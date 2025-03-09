@@ -123,6 +123,9 @@ ColumnLayout {
     DuoComboButton {
         id: listenReadCombos
 
+        readonly property bool refVoiceNeeded: app.tts_ref_voice_needed && app.available_tts_ref_voices.length !== 0
+        readonly property bool refPromptNeeded: app.tts_ref_prompt_needed && _settings.tts_voice_prompts.length !== 0
+
         Layout.fillWidth: true
         verticalMode: width < appWin.height * (app.tts_ref_voice_needed ? 1.4 : 1.0)
         first {
@@ -174,14 +177,15 @@ ColumnLayout {
         second {
             icon.name: "audio-speakers-symbolic"
             enabled: app.tts_configured && app.state === DsnoteApp.StateIdle
-            comboToolTip: app.tts_ref_voice_needed && app.available_tts_ref_voices.length === 0 ?
-                              qsTr("This model requires a voice sample.") + " " +
-                              qsTr("Create one in %1.").arg("<i>" + qsTr("Voice samples") + "</i>") : qsTr("Text to Speech model")
-            combo2ToolTip: qsTr("Voice sample")
+            comboToolTip: listenReadCombos.second.comboRedBorder ?
+                              qsTr("This model requires a voice profile") + " " +
+                              qsTr("Create one in %1.").arg("<i>" + qsTr("Voice profiles") + "</i>") : qsTr("Text to Speech model")
+            combo2ToolTip: qsTr("Voice profile")
             combo3ToolTip: qsTr("Speech speed")
             comboPlaceholderText: qsTr("No Text to Speech model")
-            combo2PlaceholderText: qsTr("No voice sample")
-            comboRedBorder: app.tts_ref_voice_needed && app.available_tts_ref_voices.length === 0
+            combo2PlaceholderText: qsTr("No voice profile")
+            comboRedBorder: (app.tts_ref_voice_needed && app.available_tts_ref_voices.length === 0) ||
+                            (app.tts_ref_prompt_needed && _settings.tts_voice_prompts.length === 0)
             showSeparator: !listenReadCombos.verticalMode
             combo {
                 enabled: listenReadCombos.second.enabled &&
@@ -192,13 +196,21 @@ ColumnLayout {
                 currentIndex: app.active_tts_model_idx
             }
             combo2 {
-                visible: app.tts_ref_voice_needed && app.available_tts_ref_voices.length !== 0
+                visible: listenReadCombos.refVoiceNeeded || listenReadCombos.refPromptNeeded
                 enabled: listenReadCombos.second.enabled &&
                          !listenReadCombos.second.off &&
                          app.state === DsnoteApp.StateIdle
-                model: app.available_tts_ref_voices
-                onActivated: app.set_active_tts_ref_voice_idx(index)
-                currentIndex: app.active_tts_ref_voice_idx
+                model: listenReadCombos.refVoiceNeeded ? app.available_tts_ref_voices :
+                                                         _settings.tts_voice_prompt_names
+                onActivated: {
+                    if (listenReadCombos.refVoiceNeeded)
+                        app.set_active_tts_ref_voice_idx(index)
+                    else
+                        _settings.tts_active_voice_prompt_idx = index
+                }
+                currentIndex: listenReadCombos.refVoiceNeeded ?
+                                  app.active_tts_ref_voice_idx :
+                                  _settings.tts_active_voice_prompt_idx
             }
             combo3 {
                 visible: true
@@ -237,11 +249,12 @@ ColumnLayout {
             }
             buttonToolTip: qsTr("Read") + " (Ctrl+Alt+Shift+R)"
             button {
+                enabled: listenReadCombos.second.enabled &&
+                         !listenReadCombos.second.off &&
+                         app.note.length !== 0 &&
+                         (!app.tts_ref_voice_needed || app.available_tts_ref_voices.length !== 0) &&
+                         (!app.tts_ref_prompt_needed || _settings.tts_voice_prompts.length !== 0)
                 action: Action {
-                    enabled: listenReadCombos.second.enabled &&
-                             !listenReadCombos.second.off &&
-                             app.note.length !== 0 &&
-                             (!app.tts_ref_voice_needed || app.available_tts_ref_voices.length !== 0)
                     text: qsTr("Read")
                     shortcut: "Ctrl+Alt+Shift+R"
                     onTriggered: app.play_speech()

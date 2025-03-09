@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -52,6 +52,7 @@ class ModelsListModel : public SelectableItemModel {
     };
     Q_ENUM(ModelRoleFilterFlags)
 
+    // must be the same as models_manager::feature_flags
     enum ModelFeatureFilterFlags : unsigned int {
         FeatureNone = 0U,
         FeatureGenericStart = 1U << 0U,
@@ -77,18 +78,20 @@ class ModelsListModel : public SelectableItemModel {
         FeatureEngineTtsMimic3 = 1U << 15U,
         FeatureEngineTtsWhisperSpeech = 1U << 16U,
         FeatureEngineTtsSam = 1U << 17U,
-        FeatureEngineTtsEnd = FeatureEngineTtsSam,
-        FeatureEngineMnt = 1U << 22U,
-        FeatureEngineOther = 1U << 23U,
+        FeatureEngineTtsParler = 1U << 18U,
+        FeatureEngineTtsEnd = FeatureEngineTtsParler,
+        FeatureEngineMnt = 1U << 20U,
+        FeatureEngineOther = 1U << 21U,
         FeatureGenericEnd = FeatureEngineOther,
-        FeatureHwOpenVino = 1U << 24U,
-        FeatureSttStart = 1U << 25U,
+        FeatureHwOpenVino = 1U << 22U,
+        FeatureSttStart = 1U << 23U,
         FeatureSttIntermediateResults = FeatureSttStart,
-        FeatureSttPunctuation = 1U << 26U,
+        FeatureSttPunctuation = 1U << 24U,
         FeatureSttEnd = FeatureSttPunctuation,
-        FeatureTtsStart = 1U << 30U,
+        FeatureTtsStart = 1U << 25U,
         FeatureTtsVoiceCloning = FeatureTtsStart,
-        FeatureTtsEnd = FeatureTtsVoiceCloning,
+        FeatureTtsPrompt = 1U << 26U,
+        FeatureTtsEnd = FeatureTtsPrompt,
         FeatureLast = FeatureTtsEnd,
         FeatureAllSttEngines = FeatureEngineSttDs | FeatureEngineSttVosk |
                                FeatureEngineSttWhisper |
@@ -98,19 +101,20 @@ class ModelsListModel : public SelectableItemModel {
                                FeatureEngineTtsRhvoice | FeatureEngineTtsCoqui |
                                FeatureEngineTtsMimic3 |
                                FeatureEngineTtsWhisperSpeech |
-                               FeatureEngineTtsSam,
+                               FeatureEngineTtsSam | FeatureEngineTtsParler,
         FeatureAll = FeatureFastProcessing | FeatureMediumProcessing |
                      FeatureSlowProcessing | FeatureQualityHigh |
                      FeatureQualityMedium | FeatureQualityLow |
                      FeatureAllSttEngines | FeatureAllTtsEngines |
                      FeatureSttIntermediateResults | FeatureSttPunctuation |
-                     FeatureTtsVoiceCloning,
+                     FeatureTtsVoiceCloning | FeatureTtsPrompt,
         FeatureDefault = FeatureFastProcessing | FeatureMediumProcessing |
                          FeatureSlowProcessing | FeatureQualityHigh |
                          FeatureQualityMedium | FeatureQualityLow |
                          FeatureAllSttEngines | FeatureAllTtsEngines,
         FeatureAdditional = FeatureSttIntermediateResults |
-                            FeatureSttPunctuation | FeatureTtsVoiceCloning
+                            FeatureSttPunctuation | FeatureTtsVoiceCloning |
+                            FeatureTtsPrompt
 
     };
     Q_ENUM(ModelFeatureFilterFlags)
@@ -151,12 +155,12 @@ class ModelsListModel : public SelectableItemModel {
     size_t firstChangedItemIdx(const QList<ListItem *> &oldItems,
                                const QList<ListItem *> &newItems) override;
     void updateItem(ListItem *oldItem, const ListItem *newItem) override;
-    inline bool downloading() const { return m_downloading; }
-    inline QString lang() const { return m_lang; }
-    inline QString pack() const { return m_pack; }
-    inline auto roleFilterFlags() const { return m_roleFilterFlags; }
-    inline auto featureFilterFlags() const { return m_featureFilterFlags; }
-    inline auto disabledFeatureFilterFlags() const {
+    bool downloading() const { return m_downloading; }
+    QString lang() const { return m_lang; }
+    QString pack() const { return m_pack; }
+    auto roleFilterFlags() const { return m_roleFilterFlags; }
+    auto featureFilterFlags() const { return m_featureFilterFlags; }
+    auto disabledFeatureFilterFlags() const {
         return m_disabledFeatureFilterFlags;
     }
     void setLang(const QString &lang);
@@ -220,29 +224,27 @@ class ModelsListItem : public SelectableItem {
                    double progress = 0.0, QObject *parent = nullptr);
     QVariant data(int role) const override;
     QHash<int, QByteArray> roleNames() const override;
-    inline QString id() const override { return m_id; }
-    inline QString name() const { return m_name; }
-    inline QString lang_id() const { return m_lang_id; }
-    inline QString pack_id() const { return m_pack_id; }
-    inline int pack_count() const { return m_pack_count; }
-    inline int pack_available_count() const { return m_pack_available_count; }
-    inline ModelsListModel::ModelRole modelRole() const { return m_role; }
-    inline bool available() const { return m_available; }
-    inline bool dl_multi() const { return m_dl_multi; }
-    inline bool dl_off() const { return m_dl_off; }
-    inline auto features() const { return m_features; }
-    inline int score() const { return m_score; }
-    inline bool default_for_lang() const { return m_default_for_lang; }
-    inline bool downloading() const { return m_downloading; }
-    inline double progress() const { return m_progress; }
-    inline QString license_id() const { return m_license.id; }
-    inline QString license_name() const { return m_license.name; }
-    inline QUrl license_url() const { return m_license.url; }
-    inline bool license_accept_required() const {
-        return m_license.accept_required;
-    }
-    inline QStringList download_urls() const { return m_download_info.urls; }
-    inline QString download_size() const { return m_download_info.size; }
+    QString id() const override { return m_id; }
+    QString name() const { return m_name; }
+    QString lang_id() const { return m_lang_id; }
+    QString pack_id() const { return m_pack_id; }
+    int pack_count() const { return m_pack_count; }
+    int pack_available_count() const { return m_pack_available_count; }
+    ModelsListModel::ModelRole modelRole() const { return m_role; }
+    bool available() const { return m_available; }
+    bool dl_multi() const { return m_dl_multi; }
+    bool dl_off() const { return m_dl_off; }
+    auto features() const { return m_features; }
+    int score() const { return m_score; }
+    bool default_for_lang() const { return m_default_for_lang; }
+    bool downloading() const { return m_downloading; }
+    double progress() const { return m_progress; }
+    QString license_id() const { return m_license.id; }
+    QString license_name() const { return m_license.name; }
+    QUrl license_url() const { return m_license.url; }
+    bool license_accept_required() const { return m_license.accept_required; }
+    QStringList download_urls() const { return m_download_info.urls; }
+    QString download_size() const { return m_download_info.size; }
     void update(const ModelsListItem *item);
 
    private:

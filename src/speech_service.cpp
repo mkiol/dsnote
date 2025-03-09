@@ -31,6 +31,7 @@
 #include "mic_source.h"
 #include "mimic3_engine.hpp"
 #include "module_tools.hpp"
+#include "parler_engine.hpp"
 #include "piper_engine.hpp"
 #include "py_executor.hpp"
 #include "py_tools.hpp"
@@ -1458,6 +1459,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                     case models_manager::model_engine_t::tts_mimic3:
                     case models_manager::model_engine_t::tts_whisperspeech:
                     case models_manager::model_engine_t::tts_sam:
+                    case models_manager::model_engine_t::tts_parler:
                     case models_manager::model_engine_t::mnt_bergamot:
                         throw std::runtime_error{
                             "invalid model engine, expected stt"};
@@ -1603,6 +1605,9 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                 static_cast<int>(
                     settings::settings::tts_tag_mode_t::TtsTagModeSupport),
                 options)));
+        config.ref_prompt =
+            get_string_value_from_options("ref_prompt", {}, options)
+                .toStdString();
 
         // clang-format off
 #define ENGINE_OPTS(name) \
@@ -1617,6 +1622,8 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             ENGINE_OPTS(coqui)
         } else if (model_config->tts->engine == models_manager::model_engine_t::tts_whisperspeech) {
             ENGINE_OPTS(whisperspeech)
+        } else if (model_config->tts->engine == models_manager::model_engine_t::tts_parler) {
+            ENGINE_OPTS(parler)
         }
 #undef ENGINE_OPTS
         // clang-format on
@@ -1678,6 +1685,10 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                     models_manager::model_engine_t::tts_sam &&
                 type != typeid(sam_engine))
                 return true;
+            if (model_config->tts->engine ==
+                    models_manager::model_engine_t::tts_parler &&
+                type != typeid(parler_engine))
+                return true;
 
             if (m_tts_engine->model_files() != config.model_files) return true;
 
@@ -1698,6 +1709,13 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             if (engine_restart_when_lang_changed &&
                 m_tts_engine->lang() != config.lang)
                 return true;
+
+            // bool engine_restart_when_ref_prompt_changed =
+            //     model_config->tts->engine ==
+            //     models_manager::model_engine_t::tts_parler;
+            // if (engine_restart_when_ref_prompt_changed &&
+            //     m_tts_engine->ref_prompt() != config.ref_prompt)
+            //     return true;
 
             if (config.use_gpu != m_tts_engine->use_gpu() ||
                 config.gpu_device != m_tts_engine->gpu_device())
@@ -1789,6 +1807,10 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                         m_tts_engine = std::make_unique<sam_engine>(
                             std::move(config), std::move(call_backs));
                         break;
+                    case models_manager::model_engine_t::tts_parler:
+                        m_tts_engine = std::make_unique<parler_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
                     case models_manager::model_engine_t::ttt_hftc:
                     case models_manager::model_engine_t::ttt_tashkeel:
                     case models_manager::model_engine_t::ttt_unikud:
@@ -1810,6 +1832,7 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             qDebug() << "new tts engine not required";
             m_tts_engine->set_speech_speed(config.speech_speed);
             m_tts_engine->set_ref_voice_file(std::move(config.ref_voice_file));
+            m_tts_engine->set_ref_prompt(std::move(config.ref_prompt));
             m_tts_engine->set_text_format(config.text_format);
             m_tts_engine->set_sync_subs(config.sync_subs);
             m_tts_engine->set_split_into_sentences(config.split_into_sentences);
@@ -2889,6 +2912,9 @@ QVariantMap speech_service::features_availability() {
                 "whisperspeech-tts",
                 QVariantList{py_availability->whisperspeech_tts,
                              "WhisperSpeech TTS"});
+            m_features_availability.insert(
+                "parler-tts",
+                QVariantList{py_availability->parler_tts, "Parler TTS"});
 #ifdef ARCH_X86_64
             auto has_cuda = gpu_tools::has_cuda_runtime();
             auto has_cudnn = gpu_tools::has_cudnn();
@@ -2932,6 +2958,25 @@ QVariantMap speech_service::features_availability() {
             if (tts_whisperspeech_hip)
                 hw_feature_flags |= settings::hw_feature_flags_t::
                     hw_feature_tts_whisperspeech_hip;
+
+            bool tts_parler_cuda =
+                py_availability->parler_tts && py_availability->torch_cuda;
+            bool tts_parler_hip =
+                py_availability->parler_tts && py_availability->torch_hip;
+            m_features_availability.insert(
+                "parler-tts-cuda",
+                QVariantList{tts_parler_cuda,
+                             "Parler TTS CUDA " + tr("HW acceleration")});
+            m_features_availability.insert(
+                "parler-tts-hip",
+                QVariantList{tts_parler_hip,
+                             "Parler TTS ROCm " + tr("HW acceleration")});
+            if (tts_parler_cuda)
+                hw_feature_flags |=
+                    settings::hw_feature_flags_t::hw_feature_tts_parler_cuda;
+            if (tts_parler_hip)
+                hw_feature_flags |=
+                    settings::hw_feature_flags_t::hw_feature_tts_parler_hip;
 #endif
             m_features_availability.insert(
                 "coqui-tts-ja", QVariantList{py_availability->coqui_tts &&
@@ -3104,6 +3149,7 @@ QVariantMap speech_service::features_availability() {
                      py_availability->gruut_nl,
                  /*tts_rhvoice=*/tts_rhvoice,
                  /*tts_whisperspeech=*/py_availability->whisperspeech_tts,
+                 /*tts_parler=*/py_availability->parler_tts,
                  /*stt_fasterwhisper=*/py_availability->faster_whisper,
                  /*stt_ds=*/stt_ds,
                  /*stt_vosk=*/stt_vosk,
@@ -3130,6 +3176,10 @@ QVariantMap speech_service::features_availability() {
                 "whisperspeech-gpu-devices",
                 variant_list_from_list(
                     settings::instance()->whisperspeech_gpu_devices()));
+            m_features_availability.insert(
+                "parler-gpu-devices",
+                variant_list_from_list(
+                    settings::instance()->parler_gpu_devices()));
 
             m_features_availability.insert(
                 "addon-flags",

@@ -164,6 +164,9 @@ ColumnLayout {
             DuoComboButton {
                 id: mntInCombo
 
+                readonly property bool refVoiceNeeded: app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voices.length !== 0
+                readonly property bool refPromptNeeded: app.tts_for_in_mnt_ref_prompt_needed && _settings.tts_voice_prompts.length !== 0
+
                 Layout.fillWidth: true
                 verticalMode: width < appWin.height
                 first {
@@ -186,15 +189,16 @@ ColumnLayout {
                 second {
                     icon.name: "audio-speakers-symbolic"
                     enabled: app.mnt_configured && app.tts_configured && app.state === DsnoteApp.StateIdle
-                    comboToolTip: app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voices.length === 0 ?
-                                      qsTr("This model requires a voice sample.") + " " +
-                                      qsTr("Create one in %1.").arg("<i>" + qsTr("Voice samples") + "</i>") :
+                    comboToolTip: mntInCombo.second.combo2RedBorder ?
+                                      qsTr("This model requires a voice profile.") + " " +
+                                      qsTr("Create one in %1.").arg("<i>" + qsTr("Voice profiles") + "</i>") :
                                       qsTr("Text to Speech model for language to translate from.")
                     comboPlaceholderText: qsTr("No Text to Speech model")
-                    combo2PlaceholderText: qsTr("No voice sample")
-                    combo2ToolTip: qsTr("Voice sample")
+                    combo2PlaceholderText: qsTr("No voice profile")
+                    combo2ToolTip: qsTr("Voice profile")
                     comboFillWidth: true
-                    comboRedBorder: !mntInCombo.second.off && app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voices.length === 0
+                    comboRedBorder: !mntInCombo.second.off && ((app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voices.length === 0) ||
+                                                               (app.tts_for_in_mnt_ref_prompt_needed && _settings.tts_voice_prompts.length === 0))
                     showSeparator: !mntInCombo.verticalMode
                     combo {
                         model: app.available_tts_models_for_in_mnt
@@ -205,24 +209,34 @@ ColumnLayout {
                         currentIndex: app.active_tts_model_for_in_mnt_idx
                     }
                     combo2 {
-                        visible: app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voices.length !== 0
+                        visible: mntInCombo.refVoiceNeeded || mntInCombo.refPromptNeeded
                         enabled: mntInCombo.second.enabled &&
                                  !mntInCombo.second.off &&
                                  app.state === DsnoteApp.StateIdle
-                        model: app.available_tts_ref_voices
-                        onActivated: app.set_active_tts_for_in_mnt_ref_voice_idx(index)
-                        currentIndex: app.active_tts_for_in_mnt_ref_voice_idx
+                        model: mntInCombo.refVoiceNeeded ? app.available_tts_ref_voices :
+                                                           _settings.tts_voice_prompt_names
+                        onActivated: {
+                            if (mntInCombo.refVoiceNeeded)
+                                app.set_active_tts_for_in_mnt_ref_voice_idx(index)
+                            else
+                                _settings.tts_active_voice_prompt_for_in_mnt_idx = index
+                        }
+                        currentIndex:
+                            mntInCombo.refVoiceNeeded ?
+                                app.active_tts_for_in_mnt_ref_voice_idx :
+                                _settings.tts_active_voice_prompt_for_in_mnt_idx
                     }
                     frame {
                         leftPadding: appWin.padding
                         rightPadding: grid.verticalMode ? appWin.padding : 0
                     }
                     button {
+                        enabled: mntInCombo.second.enabled &&
+                                 !mntInCombo.second.off &&
+                                 app.note.length !== 0 &&
+                                 (!app.tts_for_in_mnt_ref_voice_needed || app.available_tts_ref_voices.length !== 0) &&
+                                 (!app.tts_for_in_mnt_ref_prompt_needed || _settings.tts_voice_prompts.length !== 0)
                         action: Action {
-                            enabled: mntInCombo.second.enabled &&
-                                     !mntInCombo.second.off &&
-                                     app.note.length !== 0 &&
-                                     (!app.tts_for_in_mnt_ref_voice_needed || app.available_tts_ref_voices.length !== 0)
                             text: qsTr("Read")
                             onTriggered: app.play_speech_translator(false)
                         }
@@ -342,6 +356,9 @@ ColumnLayout {
             DuoComboButton {
                 id: mntOutCombo
 
+                readonly property bool refVoiceNeeded: app.tts_for_out_mnt_ref_voice_needed && app.available_tts_ref_voices.length !== 0
+                readonly property bool refPromptNeeded: app.tts_for_out_mnt_ref_prompt_needed && _settings.tts_voice_prompts.length !== 0
+
                 Layout.fillWidth: true
                 verticalMode: width < appWin.height
                 first {
@@ -364,32 +381,42 @@ ColumnLayout {
                     icon.name: "audio-speakers-symbolic"
                     enabled: app.mnt_configured && app.tts_configured &&
                              app.state === DsnoteApp.StateIdle
-                    comboToolTip: app.tts_for_out_mnt_ref_voice_needed && app.available_tts_ref_voices.length === 0 ?
-                                      qsTr("This model requires a voice sample.") + " " +
-                                      qsTr("Create one in %1 menu").arg("<i>" + qsTr("Voice samples") + "</i>") :
+                    comboToolTip: mntOutCombo.second.combo2RedBorder ?
+                                      qsTr("This model requires a voice profile.") + " " +
+                                      qsTr("Create one in %1 menu").arg("<i>" + qsTr("Voice profiles") + "</i>") :
                                       qsTr("Text to Speech model for language to translate into.")
                     comboPlaceholderText: qsTr("No Text to Speech model")
-                    combo2PlaceholderText: qsTr("No voice sample")
-                    combo2ToolTip: qsTr("Voice sample")
+                    combo2PlaceholderText: qsTr("No voice profile")
+                    combo2ToolTip: qsTr("Voice profile")
                     comboFillWidth: true
-                    comboRedBorder: !mntOutCombo.second.off && app.tts_for_out_mnt_ref_voice_needed && app.available_tts_ref_voices.length === 0
+                    comboRedBorder: !mntOutCombo.second.off && ((app.tts_for_out_mnt_ref_voice_needed && app.available_tts_ref_voices.length === 0) ||
+                                                               (app.tts_for_out_mnt_ref_prompt_needed && _settings.tts_voice_prompts.length === 0))
                     showSeparator: !mntOutCombo.verticalMode
                     combo {
+                        model: app.available_tts_models_for_out_mnt
                         enabled: mntOutCombo.second.enabled &&
                                  !mntOutCombo.second.off &&
                                  app.state === DsnoteApp.StateIdle
-                        model: app.available_tts_models_for_out_mnt
                         onActivated: app.set_active_tts_model_for_out_mnt_idx(index)
                         currentIndex: app.active_tts_model_for_out_mnt_idx
                     }
                     combo2 {
-                        visible: app.tts_for_out_mnt_ref_voice_needed && app.available_tts_ref_voices.length !== 0
+                        visible: mntOutCombo.refVoiceNeeded || mntOutCombo.refPromptNeeded
                         enabled: mntOutCombo.second.enabled &&
                                  !mntOutCombo.second.off &&
                                  app.state === DsnoteApp.StateIdle
-                        model: app.available_tts_ref_voices
-                        onActivated: app.set_active_tts_for_out_mnt_ref_voice_idx(index)
-                        currentIndex: app.active_tts_for_out_mnt_ref_voice_idx
+                        model: mntOutCombo.refVoiceNeeded ? app.available_tts_ref_voices :
+                                                           _settings.tts_voice_prompt_names
+                        onActivated: {
+                            if (mntOutCombo.refVoiceNeeded)
+                                app.set_active_tts_for_out_mnt_ref_voice_idx(index)
+                            else
+                                _settings.tts_active_voice_prompt_for_out_mnt_idx = index
+                        }
+                        currentIndex:
+                            mntOutCombo.refVoiceNeeded ?
+                                app.active_tts_for_out_mnt_ref_voice_idx :
+                                _settings.tts_active_voice_prompt_for_out_mnt_idx
                     }
                     frame {
                         rightPadding: appWin.padding
@@ -398,12 +425,13 @@ ColumnLayout {
                     }
                     buttonToolTip: qsTr("Read") + " (Ctrl+Alt+Shift+R)"
                     button {
+                        enabled: mntOutCombo.second.enabled &&
+                                 !mntOutCombo.second.off &&
+                                 app.translated_text.length !== 0 &&
+                                 app.state !== DsnoteApp.StateTranslating &&
+                                 (!app.tts_for_out_mnt_ref_voice_needed || app.available_tts_ref_voices.length !== 0) &&
+                                 (!app.tts_for_out_mnt_ref_prompt_needed || _settings.tts_voice_prompts.length !== 0)
                         action: Action {
-                            enabled: mntOutCombo.second.enabled &&
-                                     !mntOutCombo.second.off &&
-                                     app.translated_text.length !== 0 &&
-                                     app.state !== DsnoteApp.StateTranslating &&
-                                     (!app.tts_for_out_mnt_ref_voice_needed || app.available_tts_ref_voices.length !== 0)
                             text: qsTr("Read")
                             shortcut: "Ctrl+Alt+Shift+R"
                             onTriggered: app.play_speech_translator(true)

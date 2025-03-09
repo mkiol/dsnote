@@ -64,9 +64,10 @@ ColumnLayout {
             case 8: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsPiper; break
             case 9: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsRhvoice; break
             case 10: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsWhisperSpeech; break
-            case 11: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsSam; break
-            case 12: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineMnt; break
-            case 13: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineOther; break
+            case 11: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsParler; break
+            case 12: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsSam; break
+            case 13: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineMnt; break
+            case 14: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineOther; break
             }
         } else if (speed_checkBox.checked) {
             switch(index) {
@@ -85,6 +86,7 @@ ColumnLayout {
             case 0: root.models_model.featureFilterFlags = ModelsListModel.FeatureSttIntermediateResults; break
             case 1: root.models_model.featureFilterFlags = ModelsListModel.FeatureSttPunctuation; break
             case 2: root.models_model.featureFilterFlags = ModelsListModel.FeatureTtsVoiceCloning; break
+            case 3: root.models_model.featureFilterFlags = ModelsListModel.FeatureTtsPrompt; break
             }
         } else {
             root.models_model.featureFilterFlags = ModelsListModel.FeatureDefault
@@ -293,6 +295,7 @@ ColumnLayout {
                     "Piper TTS",
                     "RHVoice TTS",
                     "WhisperSpeech TTS",
+                    "Parler TTS",
                     "SAM TTS",
                     "Bergamot MT",
                     qsTr("Other")
@@ -477,6 +480,7 @@ ColumnLayout {
                     qsTr("Intermediate Results") + " STT",
                     qsTr("Punctuation") + " STT",
                     qsTr("Voice Cloning") + " TTS",
+                    qsTr("Prompt Description") + " TTS",
 
                 ]
 

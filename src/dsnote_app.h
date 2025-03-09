@@ -64,6 +64,8 @@
     X(whisperspeech_gpu) \
     X(coqui_tts)         \
     X(coqui_gpu)         \
+    X(parler_tts)        \
+    X(parler_gpu)        \
     X(punctuator)        \
     X(diacritizer_he)    \
     X(translator)        \
@@ -131,7 +133,6 @@ class dsnote_app : public QObject {
                    NOTIFY active_tts_ref_voice_changed)
     Q_PROPERTY(bool tts_ref_voice_needed READ tts_ref_voice_needed NOTIFY
                    active_tts_model_changed)
-
     Q_PROPERTY(int active_tts_for_in_mnt_ref_voice_idx READ
                    active_tts_for_in_mnt_ref_voice_idx NOTIFY
                        active_tts_for_in_mnt_ref_voice_changed)
@@ -144,7 +145,6 @@ class dsnote_app : public QObject {
     Q_PROPERTY(bool tts_for_in_mnt_ref_voice_needed READ
                    tts_for_in_mnt_ref_voice_needed NOTIFY
                        active_tts_model_for_in_mnt_changed)
-
     Q_PROPERTY(int active_tts_for_out_mnt_ref_voice_idx READ
                    active_tts_for_out_mnt_ref_voice_idx NOTIFY
                        active_tts_for_out_mnt_ref_voice_changed)
@@ -157,10 +157,19 @@ class dsnote_app : public QObject {
     Q_PROPERTY(bool tts_for_out_mnt_ref_voice_needed READ
                    tts_for_out_mnt_ref_voice_needed NOTIFY
                        active_tts_model_for_out_mnt_changed)
-
     Q_PROPERTY(
         QVariantList available_tts_ref_voices READ available_tts_ref_voices
             NOTIFY available_tts_ref_voices_changed)
+
+    // tts ref prompts
+    Q_PROPERTY(bool tts_ref_prompt_needed READ tts_ref_prompt_needed NOTIFY
+                   active_tts_model_changed)
+    Q_PROPERTY(bool tts_for_in_mnt_ref_prompt_needed READ
+                   tts_for_in_mnt_ref_prompt_needed NOTIFY
+                       active_tts_model_for_in_mnt_changed)
+    Q_PROPERTY(bool tts_for_out_mnt_ref_prompt_needed READ
+                   tts_for_out_mnt_ref_prompt_needed NOTIFY
+                       active_tts_model_for_out_mnt_changed)
 
     // tts
     Q_PROPERTY(int active_tts_model_idx READ active_tts_model_idx NOTIFY
@@ -354,6 +363,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void set_active_tts_for_out_mnt_ref_voice_idx(int idx);
     Q_INVOKABLE void delete_tts_ref_voice(int idx);
     Q_INVOKABLE void rename_tts_ref_voice(int idx, const QString &new_name);
+    Q_INVOKABLE bool test_tts_ref_voice(int idx, const QString &new_name) const;
     Q_INVOKABLE void set_active_mnt_lang_idx(int idx);
     Q_INVOKABLE void set_active_mnt_out_lang_idx(int idx);
     Q_INVOKABLE void set_active_tts_model_for_in_mnt_idx(int idx);
@@ -455,6 +465,14 @@ class dsnote_app : public QObject {
     [[nodiscard]] Q_INVOKABLE QVariantList available_tts_models_info() const;
     Q_INVOKABLE void update_feature_statuses();
     Q_INVOKABLE void open_hotkeys_editor();
+    Q_INVOKABLE void update_voice_prompt(const QString &name,
+                                         const QString &new_name,
+                                         const QString &desc) const;
+    Q_INVOKABLE bool test_voice_prompt(const QString &name,
+                                       const QString &new_name,
+                                       const QString &desc) const;
+    Q_INVOKABLE void delete_voice_prompt(const QString &name) const;
+    Q_INVOKABLE void clone_voice_prompt(const QString &name) const;
 
    signals:
     void active_stt_model_changed();
@@ -857,11 +875,13 @@ class dsnote_app : public QObject {
                                  const QString &dest_file,
                                  const QString &title_tag, const QString &track,
                                  const QString &ref_voice,
+                                 const QString &ref_prompt,
                                  settings::text_format_t text_format,
                                  settings::audio_format_t audio_format,
                                  settings::audio_quality_t audio_quality);
     void play_speech_internal(QString text, const QString &model_id,
                               const QString &ref_voice,
+                              const QString &ref_prompt,
                               settings::text_format_t text_format);
     void export_to_file_internal(const QString &text, const QString &dest_file);
     void copy_to_clipboard_internal(const QString &text);
@@ -886,10 +906,14 @@ class dsnote_app : public QObject {
     void request_reload();
     bool stt_translate_needed_by_id(const QString &id) const;
     bool tts_ref_voice_needed_by_id(const QString &id) const;
+    bool tts_ref_prompt_needed_by_id(const QString &id) const;
     bool stt_translate_needed() const;
     bool tts_ref_voice_needed() const;
     bool tts_for_in_mnt_ref_voice_needed() const;
     bool tts_for_out_mnt_ref_voice_needed() const;
+    bool tts_ref_prompt_needed() const;
+    bool tts_for_in_mnt_ref_prompt_needed() const;
+    bool tts_for_out_mnt_ref_prompt_needed() const;
     static QString cache_dir();
     static QString import_ref_voice_file_path();
     bool player_ready() const;

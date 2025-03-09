@@ -42,6 +42,9 @@ void mimic3_engine::stop() {
                     .attr("_SHARED_MODELS")
                     .attr("clear")();
                 m_tts.reset();
+
+                // release mem
+                py::module_::import("gc").attr("collect")();
             } catch (const std::exception& err) {
                 LOGE("py error: " << err.what());
             }

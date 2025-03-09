@@ -1,4 +1,4 @@
-/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -168,16 +168,39 @@ ColumnLayout {
         id: ttsEnginesBar
 
         Layout.fillWidth: true
-        currentIndex: !(app.feature_coqui_tts && app.feature_coqui_gpu) ? 1 :
-                      !(app.feature_whisperspeech_tts && app.feature_whisperspeech_gpu) ? 0 :
-                      _settings.settings_tts_engine_idx
+        currentIndex: {
+            var idx = _settings.settings_tts_engine_idx
+            var coqui_enable = app.feature_coqui_tts && app.feature_coqui_gpu;
+            var parler_enable = app.feature_parler_tts && app.feature_parler_gpu
+            var whisperspeech_enable = app.feature_whisperspeech_tts && app.feature_whisperspeech_gpu
+
+            // set idx if engine enabled
+            if (idx === 0 && coqui_enable) return idx
+            if (idx === 1 && parler_enable) return idx
+            if (idx === 2 && whisperspeech_enable) return idx
+
+            // set default
+            if (coqui_enable) return 0
+            if (parler_enable) return 1
+            if (whisperspeech_enable) return 2
+
+            return 0
+        }
+
         onCurrentIndexChanged: _settings.settings_tts_engine_idx = currentIndex
         visible: (app.feature_coqui_tts && app.feature_coqui_gpu) ||
-                 (app.feature_whisperspeech_tts && app.feature_whisperspeech_gpu)
+                 (app.feature_whisperspeech_tts && app.feature_whisperspeech_gpu) ||
+                 (app.feature_parler_tts && app.feature_parler_gpu)
 
         TabButton {
             text: "Coqui"
             enabled: app.feature_coqui_tts && app.feature_coqui_gpu
+            width: implicitWidth
+        }
+
+        TabButton {
+            text: "Parler-TTS"
+            enabled: app.feature_parler_tts && app.feature_parler_gpu
             width: implicitWidth
         }
 
@@ -209,6 +232,20 @@ ColumnLayout {
                 use_gpu: _settings.coqui_use_gpu
                 onUse_gpuChanged: _settings.coqui_use_gpu = use_gpu
                 onDevice_indexChanged: _settings.coqui_gpu_device_idx = device_index
+            }
+        }
+
+        ColumnLayout {
+            id: parlerTab
+
+            visible: app.feature_parler_tts && app.feature_parler_gpu
+
+            GpuComboBox {
+                devices: _settings.parler_gpu_devices
+                device_index: _settings.parler_gpu_device_idx
+                use_gpu: _settings.parler_use_gpu
+                onUse_gpuChanged: _settings.parler_use_gpu = use_gpu
+                onDevice_indexChanged: _settings.parler_gpu_device_idx = device_index
             }
         }
 

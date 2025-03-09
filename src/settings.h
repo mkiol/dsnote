@@ -19,6 +19,8 @@
 #include <QQmlApplicationEngine>
 #endif
 
+#include <optional>
+
 #include "qdebug.h"
 #include "singleton.h"
 
@@ -294,7 +296,35 @@ class settings : public QSettings, public singleton<settings> {
                    NOTIFY trans_rules_changed)
     Q_PROPERTY(bool trans_rules_enabled READ trans_rules_enabled WRITE
                    set_trans_rules_enabled NOTIFY trans_rules_enabled_changed)
-
+    Q_PROPERTY(QVariantList tts_voice_prompts READ tts_voice_prompts WRITE
+                   set_tts_voice_prompts NOTIFY tts_voice_prompts_changed)
+    Q_PROPERTY(QStringList tts_voice_prompt_names READ tts_voice_prompt_names
+                   NOTIFY tts_voice_prompts_changed)
+    Q_PROPERTY(
+        QString tts_active_voice_prompt READ tts_active_voice_prompt WRITE
+            set_tts_active_voice_prompt NOTIFY tts_active_voice_prompt_changed)
+    Q_PROPERTY(int tts_active_voice_prompt_idx READ tts_active_voice_prompt_idx
+                   WRITE set_tts_active_voice_prompt_idx NOTIFY
+                       tts_active_voice_prompt_changed)
+    Q_PROPERTY(QString tts_active_voice_prompt_for_in_mnt READ
+                   tts_active_voice_prompt_for_in_mnt WRITE
+                       set_tts_active_voice_prompt_for_in_mnt NOTIFY
+                           tts_active_voice_prompt_for_in_mnt_changed)
+    Q_PROPERTY(int tts_active_voice_prompt_for_in_mnt_idx READ
+                   tts_active_voice_prompt_for_in_mnt_idx WRITE
+                       set_tts_active_voice_prompt_for_in_mnt_idx NOTIFY
+                           tts_active_voice_prompt_for_in_mnt_changed)
+    Q_PROPERTY(QString tts_active_voice_prompt_for_out_mnt READ
+                   tts_active_voice_prompt_for_out_mnt WRITE
+                       set_tts_active_voice_prompt_for_out_mnt NOTIFY
+                           tts_active_voice_prompt_for_out_mnt_changed)
+    Q_PROPERTY(int tts_active_voice_prompt_for_out_mnt_idx READ
+                   tts_active_voice_prompt_for_out_mnt_idx WRITE
+                       set_tts_active_voice_prompt_for_out_mnt_idx NOTIFY
+                           tts_active_voice_prompt_for_out_mnt_changed)
+    Q_PROPERTY(voice_profile_type_t active_voice_profile_type READ
+                   active_voice_profile_type WRITE set_active_voice_profile_type
+                       NOTIFY active_voice_profile_type_changed)
     Q_PROPERTY(
         fake_keyboard_type_t fake_keyboard_type READ fake_keyboard_type WRITE
             set_fake_keyboard_type NOTIFY fake_keyboard_type_changed)
@@ -386,6 +416,7 @@ class settings : public QSettings, public singleton<settings> {
     ENGINE_OPTS(fasterwhisper)
     ENGINE_OPTS(coqui)
     ENGINE_OPTS(whisperspeech)
+    ENGINE_OPTS(parler)
 #undef ENGINE_OPTS
 
    public:
@@ -554,6 +585,8 @@ class settings : public QSettings, public singleton<settings> {
         hw_feature_tts_coqui_hip = 1U << 8U,
         hw_feature_tts_whisperspeech_cuda = 1U << 9U,
         hw_feature_tts_whisperspeech_hip = 1U << 10U,
+        hw_feature_tts_parler_cuda = 1U << 11U,
+        hw_feature_tts_parler_hip = 1U << 12U,
         hw_feature_all =
             hw_feature_stt_whispercpp_cuda | hw_feature_stt_whispercpp_hip |
             hw_feature_stt_whispercpp_openvino |
@@ -562,7 +595,8 @@ class settings : public QSettings, public singleton<settings> {
             hw_feature_stt_fasterwhisper_cuda |
             hw_feature_stt_fasterwhisper_hip | hw_feature_tts_coqui_cuda |
             hw_feature_tts_coqui_hip | hw_feature_tts_whisperspeech_cuda |
-            hw_feature_tts_whisperspeech_hip
+            hw_feature_tts_whisperspeech_hip | hw_feature_tts_parler_cuda |
+            hw_feature_tts_parler_hip
     };
     friend QDebug operator<<(QDebug d, hw_feature_flags_t hw_feature_flags);
 
@@ -607,6 +641,17 @@ class settings : public QSettings, public singleton<settings> {
 
     enum class hotkeys_type_t { HotkeysTypeX11 = 0, HotkeysTypePortal = 1 };
     Q_ENUM(hotkeys_type_t)
+
+    enum class voice_profile_type_t {
+        VoiceProfileAudioSample = 0,
+        VoiceProfilePrompt = 1
+    };
+    Q_ENUM(voice_profile_type_t)
+
+    struct voice_profile_prompt_t {
+        QString name;
+        QString desc;
+    };
 
     settings();
 
@@ -797,10 +842,34 @@ class settings : public QSettings, public singleton<settings> {
     void set_trans_rules_enabled(bool value);
     QVariantList trans_rules() const;
     void set_trans_rules(const QVariantList &value);
+    QVariantList tts_voice_prompts() const;
+    QStringList tts_voice_prompt_names() const;
+    void set_tts_voice_prompts(const QVariantList &value);
+    QString tts_active_voice_prompt() const;
+    void set_tts_active_voice_prompt(const QString &value);
+    int tts_active_voice_prompt_idx() const;
+    void set_tts_active_voice_prompt_idx(int idx);
+    QString tts_active_voice_prompt_for_in_mnt() const;
+    void set_tts_active_voice_prompt_for_in_mnt(const QString &value);
+    int tts_active_voice_prompt_for_in_mnt_idx() const;
+    void set_tts_active_voice_prompt_for_in_mnt_idx(int idx);
+    QString tts_active_voice_prompt_for_out_mnt() const;
+    void set_tts_active_voice_prompt_for_out_mnt(const QString &value);
+    int tts_active_voice_prompt_for_out_mnt_idx() const;
+    void set_tts_active_voice_prompt_for_out_mnt_idx(int idx);
     fake_keyboard_type_t fake_keyboard_type() const;
     void set_fake_keyboard_type(fake_keyboard_type_t value);
     int fake_keyboard_delay() const;
     void set_fake_keyboard_delay(int value);
+    QString tts_desc_of_voice_prompt(const QString &name) const;
+    std::optional<voice_profile_prompt_t> tts_voice_prompt(
+        const QString &name) const;
+    void tts_update_voice_prompt(const QString &name,
+                                 const voice_profile_prompt_t &voice_prompt);
+    void tts_delete_voice_prompt(const QString &name);
+    void tts_clone_voice_prompt(const QString &name);
+    voice_profile_type_t active_voice_profile_type() const;
+    void set_active_voice_profile_type(voice_profile_type_t value);
 
     Q_INVOKABLE QUrl app_icon() const;
     Q_INVOKABLE bool py_supported() const;
@@ -948,6 +1017,7 @@ class settings : public QSettings, public singleton<settings> {
     ENGINE_OPTS(fasterwhisper)
     ENGINE_OPTS(coqui)
     ENGINE_OPTS(whisperspeech)
+    ENGINE_OPTS(parler)
 #undef ENGINE_OPTS
 
    signals:
@@ -1024,8 +1094,13 @@ class settings : public QSettings, public singleton<settings> {
     void stt_echo_changed();
     void trans_rules_enabled_changed();
     void trans_rules_changed();
+    void tts_voice_prompts_changed();
+    void tts_active_voice_prompt_changed();
+    void tts_active_voice_prompt_for_in_mnt_changed();
+    void tts_active_voice_prompt_for_out_mnt_changed();
     void fake_keyboard_type_changed();
     void fake_keyboard_delay_changed();
+    void active_voice_profile_type_changed();
 
     // service
     void models_dir_changed();
@@ -1059,6 +1134,7 @@ class settings : public QSettings, public singleton<settings> {
     ENGINE_OPTS(fasterwhisper)
     ENGINE_OPTS(coqui)
     ENGINE_OPTS(whisperspeech)
+    ENGINE_OPTS(parler)
 #undef ENGINE_OPTS
 
    private:
@@ -1074,6 +1150,7 @@ class settings : public QSettings, public singleton<settings> {
     ENGINE_OPTS(fasterwhisper)
     ENGINE_OPTS(coqui)
     ENGINE_OPTS(whisperspeech)
+    ENGINE_OPTS(parler)
 #undef ENGINE_OPTS
     std::vector<QString> m_rocm_gpu_versions;
     unsigned int m_addon_flags = addon_flags_t::AddonNone;
@@ -1089,6 +1166,9 @@ class settings : public QSettings, public singleton<settings> {
     void update_system_flags();
     static QVariantList make_default_trans_rules();
     void trans_rule_set_flag(int index, unsigned int mask, bool enabled);
+    static QVariantList make_default_tts_voice_prompts();
+    int tts_index_of_voice_prompt(const QString &name) const;
+    QString tts_name_of_voice_prompt(const QString &name) const;
 
     QString m_note;
 };

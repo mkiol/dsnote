@@ -230,29 +230,18 @@ ToolBar {
                         visible: enabled
                         Layout.alignment: Qt.AlignLeft
                         action: Action {
-                            enabled: (app.tts_ref_voice_needed && !_settings.translator_mode) ||
-                                     (_settings.translator_mode && (app.tts_for_in_mnt_ref_voice_needed || app.tts_for_out_mnt_ref_voice_needed))
-                            text: qsTr("Voice samples")
+                            enabled: ((app.tts_ref_voice_needed || app.tts_ref_prompt_needed) && !_settings.translator_mode) ||
+                                     (_settings.translator_mode && (app.tts_for_in_mnt_ref_voice_needed || app.tts_for_out_mnt_ref_voice_needed ||
+                                                                    app.tts_for_in_mnt_ref_prompt_needed || app.tts_for_out_mnt_ref_prompt_needed))
+                            text: qsTr("Voice profiles")
                             shortcut: "Ctrl+V"
                             onTriggered: appWin.openDialog("VoiceMgmtPage.qml")
                         }
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Voice samples") + " (Ctrl+V)"
+                        ToolTip.text: qsTr("Voice profiles") + " (Ctrl+V)"
                         hoverEnabled: true
-
-                        Dot {
-                            visible: app.available_tts_ref_voices.length === 0 && ((app.tts_ref_voice_needed && !_settings.translator_mode) ||
-                                                                                   (_settings.translator_mode && (app.tts_for_in_mnt_ref_voice_needed || app.tts_for_out_mnt_ref_voice_needed)))
-                            size: menuButton.height / 5
-                            anchors {
-                                right: voicesButton.right
-                                rightMargin: size / 2
-                                top: voicesButton.top
-                                topMargin: size / 2
-                            }
-                        }
                     }
 
                     ToolButton {

@@ -186,6 +186,10 @@ QDebug operator<<(QDebug d, settings::hw_feature_flags_t hw_features) {
     if (hw_features &
         settings::hw_feature_flags_t::hw_feature_tts_whisperspeech_hip)
         d << "tts-whisperspeech-hip";
+    if (hw_features & settings::hw_feature_flags_t::hw_feature_tts_parler_cuda)
+        d << "tts-parler-cuda,";
+    if (hw_features & settings::hw_feature_flags_t::hw_feature_tts_parler_hip)
+        d << "tts-parler-hip";
 
     return d;
 }
@@ -1454,6 +1458,7 @@ void settings::update_hw_devices_from_fa(
     ENGINE_OPTS(fasterwhisper)
     ENGINE_OPTS(coqui)
     ENGINE_OPTS(whisperspeech)
+    ENGINE_OPTS(parler)
 #undef ENGINE_OPTS
 
     emit gpu_devices_changed();
@@ -1468,6 +1473,7 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
     ENGINE_OPTS(fasterwhisper)
     ENGINE_OPTS(coqui)
     ENGINE_OPTS(whisperspeech)
+    ENGINE_OPTS(parler)
 #undef ENGINE_OPTS
 
     m_rocm_gpu_versions.clear();
@@ -1509,6 +1515,11 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
     bool disable_whisperspeech_hip =
         (hw_feature_flags &
          hw_feature_flags_t::hw_feature_tts_whisperspeech_hip) == 0;
+    bool disable_parler_cuda =
+        (hw_feature_flags & hw_feature_flags_t::hw_feature_tts_parler_cuda) ==
+        0;
+    bool disable_parler_hip =
+        (hw_feature_flags & hw_feature_flags_t::hw_feature_tts_parler_hip) == 0;
 
     auto result = gpu_tools::available_devices(
         /*cuda=*/hw_scan_cuda(),
@@ -1537,7 +1548,8 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
                     break;
                 case gpu_tools::api_t::cuda: {
                     if (disable_fasterwhisper_cuda && disable_whispercpp_cuda &&
-                        disable_coqui_cuda && disable_whisperspeech_cuda)
+                        disable_coqui_cuda && disable_whisperspeech_cuda &&
+                        disable_parler_cuda)
                         return;
                     auto item =
                         QStringLiteral("%1, %2, %3")
@@ -1551,11 +1563,14 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
                         m_coqui_gpu_devices.push_back(item);
                     if (!disable_whisperspeech_cuda)
                         m_whisperspeech_gpu_devices.push_back(item);
+                    if (!disable_parler_cuda)
+                        m_parler_gpu_devices.push_back(item);
                     break;
                 }
                 case gpu_tools::api_t::rocm: {
                     if (disable_fasterwhisper_hip && disable_whispercpp_hip &&
-                        disable_coqui_hip && disable_whisperspeech_hip)
+                        disable_coqui_hip && disable_whisperspeech_hip &&
+                        disable_parler_hip)
                         return;
                     auto item =
                         QStringLiteral("%1, %2, %3")
@@ -1568,6 +1583,8 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
                     if (!disable_coqui_hip) m_coqui_gpu_devices.push_back(item);
                     if (!disable_whisperspeech_hip)
                         m_whisperspeech_gpu_devices.push_back(item);
+                    if (!disable_parler_hip)
+                        m_parler_gpu_devices.push_back(item);
                     m_rocm_gpu_versions.push_back(
                         QString::fromStdString(device.platform_name));
                     break;
@@ -1601,6 +1618,7 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
     ENGINE_OPTS(fasterwhisper)
     ENGINE_OPTS(coqui)
     ENGINE_OPTS(whisperspeech)
+    ENGINE_OPTS(parler)
 #undef ENGINE_OPTS
 
     emit gpu_devices_changed();
@@ -1820,6 +1838,7 @@ ENGINE_OPTS(whispercpp)
 ENGINE_OPTS(fasterwhisper)
 ENGINE_OPTS(coqui)
 ENGINE_OPTS(whisperspeech)
+ENGINE_OPTS(parler)
 #undef ENGINE_OPTS
 
 QString settings::audio_input_device() const {
@@ -2735,6 +2754,265 @@ void settings::trans_rule_clone(int index) {
     rule[2] = name;
     rules.insert(index + 1, rule);
     set_trans_rules(rules);
+}
+
+QVariantList settings::make_default_tts_voice_prompts() {
+    QVariantList rules;
+    rules.push_back(
+        QVariantList{/*[0] name=*/"Jon",
+                     /*[1] prompt=*/"Joh's talking. Very clear audio.",
+                     /*[2] flags=*/0});
+    rules.push_back(
+        QVariantList{/*[0] name=*/"Lea",
+                     /*[1] prompt=*/"Lea's talking. Very clear audio.",
+                     /*[2] flags=*/0});
+    rules.push_back(
+        QVariantList{/*[0] name=*/"Happy Jerry",
+                     /*[1] prompt=*/"Jerry's talking. Happy. Very clear audio.",
+                     /*[2] flags=*/0});
+    rules.push_back(QVariantList{
+        /*[0] name=*/"Sad Elisabeth",
+        /*[1] prompt=*/"Elisabeth's talking. Sad. Very clear audio.",
+        /*[2] flags=*/0});
+    return rules;
+}
+
+QVariantList settings::tts_voice_prompts() const {
+    if (contains(QStringLiteral("tts_voice_prompts"))) {
+        return value(QStringLiteral("tts_voice_prompts"), {}).toList();
+    }
+
+    return make_default_tts_voice_prompts();
+}
+
+QStringList settings::tts_voice_prompt_names() const {
+    QStringList names;
+
+    auto prompts = tts_voice_prompts();
+    std::transform(prompts.cbegin(), prompts.cend(), std::back_inserter(names),
+                   [](const auto& prompt) {
+                       auto l = prompt.toList();
+                       return l.isEmpty() ? QString{} : l.at(0).toString();
+                   });
+
+    return names;
+}
+
+void settings::set_tts_voice_prompts(const QVariantList& value) {
+    if (tts_voice_prompts() != value) {
+        setValue(QStringLiteral("tts_voice_prompts"), value);
+        emit tts_voice_prompts_changed();
+    }
+}
+
+QString settings::tts_name_of_voice_prompt(const QString& name) const {
+    auto prompts = tts_voice_prompts();
+    auto it =
+        std::find_if(prompts.cbegin(), prompts.cend(), [&](const auto& prompt) {
+            auto l = prompt.toList();
+            return l.size() > 1 && l.at(0) == name;
+        });
+
+    if (it == prompts.cend()) {
+        return prompts.isEmpty() ? QString{}
+                                 : prompts.front().toList().front().toString();
+    }
+
+    return it->toList().front().toString();
+}
+
+int settings::tts_index_of_voice_prompt(const QString& name) const {
+    auto prompts = tts_voice_prompts();
+    auto it =
+        std::find_if(prompts.cbegin(), prompts.cend(), [&](const auto& prompt) {
+            auto l = prompt.toList();
+            return l.size() > 1 && l.at(0) == name;
+        });
+
+    if (it == prompts.cend()) {
+        return prompts.isEmpty() ? -1 : 0;
+    }
+
+    return std::distance(prompts.cbegin(), it);
+}
+
+QString settings::tts_desc_of_voice_prompt(const QString& name) const {
+    auto prompts = tts_voice_prompts();
+    auto it =
+        std::find_if(prompts.cbegin(), prompts.cend(), [&](const auto& prompt) {
+            auto l = prompt.toList();
+            return l.size() > 1 && l.at(0) == name;
+        });
+
+    if (it == prompts.cend()) {
+        return {};
+    }
+
+    return it->toList().at(1).toString();
+}
+
+std::optional<settings::voice_profile_prompt_t> settings::tts_voice_prompt(
+    const QString& name) const {
+    auto prompts = tts_voice_prompts();
+    auto it = std::find_if(prompts.cbegin(), prompts.cend(),
+                           [&name](const auto& prompt) {
+                               auto l = prompt.toList();
+                               return l.size() > 1 && l.at(0) == name;
+                           });
+
+    if (it == prompts.cend()) {
+        return std::nullopt;
+    }
+
+    auto l = it->toList();
+
+    return voice_profile_prompt_t{/*name=*/l.at(0).toString(),
+                          /*desc=*/l.at(1).toString()};
+}
+
+void settings::tts_update_voice_prompt(const QString& name,
+                                       const voice_profile_prompt_t& voice_prompt) {
+    auto prompts = tts_voice_prompts();
+
+    bool push_new = true;
+    if (!name.isEmpty()) {
+        auto it = std::find_if(prompts.begin(), prompts.end(),
+                               [&](const auto& prompt) {
+                                   auto l = prompt.toList();
+                                   return l.size() > 1 && l.at(0) == name;
+                               });
+
+        if (it != prompts.end()) {
+            push_new = false;
+            *it = QStringList{voice_prompt.name, voice_prompt.desc};
+        }
+    }
+
+    if (push_new) {
+        prompts.push_back(QStringList{voice_prompt.name, voice_prompt.desc});
+    }
+
+    set_tts_voice_prompts(prompts);
+}
+
+void settings::tts_delete_voice_prompt(const QString& name) {
+    auto prompts = tts_voice_prompts();
+
+    auto it =
+        std::find_if(prompts.begin(), prompts.end(), [&](const auto& prompt) {
+            auto l = prompt.toList();
+            return l.size() > 1 && l.at(0) == name;
+        });
+
+    if (it != prompts.end()) {
+        prompts.erase(it);
+        set_tts_voice_prompts(prompts);
+    }
+}
+
+void settings::tts_clone_voice_prompt(const QString& name) {
+    auto voice_prompt = tts_voice_prompt(name);
+    if (!voice_prompt) return;
+
+    auto prompts = settings::tts_voice_prompts();
+
+    prompts.push_back(QStringList{tr("Clone of \"%1\"").arg(voice_prompt->name),
+                                  voice_prompt->desc});
+
+    settings::set_tts_voice_prompts(prompts);
+}
+
+QString settings::tts_active_voice_prompt() const {
+    return tts_name_of_voice_prompt(
+        value(QStringLiteral("tts_active_voice_prompt"), {}).toString());
+}
+
+void settings::set_tts_active_voice_prompt(const QString& value) {
+    if (tts_active_voice_prompt() != value) {
+        setValue(QStringLiteral("tts_active_voice_prompt"), value);
+        emit tts_active_voice_prompt_changed();
+    }
+}
+
+int settings::tts_active_voice_prompt_idx() const {
+    return tts_index_of_voice_prompt(
+        value(QStringLiteral("tts_active_voice_prompt"), {}).toString());
+}
+
+void settings::set_tts_active_voice_prompt_idx(int idx) {
+    if (idx < 0) return;
+    auto prompts = settings::tts_voice_prompts();
+    if (prompts.size() > idx)
+        set_tts_active_voice_prompt(prompts.at(idx).toList().at(0).toString());
+}
+
+QString settings::tts_active_voice_prompt_for_in_mnt() const {
+    return tts_name_of_voice_prompt(
+        value(QStringLiteral("tts_active_voice_prompt_for_in_mnt"), {})
+            .toString());
+}
+
+void settings::set_tts_active_voice_prompt_for_in_mnt(const QString& value) {
+    if (tts_active_voice_prompt_for_in_mnt() != value) {
+        setValue(QStringLiteral("tts_active_voice_prompt_for_in_mnt"), value);
+        emit tts_active_voice_prompt_for_in_mnt_changed();
+    }
+}
+
+int settings::tts_active_voice_prompt_for_in_mnt_idx() const {
+    return tts_index_of_voice_prompt(
+        value(QStringLiteral("tts_active_voice_prompt_for_in_mnt"), {})
+            .toString());
+}
+
+void settings::set_tts_active_voice_prompt_for_in_mnt_idx(int idx) {
+    if (idx < 0) return;
+    auto prompts = settings::tts_voice_prompts();
+    if (prompts.size() > idx)
+        set_tts_active_voice_prompt_for_in_mnt(
+            prompts.at(idx).toList().at(0).toString());
+}
+
+QString settings::tts_active_voice_prompt_for_out_mnt() const {
+    return tts_name_of_voice_prompt(
+        value(QStringLiteral("tts_active_voice_prompt_for_out_mnt"), {})
+            .toString());
+}
+
+void settings::set_tts_active_voice_prompt_for_out_mnt(const QString& value) {
+    if (tts_active_voice_prompt_for_out_mnt() != value) {
+        setValue(QStringLiteral("tts_active_voice_prompt_for_out_mnt"), value);
+        emit tts_active_voice_prompt_for_out_mnt_changed();
+    }
+}
+
+int settings::tts_active_voice_prompt_for_out_mnt_idx() const {
+    return tts_index_of_voice_prompt(
+        value(QStringLiteral("tts_active_voice_prompt_for_out_mnt"), {})
+            .toString());
+}
+
+void settings::set_tts_active_voice_prompt_for_out_mnt_idx(int idx) {
+    if (idx < 0) return;
+    auto prompts = settings::tts_voice_prompts();
+    if (prompts.size() > idx)
+        set_tts_active_voice_prompt_for_out_mnt(
+            prompts.at(idx).toList().at(0).toString());
+}
+
+settings::voice_profile_type_t settings::active_voice_profile_type() const {
+    return static_cast<voice_profile_type_t>(
+        value(QStringLiteral("active_voice_profile_type"),
+              static_cast<int>(voice_profile_type_t::VoiceProfileAudioSample))
+            .toInt());
+}
+
+void settings::set_active_voice_profile_type(voice_profile_type_t value) {
+    if (active_voice_profile_type() != value) {
+        setValue(QStringLiteral("active_voice_profile_type"),
+                 static_cast<int>(value));
+        emit active_voice_profile_type_changed();
+    }
 }
 
 settings::fake_keyboard_type_t settings::fake_keyboard_type() const {

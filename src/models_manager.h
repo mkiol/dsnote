@@ -59,10 +59,12 @@ class models_manager : public QObject, public singleton<models_manager> {
         tts_mimic3,
         tts_whisperspeech,
         tts_sam,
+        tts_parler,
         mnt_bergamot
     };
     friend QDebug operator<<(QDebug d, model_engine_t engine);
 
+    // must be the same as ModelFeatureFilterFlags
     enum feature_flags : unsigned int {
         no_flags = 0U,
         generic_start = 1U << 0U,
@@ -84,17 +86,19 @@ class models_manager : public QObject, public singleton<models_manager> {
         engine_tts_mimic3 = 1U << 15U,
         engine_tts_whisperspeech = 1U << 16U,
         engine_tts_sam = 1U << 17U,
-        engine_mnt = 1U << 22U,
-        engine_other = 1U << 23U,
+        engine_tts_parler = 1U << 18U,
+        engine_mnt = 1U << 20U,
+        engine_other = 1U << 21U,
         generic_end = engine_other,
-        hw_openvino = 1U << 24U,
-        stt_start = 1U << 25U,
+        hw_openvino = 1U << 22U,
+        stt_start = 1U << 23U,
         stt_intermediate_results = stt_start,
-        stt_punctuation = 1U << 26U,
+        stt_punctuation = 1U << 24U,
         stt_end = stt_punctuation,
-        tts_start = 1U << 30U,
+        tts_start = 1U << 25U,
         tts_voice_cloning = tts_start,
-        tts_end = tts_voice_cloning
+        tts_prompt = 1U << 26U,
+        tts_end = tts_prompt
     };
     friend inline feature_flags operator|(feature_flags a, feature_flags b) {
         return static_cast<feature_flags>(static_cast<unsigned int>(a) |
@@ -181,6 +185,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool tts_mimic3_nl = false;
         bool tts_rhvoice = false;
         bool tts_whisperspeech = false;
+        bool tts_parler = false;
         bool stt_fasterwhisper = false;
         bool stt_ds = false;
         bool stt_vosk = false;
@@ -296,11 +301,12 @@ class models_manager : public QObject, public singleton<models_manager> {
          * r - tts, use romanizer
          * l - tts, convert to lower case
          * p - tts, add extra pause at the end
-         * x - tts, voice cloning supported
+         * x - tts, voice cloning required
          * c - tts, convert quote to standard one
          * s - tts, avoid "punto" issue
          * 0 - tts, add extra silence
          * q - tts, do not split into sentences
+         * v - tts, propmt required
          * w - tts, split by words
          * i - stt, punctuation supported
          * t - stt, translate to english supported

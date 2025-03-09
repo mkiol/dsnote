@@ -42,6 +42,9 @@ void fasterwhisper_engine::stop() {
     auto task = py_executor::instance()->execute([&]() {
         try {
             m_model.reset();
+
+            // release mem
+            py::module_::import("gc").attr("collect")();
         } catch (const std::exception& err) {
             LOGE("py error: " << err.what());
         }

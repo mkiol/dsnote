@@ -32,6 +32,7 @@ std::ostream& operator<<(std::ostream& os,
        << ", ctranslate2-cuda=" << availability.ctranslate2_cuda
        << ", mimic3-tts=" << availability.mimic3_tts
        << ", whisperspeech-tts=" << availability.whisperspeech_tts
+       << ", parler-tts=" << availability.parler_tts
        << ", transformers=" << availability.transformers
        << ", unikud=" << availability.unikud
        << ", gruut_de=" << availability.gruut_de
@@ -96,6 +97,16 @@ libs_availability_t libs_availability() {
             availability.whisperspeech_tts = true;
         } catch (const std::exception& err) {
             LOGD("whisperspeech tts check py error: " << err.what());
+        }
+
+        try {
+            LOGD("checking: parler tts");
+            py::module_::import("parler_tts");
+            LOGD("checking: transformers");
+            py::module_::import("transformers");
+            availability.parler_tts = true;
+        } catch (const std::exception& err) {
+            LOGD("parler tts tts check py error: " << err.what());
         }
 
         try {

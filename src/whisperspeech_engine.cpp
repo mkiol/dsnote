@@ -53,6 +53,10 @@ void whisperspeech_engine::stop() {
         try {
             m_model.reset();
             m_speaker.reset();
+
+            // release mem
+            py::module_::import("gc").attr("collect")();
+            py::module_::import("torch").attr("cuda").attr("empty_cache")();
         } catch (const std::exception& err) {
             LOGE("py error: " << err.what());
         }

@@ -32446,6 +32446,336 @@
                 "https://huggingface.co/mukowaty/mimic3-voices/resolve/2b85a29b20717fdb3da37c96c9058f1bf2dd476f/voices/yo/openbible_low/phonemes.txt"
             ],
             "size": "62802884"
+        },
+        {
+            "name": "English (Parler-TTS Mini v1.1)",
+            "model_id": "en_parler_mini_v11",
+            "engine": "tts_parler",
+            "lang_id": "en",
+            "checksum": "504cef34",
+            "checksum_quick": "cc11dd93",
+            "size": "3763407097",
+            "comp": "dir",
+            "info-url": "https://huggingface.co/parler-tts/parler-tts-mini-v1.1",
+            "urls": [
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1.1/resolve/fbb2dd281092c5b414ef29cf9d8895f386f1feef/model.safetensors",
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1.1/resolve/fbb2dd281092c5b414ef29cf9d8895f386f1feef/config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1.1/resolve/fbb2dd281092c5b414ef29cf9d8895f386f1feef/generation_config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1.1/resolve/fbb2dd281092c5b414ef29cf9d8895f386f1feef/preprocessor_config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1.1/resolve/fbb2dd281092c5b414ef29cf9d8895f386f1feef/special_tokens_map.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1.1/resolve/fbb2dd281092c5b414ef29cf9d8895f386f1feef/tokenizer.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1.1/resolve/fbb2dd281092c5b414ef29cf9d8895f386f1feef/tokenizer.model",
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1.1/resolve/fbb2dd281092c5b414ef29cf9d8895f386f1feef/tokenizer_config.json"
+            ],
+            "options": "v",
+            "features": [
+                "tts_prompt"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License Version 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "score": 0,
+            "hidden": true
+        },
+        {
+            "name": "English (Parler-TTS Large v1)",
+            "model_id": "en_parler_large_v1",
+            "engine": "tts_parler",
+            "lang_id": "en",
+            "checksum": "c300ff58",
+            "checksum_quick": "769a5fd4",
+            "size": "9335524709",
+            "comp": "dir",
+            "info-url": "https://huggingface.co/parler-tts/parler-tts-large-v1",
+            "urls": [
+                "https://huggingface.co/parler-tts/parler-tts-large-v1/resolve/50cb4b874c83902f930d7c2e753224c15654f11e/model-00001-of-00002.safetensors",
+                "https://huggingface.co/parler-tts/parler-tts-large-v1/resolve/50cb4b874c83902f930d7c2e753224c15654f11e/model-00002-of-00002.safetensors",
+                "https://huggingface.co/parler-tts/parler-tts-large-v1/resolve/50cb4b874c83902f930d7c2e753224c15654f11e/model.safetensors.index.json",
+                "https://huggingface.co/parler-tts/parler-tts-large-v1/resolve/50cb4b874c83902f930d7c2e753224c15654f11e/config.json",
+                "https://huggingface.co/parler-tts/parler-tts-large-v1/resolve/50cb4b874c83902f930d7c2e753224c15654f11e/generation_config.json",
+                "https://huggingface.co/parler-tts/parler-tts-large-v1/resolve/50cb4b874c83902f930d7c2e753224c15654f11e/preprocessor_config.json",
+                "https://huggingface.co/parler-tts/parler-tts-large-v1/resolve/50cb4b874c83902f930d7c2e753224c15654f11e/special_tokens_map.json",
+                "https://huggingface.co/parler-tts/parler-tts-large-v1/resolve/50cb4b874c83902f930d7c2e753224c15654f11e/spiece.model",
+                "https://huggingface.co/parler-tts/parler-tts-large-v1/resolve/50cb4b874c83902f930d7c2e753224c15654f11e/tokenizer.json",
+                "https://huggingface.co/parler-tts/parler-tts-large-v1/resolve/50cb4b874c83902f930d7c2e753224c15654f11e/tokenizer_config.json"
+            ],
+            "options": "v",
+            "features": [
+                "tts_prompt"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License Version 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "hidden": true
+        },
+        {
+            "name": "English (Parler-TTS Mini v1)",
+            "model_id": "en_parler_mini_v1",
+            "engine": "tts_parler",
+            "lang_id": "en",
+            "checksum": "e90191bd",
+            "checksum_quick": "50ef696f",
+            "size": "3514743411",
+            "comp": "dir",
+            "info-url": "https://huggingface.co/parler-tts/parler-tts-mini-v1",
+            "urls": [
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1/resolve/0392b9451a601e528fd863bbb0598431fee810d9/model.safetensors",
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1/resolve/0392b9451a601e528fd863bbb0598431fee810d9/config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1/resolve/0392b9451a601e528fd863bbb0598431fee810d9/generation_config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1/resolve/0392b9451a601e528fd863bbb0598431fee810d9/preprocessor_config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1/resolve/0392b9451a601e528fd863bbb0598431fee810d9/special_tokens_map.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1/resolve/0392b9451a601e528fd863bbb0598431fee810d9/spiece.model",
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1/resolve/0392b9451a601e528fd863bbb0598431fee810d9/tokenizer.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-v1/resolve/0392b9451a601e528fd863bbb0598431fee810d9/tokenizer_config.json"
+            ],
+            "options": "v",
+            "features": [
+                "tts_prompt"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License Version 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "English (Parler-TTS Mini Expresso)",
+            "model_id": "en_parler_mini_expresso",
+            "engine": "tts_parler",
+            "lang_id": "en",
+            "checksum": "165fa573",
+            "checksum_quick": "ccede0c2",
+            "size": "2591470815",
+            "comp": "dir",
+            "info-url": "https://huggingface.co/parler-tts/parler-tts-mini-expresso",
+            "urls": [
+                "https://huggingface.co/parler-tts/parler-tts-mini-expresso/resolve/95d88b6f8b2b43dfb0f5c111f484addbaa1c69ed/model.safetensors",
+                "https://huggingface.co/parler-tts/parler-tts-mini-expresso/resolve/95d88b6f8b2b43dfb0f5c111f484addbaa1c69ed/config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-expresso/resolve/95d88b6f8b2b43dfb0f5c111f484addbaa1c69ed/generation_config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-expresso/resolve/95d88b6f8b2b43dfb0f5c111f484addbaa1c69ed/preprocessor_config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-expresso/resolve/95d88b6f8b2b43dfb0f5c111f484addbaa1c69ed/special_tokens_map.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-expresso/resolve/95d88b6f8b2b43dfb0f5c111f484addbaa1c69ed/spiece.model",
+                "https://huggingface.co/parler-tts/parler-tts-mini-expresso/resolve/95d88b6f8b2b43dfb0f5c111f484addbaa1c69ed/tokenizer.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-expresso/resolve/95d88b6f8b2b43dfb0f5c111f484addbaa1c69ed/tokenizer_config.json"
+            ],
+            "options": "v",
+            "features": [
+                "tts_prompt"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License Version 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "English (Parler-TTS Tiny v1)",
+            "model_id": "en_parler_tiny_v1",
+            "engine": "tts_parler",
+            "lang_id": "en",
+            "checksum": "52c8ebc2",
+            "checksum_quick": "8cc1f353",
+            "size": "1269555378",
+            "comp": "dir",
+            "info-url": "https://huggingface.co/parler-tts/parler-tts-tiny-v1",
+            "urls": [
+                "https://huggingface.co/parler-tts/parler-tts-tiny-v1/resolve/fe1bd939bb05464d39a76e20cf8a35d4e6885571/model.safetensors",
+                "https://huggingface.co/parler-tts/parler-tts-tiny-v1/resolve/fe1bd939bb05464d39a76e20cf8a35d4e6885571/config.json",
+                "https://huggingface.co/parler-tts/parler-tts-tiny-v1/resolve/fe1bd939bb05464d39a76e20cf8a35d4e6885571/generation_config.json",
+                "https://huggingface.co/parler-tts/parler-tts-tiny-v1/resolve/fe1bd939bb05464d39a76e20cf8a35d4e6885571/preprocessor_config.json",
+                "https://huggingface.co/parler-tts/parler-tts-tiny-v1/resolve/fe1bd939bb05464d39a76e20cf8a35d4e6885571/special_tokens_map.json",
+                "https://huggingface.co/parler-tts/parler-tts-tiny-v1/resolve/fe1bd939bb05464d39a76e20cf8a35d4e6885571/spiece.model",
+                "https://huggingface.co/parler-tts/parler-tts-tiny-v1/resolve/fe1bd939bb05464d39a76e20cf8a35d4e6885571/tokenizer.json",
+                "https://huggingface.co/parler-tts/parler-tts-tiny-v1/resolve/fe1bd939bb05464d39a76e20cf8a35d4e6885571/tokenizer_config.json"
+            ],
+            "options": "v",
+            "features": [
+                "tts_prompt"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License Version 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Multilingual (Parler-TTS Mini Multilingual)",
+            "model_id": "multilang_parler_mini_multilingual",
+            "engine": "tts_parler",
+            "lang_id": "multilang",
+            "checksum": "7e38db47",
+            "checksum_quick": "454f8b11",
+            "size": "3763407102",
+            "comp": "dir",
+            "info-url": "https://huggingface.co/parler-tts/parler-tts-mini-multilingual",
+            "urls": [
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual/resolve/e0e121325d1f0471756ef67b159d889f4b7db231/model.safetensors",
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual/resolve/e0e121325d1f0471756ef67b159d889f4b7db231/config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual/resolve/e0e121325d1f0471756ef67b159d889f4b7db231/generation_config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual/resolve/e0e121325d1f0471756ef67b159d889f4b7db231/preprocessor_config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual/resolve/e0e121325d1f0471756ef67b159d889f4b7db231/special_tokens_map.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual/resolve/e0e121325d1f0471756ef67b159d889f4b7db231/tokenizer.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual/resolve/e0e121325d1f0471756ef67b159d889f4b7db231/tokenizer.model",
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual/resolve/e0e121325d1f0471756ef67b159d889f4b7db231/tokenizer_config.json"
+            ],
+            "options": "v",
+            "features": [
+                "tts_prompt"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License Version 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "score": 0,
+            "hidden": true
+        },
+        {
+            "name": "Multilingual (Parler-TTS Mini Multilingual v1.1)",
+            "model_id": "multilang_parler_mini_multilingual_v11",
+            "engine": "tts_parler",
+            "lang_id": "multilang",
+            "checksum": "ea7b062b",
+            "checksum_quick": "ec170ee6",
+            "size": "3763407248",
+            "comp": "dir",
+            "info-url": "https://huggingface.co/parler-tts/parler-tts-mini-multilingual-v1.1",
+            "urls": [
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual-v1.1/resolve/11b27d57855dec1ce0914ba1f12363bf2ea75ba3/model.safetensors",
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual-v1.1/resolve/11b27d57855dec1ce0914ba1f12363bf2ea75ba3/config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual-v1.1/resolve/11b27d57855dec1ce0914ba1f12363bf2ea75ba3/generation_config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual-v1.1/resolve/11b27d57855dec1ce0914ba1f12363bf2ea75ba3/preprocessor_config.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual-v1.1/resolve/11b27d57855dec1ce0914ba1f12363bf2ea75ba3/special_tokens_map.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual-v1.1/resolve/11b27d57855dec1ce0914ba1f12363bf2ea75ba3/tokenizer.json",
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual-v1.1/resolve/11b27d57855dec1ce0914ba1f12363bf2ea75ba3/tokenizer.model",
+                "https://huggingface.co/parler-tts/parler-tts-mini-multilingual-v1.1/resolve/11b27d57855dec1ce0914ba1f12363bf2ea75ba3/tokenizer_config.json"
+            ],
+            "options": "v",
+            "features": [
+                "tts_prompt"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License Version 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "score": 0,
+            "hidden": true
+        },
+        {
+            "name": "English (Parler-TTS Mini Multilingual)",
+            "model_id": "en_parler_mini_multilingual",
+            "model_alias_of": "multilang_parler_mini_multilingual",
+            "lang_id": "en",
+            "hidden": true
+        },
+        {
+            "name": "Français (Parler-TTS Mini Multilingual)",
+            "model_id": "fr_parler_mini_multilingual",
+            "model_alias_of": "multilang_parler_mini_multilingual",
+            "lang_id": "fr",
+            "hidden": true
+        },
+        {
+            "name": "Español (Parler-TTS Mini Multilingual)",
+            "model_id": "es_parler_mini_multilingual",
+            "model_alias_of": "multilang_parler_mini_multilingual",
+            "lang_id": "es",
+            "hidden": true
+        },
+        {
+            "name": "Português (Parler-TTS Mini Multilingual)",
+            "model_id": "pt_parler_mini_multilingual",
+            "model_alias_of": "multilang_parler_mini_multilingual",
+            "lang_id": "pt",
+            "hidden": true
+        },
+        {
+            "name": "Polski (Parler-TTS Mini Multilingual)",
+            "model_id": "pl_parler_mini_multilingual",
+            "model_alias_of": "multilang_parler_mini_multilingual",
+            "lang_id": "pl",
+            "hidden": true
+        },
+        {
+            "name": "Deutsch (Parler-TTS Mini Multilingual)",
+            "model_id": "de_parler_mini_multilingual",
+            "model_alias_of": "multilang_parler_mini_multilingual",
+            "lang_id": "de",
+            "hidden": true
+        },
+        {
+            "name": "Nederlands (Parler-TTS Mini Multilingual)",
+            "model_id": "nl_parler_mini_multilingual",
+            "model_alias_of": "multilang_parler_mini_multilingual",
+            "lang_id": "nl",
+            "hidden": true
+        },
+        {
+            "name": "Italiano (Parler-TTS Mini Multilingual)",
+            "model_id": "it_parler_mini_multilingual",
+            "model_alias_of": "multilang_parler_mini_multilingual",
+            "lang_id": "it",
+            "hidden": true
+        },
+        {
+            "name": "English (Parler-TTS Mini Multilingual v1.1)",
+            "model_id": "en_parler_mini_multilingual_v11",
+            "model_alias_of": "multilang_parler_mini_multilingual_v11",
+            "lang_id": "en"
+        },
+        {
+            "name": "Français (Parler-TTS Mini Multilingual v1.1)",
+            "model_id": "fr_parler_mini_multilingual_v11",
+            "model_alias_of": "multilang_parler_mini_multilingual_v11",
+            "lang_id": "fr"
+        },
+        {
+            "name": "Español (Parler-TTS Mini Multilingual v1.1)",
+            "model_id": "es_parler_mini_multilingual_v11",
+            "model_alias_of": "multilang_parler_mini_multilingual_v11",
+            "lang_id": "es"
+        },
+        {
+            "name": "Português (Parler-TTS Mini Multilingual v1.1)",
+            "model_id": "pt_parler_mini_multilingual_v11",
+            "model_alias_of": "multilang_parler_mini_multilingual_v11",
+            "lang_id": "pt"
+        },
+        {
+            "name": "Polski (Parler-TTS Mini Multilingual v1.1)",
+            "model_id": "pl_parler_mini_multilingual_v11",
+            "model_alias_of": "multilang_parler_mini_multilingual_v11",
+            "lang_id": "pl"
+        },
+        {
+            "name": "Deutsch (Parler-TTS Mini Multilingual v1.1)",
+            "model_id": "de_parler_mini_multilingual_v11",
+            "model_alias_of": "multilang_parler_mini_multilingual_v11",
+            "lang_id": "de"
+        },
+        {
+            "name": "Nederlands (Parler-TTS Mini Multilingual v1.1)",
+            "model_id": "nl_parler_mini_multilingual_v11",
+            "model_alias_of": "multilang_parler_mini_multilingual_v11",
+            "lang_id": "nl"
+        },
+        {
+            "name": "Italiano (Parler-TTS Mini Multilingual v1.1)",
+            "model_id": "it_parler_mini_multilingual_v11",
+            "model_alias_of": "multilang_parler_mini_multilingual_v11",
+            "lang_id": "it"
         }
     ]
 }

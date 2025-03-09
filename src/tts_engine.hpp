@@ -127,6 +127,7 @@ class tts_engine {
         model_files_t model_files;
         std::string speaker_id;
         std::string ref_voice_file;
+        std::string ref_prompt;
         std::string cache_dir;
         std::string data_dir;
         std::string config_dir;
@@ -171,6 +172,7 @@ class tts_engine {
     auto text_format() const { return m_config.text_format; }
     void set_text_format(text_format_t value) { m_config.text_format = value; }
     auto split_into_sentences() const { return m_config.split_into_sentences; }
+    auto ref_prompt() const { return m_config.ref_prompt; }
     void set_split_into_sentences(bool value) {
         m_config.split_into_sentences = value;
     }
@@ -190,6 +192,7 @@ class tts_engine {
     static std::string merge_wav_files(std::vector<std::string>&& files);
     void set_speech_speed(unsigned int speech_speed);
     void set_ref_voice_file(std::string ref_voice_file);
+    void set_ref_prompt(std::string ref_prompt);
 
    protected:
     enum class task_type_t { speech_encoding, text_restoration };

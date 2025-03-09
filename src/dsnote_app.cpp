@@ -902,6 +902,49 @@ void dsnote_app::set_trans_rules_test_text(const QString &value) {
     }
 }
 
+void dsnote_app::update_voice_prompt(const QString &name,
+                                     const QString &new_name,
+                                     const QString &desc) const {
+    if (new_name.isEmpty() || desc.isEmpty()) {
+        qWarning() << "empty voice prompt";
+        return;
+    }
+
+    settings::instance()->tts_update_voice_prompt(name, {new_name, desc});
+}
+
+void dsnote_app::delete_voice_prompt(const QString &name) const {
+    if (name.isEmpty()) {
+        qWarning() << "empty voice prompt name";
+        return;
+    }
+
+    settings::instance()->tts_delete_voice_prompt(name);
+}
+
+void dsnote_app::clone_voice_prompt(const QString &name) const {
+    if (name.isEmpty()) {
+        qWarning() << "empty voice prompt name";
+        return;
+    }
+
+    settings::instance()->tts_clone_voice_prompt(name);
+}
+
+bool dsnote_app::test_voice_prompt(const QString &name, const QString &new_name,
+                                   const QString &desc) const {
+    if (new_name.isEmpty() || desc.isEmpty()) return false;
+
+    bool new_exists =
+        static_cast<bool>(settings::instance()->tts_voice_prompt(new_name));
+
+    if (name.isEmpty()) {
+        return !new_exists;
+    }
+
+    return name == new_name ? new_exists : !new_exists;
+}
+
 void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
                                          int task) {
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
@@ -2117,6 +2160,22 @@ void dsnote_app::rename_tts_ref_voice(int idx, const QString &new_name) {
     emit active_tts_for_out_mnt_ref_voice_changed();
 }
 
+bool dsnote_app::test_tts_ref_voice(int idx, const QString &new_name) const {
+    // find if name already taken
+    int i = 0;
+    for (auto it = m_available_tts_ref_voices_map.constBegin();
+         it != m_available_tts_ref_voices_map.constEnd(); ++it, ++i) {
+        if (i == idx) continue;
+        auto v = it.value().toStringList();
+        if (v.isEmpty()) continue;
+        if (v.front() == new_name) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 QVariantList dsnote_app::available_tts_models_for_in_mnt() const {
     QVariantList list;
 
@@ -2580,6 +2639,7 @@ QString dsnote_app::lang_from_model_id(const QString &model_id) {
 
 void dsnote_app::play_speech_internal(QString text, const QString &model_id,
                                       const QString &ref_voice,
+                                      const QString &ref_prompt,
                                       settings::text_format_t text_format) {
     if (text.isEmpty()) {
         qWarning() << "text is empty";
@@ -2617,6 +2677,8 @@ void dsnote_app::play_speech_internal(QString text, const QString &model_id,
                    settings::instance()->tts_normalize_audio());
     options.insert("tag_mode",
                    static_cast<int>(settings::instance()->tts_tag_mode()));
+    options.insert("ref_prompt",
+                   settings::instance()->tts_desc_of_voice_prompt(ref_prompt));
 
     if (m_available_tts_ref_voices_map.contains(ref_voice)) {
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
@@ -2642,6 +2704,9 @@ void dsnote_app::play_speech() {
     play_speech_internal(
         note(), active_tts_model(),
         tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
+        tts_ref_prompt_needed()
+            ? settings::instance()->tts_active_voice_prompt()
+            : QString{},
         settings::instance()->stt_tts_text_format());
 }
 
@@ -2658,6 +2723,9 @@ void dsnote_app::play_speech_selected(int start, int end) {
     play_speech_internal(
         note().mid(start, end - start), active_tts_model(),
         tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
+        tts_ref_prompt_needed()
+            ? settings::instance()->tts_active_voice_prompt()
+            : QString{},
         settings::instance()->stt_tts_text_format());
 }
 
@@ -2692,6 +2760,13 @@ void dsnote_app::play_speech_translator_selected(int start, int end,
                                                   : QString{}
                                : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
                                             : QString{},
+        transtalated
+            ? tts_for_out_mnt_ref_prompt_needed()
+                  ? settings::instance()->tts_active_voice_prompt_for_out_mnt()
+                  : QString{}
+        : tts_for_in_mnt_ref_prompt_needed()
+            ? settings::instance()->tts_active_voice_prompt_for_in_mnt()
+            : QString{},
         settings::instance()->mnt_text_format());
 }
 
@@ -2741,6 +2816,9 @@ void dsnote_app::play_speech_from_text(const QString &text,
                          tts_ref_voice_needed_by_id(model_id)
                              ? active_tts_ref_voice()
                              : QString{},
+                         tts_ref_prompt_needed_by_id(model_id)
+                             ? settings::instance()->tts_active_voice_prompt()
+                             : QString{},
                          settings::text_format_t::TextFormatRaw);
 }
 
@@ -2755,16 +2833,23 @@ void dsnote_app::play_speech_translator(bool transtalated) {
         return;
     }
 
-    play_speech_internal(transtalated ? m_translated_text : note(),
-                         transtalated ? m_active_tts_model_for_out_mnt
-                                      : m_active_tts_model_for_in_mnt,
-                         transtalated ? tts_for_out_mnt_ref_voice_needed()
-                                            ? active_tts_for_out_mnt_ref_voice()
-                                            : QString{}
-                         : tts_for_in_mnt_ref_voice_needed()
-                             ? active_tts_for_in_mnt_ref_voice()
-                             : QString{},
-                         settings::instance()->mnt_text_format());
+    play_speech_internal(
+        transtalated ? m_translated_text : note(),
+        transtalated ? m_active_tts_model_for_out_mnt
+                     : m_active_tts_model_for_in_mnt,
+        transtalated                        ? tts_for_out_mnt_ref_voice_needed()
+                                                  ? active_tts_for_out_mnt_ref_voice()
+                                                  : QString{}
+                               : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
+                                            : QString{},
+        transtalated
+            ? tts_for_out_mnt_ref_prompt_needed()
+                  ? settings::instance()->tts_active_voice_prompt_for_out_mnt()
+                  : QString{}
+        : tts_for_in_mnt_ref_prompt_needed()
+            ? settings::instance()->tts_active_voice_prompt_for_in_mnt()
+            : QString{},
+        settings::instance()->mnt_text_format());
 }
 
 void dsnote_app::translate_delayed() {
@@ -2836,6 +2921,9 @@ void dsnote_app::speech_to_file(const QString &dest_file,
     speech_to_file_internal(
         note(), active_tts_model(), dest_file, title_tag, track_tag,
         tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
+        tts_ref_prompt_needed()
+            ? settings::instance()->tts_active_voice_prompt()
+            : QString{},
         settings::instance()->stt_tts_text_format(),
         settings::instance()->audio_format(),
         settings::instance()->audio_quality());
@@ -2867,6 +2955,13 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
                                                   : QString{}
                                : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
                                             : QString{},
+        transtalated
+            ? tts_for_out_mnt_ref_prompt_needed()
+                  ? settings::instance()->tts_active_voice_prompt_for_out_mnt()
+                  : QString{}
+        : tts_for_in_mnt_ref_prompt_needed()
+            ? settings::instance()->tts_active_voice_prompt_for_in_mnt()
+            : QString{},
         settings::instance()->mnt_text_format(),
         settings::instance()->audio_format(),
         settings::instance()->audio_quality());
@@ -2875,8 +2970,8 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
 void dsnote_app::speech_to_file_internal(
     QString text, const QString &model_id, const QString &dest_file,
     const QString &title_tag, const QString &track_tag,
-    const QString &ref_voice, settings::text_format_t text_format,
-    settings::audio_format_t audio_format,
+    const QString &ref_voice, const QString &ref_prompt,
+    settings::text_format_t text_format, settings::audio_format_t audio_format,
     settings::audio_quality_t audio_quality) {
     if (text.isEmpty()) {
         qWarning() << "text is empty";
@@ -2920,6 +3015,8 @@ void dsnote_app::speech_to_file_internal(
                    settings::instance()->tts_normalize_audio());
     options.insert("tag_mode",
                    static_cast<int>(settings::instance()->tts_tag_mode()));
+    options.insert("ref_prompt",
+                   settings::instance()->tts_desc_of_voice_prompt(ref_prompt));
 
     if (m_available_tts_ref_voices_map.contains(ref_voice)) {
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
@@ -3768,6 +3865,13 @@ void dsnote_app::export_to_audio_mix_translator(bool transtalated,
                                                   : QString{}
                                : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
                                             : QString{},
+        transtalated
+            ? tts_for_out_mnt_ref_prompt_needed()
+                  ? settings::instance()->tts_active_voice_prompt_for_out_mnt()
+                  : QString{}
+        : tts_for_in_mnt_ref_prompt_needed()
+            ? settings::instance()->tts_active_voice_prompt_for_in_mnt()
+            : QString{},
         settings::instance()->mnt_text_format(),
         settings::audio_format_t::AudioFormatOggOpus,
         settings::audio_quality_t::AudioQualityVbrHigh);
@@ -3785,6 +3889,9 @@ void dsnote_app::export_to_audio_mix(const QString &input_file,
     speech_to_file_internal(
         note(), active_tts_model(), dest_file, title_tag, track_tag,
         tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
+        tts_ref_prompt_needed()
+            ? settings::instance()->tts_active_voice_prompt()
+            : QString{},
         settings::instance()->stt_tts_text_format(),
         settings::audio_format_t::AudioFormatOggOpus,
         settings::audio_quality_t::AudioQualityVbrHigh);
@@ -4393,6 +4500,15 @@ bool dsnote_app::feature_whisperspeech_gpu() const {
            feature_available("whisperspeech-tts-hip", false);
 }
 
+bool dsnote_app::feature_parler_tts() const {
+    return feature_available("parler-tts", false);
+}
+
+bool dsnote_app::feature_parler_gpu() const {
+    return feature_available("parler-tts-cuda", false) ||
+           feature_available("parler-tts-hip", false);
+}
+
 bool dsnote_app::feature_punctuator() const {
     return feature_available("punctuator", false);
 }
@@ -4537,6 +4653,8 @@ QVariantList dsnote_app::features_availability() {
                  /*tts_rhvoice=*/feature_available("rhvoice-tts", false),
                  /*tts_whisperspeech=*/
                  feature_available("whisperspeech-tts", false),
+                 /*tts_parler=*/
+                 feature_available("parler-tts", false),
                  /*stt_fasterwhisper=*/
                  feature_available("faster-whisper-stt", false),
                  /*stt_ds=*/feature_available("coqui-stt", false),
@@ -4807,22 +4925,26 @@ QString dsnote_app::download_content(const QUrl &url) {
     return text;
 }
 
-bool dsnote_app::stt_translate_needed_by_id(const QString &id) const {
-    if (m_available_stt_models_map.contains(id)) {
-        auto model = m_available_stt_models_map.value(id).toStringList();
-        return model.size() > 2 && model.at(2).contains('t');
+static bool has_model_options(const QVariantMap &map, const QString &id,
+                              char option) {
+    if (map.contains(id)) {
+        auto model = map.value(id).toStringList();
+        return model.size() > 2 && model.at(2).contains(option);
     }
 
     return false;
 }
 
-bool dsnote_app::tts_ref_voice_needed_by_id(const QString &id) const {
-    if (m_available_tts_models_map.contains(id)) {
-        auto model = m_available_tts_models_map.value(id).toStringList();
-        return model.size() > 2 && model.at(2).contains('x');
-    }
+bool dsnote_app::stt_translate_needed_by_id(const QString &id) const {
+    return has_model_options(m_available_stt_models_map, id, 't');
+}
 
-    return false;
+bool dsnote_app::tts_ref_voice_needed_by_id(const QString &id) const {
+    return has_model_options(m_available_tts_models_map, id, 'x');
+}
+
+bool dsnote_app::tts_ref_prompt_needed_by_id(const QString &id) const {
+    return has_model_options(m_available_tts_models_map, id, 'v');
 }
 
 bool dsnote_app::stt_translate_needed() const {
@@ -4833,12 +4955,24 @@ bool dsnote_app::tts_ref_voice_needed() const {
     return tts_ref_voice_needed_by_id(m_active_tts_model);
 }
 
+bool dsnote_app::tts_ref_prompt_needed() const {
+    return tts_ref_prompt_needed_by_id(m_active_tts_model);
+}
+
 bool dsnote_app::tts_for_in_mnt_ref_voice_needed() const {
     return tts_ref_voice_needed_by_id(m_active_tts_model_for_in_mnt);
 }
 
 bool dsnote_app::tts_for_out_mnt_ref_voice_needed() const {
     return tts_ref_voice_needed_by_id(m_active_tts_model_for_out_mnt);
+}
+
+bool dsnote_app::tts_for_out_mnt_ref_prompt_needed() const {
+    return tts_ref_prompt_needed_by_id(m_active_tts_model_for_out_mnt);
+}
+
+bool dsnote_app::tts_for_in_mnt_ref_prompt_needed() const {
+    return tts_ref_prompt_needed_by_id(m_active_tts_model_for_in_mnt);
 }
 
 QString dsnote_app::cache_dir() {

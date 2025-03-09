@@ -178,6 +178,7 @@ std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
        << ", model-files=[" << config.model_files << "]"
        << ", speaker=" << config.speaker_id
        << ", ref_voice_file=" << config.ref_voice_file
+       << ", ref_prompt=" << config.ref_prompt
        << ", text-format=" << config.text_format
        << ", sync_subs=" << config.sync_subs << ", tag_mode=" << config.tag_mode
        << ", options=" << config.options << ", lang_code=" << config.lang_code
@@ -356,6 +357,11 @@ void tts_engine::set_ref_voice_file(std::string ref_voice_file) {
     reset_ref_voice();
 }
 
+void tts_engine::set_ref_prompt(std::string ref_prompt) {
+    m_config.ref_prompt.assign(std::move(ref_prompt));
+    reset_ref_voice();
+}
+
 void tts_engine::reset_ref_voice() {
     // do nothing
 }
@@ -398,8 +404,9 @@ std::string tts_engine::path_to_output_file(const std::string& text,
         text + m_config.model_files.model_path +
         m_config.model_files.vocoder_path + m_config.ref_voice_file +
         std::to_string(create_date_sec(m_config.ref_voice_file)) +
-        m_config.model_files.diacritizer_path + m_config.speaker_id +
-        m_config.lang + (m_config.normalize_audio ? "1" : "0") +
+        m_config.ref_prompt + m_config.model_files.diacritizer_path +
+        m_config.speaker_id + m_config.lang +
+        (m_config.normalize_audio ? "1" : "0") +
         (do_speech_change ? "1" : "0") +
         (speech_speed == 10 ? "" : std::to_string(speech_speed)));
     return m_config.cache_dir + "/" + std::to_string(hash) + '.' +

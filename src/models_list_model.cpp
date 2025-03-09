@@ -81,6 +81,13 @@ QDebug operator<<(QDebug d, ModelsListModel::ModelFeatureFilterFlags flags) {
                 FeatureEngineTtsWhisperSpeech:
                 d << "engine-tts-whisper-speech";
                 break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureEngineTtsParler:
+                d << "engine-tts-parler";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::FeatureEngineTtsSam:
+                d << "engine-tts-sam";
+                break;
             case ModelsListModel::ModelFeatureFilterFlags::FeatureEngineMnt:
                 d << "engine-mnt";
                 break;
@@ -101,6 +108,9 @@ QDebug operator<<(QDebug d, ModelsListModel::ModelFeatureFilterFlags flags) {
             case ModelsListModel::ModelFeatureFilterFlags::
                 FeatureTtsVoiceCloning:
                 d << "tts-voice-cloning";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::FeatureTtsPrompt:
+                d << "tts-prompt";
                 break;
             default:
                 break;
@@ -349,7 +359,8 @@ QList<ListItem *> ModelsListModel::makeItems() {
 
     m_disabledFeatureFilterFlags = 0;
     for (unsigned int flag = ModelFeatureFilterFlags::FeatureSttStart;
-         flag <= ModelFeatureFilterFlags::FeatureTtsEnd; flag <<= 1U) {
+         flag != 0 && flag <= ModelFeatureFilterFlags::FeatureTtsEnd;
+         flag <<= 1U) {
         if ((flag & existing_not_generic_feature_flags) == 0)
             m_disabledFeatureFilterFlags |= flag;
     }

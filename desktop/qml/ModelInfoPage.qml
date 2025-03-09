@@ -140,6 +140,12 @@ Dialog {
                         return "Coqui"
                     else if (f & ModelsListModel.FeatureEngineTtsMimic3)
                         return "Mimic3"
+                    else if (f & ModelsListModel.FeatureEngineTtsWhisperSpeech)
+                        return "WhisperSpeech"
+                    else if (f & ModelsListModel.FeatureEngineTtsParler)
+                        return "Parler TTS"
+                    else if (f & ModelsListModel.FeatureEngineTtsSam)
+                        return "S.A.M."
                     return ""
                 }
                 font.bold: true
@@ -165,6 +171,8 @@ Dialog {
                     } else if (f & ModelsListModel.FeatureEngineSttFasterWhisper)
                         return "NVIDIA CUDA"
                     else if (f & ModelsListModel.FeatureEngineTtsCoqui)
+                        return "NVIDIA CUDA, AMD ROCm"
+                    else if (f & ModelsListModel.FeatureEngineTtsParler)
                         return "NVIDIA CUDA, AMD ROCm"
                     return ""
                 }
@@ -238,6 +246,8 @@ Dialog {
                         text += qsTr("Punctuation") + " · "
                     if (f & ModelsListModel.FeatureTtsVoiceCloning)
                         text += qsTr("Voice Cloning")
+                    if (f & ModelsListModel.FeatureTtsPrompt)
+                        text += qsTr("Voice Text Description")
 
                     if (text.length > 3 && text[text.length - 1] === ' ')
                         text = text.substring(0, text.length - 3)

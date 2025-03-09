@@ -163,10 +163,16 @@ DialogPage {
 
         RowLayout {
             anchors {
+                left: parent.left
+                leftMargin: root.leftPadding + appWin.padding
                 right: parent.right
                 rightMargin: root.rightPadding + appWin.padding
                 bottom: parent.bottom
                 bottomMargin: root.bottomPadding
+            }
+
+            Item {
+                Layout.fillWidth: true
             }
 
             Button {

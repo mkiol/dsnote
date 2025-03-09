@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,9 +14,11 @@ DialogPage {
     id: root
 
     readonly property bool verticalMode: (micButton.implicitWidth + fileButton.implicitWidth + cleanupButton.implicitWidth) > (width - 2 * appWin.padding)
-    readonly property bool canCreate: app.player_ready && titleTextField.text.length !== 0 &&
-                                      rangeSlider.first.value < rangeSlider.second.value && !app.recorder_processing
-
+    readonly property bool canCreate: app.player_ready &&
+                                      rangeSlider.first.value < rangeSlider.second.value &&
+                                      !app.recorder_processing &&
+                                      testData()
+    readonly property bool nameTaken: _nameForm.textField.text.trim().length > 0 && !testData()
     function format_time_to_s(time_ms) {
         return (time_ms / 1000).toFixed(1)
     }
@@ -28,7 +30,7 @@ DialogPage {
     function export_voice() {
         if (!root.canCreate) return
 
-        app.player_export_ref_voice(rangeSlider.first.value, rangeSlider.second.value, titleTextField.text)
+        app.player_export_ref_voice(rangeSlider.first.value, rangeSlider.second.value, _nameForm.textField.text)
         appWin.openDialog("VoiceMgmtPage.qml")
     }
 
@@ -38,6 +40,16 @@ DialogPage {
                             rangeSlider.first.handle.width / 2) / probsRow.probs.length
     }
 
+    function testData() {
+        var name = _nameForm.textField.text.trim()
+
+        if (name.length === 0) {
+            return false
+        }
+
+        return app.test_tts_ref_voice(-1, name)
+    }
+
     onOpenedChanged: {
         if (!opened) {
             app.player_reset()
@@ -45,17 +57,77 @@ DialogPage {
         }
     }
 
-    title: qsTr("Create a new voice sample")
+    title: qsTr("Create a new audio sample")
+
+    Component {
+        id: helpDialog
+
+        HelpDialog {
+            title: qsTr("Audio sample")
+
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                text: qsTr("Audio sample lets you clone someone's voice.") + " " +
+                      qsTr("It can be created by recording a audio sample directly from the microphone or by providing an audio file.")
+            }
+
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                text: qsTr("Tips:") +
+                      "<ul>" +
+                      "<li>" + qsTr("Audio sample should not be very long.") + " " + qsTr("The duration from 10 to 30 seconds is good enough.") + "</li>" +
+                      "<li>" + qsTr("Use the range slider to clip the audio sample to the part containing speech.") + "</li>" +
+                      "<li>" + qsTr("If you're not satisfied with voice cloning quality, try creating a few different audio samples and see which one gives you the best result.") + "</li>" +
+                      "</ul>"
+            }
+
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                text: qsTr("Currently, voice cloning can be used in the following models:") +
+                      "<ul>" +
+                      "<li><i>Coqui XTTS</i></li>" +
+                      "<li><i>Coqui YourTTS</i></li>" +
+                      "<li><i>WhisperSpeech</i></li>" +
+                      "</ul>"
+            }
+
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                text: qsTr("To learn more about how to create a good audio sample, check out the specific model's website.")
+            }
+        }
+    }
 
     footer: Item {
         height: closeButton.height + appWin.padding
 
         RowLayout {
             anchors {
+                left: parent.left
+                leftMargin: root.leftPadding + appWin.padding
                 right: parent.right
                 rightMargin: root.rightPadding + appWin.padding
                 bottom: parent.bottom
                 bottomMargin: root.bottomPadding
+            }
+
+            Button {
+                icon.name: "help-about-symbolic"
+                display: AbstractButton.IconOnly
+                text: qsTr("Help")
+                onClicked: appWin.openPopup(helpDialog)
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: text
+                hoverEnabled: true
+            }
+
+            Item {
+                Layout.fillWidth: true
             }
 
             Button {
@@ -86,7 +158,7 @@ DialogPage {
             rangeSlider.second.value = app.player_duration
         }
         onRecorder_new_stream_name: {
-            titleTextField.text = name
+            _nameForm.textField.text = name
         }
         onRecorder_new_probs: root.update_probs(probs)
     }
@@ -245,46 +317,19 @@ DialogPage {
         }
     }
 
-    GridLayout {
-        id: gridVoiceName
+    TextFieldForm {
+        id: _nameForm
 
-        columns: root.verticalMode ? 1 : 2
-        columnSpacing: appWin.padding
-        rowSpacing: appWin.padding
         enabled: app.player_ready && !app.recorder_processing
-
-        Label {
-            Layout.fillWidth: true
-            Layout.leftMargin: verticalMode ? appWin.padding : 2 * appWin.padding
-            text: qsTr("Voice name")
-        }
-
-        TextField {
-            id: titleTextField
-
-            Layout.fillWidth: verticalMode
-            Layout.preferredWidth: verticalMode ? gridVoiceName.width : gridVoiceName.width / 2
-            Layout.leftMargin: verticalMode ? appWin.padding : 0
-            color: palette.text
-            Accessible.name: qsTr("Voice name")
-            TextContextMenu {}
+        label.text: qsTr("Name")
+        valid: !root.nameTaken
+        toolTip: valid ? "" : qsTr("This name is already taken")
+        textField {
+            text: root.dataName
         }
     }
 
     Item { height: 1}
-
-    InlineMessage {
-        visible: app.player_ready
-        color: palette.text
-        Layout.leftMargin: appWin.padding
-        Layout.fillWidth: true
-
-        Label {
-            Layout.fillWidth: true
-            wrapMode: Text.Wrap
-            text: qsTr("Tip: If you're not satisfied with voice cloning quality, try creating a few different voice samples and see which one gives you the best result.")
-        }
-    }
 
     VoiceRecordPage {
         id: voiceRecordDialog
@@ -311,7 +356,7 @@ DialogPage {
         selectExisting: true
         selectMultiple: false
         onAccepted: {
-            titleTextField.text = ""
+            _nameForm.textField.text = ""
             app.player_import_from_url(fileUrl);
             _settings.file_audio_open_dir_url = fileUrl
         }
