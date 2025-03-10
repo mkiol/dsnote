@@ -313,10 +313,20 @@ Dialog {
             Label {
                 Layout.columnSpan: 2
                 Layout.topMargin: appWin.padding
+                visible: root.model.score === 0
+                text: qsTr("This model is experimental and may not work well.")
+                font.italic: true
+                color: "red"
+                Layout.alignment: Qt.AlignVCenter
+            }
+
+            Label {
+                Layout.columnSpan: 2
+                Layout.topMargin: appWin.padding
                 visible: root.model.download_urls.length === 0
                 text: qsTr("The model does not have any files to download.")
                 font.italic: true
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                Layout.alignment: Qt.AlignVCenter
             }
         }
 

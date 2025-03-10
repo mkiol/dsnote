@@ -432,7 +432,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     static void update_url_hash(priv_model_t& model);
     static download_info_t make_download_info(const priv_model_t& model);
     static feature_flags add_implicit_feature_flags(
-        const QString& model_id, model_engine_t engine,
+        const QString& model_id, model_engine_t engine, int score,
         feature_flags existing_features);
     static feature_flags add_new_feature(feature_flags existing_features,
                                          feature_flags new_feature);

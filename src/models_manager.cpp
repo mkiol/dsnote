@@ -1828,7 +1828,7 @@ models_manager::feature_flags models_manager::add_new_feature(
 }
 
 models_manager::feature_flags models_manager::add_implicit_feature_flags(
-    const QString& model_id, model_engine_t engine,
+    const QString& model_id, model_engine_t engine, int score,
     feature_flags existing_features) {
     switch (engine) {
         case model_engine_t::stt_ds:
@@ -1898,7 +1898,10 @@ models_manager::feature_flags models_manager::add_implicit_feature_flags(
                                 feature_flags::engine_tts_coqui) |
                 add_new_feature(existing_features,
                                 feature_flags::slow_processing);
-            if (model_id.contains("fairseq"))
+            if (score == 0)
+                existing_features = add_new_feature(existing_features,
+                                                    feature_flags::low_quality);
+            else if (model_id.contains("fairseq"))
                 existing_features = add_new_feature(
                     existing_features, feature_flags::medium_quality);
             else
@@ -1911,8 +1914,9 @@ models_manager::feature_flags models_manager::add_implicit_feature_flags(
                                 feature_flags::engine_tts_whisperspeech) |
                 add_new_feature(existing_features,
                                 feature_flags::slow_processing);
-            existing_features =
-                add_new_feature(existing_features, feature_flags::high_quality);
+            existing_features = add_new_feature(
+                existing_features, score == 0 ? feature_flags::low_quality
+                                              : feature_flags::high_quality);
             break;
         case model_engine_t::tts_mimic3:
             existing_features =
@@ -1927,7 +1931,9 @@ models_manager::feature_flags models_manager::add_implicit_feature_flags(
             existing_features =
                 add_new_feature(existing_features,
                                 feature_flags::engine_tts_piper) |
-                add_new_feature(existing_features, feature_flags::high_quality);
+                add_new_feature(existing_features,
+                                (score == 0 ? feature_flags::low_quality
+                                            : feature_flags::high_quality));
 
             if (model_id.contains("high") || model_id.contains("medium"))
                 existing_features = add_new_feature(
@@ -1958,8 +1964,9 @@ models_manager::feature_flags models_manager::add_implicit_feature_flags(
                                 feature_flags::engine_tts_parler) |
                 add_new_feature(existing_features,
                                 feature_flags::slow_processing);
-            existing_features =
-                add_new_feature(existing_features, feature_flags::high_quality);
+            existing_features = add_new_feature(
+                existing_features, score == 0 ? feature_flags::low_quality
+                                              : feature_flags::high_quality);
             break;
         case model_engine_t::tts_rhvoice:
             existing_features =
@@ -1975,7 +1982,8 @@ models_manager::feature_flags models_manager::add_implicit_feature_flags(
                 add_new_feature(existing_features,
                                 feature_flags::fast_processing) |
                 add_new_feature(existing_features,
-                                feature_flags::medium_quality);
+                                score == 0 ? feature_flags::low_quality
+                                           : feature_flags::medium_quality);
             break;
         case model_engine_t::ttt_hftc:
             existing_features =
@@ -2125,7 +2133,8 @@ auto models_manager::extract_models(
                 for (const auto& obj : features_array)
                     features = features | feature_from_name(obj.toString());
             }
-            features = add_implicit_feature_flags(model_id, engine, features);
+            features =
+                add_implicit_feature_flags(model_id, engine, score, features);
 
             recommended_model = obj.value("recommended_model").toString();
         } else if (models.count(model_alias_of) > 0) {
@@ -2148,6 +2157,7 @@ auto models_manager::extract_models(
             if (trg_lang_id.isEmpty()) trg_lang_id = alias.trg_lang_id;
             options = merge_options(options, alias.options);
             if (info.isEmpty()) info = alias.info;
+            if (score == -1) score = alias.score;
 
             if (engine == model_engine_t::mnt_bergamot &&
                 trg_lang_id.isEmpty()) {
@@ -2162,7 +2172,8 @@ auto models_manager::extract_models(
                     features = add_new_feature(
                         features, feature_from_name(obj.toString()));
             }
-            features = add_implicit_feature_flags(model_id, engine, features);
+            features =
+                add_implicit_feature_flags(model_id, engine, score, features);
 
             license = alias.license;
 

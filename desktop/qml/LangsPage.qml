@@ -537,6 +537,19 @@ DialogPage {
                         Layout.fillWidth: true
                     }
 
+                    Button {
+                        visible: model.score === 0
+                        icon.name: "applications-science-symbolic"
+                        display: AbstractButton.IconOnly
+                        flat: true
+                        text: qsTr("Experimental")
+                        Layout.alignment: Qt.AlignVCenter
+
+                        ToolTip.visible: hovered || down
+                        ToolTip.text: qsTr("This model is experimental and may not work well.")
+                        hoverEnabled: true
+                    }
+
                     Label {
                         id: availableLabel
 
