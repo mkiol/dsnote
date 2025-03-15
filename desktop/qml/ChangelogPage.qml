@@ -46,6 +46,10 @@ DialogPage {
             The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.
             Disable this option if you observe this problem.</li>
         </ul>
+        <p>" + qsTr("Translator") + "</p>
+        <ul>
+        <li>New models: English to Chinese, English to Arabic, English to Korean, English to Japanese</li>
+        </ul>
         <p>" + qsTr("Accessibility") + "</p>
         <ul>
         <li>Support for <i>Insert into active window</i> under Wayland.

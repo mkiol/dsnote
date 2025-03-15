@@ -98,7 +98,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.8.0" date="2025-03-08">
+    <release version="4.8.0" date="2025-03-15">
       <description>
       <p>User Interface:</p>
       <ul>
@@ -122,6 +122,10 @@
           Unlike the original Whisper, which tends to omit disfluencies and follows more of a intended transcription style,
           CrisperWhisper aims to transcribe every spoken word exactly as it is, including fillers, pauses, stutters and false starts.
           CrisperWhisper model is enabled only for English and German languages.</li>
+      </ul>
+      <p>Translator:</p>
+      <ul>
+      <li>New models: English to Chinese, English to Arabic, English to Korean, English to Japanese</li>
       </ul>
       <p>Accessibility:</p>
       <ul>
