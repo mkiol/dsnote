@@ -22834,6 +22834,56 @@
             "size": "63118669"
         },
         {
+            "name": "Deutsch (Piper Kantodel Male)",
+            "model_id": "de_piper_kantodel",
+            "engine": "tts_piper",
+            "lang_id": "de",
+            "checksum": "8a7a1246",
+            "checksum_quick": "1e52d293",
+            "size": "63526317",
+            "info": "https://huggingface.co/nullnullvier/kantodel",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/nullnullvier/kantodel/resolve/30791789864f7bba3aa4284f30ea24c1a989df72/kantodel.onnx",
+                "https://huggingface.co/nullnullvier/kantodel/resolve/30791789864f7bba3aa4284f30ea24c1a989df72/kantodel.onnx.json"
+            ],
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Deutsch (Piper GLaDOS High Female)",
+            "model_id": "de_piper_glados_high",
+            "engine": "tts_piper",
+            "lang_id": "de",
+            "checksum": "537ad3d3",
+            "checksum_quick": "e18a70e",
+            "size": "114214301",
+            "info": "https://huggingface.co/systemofapwne/piper-de-glados",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/systemofapwne/piper-de-glados/resolve/cdabb24138ecdba1e4b11698f34afbeba5148d02/de/de_DE/glados/high/de_DE-glados-high.onnx",
+                "https://huggingface.co/systemofapwne/piper-de-glados/resolve/cdabb24138ecdba1e4b11698f34afbeba5148d02/de/de_DE/glados/high/de_DE-glados-high.onnx.json"
+            ]
+        },
+        {
+            "name": "Deutsch (Piper GLaDOS Turret High Female)",
+            "model_id": "de_piper_gladosturret_high",
+            "engine": "tts_piper",
+            "lang_id": "de",
+            "checksum": "c5b66673",
+            "checksum_quick": "71d70765",
+            "size": "114214308",
+            "info": "https://huggingface.co/systemofapwne/piper-de-glados",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/systemofapwne/piper-de-glados/resolve/cdabb24138ecdba1e4b11698f34afbeba5148d02/de/de_DE/glados-turret/high/de_DE-glados-turret-high.onnx",
+                "https://huggingface.co/systemofapwne/piper-de-glados/resolve/cdabb24138ecdba1e4b11698f34afbeba5148d02/de/de_DE/glados-turret/high/de_DE-glados-turret-high.onnx.json"
+            ]
+        },
+        {
             "name": "Deutsch (Piper Thorsten Low Male)",
             "model_id": "de_piper_thorsten_low",
             "engine": "tts_piper",
@@ -23112,6 +23162,27 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/fi/fi_FI/harri/medium/fi_FI-harri-medium.onnx.json"
             ],
             "size": "63216492"
+        },
+        {
+            "name": "Suomi (Piper Asmo Medium Male)",
+            "model_id": "fi_piper_asmo_medium",
+            "engine": "tts_piper",
+            "lang_id": "fi",
+            "checksum": "b69c71f",
+            "checksum_quick": "be28d512",
+            "size": "63531337",
+            "info": "https://huggingface.co/AsmoKoskinen/Piper_Finnish_Model",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/AsmoKoskinen/Piper_Finnish_Model/resolve/37e26c355e9e1f2dc6d3d5d966a05fbf29ba8427/fi_FI-asmo-medium.onnx",
+                "https://huggingface.co/AsmoKoskinen/Piper_Finnish_Model/resolve/37e26c355e9e1f2dc6d3d5d966a05fbf29ba8427/fi_FI-asmo-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC BY NC 4.0",
+                "name": "Creative Commons Attribution Non Commercial 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Français (Piper Tom Medium Male)",
@@ -23410,12 +23481,61 @@
             "lang_id": "lb",
             "checksum": "81c437f3",
             "checksum_quick": "b06cff60",
+            "size": "63214465",
+            "info": "https://huggingface.co/mbarnig/lb_rhasspy_piper_tts",
             "comp": "dir",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/lb/lb_LU/marylux/medium/lb_LU-marylux-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/lb/lb_LU/marylux/medium/lb_LU-marylux-medium.onnx.json"
             ],
-            "size": "63214465"
+            "license": {
+                "id": "CC BY 4.0",
+                "name": "Creative Commons Attribution 4.0 International",
+                "url": "https://creativecommons.org/licenses/by/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Lëtzebuergesch (Piper Androgynous Medium Male)",
+            "model_id": "lb_piper_androgynous_medium",
+            "engine": "tts_piper",
+            "lang_id": "lb",
+            "checksum": "7aeec6c4",
+            "checksum_quick": "33aba3a1",
+            "size": "63526314",
+            "info": "https://huggingface.co/mbarnig/lb_rhasspy_piper_tts",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/mbarnig/lb_rhasspy_piper_tts/resolve/56b09ff6101ba3d6d26744b75c6f6baa247e514a/lb/lb_LU/androgynous/medium/lb_LU-androgynous-medium.onnx",
+                "https://huggingface.co/mbarnig/lb_rhasspy_piper_tts/resolve/56b09ff6101ba3d6d26744b75c6f6baa247e514a/lb/lb_LU/androgynous/medium/lb_LU-androgynous-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC BY 4.0",
+                "name": "Creative Commons Attribution 4.0 International",
+                "url": "https://creativecommons.org/licenses/by/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Lëtzebuergesch (Piper FemaleLOD Medium)",
+            "model_id": "lb_piper_femalelod_medium",
+            "engine": "tts_piper",
+            "lang_id": "lb",
+            "checksum": "d36428bc",
+            "checksum_quick": "9f3e47a5",
+            "size": "63526314",
+            "info": "https://huggingface.co/mbarnig/lb_rhasspy_piper_tts",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/mbarnig/lb_rhasspy_piper_tts/resolve/56b09ff6101ba3d6d26744b75c6f6baa247e514a/lb/lb_LU/femaleLOD/medium/lb_LU-femaleLOD-medium.onnx",
+                "https://huggingface.co/mbarnig/lb_rhasspy_piper_tts/resolve/56b09ff6101ba3d6d26744b75c6f6baa247e514a/lb/lb_LU/femaleLOD/medium/lb_LU-femaleLOD-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC BY 4.0",
+                "name": "Creative Commons Attribution 4.0 International",
+                "url": "https://creativecommons.org/licenses/by/4.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "नेपाली (Piper Google Medium)",
@@ -23587,6 +23707,21 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/nl/nl_NL/mls_7432/low/nl_NL-mls_7432-low.onnx.json"
             ],
             "size": "63118671"
+        },
+        {
+            "name": "Nederlands (Piper Anna Female)",
+            "model_id": "nl_piper_anna",
+            "engine": "tts_piper",
+            "lang_id": "nl",
+            "checksum": "432f4cd3",
+            "checksum_quick": "f3639baf",
+            "size": "63546750",
+            "info": "https://huggingface.co/Rikels/piper-dutch",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/Rikels/piper-dutch/resolve/58bfafcef779b1fafd71475d3079b284a5b9fd0a/anna.onnx",
+                "https://huggingface.co/Rikels/piper-dutch/resolve/58bfafcef779b1fafd71475d3079b284a5b9fd0a/anna.onnx.json"
+            ]
         },
         {
             "name": "Nederlands Belgisch (Piper Nathalie Low Female)",

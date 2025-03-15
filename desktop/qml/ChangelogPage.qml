@@ -45,6 +45,7 @@ DialogPage {
             Use this option to enable/disable audio volume normalization.
             The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.
             Disable this option if you observe this problem.</li>
+        <li>New <i>Piper</i> voices for: Dutch, Finnish, German, Luxembourgish</li>
         </ul>
         <p>" + qsTr("Translator") + "</p>
         <ul>
