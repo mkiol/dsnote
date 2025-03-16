@@ -251,6 +251,8 @@ set(share_install_dir "${install_dir}/share")
 set(lib_install_dir "${install_dir}/lib")
 set(bin_install_dir "${install_dir}/bin")
 set(rpath_install_dir "${CMAKE_INSTALL_PREFIX}/${lib_install_dir}")
+set(resources_dir "${PROJECT_SOURCE_DIR}/resources")
+set(resources_install_dir ${install_dir})
 set(translations_resource_file "${CMAKE_BINARY_DIR}/translations.qrc")
 
 set(xz_path "xz")

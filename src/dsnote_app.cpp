@@ -22,6 +22,7 @@
 
 #include "downloader.hpp"
 #include "media_compressor.hpp"
+#include "module_tools.hpp"
 #include "mtag_tools.hpp"
 #include "qtlogger.hpp"
 #include "speech_service.h"
@@ -1884,24 +1885,48 @@ void dsnote_app::update_available_tts_ref_voices() {
         QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
             .filePath(s_ref_voices_dir_name);
 
-    QDir dir{ref_voices_dir};
+    auto scan_ref_voices = [&] {
+        QDir dir{ref_voices_dir};
 
-    if (!dir.exists()) QDir::root().mkpath(dir.absolutePath());
+        if (!dir.exists()) QDir::root().mkpath(dir.absolutePath());
 
-    dir.setNameFilters(QStringList{} << "*.mp3"
-                                     << "*.ogg"
-                                     << "*.opus"
-                                     << "*.flac");
-    dir.setFilter(QDir::Files);
+        dir.setNameFilters(QStringList{} << "*.mp3"
+                                         << "*.ogg"
+                                         << "*.opus"
+                                         << "*.flac");
+        dir.setFilter(QDir::Files);
 
-    for (const auto &file : std::as_const(dir).entryList()) {
-        auto path = dir.absoluteFilePath(file);
-        auto mtag = mtag_tools::read(path.toStdString());
-        auto name = mtag && !mtag->title.empty()
-                        ? QString::fromStdString(mtag->title)
-                        : QFileInfo{file}.baseName();
-        new_available_tts_ref_voices_map.insert(
-            file, QStringList{std::move(name), std::move(path)});
+        for (const auto &file : std::as_const(dir).entryList()) {
+            auto path = dir.absoluteFilePath(file);
+            auto mtag = mtag_tools::read(path.toStdString());
+            auto name = mtag && !mtag->title.empty()
+                            ? QString::fromStdString(mtag->title)
+                            : QFileInfo{file}.baseName();
+            new_available_tts_ref_voices_map.insert(
+                file, QStringList{std::move(name), std::move(path)});
+        }
+    };
+
+    scan_ref_voices();
+
+    if (new_available_tts_ref_voices_map.empty() &&
+        (settings::instance()->hint_done_flags() &
+         settings::hint_done_flags_t::HintDoneRefVoiceDefault) == 0) {
+        auto copy_default_ref_voice = [&](int nb) {
+            auto voice_ref_file_name = QStringLiteral("voice-%1.opus").arg(nb);
+            QFile{
+                module_tools::path_to_share_dir_for_path(voice_ref_file_name) +
+                '/' + voice_ref_file_name}
+                .copy(ref_voices_dir + '/' + voice_ref_file_name);
+        };
+
+        // copy default ref-voices
+        copy_default_ref_voice(1);
+        copy_default_ref_voice(2);
+
+        settings::instance()->set_hint_done(settings::HintDoneRefVoiceDefault);
+
+        scan_ref_voices();
     }
 
     if (new_available_tts_ref_voices_map.contains(

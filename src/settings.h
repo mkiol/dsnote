@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -568,7 +568,10 @@ class settings : public QSettings, public singleton<settings> {
         HintDoneAddon = 1U << 0U,
         HintDoneHwAccel = 1U << 1U,
         HintDoneTranslator = 1U << 2U,
-        HintDoneRules = 1U << 3U
+        HintDoneRules = 1U << 3U,
+        HintDoneRefVoiceHelp = 1U << 4U,
+        HintDoneRefPromptHelp = 1U << 5U,
+        HintDoneRefVoiceDefault = 1U << 6U
     };
     Q_ENUM(hint_done_flags_t)
 

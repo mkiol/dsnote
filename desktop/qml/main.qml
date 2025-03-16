@@ -163,6 +163,22 @@ ApplicationWindow {
         }
     }
 
+    function showRefHelpIfNeeded() {
+        var ref_voice_needed = (app.tts_ref_voice_needed && !_settings.translator_mode) ||
+                ((app.tts_for_in_mnt_ref_voice_needed || app.tts_for_out_mnt_ref_voice_needed) && _settings.translator_mode)
+        var ref_prompt_needed = (app.tts_ref_prompt_needed && !_settings.translator_mode) ||
+                ((app.tts_for_in_mnt_ref_prompt_needed || app.tts_for_out_mnt_ref_prompt_needed) && _settings.translator_mode)
+
+        if (ref_voice_needed && ((_settings.hint_done_flags & Settings.HintDoneRefVoiceHelp) == 0 || app.available_tts_ref_voices.length === 0)) {
+            appWin.openPopup(refVoiceHelpMessage)
+            _settings.set_hint_done(Settings.HintDoneRefVoiceHelp)
+        }
+        if (ref_prompt_needed && ((_settings.hint_done_flags & Settings.HintDoneRefPromptHelp) == 0 || _settings.tts_voice_prompts.length === 0)) {
+            appWin.openPopup(refPromptHelpMessage)
+            _settings.set_hint_done(Settings.HintDoneRefPromptHelp)
+        }
+    }
+
     Component.onCompleted: {
         var hidded =  _start_in_tray || (_settings.start_in_tray && _settings.use_tray)
         visible = !hidded;
@@ -173,6 +189,46 @@ ApplicationWindow {
     visible: false
     header: MainToolBar {}
     onActiveChanged: update_dektop_notification()
+
+    Component {
+        id: refVoiceHelpMessage
+
+        HelpDialog {
+            title: qsTr("Audio sample")
+
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                text: qsTr("The selected model supports voice cloning. Create an %1 to clone someone's voice.").arg("<i>" + qsTr("Audio sample") + "</i>")
+            }
+
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                text: qsTr("You can make a new %1 in the %2 menu.").arg("<i>" + qsTr("Audio sample") + "</i>").arg("<i>" + qsTr("Voice profiles") + "</i>")
+            }
+        }
+    }
+
+    Component {
+        id: refPromptHelpMessage
+
+        HelpDialog {
+            title: qsTr("Text voice profile")
+
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                text: qsTr("The selected model supports the voice characteristics defined in the text description.")
+            }
+
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                text: qsTr("You can make a new %1 in the %2 menu.").arg("<i>" + qsTr("Text voice profile") + "</i>").arg("<i>" + qsTr("Voice profiles") + "</i>")
+            }
+        }
+    }
 
     TextField {
         id: _dummyTextField
@@ -593,5 +649,11 @@ ApplicationWindow {
             appWin.show()
             appWin.raise()
         }
+        onTts_ref_voice_neededChanged: appWin.showRefHelpIfNeeded()
+        onTts_for_in_mnt_ref_voice_neededChanged: appWin.showRefHelpIfNeeded()
+        onTts_for_out_mnt_ref_voice_neededChanged: appWin.showRefHelpIfNeeded()
+        onTts_ref_prompt_neededChanged: appWin.showRefHelpIfNeeded()
+        onTts_for_in_mnt_ref_prompt_neededChanged: appWin.showRefHelpIfNeeded()
+        onTts_for_out_mnt_ref_prompt_neededChanged: appWin.showRefHelpIfNeeded()
     }
 }

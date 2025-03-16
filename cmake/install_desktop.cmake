@@ -19,6 +19,10 @@ install(FILES "${desktop_dir}/icons/128x128/${info_binary_id}.png" DESTINATION s
 install(FILES "${desktop_dir}/icons/256x256/${info_binary_id}.png" DESTINATION share/icons/hicolor/256x256/apps)
 install(FILES "${desktop_dir}/icons/512x512/${info_binary_id}.png" DESTINATION share/icons/hicolor/512x512/apps)
 
+# default voice audio samples for voice cloning
+install(FILES "${resources_dir}/voice-1.opus" DESTINATION ${resources_install_dir})
+install(FILES "${resources_dir}/voice-2.opus" DESTINATION ${resources_install_dir})
+
 function(check_patchelf)
     if(${patchelf_bin} MATCHES "-NOTFOUND$")
         message(FATAL_ERROR "patchelf not found but it is required to install files")
