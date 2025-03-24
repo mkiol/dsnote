@@ -29381,14 +29381,15 @@
             "engine": "mnt_bergamot",
             "lang_id": "en",
             "trg_lang_id": "zh",
-            "checksum": "f02e5dd6",
-            "checksum_quick": "d7194e",
-            "size": "45232593",
+            "checksum": "2f2d9876",
+            "checksum_quick": "63e27892",
+            "size": "34879134",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/b47bece6db4703b26563b7403b3004ba3fe9d96d/models/dev/enzh/model.enzh.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/b47bece6db4703b26563b7403b3004ba3fe9d96d/models/dev/enzh/lex.50.50.enzh.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/b47bece6db4703b26563b7403b3004ba3fe9d96d/models/dev/enzh/vocab.enzh.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/5e7d28f8bd859db09b9e94cc30bca7bb889eb6db/models/dev/enzh/model.enzh.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/5e7d28f8bd859db09b9e94cc30bca7bb889eb6db/models/dev/enzh/lex.50.50.enzh.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/5e7d28f8bd859db09b9e94cc30bca7bb889eb6db/models/dev/enzh/srcvocab.enzh.spm.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/5e7d28f8bd859db09b9e94cc30bca7bb889eb6db/models/dev/enzh/trgvocab.enzh.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
