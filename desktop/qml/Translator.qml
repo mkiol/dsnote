@@ -164,7 +164,7 @@ ColumnLayout {
             DuoComboButton {
                 id: mntInCombo
 
-                readonly property bool refVoiceNeeded: app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voices.length !== 0
+                readonly property bool refVoiceNeeded: app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voice_names.length !== 0
                 readonly property bool refPromptNeeded: app.tts_for_in_mnt_ref_prompt_needed && _settings.tts_voice_prompts.length !== 0
 
                 Layout.fillWidth: true
@@ -197,7 +197,7 @@ ColumnLayout {
                     combo2PlaceholderText: qsTr("No voice profile")
                     combo2ToolTip: qsTr("Voice profile")
                     comboFillWidth: true
-                    comboRedBorder: !mntInCombo.second.off && ((app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voices.length === 0) ||
+                    comboRedBorder: !mntInCombo.second.off && ((app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voice_names.length === 0) ||
                                                                (app.tts_for_in_mnt_ref_prompt_needed && _settings.tts_voice_prompts.length === 0))
                     showSeparator: !mntInCombo.verticalMode
                     combo {
@@ -213,7 +213,7 @@ ColumnLayout {
                         enabled: mntInCombo.second.enabled &&
                                  !mntInCombo.second.off &&
                                  app.state === DsnoteApp.StateIdle
-                        model: mntInCombo.refVoiceNeeded ? app.available_tts_ref_voices :
+                        model: mntInCombo.refVoiceNeeded ? app.available_tts_ref_voice_names :
                                                            _settings.tts_voice_prompt_names
                         onActivated: {
                             if (mntInCombo.refVoiceNeeded)
@@ -234,7 +234,7 @@ ColumnLayout {
                         enabled: mntInCombo.second.enabled &&
                                  !mntInCombo.second.off &&
                                  app.note.length !== 0 &&
-                                 (!app.tts_for_in_mnt_ref_voice_needed || app.available_tts_ref_voices.length !== 0) &&
+                                 (!app.tts_for_in_mnt_ref_voice_needed || app.available_tts_ref_voice_names.length !== 0) &&
                                  (!app.tts_for_in_mnt_ref_prompt_needed || _settings.tts_voice_prompts.length !== 0)
                         action: Action {
                             text: qsTr("Read")
@@ -356,7 +356,7 @@ ColumnLayout {
             DuoComboButton {
                 id: mntOutCombo
 
-                readonly property bool refVoiceNeeded: app.tts_for_out_mnt_ref_voice_needed && app.available_tts_ref_voices.length !== 0
+                readonly property bool refVoiceNeeded: app.tts_for_out_mnt_ref_voice_needed && app.available_tts_ref_voice_names.length !== 0
                 readonly property bool refPromptNeeded: app.tts_for_out_mnt_ref_prompt_needed && _settings.tts_voice_prompts.length !== 0
 
                 Layout.fillWidth: true
@@ -389,7 +389,7 @@ ColumnLayout {
                     combo2PlaceholderText: qsTr("No voice profile")
                     combo2ToolTip: qsTr("Voice profile")
                     comboFillWidth: true
-                    comboRedBorder: !mntOutCombo.second.off && ((app.tts_for_out_mnt_ref_voice_needed && app.available_tts_ref_voices.length === 0) ||
+                    comboRedBorder: !mntOutCombo.second.off && ((app.tts_for_out_mnt_ref_voice_needed && app.available_tts_ref_voice_names.length === 0) ||
                                                                (app.tts_for_out_mnt_ref_prompt_needed && _settings.tts_voice_prompts.length === 0))
                     showSeparator: !mntOutCombo.verticalMode
                     combo {
@@ -405,7 +405,7 @@ ColumnLayout {
                         enabled: mntOutCombo.second.enabled &&
                                  !mntOutCombo.second.off &&
                                  app.state === DsnoteApp.StateIdle
-                        model: mntOutCombo.refVoiceNeeded ? app.available_tts_ref_voices :
+                        model: mntOutCombo.refVoiceNeeded ? app.available_tts_ref_voice_names :
                                                            _settings.tts_voice_prompt_names
                         onActivated: {
                             if (mntOutCombo.refVoiceNeeded)
@@ -429,7 +429,7 @@ ColumnLayout {
                                  !mntOutCombo.second.off &&
                                  app.translated_text.length !== 0 &&
                                  app.state !== DsnoteApp.StateTranslating &&
-                                 (!app.tts_for_out_mnt_ref_voice_needed || app.available_tts_ref_voices.length !== 0) &&
+                                 (!app.tts_for_out_mnt_ref_voice_needed || app.available_tts_ref_voice_names.length !== 0) &&
                                  (!app.tts_for_out_mnt_ref_prompt_needed || _settings.tts_voice_prompts.length !== 0)
                         action: Action {
                             text: qsTr("Read")

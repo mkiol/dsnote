@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -123,7 +123,7 @@ ColumnLayout {
     DuoComboButton {
         id: listenReadCombos
 
-        readonly property bool refVoiceNeeded: app.tts_ref_voice_needed && app.available_tts_ref_voices.length !== 0
+        readonly property bool refVoiceNeeded: app.tts_ref_voice_needed && app.available_tts_ref_voice_names.length !== 0
         readonly property bool refPromptNeeded: app.tts_ref_prompt_needed && _settings.tts_voice_prompts.length !== 0
 
         Layout.fillWidth: true
@@ -200,7 +200,7 @@ ColumnLayout {
                 enabled: listenReadCombos.second.enabled &&
                          !listenReadCombos.second.off &&
                          app.state === DsnoteApp.StateIdle
-                model: listenReadCombos.refVoiceNeeded ? app.available_tts_ref_voices :
+                model: listenReadCombos.refVoiceNeeded ? app.available_tts_ref_voice_names :
                                                          _settings.tts_voice_prompt_names
                 onActivated: {
                     if (listenReadCombos.refVoiceNeeded)
@@ -252,7 +252,7 @@ ColumnLayout {
                 enabled: listenReadCombos.second.enabled &&
                          !listenReadCombos.second.off &&
                          app.note.length !== 0 &&
-                         (!app.tts_ref_voice_needed || app.available_tts_ref_voices.length !== 0) &&
+                         (!app.tts_ref_voice_needed || app.available_tts_ref_voice_names.length !== 0) &&
                          (!app.tts_ref_prompt_needed || _settings.tts_voice_prompts.length !== 0)
                 action: Action {
                     text: qsTr("Read")

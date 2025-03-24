@@ -32,11 +32,16 @@ DialogPage {
         </ul>
         <p>" + qsTr("Text to Speech") + "</p>
         <ul>
-        <li><i>Parler</i> TTS engine. Parler TTS can generate high-quality, natural sounding speech in the style of a given speaker (gender, pitch, speaking style, etc).
+        <li><i>F5-TTS: A Fairytaler that Fakes Fluent and Faithful Speech with Flow Matching</i> engine.
+            The F5-TTS provides exceptional voice cloning capabilities. The currently enabled model works with English and Chinese languages.
+            To work well, F5-TTS needs audio samples of the voice along with the transcribed text spoken in the sample.
+            Make sure that the text spoken in the audio sample is set correctly in <i>Voice profiles</i> &rarr; <i>Audio sample</i> menu.
+            F5-TTS works best with CUDA acceleration. CPU only processing can be very slow.</li>
+        <li><i>Parler-TTS</i> engine. Parler-TTS can generate high-quality, natural sounding speech in the style of a given speaker (gender, pitch, speaking style, etc).
             The speaker's characteristics are defined by a text description (prompt).
-            To use Parler TTS models, you need to configure a <i>Text voice profile</i>. This can be done in the <i>Voice profiles</i> menu.
+            To use Parler-TTS models, you need to configure a <i>Text voice profile</i>. This can be done in the <i>Voice profiles</i> menu.
             To learn more about the unique features of this engine, check out <a href='https://github.com/huggingface/parler-tts/'>Parler TTS project website</a>.
-            Parler TTS primarily supports English, but a multilingual model for French, Spanish, Portuguese, Polish, German, Dutch and Italian is also included.
+            Parler-TTS primarily supports English, but a multilingual model for French, Spanish, Portuguese, Polish, German, Dutch and Italian is also included.
             Currently, the multilingual model provides rather poor quality and not entirely usable speech.</li>
         <li><i>S.A.M.</i> TTS engine. S.A.M. is a small speech synthesizer designed for the Commodore 64.
             It features a robotic voice that evokes a strong sense of nostalgia.

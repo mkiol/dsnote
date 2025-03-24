@@ -14,8 +14,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
-#include <functional>
-#include <string_view>
 #include <utility>
 
 #include "cpu_tools.hpp"

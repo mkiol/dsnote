@@ -22,6 +22,7 @@ struct libs_availability_t {
     bool mimic3_tts = false;
     bool whisperspeech_tts = false;
     bool parler_tts = false;
+    bool f5_tts = false;
     bool transformers = false;
     bool unikud = false;
     bool gruut_de = false;

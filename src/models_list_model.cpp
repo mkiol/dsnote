@@ -85,6 +85,9 @@ QDebug operator<<(QDebug d, ModelsListModel::ModelFeatureFilterFlags flags) {
                 FeatureEngineTtsParler:
                 d << "engine-tts-parler";
                 break;
+            case ModelsListModel::ModelFeatureFilterFlags::FeatureEngineTtsF5:
+                d << "engine-tts-f5";
+                break;
             case ModelsListModel::ModelFeatureFilterFlags::FeatureEngineTtsSam:
                 d << "engine-tts-sam";
                 break;

@@ -190,6 +190,10 @@ QDebug operator<<(QDebug d, settings::hw_feature_flags_t hw_features) {
         d << "tts-parler-cuda,";
     if (hw_features & settings::hw_feature_flags_t::hw_feature_tts_parler_hip)
         d << "tts-parler-hip";
+    if (hw_features & settings::hw_feature_flags_t::hw_feature_tts_f5_cuda)
+        d << "tts-f5-cuda,";
+    if (hw_features & settings::hw_feature_flags_t::hw_feature_tts_f5_hip)
+        d << "tts-f5-hip";
 
     return d;
 }
@@ -1459,6 +1463,7 @@ void settings::update_hw_devices_from_fa(
     ENGINE_OPTS(coqui)
     ENGINE_OPTS(whisperspeech)
     ENGINE_OPTS(parler)
+    ENGINE_OPTS(f5)
 #undef ENGINE_OPTS
 
     emit gpu_devices_changed();
@@ -1474,6 +1479,7 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
     ENGINE_OPTS(coqui)
     ENGINE_OPTS(whisperspeech)
     ENGINE_OPTS(parler)
+    ENGINE_OPTS(f5)
 #undef ENGINE_OPTS
 
     m_rocm_gpu_versions.clear();
@@ -1520,6 +1526,10 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
         0;
     bool disable_parler_hip =
         (hw_feature_flags & hw_feature_flags_t::hw_feature_tts_parler_hip) == 0;
+    bool disable_f5_cuda =
+        (hw_feature_flags & hw_feature_flags_t::hw_feature_tts_f5_cuda) == 0;
+    bool disable_f5_hip =
+        (hw_feature_flags & hw_feature_flags_t::hw_feature_tts_f5_hip) == 0;
 
     auto result = gpu_tools::available_devices(
         /*cuda=*/hw_scan_cuda(),
@@ -1549,7 +1559,7 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
                 case gpu_tools::api_t::cuda: {
                     if (disable_fasterwhisper_cuda && disable_whispercpp_cuda &&
                         disable_coqui_cuda && disable_whisperspeech_cuda &&
-                        disable_parler_cuda)
+                        disable_parler_cuda && disable_f5_cuda)
                         return;
                     auto item =
                         QStringLiteral("%1, %2, %3")
@@ -1565,12 +1575,13 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
                         m_whisperspeech_gpu_devices.push_back(item);
                     if (!disable_parler_cuda)
                         m_parler_gpu_devices.push_back(item);
+                    if (!disable_f5_cuda) m_f5_gpu_devices.push_back(item);
                     break;
                 }
                 case gpu_tools::api_t::rocm: {
                     if (disable_fasterwhisper_hip && disable_whispercpp_hip &&
                         disable_coqui_hip && disable_whisperspeech_hip &&
-                        disable_parler_hip)
+                        disable_parler_hip && disable_f5_hip)
                         return;
                     auto item =
                         QStringLiteral("%1, %2, %3")
@@ -1585,6 +1596,7 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
                         m_whisperspeech_gpu_devices.push_back(item);
                     if (!disable_parler_hip)
                         m_parler_gpu_devices.push_back(item);
+                    if (!disable_f5_hip) m_f5_gpu_devices.push_back(item);
                     m_rocm_gpu_versions.push_back(
                         QString::fromStdString(device.platform_name));
                     break;
@@ -1619,6 +1631,7 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
     ENGINE_OPTS(coqui)
     ENGINE_OPTS(whisperspeech)
     ENGINE_OPTS(parler)
+    ENGINE_OPTS(f5)
 #undef ENGINE_OPTS
 
     emit gpu_devices_changed();
@@ -1839,6 +1852,7 @@ ENGINE_OPTS(fasterwhisper)
 ENGINE_OPTS(coqui)
 ENGINE_OPTS(whisperspeech)
 ENGINE_OPTS(parler)
+ENGINE_OPTS(f5)
 #undef ENGINE_OPTS
 
 QString settings::audio_input_device() const {

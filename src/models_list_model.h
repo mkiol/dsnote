@@ -79,7 +79,8 @@ class ModelsListModel : public SelectableItemModel {
         FeatureEngineTtsWhisperSpeech = 1U << 16U,
         FeatureEngineTtsSam = 1U << 17U,
         FeatureEngineTtsParler = 1U << 18U,
-        FeatureEngineTtsEnd = FeatureEngineTtsParler,
+        FeatureEngineTtsF5 = 1U << 19U,
+        FeatureEngineTtsEnd = FeatureEngineTtsF5,
         FeatureEngineMnt = 1U << 20U,
         FeatureEngineOther = 1U << 21U,
         FeatureGenericEnd = FeatureEngineOther,
@@ -97,11 +98,11 @@ class ModelsListModel : public SelectableItemModel {
                                FeatureEngineSttWhisper |
                                FeatureEngineSttFasterWhisper |
                                FeatureEngineSttApril,
-        FeatureAllTtsEngines = FeatureEngineTtsEspeak | FeatureEngineTtsPiper |
-                               FeatureEngineTtsRhvoice | FeatureEngineTtsCoqui |
-                               FeatureEngineTtsMimic3 |
-                               FeatureEngineTtsWhisperSpeech |
-                               FeatureEngineTtsSam | FeatureEngineTtsParler,
+        FeatureAllTtsEngines =
+            FeatureEngineTtsEspeak | FeatureEngineTtsPiper |
+            FeatureEngineTtsRhvoice | FeatureEngineTtsCoqui |
+            FeatureEngineTtsMimic3 | FeatureEngineTtsWhisperSpeech |
+            FeatureEngineTtsSam | FeatureEngineTtsParler | FeatureEngineTtsF5,
         FeatureAll = FeatureFastProcessing | FeatureMediumProcessing |
                      FeatureSlowProcessing | FeatureQualityHigh |
                      FeatureQualityMedium | FeatureQualityLow |

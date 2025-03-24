@@ -31,6 +31,7 @@ ApplicationWindow {
     readonly property alias buttonWithIconWidth: _dummyButtonWithIcon.width
     readonly property alias buttonHeight: _dummyButton.height
     readonly property double buttonHeightShort: buttonHeight * 0.8
+    readonly property alias toast: _toast
     property var features: app.features_availability()
 
     property var _dialogPage
@@ -169,7 +170,7 @@ ApplicationWindow {
         var ref_prompt_needed = (app.tts_ref_prompt_needed && !_settings.translator_mode) ||
                 ((app.tts_for_in_mnt_ref_prompt_needed || app.tts_for_out_mnt_ref_prompt_needed) && _settings.translator_mode)
 
-        if (ref_voice_needed && ((_settings.hint_done_flags & Settings.HintDoneRefVoiceHelp) == 0 || app.available_tts_ref_voices.length === 0)) {
+        if (ref_voice_needed && ((_settings.hint_done_flags & Settings.HintDoneRefVoiceHelp) == 0 || app.available_tts_ref_voice_names.length === 0)) {
             appWin.openPopup(refVoiceHelpMessage)
             _settings.set_hint_done(Settings.HintDoneRefVoiceHelp)
         }
@@ -505,7 +506,7 @@ ApplicationWindow {
     }
 
     ToastNotification {
-        id: toast
+        id: _toast
     }
 
     Connections {

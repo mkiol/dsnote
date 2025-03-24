@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -66,6 +66,8 @@
     X(coqui_gpu)         \
     X(parler_tts)        \
     X(parler_gpu)        \
+    X(f5_tts)            \
+    X(f5_gpu)            \
     X(punctuator)        \
     X(diacritizer_he)    \
     X(translator)        \
@@ -160,6 +162,9 @@ class dsnote_app : public QObject {
     Q_PROPERTY(
         QVariantList available_tts_ref_voices READ available_tts_ref_voices
             NOTIFY available_tts_ref_voices_changed)
+    Q_PROPERTY(QVariantList available_tts_ref_voice_names READ
+                   available_tts_ref_voice_names NOTIFY
+                       available_tts_ref_voices_changed)
 
     // tts ref prompts
     Q_PROPERTY(bool tts_ref_prompt_needed READ tts_ref_prompt_needed NOTIFY
@@ -362,7 +367,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void set_active_tts_for_in_mnt_ref_voice_idx(int idx);
     Q_INVOKABLE void set_active_tts_for_out_mnt_ref_voice_idx(int idx);
     Q_INVOKABLE void delete_tts_ref_voice(int idx);
-    Q_INVOKABLE void rename_tts_ref_voice(int idx, const QString &new_name);
+    Q_INVOKABLE void update_tts_ref_voice(int idx, const QString &new_name,
+                                          const QString &new_text);
     Q_INVOKABLE bool test_tts_ref_voice(int idx, const QString &new_name) const;
     Q_INVOKABLE void set_active_mnt_lang_idx(int idx);
     Q_INVOKABLE void set_active_mnt_out_lang_idx(int idx);
@@ -371,6 +377,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void import_file(const QString &file_path, int stream_index,
                                  bool replace);
     Q_INVOKABLE void cancel();
+    Q_INVOKABLE void cancel_if_internal();
     Q_INVOKABLE void listen();
     Q_INVOKABLE void listen_translate();
     Q_INVOKABLE void listen_to_active_window();
@@ -440,7 +447,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void player_stop();
     Q_INVOKABLE void player_set_position(long long position);
     Q_INVOKABLE void player_export_ref_voice(long long start, long long stop,
-                                             const QString &name);
+                                             const QString &name,
+                                             const QString &text);
     Q_INVOKABLE void player_stop_voice_ref();
     Q_INVOKABLE void player_reset();
     Q_INVOKABLE void recorder_start();
@@ -473,6 +481,9 @@ class dsnote_app : public QObject {
                                        const QString &desc) const;
     Q_INVOKABLE void delete_voice_prompt(const QString &name) const;
     Q_INVOKABLE void clone_voice_prompt(const QString &name) const;
+    Q_INVOKABLE void transcribe_ref_file(const QString &file_path);
+    Q_INVOKABLE void transcribe_ref_file_import(long long start,
+                                                long long stop);
 
    signals:
     void active_stt_model_changed();
@@ -491,6 +502,7 @@ class dsnote_app : public QObject {
     void intermediate_text_changed();
     void text_changed();
     void text_decoded_to_clipboard();
+    void text_decoded_internal(const QString &text);
     void text_decoded_to_active_window();
     void task_state_changed();
     void busy_changed();
@@ -604,7 +616,8 @@ class dsnote_app : public QObject {
         note_add,
         note_replace,
         active_window,
-        clipboard
+        clipboard,
+        internal
     };
 
     enum class mc_state_t { idle, extracting_subtitles };
@@ -724,6 +737,7 @@ class dsnote_app : public QObject {
     [[nodiscard]] QVariantList available_stt_models() const;
     [[nodiscard]] QVariantList available_tts_models() const;
     [[nodiscard]] QVariantList available_tts_ref_voices() const;
+    [[nodiscard]] QVariantList available_tts_ref_voice_names() const;
     [[nodiscard]] QVariantList available_mnt_langs() const;
     [[nodiscard]] QVariantList available_mnt_out_langs() const;
     [[nodiscard]] QVariantList available_tts_models_for_in_mnt() const;

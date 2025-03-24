@@ -157,7 +157,7 @@ set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_conf_version "102")
+set(info_conf_version "103")
 set(info_addon_version "1.3") # if run as a flatpak pkg, the required add-on version
 set(info_version_type "-beta")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
@@ -397,6 +397,8 @@ set(dsnote_lib_sources
     ${sources_dir}/sam_engine.hpp
     ${sources_dir}/parler_engine.cpp
     ${sources_dir}/parler_engine.hpp
+    ${sources_dir}/f5_engine.cpp
+    ${sources_dir}/f5_engine.hpp
 )
 
 if(WITH_DESKTOP)

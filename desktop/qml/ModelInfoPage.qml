@@ -143,7 +143,9 @@ Dialog {
                     else if (f & ModelsListModel.FeatureEngineTtsWhisperSpeech)
                         return "WhisperSpeech"
                     else if (f & ModelsListModel.FeatureEngineTtsParler)
-                        return "Parler TTS"
+                        return "Parler-TTS"
+                    else if (f & ModelsListModel.FeatureEngineTtsF5)
+                        return "F5-TTS"
                     else if (f & ModelsListModel.FeatureEngineTtsSam)
                         return "S.A.M."
                     return ""
@@ -168,12 +170,15 @@ Dialog {
                         if (f & ModelsListModel.FeatureHwOpenVino)
                             return "NVIDIA CUDA, AMD ROCm, Vulkan, OpenVINO, OpenCL"
                         return "NVIDIA CUDA, AMD ROCm, Vulkan, OpenCL"
-                    } else if (f & ModelsListModel.FeatureEngineSttFasterWhisper)
+                    }
+                    if (f & ModelsListModel.FeatureEngineSttFasterWhisper) {
                         return "NVIDIA CUDA"
-                    else if (f & ModelsListModel.FeatureEngineTtsCoqui)
+                    }
+                    if ((f & ModelsListModel.FeatureEngineTtsCoqui) ||
+                             (f & ModelsListModel.FeatureEngineTtsParler) ||
+                             (f & ModelsListModel.FeatureEngineTtsF5)) {
                         return "NVIDIA CUDA, AMD ROCm"
-                    else if (f & ModelsListModel.FeatureEngineTtsParler)
-                        return "NVIDIA CUDA, AMD ROCm"
+                    }
                     return ""
                 }
                 font.bold: true

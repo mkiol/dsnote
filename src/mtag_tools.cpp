@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,6 +9,8 @@
 
 #include <taglib/fileref.h>
 #include <taglib/tag.h>
+
+#include <limits>
 
 #include "logger.hpp"
 
@@ -30,6 +32,8 @@ bool write(const std::string &path, const mtag_t &mtag) {
     if (!mtag.artist.empty())
         tag->setArtist({mtag.artist, TagLib::String::UTF8});
     if (!mtag.album.empty()) tag->setAlbum({mtag.album, TagLib::String::UTF8});
+    if (!mtag.comment.empty())
+        tag->setComment({mtag.comment, TagLib::String::UTF8});
     if (mtag.track > 0) tag->setTrack(mtag.track);
 
     file.save();
@@ -55,7 +59,9 @@ std::optional<mtag_t> read(const std::string &path) {
     mtag.title = tag->title().toCString(true);
     mtag.artist = tag->artist().toCString(true);
     mtag.album = tag->album().toCString(true);
-    mtag.track = tag->track();
+    mtag.comment = tag->comment().toCString(true);
+    mtag.track = static_cast<int>(std::clamp<decltype(tag->track())>(
+        tag->track(), 0, std::numeric_limits<decltype(mtag.track)>::max()));
 
     return mtag;
 }

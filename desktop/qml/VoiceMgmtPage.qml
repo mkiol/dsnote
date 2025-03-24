@@ -349,7 +349,7 @@ DialogPage {
             id: control
 
             readonly property bool compact: root.verticalMode
-            readonly property string voiceName: modelData
+            readonly property string voiceName: modelData[0]
             property bool editActive: false
 
             background: Rectangle {
@@ -398,7 +398,7 @@ DialogPage {
                 }
 
                 Button {
-                    text: qsTr("Rename")
+                    text: qsTr("Edit")
                     icon.name: "edit-entry-symbolic"
                     display: control.compact ? Button.IconOnly : Button.TextBesideIcon
                     Layout.alignment: Qt.AlignHCenter

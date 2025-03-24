@@ -23178,7 +23178,7 @@
                 "https://huggingface.co/AsmoKoskinen/Piper_Finnish_Model/resolve/37e26c355e9e1f2dc6d3d5d966a05fbf29ba8427/fi_FI-asmo-medium.onnx.json"
             ],
             "license": {
-                "id": "CC BY NC 4.0",
+                "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution Non Commercial 4.0 International",
                 "url": "https://creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
                 "accept_required": false
@@ -26743,7 +26743,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134859962"
@@ -26763,7 +26763,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134875189"
@@ -26826,7 +26826,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "rn",
             "size": "134816378"
@@ -26846,7 +26846,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "dn",
             "size": "134871646",
@@ -26892,7 +26892,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134838761"
@@ -27014,7 +27014,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134860496"
@@ -27079,7 +27079,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "anr",
             "size": "134881386"
@@ -27099,7 +27099,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "anr",
             "size": "134880972"
@@ -27189,7 +27189,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134859841"
@@ -27223,7 +27223,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134888550"
@@ -27243,7 +27243,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134897188"
@@ -27263,7 +27263,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134841288"
@@ -27283,7 +27283,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "an",
             "size": "134894586"
@@ -27303,7 +27303,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134876610"
@@ -27323,7 +27323,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134839016"
@@ -27421,7 +27421,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134839047"
@@ -27455,7 +27455,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134866072"
@@ -27475,7 +27475,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "arn",
             "size": "134854730"
@@ -27495,7 +27495,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134858503"
@@ -27543,7 +27543,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134868094"
@@ -27577,7 +27577,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134865938"
@@ -27639,7 +27639,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134853594"
@@ -27673,7 +27673,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134866051"
@@ -27693,7 +27693,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134877023"
@@ -27727,7 +27727,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134865248"
@@ -27761,7 +27761,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134861242"
@@ -27795,7 +27795,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "an",
             "size": "134895489"
@@ -27815,7 +27815,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134878211"
@@ -27835,7 +27835,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134879575"
@@ -27855,7 +27855,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134900282"
@@ -27875,7 +27875,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134870686"
@@ -27921,7 +27921,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134861899"
@@ -28010,7 +28010,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134841474"
@@ -28091,7 +28091,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "an",
             "size": "134892405"
@@ -28111,7 +28111,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "an",
             "size": "134895740"
@@ -28131,7 +28131,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134869027"
@@ -28165,7 +28165,7 @@
                 "id": "CC BY-NC 4.0",
                 "name": "Creative Commons Attribution-NonCommercial 4.0",
                 "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
-                "accept_required": false
+                "accept_required": true
             },
             "options": "n",
             "size": "134856548"
@@ -28314,14 +28314,14 @@
             "engine": "mnt_bergamot",
             "lang_id": "en",
             "trg_lang_id": "it",
-            "checksum": "e8a4a67d",
-            "checksum_quick": "536469a1",
-            "size": "14625820",
+            "checksum": "5168f02",
+            "checksum_quick": "d527491b",
+            "size": "16126133",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/e3c15a005424ac6b0459e606ee7565cf78c09419/models/prod/enid/model.enid.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/e3c15a005424ac6b0459e606ee7565cf78c09419/models/prod/enid/lex.50.50.enid.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/e3c15a005424ac6b0459e606ee7565cf78c09419/models/prod/enid/vocab.enid.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/5e7d28f8bd859db09b9e94cc30bca7bb889eb6db/models/prod/enit/model.enit.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/5e7d28f8bd859db09b9e94cc30bca7bb889eb6db/models/prod/enit/lex.50.50.enit.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/5e7d28f8bd859db09b9e94cc30bca7bb889eb6db/models/prod/enit/vocab.enit.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
@@ -33015,6 +33015,59 @@
             "model_id": "it_parler_mini_multilingual_v11",
             "model_alias_of": "multilang_parler_mini_multilingual_v11",
             "lang_id": "it"
+        },
+        {
+            "name": "Multilingual (F5-TTS V1 Base)",
+            "model_id": "multilang_f5_v1_base",
+            "engine": "tts_f5",
+            "lang_id": "multilang",
+            "checksum": "17e939f6",
+            "checksum_quick": "509b93d7",
+            "size": "1348457753",
+            "options": "x",
+            "features": [
+                "tts_voice_cloning"
+            ],
+            "sups": [
+                {
+                    "role": "hub",
+                    "file_name": "hf_charactr--vocos-mel-24khz_hub",
+                    "checksum": "1935f92f",
+                    "checksum_quick": "53d9ea25",
+                    "size": "54374644",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/charactr/vocos-mel-24khz/resolve/0feb3fdd929bcd6649e0e7c5a688cf7dd012ef21/pytorch_model.bin",
+                        "https://huggingface.co/charactr/vocos-mel-24khz/resolve/0feb3fdd929bcd6649e0e7c5a688cf7dd012ef21/config.yaml"
+                    ]
+                }
+            ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution NonCommertial 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": true
+            },
+            "info": "https://huggingface.co/SWivid/F5-TTS",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/SWivid/F5-TTS/resolve/d6bd6c3c3ec65c0a3ef25a6d3d09658c5e2817fd/F5TTS_v1_Base/model_1250000.safetensors",
+                "https://huggingface.co/SWivid/F5-TTS/resolve/d6bd6c3c3ec65c0a3ef25a6d3d09658c5e2817fd/F5TTS_v1_Base/vocab.txt"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "English (F5-TTS V1 Base)",
+            "model_id": "en_f5_v1_base",
+            "model_alias_of": "multilang_f5_v1_base",
+            "lang_id": "en"
+        },
+        {
+            "name": "中文 (F5-TTS V1 Base)",
+            "model_id": "zh_f5_v1_base",
+            "model_alias_of": "multilang_f5_v1_base",
+            "lang_id": "zh",
+            "options": "na"
         }
     ]
 }

@@ -33,6 +33,7 @@ std::ostream& operator<<(std::ostream& os,
        << ", mimic3-tts=" << availability.mimic3_tts
        << ", whisperspeech-tts=" << availability.whisperspeech_tts
        << ", parler-tts=" << availability.parler_tts
+       << ", f5-tts=" << availability.f5_tts
        << ", transformers=" << availability.transformers
        << ", unikud=" << availability.unikud
        << ", gruut_de=" << availability.gruut_de
@@ -106,7 +107,15 @@ libs_availability_t libs_availability() {
             py::module_::import("transformers");
             availability.parler_tts = true;
         } catch (const std::exception& err) {
-            LOGD("parler tts tts check py error: " << err.what());
+            LOGD("parler tts check py error: " << err.what());
+        }
+
+        try {
+            LOGD("checking: f5 tts");
+            py::module_::import("f5_tts");
+            availability.f5_tts = true;
+        } catch (const std::exception& err) {
+            LOGD("f5 tts check py error: " << err.what());
         }
 
         try {

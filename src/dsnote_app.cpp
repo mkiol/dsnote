@@ -1021,6 +1021,9 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
             QGuiApplication::clipboard()->setText(text);
             emit text_decoded_to_clipboard();
             break;
+        case text_destination_t::internal:
+            emit text_decoded_internal(text);
+            return;
     }
 
     // echo mode handling
@@ -1695,7 +1698,9 @@ void dsnote_app::handle_stt_file_transcribe_finished(int task) {
         return;
     }
 
-    emit transcribe_done();
+    if (m_text_destination != text_destination_t::internal) {
+        emit transcribe_done();
+    }
 
     emit can_open_next_file();
 }
@@ -1903,7 +1908,8 @@ void dsnote_app::update_available_tts_ref_voices() {
                             ? QString::fromStdString(mtag->title)
                             : QFileInfo{file}.baseName();
             new_available_tts_ref_voices_map.insert(
-                file, QStringList{std::move(name), std::move(path)});
+                file, QStringList{std::move(name), std::move(path),
+                                  QString::fromStdString(mtag->comment)});
         }
     };
 
@@ -2142,7 +2148,19 @@ QVariantList dsnote_app::available_tts_ref_voices() const {
     for (auto it = m_available_tts_ref_voices_map.constBegin();
          it != m_available_tts_ref_voices_map.constEnd(); ++it) {
         const auto v = it.value().toStringList();
-        if (!v.isEmpty()) list.push_back(v.front());
+        if (v.size() > 2) list.push_back(v);
+    }
+
+    return list;
+}
+
+QVariantList dsnote_app::available_tts_ref_voice_names() const {
+    QVariantList list;
+
+    for (auto it = m_available_tts_ref_voices_map.constBegin();
+         it != m_available_tts_ref_voices_map.constEnd(); ++it) {
+        const auto v = it.value().toStringList();
+        if (v.size() > 2) list.push_back(v.front());
     }
 
     return list;
@@ -2159,7 +2177,8 @@ void dsnote_app::delete_tts_ref_voice(int idx) {
     update_available_tts_ref_voices();
 }
 
-void dsnote_app::rename_tts_ref_voice(int idx, const QString &new_name) {
+void dsnote_app::update_tts_ref_voice(int idx, const QString &new_name,
+                                      const QString &new_text) {
     auto &item = std::next(m_available_tts_ref_voices_map.begin(), idx).value();
 
     auto list = item.toStringList();
@@ -2170,13 +2189,19 @@ void dsnote_app::rename_tts_ref_voice(int idx, const QString &new_name) {
 
     if (!mtag) return;
 
-    if (mtag->title == new_name.toStdString()) return;
+    if (mtag->title == new_name.toStdString() &&
+        mtag->comment == new_text.toStdString()) {
+        // no change
+        return;
+    }
 
     mtag->title.assign(new_name.toStdString());
+    mtag->comment.assign(new_text.toStdString());
 
-    if (!mtag_tools::write(file_path_std, *mtag)) return;
+    if (!mtag_tools::write(file_path_std, mtag.value())) return;
 
     list[0] = new_name;
+    list[2] = new_text;
     item = list;
 
     emit available_tts_ref_voices_changed();
@@ -2427,6 +2452,14 @@ void dsnote_app::switch_mnt_langs() {
     }
 }
 
+void dsnote_app::cancel_if_internal() {
+    if (m_text_destination != text_destination_t::internal) {
+        return;
+    }
+
+    cancel();
+}
+
 void dsnote_app::cancel() {
     if (busy()) return;
 
@@ -2507,6 +2540,56 @@ void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
         new_task = m_dbus_service.SttTranscribeFile(
             file_path, {},
             s->whisper_translate() ? QStringLiteral("en") : QString{}, options);
+    }
+
+    m_primary_task.set(new_task);
+}
+
+void dsnote_app::transcribe_ref_file_import(long long start, long long stop) {
+    auto wav_file_path = import_ref_voice_file_path();
+    auto out_file_path = QStringLiteral("%1_cut.ogg").arg(wav_file_path);
+
+    try {
+        media_compressor::options_t opts{
+            media_compressor::quality_t::vbr_high,
+            media_compressor::flags_t::flag_none,
+            1.0,
+            {},
+            /*clip_info=*/
+            media_compressor::clip_info_t{static_cast<uint64_t>(start),
+                                          static_cast<uint64_t>(stop), 0, 0}};
+
+        media_compressor{}.compress_to_file(
+            {wav_file_path.toStdString()}, out_file_path.toStdString(),
+            media_compressor::format_t::audio_ogg_opus, opts);
+    } catch (const std::runtime_error &error) {
+        qWarning() << "can't compress file:" << error.what();
+        return;
+    }
+
+    transcribe_ref_file(out_file_path);
+}
+
+void dsnote_app::transcribe_ref_file(const QString &file_path) {
+    m_text_destination = text_destination_t::internal;
+
+    int new_task = 0;
+
+    QVariantMap options;
+    options.insert("text_format",
+                   static_cast<int>(settings::text_format_t::TextFormatRaw));
+    options.insert("stream_index", 0);
+    options.insert("insert_stats", false);
+
+    m_current_stt_request = stt_request_t::transcribe_file;
+
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
+        new_task = speech_service::instance()->stt_transcribe_file(
+            file_path, {}, {}, options);
+    } else {
+        qDebug() << "[app => dbus] call SttTranscribeFile";
+
+        new_task = m_dbus_service.SttTranscribeFile(file_path, {}, {}, options);
     }
 
     m_primary_task.set(new_task);
@@ -4162,6 +4245,7 @@ void dsnote_app::handle_mc_state_changed() {
                                 settings::instance()
                                     ->mtag_album_name()
                                     .toStdString(),
+                                /*comment=*/{},
                                 /*track=*/m_dest_file_info.track_tag.toInt()});
                     }
                     emit save_note_to_file_done();
@@ -4534,6 +4618,15 @@ bool dsnote_app::feature_parler_gpu() const {
            feature_available("parler-tts-hip", false);
 }
 
+bool dsnote_app::feature_f5_tts() const {
+    return feature_available("f5-tts", false);
+}
+
+bool dsnote_app::feature_f5_gpu() const {
+    return feature_available("f5-tts-cuda", false) ||
+           feature_available("f5-tts-hip", false);
+}
+
 bool dsnote_app::feature_punctuator() const {
     return feature_available("punctuator", false);
 }
@@ -4680,6 +4773,8 @@ QVariantList dsnote_app::features_availability() {
                  feature_available("whisperspeech-tts", false),
                  /*tts_parler=*/
                  feature_available("parler-tts", false),
+                 /*tts_f5=*/
+                 feature_available("f5-tts", false),
                  /*stt_fasterwhisper=*/
                  feature_available("faster-whisper-stt", false),
                  /*stt_ds=*/feature_available("coqui-stt", false),
@@ -5135,7 +5230,8 @@ QString dsnote_app::tts_ref_voice_unique_name(QString name,
 }
 
 void dsnote_app::player_export_ref_voice(long long start, long long stop,
-                                         const QString &name) {
+                                         const QString &name,
+                                         const QString &text) {
     QDir ref_voices_dir{
         QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
             .filePath(s_ref_voices_dir_name)};
@@ -5172,6 +5268,7 @@ void dsnote_app::player_export_ref_voice(long long start, long long stop,
         tts_ref_voice_unique_name(
             name.isEmpty() ? QFileInfo{out_file_path}.baseName() : name, false)
             .toStdString();
+    mtag.comment = text.toStdString();
     mtag_tools::write(out_file_path.toStdString(), mtag);
 
     player_reset();

@@ -10,15 +10,19 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2 as Dialogs
 import QtQuick.Layouts 1.3
 
+import org.mkiol.dsnote.Dsnote 1.0
+
 DialogPage {
     id: root
 
     readonly property bool verticalMode: (micButton.implicitWidth + fileButton.implicitWidth + cleanupButton.implicitWidth) > (width - 2 * appWin.padding)
-    readonly property bool canCreate: app.player_ready &&
+    readonly property bool dataOk: testData()
+    readonly property bool canSave: app.player_ready &&
                                       rangeSlider.first.value < rangeSlider.second.value &&
                                       !app.recorder_processing &&
-                                      testData()
-    readonly property bool nameTaken: _nameForm.textField.text.trim().length > 0 && !testData()
+                                      _textForm.text.trim().length > 0 &&
+                                      dataOk
+    readonly property bool nameTaken: _nameForm.textField.text.trim().length > 0 && !dataOk
     function format_time_to_s(time_ms) {
         return (time_ms / 1000).toFixed(1)
     }
@@ -27,10 +31,18 @@ DialogPage {
         appWin.openDialog("VoiceMgmtPage.qml")
     }
 
-    function export_voice() {
-        if (!root.canCreate) return
+    function saveData() {
+        if (!canSave) return
 
-        app.player_export_ref_voice(rangeSlider.first.value, rangeSlider.second.value, _nameForm.textField.text)
+        var name = _nameForm.textField.text.trim()
+        var text = _textForm.text.trim()
+
+        if (name.length === 0 || text.length === 0) {
+            return
+        }
+
+        app.player_export_ref_voice(rangeSlider.first.value, rangeSlider.second.value, name, text)
+
         appWin.openDialog("VoiceMgmtPage.qml")
     }
 
@@ -54,6 +66,7 @@ DialogPage {
         if (!opened) {
             app.player_reset()
             app.recorder_reset()
+            app.cancel_if_internal()
         }
     }
 
@@ -69,7 +82,8 @@ DialogPage {
                 Layout.fillWidth: true
                 wrapMode: Text.Wrap
                 text: qsTr("Audio sample lets you clone someone's voice.") + " " +
-                      qsTr("It can be created by recording a audio sample directly from the microphone or by providing an audio file.")
+                      qsTr("It can be created by recording a audio sample directly from the microphone or by providing an audio file.") + " " +
+                      qsTr("The text spoken in the audio sample should also be provided.")
             }
 
             Label {
@@ -80,6 +94,7 @@ DialogPage {
                       "<li>" + qsTr("Audio sample should not be very long.") + " " + qsTr("The duration from 10 to 30 seconds is good enough.") + "</li>" +
                       "<li>" + qsTr("Use the range slider to clip the audio sample to the part containing speech.") + "</li>" +
                       "<li>" + qsTr("If you're not satisfied with voice cloning quality, try creating a few different audio samples and see which one gives you the best result.") + "</li>" +
+                      "<li>" + qsTr("More detailed instructions on the requirements for the audio sample can be found in the documentation for the specific TTS engine.") + "</li>" +
                       "</ul>"
             }
 
@@ -91,13 +106,8 @@ DialogPage {
                       "<li><i>Coqui XTTS</i></li>" +
                       "<li><i>Coqui YourTTS</i></li>" +
                       "<li><i>WhisperSpeech</i></li>" +
+                      "<li><i>F5-TTS</i></li>" +
                       "</ul>"
-            }
-
-            Label {
-                Layout.fillWidth: true
-                wrapMode: Text.Wrap
-                text: qsTr("To learn more about how to create a good audio sample, check out the specific model's website.")
             }
         }
     }
@@ -132,10 +142,10 @@ DialogPage {
 
             Button {
                 text: qsTr("Create")
-                enabled: root.canCreate
+                enabled: root.canSave
                 icon.name: "document-save-symbolic"
-                Keys.onReturnPressed: root.export_voice()
-                onClicked: root.export_voice()
+                Keys.onReturnPressed: root.saveData()
+                onClicked: root.saveData()
             }
 
             Button {
@@ -161,6 +171,13 @@ DialogPage {
             _nameForm.textField.text = name
         }
         onRecorder_new_probs: root.update_probs(probs)
+        onText_decoded_internal: {
+            var new_text = text.trim()
+            if (new_text.length > 0) {
+                _textForm.text = new_text
+                appWin.toast.show(qsTr("Text decoding has completed!"))
+            }
+        }
     }
 
     GridLayout {
@@ -317,6 +334,46 @@ DialogPage {
         }
     }
 
+    TextArea {
+        id: _textForm
+
+        enabled: app.player_ready && !app.recorder_processing
+        readOnly: app.state !== DsnoteApp.StateIdle
+        selectByMouse: true
+        wrapMode: TextEdit.Wrap
+        verticalAlignment: TextEdit.AlignTop
+        placeholderText: qsTr("Text spoken in audio sample")
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: placeholderText
+        hoverEnabled: true
+        Layout.fillWidth: true
+        Layout.minimumHeight: _nameForm.textField.implicitHeight * 3
+
+        TextContextMenu {}
+
+        BusyIndicator {
+            id: busyIndicator
+
+            anchors.centerIn: parent
+            running: app.state === DsnoteApp.StateTranscribingFile
+            visible: running
+        }
+    }
+
+    Button {
+        enabled: app.player_ready && !app.recorder_processing &&
+                 app.stt_configured && app.state === DsnoteApp.StateIdle
+        Layout.alignment: Qt.AlignRight
+        text: qsTr("Decode text from audio sample")
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("Use the current active Speech to Text model to decode text from an audio sample.")
+        onClicked: {
+            app.transcribe_ref_file_import(rangeSlider.first.value, rangeSlider.second.value)
+        }
+    }
+
     TextFieldForm {
         id: _nameForm
 
@@ -326,6 +383,7 @@ DialogPage {
         toolTip: valid ? "" : qsTr("This name is already taken")
         textField {
             text: root.dataName
+            placeholderText: _nameForm.label.text
         }
     }
 

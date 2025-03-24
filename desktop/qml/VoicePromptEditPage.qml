@@ -176,6 +176,7 @@ DialogPage {
             toolTip: valid ? "" : qsTr("This name is already taken")
             textField {
                 text: root.dataName
+                placeholderText: _nameForm.label.text
             }
         }
     }

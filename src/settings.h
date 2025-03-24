@@ -417,6 +417,7 @@ class settings : public QSettings, public singleton<settings> {
     ENGINE_OPTS(coqui)
     ENGINE_OPTS(whisperspeech)
     ENGINE_OPTS(parler)
+    ENGINE_OPTS(f5)
 #undef ENGINE_OPTS
 
    public:
@@ -590,6 +591,8 @@ class settings : public QSettings, public singleton<settings> {
         hw_feature_tts_whisperspeech_hip = 1U << 10U,
         hw_feature_tts_parler_cuda = 1U << 11U,
         hw_feature_tts_parler_hip = 1U << 12U,
+        hw_feature_tts_f5_cuda = 1U << 13U,
+        hw_feature_tts_f5_hip = 1U << 14U,
         hw_feature_all =
             hw_feature_stt_whispercpp_cuda | hw_feature_stt_whispercpp_hip |
             hw_feature_stt_whispercpp_openvino |
@@ -599,7 +602,8 @@ class settings : public QSettings, public singleton<settings> {
             hw_feature_stt_fasterwhisper_hip | hw_feature_tts_coqui_cuda |
             hw_feature_tts_coqui_hip | hw_feature_tts_whisperspeech_cuda |
             hw_feature_tts_whisperspeech_hip | hw_feature_tts_parler_cuda |
-            hw_feature_tts_parler_hip
+            hw_feature_tts_parler_hip | hw_feature_tts_f5_cuda |
+            hw_feature_tts_f5_hip
     };
     friend QDebug operator<<(QDebug d, hw_feature_flags_t hw_feature_flags);
 
@@ -1021,6 +1025,7 @@ class settings : public QSettings, public singleton<settings> {
     ENGINE_OPTS(coqui)
     ENGINE_OPTS(whisperspeech)
     ENGINE_OPTS(parler)
+    ENGINE_OPTS(f5)
 #undef ENGINE_OPTS
 
    signals:
@@ -1138,6 +1143,7 @@ class settings : public QSettings, public singleton<settings> {
     ENGINE_OPTS(coqui)
     ENGINE_OPTS(whisperspeech)
     ENGINE_OPTS(parler)
+    ENGINE_OPTS(f5)
 #undef ENGINE_OPTS
 
    private:
@@ -1154,6 +1160,7 @@ class settings : public QSettings, public singleton<settings> {
     ENGINE_OPTS(coqui)
     ENGINE_OPTS(whisperspeech)
     ENGINE_OPTS(parler)
+    ENGINE_OPTS(f5)
 #undef ENGINE_OPTS
     std::vector<QString> m_rocm_gpu_versions;
     unsigned int m_addon_flags = addon_flags_t::AddonNone;

@@ -24,6 +24,7 @@
 #include "denoiser.hpp"
 #include "logger.hpp"
 #include "media_compressor.hpp"
+#include "mtag_tools.hpp"
 
 static std::string file_ext_for_format(tts_engine::audio_format_t format) {
     switch (format) {
@@ -354,6 +355,7 @@ void tts_engine::set_speech_speed(unsigned int speech_speed) {
 void tts_engine::set_ref_voice_file(std::string ref_voice_file) {
     m_config.ref_voice_file.assign(std::move(ref_voice_file));
     m_ref_voice_wav_file.clear();
+    m_ref_voice_text.clear();
     reset_ref_voice();
 }
 
@@ -1080,6 +1082,7 @@ void tts_engine::process() {
             if (!m_ref_voice_wav_file.empty()) {
                 unlink(m_ref_voice_wav_file.c_str());
                 m_ref_voice_wav_file.clear();
+                m_ref_voice_text.clear();
             }
         }
 
@@ -1149,6 +1152,11 @@ void tts_engine::setup_ref_voice() {
     if (!file_exists(m_ref_voice_wav_file)) {
         media_compressor{}.decompress_to_file({m_config.ref_voice_file},
                                               m_ref_voice_wav_file, {});
+    }
+
+    if (auto mtag = mtag_tools::read(m_config.ref_voice_file)) {
+        m_ref_voice_text = mtag->comment;
+        LOGD("ref voice text: " << m_ref_voice_text);
     }
 }
 

@@ -227,6 +227,7 @@ class tts_engine {
     state_t m_state = state_t::idle;
     text_tools::processor m_text_processor;
     std::string m_ref_voice_wav_file;
+    std::string m_ref_voice_text;
     bool m_restart_requested = false;
     unsigned int m_last_speech_sample_rate = 48000;
 
