@@ -4553,12 +4553,14 @@ void dsnote_app::show_desktop_notification(const QString &summary,
 }
 
 void dsnote_app::handle_desktop_notification_closed(
-    [[maybe_unused]] uint id, [[maybe_unused]] uint reason) {
+    uint id, [[maybe_unused]] uint reason) {
+    if (!m_desktop_notification || m_desktop_notification->id != id) return;
     m_desktop_notification.reset();
 }
 
 void dsnote_app::handle_desktop_notification_action_invoked(
-    [[maybe_unused]] uint id, [[maybe_unused]] const QString &action_key) {
+    uint id, [[maybe_unused]] const QString &action_key) {
+    if (!m_desktop_notification || m_desktop_notification->id != id) return;
     emit activate_requested();
     close_desktop_notification();
 }
