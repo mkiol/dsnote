@@ -23,6 +23,7 @@ struct libs_availability_t {
     bool whisperspeech_tts = false;
     bool parler_tts = false;
     bool f5_tts = false;
+    bool kokoro_tts = false;
     bool transformers = false;
     bool unikud = false;
     bool gruut_de = false;
@@ -33,6 +34,8 @@ struct libs_availability_t {
     bool gruut_nl = false;
     bool gruut_ru = false;
     bool gruut_sw = false;
+    bool kokoro_ja = false;
+    bool kokoro_zh = false;
     bool mecab = false;
 };
 

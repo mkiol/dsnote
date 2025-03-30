@@ -34,6 +34,7 @@ std::ostream& operator<<(std::ostream& os,
        << ", whisperspeech-tts=" << availability.whisperspeech_tts
        << ", parler-tts=" << availability.parler_tts
        << ", f5-tts=" << availability.f5_tts
+       << ", kokoro-tts=" << availability.f5_tts
        << ", transformers=" << availability.transformers
        << ", unikud=" << availability.unikud
        << ", gruut_de=" << availability.gruut_de
@@ -44,6 +45,8 @@ std::ostream& operator<<(std::ostream& os,
        << ", gruut_it=" << availability.gruut_it
        << ", gruut_ru=" << availability.gruut_ru
        << ", gruut_sw=" << availability.gruut_sw
+       << ", kokoro_ja=" << availability.kokoro_ja
+       << ", kokoro_zh=" << availability.kokoro_zh
        << ", mecab=" << availability.mecab
        << ", torch-cuda=" << availability.torch_cuda
        << ", torch-hip=" << availability.torch_hip;
@@ -116,6 +119,30 @@ libs_availability_t libs_availability() {
             availability.f5_tts = true;
         } catch (const std::exception& err) {
             LOGD("f5 tts check py error: " << err.what());
+        }
+
+        try {
+            LOGD("checking: kokoro tts");
+            py::module_::import("kokoro");
+            LOGD("checking: misaki");
+            py::module_::import("misaki");
+            availability.kokoro_tts = true;
+            try {
+                LOGD("checking: misaki.ja");
+                py::module_::import("misaki.ja");
+                availability.kokoro_ja = true;
+            } catch (const std::exception& err) {
+                LOGD("kokoro kokoro.ja check py error: " << err.what());
+            }
+            try {
+                LOGD("checking: misaki.zh");
+                py::module_::import("misaki.zh");
+                availability.kokoro_zh = true;
+            } catch (const std::exception& err) {
+                LOGD("kokoro kokoro.zh check py error: " << err.what());
+            }
+        } catch (const std::exception& err) {
+            LOGD("kokoro tts check py error: " << err.what());
         }
 
         try {

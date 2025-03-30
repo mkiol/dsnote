@@ -27,6 +27,12 @@
         << msg
 #define LOGE(msg) \
     Logger::Message(Logger::LogType::Error, __FILE__, __func__, __LINE__) << msg
+#define LOGF(msg)                                                         \
+    Logger::Message(Logger::LogType::Error, __FILE__, __func__, __LINE__) \
+        << msg;                                                           \
+    std::ostringstream ss;                                                \
+    ss << __func__ << ':' << __LINE__ << " - " << msg;                    \
+    throw std::runtime_error { ss.str() }
 
 class Logger {
    public:

@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -66,9 +66,10 @@ ColumnLayout {
             case 10: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsWhisperSpeech; break
             case 11: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsParler; break
             case 12: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsF5; break
-            case 13: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsSam; break
-            case 14: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineMnt; break
-            case 15: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineOther; break
+            case 13: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsKokoro; break
+            case 14: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsSam; break
+            case 15: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineMnt; break
+            case 16: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineOther; break
             }
         } else if (speed_checkBox.checked) {
             switch(index) {
@@ -296,8 +297,9 @@ ColumnLayout {
                     "Piper TTS",
                     "RHVoice TTS",
                     "WhisperSpeech TTS",
-                    "Parler TTS",
-                    "F5 TTS",
+                    "Parler-TTS",
+                    "F5-TTS",
+                    "Kokoro TTS",
                     "SAM TTS",
                     "Bergamot MT",
                     qsTr("Other")

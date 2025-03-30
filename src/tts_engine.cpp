@@ -19,6 +19,8 @@
 #include <clocale>
 #include <cmath>
 #include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <fstream>
 
 #include "denoiser.hpp"
@@ -677,28 +679,25 @@ bool tts_engine::convert_wav_to_16bits(const std::string& wav_file) {
     return true;
 }
 
-bool tts_engine::post_process_wav(const std::string& wav_file,
+void tts_engine::post_process_wav(const std::string& wav_file,
                                   size_t silence_duration_msec) const {
     std::ifstream is{wav_file, std::ios::binary | std::ios::ate};
     if (!is) {
-        LOGE("failed to open input file: " << wav_file);
-        return false;
+        LOGF("failed to open input file: " << wav_file);
     }
 
     auto tmp_file = wav_file + "_tmp";
 
     std::ofstream os{tmp_file, std::ios::binary};
     if (!os) {
-        LOGE("failed to open output file: " << tmp_file);
-        return false;
+        LOGF("failed to open output file: " << tmp_file);
     }
 
     size_t size = is.tellg();
     if (size < sizeof(wav_header)) {
-        LOGE("file header is too short");
         os.close();
         unlink(tmp_file.c_str());
-        return false;
+        LOGF("file header is too short");
     }
 
     is.seekg(0, std::ios::beg);
@@ -771,8 +770,6 @@ bool tts_engine::post_process_wav(const std::string& wav_file,
 
     unlink(wav_file.c_str());
     rename(tmp_file.c_str(), wav_file.c_str());
-
-    return true;
 }
 
 void tts_engine::process_restore_text(const task_t& task,
@@ -1208,4 +1205,30 @@ float tts_engine::overflow_duration_threshold(
     unsigned int speech_speed, float initial_duration_threshold) {
     return initial_duration_threshold *
            (static_cast<float>(std::clamp(speech_speed, 1U, 20U)) / 10.0F);
+}
+
+void tts_engine::make_hf_link(const char* model_name,
+                              const std::string& hub_path,
+                              const std::string& cache_dir) {
+    static const auto* hash = "0feb3fdd929bcd6649e0e7c5a688cf7dd012ef21";
+    auto model_path = fmt::format("{}/hf_{}_hub", hub_path, model_name);
+
+    auto dir = fmt::format("{}/models--{}", cache_dir, model_name);
+    mkdir(dir.c_str(), 0755);
+    mkdir(fmt::format("{}/snapshots", dir).c_str(), 0755);
+    mkdir(fmt::format("{}/refs", dir).c_str(), 0755);
+
+    if (std::ofstream os{fmt::format("{}/refs/main", dir).c_str()}) {
+        os << hash;
+    } else {
+        LOGE("can't write hf ref file");
+        return;
+    }
+
+    auto ln_target = fmt::format("{}/snapshots/{}", dir, hash);
+    mkdir(dir.c_str(), 0755);
+
+    remove(ln_target.c_str());
+    LOGD("ln: " << model_path << " => " << ln_target);
+    (void)symlink(model_path.c_str(), ln_target.c_str());
 }

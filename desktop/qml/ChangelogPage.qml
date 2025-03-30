@@ -32,6 +32,11 @@ DialogPage {
         </ul>
         <p>" + qsTr("Text to Speech") + "</p>
         <ul>
+        <li><i>Kokoro</i> TTS engine.
+            Kokoro is a compact yet powerful open-source multilingual TTS engine.
+            Despite its modest size (trained on less than 100 hours of audio), it delivers impressive results.
+            Unlike other engines with comparable quality, Kokoro offers the advantage of running even on devices without GPUs.
+            Kokoro voices are enabled for: English, Chinese, Japanese, Hindi, Italian, French, Spanish and Portuguese.</li>
         <li><i>F5-TTS: A Fairytaler that Fakes Fluent and Faithful Speech with Flow Matching</i> engine.
             The F5-TTS provides exceptional voice cloning capabilities. The currently enabled model works with English and Chinese languages.
             To work well, F5-TTS needs audio samples of the voice along with the transcribed text spoken in the sample.

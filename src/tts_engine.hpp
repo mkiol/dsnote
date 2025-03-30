@@ -278,10 +278,13 @@ class tts_engine {
         return m_state == state_t::stopping || m_state == state_t::stopped ||
                m_state == state_t::error;
     }
-    bool post_process_wav(const std::string& wav_file,
+    void post_process_wav(const std::string& wav_file,
                           size_t silence_duration_msec) const;
     static bool file_exists(const std::string& file_path);
     static bool convert_wav_to_16bits(const std::string& wav_file);
+    static void make_hf_link(const char* model_name,
+                             const std::string& hub_path,
+                             const std::string& cache_dir);
 };
 
 #endif // TTS_ENGINE_HPP

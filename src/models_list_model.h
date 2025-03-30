@@ -80,29 +80,31 @@ class ModelsListModel : public SelectableItemModel {
         FeatureEngineTtsSam = 1U << 17U,
         FeatureEngineTtsParler = 1U << 18U,
         FeatureEngineTtsF5 = 1U << 19U,
-        FeatureEngineTtsEnd = FeatureEngineTtsF5,
-        FeatureEngineMnt = 1U << 20U,
-        FeatureEngineOther = 1U << 21U,
+        FeatureEngineTtsKokoro = 1U << 20U,
+        FeatureEngineTtsEnd = FeatureEngineTtsKokoro,
+        FeatureEngineMnt = 1U << 23U,
+        FeatureEngineOther = 1U << 24U,
         FeatureGenericEnd = FeatureEngineOther,
-        FeatureHwOpenVino = 1U << 22U,
-        FeatureSttStart = 1U << 23U,
+        FeatureHwOpenVino = 1U << 25U,
+        FeatureSttStart = 1U << 26U,
         FeatureSttIntermediateResults = FeatureSttStart,
-        FeatureSttPunctuation = 1U << 24U,
+        FeatureSttPunctuation = 1U << 27U,
         FeatureSttEnd = FeatureSttPunctuation,
-        FeatureTtsStart = 1U << 25U,
+        FeatureTtsStart = 1U << 28U,
         FeatureTtsVoiceCloning = FeatureTtsStart,
-        FeatureTtsPrompt = 1U << 26U,
+        FeatureTtsPrompt = 1U << 29U,
         FeatureTtsEnd = FeatureTtsPrompt,
         FeatureLast = FeatureTtsEnd,
         FeatureAllSttEngines = FeatureEngineSttDs | FeatureEngineSttVosk |
                                FeatureEngineSttWhisper |
                                FeatureEngineSttFasterWhisper |
                                FeatureEngineSttApril,
-        FeatureAllTtsEngines =
-            FeatureEngineTtsEspeak | FeatureEngineTtsPiper |
-            FeatureEngineTtsRhvoice | FeatureEngineTtsCoqui |
-            FeatureEngineTtsMimic3 | FeatureEngineTtsWhisperSpeech |
-            FeatureEngineTtsSam | FeatureEngineTtsParler | FeatureEngineTtsF5,
+        FeatureAllTtsEngines = FeatureEngineTtsEspeak | FeatureEngineTtsPiper |
+                               FeatureEngineTtsRhvoice | FeatureEngineTtsCoqui |
+                               FeatureEngineTtsMimic3 |
+                               FeatureEngineTtsWhisperSpeech |
+                               FeatureEngineTtsSam | FeatureEngineTtsParler |
+                               FeatureEngineTtsF5 | FeatureEngineTtsKokoro,
         FeatureAll = FeatureFastProcessing | FeatureMediumProcessing |
                      FeatureSlowProcessing | FeatureQualityHigh |
                      FeatureQualityMedium | FeatureQualityLow |

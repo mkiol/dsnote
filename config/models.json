@@ -33069,6 +33069,508 @@
             "model_alias_of": "multilang_f5_v1_base",
             "lang_id": "zh",
             "options": "na"
+        },
+        {
+            "name": "Multilingual (Kokoro 82M)",
+            "model_id": "multilang_kokoro_82m",
+            "engine": "tts_kokoro",
+            "lang_id": "multilang",
+            "checksum": "b58e08d5",
+            "checksum_quick": "4b932f06",
+            "size": "355487478",
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "info": "https://huggingface.co/hexgrad/Kokoro-82M",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/kokoro-v1_0.pth",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/config.json",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/af_alloy.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/af_aoede.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/af_bella.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/af_heart.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/af_jessica.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/af_kore.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/af_nicole.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/af_nova.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/af_river.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/af_sarah.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/af_sky.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/am_adam.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/am_echo.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/am_eric.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/am_fenrir.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/am_liam.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/am_michael.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/am_onyx.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/am_puck.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/am_santa.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/bf_alice.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/bf_emma.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/bf_isabella.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/bf_lily.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/bm_daniel.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/bm_fable.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/bm_george.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/bm_lewis.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/ef_dora.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/em_alex.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/em_santa.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/ff_siwis.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/hf_alpha.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/hf_beta.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/hm_omega.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/hm_psi.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/if_sara.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/im_nicola.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/jf_alpha.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/jf_gongitsune.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/jf_nezumi.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/jf_tebukuro.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/jm_kumo.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/pf_dora.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/pm_alex.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/pm_santa.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/zf_xiaobei.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/zf_xiaoni.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/zf_xiaoxiao.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/zf_xiaoyi.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/zm_yunjian.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/zm_yunxi.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/zm_yunxia.pt",
+                "https://huggingface.co/hexgrad/Kokoro-82M/resolve/9871713c6a29032f914cee65b617e2b6b3323770/voices/zm_yunyang.pt"
+            ],
+            "packs": [
+                {
+                    "id": "en_kokoro_82m",
+                    "lang_id": "en",
+                    "name": "English (Kokoro 82M)"
+                },
+                {
+                    "id": "zh_kokoro_82m",
+                    "lang_id": "zh",
+                    "name": "中文 (Kokoro 82M)"
+                }
+            ],
+            "hidden": true
+        },
+        {
+            "name": "English (Kokoro 82M Alloy Female)",
+            "model_id": "en_kokoro_82m_af_alloy",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "af_alloy"
+        },
+        {
+            "name": "English (Kokoro 82M Aoede Female)",
+            "model_id": "en_kokoro_82m_af_aoede",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "af_aoede"
+        },
+        {
+            "name": "English (Kokoro 82M Bella Female)",
+            "model_id": "en_kokoro_82m_af_bella",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "af_bella"
+        },
+        {
+            "name": "English (Kokoro 82M Heart Female)",
+            "model_id": "en_kokoro_82m_af_heart",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "af_heart"
+        },
+        {
+            "name": "English (Kokoro 82M Jessica Female)",
+            "model_id": "en_kokoro_82m_af_jessica",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "af_jessica"
+        },
+        {
+            "name": "English (Kokoro 82M Kore Female)",
+            "model_id": "en_kokoro_82m_af_kore",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "af_kore"
+        },
+        {
+            "name": "English (Kokoro 82M Nicole Female)",
+            "model_id": "en_kokoro_82m_af_nicole",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "af_nicole"
+        },
+        {
+            "name": "English (Kokoro 82M Nova Female)",
+            "model_id": "en_kokoro_82m_af_nova",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "af_nova"
+        },
+        {
+            "name": "English (Kokoro 82M River Female)",
+            "model_id": "en_kokoro_82m_af_river",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "af_river"
+        },
+        {
+            "name": "English (Kokoro 82M Sarah Female)",
+            "model_id": "en_kokoro_82m_af_sarah",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "af_sarah"
+        },
+        {
+            "name": "English (Kokoro 82M Sky Female)",
+            "model_id": "en_kokoro_82m_af_sky",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "af_sky"
+        },
+        {
+            "name": "English (Kokoro 82M Adam Male)",
+            "model_id": "en_kokoro_82m_am_adam",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "am_adam"
+        },
+        {
+            "name": "English (Kokoro 82M Echo Male)",
+            "model_id": "en_kokoro_82m_am_echo",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "am_echo"
+        },
+        {
+            "name": "English (Kokoro 82M Eric Male)",
+            "model_id": "en_kokoro_82m_am_eric",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "am_eric"
+        },
+        {
+            "name": "English (Kokoro 82M Fenrir Male)",
+            "model_id": "en_kokoro_82m_am_fenrir",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "am_fenrir"
+        },
+        {
+            "name": "English (Kokoro 82M Liam Male)",
+            "model_id": "en_kokoro_82m_am_liam",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "am_liam"
+        },
+        {
+            "name": "English (Kokoro 82M Michael Male)",
+            "model_id": "en_kokoro_82m_am_michael",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "am_michael"
+        },
+        {
+            "name": "English (Kokoro 82M Onyx Male)",
+            "model_id": "en_kokoro_82m_am_onyx",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "am_onyx"
+        },
+        {
+            "name": "English (Kokoro 82M Puck Male)",
+            "model_id": "en_kokoro_82m_am_puck",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "am_puck"
+        },
+        {
+            "name": "English (Kokoro 82M Santa Male)",
+            "model_id": "en_kokoro_82m_am_santa",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "am_santa"
+        },
+        {
+            "name": "English British (Kokoro 82M Alice Female)",
+            "model_id": "en_kokoro_82m_bf_alice",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "bf_alice"
+        },
+        {
+            "name": "English British (Kokoro 82M Emma Female)",
+            "model_id": "en_kokoro_82m_bf_emma",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "bf_emma"
+        },
+        {
+            "name": "English British (Kokoro 82M Isabella Female)",
+            "model_id": "en_kokoro_82m_bf_isabella",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "bf_isabella"
+        },
+        {
+            "name": "English British (Kokoro 82M Lily Female)",
+            "model_id": "en_kokoro_82m_bf_lily",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "bf_lily"
+        },
+        {
+            "name": "English British (Kokoro 82M Daniel Male)",
+            "model_id": "en_kokoro_82m_bm_daniel",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "bm_daniel"
+        },
+        {
+            "name": "English British (Kokoro 82M Fable Male)",
+            "model_id": "en_kokoro_82m_bm_fable",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "bm_fable"
+        },
+        {
+            "name": "English British (Kokoro 82M George Male)",
+            "model_id": "en_kokoro_82m_bm_george",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "bm_george"
+        },
+        {
+            "name": "English British (Kokoro 82M Lewis Male)",
+            "model_id": "en_kokoro_82m_bm_lewis",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "en_kokoro_82m",
+            "lang_id": "en",
+            "speaker": "bm_lewis"
+        },
+        {
+            "name": "Español (Kokoro 82M Dora Female)",
+            "model_id": "es_kokoro_82m_ef_dora",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "es",
+            "speaker": "ef_dora"
+        },
+        {
+            "name": "Español (Kokoro 82M Alex Male)",
+            "model_id": "es_kokoro_82m_em_alex",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "es",
+            "speaker": "em_alex"
+        },
+        {
+            "name": "Español (Kokoro 82M Santa Male)",
+            "model_id": "es_kokoro_82m_em_santa",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "es",
+            "speaker": "em_santa"
+        },
+        {
+            "name": "Français (Kokoro 82M Siwis Female)",
+            "model_id": "fr_kokoro_82m_ff_siwis",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "fr",
+            "speaker": "ff_siwis"
+        },
+        {
+            "name": "हिन्दी (Kokoro 82M Alpha Female)",
+            "model_id": "hi_kokoro_82m_hf_alpha",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "hi",
+            "speaker": "hf_alpha"
+        },
+        {
+            "name": "हिन्दी (Kokoro 82M Beta Female)",
+            "model_id": "hi_kokoro_82m_hf_beta",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "hi",
+            "speaker": "hf_beta"
+        },
+        {
+            "name": "हिन्दी (Kokoro 82M Omega Male)",
+            "model_id": "hi_kokoro_82m_hm_omega",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "hi",
+            "speaker": "hm_omega"
+        },
+        {
+            "name": "हिन्दी (Kokoro 82M Psi Male)",
+            "model_id": "hi_kokoro_82m_hm_psi",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "hi",
+            "speaker": "hm_psi"
+        },
+        {
+            "name": "Italiano (Kokoro 82M Sara Female)",
+            "model_id": "it_kokoro_82m_if_sara",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "it",
+            "speaker": "if_sara"
+        },
+        {
+            "name": "Italiano (Kokoro 82M Nicola Male)",
+            "model_id": "it_kokoro_82m_im_nicola",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "it",
+            "speaker": "im_nicola"
+        },
+        {
+            "name": "日本語 (Kokoro 82M Alpha Female)",
+            "model_id": "ja_kokoro_82m_jf_alpha",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "ja",
+            "speaker": "jf_alpha"
+        },
+        {
+            "name": "日本語 (Kokoro 82M Gongitsune Female)",
+            "model_id": "ja_kokoro_82m_jf_gongitsune",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "ja",
+            "speaker": "jf_gongitsune"
+        },
+        {
+            "name": "日本語 (Kokoro 82M Nezumi Female)",
+            "model_id": "ja_kokoro_82m_jf_nezumi",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "ja",
+            "speaker": "jf_nezumi"
+        },
+        {
+            "name": "日本語 (Kokoro 82M Tebukuro Female)",
+            "model_id": "ja_kokoro_82m_jf_tebukuro",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "ja",
+            "speaker": "jf_tebukuro"
+        },
+        {
+            "name": "日本語 (Kokoro 82M Kumo Male)",
+            "model_id": "ja_kokoro_82m_jm_kumo",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "ja",
+            "speaker": "jm_kumo"
+        },
+        {
+            "name": "Português brasileiro (Kokoro 82M Dora Female)",
+            "model_id": "pt_kokoro_82m_pf_dora",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "pt",
+            "speaker": "pf_dora"
+        },
+        {
+            "name": "Português brasileiro (Kokoro 82M Alex Male)",
+            "model_id": "pt_kokoro_82m_pm_alex",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "pt",
+            "speaker": "pm_alex"
+        },
+        {
+            "name": "Português brasileiro (Kokoro 82M Santa Male)",
+            "model_id": "pt_kokoro_82m_pm_santa",
+            "model_alias_of": "multilang_kokoro_82m",
+            "lang_id": "pt",
+            "speaker": "pm_santa"
+        },
+        {
+            "name": "中文 (Kokoro 82M Xiaobei Female)",
+            "model_id": "zh_kokoro_82m_zf_xiaobei",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "zh_kokoro_82m",
+            "lang_id": "zh",
+            "speaker": "zf_xiaobei"
+        },
+        {
+            "name": "中文 (Kokoro 82M Xiaoni Female)",
+            "model_id": "zh_kokoro_82m_zf_xiaoni",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "zh_kokoro_82m",
+            "lang_id": "zh",
+            "speaker": "zf_xiaoni"
+        },
+        {
+            "name": "中文 (Kokoro 82M Xiaoxiao Female)",
+            "model_id": "zh_kokoro_82m_zf_xiaoxiao",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "zh_kokoro_82m",
+            "lang_id": "zh",
+            "speaker": "zf_xiaoxiao"
+        },
+        {
+            "name": "中文 (Kokoro 82M Xiaoyi Female)",
+            "model_id": "zh_kokoro_82m_zf_xiaoyi",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "zh_kokoro_82m",
+            "lang_id": "zh",
+            "speaker": "zf_xiaoyi"
+        },
+        {
+            "name": "中文 (Kokoro 82M Yunjian Male)",
+            "model_id": "zh_kokoro_82m_zm_yunjian",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "zh_kokoro_82m",
+            "lang_id": "zh",
+            "speaker": "zm_yunjian"
+        },
+        {
+            "name": "中文 (Kokoro 82M Yunxi Male)",
+            "model_id": "zh_kokoro_82m_zm_yunxi",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "zh_kokoro_82m",
+            "lang_id": "zh",
+            "speaker": "zm_yunxi"
+        },
+        {
+            "name": "中文 (Kokoro 82M Yunxia Male)",
+            "model_id": "zh_kokoro_82m_zm_yunxia",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "zh_kokoro_82m",
+            "lang_id": "zh",
+            "speaker": "zm_yunxia"
+        },
+        {
+            "name": "中文 (Kokoro 82M Yunyang Male)",
+            "model_id": "zh_kokoro_82m_zm_yunyang",
+            "model_alias_of": "multilang_kokoro_82m",
+            "pack_id": "zh_kokoro_82m",
+            "lang_id": "zh",
+            "speaker": "zm_yunyang"
         }
     ]
 }

@@ -173,19 +173,22 @@ ColumnLayout {
             var coqui_enable = app.feature_coqui_tts && app.feature_coqui_gpu;
             var parler_enable = app.feature_parler_tts && app.feature_parler_gpu
             var f5_enable = app.feature_f5_tts && app.feature_f5_gpu
+            var kokoro_enable = app.feature_kokoro_tts && app.feature_kokoro_gpu
             var whisperspeech_enable = app.feature_whisperspeech_tts && app.feature_whisperspeech_gpu
 
             // set idx if engine enabled
             if (idx === 0 && coqui_enable) return idx
             if (idx === 1 && parler_enable) return idx
             if (idx === 2 && f5_enable) return idx
-            if (idx === 3 && whisperspeech_enable) return idx
+            if (idx === 3 && kokoro_enable) return idx
+            if (idx === 4 && whisperspeech_enable) return idx
 
             // set default
             if (coqui_enable) return 0
             if (parler_enable) return 1
             if (f5_enable) return 2
-            if (whisperspeech_enable) return 3
+            if (kokoro_enable) return 3
+            if (whisperspeech_enable) return 4
 
             return 0
         }
@@ -194,7 +197,8 @@ ColumnLayout {
         visible: (app.feature_coqui_tts && app.feature_coqui_gpu) ||
                  (app.feature_whisperspeech_tts && app.feature_whisperspeech_gpu) ||
                  (app.feature_parler_tts && app.feature_parler_gpu) ||
-                 (app.feature_f5_tts && app.feature_f5_gpu)
+                 (app.feature_f5_tts && app.feature_f5_gpu) ||
+                 (app.feature_kokoro_tts && app.feature_kokoro_gpu)
 
         TabButton {
             text: "Coqui"
@@ -211,6 +215,12 @@ ColumnLayout {
         TabButton {
             text: "F5-TTS"
             enabled: app.feature_f5_tts && app.feature_f5_gpu
+            width: implicitWidth
+        }
+
+        TabButton {
+            text: "Kokoro"
+            enabled: app.feature_kokoro_tts && app.feature_kokoro_gpu
             width: implicitWidth
         }
 
@@ -270,6 +280,20 @@ ColumnLayout {
                 use_gpu: _settings.f5_use_gpu
                 onUse_gpuChanged: _settings.f5_use_gpu = use_gpu
                 onDevice_indexChanged: _settings.f5_gpu_device_idx = device_index
+            }
+        }
+
+        ColumnLayout {
+            id: kokoroTab
+
+            visible: app.feature_kokoro_tts && app.feature_kokoro_gpu
+
+            GpuComboBox {
+                devices: _settings.kokoro_gpu_devices
+                device_index: _settings.kokoro_gpu_device_idx
+                use_gpu: _settings.kokoro_use_gpu
+                onUse_gpuChanged: _settings.kokoro_use_gpu = use_gpu
+                onDevice_indexChanged: _settings.kokoro_gpu_device_idx = device_index
             }
         }
 

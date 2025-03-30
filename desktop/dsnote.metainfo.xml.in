@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2024 Michal Kosciesza -->
+<!-- Copyright 2024-2025 Michal Kosciesza -->
 <component type="desktop-application">
   <id>@info_app_icon_id@</id>
   <metadata_license>CC0-1.0</metadata_license>
@@ -98,7 +98,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.8.0" date="2025-03-24">
+    <release version="4.8.0" date="2025-03-30">
       <description>
       <p>User Interface:</p>
       <ul>
@@ -106,8 +106,14 @@
       </ul>
       <p>Text to Speech:</p>
       <ul>
-      <i>F5-TTS: A Fairytaler that Fakes Fluent and Faithful Speech with Flow Matching</i> engine.
-         The F5-TTS provides exceptional voice cloning capabilities. The currently enabled model works with English and Chinese languages.</li>
+      <li>Kokoro TTS engine.
+          Kokoro is a compact yet powerful open-source multilingual TTS engine.
+          Despite its modest size (trained on less than 100 hours of audio), it delivers impressive results.
+          Unlike other engines with comparable quality, Kokoro offers the advantage of running even on devices without GPUs.
+          Kokoro voices are enabled for: English, Chinese, Japanese, Hindi, Italian, French, Spanish and Portuguese.</li>
+      <li>F5-TTS engine.
+          The F5-TTS provides exceptional voice cloning capabilities.
+          The currently enabled model works with English and Chinese languages.</li>
       <li>Parler TTS engine. Parler TTS can generate high-quality, natural sounding speech in the style of a given speaker (gender, pitch, speaking style, etc).
           The speaker's characteristics are defined by a text description (prompt).
           Parler TTS primarily supports English, but a multilingual model for French, Spanish, Portuguese, Polish, German, Dutch and Italian is also included.</li>

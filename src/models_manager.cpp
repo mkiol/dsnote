@@ -145,6 +145,7 @@ QDebug operator<<(QDebug d, models_manager::feature_flags flags) {
         d << "engine-tts-whisperspeech, ";
     if (flags & models_manager::engine_tts_parler) d << "engine-tts-parler, ";
     if (flags & models_manager::engine_tts_f5) d << "engine-tts-f5, ";
+    if (flags & models_manager::engine_tts_kokoro) d << "engine-tts-kokoro, ";
     if (flags & models_manager::engine_other) d << "engine-other, ";
     if (flags & models_manager::hw_openvino) d << "hw-openvino, ";
     if (flags & models_manager::stt_intermediate_results)
@@ -208,6 +209,9 @@ QDebug operator<<(QDebug d, models_manager::model_engine_t engine) {
         case models_manager::model_engine_t::tts_f5:
             d << "tts-f5";
             break;
+        case models_manager::model_engine_t::tts_kokoro:
+            d << "tts-kokoro";
+            break;
         case models_manager::model_engine_t::mnt_bergamot:
             d << "mnt-bergamot";
             break;
@@ -254,6 +258,9 @@ QDebug operator<<(QDebug d,
     if (models_availability.tts_whisperspeech) d << "tts_whisperspeech,";
     if (models_availability.tts_parler) d << "tts_parler,";
     if (models_availability.tts_f5) d << "tts_f5,";
+    if (models_availability.tts_kokoro) d << "tts_kokoro,";
+    if (models_availability.tts_kokoro_ja) d << "tts_kokoro_ja,";
+    if (models_availability.tts_kokoro_zh) d << "tts_kokoro_zh,";
     if (models_availability.stt_fasterwhisper) d << "stt_fasterwhisper,";
     if (models_availability.stt_ds) d << "stt_ds,";
     if (models_availability.stt_vosk) d << "stt_vosk,";
@@ -445,39 +452,46 @@ std::vector<models_manager::model_t> models_manager::models(
 
                       if (model.disabled) return;
 
-                      if (!lang_id.isEmpty() && lang_id != model.lang_id)
-                          return;
-
                       if (!pack_id.isEmpty() && pack_id != model.pack_id)
                           return;
 
                       for (const auto& pack : model.packs) {
-                          list.push_back(model_t{/*id=*/pack.id,
-                                                 /*engine=*/model.engine,
-                                                 /*lang_id=*/model.lang_id,
-                                                 /*lang_code=*/{},
-                                                 /*name=*/pack.name,
-                                                 /*model_file=*/{},
-                                                 /*sup_files=*/{},
-                                                 /*pack_id=*/pack.id,
-                                                 /*pack_count=*/0,
-                                                 /*pack_available_count=*/0,
-                                                 /*packs=*/{},
-                                                 /*info=*/{},
-                                                 /*speaker=*/{},
-                                                 /*trg_lang_id=*/{},
-                                                 /*score=*/model.score,
-                                                 /*options=*/{},
-                                                 /*license=*/{},
-                                                 /*download_info=*/{},
-                                                 /*default_for_lang=*/{},
-                                                 /*available=*/{},
-                                                 /*dl_multi=*/{},
-                                                 /*dl_off=*/{},
-                                                 /*features=*/model.features,
-                                                 /*downloading=*/{},
-                                                 /*download_progress=*/{}});
+                          auto pack_lang = pack.lang_id.isEmpty()
+                                               ? model.lang_id
+                                               : pack.lang_id;
+                          if (!lang_id.isEmpty() && lang_id != pack_lang) {
+                              continue;
+                          }
+                          list.push_back(
+                              model_t{/*id=*/pack.id,
+                                      /*engine=*/model.engine,
+                                      /*lang_id=*/std::move(pack_lang),
+                                      /*lang_code=*/{},
+                                      /*name=*/pack.name,
+                                      /*model_file=*/{},
+                                      /*sup_files=*/{},
+                                      /*pack_id=*/pack.id,
+                                      /*pack_count=*/0,
+                                      /*pack_available_count=*/0,
+                                      /*packs=*/{},
+                                      /*info=*/{},
+                                      /*speaker=*/{},
+                                      /*trg_lang_id=*/{},
+                                      /*score=*/model.score,
+                                      /*options=*/{},
+                                      /*license=*/{},
+                                      /*download_info=*/{},
+                                      /*default_for_lang=*/{},
+                                      /*available=*/{},
+                                      /*dl_multi=*/{},
+                                      /*dl_off=*/{},
+                                      /*features=*/model.features,
+                                      /*downloading=*/{},
+                                      /*download_progress=*/{}});
                       }
+
+                      if (!lang_id.isEmpty() && lang_id != model.lang_id)
+                          return;
 
                       if (model.hidden) return;
 
@@ -1520,8 +1534,39 @@ bool models_manager::is_modelless_engine(model_engine_t engine) {
         case model_engine_t::tts_whisperspeech:
         case model_engine_t::tts_parler:
         case model_engine_t::tts_f5:
+        case model_engine_t::tts_kokoro:
         case model_engine_t::mnt_bergamot:
             return false;
+    }
+
+    throw std::runtime_error("unknown engine");
+}
+
+bool models_manager::is_ignore_on_sfos(model_engine_t engine,
+                                       const QString& model_id) {
+    switch (engine) {
+        case model_engine_t::ttt_hftc:
+        case model_engine_t::ttt_tashkeel:
+        case model_engine_t::ttt_unikud:
+        case model_engine_t::stt_fasterwhisper:
+        case model_engine_t::tts_mimic3:
+        case model_engine_t::tts_whisperspeech:
+        case model_engine_t::tts_parler:
+        case model_engine_t::tts_f5:
+        case model_engine_t::tts_kokoro:
+        case model_engine_t::tts_coqui:
+            return true;
+        case model_engine_t::stt_april:
+        case model_engine_t::tts_piper:
+        case model_engine_t::tts_rhvoice:
+        case model_engine_t::mnt_bergamot:
+        case model_engine_t::tts_espeak:
+        case model_engine_t::tts_sam:
+        case model_engine_t::stt_ds:
+            return false;
+        case model_engine_t::stt_vosk:
+        case model_engine_t::stt_whisper:
+            return model_id.contains("large") || model_id.contains("medium");
     }
 
     throw std::runtime_error("unknown engine");
@@ -1616,6 +1661,7 @@ models_manager::model_role_t models_manager::role_of_engine(
         case model_engine_t::tts_sam:
         case model_engine_t::tts_parler:
         case model_engine_t::tts_f5:
+        case model_engine_t::tts_kokoro:
             return model_role_t::tts;
         case model_engine_t::mnt_bergamot:
             return model_role_t::mnt;
@@ -1648,6 +1694,7 @@ models_manager::model_engine_t models_manager::engine_from_name(
     if (name == QStringLiteral("tts_sam")) return model_engine_t::tts_sam;
     if (name == QStringLiteral("tts_parler")) return model_engine_t::tts_parler;
     if (name == QStringLiteral("tts_f5")) return model_engine_t::tts_f5;
+    if (name == QStringLiteral("tts_kokoro")) return model_engine_t::tts_kokoro;
     if (name == QStringLiteral("mnt_bergamot"))
         return model_engine_t::mnt_bergamot;
 
@@ -1738,6 +1785,7 @@ void models_manager::extract_packs(const QJsonObject& model_obj,
 
         pack_t pack_ele;
         pack_ele.id = pack_obj.value(QLatin1String{"id"}).toString();
+        pack_ele.lang_id = pack_obj.value(QLatin1String{"lang_id"}).toString();
         pack_ele.name = pack_obj.value(QLatin1String{"name"}).toString();
 
         packs.push_back(std::move(pack_ele));
@@ -1804,6 +1852,7 @@ models_manager::feature_flags models_manager::add_new_feature(
         case feature_flags::engine_tts_sam:
         case feature_flags::engine_tts_parler:
         case feature_flags::engine_tts_f5:
+        case feature_flags::engine_tts_kokoro:
         case feature_flags::engine_mnt:
         case feature_flags::engine_other:
             if (existing_features & feature_flags::engine_stt_ds ||
@@ -1987,6 +2036,16 @@ models_manager::feature_flags models_manager::add_implicit_feature_flags(
                 existing_features, score == 0 ? feature_flags::low_quality
                                               : feature_flags::high_quality);
             break;
+        case model_engine_t::tts_kokoro:
+            existing_features =
+                add_new_feature(existing_features,
+                                feature_flags::engine_tts_kokoro) |
+                add_new_feature(existing_features,
+                                feature_flags::medium_processing);
+            existing_features = add_new_feature(
+                existing_features, score == 0 ? feature_flags::low_quality
+                                              : feature_flags::high_quality);
+            break;
         case model_engine_t::tts_rhvoice:
             existing_features =
                 add_new_feature(existing_features,
@@ -2043,7 +2102,6 @@ static QString merge_options(QString opts_1, const QString& opts_2) {
 
     return opts_1;
 }
-
 auto models_manager::extract_models(
     const QJsonArray& models_jarray,
     std::optional<models_availability_t> models_availability) {
@@ -2159,7 +2217,16 @@ auto models_manager::extract_models(
         } else if (models.count(model_alias_of) > 0) {
             const auto& alias = models.at(model_alias_of);
 
-            if (!alias.packs.empty()) pack_id = model_alias_of;
+            pack_id = obj.value("pack_id").toString();
+            if (pack_id.isEmpty()) {
+                for (const auto& pack : alias.packs) {
+                    if (pack.lang_id.isEmpty() || pack.lang_id == lang_id) {
+                        pack_id = model_alias_of;
+                        break;
+                    }
+                }
+            }
+
             engine = alias.engine;
             if (score == -1) score = alias.score;
             file_name = alias.file_name;
@@ -2219,31 +2286,8 @@ auto models_manager::extract_models(
         }
 #endif
 #ifdef USE_SFOS
-        if (role_of_engine(engine) == model_role_t::ttt) {
-            qDebug() << "ignoring ttt model on sfos:" << model_id;
-            continue;
-        }
-        if (engine == model_engine_t::stt_vosk &&
-            (model_id.contains("large") || model_id.contains("medium"))) {
-            qDebug() << "ignoring vosk large model on sfos:" << model_id;
-            continue;
-        }
-        if (engine == model_engine_t::stt_whisper &&
-            (model_id.contains("medium") || model_id.contains("large"))) {
-            qDebug() << "ignoring whisper medium or large model os sfos:"
-                     << model_id;
-            continue;
-        }
-        if (engine == model_engine_t::tts_coqui) {
-            qDebug() << "ignoring coqui model on sfos:" << model_id;
-            continue;
-        }
-        if (engine == model_engine_t::tts_parler) {
-            qDebug() << "ignoring parler model on sfos:" << model_id;
-            continue;
-        }
-        if (engine == model_engine_t::tts_f5) {
-            qDebug() << "ignoring f5 model on sfos:" << model_id;
+        if (is_ignore_on_sfos(engine, model_id)) {
+            qDebug() << "ignoring model on sfos:" << model_id;
             continue;
         }
 #endif
@@ -2271,6 +2315,11 @@ auto models_manager::extract_models(
             if (!models_availability->tts_f5 &&
                 engine == model_engine_t::tts_f5) {
                 qDebug() << "ignoring f5 model:" << model_id;
+                continue;
+            }
+            if (!models_availability->tts_kokoro &&
+                engine == model_engine_t::tts_kokoro) {
+                qDebug() << "ignoring kokoro model:" << model_id;
                 continue;
             }
             if (!models_availability->tts_rhvoice &&
@@ -2674,6 +2723,7 @@ QString models_manager::file_name_from_id(const QString& id,
         case model_engine_t::tts_sam:
         case model_engine_t::tts_parler:
         case model_engine_t::tts_f5:
+        case model_engine_t::tts_kokoro:
         case model_engine_t::mnt_bergamot:
             return id;
     }
@@ -2860,6 +2910,16 @@ void models_manager::update_models_using_availability_internal() {
             pair.second.engine == model_engine_t::tts_f5) {
             pair.second.disabled = true;
             return;
+        }
+        if (pair.second.engine == model_engine_t::tts_kokoro) {
+            if (!m_models_availability->tts_kokoro ||
+                (!m_models_availability->tts_kokoro_ja &&
+                 pair.second.lang_id == "ja") ||
+                (!m_models_availability->tts_kokoro_zh &&
+                 pair.second.lang_id == "zh")) {
+                pair.second.disabled = true;
+                return;
+            }
         }
         if (pair.second.engine == model_engine_t::tts_mimic3) {
             if (!m_models_availability->tts_mimic3 ||

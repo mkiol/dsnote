@@ -68,6 +68,8 @@
     X(parler_gpu)        \
     X(f5_tts)            \
     X(f5_gpu)            \
+    X(kokoro_tts)        \
+    X(kokoro_gpu)        \
     X(punctuator)        \
     X(diacritizer_he)    \
     X(translator)        \

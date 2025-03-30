@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+﻿/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -28,6 +28,7 @@
 #include "fasterwhisper_engine.hpp"
 #include "file_source.h"
 #include "gpu_tools.hpp"
+#include "kokoro_engine.hpp"
 #include "media_compressor.hpp"
 #include "mic_source.h"
 #include "mimic3_engine.hpp"
@@ -1462,6 +1463,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                     case models_manager::model_engine_t::tts_sam:
                     case models_manager::model_engine_t::tts_parler:
                     case models_manager::model_engine_t::tts_f5:
+                    case models_manager::model_engine_t::tts_kokoro:
                     case models_manager::model_engine_t::mnt_bergamot:
                         throw std::runtime_error{
                             "invalid model engine, expected stt"};
@@ -1612,7 +1614,7 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                 .toStdString();
 
         // clang-format off
-#define ENGINE_OPTS(name) \
+#define X(name) \
         if (settings::instance()->name##_use_gpu() && settings::instance()->has_##name##_gpu_device()) { \
             if (auto device = make_gpu_device<tts_engine>(settings::instance()->name##_gpu_device(), settings::instance()->name##_auto_gpu_device())) { \
                 config.gpu_device = std::move(*device); \
@@ -1621,15 +1623,17 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         }
         
         if (model_config->tts->engine == models_manager::model_engine_t::tts_coqui) {
-            ENGINE_OPTS(coqui)
+            X(coqui)
         } else if (model_config->tts->engine == models_manager::model_engine_t::tts_whisperspeech) {
-            ENGINE_OPTS(whisperspeech)
+            X(whisperspeech)
         } else if (model_config->tts->engine == models_manager::model_engine_t::tts_parler) {
-            ENGINE_OPTS(parler)
+            X(parler)
         } else if (model_config->tts->engine == models_manager::model_engine_t::tts_f5) {
-            ENGINE_OPTS(f5)
+            X(f5)
+        } else if (model_config->tts->engine == models_manager::model_engine_t::tts_kokoro) {
+            X(kokoro)
         }
-#undef ENGINE_OPTS
+#undef X
         // clang-format on
 
         if (model_config->tts->model_id.contains("fairseq")) {
@@ -1697,6 +1701,10 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                     models_manager::model_engine_t::tts_f5 &&
                 type != typeid(f5_engine))
                 return true;
+            if (model_config->tts->engine ==
+                    models_manager::model_engine_t::tts_kokoro &&
+                type != typeid(kokoro_engine))
+                return true;
 
             if (m_tts_engine->model_files() != config.model_files) return true;
 
@@ -1706,7 +1714,9 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                 model_config->tts->engine ==
                     models_manager::model_engine_t::tts_rhvoice ||
                 model_config->tts->engine ==
-                    models_manager::model_engine_t::tts_espeak;
+                    models_manager::model_engine_t::tts_espeak ||
+                model_config->tts->engine ==
+                    models_manager::model_engine_t::tts_kokoro;
             if (engine_restart_when_speaker_changed &&
                 m_tts_engine->speaker() != config.speaker_id)
                 return true;
@@ -1821,6 +1831,10 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                         break;
                     case models_manager::model_engine_t::tts_f5:
                         m_tts_engine = std::make_unique<f5_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
+                    case models_manager::model_engine_t::tts_kokoro:
+                        m_tts_engine = std::make_unique<kokoro_engine>(
                             std::move(config), std::move(call_backs));
                         break;
                     case models_manager::model_engine_t::ttt_hftc:
@@ -2929,6 +2943,17 @@ QVariantMap speech_service::features_availability() {
                 QVariantList{py_availability->parler_tts, "Parler-TTS"});
             m_features_availability.insert(
                 "f5-tts", QVariantList{py_availability->f5_tts, "F5-TTS"});
+            m_features_availability.insert(
+                "kokoro-tts",
+                QVariantList{py_availability->kokoro_tts, "Kokoro TTS"});
+            m_features_availability.insert(
+                "kokoro-tts-ja", QVariantList{py_availability->kokoro_tts &&
+                                                  py_availability->kokoro_ja,
+                                              "Kokoro TTS " + tr("Japanese")});
+            m_features_availability.insert(
+                "kokoro-tts-zh", QVariantList{py_availability->kokoro_tts &&
+                                                  py_availability->kokoro_zh,
+                                              "Kokoro TTS " + tr("Chinese")});
 #ifdef ARCH_X86_64
             auto has_cuda = gpu_tools::has_cuda_runtime();
             auto has_cudnn = gpu_tools::has_cudnn();
@@ -3010,6 +3035,25 @@ QVariantMap speech_service::features_availability() {
             if (tts_f5_hip)
                 hw_feature_flags |=
                     settings::hw_feature_flags_t::hw_feature_tts_f5_hip;
+
+            bool tts_kokoro_cuda =
+                py_availability->kokoro_tts && py_availability->torch_cuda;
+            bool tts_kokoro_hip =
+                py_availability->kokoro_tts && py_availability->torch_hip;
+            m_features_availability.insert(
+                "kokoro-tts-cuda",
+                QVariantList{tts_kokoro_cuda,
+                             "Kokoro TTS CUDA " + tr("HW acceleration")});
+            m_features_availability.insert(
+                "kokoro-tts-hip",
+                QVariantList{tts_kokoro_hip,
+                             "Kokoro TTS ROCm " + tr("HW acceleration")});
+            if (tts_kokoro_cuda)
+                hw_feature_flags |=
+                    settings::hw_feature_flags_t::hw_feature_tts_kokoro_cuda;
+            if (tts_kokoro_hip)
+                hw_feature_flags |=
+                    settings::hw_feature_flags_t::hw_feature_tts_kokoro_hip;
 #endif
             m_features_availability.insert(
                 "coqui-tts-ja", QVariantList{py_availability->coqui_tts &&
@@ -3184,6 +3228,9 @@ QVariantMap speech_service::features_availability() {
                  /*tts_whisperspeech=*/py_availability->whisperspeech_tts,
                  /*tts_parler=*/py_availability->parler_tts,
                  /*tts_f5=*/py_availability->f5_tts,
+                 /*tts_kokoro=*/py_availability->kokoro_tts,
+                 /*tts_kokoro_ja=*/py_availability->kokoro_ja,
+                 /*tts_kokoro_zh=*/py_availability->kokoro_zh,
                  /*stt_fasterwhisper=*/py_availability->faster_whisper,
                  /*stt_ds=*/stt_ds,
                  /*stt_vosk=*/stt_vosk,
@@ -3217,6 +3264,10 @@ QVariantMap speech_service::features_availability() {
             m_features_availability.insert(
                 "f5-gpu-devices",
                 variant_list_from_list(settings::instance()->f5_gpu_devices()));
+            m_features_availability.insert(
+                "kokoro-gpu-devices",
+                variant_list_from_list(
+                    settings::instance()->kokoro_gpu_devices()));
 
             m_features_availability.insert(
                 "addon-flags",

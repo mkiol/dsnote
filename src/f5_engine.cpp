@@ -63,31 +63,6 @@ void f5_engine::stop() {
     LOGD("f5 stopped");
 }
 
-static void make_hf_link(const char* model_name, const std::string& hub_path,
-                         const std::string& cache_dir) {
-    auto model_path = fmt::format("{}/hf_{}_hub", hub_path, model_name);
-
-    auto dir = fmt::format("{}/models--{}", cache_dir, model_name);
-    mkdir(dir.c_str(), 0755);
-    mkdir(fmt::format("{}/snapshots", dir).c_str(), 0755);
-    mkdir(fmt::format("{}/refs", dir).c_str(), 0755);
-
-    if (std::ofstream os{fmt::format("{}/refs/main", dir).c_str()}) {
-        os << "0feb3fdd929bcd6649e0e7c5a688cf7dd012ef21";
-    } else {
-        LOGE("can't write hf ref file");
-        return;
-    }
-
-    auto ln_target = fmt::format(
-        "{}/snapshots/0feb3fdd929bcd6649e0e7c5a688cf7dd012ef21", dir);
-    mkdir(dir.c_str(), 0755);
-
-    remove(ln_target.c_str());
-    LOGD("ln: " << model_path << " => " << ln_target);
-    (void)symlink(model_path.c_str(), ln_target.c_str());
-}
-
 void f5_engine::create_model() {
     auto task = py_executor::instance()->execute([&]() {
         auto model_file =

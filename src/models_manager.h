@@ -61,6 +61,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         tts_sam,
         tts_parler,
         tts_f5,
+        tts_kokoro,
         mnt_bergamot
     };
     friend QDebug operator<<(QDebug d, model_engine_t engine);
@@ -89,20 +90,21 @@ class models_manager : public QObject, public singleton<models_manager> {
         engine_tts_sam = 1U << 17U,
         engine_tts_parler = 1U << 18U,
         engine_tts_f5 = 1U << 19U,
-        engine_mnt = 1U << 20U,
-        engine_other = 1U << 21U,
+        engine_tts_kokoro = 1U << 20U,
+        engine_mnt = 1U << 23U,
+        engine_other = 1U << 24U,
         generic_end = engine_other,
-        hw_openvino = 1U << 22U,
-        stt_start = 1U << 23U,
+        hw_openvino = 1U << 25U,
+        stt_start = 1U << 26U,
         stt_intermediate_results = stt_start,
-        stt_punctuation = 1U << 24U,
+        stt_punctuation = 1U << 27U,
         stt_end = stt_punctuation,
-        tts_start = 1U << 25U,
+        tts_start = 1U << 28U,
         tts_voice_cloning = tts_start,
-        tts_prompt = 1U << 26U,
+        tts_prompt = 1U << 29U,
         tts_end = tts_prompt
     };
-    friend inline feature_flags operator|(feature_flags a, feature_flags b) {
+    friend feature_flags operator|(feature_flags a, feature_flags b) {
         return static_cast<feature_flags>(static_cast<unsigned int>(a) |
                                           static_cast<unsigned int>(b));
     }
@@ -144,6 +146,7 @@ class models_manager : public QObject, public singleton<models_manager> {
 
     struct pack_t {
         QString id;
+        QString lang_id;
         QString name;
     };
 
@@ -190,6 +193,9 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool tts_whisperspeech = false;
         bool tts_parler = false;
         bool tts_f5 = false;
+        bool tts_kokoro = false;
+        bool tts_kokoro_ja = false;
+        bool tts_kokoro_zh = false;
         bool stt_fasterwhisper = false;
         bool stt_ds = false;
         bool stt_vosk = false;
@@ -443,6 +449,8 @@ class models_manager : public QObject, public singleton<models_manager> {
                                         bool download_not_needed);
     void update_counts();
     static bool is_modelless_engine(model_engine_t engine);
+    static bool is_ignore_on_sfos(model_engine_t engine,
+                                  const QString& model_id);
 };
 
 #endif  // MODELS_MANAGER_H
