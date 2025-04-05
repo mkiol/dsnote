@@ -25580,18 +25580,25 @@
             }
         },
         {
-            "name": "Čeština (RHVoice Zdenek Male)",
+            "name": "Čeština (RHVoice Zděnek Male)",
             "model_id": "cs_rhvoice_zdenek",
             "engine": "tts_rhvoice",
             "lang_id": "cs",
             "speaker": "zdenek",
-            "checksum": "f99a3003",
-            "checksum_quick": "e8c2e285",
+            "checksum": "40a6aad7",
+            "checksum_quick": "d0557899",
+            "size": "5321998",
+            "info": "https://github.com/RHVoice/zdenek-cze",
             "comp": "zipall",
             "urls": [
-                "https://github.com/RHVoice/zdenek-cze/releases/download/v4.4/RHVoice-voice-Czech-Zdenek-v4.4.zip"
+                "https://github.com/RHVoice/zdenek-cze/releases/download/4.6/RHVoice-voice-Czech-Zdenek-v4.6.zip"
             ],
-            "size": "10647609"
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Čeština (RHVoice Radek Male)",
@@ -25599,13 +25606,20 @@
             "engine": "tts_rhvoice",
             "lang_id": "cs",
             "speaker": "radek",
-            "checksum": "56d3b13b",
-            "checksum_quick": "b8a72dac",
-            "size": "4404733",
+            "checksum": "6353e675",
+            "checksum_quick": "74298482",
+            "size": "5079163",
+            "info": "https://github.com/RHVoice/radek-cze",
             "comp": "zipall",
             "urls": [
-                "https://github.com/RHVoice/radek-cze/releases/download/4.5/RHVoice-voice-Czech-Radek-v4.5.zip"
-            ]
+                "https://github.com/RHVoice/radek-cze/releases/download/4.6/RHVoice-voice-Czech-Radek-v4.6.zip"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "English (RHVoice Slt Female)",
