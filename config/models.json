@@ -33066,7 +33066,7 @@
             "model_id": "zh_f5_v1_base",
             "model_alias_of": "multilang_f5_v1_base",
             "lang_id": "zh",
-            "options": "na"
+            "options": "an"
         },
         {
             "name": "Multilingual (Kokoro 82M)",
@@ -33413,28 +33413,32 @@
             "model_id": "hi_kokoro_82m_hf_alpha",
             "model_alias_of": "multilang_kokoro_82m",
             "lang_id": "hi",
-            "speaker": "hf_alpha"
+            "speaker": "hf_alpha",
+            "options": "a"
         },
         {
             "name": "हिन्दी (Kokoro 82M Beta Female)",
             "model_id": "hi_kokoro_82m_hf_beta",
             "model_alias_of": "multilang_kokoro_82m",
             "lang_id": "hi",
-            "speaker": "hf_beta"
+            "speaker": "hf_beta",
+            "options": "a"
         },
         {
             "name": "हिन्दी (Kokoro 82M Omega Male)",
             "model_id": "hi_kokoro_82m_hm_omega",
             "model_alias_of": "multilang_kokoro_82m",
             "lang_id": "hi",
-            "speaker": "hm_omega"
+            "speaker": "hm_omega",
+            "options": "a"
         },
         {
             "name": "हिन्दी (Kokoro 82M Psi Male)",
             "model_id": "hi_kokoro_82m_hm_psi",
             "model_alias_of": "multilang_kokoro_82m",
             "lang_id": "hi",
-            "speaker": "hm_psi"
+            "speaker": "hm_psi",
+            "options": "a"
         },
         {
             "name": "Italiano (Kokoro 82M Sara Female)",
@@ -33455,35 +33459,40 @@
             "model_id": "ja_kokoro_82m_jf_alpha",
             "model_alias_of": "multilang_kokoro_82m",
             "lang_id": "ja",
-            "speaker": "jf_alpha"
+            "speaker": "jf_alpha",
+            "options": "a"
         },
         {
             "name": "日本語 (Kokoro 82M Gongitsune Female)",
             "model_id": "ja_kokoro_82m_jf_gongitsune",
             "model_alias_of": "multilang_kokoro_82m",
             "lang_id": "ja",
-            "speaker": "jf_gongitsune"
+            "speaker": "jf_gongitsune",
+            "options": "a"
         },
         {
             "name": "日本語 (Kokoro 82M Nezumi Female)",
             "model_id": "ja_kokoro_82m_jf_nezumi",
             "model_alias_of": "multilang_kokoro_82m",
             "lang_id": "ja",
-            "speaker": "jf_nezumi"
+            "speaker": "jf_nezumi",
+            "options": "a"
         },
         {
             "name": "日本語 (Kokoro 82M Tebukuro Female)",
             "model_id": "ja_kokoro_82m_jf_tebukuro",
             "model_alias_of": "multilang_kokoro_82m",
             "lang_id": "ja",
-            "speaker": "jf_tebukuro"
+            "speaker": "jf_tebukuro",
+            "options": "a"
         },
         {
             "name": "日本語 (Kokoro 82M Kumo Male)",
             "model_id": "ja_kokoro_82m_jm_kumo",
             "model_alias_of": "multilang_kokoro_82m",
             "lang_id": "ja",
-            "speaker": "jm_kumo"
+            "speaker": "jm_kumo",
+            "options": "a"
         },
         {
             "name": "Português brasileiro (Kokoro 82M Dora Female)",
@@ -33512,7 +33521,8 @@
             "model_alias_of": "multilang_kokoro_82m",
             "pack_id": "zh_kokoro_82m",
             "lang_id": "zh",
-            "speaker": "zf_xiaobei"
+            "speaker": "zf_xiaobei",
+            "options": "a"
         },
         {
             "name": "中文 (Kokoro 82M Xiaoni Female)",
@@ -33520,7 +33530,8 @@
             "model_alias_of": "multilang_kokoro_82m",
             "pack_id": "zh_kokoro_82m",
             "lang_id": "zh",
-            "speaker": "zf_xiaoni"
+            "speaker": "zf_xiaoni",
+            "options": "a"
         },
         {
             "name": "中文 (Kokoro 82M Xiaoxiao Female)",
@@ -33528,7 +33539,8 @@
             "model_alias_of": "multilang_kokoro_82m",
             "pack_id": "zh_kokoro_82m",
             "lang_id": "zh",
-            "speaker": "zf_xiaoxiao"
+            "speaker": "zf_xiaoxiao",
+            "options": "a"
         },
         {
             "name": "中文 (Kokoro 82M Xiaoyi Female)",
@@ -33536,7 +33548,8 @@
             "model_alias_of": "multilang_kokoro_82m",
             "pack_id": "zh_kokoro_82m",
             "lang_id": "zh",
-            "speaker": "zf_xiaoyi"
+            "speaker": "zf_xiaoyi",
+            "options": "a"
         },
         {
             "name": "中文 (Kokoro 82M Yunjian Male)",
@@ -33544,7 +33557,8 @@
             "model_alias_of": "multilang_kokoro_82m",
             "pack_id": "zh_kokoro_82m",
             "lang_id": "zh",
-            "speaker": "zm_yunjian"
+            "speaker": "zm_yunjian",
+            "options": "a"
         },
         {
             "name": "中文 (Kokoro 82M Yunxi Male)",
@@ -33552,7 +33566,8 @@
             "model_alias_of": "multilang_kokoro_82m",
             "pack_id": "zh_kokoro_82m",
             "lang_id": "zh",
-            "speaker": "zm_yunxi"
+            "speaker": "zm_yunxi",
+            "options": "a"
         },
         {
             "name": "中文 (Kokoro 82M Yunxia Male)",
@@ -33560,7 +33575,8 @@
             "model_alias_of": "multilang_kokoro_82m",
             "pack_id": "zh_kokoro_82m",
             "lang_id": "zh",
-            "speaker": "zm_yunxia"
+            "speaker": "zm_yunxia",
+            "options": "a"
         },
         {
             "name": "中文 (Kokoro 82M Yunyang Male)",
@@ -33568,7 +33584,8 @@
             "model_alias_of": "multilang_kokoro_82m",
             "pack_id": "zh_kokoro_82m",
             "lang_id": "zh",
-            "speaker": "zm_yunyang"
+            "speaker": "zm_yunyang",
+            "options": "a"
         }
     ]
 }
