@@ -25929,6 +25929,27 @@
             "size": "7618694"
         },
         {
+            "name": "Español (RHVoice Mateo Male)",
+            "model_id": "es_rhvoice_mateo",
+            "engine": "tts_rhvoice",
+            "lang_id": "es",
+            "speaker": "mateo",
+            "checksum": "d7552786",
+            "checksum_quick": "f2f31a1a",
+            "size": "4013359",
+            "info": "https://github.com/RHVoice/mateo-spa",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/mateo-spa/releases/download/4.10/RHVoice-voice-Spanish-Mateo-v4.10.zip"
+            ],
+            "license": {
+                "id": "Unlicense",
+                "name": "The Unlicense",
+                "url": "https://raw.githubusercontent.com/unlicense/unlicense.org/refs/heads/master/public/UNLICENSE",
+                "accept_required": false
+            }
+        },
+        {
             "name": "Multilingual (WhisperSpeech Q4 Tiny)",
             "model_id": "multilang_whisperspeech_q4_tiny_enpl",
             "engine": "tts_whisperspeech",

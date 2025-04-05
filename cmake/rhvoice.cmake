@@ -1,5 +1,5 @@
 set(rhvoice_source_url "https://github.com/RHVoice/RHVoice.git")
-set(rhvoice_tag "71a1a830d2d860688ffcbb0d27d4de260136d161")
+set(rhvoice_tag "3e61d440308cedc53f56d0d9f22c380af80d933e")
 
 find_package(Boost)
 if(NOT ${Boost_FOUND})
@@ -20,7 +20,7 @@ ExternalProject_Add(rhvoice
         "data/languages/Kyrgyz" "data/languages/Macedonian" "data/languages/Russian"
         "data/languages/Tatar" "data/languages/Ukrainian" "data/languages/Czech"
         "data/languages/Uzbek" "data/languages/Slovak" "data/languages/Serbian"
-        "data/languages/Croatian"
+        "data/languages/Croatian" "data/languages/Spanish"
     UPDATE_COMMAND ""
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/rhvoice.patch ||
