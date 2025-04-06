@@ -15,6 +15,7 @@ ExternalProject_Add(html2md
         -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         -DBUILD_EXE=OFF
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     BUILD_ALWAYS False
 )
 
