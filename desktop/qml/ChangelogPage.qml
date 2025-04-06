@@ -47,7 +47,8 @@ DialogPage {
             To use Parler-TTS models, you need to configure a <i>Text voice profile</i>. This can be done in the <i>Voice profiles</i> menu.
             To learn more about the unique features of this engine, check out <a href='https://github.com/huggingface/parler-tts/'>Parler TTS project website</a>.
             Parler-TTS primarily supports English, but a multilingual model for French, Spanish, Portuguese, Polish, German, Dutch and Italian is also included.
-            Currently, the multilingual model provides rather poor quality and not entirely usable speech.</li>
+            Currently, the multilingual model provides rather poor quality and not entirely usable speech.
+            Parler-TTS works best with CUDA acceleration. CPU only processing can be very slow.</li></li>
         <li><i>S.A.M.</i> TTS engine. S.A.M. is a small speech synthesizer designed for the Commodore 64.
             It features a robotic voice that evokes a strong sense of nostalgia.
             The S.A.M. voice is available in English only.</li>

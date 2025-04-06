@@ -1449,7 +1449,7 @@ void settings::enforce_num_threads() const {
 }
 void settings::update_hw_devices_from_fa(
     const QVariantMap& features_availability) {
-#define X(name)                                                          \
+#define X(name, _)                                                       \
     if (features_availability.contains(#name "-gpu-devices")) {          \
         m_##name##_gpu_devices = string_list_from_list(                  \
             features_availability.value(#name "-gpu-devices").toList()); \
@@ -1464,7 +1464,7 @@ void settings::update_hw_devices_from_fa(
 }
 
 void settings::scan_hw_devices(unsigned int hw_feature_flags) {
-#define X(name)                     \
+#define X(name, _)                  \
     m_##name##_gpu_devices.clear(); \
     m_##name##_gpu_devices.push_back(tr("Auto"));
     GPU_ENGINE_TABLE
@@ -1620,7 +1620,7 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
             }
         });
 
-#define X(name)                                      \
+#define X(name, _)                                   \
     if (!name##_auto_gpu_device().isEmpty())         \
         m_##name##_gpu_devices.front().append(" (" + \
                                               name##_auto_gpu_device() + ")");
@@ -1767,9 +1767,9 @@ X(whispercpp)
 X(fasterwhisper)
 #undef X
 
-#define X(name)                                                               \
+#define X(name, enabled)                                                      \
     bool settings::name##_use_gpu() const {                                   \
-        return value(QStringLiteral(#name "_use_gpu"), false).toBool();       \
+        return value(QStringLiteral(#name "_use_gpu"), enabled).toBool();     \
     }                                                                         \
     void settings::set_##name##_use_gpu(bool value) {                         \
         if (name##_use_gpu() != value) {                                      \

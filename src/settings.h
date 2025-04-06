@@ -37,14 +37,15 @@
     X(vulkan_igpu, true)                                               \
     X(vulkan_cpu, false) /* will work but extremely slow */
 
-#define GPU_ENGINE_TABLE \
-    X(whispercpp)        \
-    X(fasterwhisper)     \
-    X(coqui)             \
-    X(whisperspeech)     \
-    X(parler)            \
-    X(f5)                \
-    X(kokoro)
+// name, enable by default
+#define GPU_ENGINE_TABLE    \
+    X(whispercpp, false)    \
+    X(fasterwhisper, false) \
+    X(coqui, true)          \
+    X(whisperspeech, true)  \
+    X(parler, true)         \
+    X(f5, true)             \
+    X(kokoro, true)
 
 // name, default key
 #define HOTKEY_TABLE                                                           \
@@ -404,7 +405,7 @@ class settings : public QSettings, public singleton<settings> {
     X(whispercpp)
     X(fasterwhisper)
 #undef X
-#define X(name)                                                              \
+#define X(name, _)                                                           \
     Q_PROPERTY(bool name##_use_gpu READ name##_use_gpu WRITE                 \
                    set_##name##_use_gpu NOTIFY name##_use_gpu_changed)       \
     Q_PROPERTY(QStringList name##_gpu_devices READ name##_gpu_devices NOTIFY \
@@ -1008,7 +1009,7 @@ class settings : public QSettings, public singleton<settings> {
     X(whispercpp)
     X(fasterwhisper)
 #undef X
-#define X(name)                                         \
+#define X(name, _)                                      \
     bool name##_use_gpu() const;                        \
     void set_##name##_use_gpu(bool value);              \
     Q_INVOKABLE bool has_##name##_gpu_device() const;   \
@@ -1127,7 +1128,7 @@ class settings : public QSettings, public singleton<settings> {
     X(whispercpp)
     X(fasterwhisper)
 #undef X
-#define X(name)                       \
+#define X(name, _)                    \
     void name##_gpu_device_changed(); \
     void name##_use_gpu_changed();
     GPU_ENGINE_TABLE
@@ -1141,7 +1142,7 @@ class settings : public QSettings, public singleton<settings> {
     inline static const QString default_qt_style_fallback =
         QStringLiteral("org.kde.breeze");
     bool m_restart_required = false;
-#define X(name) QStringList m_##name##_gpu_devices;
+#define X(name, _) QStringList m_##name##_gpu_devices;
     GPU_ENGINE_TABLE
 #undef X
     std::vector<QString> m_rocm_gpu_versions;
