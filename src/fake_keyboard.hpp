@@ -55,6 +55,7 @@ class fake_keyboard : public QObject {
 
    private:
     enum class method_t { legacy, xdo, ydo };
+    inline static std::string m_keymap{};
     method_t m_method = method_t::legacy;
     std::queue<key_code_t> m_keys_to_send_queue;
     std::u32string m_text;

@@ -406,6 +406,7 @@ void fake_keyboard::init_ydo() {
         auto device_id = xkb_x11_get_core_keyboard_device_id(xcb_conn);
         if (device_id == -1) throw std::runtime_error{"no xkb keyboard"};
 
+        // get keymap from X11 server
         m_xkb_keymap = xkb_x11_keymap_new_from_device(
             m_xkb_ctx, xcb_conn, device_id, XKB_KEYMAP_COMPILE_NO_FLAGS);
         if (!m_xkb_keymap) {
@@ -416,14 +417,36 @@ void fake_keyboard::init_ydo() {
     }
 #endif
 
-    if (!m_xkb_keymap) connect_wayland();
+    if (!m_keymap.empty()) {
+        // get cached keymap
+        m_xkb_keymap = xkb_keymap_new_from_buffer(
+            m_xkb_ctx, m_keymap.data(), m_keymap.size(),
+            XKB_KEYMAP_FORMAT_TEXT_V1, XKB_KEYMAP_COMPILE_NO_FLAGS);
+    }
+
+    if (!m_xkb_keymap) {
+        // get keymap from wayland composer
+        connect_wayland();
+    }
+
+    if (!m_xkb_keymap) {
+        LOGD("fallback, create standard US keymap");
+
+        xkb_rule_names names{};
+        names.rules = nullptr;
+        names.model = "pc104";
+        names.layout = "us";
+
+        m_xkb_keymap = xkb_keymap_new_from_names(m_xkb_ctx, &names,
+                                                 XKB_KEYMAP_COMPILE_NO_FLAGS);
+    }
 
     if (m_xkb_keymap) {
         m_num_layouts = xkb_keymap_num_layouts(m_xkb_keymap);
         if (m_num_layouts == 0) {
             xkb_context_unref(m_xkb_ctx);
             m_xkb_ctx = nullptr;
-            throw std::runtime_error{"no xkb layouts"};
+            LOGF("no xkb layouts");
         }
 
         LOGD("keyboard layouts: ");
@@ -526,7 +549,7 @@ void fake_keyboard::send_keyevent() {
             send_keyevent_ydo();
             break;
         case method_t::xdo:
-            throw std::runtime_error{"invalid fake-keyboard type"};
+            LOGF("invalid fake-keyboard type");
     }
 #else
     send_keyevent_ydo();
@@ -584,14 +607,14 @@ void fake_keyboard::init_legacy() {
     if (!m_xkb_keymap) {
         xkb_context_unref(m_xkb_ctx);
         m_xkb_ctx = nullptr;
-        throw std::runtime_error{"no xkb keymap"};
+        LOGF("no xkb keymap");
     }
 
     m_num_layouts = xkb_keymap_num_layouts(m_xkb_keymap);
     if (m_num_layouts == 0) {
         xkb_context_unref(m_xkb_ctx);
         m_xkb_ctx = nullptr;
-        throw std::runtime_error{"no xkb layouts"};
+        LOGF("no xkb layouts");
     }
     if (m_num_layouts > XkbGroup4Index + 1) m_num_layouts = XkbGroup4Index + 1;
 
@@ -629,10 +652,14 @@ void fake_keyboard::init_legacy() {
 void fake_keyboard::init_xdo() {
     LOGD("using xdo fake-keyboard");
 
-    if (!QX11Info::display()) throw std::runtime_error{"no x11 display"};
+    if (!QX11Info::display()) {
+        LOGF("no x11 display");
+    }
 
     m_xdo = xdo_new_with_opened_display(QX11Info::display(), nullptr, 0);
-    if (!m_xdo) throw std::runtime_error{"can't create xdo"};
+    if (!m_xdo) {
+        LOGF("can't create xdo");
+    }
 
     m_method = method_t::xdo;
 }
@@ -844,24 +871,45 @@ void fake_keyboard::wly_keyboard_keymap(
     void *data, [[maybe_unused]] wl_keyboard *wl_keyboard, uint32_t format,
     int32_t fd, uint32_t size) {
     if (format != WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1) {
-        LOGW("unsupported keymap format");
+        LOGE(
+            "failed to get xkb_keymap from wayland: unsupported keymap format");
         return;
     }
 
-    auto *map_shm =
-        static_cast<char *>(mmap(nullptr, size, PROT_READ, MAP_SHARED, fd, 0));
-    if (map_shm == MAP_FAILED) {
-        LOGW("map shm failed");
+    if (size == 0) {
+        LOGE("failed to get xkb_keymap from wayland: keymap size is zero");
         return;
     }
 
     auto *self = static_cast<fake_keyboard *>(data);
-    self->m_xkb_keymap = xkb_keymap_new_from_string(
-        self->m_xkb_ctx, map_shm, XKB_KEYMAP_FORMAT_TEXT_V1,
-        XKB_KEYMAP_COMPILE_NO_FLAGS);
 
-    munmap(map_shm, size);
+    // try mmap
+    auto *map_shm =
+        static_cast<char *>(mmap(nullptr, size, PROT_READ, MAP_SHARED, fd, 0));
+    if (map_shm == MAP_FAILED) {
+        LOGW("map shm failed: " << errno);
+
+        // try read file
+        m_keymap = std::string(size, '\0');
+        read(fd, m_keymap.data(), size);
+        auto *self = static_cast<fake_keyboard *>(data);
+        self->m_xkb_keymap = xkb_keymap_new_from_string(
+            self->m_xkb_ctx, m_keymap.c_str(), XKB_KEYMAP_FORMAT_TEXT_V1,
+            XKB_KEYMAP_COMPILE_NO_FLAGS);
+    } else {
+        self->m_xkb_keymap = xkb_keymap_new_from_string(
+            self->m_xkb_ctx, map_shm, XKB_KEYMAP_FORMAT_TEXT_V1,
+            XKB_KEYMAP_COMPILE_NO_FLAGS);
+        m_keymap.assign(map_shm, size);
+        munmap(map_shm, size);
+    }
+
     close(fd);
+
+    if (!self->m_xkb_keymap) {
+        LOGE("failed to get xkb_keymap from wayland");
+        m_keymap.clear();
+    }
 }
 
 void fake_keyboard::wly_keyboard_enter(
