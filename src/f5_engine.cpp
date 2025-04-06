@@ -117,15 +117,17 @@ bool f5_engine::model_created() const { return m_model.has_value(); }
 bool f5_engine::encode_speech_impl(const std::string& text,
                                        [[maybe_unused]] unsigned int speed,
                                        const std::string& out_file) {
+    auto speech_speed = std::clamp(speed, 1U, 20U) / 10.0;
+
     auto task = py_executor::instance()->execute([&]() {
         try {
+            // to speed up decrease "nfe_step", e.g. "nfe_step"_a = 16
             m_model->attr("infer")(
                 "ref_file"_a = m_ref_voice_wav_file,
                 "ref_text"_a = m_ref_voice_text, "gen_text"_a = text,
-                "file_wave"_a = out_file, "speed"_a = 1.0,
+                "file_wave"_a = out_file, "speed"_a = speech_speed,
                 "remove_silence"_a = false, "seed"_a = py::none(),
                 "file_spec"_a = py::none());
-
         } catch (const std::exception& err) {
             LOGE("py error: " << err.what());
             return false;
@@ -138,4 +140,4 @@ bool f5_engine::encode_speech_impl(const std::string& text,
     return task && std::any_cast<bool>(task->get());
 }
 
-bool f5_engine::model_supports_speed() const { return false; }
+bool f5_engine::model_supports_speed() const { return true; }
