@@ -275,6 +275,14 @@ libs_availability_t libs_availability() {
     }
 
     LOGD("py libs availability: [" << availability << "]");
+
+    try {
+        // release mem
+        py::module_::import("gc").attr("collect")();
+        py::module_::import("torch").attr("cuda").attr("empty_cache")();
+    } catch (const std::exception& err) {
+        LOGE("py error: " << err.what());
+    }
 #endif
 
     return availability;
