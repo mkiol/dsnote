@@ -184,7 +184,7 @@ ColumnLayout {
             combo3ToolTip: qsTr("Speech speed")
             comboPlaceholderText: qsTr("No Text to Speech model")
             combo2PlaceholderText: qsTr("No voice profile")
-            comboRedBorder: (app.tts_ref_voice_needed && app.available_tts_ref_voices.length === 0) ||
+            comboRedBorder: (app.tts_ref_voice_needed && app.available_tts_ref_voice_names.length === 0) ||
                             (app.tts_ref_prompt_needed && _settings.tts_voice_prompts.length === 0)
             showSeparator: !listenReadCombos.verticalMode
             combo {

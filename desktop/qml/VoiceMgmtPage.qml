@@ -350,6 +350,7 @@ DialogPage {
 
             readonly property bool compact: root.verticalMode
             readonly property string voiceName: modelData[0]
+            readonly property bool invalid: modelData[2].length > 0
             property bool editActive: false
 
             background: Rectangle {
@@ -364,6 +365,10 @@ DialogPage {
             height: deleteButton.height
             leftPadding: root._leftMargin
 
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: !invalid && hovered
+            ToolTip.text: qsTr("Edit the audio sample and set the missing text.")
+
             RowLayout {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
@@ -377,6 +382,7 @@ DialogPage {
                     Layout.alignment: Qt.AlignHCenter
                     Layout.leftMargin: appWin.padding
                     Layout.fillWidth: true
+                    color: control.invalid ? palette.text : "red"
                 }
 
                 Button {

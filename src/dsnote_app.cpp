@@ -2160,7 +2160,9 @@ QVariantList dsnote_app::available_tts_ref_voice_names() const {
     for (auto it = m_available_tts_ref_voices_map.constBegin();
          it != m_available_tts_ref_voices_map.constEnd(); ++it) {
         const auto v = it.value().toStringList();
-        if (v.size() > 2) list.push_back(v.front());
+        if (v.size() > 2 && !v.at(2).isEmpty()) {
+            list.push_back(v.front());
+        }
     }
 
     return list;
