@@ -52,7 +52,7 @@ add-extensions:
   net.mkiol.SpeechNote.Addon:
     directory: extensions
     no-autodownload: true
-    autodelete: true
+    autodelete: false
     subdirectories: true
     version: stable
     versions: stable;beta;test;master
@@ -116,6 +116,8 @@ modules:
       - type: archive
         url: https://github.com/rhasspy/espeak-ng/archive/8593723f10cfd9befd50de447f14bf0a9d2a14a4.zip
         sha256: cc8092f23a28ccd79b1c5e62984a4c4ac1959d2d0b8193ac208d728c620bd5ed
+      - type: patch
+        path: ../patches/espeak-flatpak.patch
 
   - name: boost
     buildsystem: simple
@@ -126,7 +128,7 @@ modules:
       - "./b2 -j ${FLATPAK_BUILDER_N_JOBS} install"
     sources:
       - type: archive
-        url: https://boostorg.jfrog.io/artifactory/main/release/1.82.0/source/boost_1_82_0.tar.bz2
+        url: https://archives.boost.io/release/1.82.0/source/boost_1_82_0.tar.bz2
         sha256: a6e1ab9b0860e6a2881dd7b21fe9f737a095e5f33a3a874afc6a345228597ee6
 
   - name: webrtcvad

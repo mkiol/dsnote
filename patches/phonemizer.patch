@@ -1,0 +1,62 @@
+diff -ruN phonemizer-org/backend/espeak/api.py phonemizer-pathed/backend/espeak/api.py
+--- phonemizer-org/backend/espeak/api.py	2025-04-05 19:50:59.950166878 +0200
++++ phonemizer-pathed/backend/espeak/api.py	2025-04-05 19:59:15.371166561 +0200
+@@ -44,47 +44,11 @@
+         # set to None to avoid an AttributeError in _delete if the __init__
+         # method raises, will be properly initialized below
+         self._library = None
+-        
++
+         if data_path is not None:
+             data_path = str(data_path).encode('utf-8')
+ 
+-        # Because the library is not designed to be wrapped nor to be used in
+-        # multithreaded/multiprocess contexts (massive use of global variables)
+-        # we need a copy of the original library for each instance of the
+-        # wrapper... (see "man dlopen" on Linux/MacOS: we cannot load two times
+-        # the same library because a reference is then returned by dlopen). The
+-        # tweak is therefore to make a copy of the original library in a
+-        # different (temporary) directory.
+-        try:
+-            # load the original library in order to retrieve its full path?
+-            # Forced as str as it is required on Windows.
+-            espeak: CDLL = ctypes.cdll.LoadLibrary(str(library))
+-            library_path = self._shared_library_path(espeak)
+-            del espeak
+-        except OSError as error:
+-            raise RuntimeError(
+-                f'failed to load espeak library: {str(error)}') from None
+-
+-        # will be automatically destroyed after use
+-        self._tempdir = tempfile.mkdtemp()
+-
+-        # properly exit when the wrapper object is destroyed (see
+-        # https://docs.python.org/3/library/weakref.html#comparing-finalizers-with-del-methods).
+-        # But... weakref implementation does not work on windows so we register
+-        # the cleanup with atexit. This means that, on Windows, all the
+-        # temporary directories created by EspeakAPI instances will remain on
+-        # disk until the Python process exit.
+-        if sys.platform == 'win32':  # pragma: nocover
+-            atexit.register(self._delete_win32)
+-        else:
+-            weakref.finalize(self, self._delete, self._library, self._tempdir)
+-
+-        espeak_copy = pathlib.Path(self._tempdir) / library_path.name
+-        shutil.copy(library_path, espeak_copy, follow_symlinks=False)
+-
+-        # finally load the library copy and initialize it. 0x02 is
+-        # AUDIO_OUTPUT_SYNCHRONOUS in the espeak API
+-        self._library = ctypes.cdll.LoadLibrary(str(espeak_copy))
++        self._library = ctypes.cdll.LoadLibrary('/app/lib/libespeak-ng.so')
+         try:
+             if self._library.espeak_Initialize(0x02, 0, data_path, 0) <= 0:
+                 raise RuntimeError(  # pragma: nocover
+@@ -95,7 +59,7 @@
+ 
+         # the path to the original one (the copy is considered an
+         # implementation detail and is not exposed)
+-        self._library_path = library_path
++        self._library_path = '/app/lib/libespeak-ng.so'
+ 
+     def _delete_win32(self):  # pragma: nocover
+         # Windows does not support static methods with ctypes libraries

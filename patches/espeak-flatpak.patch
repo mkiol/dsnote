@@ -1,0 +1,12 @@
+diff -ruN espeak-org/Makefile.am espeak-patched/Makefile.am
+--- espeak-org/Makefile.am	2023-11-27 22:00:32.000000000 +0100
++++ espeak-patched/Makefile.am	2025-04-06 13:09:29.186077138 +0200
+@@ -5,7 +5,7 @@
+ BINDIR=@bindir@
+ INCDIR=@includedir@/espeak
+ LIBDIR=@libdir@
+-DATADIR=$(PREFIX)/share/espeak-ng-data
++DATADIR=/app/share/espeak-ng-data
+ VIMDIR=$(PREFIX)/share/vim
+ 
+ pkgconfigdir = $(libdir)/pkgconfig

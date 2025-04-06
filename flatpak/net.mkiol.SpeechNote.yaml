@@ -59,13 +59,14 @@ cleanup:
   - /bin/spellout
   - /bin/vulkan*
   - /bin/speak*
+  - /bin/xdo*
   - "*.a"
   - "*.la"
 add-extensions:
   net.mkiol.SpeechNote.Addon:
     directory: extensions
     no-autodownload: true
-    autodelete: true
+    autodelete: false
     subdirectories: true
     version: stable
     versions: stable;beta;test;master
@@ -129,6 +130,8 @@ modules:
       - type: archive
         url: https://github.com/rhasspy/espeak-ng/archive/8593723f10cfd9befd50de447f14bf0a9d2a14a4.zip
         sha256: cc8092f23a28ccd79b1c5e62984a4c4ac1959d2d0b8193ac208d728c620bd5ed
+      - type: patch
+        path: ../patches/espeak-flatpak.patch
 
   - name: boost
     buildsystem: simple
@@ -139,7 +142,7 @@ modules:
       - "./b2 -j ${FLATPAK_BUILDER_N_JOBS} install"
     sources:
       - type: archive
-        url: https://boostorg.jfrog.io/artifactory/main/release/1.82.0/source/boost_1_82_0.tar.bz2
+        url: https://archives.boost.io/release/1.82.0/source/boost_1_82_0.tar.bz2
         sha256: a6e1ab9b0860e6a2881dd7b21fe9f737a095e5f33a3a874afc6a345228597ee6
 
   - name: webrtcvad
@@ -329,7 +332,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RHVoice/RHVoice.git
-        commit: 71a1a830d2d860688ffcbb0d27d4de260136d161
+        commit: 3e61d440308cedc53f56d0d9f22c380af80d933e
       - type: patch
         path: ../patches/rhvoice.patch
 
@@ -761,6 +764,14 @@ modules:
         sha256: e0b7a9452162e854cf08b4e90bcd1b382b9903ace6a61503a872573880d24c3f
 
   - python3-modules-x86-64.yaml
+
+  - name: phonemizer-patch
+    buildsystem: simple
+    build-commands:
+      - patch --batch --unified -p1 --directory=${FLATPAK_DEST}/lib/python3.11/site-packages/phonemizer -i "$(realpath .)"/phonemizer.patch
+    sources:
+      - type: file
+        path: ../patches/phonemizer.patch
 
   - name: python3-pybind11
     buildsystem: simple
