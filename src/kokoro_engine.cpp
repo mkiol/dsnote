@@ -104,6 +104,7 @@ void kokoro_engine::create_model() {
             m_model = kokoro_api.attr("KModel")("model"_a = model_file,
                                                 "config"_a = config_file);
             m_pipeline = kokoro_api.attr("KPipeline")(
+                "model"_a = m_model.value(),
                 "lang_code"_a = m_config.speaker_id.empty()
                                     ? "a"
                                     : m_config.speaker_id.substr(0, 1),
