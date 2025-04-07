@@ -798,7 +798,6 @@ modules:
       - -DBUILD_MADDY=OFF
       - -DBUILD_XDO=OFF
       - -DBUILD_SAM=OFF
-      - -DWITH_PY=OFF
     post-install:
       - install -d ${FLATPAK_DEST}/extensions
     sources:

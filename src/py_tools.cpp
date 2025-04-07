@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -25,9 +25,15 @@
 #include "module_tools.hpp"
 #endif
 
+std::ostream& operator<<(std::ostream& os, py_tools::py_version_t version) {
+    os << version.major << '.' << version.minor << '.' << version.micro;
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os,
                          const py_tools::libs_availability_t& availability) {
-    os << "coqui-tts=" << availability.coqui_tts
+    os << "py-version" << availability.py_version
+       << ", coqui-tts=" << availability.coqui_tts
        << ", faster-whisper=" << availability.faster_whisper
        << ", ctranslate2-cuda=" << availability.ctranslate2_cuda
        << ", mimic3-tts=" << availability.mimic3_tts
@@ -63,6 +69,17 @@ libs_availability_t libs_availability() {
 #ifdef USE_PY
     namespace py = pybind11;
     using namespace pybind11::literals;
+
+    try {
+        LOGD("checking: python version");
+        auto version_info = py::module_::import("sys").attr("version_info");
+        availability.py_version.major = version_info.attr("major").cast<int>();
+        availability.py_version.minor = version_info.attr("minor").cast<int>();
+        availability.py_version.micro = version_info.attr("micro").cast<int>();
+        LOGD("python version: " << availability.py_version);
+    } catch (const std::exception& err) {
+        LOGD("python version check py error: " << err.what());
+    }
 
     if (cpu_tools::cpuinfo().feature_flags & cpu_tools::feature_flags_t::avx) {
         try {

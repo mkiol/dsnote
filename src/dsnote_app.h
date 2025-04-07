@@ -283,6 +283,7 @@ class dsnote_app : public QObject {
 
     Q_PROPERTY(auto_text_format_t auto_text_format READ auto_text_format NOTIFY
                    auto_text_format_changed)
+    Q_PROPERTY(QString py_version READ py_version NOTIFY py_version_changed)
 
    public:
     enum service_state_t {
@@ -557,6 +558,7 @@ class dsnote_app : public QObject {
     void stt_auto_lang_changed();
     void last_cursor_position_changed();
     void trans_rules_test_text_changed();
+    void py_version_changed();
 
    private:
     enum class action_t : uint8_t {
@@ -731,6 +733,7 @@ class dsnote_app : public QObject {
     std::optional<stt_request_t> m_current_stt_request;
     std::optional<stt_request_t> m_pending_stt_request;
     QString m_trans_rules_test_text;
+    QString m_py_version;
 #ifdef USE_DESKTOP
     std::optional<fake_keyboard> m_fake_keyboard;
     tray_icon m_tray;
@@ -985,6 +988,7 @@ class dsnote_app : public QObject {
     QString trans_rules_test_text() const;
     void set_trans_rules_test_text(const QString &text);
     static QString lang_from_model_id(const QString &model_id);
+    QString py_version() const { return m_py_version; }
 };
 
 #endif  // DSNOTE_APP_H

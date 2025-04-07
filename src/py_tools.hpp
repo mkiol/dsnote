@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,7 +13,14 @@
 namespace py_tools {
 inline static const auto python_site_path = "python/site-packages";
 
+struct py_version_t {
+    int major = 0;
+    int minor = 0;
+    int micro = 0;
+};
+
 struct libs_availability_t {
+    py_version_t py_version;
     bool coqui_tts = false;
     bool torch_cuda = false;
     bool torch_hip = false;
@@ -45,5 +52,6 @@ bool init_module();
 
 std::ostream& operator<<(std::ostream& os,
                          const py_tools::libs_availability_t& availability);
+std::ostream& operator<<(std::ostream& os, py_tools::py_version_t version);
 
 #endif  // PY_TOOLS_HPP

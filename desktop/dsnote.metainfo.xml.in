@@ -122,7 +122,8 @@
           The S.A.M. voice is available in English only.</li>
       <li>'Normalize audio' setting option.
           Use this option to enable/disable audio volume normalization.</li>
-      <li>New 'Piper' voices for: Dutch, Finnish, German, Luxembourgish</li>
+      <li>New 'Piper' voices for Dutch, Finnish, German and Luxembourgish</li>
+      <li>New 'RHVoice' voice for Spanish</li>
       </ul>
       <p>Speech to Text:</p>
       <ul>
@@ -148,6 +149,12 @@
           Now integration with 'XDG Desktop Portal' has been added, making global keyboard shortcuts possible also under Wayland.
           For shortcuts to work, your desktop enviroment has to support
           'GlobalShortcuts' interface on 'XDG Desktop Portal' service.</li>
+      </ul>
+      <p>Flatpak:</p>
+      <ul>
+      <li>Python support enabled in 'Tiny' or ARM packages.
+          Python libraries are not included in Tiny or ARM packages, but using the 'Location of Python libraries' option,
+          you can set an external directory that contains the libraries.</li>
       </ul>
       </description>
     </release>

@@ -4753,6 +4753,18 @@ QVariantList dsnote_app::features_availability() {
     }
 #endif
 
+    // update py version
+    if (m_features_availability.contains("py-version")) {
+        auto vl = m_features_availability.value("py-version").toList();
+        if (!vl.isEmpty()) {
+            auto new_py_version = vl.front().toString();
+            if (new_py_version != m_py_version) {
+                m_py_version = new_py_version;
+                emit py_version_changed();
+            }
+        }
+    }
+
     auto it = m_features_availability.cbegin();
     while (it != m_features_availability.cend()) {
         auto val = it.value().toList();

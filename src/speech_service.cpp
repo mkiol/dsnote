@@ -3279,6 +3279,12 @@ QVariantMap speech_service::features_availability() {
                 "error-flags",
                 QVariantList{} << settings::instance()->error_flags());
 
+            m_features_availability.insert(
+                "py-version",
+                QVariantList{} << QString::fromStdString(
+                    fmt::format("{}.{}.{}", py_availability->py_version.major,
+                                py_availability->py_version.minor,
+                                py_availability->py_version.micro)));
             refresh_status();
 
             emit features_availability_updated();

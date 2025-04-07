@@ -56,7 +56,8 @@ DialogPage {
             Use this option to enable/disable audio volume normalization.
             The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.
             Disable this option if you observe this problem.</li>
-        <li>New <i>Piper</i> voices for: Dutch, Finnish, German, Luxembourgish</li>
+        <li>New <i>Piper</i> voices for Dutch, Finnish, German and Luxembourgish</li>
+        <li>New <i>RHVoice</i> voice for Spanish</li>
         </ul>
         <p>" + qsTr("Translator") + "</p>
         <ul>
@@ -77,6 +78,13 @@ DialogPage {
             Now integration with <i>XDG Desktop Portal</i> has been added, making global keyboard shortcuts possible also under Wayland.
             For shortcuts to work, your desktop enviroment has to support
             <i>GlobalShortcuts</i> interface on <i>XDG Desktop Portal</i> service.</li>
+        </ul>
+        <p>Flatpak</p>
+        <ul>
+        <li>Python support enabled in <i>Tiny</i> and ARM packages.
+            Python libraries are not included in Tiny or ARM packages, but using the <i>Location of Python libraries</i> option,
+            you can set an external directory that contains the libraries.
+            Make sure that the Flatpak application has permissions to access this directory.</li>
         </ul>"
     }
 

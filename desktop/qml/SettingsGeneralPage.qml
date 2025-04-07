@@ -163,7 +163,10 @@ ColumnLayout {
 
     TextFieldForm {
         label.text: qsTranslate("SettingsPage", "Location of language files")
-        toolTip: qsTranslate("SettingsPage", "Directory where language files are downloaded to and stored.")
+        toolTip: qsTranslate("SettingsPage", "Directory where language files are downloaded to and stored.") +
+                 (_settings.is_flatpak() ?
+                      (" " + qsTranslate("SettingsPage", "Make sure that the Flatpak application has permissions to access the directory.")) :
+                      "")
         textField {
             text: _settings.models_dir
             readOnly: true

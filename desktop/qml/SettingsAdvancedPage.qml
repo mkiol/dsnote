@@ -276,18 +276,17 @@ ColumnLayout {
         id: pyTextField
 
         indends: 1
-        visible: _settings.py_feature_scan && !_settings.is_flatpak()
-        label.text: qsTranslate("SettingsPage", "Location of Python libraries")
+        visible: _settings.py_feature_scan
+        label.text: qsTranslate("SettingsPage", "Location of Python libraries (version: %1)").arg(app.py_version.length === 0 ? "0.0.0" : app.py_version)
         toolTip: qsTranslate("SettingsPage", "Python libraries directory (%1).").arg("<i>PYTHONPATH</i>") + " " +
                  qsTranslate("SettingsPage", "Leave blank to use the default value.") + " " +
-                 qsTranslate("SettingsPage", "This option may be useful if you use %1 module to manage Python libraries.").arg("<i>venv</i>")
+                 (_settings.is_flatpak() ?
+                      qsTranslate("SettingsPage", "Make sure that the Flatpak application has permissions to access the directory.") :
+                      qsTranslate("SettingsPage", "This option may be useful if you use %1 module to manage Python libraries.").arg("<i>venv</i>"))
         textField {
             text: _settings.py_path
+            onTextChanged: _settings.py_path = pyTextField.textField.text
             placeholderText: qsTranslate("SettingsPage", "Leave blank to use the default value.")
-        }
-        button {
-            text: qsTranslate("SettingsPage", "Save")
-            onClicked: _settings.py_path = pyTextField.textField.text
         }
     }
 
@@ -348,10 +347,14 @@ ColumnLayout {
         visible: app.feature_fake_keyboard && _settings.fake_keyboard_type !== Settings.FakeKeyboardTypeXdo
         label.text: qsTranslate("SettingsPage", "Compose file")
         toolTip: qsTranslate("SettingsPage", "X11 compose file used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>") + " " +
-                 qsTranslate("SettingsPage", "Leave blank to use the default value.")
+                 qsTranslate("SettingsPage", "Leave blank to use the default value.") +
+                 (_settings.is_flatpak() ?
+                      (" " + qsTranslate("SettingsPage", "Make sure that the Flatpak application has permissions to access the directory.")) :
+                      "")
         textField {
             text: _settings.x11_compose_file
             onTextChanged: _settings.x11_compose_file = text
+            placeholderText: qsTranslate("SettingsPage", "Leave blank to use the default value.")
         }
     }
 
@@ -363,6 +366,7 @@ ColumnLayout {
         textField {
             text: _settings.fake_keyboard_layout
             onTextChanged: _settings.fake_keyboard_layout = text
+            placeholderText: qsTranslate("SettingsPage", "Leave blank to use the default value.")
         }
     }
 

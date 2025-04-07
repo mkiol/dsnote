@@ -766,6 +766,8 @@ modules:
   - python3-modules-x86-64.yaml
 
   - name: phonemizer-patch
+    only-arches:
+      - x86_64
     buildsystem: simple
     build-commands:
       - patch --batch --unified -p1 --directory=${FLATPAK_DEST}/lib/python3.11/site-packages/phonemizer -i "$(realpath .)"/phonemizer.patch
@@ -774,6 +776,8 @@ modules:
         path: ../patches/phonemizer.patch
 
   - name: python3-pybind11
+    only-arches:
+      - x86_64
     buildsystem: simple
     cleanup:
       - /bin
@@ -1019,11 +1023,6 @@ modules:
       - -DBUILD_MADDY=OFF
       - -DBUILD_XDO=OFF
       - -DBUILD_SAM=OFF
-    build-options:
-      arch:
-        aarch64:
-          config-opts:
-            - -DWITH_PY=OFF
     post-install:
       - install -d ${FLATPAK_DEST}/extensions
     sources:
