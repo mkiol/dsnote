@@ -24,6 +24,22 @@
 #include "qdebug.h"
 #include "singleton.h"
 
+// name, setting str, default value
+#define SETTINGS_BOOL_PROPERTY_TABLE      \
+    X(stt_use_note_as_prompt, true)       \
+    X(stt_echo, false)                    \
+    X(tts_split_into_sentences, true)     \
+    X(show_repair_text, false)            \
+    X(tts_use_engine_speed_control, true) \
+    X(tts_normalize_audio, true)          \
+    X(stt_insert_stats, false)            \
+    X(trans_rules_enabled, false)         \
+    X(mnt_clean_text, false)              \
+    X(whisper_translate, false)           \
+    X(use_tray, false)                    \
+    X(start_in_tray, false)               \
+    X(clean_ref_voice, true)
+
 // name, default value
 #define GPU_SCAN_TABLE                                                 \
     X(cuda, true)                                                      \
@@ -110,6 +126,10 @@ class settings : public QSettings, public singleton<settings> {
     Q_OBJECT
 
     // app
+#define X(name, _) \
+    Q_PROPERTY(bool name READ name WRITE set_##name NOTIFY name##_changed)
+    SETTINGS_BOOL_PROPERTY_TABLE
+#undef X
     Q_PROPERTY(QString note READ note WRITE set_note NOTIFY note_changed)
     Q_PROPERTY(speech_mode_t speech_mode READ speech_mode WRITE set_speech_mode
                    NOTIFY speech_mode_changed)
@@ -234,16 +254,6 @@ class settings : public QSettings, public singleton<settings> {
                    active_tts_for_out_mnt_ref_voice WRITE
                        set_active_tts_for_out_mnt_ref_voice NOTIFY
                            active_tts_for_out_mnt_ref_voice_changed)
-    Q_PROPERTY(bool mnt_clean_text READ mnt_clean_text WRITE set_mnt_clean_text
-                   NOTIFY mnt_clean_text_changed)
-    Q_PROPERTY(bool whisper_translate READ whisper_translate WRITE
-                   set_whisper_translate NOTIFY whisper_translate_changed)
-    Q_PROPERTY(
-        bool use_tray READ use_tray WRITE set_use_tray NOTIFY use_tray_changed)
-    Q_PROPERTY(bool start_in_tray READ start_in_tray WRITE set_start_in_tray
-                   NOTIFY start_in_tray_changed)
-    Q_PROPERTY(bool clean_ref_voice READ clean_ref_voice WRITE
-                   set_clean_ref_voice NOTIFY clean_ref_voice_changed)
     Q_PROPERTY(
         unsigned int addon_flags READ addon_flags NOTIFY addon_flags_changed)
     Q_PROPERTY(
@@ -261,21 +271,10 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(
         default_export_tab_t default_export_tab READ default_export_tab WRITE
             set_default_export_tab NOTIFY default_export_tab_changed)
-    Q_PROPERTY(bool show_repair_text READ show_repair_text WRITE
-                   set_show_repair_text NOTIFY show_repair_text_changed)
     Q_PROPERTY(QString x11_compose_file READ x11_compose_file WRITE
                    set_x11_compose_file NOTIFY x11_compose_file_changed)
     Q_PROPERTY(QString fake_keyboard_layout READ fake_keyboard_layout WRITE
-                   set_fake_keyboard_layout NOTIFY fake_keyboard_layout_changed)
-    Q_PROPERTY(bool tts_split_into_sentences READ tts_split_into_sentences WRITE
-                   set_tts_split_into_sentences NOTIFY
-                       tts_split_into_sentences_changed)
-    Q_PROPERTY(
-        bool tts_use_engine_speed_control READ tts_use_engine_speed_control
-            WRITE set_tts_use_engine_speed_control NOTIFY
-                tts_use_engine_speed_control_changed)
-    Q_PROPERTY(bool tts_normalize_audio READ tts_normalize_audio WRITE
-                   set_tts_normalize_audio NOTIFY tts_normalize_audio_changed)
+                   set_fake_keyboard_layout NOTIFY fake_keyboard_layout_changed)    
     Q_PROPERTY(
         unsigned int error_flags READ error_flags NOTIFY error_flags_changed)
     Q_PROPERTY(unsigned int hint_done_flags READ hint_done_flags NOTIFY
@@ -296,16 +295,10 @@ class settings : public QSettings, public singleton<settings> {
                    set_mix_volume_change NOTIFY mix_volume_change_changed)
     Q_PROPERTY(tts_tag_mode_t tts_tag_mode READ tts_tag_mode WRITE
                    set_tts_tag_mode NOTIFY tts_tag_mode_changed)
-    Q_PROPERTY(bool stt_insert_stats READ stt_insert_stats WRITE
-                   set_stt_insert_stats NOTIFY stt_insert_stats_changed)
     Q_PROPERTY(bool subtitles_support READ subtitles_support WRITE
                    set_subtitles_support NOTIFY subtitles_support_changed)
-    Q_PROPERTY(
-        bool stt_echo READ stt_echo WRITE set_stt_echo NOTIFY stt_echo_changed)
     Q_PROPERTY(QVariantList trans_rules READ trans_rules WRITE set_trans_rules
                    NOTIFY trans_rules_changed)
-    Q_PROPERTY(bool trans_rules_enabled READ trans_rules_enabled WRITE
-                   set_trans_rules_enabled NOTIFY trans_rules_enabled_changed)
     Q_PROPERTY(QVariantList tts_voice_prompts READ tts_voice_prompts WRITE
                    set_tts_voice_prompts NOTIFY tts_voice_prompts_changed)
     Q_PROPERTY(QStringList tts_voice_prompt_names READ tts_voice_prompt_names
@@ -676,6 +669,16 @@ class settings : public QSettings, public singleton<settings> {
     void update_qt_style(QQmlApplicationEngine *engine);
 #endif
     // app
+#define X(name, _)     \
+    bool name() const; \
+    void set_##name(bool value);
+    SETTINGS_BOOL_PROPERTY_TABLE
+#undef X
+#define X(name, _)               \
+    bool hw_scan_##name() const; \
+    void set_hw_scan_##name(bool value);
+    GPU_SCAN_TABLE
+#undef X
     QString note() const;
     void set_note(const QString &value);
     speech_mode_t speech_mode() const;
@@ -688,7 +691,6 @@ class settings : public QSettings, public singleton<settings> {
     void set_mode(mode_t value);
     void update_addon_flags_from_fa(const QVariantMap &features_availability);
     void update_system_flags_from_fa(const QVariantMap &features_availability);
-
     QString audio_file_save_dir() const;
     void set_audio_file_save_dir(const QString &value);
     QUrl audio_file_save_dir_url() const;
@@ -769,7 +771,6 @@ class settings : public QSettings, public singleton<settings> {
 #undef X
     void set_use_toggle_for_hotkey(bool value);
     bool use_toggle_for_hotkey() const;
-
     desktop_notification_policy_t desktop_notification_policy() const;
     void set_desktop_notification_policy(desktop_notification_policy_t value);
     bool desktop_notification_details() const;
@@ -778,37 +779,12 @@ class settings : public QSettings, public singleton<settings> {
     void set_actions_api_enabled(bool value);
     bool diacritizer_enabled() const;
     void set_diacritizer_enabled(bool value);
-
-#define X(name, dvalue)          \
-    bool hw_scan_##name() const; \
-    void set_hw_scan_##name(bool value);
-    GPU_SCAN_TABLE
-#undef X
-
     QString active_tts_ref_voice() const;
     void set_active_tts_ref_voice(const QString &value);
     QString active_tts_for_in_mnt_ref_voice() const;
     void set_active_tts_for_in_mnt_ref_voice(const QString &value);
     QString active_tts_for_out_mnt_ref_voice() const;
     void set_active_tts_for_out_mnt_ref_voice(const QString &value);
-    bool mnt_clean_text() const;
-    void set_mnt_clean_text(bool value);
-    bool whisper_translate() const;
-    void set_whisper_translate(bool value);
-    bool use_tray() const;
-    void set_use_tray(bool value);
-    bool start_in_tray() const;
-    void set_start_in_tray(bool value);
-    bool show_repair_text() const;
-    void set_show_repair_text(bool value);
-    bool tts_split_into_sentences() const;
-    void set_tts_split_into_sentences(bool value);
-    bool tts_use_engine_speed_control() const;
-    void set_tts_use_engine_speed_control(bool value);
-    bool tts_normalize_audio() const;
-    void set_tts_normalize_audio(bool value);
-    bool clean_ref_voice() const;
-    void set_clean_ref_voice(bool value);
     unsigned int addon_flags() const;
     unsigned int system_flags() const;
     unsigned int error_flags() const;
@@ -842,14 +818,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_tts_subtitles_sync(tts_subtitles_sync_mode_t value);
     tts_tag_mode_t tts_tag_mode() const;
     void set_tts_tag_mode(tts_tag_mode_t value);
-    bool stt_insert_stats() const;
-    void set_stt_insert_stats(bool value);
     bool subtitles_support() const;
     void set_subtitles_support(bool value);
-    bool stt_echo() const;
-    void set_stt_echo(bool value);
-    bool trans_rules_enabled() const;
-    void set_trans_rules_enabled(bool value);
     QVariantList trans_rules() const;
     void set_trans_rules(const QVariantList &value);
     QVariantList tts_voice_prompts() const;
@@ -1024,6 +994,12 @@ class settings : public QSettings, public singleton<settings> {
 
    signals:
     // app
+#define X(name, _) void name##_changed();
+    SETTINGS_BOOL_PROPERTY_TABLE
+#undef X
+#define X(name, _) void hw_scan_##name##_changed();
+    GPU_SCAN_TABLE
+#undef X
     void speech_mode_changed();
     void note_changed();
     void insert_mode_changed();
@@ -1056,21 +1032,11 @@ class settings : public QSettings, public singleton<settings> {
     void desktop_notification_details_changed();
     void actions_api_enabled_changed();
     void diacritizer_enabled_changed();
-
-#define X(name, dvalue) void hw_scan_##name##_changed();
-    GPU_SCAN_TABLE
-#undef X
-
     void active_tts_ref_voice_changed();
     void active_tts_for_in_mnt_ref_voice_changed();
     void active_tts_for_out_mnt_ref_voice_changed();
-    void mnt_clean_text_changed();
-    void whisper_translate_changed();
-    void use_tray_changed();
-    void start_in_tray_changed();
     void mnt_text_format_changed();
     void stt_tts_text_format_changed();
-    void clean_ref_voice_changed();
     void addon_flags_changed();
     void system_flags_changed();
     void hint_done_flags_changed();
@@ -1080,21 +1046,14 @@ class settings : public QSettings, public singleton<settings> {
     void default_export_tab_changed();
     void tts_subtitles_sync_changed();
     void mix_volume_change_changed();
-    void show_repair_text_changed();
     void x11_compose_file_changed();
     void fake_keyboard_layout_changed();
-    void tts_split_into_sentences_changed();
-    void tts_use_engine_speed_control_changed();
-    void tts_normalize_audio_changed();
     void use_toggle_for_hotkey_changed();
     void error_flags_changed();
     void settings_stt_engine_idx_changed();
     void settings_tts_engine_idx_changed();
     void tts_tag_mode_changed();
-    void stt_insert_stats_changed();
     void subtitles_support_changed();
-    void stt_echo_changed();
-    void trans_rules_enabled_changed();
     void trans_rules_changed();
     void tts_voice_prompts_changed();
     void tts_active_voice_prompt_changed();

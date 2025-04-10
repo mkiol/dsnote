@@ -272,6 +272,19 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
         .removeRecursively();
 }
 
+#define X(name, dvalue)                                       \
+    bool settings::name() const {                             \
+        return value(QStringLiteral(#name), dvalue).toBool(); \
+    }                                                         \
+    void settings::set_##name(bool value) {                   \
+        if (name() != value) {                                \
+            setValue(QStringLiteral(#name), value);           \
+            emit name##_changed();                            \
+        }                                                     \
+    }
+SETTINGS_BOOL_PROPERTY_TABLE
+#undef X
+
 QString settings::settings_filepath() {
     QDir conf_dir{
         QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)};
@@ -2040,50 +2053,6 @@ void settings::set_desktop_notification_details(bool value) {
     }
 }
 
-bool settings::mnt_clean_text() const {
-    return value(QStringLiteral("mnt_clean_text"), false).toBool();
-}
-
-void settings::set_mnt_clean_text(bool value) {
-    if (value != mnt_clean_text()) {
-        setValue(QStringLiteral("mnt_clean_text"), value);
-        emit mnt_clean_text_changed();
-    }
-}
-
-bool settings::whisper_translate() const {
-    return value(QStringLiteral("whisper_translate"), false).toBool();
-}
-
-void settings::set_whisper_translate(bool value) {
-    if (value != whisper_translate()) {
-        setValue(QStringLiteral("whisper_translate"), value);
-        emit whisper_translate_changed();
-    }
-}
-
-bool settings::use_tray() const {
-    return value(QStringLiteral("use_tray"), false).toBool();
-}
-
-void settings::set_use_tray(bool value) {
-    if (value != use_tray()) {
-        setValue(QStringLiteral("use_tray"), value);
-        emit use_tray_changed();
-    }
-}
-
-bool settings::clean_ref_voice() const {
-    return value(QStringLiteral("clean_ref_voice"), true).toBool();
-}
-
-void settings::set_clean_ref_voice(bool value) {
-    if (value != clean_ref_voice()) {
-        setValue(QStringLiteral("clean_ref_voice"), value);
-        emit clean_ref_voice_changed();
-    }
-}
-
 unsigned int settings::sub_min_segment_dur() const {
     return value(QStringLiteral("sub_min_segment_dur"), 4).toUInt();
 }
@@ -2144,61 +2113,6 @@ void settings::set_keep_last_note(bool new_value) {
             m_note = value(QStringLiteral("note"), {}).toString();
             setValue(QStringLiteral("note"), {});
         }
-    }
-}
-
-bool settings::start_in_tray() const {
-    return value(QStringLiteral("start_in_tray"), false).toBool();
-}
-
-void settings::set_start_in_tray(bool value) {
-    if (value != start_in_tray()) {
-        setValue(QStringLiteral("start_in_tray"), value);
-        emit start_in_tray_changed();
-    }
-}
-
-bool settings::show_repair_text() const {
-    return value(QStringLiteral("show_repair_text"), false).toBool();
-}
-
-void settings::set_show_repair_text(bool value) {
-    if (value != show_repair_text()) {
-        setValue(QStringLiteral("show_repair_text"), value);
-        emit show_repair_text_changed();
-    }
-}
-
-bool settings::tts_split_into_sentences() const {
-    return value(QStringLiteral("tts_split_into_sentences"), true).toBool();
-}
-
-void settings::set_tts_split_into_sentences(bool value) {
-    if (value != tts_split_into_sentences()) {
-        setValue(QStringLiteral("tts_split_into_sentences"), value);
-        emit tts_split_into_sentences_changed();
-    }
-}
-
-bool settings::tts_use_engine_speed_control() const {
-    return value(QStringLiteral("tts_use_engine_speed_control"), true).toBool();
-}
-
-void settings::set_tts_use_engine_speed_control(bool value) {
-    if (value != tts_use_engine_speed_control()) {
-        setValue(QStringLiteral("tts_use_engine_speed_control"), value);
-        emit tts_use_engine_speed_control_changed();
-    }
-}
-
-bool settings::tts_normalize_audio() const {
-    return value(QStringLiteral("tts_normalize_audio"), true).toBool();
-}
-
-void settings::set_tts_normalize_audio(bool value) {
-    if (value != tts_normalize_audio()) {
-        setValue(QStringLiteral("tts_normalize_audio"), value);
-        emit tts_normalize_audio_changed();
     }
 }
 
@@ -2556,17 +2470,6 @@ void settings::add_error_flags(error_flags_t new_flag) {
     }
 }
 
-bool settings::stt_insert_stats() const {
-    return value(QStringLiteral("stt_insert_stats"), false).toBool();
-}
-
-void settings::set_stt_insert_stats(bool value) {
-    if (stt_insert_stats() != value) {
-        setValue(QStringLiteral("stt_insert_stats"), value);
-        emit stt_insert_stats_changed();
-    }
-}
-
 bool settings::subtitles_support() const {
 #ifdef USE_SFOS
     return value(QStringLiteral("subtitles_support"), false).toBool();
@@ -2581,28 +2484,6 @@ void settings::set_subtitles_support(bool value) {
         emit subtitles_support_changed();
         emit stt_tts_text_format_changed();
         emit mnt_text_format_changed();
-    }
-}
-
-bool settings::stt_echo() const {
-    return value(QStringLiteral("stt_echo"), false).toBool();
-}
-
-void settings::set_stt_echo(bool value) {
-    if (stt_echo() != value) {
-        setValue(QStringLiteral("stt_echo"), value);
-        emit stt_echo_changed();
-    }
-}
-
-bool settings::trans_rules_enabled() const {
-    return value(QStringLiteral("trans_rules_enabled"), false).toBool();
-}
-
-void settings::set_trans_rules_enabled(bool value) {
-    if (trans_rules_enabled() != value) {
-        setValue(QStringLiteral("trans_rules_enabled"), value);
-        emit trans_rules_enabled_changed();
     }
 }
 

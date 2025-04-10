@@ -29,6 +29,9 @@ DialogPage {
             Unlike the original Whisper, which tends to omit disfluencies and follows more of a intended transcription style,
             <i>CrisperWhisper</i> aims to transcribe every spoken word exactly as it is, including fillers, pauses, stutters and false starts.
             <i>CrisperWhisper</i> model is enabled only for English and German languages.</li>
+        <li>Using an existing note as the initial context in decoding.
+            This has the potential to improve transcription quality and reduce \"hallucination\" problem.
+            If you observe a degradation in quality, turn off the <i>Use note as context</i> option.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + "</p>
         <ul>

@@ -132,6 +132,9 @@
           Unlike the original Whisper, which tends to omit disfluencies and follows more of a intended transcription style,
           CrisperWhisper aims to transcribe every spoken word exactly as it is, including fillers, pauses, stutters and false starts.
           CrisperWhisper model is enabled only for English and German languages.</li>
+      <li>Using an existing note as the initial context in decoding.
+          This has the potential to improve transcription quality and reduce 'hallucination' problem.
+          If you observe a degradation in quality, turn off the 'Use note as context' option.</li>
       </ul>
       <p>Translator:</p>
       <ul>

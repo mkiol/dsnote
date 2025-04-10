@@ -342,7 +342,11 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
                                                  py::str(m_config.lang)),
                 "task"_a = m_config.translate && m_config.has_option('t')
                                ? "translate"
-                               : "transcribe");
+                               : "transcribe",
+                "initial_prompt"_a = m_config.initial_prompt.empty()
+                                         ? static_cast<py::object>(py::none())
+                                         : static_cast<py::object>(py::str(
+                                               m_config.initial_prompt)));
 
             auto segments = *seg_tuple.cast<py::list>().begin();
 

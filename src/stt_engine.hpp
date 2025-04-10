@@ -66,13 +66,13 @@ class stt_engine {
         std::string ttt_model_file;
         std::string openvino_model_file; /* used only in whisper.cpp */
 
-        inline bool operator==(const model_files_t& rhs) const {
+        bool operator==(const model_files_t& rhs) const {
             return model_file == rhs.model_file &&
                    scorer_file == rhs.scorer_file &&
                    ttt_model_file == rhs.ttt_model_file &&
                    openvino_model_file == rhs.openvino_model_file;
         };
-        inline bool operator!=(const model_files_t& rhs) const {
+        bool operator!=(const model_files_t& rhs) const {
             return !(*this == rhs);
         };
     };
@@ -108,11 +108,11 @@ class stt_engine {
         std::string platform_name;
         bool flash_attn = false;
 
-        inline bool operator==(const gpu_device_t& rhs) const {
+        bool operator==(const gpu_device_t& rhs) const {
             return platform_name == rhs.platform_name && name == rhs.name &&
                    id == rhs.id && flash_attn == rhs.flash_attn;
         }
-        inline bool operator!=(const gpu_device_t& rhs) const {
+        bool operator!=(const gpu_device_t& rhs) const {
             return !(*this == rhs);
         }
     };
@@ -136,12 +136,13 @@ class stt_engine {
         audio_ctx_conf_t audio_ctx_conf =
             audio_ctx_conf_t::dynamic; /*extra whisper feature*/
         int audio_ctx_size = 1500;     /*extra whisper feature*/
+        std::string initial_prompt;    /*extra whisper feature*/
         text_format_t text_format = text_format_t::raw;
         std::string options;
         gpu_device_t gpu_device;
         std::vector<int> available_devices;
         sub_config_t sub_config;
-        inline bool has_option(char c) const {
+        bool has_option(char c) const {
             return options.find(c) != std::string::npos;
         }
     };
@@ -156,32 +157,30 @@ class stt_engine {
     void request_stop();
     bool started() const;
     bool stopping() const;
-    inline void restart() { m_restart_requested = true; }
+    void restart() { m_restart_requested = true; }
     speech_detection_status_t speech_detection_status() const;
     void set_speech_mode(speech_mode_t mode);
-    inline auto speech_mode() const { return m_config.speech_mode; }
+    auto speech_mode() const { return m_config.speech_mode; }
     void set_speech_started(bool value);
-    inline auto speech_status() const { return m_config.speech_started; }
-    inline const model_files_t& model_files() const {
-        return m_config.model_files;
+    auto speech_status() const { return m_config.speech_started; }
+    const model_files_t& model_files() const { return m_config.model_files; }
+    const std::string& lang() const { return m_config.lang; }
+    auto translate() const { return m_config.translate; }
+    auto use_gpu() const { return m_config.use_gpu; }
+    auto gpu_device() const { return m_config.gpu_device; }
+    auto text_format() const { return m_config.text_format; }
+    void set_text_format(text_format_t value) { m_config.text_format = value; }
+    void set_sub_config(sub_config_t value) { m_config.sub_config = value; }
+    bool stop_requested() const { return m_thread_exit_requested; }
+    void set_insert_stats(bool value) { m_config.insert_stats = value; }
+    auto audio_ctx_conf() const { return m_config.audio_ctx_conf; }
+    auto audio_ctx_size() const { return m_config.audio_ctx_size; }
+    auto cpu_threads() const { return m_config.cpu_threads; }
+    auto beam_search() const { return m_config.beam_search; }
+    auto initial_prompt() const { return m_config.initial_prompt; }
+    void set_initial_prompt(std::string prompt) {
+        m_config.initial_prompt.assign(std::move(prompt));
     }
-    inline const std::string& lang() const { return m_config.lang; }
-    inline auto translate() const { return m_config.translate; }
-    inline auto use_gpu() const { return m_config.use_gpu; }
-    inline auto gpu_device() const { return m_config.gpu_device; }
-    inline auto text_format() const { return m_config.text_format; }
-    inline void set_text_format(text_format_t value) {
-        m_config.text_format = value;
-    }
-    inline void set_sub_config(sub_config_t value) {
-        m_config.sub_config = value;
-    }
-    inline bool stop_requested() const { return m_thread_exit_requested; }
-    inline void set_insert_stats(bool value) { m_config.insert_stats = value; }
-    inline auto audio_ctx_conf() const { return m_config.audio_ctx_conf; }
-    inline auto audio_ctx_size() const { return m_config.audio_ctx_size; }
-    inline auto cpu_threads() const { return m_config.cpu_threads; }
-    inline auto beam_search() const { return m_config.beam_search; }
 
    protected:
     enum class lock_type_t { free, processed, borrowed };
@@ -210,8 +209,8 @@ class stt_engine {
         bool sof = true;
         bool eof = false;
         std::atomic<lock_type_t> lock = lock_type_t::free;
-        [[nodiscard]] inline bool full() const { return size == buf.size(); }
-        inline void clear() {
+        [[nodiscard]] bool full() const { return size == buf.size(); }
+        void clear() {
             size = 0;
             sof = false;
             eof = false;

@@ -198,6 +198,17 @@ Page {
                         }
 
                         TextSwitch {
+                            checked: _settings.stt_use_note_as_prompt
+                            automaticCheck: false
+                            text: qsTr("Use note as context")
+                            onClicked: {
+                                _settings.stt_use_note_as_prompt = !_settings.stt_use_note_as_prompt
+                            }
+                            description: qsTr("Use an existing note as the initial context in decoding.") + " " +
+                                         qsTr("The option works only with %1 models.").arg("<i>WhisperCpp</i>")
+                        }
+
+                        TextSwitch {
                             checked: _settings.stt_insert_stats
                             automaticCheck: false
                             text: qsTr("Insert statistics")

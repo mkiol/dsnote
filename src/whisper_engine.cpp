@@ -643,6 +643,7 @@ whisper_full_params whisper_engine::make_wparams() {
     wparams.print_progress = false;
     wparams.print_timestamps = false;
     wparams.audio_ctx = 1500;
+    wparams.no_context = false;
 
     if (!m_config.model_files.openvino_model_file.empty()) {
         // read audio_ctx from config file for openvino
@@ -691,6 +692,7 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
     if (m_whisper_sup_ctx && auto_lang) {
         // use sup model to detect language
         m_wparams.detect_language = true;
+        m_wparams.initial_prompt = nullptr;
 
         if (auto ret = m_whisper_api.whisper_full(m_whisper_sup_ctx, m_wparams,
                                                   buf.data(), buf.size());
@@ -713,6 +715,10 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
     }
 
     std::ostringstream os;
+
+    if (!m_config.initial_prompt.empty()) {
+        m_wparams.initial_prompt = m_config.initial_prompt.c_str();
+    }
 
     if (auto ret = m_whisper_api.whisper_full(m_whisper_ctx, m_wparams,
                                               buf.data(), buf.size());

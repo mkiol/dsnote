@@ -1275,6 +1275,9 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         config.cache_dir = settings::instance()->cache_dir().toStdString();
         config.insert_stats =
             get_bool_value_from_options("insert_stats", false, options);
+        config.initial_prompt =
+            get_string_value_from_options("initial_prompt", {}, options)
+                .toStdString();
 
         // clang-format off
 #define ENGINE_OPTS(name_) \
@@ -1484,6 +1487,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             m_stt_engine->set_text_format(config.text_format);
             m_stt_engine->set_sub_config(config.sub_config);
             m_stt_engine->set_insert_stats(config.insert_stats);
+            m_stt_engine->set_initial_prompt(std::move(config.initial_prompt));
         }
 
         return model_config->stt->model_id;

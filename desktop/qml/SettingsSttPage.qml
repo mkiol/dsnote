@@ -113,6 +113,20 @@ ColumnLayout {
     }
 
     CheckBox {
+        checked: _settings.stt_use_note_as_prompt
+        text: qsTranslate("SettingsPage", "Use note as context")
+        onCheckedChanged: {
+            _settings.stt_use_note_as_prompt = checked
+        }
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: qsTranslate("SettingsPage", "Use an existing note as the initial context in decoding.") + " " +
+                      qsTranslate("SettingsPage", "This option only works with %1 and %2 models.").arg("<i>WhisperCpp</i>").arg("<i>FasterWhisper</i>")
+        hoverEnabled: true
+    }
+
+    CheckBox {
         checked: _settings.stt_insert_stats
         text: qsTranslate("SettingsPage", "Insert statistics")
         onCheckedChanged: {

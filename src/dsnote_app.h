@@ -884,6 +884,7 @@ class dsnote_app : public QObject {
                                                   int last_cursor_position);
     QString note() const;
     void set_note(const QString &text);
+    QString note_as_prompt() const;
     bool can_undo_note() const;
     bool can_redo_note() const;
     bool can_undo_or_redu_note() const;

@@ -2529,6 +2529,9 @@ void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
         options.insert("sub_min_line_length", s->sub_min_line_length());
         options.insert("sub_max_line_length", s->sub_max_line_length());
     }
+    if (!replace && s->stt_tts_text_format() == settings::text_format_t::TextFormatRaw && s->stt_use_note_as_prompt()) {
+        options.insert("initial_prompt", note_as_prompt());
+    }
 
     m_current_stt_request = stt_request_t::transcribe_file;
 
@@ -2656,6 +2659,9 @@ void dsnote_app::listen_internal(stt_translate_req_t translate_req) {
     if (s->sub_break_lines()) {
         options.insert("sub_min_line_length", s->sub_min_line_length());
         options.insert("sub_max_line_length", s->sub_max_line_length());
+    }
+    if (text_format == settings::text_format_t::TextFormatRaw && s->stt_use_note_as_prompt()) {
+        options.insert("initial_prompt", note_as_prompt());
     }
 
     auto out_lang = [&]() {
@@ -3849,6 +3855,10 @@ void dsnote_app::set_translated_text(const QString text) {
 }
 
 QString dsnote_app::note() const { return settings::instance()->note(); }
+
+QString dsnote_app::note_as_prompt() const {
+    return settings::instance()->note().right(5000).simplified();
+}
 
 void dsnote_app::set_note(const QString &text) {
     auto old = can_undo_or_redu_note();
