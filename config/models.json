@@ -2018,6 +2018,131 @@
             "lang_id": "sv"
         },
         {
+            "name": "Svenska (FasterWhisper KBLab Tiny)",
+            "model_id": "sv_fasterwhisper_kblab_tiny",
+            "engine": "stt_fasterwhisper",
+            "lang_id": "sv",
+            "checksum": "94b5299a",
+            "checksum_quick": "51a9f986",
+            "size": "80549811",
+            "info": "https://huggingface.co/KBLab/kb-whisper-tiny",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/KBLab/kb-whisper-tiny/resolve/fb77c9949fde44d50255f6462f70c6d67621af11/model.bin",
+                "https://huggingface.co/KBLab/kb-whisper-tiny/resolve/fb77c9949fde44d50255f6462f70c6d67621af11/config.json",
+                "https://huggingface.co/KBLab/kb-whisper-tiny/resolve/fb77c9949fde44d50255f6462f70c6d67621af11/tokenizer.json",
+                "https://huggingface.co/KBLab/kb-whisper-tiny/resolve/fb77c9949fde44d50255f6462f70c6d67621af11/vocabulary.json",
+                "https://huggingface.co/KBLab/kb-whisper-tiny/resolve/fb77c9949fde44d50255f6462f70c6d67621af11/preprocessor_config.json"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "pack_id": "sv_fasterwhisper_kblab"
+        },
+        {
+            "name": "Svenska (FasterWhisper KBLab Base)",
+            "model_id": "sv_fasterwhisper_kblab_base",
+            "engine": "stt_fasterwhisper",
+            "lang_id": "sv",
+            "checksum": "3569ac76",
+            "checksum_quick": "d3683759",
+            "size": "150229133",
+            "info": "https://huggingface.co/KBLab/kb-whisper-base",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/KBLab/kb-whisper-base/resolve/35e1b469c4241867835daf57254ade4bed1f1d4c/model.bin",
+                "https://huggingface.co/KBLab/kb-whisper-base/resolve/35e1b469c4241867835daf57254ade4bed1f1d4c/config.json",
+                "https://huggingface.co/KBLab/kb-whisper-base/resolve/35e1b469c4241867835daf57254ade4bed1f1d4c/tokenizer.json",
+                "https://huggingface.co/KBLab/kb-whisper-base/resolve/35e1b469c4241867835daf57254ade4bed1f1d4c/vocabulary.json",
+                "https://huggingface.co/KBLab/kb-whisper-base/resolve/35e1b469c4241867835daf57254ade4bed1f1d4c/preprocessor_config.json"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "pack_id": "sv_fasterwhisper_kblab"
+        },
+        {
+            "name": "Svenska (FasterWhisper KBLab Small)",
+            "model_id": "sv_fasterwhisper_kblab_small",
+            "engine": "stt_fasterwhisper",
+            "lang_id": "sv",
+            "checksum": "30e7cb70",
+            "checksum_quick": "829002d0",
+            "size": "488558571",
+            "info": "https://huggingface.co/KBLab/kb-whisper-small",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/KBLab/kb-whisper-small/resolve/f516f51f3cb3782e28d41a22ccd1cd7df17ee515/model.bin",
+                "https://huggingface.co/KBLab/kb-whisper-small/resolve/f516f51f3cb3782e28d41a22ccd1cd7df17ee515/config.json",
+                "https://huggingface.co/KBLab/kb-whisper-small/resolve/f516f51f3cb3782e28d41a22ccd1cd7df17ee515/tokenizer.json",
+                "https://huggingface.co/KBLab/kb-whisper-small/resolve/f516f51f3cb3782e28d41a22ccd1cd7df17ee515/vocabulary.json",
+                "https://huggingface.co/KBLab/kb-whisper-small/resolve/f516f51f3cb3782e28d41a22ccd1cd7df17ee515/preprocessor_config.json"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "pack_id": "sv_fasterwhisper_kblab"
+        },
+        {
+            "name": "Svenska (FasterWhisper KBLab Medium)",
+            "model_id": "sv_fasterwhisper_kblab_medium",
+            "engine": "stt_fasterwhisper",
+            "lang_id": "sv",
+            "checksum": "e9583557",
+            "checksum_quick": "bd9bd507",
+            "size": "1532917950",
+            "info": "https://huggingface.co/KBLab/kb-whisper-medium",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/KBLab/kb-whisper-medium/resolve/1951aa1bb411016e15023815d039da9425f1ec5a/model.bin",
+                "https://huggingface.co/KBLab/kb-whisper-medium/resolve/1951aa1bb411016e15023815d039da9425f1ec5a/config.json",
+                "https://huggingface.co/KBLab/kb-whisper-medium/resolve/1951aa1bb411016e15023815d039da9425f1ec5a/tokenizer.json",
+                "https://huggingface.co/KBLab/kb-whisper-medium/resolve/1951aa1bb411016e15023815d039da9425f1ec5a/vocabulary.json",
+                "https://huggingface.co/KBLab/kb-whisper-medium/resolve/1951aa1bb411016e15023815d039da9425f1ec5a/preprocessor_config.json"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "pack_id": "sv_fasterwhisper_kblab"
+        },
+        {
+            "name": "Svenska (FasterWhisper KBLab Large)",
+            "model_id": "sv_fasterwhisper_kblab_large",
+            "engine": "stt_fasterwhisper",
+            "lang_id": "sv",
+            "checksum": "e3c88aeb",
+            "checksum_quick": "faeebbe6",
+            "size": "3092296021",
+            "info": "https://huggingface.co/KBLab/kb-whisper-large",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/KBLab/kb-whisper-large/resolve/33cee585905bd2f817274d5a88e65ce3e8fcedb0/model.bin",
+                "https://huggingface.co/KBLab/kb-whisper-large/resolve/33cee585905bd2f817274d5a88e65ce3e8fcedb0/config.json",
+                "https://huggingface.co/KBLab/kb-whisper-large/resolve/33cee585905bd2f817274d5a88e65ce3e8fcedb0/tokenizer.json",
+                "https://huggingface.co/KBLab/kb-whisper-large/resolve/33cee585905bd2f817274d5a88e65ce3e8fcedb0/vocabulary.json",
+                "https://huggingface.co/KBLab/kb-whisper-large/resolve/33cee585905bd2f817274d5a88e65ce3e8fcedb0/preprocessor_config.json"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "pack_id": "sv_fasterwhisper_kblab"
+        },
+        {
             "name": "Українська (FasterWhisper Tiny)",
             "model_id": "uk_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -5207,6 +5332,106 @@
             "model_id": "sv_whisper_large2",
             "model_alias_of": "multilang_whisper_large2",
             "lang_id": "sv"
+        },
+        {
+            "name": "Svenska (WhisperCpp KBLab Tiny)",
+            "model_id": "sv_whisper_kblab_tiny",
+            "engine": "stt_whisper",
+            "lang_id": "sv",
+            "checksum": "4f3e9de4",
+            "checksum_quick": "15b18cb2",
+            "size": "29883930",
+            "info": "https://huggingface.co/KBLab/kb-whisper-tiny",
+            "urls": [
+                "https://huggingface.co/KBLab/kb-whisper-tiny/resolve/fb77c9949fde44d50255f6462f70c6d67621af11/ggml-model-q5_0.bin"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "pack_id": "sv_whisper_kblab"
+        },
+        {
+            "name": "Svenska (WhisperCpp KBLab Base)",
+            "model_id": "sv_whisper_kblab_base",
+            "engine": "stt_whisper",
+            "lang_id": "sv",
+            "checksum": "daca9acb",
+            "checksum_quick": "4e7bca22",
+            "size": "55303642",
+            "info": "https://huggingface.co/KBLab/kb-whisper-base",
+            "urls": [
+                "https://huggingface.co/KBLab/kb-whisper-base/resolve/35e1b469c4241867835daf57254ade4bed1f1d4c/ggml-model-q5_0.bin"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "pack_id": "sv_whisper_kblab"
+        },
+        {
+            "name": "Svenska (WhisperCpp KBLab Small)",
+            "model_id": "sv_whisper_kblab_small",
+            "engine": "stt_whisper",
+            "lang_id": "sv",
+            "checksum": "702785de",
+            "checksum_quick": "4c18184c",
+            "size": "175217872",
+            "info": "https://huggingface.co/KBLab/kb-whisper-small",
+            "urls": [
+                "https://huggingface.co/KBLab/kb-whisper-small/resolve/f516f51f3cb3782e28d41a22ccd1cd7df17ee515/ggml-model-q5_0.bin"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "pack_id": "sv_whisper_kblab"
+        },
+        {
+            "name": "Svenska (WhisperCpp KBLab Medium)",
+            "model_id": "sv_whisper_kblab_medium",
+            "engine": "stt_whisper",
+            "lang_id": "sv",
+            "checksum": "616d248a",
+            "checksum_quick": "6da49dbe",
+            "size": "539220676",
+            "info": "https://huggingface.co/KBLab/kb-whisper-medium",
+            "urls": [
+                "https://huggingface.co/KBLab/kb-whisper-medium/resolve/1951aa1bb411016e15023815d039da9425f1ec5a/ggml-model-q5_0.bin"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "pack_id": "sv_whisper_kblab"
+        },
+        {
+            "name": "Svenska (WhisperCpp KBLab Large)",
+            "model_id": "sv_whisper_kblab_large",
+            "engine": "stt_whisper",
+            "lang_id": "sv",
+            "checksum": "34e3bd28",
+            "checksum_quick": "e822f64d",
+            "size": "1081148395",
+            "info": "https://huggingface.co/KBLab/kb-whisper-large",
+            "urls": [
+                "https://huggingface.co/KBLab/kb-whisper-large/resolve/33cee585905bd2f817274d5a88e65ce3e8fcedb0/ggml-model-q5_0.bin"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "pack_id": "sv_whisper_kblab"
         },
         {
             "name": "Українська (WhisperCpp Tiny)",
@@ -34201,8 +34426,20 @@
             "lang_id": "sv"
         },
         {
+            "name": "Svenska (FasterWhisper KBLab)",
+            "id": "sv_fasterwhisper_kblab",
+            "engine": "stt_fasterwhisper",
+            "lang_id": "sv"
+        },
+        {
             "name": "Svenska (WhisperCpp)",
             "id": "sv_whisper",
+            "engine": "stt_whisper",
+            "lang_id": "sv"
+        },
+        {
+            "name": "Svenska (WhisperCpp KBLab)",
+            "id": "sv_whisper_kblab",
             "engine": "stt_whisper",
             "lang_id": "sv"
         },
