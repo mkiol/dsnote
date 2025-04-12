@@ -451,48 +451,10 @@ std::vector<models_manager::model_t> models_manager::models(
                       const auto& model = pair.second;
 
                       if (model.disabled) return;
-
                       if (!pack_id.isEmpty() && pack_id != model.pack_id)
                           return;
-
-                      for (const auto& pack : model.packs) {
-                          auto pack_lang = pack.lang_id.isEmpty()
-                                               ? model.lang_id
-                                               : pack.lang_id;
-                          if (!lang_id.isEmpty() && lang_id != pack_lang) {
-                              continue;
-                          }
-                          list.push_back(
-                              model_t{/*id=*/pack.id,
-                                      /*engine=*/model.engine,
-                                      /*lang_id=*/std::move(pack_lang),
-                                      /*lang_code=*/{},
-                                      /*name=*/pack.name,
-                                      /*model_file=*/{},
-                                      /*sup_files=*/{},
-                                      /*pack_id=*/pack.id,
-                                      /*pack_count=*/0,
-                                      /*pack_available_count=*/0,
-                                      /*packs=*/{},
-                                      /*info=*/{},
-                                      /*speaker=*/{},
-                                      /*trg_lang_id=*/{},
-                                      /*score=*/model.score,
-                                      /*options=*/{},
-                                      /*license=*/{},
-                                      /*download_info=*/{},
-                                      /*default_for_lang=*/{},
-                                      /*available=*/{},
-                                      /*dl_multi=*/{},
-                                      /*dl_off=*/{},
-                                      /*features=*/model.features,
-                                      /*downloading=*/{},
-                                      /*download_progress=*/{}});
-                      }
-
                       if (!lang_id.isEmpty() && lang_id != model.lang_id)
                           return;
-
                       if (model.hidden) return;
 
                       if (pack_id.isEmpty() && !model.pack_id.isEmpty()) {
@@ -517,7 +479,6 @@ std::vector<models_manager::model_t> models_manager::models(
                           /*pack_id=*/{},
                           /*pack_count=*/{},
                           /*pack_available_count=*/{},
-                          /*packs=*/model.packs,
                           /*info=*/model.info,
                           /*speaker=*/model.speaker,
                           /*trg_lang_id=*/model.trg_lang_id,
@@ -533,6 +494,44 @@ std::vector<models_manager::model_t> models_manager::models(
                           /*downloading=*/model.downloading,
                           /*download_progress=*/model.download_progress});
                   });
+
+    if (pack_id.isEmpty()) {
+        std::for_each(m_packs.cbegin(), m_packs.cend(),
+                      [&](const std::pair<QString, pack_t>& pair) {
+                          const auto& pack = pair.second;
+                          if (!lang_id.isEmpty() && lang_id != pack.lang_id) {
+                              return;
+                          }
+                          if (pack.disabled || pack.hidden ||
+                              pack_status_map.count(pair.first) == 0) {
+                              return;
+                          }
+                          list.push_back(model_t{/*id=*/pair.first,
+                                                 /*engine=*/pack.engine,
+                                                 /*lang_id=*/pack.lang_id,
+                                                 /*lang_code=*/{},
+                                                 /*name=*/pack.name,
+                                                 /*model_file=*/{},
+                                                 /*sup_files=*/{},
+                                                 /*pack_id=*/pair.first,
+                                                 /*pack_count=*/0,
+                                                 /*pack_available_count=*/0,
+                                                 /*info=*/{},
+                                                 /*speaker=*/{},
+                                                 /*trg_lang_id=*/{},
+                                                 /*score=*/pack.score,
+                                                 /*options=*/{},
+                                                 /*license=*/{},
+                                                 /*download_info=*/{},
+                                                 /*default_for_lang=*/{},
+                                                 /*available=*/{},
+                                                 /*dl_multi=*/{},
+                                                 /*dl_off=*/{},
+                                                 /*features=*/pack.features,
+                                                 /*downloading=*/{},
+                                                 /*download_progress=*/{}});
+                      });
+    }
 
     std::for_each(list.begin(), list.end(), [&pack_status_map](auto& model) {
         if (!model.pack_id.isEmpty() && pack_status_map.count(model.id) > 0) {
@@ -636,7 +635,6 @@ std::vector<models_manager::model_t> models_manager::available_models() const {
                             /*pack_id=*/model.pack_id,
                             /*pack_count=*/0,
                             /*pack_available_count=*/0,
-                            /*packs=*/model.packs,
                             model.info,
                             model.speaker,
                             model.trg_lang_id,
@@ -1483,6 +1481,65 @@ auto models_manager::extract_langs(const QJsonArray& langs_jarray) {
     return langs;
 }
 
+auto models_manager::extract_packs(const QJsonArray& packs_jarray) {
+    packs_t packs;
+
+    for (const auto& ele : packs_jarray) {
+        auto obj = ele.toObject();
+
+        auto id = obj.value(QLatin1String{"id"}).toString();
+        if (id.isEmpty()) {
+            qWarning() << "empty pack id";
+            continue;
+        }
+
+        pack_t pack;
+
+        try {
+            pack.engine =
+                engine_from_name(obj.value(QLatin1String{"engine"}).toString());
+        } catch (const std::runtime_error& e) {
+            qWarning() << e.what();
+            continue;
+        }
+
+        pack.lang_id = obj.value(QLatin1String{"lang_id"}).toString();
+        if (pack.lang_id.isEmpty()) {
+            qWarning() << "empty pack lang id";
+            continue;
+        }
+
+        pack.name = obj.value(QLatin1String{"name"}).toString();
+        if (pack.name.isEmpty()) {
+            qWarning() << "empty pack name";
+            continue;
+        }
+
+        pack.score = obj.value(QLatin1String{"score"}).toInt(-1);
+        if (pack.score == -1) {
+            if (pack.engine == model_engine_t::tts_espeak)
+                pack.score = default_score_tts_espeak;
+            else if (pack.engine == model_engine_t::tts_sam)
+                pack.score = default_score_tts_sam;
+            else
+                pack.score = default_score;
+        }
+
+        if (auto features_array =
+                obj.value(QLatin1String{"features"}).toArray();
+            !features_array.isEmpty()) {
+            for (const auto& obj : features_array)
+                pack.features = add_new_feature(
+                    pack.features, feature_from_name(obj.toString()));
+        }
+        pack.features = add_implicit_feature_flags(id, pack.engine, pack.score,
+                                                   pack.features);
+        packs.try_emplace(id, std::move(pack));
+    }
+
+    return packs;
+}
+
 void models_manager::remove_empty_langs(langs_t& langs,
                                         const models_t& models) {
     std::set<QString> existing_langs;
@@ -1773,22 +1830,6 @@ void models_manager::extract_sup_models(const QString& model_id,
         for (auto url : urls) sup_model.urls.emplace_back(url.toString());
 
         sup_models.push_back(std::move(sup_model));
-    }
-}
-
-void models_manager::extract_packs(const QJsonObject& model_obj,
-                                   std::vector<pack_t>& packs) {
-    auto packs_json = model_obj.value(QLatin1String{"packs"}).toArray();
-
-    for (const auto& pack_json : packs_json) {
-        auto pack_obj = pack_json.toObject();
-
-        pack_t pack_ele;
-        pack_ele.id = pack_obj.value(QLatin1String{"id"}).toString();
-        pack_ele.lang_id = pack_obj.value(QLatin1String{"lang_id"}).toString();
-        pack_ele.name = pack_obj.value(QLatin1String{"name"}).toString();
-
-        packs.push_back(std::move(pack_ele));
     }
 }
 
@@ -2102,8 +2143,9 @@ static QString merge_options(QString opts_1, const QString& opts_2) {
 
     return opts_1;
 }
+
 auto models_manager::extract_models(
-    const QJsonArray& models_jarray,
+    const QJsonArray& models_jarray, const packs_t& packs,
     std::optional<models_availability_t> models_availability) {
     models_t models;
 
@@ -2141,8 +2183,7 @@ auto models_manager::extract_models(
         std::vector<QUrl> urls;
         long long size = 0;
         std::vector<sup_model_t> sup_models;
-        QString pack_id;
-        std::vector<pack_t> packs;
+        QString pack_id = obj.value(QLatin1String{"pack_id"}).toString();
         QString trg_lang_id =
             obj.value(QLatin1String{"trg_lang_id"}).toString();
         int score = obj.value(QLatin1String{"score"}).toInt(-1);
@@ -2194,7 +2235,6 @@ auto models_manager::extract_models(
             for (const auto& url : aurls) urls.emplace_back(url.toString());
 
             extract_sup_models(model_id, obj, sup_models);
-            extract_packs(obj, packs);
 
             if (auto license_obj = obj.value("license").toObject();
                 !license_obj.isEmpty()) {
@@ -2216,18 +2256,43 @@ auto models_manager::extract_models(
             recommended_model = obj.value("recommended_model").toString();
         } else if (models.count(model_alias_of) > 0) {
             const auto& alias = models.at(model_alias_of);
-
-            pack_id = obj.value("pack_id").toString();
+            engine = alias.engine;
             if (pack_id.isEmpty()) {
-                for (const auto& pack : alias.packs) {
-                    if (pack.lang_id.isEmpty() || pack.lang_id == lang_id) {
-                        pack_id = model_alias_of;
-                        break;
-                    }
+                pack_id = alias.pack_id;
+                if (pack_id.isEmpty()) {
+                    pack_id = [&]() -> QString {
+                        // implicit pack_id
+                        auto it = packs.find(model_alias_of);
+                        if (it != packs.cend() &&
+                            it->second.lang_id == lang_id) {
+                            return model_alias_of;
+                        }
+                        if (engine != model_engine_t::stt_whisper &&
+                            engine != model_engine_t::stt_fasterwhisper) {
+                            return {};
+                        }
+                        auto l = model_id.split('_');
+                        if (l.size() < 3) return {};
+                        if (l.at(2) == "tiny" || l.at(2) == "base" ||
+                            l.at(2) == "small" || l.at(2) == "medium" ||
+                            l.at(2) == "large" || l.at(2) == "large2" ||
+                            l.at(2) == "large3") {
+                            return QStringLiteral("%1_%2").arg(
+                                lang_id, engine == model_engine_t::stt_whisper
+                                             ? "whisper"
+                                             : "fasterwhisper");
+                        }
+                        return {};
+                    }();
                 }
             }
-
-            engine = alias.engine;
+            if (!pack_id.isEmpty()) {
+                // remove pack_id if id doesn't exist
+                auto it = packs.find(pack_id);
+                if (it == packs.cend()) {
+                    pack_id.clear();
+                }
+            }
             if (score == -1) score = alias.score;
             file_name = alias.file_name;
             checksum = alias.checksum;
@@ -2405,7 +2470,6 @@ auto models_manager::extract_models(
             /*size=*/size,
             /*sup_models=*/std::move(sup_models),
             /*pack_id=*/std::move(pack_id),
-            /*packs=*/std::move(packs),
             /*info=*/std::move(info),
             /*speaker=*/speaker,
             /*trg_lang_id=*/std::move(trg_lang_id),
@@ -2616,7 +2680,8 @@ bool models_manager::parse_models_file_might_reset() {
     m_thread = std::thread{[this, models_availability = m_models_availability] {
         do {
             m_pending_reload = false;
-            parse_models_file(false, &m_langs, &m_models, models_availability);
+            parse_models_file(false, &m_langs, &m_packs, &m_models,
+                              models_availability);
             update_dl_multi(m_models);
             m_langs_of_role = make_langs_of_role(m_models);
         } while (m_pending_reload);
@@ -2645,7 +2710,7 @@ void models_manager::reset_models() {
 }
 
 void models_manager::parse_models_file(
-    bool reset, langs_t* langs, models_t* models,
+    bool reset, langs_t* langs, packs_t* packs, models_t* models,
     std::optional<models_availability_t> models_availability) {
     const auto models_file_path =
         QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
@@ -2664,7 +2729,8 @@ void models_manager::parse_models_file(
             input.close();
             if (!reset) {
                 init_config();
-                parse_models_file(true, langs, models, models_availability);
+                parse_models_file(true, langs, packs, models,
+                                  models_availability);
             }
         } else {
             auto version = json.object()
@@ -2682,14 +2748,17 @@ void models_manager::parse_models_file(
                 input.close();
                 if (!reset) {
                     init_config();
-                    parse_models_file(true, langs, models, models_availability);
+                    parse_models_file(true, langs, packs, models,
+                                      models_availability);
                 }
             } else {
                 *langs = extract_langs(
                     json.object().value(QStringLiteral("langs")).toArray());
+                *packs = extract_packs(
+                    json.object().value(QStringLiteral("packs")).toArray());
                 *models = extract_models(
                     json.object().value(QStringLiteral("models")).toArray(),
-                    models_availability);
+                    *packs, models_availability);
 
                 remove_empty_langs(*langs, *models);
             }

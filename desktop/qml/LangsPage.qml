@@ -433,6 +433,7 @@ DialogPage {
                         verticalAlignment: Text.AlignVCenter
                         Layout.alignment: Qt.AlignVCenter
                         Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignLeft
                     }
 
                     BusyIndicator {

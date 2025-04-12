@@ -144,12 +144,6 @@ class models_manager : public QObject, public singleton<models_manager> {
         size_t total_size = 0;
     };
 
-    struct pack_t {
-        QString id;
-        QString lang_id;
-        QString name;
-    };
-
     struct model_t {
         QString id;
         model_engine_t engine = model_engine_t::stt_ds;
@@ -161,7 +155,6 @@ class models_manager : public QObject, public singleton<models_manager> {
         QString pack_id;
         unsigned int pack_count = 0;
         unsigned int pack_available_count = 0;
-        std::vector<pack_t> packs;
         QString info;
         QString speaker;
         QString trg_lang_id;
@@ -286,6 +279,16 @@ class models_manager : public QObject, public singleton<models_manager> {
         size_t urls_hash = 0;
     };
 
+    struct pack_t {
+        model_engine_t engine = model_engine_t::stt_ds;
+        QString lang_id;
+        QString name;
+        int score = 2;
+        feature_flags features = feature_flags::no_flags;
+        bool disabled = false;
+        bool hidden = false;
+    };
+
     struct priv_model_t {
         model_engine_t engine = model_engine_t::stt_ds;
         QString lang_id;
@@ -299,7 +302,6 @@ class models_manager : public QObject, public singleton<models_manager> {
         long long size = 0;
         std::vector<sup_model_t> sup_models;
         QString pack_id;
-        std::vector<pack_t> packs;
         QString info;
         QString speaker;
         QString trg_lang_id;
@@ -345,10 +347,12 @@ class models_manager : public QObject, public singleton<models_manager> {
     inline static const int default_score_tts_sam = 1;
     using langs_t = std::unordered_map<QString, std::pair<QString, QString>>;
     using models_t = std::unordered_map<QString, priv_model_t>;
+    using packs_t = std::unordered_map<QString, pack_t>;
     using langs_of_role_t = std::unordered_map<model_role_t, std::set<QString>>;
 
     models_t m_models;
     langs_t m_langs;
+    packs_t m_packs;
     langs_of_role_t m_langs_of_role;
     QNetworkAccessManager m_nam;
     std::atomic_bool m_busy_value = false;
@@ -366,7 +370,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     static QLatin1String comp_type_str(comp_type type);
     bool parse_models_file_might_reset();
     static void parse_models_file(
-        bool reset, langs_t* langs, models_t* models,
+        bool reset, langs_t* langs, packs_t* packs, models_t* models,
         std::optional<models_availability_t> models_availability);
     static QString file_name_from_id(const QString& id, model_engine_t engine);
     static QString sup_file_name_from_id(const QString& id,
@@ -387,9 +391,10 @@ class models_manager : public QObject, public singleton<models_manager> {
                          const QString& path_in_archive_2, comp_type comp,
                          int parts);
     static auto extract_models(
-        const QJsonArray& models_jarray,
+        const QJsonArray& models_jarray, const packs_t& packs,
         std::optional<models_availability_t> models_availability);
     static auto extract_langs(const QJsonArray& langs_jarray);
+    static auto extract_packs(const QJsonArray& packs_jarray);
     static comp_type str2comp(const QString& str);
     static QString download_filename(QString filename, comp_type comp,
                                      int part = -1, const QUrl& url = {});
@@ -433,8 +438,6 @@ class models_manager : public QObject, public singleton<models_manager> {
     static void extract_sup_models(const QString& model_id,
                                    const QJsonObject& model_obj,
                                    std::vector<sup_model_t>& sup_models);
-    static void extract_packs(const QJsonObject& model_obj,
-                              std::vector<pack_t>& packs);
     void update_models_using_availability_internal();
     static void update_dl_multi(models_t& models);
     static void update_dl_off(models_t& models);
