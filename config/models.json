@@ -33820,6 +33820,18 @@
             "lang_id": "en"
         },
         {
+            "name": "Auto (FasterWhisper)",
+            "id": "auto_fasterwhisper",
+            "engine": "stt_fasterwhisper",
+            "lang_id": "auto"
+        },
+        {
+            "name": "Auto (WhisperCpp)",
+            "id": "auto_whisper",
+            "engine": "stt_whisper",
+            "lang_id": "auto"
+        },
+        {
             "name": "Afrikaans (FasterWhisper)",
             "id": "af_fasterwhisper",
             "engine": "stt_fasterwhisper",
