@@ -127,6 +127,22 @@ ColumnLayout {
     }
 
     CheckBox {
+        checked: _settings.stt_clear_mic_audio_when_decoding
+        text: qsTranslate("SettingsPage", "Pause listening while processing")
+        onCheckedChanged: {
+            _settings.stt_clear_mic_audio_when_decoding = checked
+        }
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: qsTranslate("SettingsPage", "Temporarily pause listening for the duration of audio processing.") + " " +
+                      qsTranslate("SettingsPage", "This option can be useful when %1 is %2.")
+                        .arg("<i>" + qsTranslate("SettingsPage", "Listening mode") + "</i>")
+                        .arg("<i>" + qsTranslate("SettingsPage", "Always on") + "</i>")
+        hoverEnabled: true
+    }
+
+    CheckBox {
         checked: _settings.stt_insert_stats
         text: qsTranslate("SettingsPage", "Insert statistics")
         onCheckedChanged: {

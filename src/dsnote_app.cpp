@@ -2655,6 +2655,7 @@ void dsnote_app::listen_internal(stt_translate_req_t translate_req) {
             ? s->stt_insert_stats()
             : false;
     options.insert("insert_stats", insert_stats);
+    options.insert("stt_clear_mic_audio_when_decoding", s->stt_clear_mic_audio_when_decoding());
     options.insert("sub_min_segment_dur", s->sub_min_segment_dur());
     if (s->sub_break_lines()) {
         options.insert("sub_min_line_length", s->sub_min_line_length());

@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -206,6 +206,19 @@ Page {
                             }
                             description: qsTr("Use an existing note as the initial context in decoding.") + " " +
                                          qsTr("The option works only with %1 models.").arg("<i>WhisperCpp</i>")
+                        }
+
+                        TextSwitch {
+                            checked: _settings.stt_clear_mic_audio_when_decoding
+                            automaticCheck: false
+                            text: qsTr("Pause listening while processing")
+                            onClicked: {
+                                _settings.stt_clear_mic_audio_when_decoding = !_settings.stt_clear_mic_audio_when_decoding
+                            }
+                            description: qsTr("Temporarily pause listening for the duration of audio processing.") + " " +
+                                         qsTr("This option can be useful when %1 is %2.")
+                                            .arg("<i>" + qsTr("Listening mode") + "</i>")
+                                            .arg("<i>" + qsTr("Always on") + "</i>")
                         }
 
                         TextSwitch {

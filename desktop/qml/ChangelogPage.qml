@@ -29,9 +29,18 @@ DialogPage {
             Unlike the original Whisper, which tends to omit disfluencies and follows more of a intended transcription style,
             <i>CrisperWhisper</i> aims to transcribe every spoken word exactly as it is, including fillers, pauses, stutters and false starts.
             <i>CrisperWhisper</i> model is enabled only for English and German languages.</li>
+        <li><i>KBLab Whisper</i> models for Swedish.
+            The National Library of Sweden has released fine-tuned STT models trained on its library collections.
+            The models have significantly improved accuracy compared to regular Whisper models.
+            Even \"Tiny\" model provides decent quality.
+            KBLab models are available as both <i>FasterWhisper</i> and <i>WhisperCpp</i>.</li>
         <li>Using an existing note as the initial context in decoding.
             This has the potential to improve transcription quality and reduce \"hallucination\" problem.
             If you observe a degradation in quality, turn off the <i>Use note as context</i> option.</li>
+        <li>Option to pause listening while processing.
+            This option can be useful when <i>Listening mode</i> is <i>Always on</i>.
+            By default, listening continues even when a piece of audio data is being processed.
+            Using this option, you can temporarily pause listening for the duration of processing.</li>
         </ul>
         <p>" + qsTr("Text to Speech") + "</p>
         <ul>

@@ -354,6 +354,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         std::vector<QString> files;
         QVariantMap options;
         bool paused = false;
+        bool stt_clear_mic_audio_when_decoding = false;
     };
 
     inline static const QString DBUS_SERVICE_NAME{

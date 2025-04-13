@@ -38,7 +38,8 @@
     X(whisper_translate, false)           \
     X(use_tray, false)                    \
     X(start_in_tray, false)               \
-    X(clean_ref_voice, true)
+    X(clean_ref_voice, true)              \
+    X(stt_clear_mic_audio_when_decoding, false)
 
 // name, default value
 #define GPU_SCAN_TABLE                                                 \

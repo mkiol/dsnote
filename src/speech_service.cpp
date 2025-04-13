@@ -2818,12 +2818,23 @@ void speech_service::delete_model(const QString &id) {
 
 void speech_service::handle_audio_available() {
     if (m_source && m_stt_engine && m_stt_engine->started()) {
-        if (m_stt_engine->speech_detection_status() ==
-            stt_engine::speech_detection_status_t::initializing) {
-            if (m_source->type() == audio_source::source_type::mic)
+        qDebug() << "stt engine status:"
+                 << static_cast<int>(m_stt_engine->speech_detection_status())
+                 << m_stt_engine->speech_status()
+                 << static_cast<int>(m_stt_engine->speech_mode());
+
+        auto status = m_stt_engine->speech_detection_status();
+        if (m_source->type() == audio_source::source_type::mic) {
+            if ((status == stt_engine::speech_detection_status_t::decoding &&
+                 m_current_task &&
+                 m_current_task->stt_clear_mic_audio_when_decoding) ||
+                status == stt_engine::speech_detection_status_t::initializing) {
                 m_source->clear();
-            else
-                m_source->slowdown();
+                return;
+            }
+        } else if (status ==
+                   stt_engine::speech_detection_status_t::initializing) {
+            m_source->slowdown();
             return;
         }
 
@@ -3347,6 +3358,7 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
         0.0,
         {},
         options,
+        false,
         false};
 
     if (m_current_task->model_id.isEmpty()) {
@@ -3421,6 +3433,7 @@ int speech_service::mnt_translate(const QString &text, QString lang,
                       0.0,
                       {},
                       options,
+                      false,
                       false};
 
     if (m_current_task->model_id.isEmpty()) {
@@ -3486,7 +3499,7 @@ int speech_service::ttt_repair_text(const QString &text,
 
     m_current_task = {
         next_task_id(), engine_t::text_repair,
-        /*model=*/{},   speech_mode_t::play_speech, {}, 0.0, {}, options,
+        /*model=*/{},   speech_mode_t::play_speech, {}, 0.0, {}, options, false,
         false};
 
     if (m_text_repair_engine) {
@@ -3543,7 +3556,9 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
                       0.0,
                       {},
                       options,
-                      false};
+                      false,
+                      get_bool_value_from_options(
+                          "stt_clear_mic_audio_when_decoding", false, options)};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -3602,6 +3617,7 @@ int speech_service::tts_play_speech(const QString &text, QString lang,
                       0.0,
                       {},
                       options,
+                      false,
                       false};
 
     if (m_current_task->model_id.isEmpty()) {
@@ -3659,6 +3675,7 @@ int speech_service::tts_speech_to_file(const QString &text, QString lang,
                       0.0,
                       {},
                       options,
+                      false,
                       false};
 
     if (m_current_task->model_id.isEmpty()) {

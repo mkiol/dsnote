@@ -98,11 +98,31 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.8.0" date="2025-03-30">
+    <release version="4.8.0" date="2025-04-13">
       <description>
       <p>User Interface:</p>
       <ul>
       <li>Speech Note has been translated into Arabic, Catalan, Spanish and French-Canadian languages.</li>
+      </ul>
+      <p>Speech to Text:</p>
+      <ul>
+      <li>New 'CrisperWhisper' model for 'FasterWhisper' engine.
+          CrisperWhisper is designed for fast, precise, and verbatim speech recognition with accurate word-level timestamps.
+          Unlike the original Whisper, which tends to omit disfluencies and follows more of a intended transcription style,
+          CrisperWhisper aims to transcribe every spoken word exactly as it is, including fillers, pauses, stutters and false starts.
+          CrisperWhisper model is enabled only for English and German languages.</li>
+      <li>'KBLab Whisper' models for Swedish.
+          The National Library of Sweden has released fine-tuned STT models trained on its library collections.
+          The models have significantly improved accuracy compared to regular Whisper models.
+          Even "Tiny" model provides decent quality.
+          KBLab models are available as both 'FasterWhisper' and 'WhisperCpp'.</li>
+      <li>Using an existing note as the initial context in decoding.
+          This has the potential to improve transcription quality and reduce 'hallucination' problem.
+          If you observe a degradation in quality, turn off the 'Use note as context' option.</li>
+      <li>Option to pause listening while processing.
+          This option can be useful when 'Listening mode' is 'Always on'.
+          By default, listening continues even when a piece of audio data is being processed.
+          Using this option, you can temporarily pause listening for the duration of processing.</li>
       </ul>
       <p>Text to Speech:</p>
       <ul>
@@ -124,17 +144,6 @@
           Use this option to enable/disable audio volume normalization.</li>
       <li>New 'Piper' voices for Dutch, Finnish, German and Luxembourgish</li>
       <li>New 'RHVoice' voice for Spanish</li>
-      </ul>
-      <p>Speech to Text:</p>
-      <ul>
-      <li>New 'CrisperWhisper' model for 'FasterWhisper' engine.
-          CrisperWhisper is designed for fast, precise, and verbatim speech recognition with accurate word-level timestamps.
-          Unlike the original Whisper, which tends to omit disfluencies and follows more of a intended transcription style,
-          CrisperWhisper aims to transcribe every spoken word exactly as it is, including fillers, pauses, stutters and false starts.
-          CrisperWhisper model is enabled only for English and German languages.</li>
-      <li>Using an existing note as the initial context in decoding.
-          This has the potential to improve transcription quality and reduce 'hallucination' problem.
-          If you observe a degradation in quality, turn off the 'Use note as context' option.</li>
       </ul>
       <p>Translator:</p>
       <ul>
