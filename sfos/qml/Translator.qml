@@ -74,7 +74,7 @@ Item {
         enabled: !app.mnt_configured
         text: qsTr("Translator model has not been set up yet.") + " " +
               qsTr("Go to the %1 to download models for the languages you intend to use.")
-                .arg("<i>" + qsTr("Languages") + "</i>")
+                .arg("<i>" + qsTr("Languages & Models") + "</i>")
     }
 
     Column {

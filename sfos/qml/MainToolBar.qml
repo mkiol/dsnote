@@ -28,7 +28,7 @@ PullDownMenu {
     }
 
     MenuItem {
-        text: qsTr("Languages")
+        text: qsTr("Languages & Models")
         onClicked: pageStack.push(Qt.resolvedUrl("LangsPage.qml"))
     }
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -166,14 +166,14 @@ ToolBar {
                     ToolButton {
                         action: Action {
                             enabled: !app.busy
-                            text: qsTr("Languages")
+                            text: qsTr("Languages & Models").replace("&", "&&")
                             shortcut: "Ctrl+L"
                             onTriggered: appWin.openDialog("LangsPage.qml")
                         }
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Languages") + " (Ctrl+L)"
+                        ToolTip.text: qsTr("Languages & Models") + " (Ctrl+L)"
                         hoverEnabled: true
                     }
 

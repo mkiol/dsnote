@@ -106,7 +106,7 @@ Column {
                      !_noteTextArea.textArea.highlighted
             text: qsTr("Neither Speech to Text nor Text to Speech model has been set up yet.") + " " +
                   qsTr("Go to the %1 to download models for the languages you intend to use.")
-                    .arg("<i>" + qsTr("Languages") + "</i>")
+                    .arg("<i>" + qsTr("Languages & Models") + "</i>")
         }
     }
 
