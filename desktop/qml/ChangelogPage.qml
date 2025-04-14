@@ -41,6 +41,7 @@ DialogPage {
             This option can be useful when <i>Listening mode</i> is <i>Always on</i>.
             By default, listening continues even when a piece of audio data is being processed.
             Using this option, you can temporarily pause listening for the duration of processing.</li>
+        <li>Option to play an audible tone when starting and stopping listening</li>
         </ul>
         <p>" + qsTr("Text to Speech") + "</p>
         <ul>

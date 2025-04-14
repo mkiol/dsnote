@@ -2119,9 +2119,10 @@ void speech_service::handle_stt_intermediate_text_decoded(
 void speech_service::handle_stt_text_decoded(
     [[maybe_unused]] const QString &text, [[maybe_unused]] const QString &lang,
     int task_id) {
-    if (m_current_task && m_current_task->id == task_id &&
-        m_current_task->speech_mode == speech_mode_t::single_sentence) {
-        stt_stop_listen(m_current_task->id);
+    if (m_current_task && m_current_task->id == task_id) {
+        if (m_current_task->speech_mode == speech_mode_t::single_sentence) {
+            stt_stop_listen(m_current_task->id);
+        }
     }
 }
 
@@ -2433,6 +2434,47 @@ void speech_service::handle_tts_speech_encoded(tts_partial_result_t result) {
     } else {
         qWarning() << "unknown task in tts speech encoded";
     }
+}
+
+void speech_service::play_beep(beep_role_t beep_role) {
+    auto get_beep_file = [](const QString &name) {
+        // get from user data dir
+        auto file_user =
+            QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+                .filePath(name);
+        qDebug() << "file user:" << file_user;
+        if (QFileInfo::exists(file_user)) {
+            return file_user;
+        }
+
+        // get from share dir
+        auto file_sys = QStringLiteral("%1/%2").arg(
+            module_tools::path_to_share_dir_for_path(name), name);
+        qDebug() << "file sys:" << file_sys;
+        if (QFileInfo::exists(file_sys)) {
+            return file_sys;
+        }
+
+        return QString{};
+    };
+
+    auto beep_file = [&] {
+        switch (beep_role) {
+            case beep_role_t::stt_start_listen:
+                return get_beep_file("beep-start-listen.wav");
+            case beep_role_t::stt_end_listen:
+                return get_beep_file("beep-end-listen.wav");
+        }
+        return QString{};
+    }();
+
+    if (beep_file.isEmpty()) {
+        qWarning() << "can't find beep file";
+        return;
+    }
+
+    m_beep_player.setMedia(QMediaContent{QUrl::fromLocalFile(beep_file)});
+    m_beep_player.play();
 }
 
 void speech_service::handle_tts_queue() {
@@ -2818,16 +2860,12 @@ void speech_service::delete_model(const QString &id) {
 
 void speech_service::handle_audio_available() {
     if (m_source && m_stt_engine && m_stt_engine->started()) {
-        qDebug() << "stt engine status:"
-                 << static_cast<int>(m_stt_engine->speech_detection_status())
-                 << m_stt_engine->speech_status()
-                 << static_cast<int>(m_stt_engine->speech_mode());
-
         auto status = m_stt_engine->speech_detection_status();
         if (m_source->type() == audio_source::source_type::mic) {
             if ((status == stt_engine::speech_detection_status_t::decoding &&
                  m_current_task &&
-                 m_current_task->stt_clear_mic_audio_when_decoding) ||
+                 (m_current_task->flags &
+                  task_flags_stt_clear_mic_audio_when_decoding)) ||
                 status == stt_engine::speech_detection_status_t::initializing) {
                 m_source->clear();
                 return;
@@ -3359,7 +3397,7 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
         {},
         options,
         false,
-        false};
+        task_flags_none};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -3434,7 +3472,7 @@ int speech_service::mnt_translate(const QString &text, QString lang,
                       {},
                       options,
                       false,
-                      false};
+                      task_flags_none};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -3500,7 +3538,7 @@ int speech_service::ttt_repair_text(const QString &text,
     m_current_task = {
         next_task_id(), engine_t::text_repair,
         /*model=*/{},   speech_mode_t::play_speech, {}, 0.0, {}, options, false,
-        false};
+        task_flags_none};
 
     if (m_text_repair_engine) {
         auto task_type = text_repair_task_type_from_options(options);
@@ -3548,6 +3586,15 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
 
     m_current_task.reset();
 
+    std::underlying_type_t<task_flags_t> flags = task_flags_none;
+    if (get_bool_value_from_options("stt_clear_mic_audio_when_decoding", false,
+                                    options)) {
+        flags |= task_flags_stt_clear_mic_audio_when_decoding;
+    }
+    if (get_bool_value_from_options("stt_play_beep", false, options)) {
+        flags |= task_flags_stt_play_beep;
+    }
+
     m_current_task = {next_task_id(),
                       engine_t::stt,
                       restart_stt_engine(mode, lang, out_lang, options),
@@ -3557,8 +3604,7 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
                       {},
                       options,
                       false,
-                      get_bool_value_from_options(
-                          "stt_clear_mic_audio_when_decoding", false, options)};
+                      flags};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -3618,7 +3664,7 @@ int speech_service::tts_play_speech(const QString &text, QString lang,
                       {},
                       options,
                       false,
-                      false};
+                      task_flags_none};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -3676,7 +3722,7 @@ int speech_service::tts_speech_to_file(const QString &text, QString lang,
                       {},
                       options,
                       false,
-                      false};
+                      task_flags_none};
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -3896,6 +3942,11 @@ void speech_service::stop_stt_engine_gracefully() {
     if (m_source) {
         if (m_stt_engine) m_stt_engine->set_speech_started(false);
         m_source->stop();
+
+        if (m_current_task &&
+            (m_current_task->flags & task_flags_stt_play_beep)) {
+            play_beep(beep_role_t::stt_end_listen);
+        }
     } else {
         stop_stt_engine();
     }
@@ -3997,6 +4048,10 @@ void speech_service::restart_audio_source(
                 std::get<stt_source_file_props_t>(config).stream_index);
         } else {
             m_source = std::make_unique<mic_source>(std::get<QString>(config));
+            if (m_current_task &&
+                (m_current_task->flags & task_flags_stt_play_beep)) {
+                play_beep(beep_role_t::stt_start_listen);
+            }
         }
 
         set_progress(m_source->progress());

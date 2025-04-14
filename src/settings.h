@@ -25,21 +25,22 @@
 #include "singleton.h"
 
 // name, setting str, default value
-#define SETTINGS_BOOL_PROPERTY_TABLE      \
-    X(stt_use_note_as_prompt, true)       \
-    X(stt_echo, false)                    \
-    X(tts_split_into_sentences, true)     \
-    X(show_repair_text, false)            \
-    X(tts_use_engine_speed_control, true) \
-    X(tts_normalize_audio, true)          \
-    X(stt_insert_stats, false)            \
-    X(trans_rules_enabled, false)         \
-    X(mnt_clean_text, false)              \
-    X(whisper_translate, false)           \
-    X(use_tray, false)                    \
-    X(start_in_tray, false)               \
-    X(clean_ref_voice, true)              \
-    X(stt_clear_mic_audio_when_decoding, false)
+#define SETTINGS_BOOL_PROPERTY_TABLE            \
+    X(stt_use_note_as_prompt, true)             \
+    X(stt_echo, false)                          \
+    X(tts_split_into_sentences, true)           \
+    X(show_repair_text, false)                  \
+    X(tts_use_engine_speed_control, true)       \
+    X(tts_normalize_audio, true)                \
+    X(stt_insert_stats, false)                  \
+    X(trans_rules_enabled, false)               \
+    X(mnt_clean_text, false)                    \
+    X(whisper_translate, false)                 \
+    X(use_tray, false)                          \
+    X(start_in_tray, false)                     \
+    X(clean_ref_voice, true)                    \
+    X(stt_clear_mic_audio_when_decoding, false) \
+    X(stt_play_beep, false)
 
 // name, default value
 #define GPU_SCAN_TABLE                                                 \

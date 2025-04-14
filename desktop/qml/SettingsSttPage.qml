@@ -1,4 +1,4 @@
-/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -139,6 +139,19 @@ ColumnLayout {
                       qsTranslate("SettingsPage", "This option can be useful when %1 is %2.")
                         .arg("<i>" + qsTranslate("SettingsPage", "Listening mode") + "</i>")
                         .arg("<i>" + qsTranslate("SettingsPage", "Always on") + "</i>")
+        hoverEnabled: true
+    }
+
+    CheckBox {
+        checked: _settings.stt_play_beep
+        text: qsTranslate("SettingsPage", "Play tone when starting and stopping listening")
+        onCheckedChanged: {
+            _settings.stt_play_beep = checked
+        }
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: qsTranslate("SettingsPage", "Play an audible tone when starting and stopping listening.")
         hoverEnabled: true
     }
 

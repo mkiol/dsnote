@@ -11,6 +11,10 @@ install(DIRECTORY "${sfos_dir}/qml" DESTINATION ${install_dir})
 configure_file("${sfos_dir}/dbus_app.service.in" "${PROJECT_BINARY_DIR}/dbus_app.service")
 install(FILES "${PROJECT_BINARY_DIR}/dbus_app.service" DESTINATION share/dbus-1/services RENAME ${info_dbus_app_service}.service)
 
+# beep tones
+install(FILES "${resources_dir}/beep-start-listen.wav" DESTINATION ${resources_install_dir})
+install(FILES "${resources_dir}/beep-end-listen.wav" DESTINATION ${resources_install_dir})
+
 if(BUILD_WHISPERCPP)
     set(whispercpp_ver "1.7.1")
     install(PROGRAMS "${external_lib_dir}/libwhisper-openblas.so.${whispercpp_ver}" DESTINATION ${lib_install_dir})

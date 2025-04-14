@@ -123,6 +123,7 @@
           This option can be useful when 'Listening mode' is 'Always on'.
           By default, listening continues even when a piece of audio data is being processed.
           Using this option, you can temporarily pause listening for the duration of processing.</li>
+      <li>Option to play an audible tone when starting and stopping listening</li>
       </ul>
       <p>Text to Speech:</p>
       <ul>

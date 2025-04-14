@@ -272,6 +272,7 @@ class speech_service : public QObject, public singleton<speech_service> {
 
    private:
     enum class engine_t { stt, tts, mnt, text_repair };
+    enum class beep_role_t { stt_start_listen, stt_end_listen };
 
     struct lang_to_model_map_t {
         std::unordered_map<QString, QString> stt;
@@ -344,6 +345,12 @@ class speech_service : public QObject, public singleton<speech_service> {
         QString options;
     };
 
+    enum task_flags_t {
+        task_flags_none = 0,
+        task_flags_stt_clear_mic_audio_when_decoding = 1 << 1,
+        task_flags_stt_play_beep = 1 << 2
+    };
+
     struct task_t {
         int id = INVALID_TASK;
         engine_t engine = engine_t::stt;
@@ -354,7 +361,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         std::vector<QString> files;
         QVariantMap options;
         bool paused = false;
-        bool stt_clear_mic_audio_when_decoding = false;
+        std::underlying_type_t<task_flags_t> flags = task_flags_none;
     };
 
     inline static const QString DBUS_SERVICE_NAME{
@@ -394,6 +401,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     std::optional<task_t> m_previous_task;
     std::optional<task_t> m_current_task;
     QMediaPlayer m_player;
+    QMediaPlayer m_beep_player;
     int m_task_state = 0;
     std::queue<tts_partial_result_t> m_tts_queue;
     QVariantMap m_features_availability;
@@ -537,6 +545,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     static QString get_string_value_from_options(const QString &name,
                                                  const QString &default_value,
                                                  const QVariantMap &options);
+    void play_beep(beep_role_t beep_role);
 
     // DBus
     Q_INVOKABLE int Cancel(int task);

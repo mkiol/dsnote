@@ -23,6 +23,10 @@ install(FILES "${desktop_dir}/icons/512x512/${info_binary_id}.png" DESTINATION s
 install(FILES "${resources_dir}/voice-1.opus" DESTINATION ${resources_install_dir})
 install(FILES "${resources_dir}/voice-2.opus" DESTINATION ${resources_install_dir})
 
+# beep tones
+install(FILES "${resources_dir}/beep-start-listen.wav" DESTINATION ${resources_install_dir})
+install(FILES "${resources_dir}/beep-end-listen.wav" DESTINATION ${resources_install_dir})
+
 function(check_patchelf)
     if(${patchelf_bin} MATCHES "-NOTFOUND$")
         message(FATAL_ERROR "patchelf not found but it is required to install files")

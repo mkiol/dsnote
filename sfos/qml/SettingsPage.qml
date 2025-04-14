@@ -222,6 +222,16 @@ Page {
                         }
 
                         TextSwitch {
+                            checked: _settings.stt_play_beep
+                            automaticCheck: false
+                            text: qsTr("Play tone when starting and stopping listening")
+                            onClicked: {
+                                _settings.stt_play_beep = !_settings.stt_play_beep
+                            }
+                            description: qsTr("Play an audible tone when starting and stopping listening.")
+                        }
+
+                        TextSwitch {
                             checked: _settings.stt_insert_stats
                             automaticCheck: false
                             text: qsTr("Insert statistics")
