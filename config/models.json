@@ -4495,6 +4495,272 @@
             "hidden": true
         },
         {
+            "name": "Multilingual (WhisperCpp FUTO Multilingual-39)",
+            "model_id": "multilang_whisper_futo_multilingual39",
+            "engine": "stt_whisper",
+            "lang_id": "multilang",
+            "checksum": "60c878f4",
+            "checksum_quick": "232e82f5",
+            "size": "43537450",
+            "info": "https://keyboard.futo.org/voice-input-models",
+            "urls": [
+                "https://keyboard.futo.org/voice-input-multilingual-39.bin"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "Multilingual (WhisperCpp FUTO Multilingual-74)",
+            "model_id": "multilang_whisper_futo_multilingual74",
+            "engine": "stt_whisper",
+            "lang_id": "multilang",
+            "checksum": "94b9f900",
+            "checksum_quick": "1db5deca",
+            "size": "81768602",
+            "info": "https://keyboard.futo.org/voice-input-models",
+            "urls": [
+                "https://keyboard.futo.org/voice-input-multilingual-74.bin"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "Multilingual (WhisperCpp FUTO Multilingual-244)",
+            "model_id": "multilang_whisper_futo_multilingual244",
+            "engine": "stt_whisper",
+            "lang_id": "multilang",
+            "checksum": "737fdfd1",
+            "checksum_quick": "837148a0",
+            "size": "264464624",
+            "info": "https://keyboard.futo.org/voice-input-models",
+            "urls": [
+                "https://keyboard.futo.org/voice-input-multilingual-244.bin"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "English (WhisperCpp FUTO English-39)",
+            "model_id": "en_whisper_futo_english39",
+            "engine": "stt_whisper",
+            "lang_id": "en",
+            "checksum": "44cdc5f9",
+            "checksum_quick": "89161d10",
+            "size": "43550795",
+            "info": "https://keyboard.futo.org/voice-input-models",
+            "urls": [
+                "https://keyboard.futo.org/voice-input-english-39.bin"
+            ],
+            "pack_id": "en_whisper_futo"
+        },
+        {
+            "name": "English (WhisperCpp FUTO English-74)",
+            "model_id": "en_whisper_futo_english74",
+            "engine": "stt_whisper",
+            "lang_id": "en",
+            "checksum": "6c2e2dbe",
+            "checksum_quick": "7d51c1e2",
+            "size": "81781811",
+            "info": "https://keyboard.futo.org/voice-input-models",
+            "urls": [
+                "https://keyboard.futo.org/voice-input-english-74.bin"
+            ],
+            "pack_id": "en_whisper_futo"
+        },
+        {
+            "name": "English (WhisperCpp FUTO English-244)",
+            "model_id": "en_whisper_futo_english244",
+            "engine": "stt_whisper",
+            "lang_id": "en",
+            "checksum": "f2c9c82b",
+            "checksum_quick": "a6ff5dcb",
+            "size": "264477561",
+            "info": "https://keyboard.futo.org/voice-input-models",
+            "urls": [
+                "https://keyboard.futo.org/voice-input-english-244.bin"
+            ],
+            "pack_id": "en_whisper_futo"
+        },
+        {
+            "name": "Polski (WhisperCpp Futo Multilingual-244)",
+            "model_id": "pl_whisper_futo_multilingual244",
+            "model_alias_of": "multilang_whisper_futo_multilingual244",
+            "lang_id": "pl",
+            "pack_id": "pl_whisper_futo"
+        },
+        {
+            "name": "Polski (WhisperCpp Futo Multilingual-39)",
+            "model_id": "pl_whisper_futo_multilingual39",
+            "model_alias_of": "multilang_whisper_futo_multilingual39",
+            "lang_id": "pl",
+            "pack_id": "pl_whisper_futo"
+        },
+        {
+            "name": "Deutsch (WhisperCpp Futo Multilingual-244)",
+            "model_id": "de_whisper_futo_multilingual244",
+            "model_alias_of": "multilang_whisper_futo_multilingual244",
+            "lang_id": "de",
+            "pack_id": "de_whisper_futo"
+        },
+        {
+            "name": "Deutsch (WhisperCpp Futo Multilingual-74)",
+            "model_id": "de_whisper_futo_multilingual74",
+            "model_alias_of": "multilang_whisper_futo_multilingual74",
+            "lang_id": "de",
+            "pack_id": "de_whisper_futo"
+        },
+        {
+            "name": "Deutsch (WhisperCpp Futo Multilingual-39)",
+            "model_id": "de_whisper_futo_multilingual39",
+            "model_alias_of": "multilang_whisper_futo_multilingual39",
+            "lang_id": "de",
+            "pack_id": "de_whisper_futo"
+        },
+        {
+            "name": "Español (WhisperCpp Futo Multilingual-244)",
+            "model_id": "es_whisper_futo_multilingual244",
+            "model_alias_of": "multilang_whisper_futo_multilingual244",
+            "lang_id": "es",
+            "pack_id": "es_whisper_futo"
+        },
+        {
+            "name": "Español (WhisperCpp Futo Multilingual-74)",
+            "model_id": "es_whisper_futo_multilingual74",
+            "model_alias_of": "multilang_whisper_futo_multilingual74",
+            "lang_id": "es",
+            "pack_id": "es_whisper_futo"
+        },
+        {
+            "name": "Español (WhisperCpp Futo Multilingual-39)",
+            "model_id": "es_whisper_futo_multilingual39",
+            "model_alias_of": "multilang_whisper_futo_multilingual39",
+            "lang_id": "es",
+            "pack_id": "es_whisper_futo"
+        },
+        {
+            "name": "Русский (WhisperCpp Futo Multilingual-244)",
+            "model_id": "ru_whisper_futo_multilingual244",
+            "model_alias_of": "multilang_whisper_futo_multilingual244",
+            "lang_id": "ru",
+            "pack_id": "ru_whisper_futo"
+        },
+        {
+            "name": "Русский (WhisperCpp Futo Multilingual-74)",
+            "model_id": "ru_whisper_futo_multilingual74",
+            "model_alias_of": "multilang_whisper_futo_multilingual74",
+            "lang_id": "ru",
+            "pack_id": "ru_whisper_futo"
+        },
+        {
+            "name": "Русский (WhisperCpp Futo Multilingual-39)",
+            "model_id": "ru_whisper_futo_multilingual39",
+            "model_alias_of": "multilang_whisper_futo_multilingual39",
+            "lang_id": "ru",
+            "pack_id": "ru_whisper_futo"
+        },
+        {
+            "name": "Français (WhisperCpp Futo Multilingual-244)",
+            "model_id": "fr_whisper_futo_multilingual244",
+            "model_alias_of": "multilang_whisper_futo_multilingual244",
+            "lang_id": "fr",
+            "pack_id": "fr_whisper_futo"
+        },
+        {
+            "name": "Français (WhisperCpp Futo Multilingual-74)",
+            "model_id": "fr_whisper_futo_multilingual74",
+            "model_alias_of": "multilang_whisper_futo_multilingual74",
+            "lang_id": "fr",
+            "pack_id": "fr_whisper_futo"
+        },
+        {
+            "name": "Français (WhisperCpp Futo Multilingual-39)",
+            "model_id": "fr_whisper_futo_multilingual39",
+            "model_alias_of": "multilang_whisper_futo_multilingual39",
+            "lang_id": "fr",
+            "pack_id": "fr_whisper_futo"
+        },
+        {
+            "name": "Português (WhisperCpp Futo Multilingual-244)",
+            "model_id": "pt_whisper_futo_multilingual244",
+            "model_alias_of": "multilang_whisper_futo_multilingual244",
+            "lang_id": "pt",
+            "pack_id": "pt_whisper_futo"
+        },
+        {
+            "name": "Português (WhisperCpp Futo Multilingual-74)",
+            "model_id": "pt_whisper_futo_multilingual74",
+            "model_alias_of": "multilang_whisper_futo_multilingual74",
+            "lang_id": "pt",
+            "pack_id": "pt_whisper_futo"
+        },
+        {
+            "name": "Português (WhisperCpp Futo Multilingual-39)",
+            "model_id": "pt_whisper_futo_multilingual39",
+            "model_alias_of": "multilang_whisper_futo_multilingual39",
+            "lang_id": "pt",
+            "pack_id": "pt_whisper_futo"
+        },
+        {
+            "name": "中文 (WhisperCpp Futo Multilingual-244)",
+            "model_id": "zh_whisper_futo_multilingual244",
+            "model_alias_of": "multilang_whisper_futo_multilingual244",
+            "lang_id": "zh",
+            "pack_id": "zh_whisper_futo"
+        },
+        {
+            "name": "中文 (WhisperCpp Futo Multilingual-74)",
+            "model_id": "zh_whisper_futo_multilingual74",
+            "model_alias_of": "multilang_whisper_futo_multilingual74",
+            "lang_id": "zh",
+            "pack_id": "zh_whisper_futo"
+        },
+        {
+            "name": "中文 (WhisperCpp Futo Multilingual-39)",
+            "model_id": "zh_whisper_futo_multilingual39",
+            "model_alias_of": "multilang_whisper_futo_multilingual39",
+            "lang_id": "zh",
+            "pack_id": "zh_whisper_futo"
+        },
+        {
+            "name": "한국어 (WhisperCpp Futo Multilingual-244)",
+            "model_id": "ko_whisper_futo_multilingual244",
+            "model_alias_of": "multilang_whisper_futo_multilingual244",
+            "lang_id": "ko",
+            "pack_id": "ko_whisper_futo"
+        },
+        {
+            "name": "한국어 (WhisperCpp Futo Multilingual-74)",
+            "model_id": "ko_whisper_futo_multilingual74",
+            "model_alias_of": "multilang_whisper_futo_multilingual74",
+            "lang_id": "ko",
+            "pack_id": "ko_whisper_futo"
+        },
+        {
+            "name": "한국어 (WhisperCpp Futo Multilingual-39)",
+            "model_id": "ko_whisper_futo_multilingual39",
+            "model_alias_of": "multilang_whisper_futo_multilingual39",
+            "lang_id": "ko",
+            "pack_id": "ko_whisper_futo"
+        },
+        {
+            "name": "日本語 (WhisperCpp Futo Multilingual-244)",
+            "model_id": "ja_whisper_futo_multilingual244",
+            "model_alias_of": "multilang_whisper_futo_multilingual244",
+            "lang_id": "ja",
+            "pack_id": "ja_whisper_futo"
+        },
+        {
+            "name": "日本語 (WhisperCpp Futo Multilingual-74)",
+            "model_id": "ja_whisper_futo_multilingual74",
+            "model_alias_of": "multilang_whisper_futo_multilingual74",
+            "lang_id": "ja",
+            "pack_id": "ja_whisper_futo"
+        },
+        {
+            "name": "日本語 (WhisperCpp Futo Multilingual-39)",
+            "model_id": "ja_whisper_futo_multilingual39",
+            "model_alias_of": "multilang_whisper_futo_multilingual39",
+            "lang_id": "ja",
+            "pack_id": "ja_whisper_futo"
+        },
+        {
             "name": "English (WhisperCpp Tiny)",
             "model_id": "en_whisper_tiny",
             "engine": "stt_whisper",
@@ -33806,6 +34072,66 @@
             "id": "de_ds",
             "engine": "stt_ds",
             "lang_id": "de"
+        },
+        {
+            "name": "English (WhisperCpp FUTO)",
+            "id": "en_whisper_futo",
+            "engine": "stt_whisper",
+            "lang_id": "en"
+        },
+        {
+            "name": "Deutsch (WhisperCpp FUTO)",
+            "id": "de_whisper_futo",
+            "engine": "stt_whisper",
+            "lang_id": "de"
+        },
+        {
+            "name": "Español (WhisperCpp FUTO)",
+            "id": "es_whisper_futo",
+            "engine": "stt_whisper",
+            "lang_id": "es"
+        },
+        {
+            "name": "Русский (WhisperCpp FUTO)",
+            "id": "ru_whisper_futo",
+            "engine": "stt_whisper",
+            "lang_id": "ru"
+        },
+        {
+            "name": "Français (WhisperCpp FUTO)",
+            "id": "fr_whisper_futo",
+            "engine": "stt_whisper",
+            "lang_id": "fr"
+        },
+        {
+            "name": "Português (WhisperCpp FUTO)",
+            "id": "pt_whisper_futo",
+            "engine": "stt_whisper",
+            "lang_id": "pt"
+        },
+        {
+            "name": "中文 (WhisperCpp FUTO)",
+            "id": "zh_whisper_futo",
+            "engine": "stt_whisper",
+            "lang_id": "zh"
+        },
+        {
+            "name": "한국어 (WhisperCpp FUTO)",
+            "id": "ko_whisper_futo",
+            "engine": "stt_whisper",
+            "lang_id": "ko"
+        },
+        {
+            "name": "日本語 (WhisperCpp FUTO)",
+            "id": "ja_whisper_futo",
+            "engine": "stt_whisper",
+            "lang_id": "ja"
+        },
+        {
+            "name": "Polski (WhisperCpp FUTO)",
+            "id": "pl_whisper_futo",
+            "engine": "stt_whisper",
+            "lang_id": "pl"
         },
         {
             "name": "English (FasterWhisper-Distil)",
