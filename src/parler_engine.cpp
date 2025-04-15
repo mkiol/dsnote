@@ -8,6 +8,7 @@
 #include "parler_engine.hpp"
 
 #include <fmt/format.h>
+#include <pybind11/functional.h>
 #include <pybind11/numpy.h>
 
 #include <utility>
@@ -142,14 +143,25 @@ bool parler_engine::encode_speech_impl(const std::string& text,
                              "padding"_a = true)
                     .attr("input_ids")
                     .attr("to")(m_device_str);
+
+            py::list scl;
+            scl.append(py::cpp_function{
+                [this]([[maybe_unused]] const py::args& args,
+                       [[maybe_unused]] const py::kwargs& kwargs) {
+                    return is_shutdown();
+                }});
+
             auto generation = m_model->attr("generate")(
                 "input_ids"_a = m_desc_input_ids.value(),
                 "prompt_input_ids"_a = prompt_input_ids,
-                "attention_mask"_a = m_desc_attention_mask.value());
+                "attention_mask"_a = m_desc_attention_mask.value(),
+                "stopping_criteria"_a = scl);
 
             py::array_t<float, py::array::c_style | py::array::forcecast>
                 audio_arr =
                     generation.attr("cpu")().attr("numpy")().attr("squeeze")();
+
+            if (is_shutdown()) throw std::runtime_error{"engine shutdown"};
 
             // save to wav file
             auto buffer = audio_arr.request();
