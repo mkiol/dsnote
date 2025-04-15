@@ -19,6 +19,7 @@ bool file_source::ok() const { return m_error; }
 void file_source::stop() {
     qDebug() << "file source stop";
     m_mc.cancel();
+    m_stopped = true;
 }
 
 void file_source::slowdown() {
@@ -38,6 +39,7 @@ void file_source::speedup() {
 }
 
 void file_source::start() {
+    m_stopped = false;
     connect(&m_timer, &QTimer::timeout, this,
             &file_source::handle_read_timeout);
     m_timer.setInterval(m_timer_quick);

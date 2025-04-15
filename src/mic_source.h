@@ -39,7 +39,6 @@ class mic_source : public audio_source {
     bool m_eof = false;
     bool m_sof = true;
     bool m_ended = false;
-    bool m_stopped = false;
 
     void init_audio(const QString& preferred_audio_input);
     void start();

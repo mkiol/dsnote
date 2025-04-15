@@ -273,6 +273,7 @@ class speech_service : public QObject, public singleton<speech_service> {
    private:
     enum class engine_t { stt, tts, mnt, text_repair };
     enum class beep_role_t { stt_start_listen, stt_end_listen };
+    friend QDebug operator<<(QDebug d, beep_role_t beep_role);
 
     struct lang_to_model_map_t {
         std::unordered_map<QString, QString> stt;

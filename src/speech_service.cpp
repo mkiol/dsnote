@@ -124,6 +124,19 @@ QDebug operator<<(QDebug d, speech_service::state_t state_value) {
     return d;
 }
 
+QDebug operator<<(QDebug d, speech_service::beep_role_t beep_role) {
+    switch (beep_role) {
+        case speech_service::beep_role_t::stt_start_listen:
+            d << "stt-start-listen";
+            break;
+        case speech_service::beep_role_t::stt_end_listen:
+            d << "stt-end-listen";
+            break;
+    }
+
+    return d;
+}
+
 static bool tts_not_merge_files_options(const QVariantMap &options) {
     if (options.contains(QStringLiteral("not_merge_files"))) {
         return options.value(QStringLiteral("not_merge_files")).toBool();
@@ -2458,6 +2471,8 @@ void speech_service::play_beep(beep_role_t beep_role) {
         return QString{};
     };
 
+    qDebug() << "play beep:" << beep_role;
+
     auto beep_file = [&] {
         switch (beep_role) {
             case beep_role_t::stt_start_listen:
@@ -3941,11 +3956,12 @@ void speech_service::stop_stt_engine_gracefully() {
 
     if (m_source) {
         if (m_stt_engine) m_stt_engine->set_speech_started(false);
-        m_source->stop();
-
-        if (m_current_task &&
-            (m_current_task->flags & task_flags_stt_play_beep)) {
-            play_beep(beep_role_t::stt_end_listen);
+        if (!m_source->stopped()) {
+            m_source->stop();
+            if (m_current_task &&
+                (m_current_task->flags & task_flags_stt_play_beep)) {
+                play_beep(beep_role_t::stt_end_listen);
+            }
         }
     } else {
         stop_stt_engine();

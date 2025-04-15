@@ -31,7 +31,11 @@ class audio_source : public QObject {
     virtual void stop() = 0;
     virtual void slowdown() = 0;
     virtual void speedup() = 0;
+    bool stopped() const { return m_stopped; }
     ~audio_source() override = default;
+
+   protected:
+    bool m_stopped = false;
 
    signals:
     void audio_available();
