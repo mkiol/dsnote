@@ -1,7 +1,7 @@
 # all translations
-set(enabled_translations ar ca_ES cs de en es fr fr_CA it nl pl ru sv sl zh_CN uk no)
+set(enabled_translations ar ca_ES cs de en es fr fr_CA it nl no pl ru sv sl uk zh_CN zh_TW)
 # finished translations
-set(enabled_translations ar ca_ES en es fr fr_CA it nl pl ru sv sl uk no)
+set(enabled_translations ar ca_ES en es fr fr_CA it nl no pl ru sv sl uk zh_CN zh_TW)
 
 find_package(Qt5 COMPONENTS Core LinguistTools)
 
