@@ -41,6 +41,7 @@ void fasterwhisper_engine::stop() {
 
     auto task = py_executor::instance()->execute([&]() {
         try {
+            m_model->attr("model").attr("unload_model")();
             m_model.reset();
 
             // release mem
