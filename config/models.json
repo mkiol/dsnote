@@ -1350,7 +1350,7 @@
             "pack_id": "en_fasterwhisper"
         },
         {
-            "name": "English (FasterWhisper-Distil Small)",
+            "name": "English (FasterWhisper Distil Small)",
             "model_id": "en_fasterwhisper_distil_small",
             "engine": "stt_fasterwhisper",
             "lang_id": "en",
@@ -1372,7 +1372,7 @@
             "pack_id": "en_fasterwhisper_distil"
         },
         {
-            "name": "English (FasterWhisper-Distil Medium)",
+            "name": "English (FasterWhisper Distil Medium)",
             "model_id": "en_fasterwhisper_distil_medium",
             "engine": "stt_fasterwhisper",
             "lang_id": "en",
@@ -1394,7 +1394,7 @@
             "pack_id": "en_fasterwhisper_distil"
         },
         {
-            "name": "English (FasterWhisper-Distil Large-v2)",
+            "name": "English (FasterWhisper Distil Large-v2)",
             "model_id": "en_fasterwhisper_distil_large2",
             "engine": "stt_fasterwhisper",
             "lang_id": "en",
@@ -1416,7 +1416,7 @@
             "pack_id": "en_fasterwhisper_distil"
         },
         {
-            "name": "English (FasterWhisper-Distil Large-v3)",
+            "name": "English (FasterWhisper Distil Large-v3)",
             "model_id": "en_fasterwhisper_distil_large3",
             "engine": "stt_fasterwhisper",
             "lang_id": "en",
@@ -3984,7 +3984,7 @@
             "lang_id": "pl"
         },
         {
-            "name": "Polski (FasterWhisper-Distil Large-v3 Fine-Tuned Aspik)",
+            "name": "Polski (FasterWhisper Distil Large-v3 Fine-Tuned Aspik)",
             "model_id": "pl_fasterwhisper_distil_large3_aspik",
             "engine": "stt_fasterwhisper",
             "lang_id": "pl",
@@ -4003,8 +4003,7 @@
                 "id": "MIT",
                 "name": "MIT License",
                 "accept_required": false
-            },
-            "pack_id": "en_fasterwhisper"
+            }
         },
         {
             "name": "Afrikaans (FasterWhisper Tiny)",
@@ -4877,7 +4876,7 @@
             "pack_id": "en_whisper"
         },
         {
-            "name": "English (WhisperCpp-Distil Small)",
+            "name": "English (WhisperCpp Distil Small)",
             "model_id": "en_whisper_distil_small",
             "engine": "stt_whisper",
             "lang_id": "en",
@@ -4895,7 +4894,7 @@
             "pack_id": "en_whisper_distil"
         },
         {
-            "name": "English (WhisperCpp-Distil Medium)",
+            "name": "English (WhisperCpp Distil Medium)",
             "model_id": "en_whisper_distil_medium",
             "engine": "stt_whisper",
             "lang_id": "en",
@@ -4913,7 +4912,7 @@
             "pack_id": "en_whisper_distil"
         },
         {
-            "name": "English (WhisperCpp-Distil Large-v2)",
+            "name": "English (WhisperCpp Distil Large-v2)",
             "model_id": "en_whisper_distil_large2",
             "engine": "stt_whisper",
             "lang_id": "en",
@@ -4931,7 +4930,7 @@
             "pack_id": "en_whisper_distil"
         },
         {
-            "name": "English (WhisperCpp-Distil Large-v3)",
+            "name": "English (WhisperCpp Distil Large-v3)",
             "model_id": "en_whisper_distil_large3",
             "engine": "stt_whisper",
             "lang_id": "en",
@@ -5315,7 +5314,8 @@
             "urls": [
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/ru/ggml-base-ru-artyomboyko-q5_0.bin"
             ],
-            "size": "59707642"
+            "size": "59707642",
+            "pack_id": "ru_whisper"
         },
         {
             "name": "Русский (WhisperCpp Small)",
@@ -5895,7 +5895,8 @@
             "urls": [
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/cs/ggml-small-cs-mikr-q5_0.bin"
             ],
-            "size": "190085487"
+            "size": "190085487",
+            "pack_id": "cs_whisper"
         },
         {
             "name": "Čeština (WhisperCpp Medium)",
@@ -5913,7 +5914,8 @@
             "urls": [
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/cs/ggml-medium-cs-mikr-q5_0.bin"
             ],
-            "size": "586572019"
+            "size": "586572019",
+            "pack_id": "cs_whisper"
         },
         {
             "name": "Čeština (WhisperCpp Large-v3)",
@@ -5961,7 +5963,8 @@
             "urls": [
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/sk/ggml-small-sk-mikr-q5_0.bin"
             ],
-            "size": "190085487"
+            "size": "190085487",
+            "pack_id": "sk_whisper"
         },
         {
             "name": "Slovenčina (WhisperCpp Medium)",
@@ -5979,7 +5982,8 @@
             "urls": [
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/sk/ggml-medium-sk-mikr-q5_0.bin"
             ],
-            "size": "586572019"
+            "size": "586572019",
+            "pack_id": "sk_whisper"
         },
         {
             "name": "Slovenčina (WhisperCpp Large-v3)",
@@ -6243,7 +6247,8 @@
             "urls": [
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/hr/ggml-small-hr-mikr-q5_0.bin"
             ],
-            "size": "190085487"
+            "size": "190085487",
+            "pack_id": "hr_whisper"
         },
         {
             "name": "Hrvatski (WhisperCpp Large-v3)",
@@ -6333,7 +6338,8 @@
             "urls": [
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/ro/ggml-small-ro-mikr-q5_0.bin"
             ],
-            "size": "190085487"
+            "size": "190085487",
+            "pack_id": "ro_whisper"
         },
         {
             "name": "Română (WhisperCpp Medium)",
@@ -6393,7 +6399,8 @@
             "urls": [
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/sl/ggml-medium-sl-mikr-q5_0.bin"
             ],
-            "size": "586572019"
+            "size": "586572019",
+            "pack_id": "sl_whisper"
         },
         {
             "name": "Slovenščina (WhisperCpp Large-v3)",
@@ -6429,7 +6436,8 @@
                 "name": "Apache License 2.0",
                 "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
                 "accept_required": false
-            }
+            },
+            "pack_id": "sl_whisper"
         },
         {
             "name": "Bosanski (WhisperCpp Tiny)",
@@ -6585,7 +6593,8 @@
             "urls": [
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/hu/ggml-small-hu-mikr-q5_0.bin"
             ],
-            "size": "190085487"
+            "size": "190085487",
+            "pack_id": "hu_whisper"
         },
         {
             "name": "Magyar (WhisperCpp Medium)",
@@ -7635,7 +7644,8 @@
             "urls": [
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/pl/ggml-tiny-pl-aspik101-q5_0.bin"
             ],
-            "size": "32152673"
+            "size": "32152673",
+            "pack_id": "pl_whisper"
         },
         {
             "name": "Polski (WhisperCpp Base)",
@@ -7665,7 +7675,8 @@
             "urls": [
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/pl/ggml-medium-pl-aspik101-q5_0.bin"
             ],
-            "size": "586572019"
+            "size": "586572019",
+            "pack_id": "pl_whisper"
         },
         {
             "name": "Polski (WhisperCpp Large-v3)",
@@ -7686,7 +7697,7 @@
             "lang_id": "pl"
         },
         {
-            "name": "Polish (WhisperCpp-Distil Large-v3 Fine-Tuned Aspik)",
+            "name": "Polish (WhisperCpp Distil Large-v3 Fine-Tuned Aspik)",
             "model_id": "pl_whisper_distil_large3_aspik",
             "engine": "stt_whisper",
             "lang_id": "pl",
@@ -7700,8 +7711,7 @@
                 "id": "MIT",
                 "name": "MIT License",
                 "accept_required": false
-            },
-            "pack_id": "en_whisper"
+            }
         },
         {
             "name": "Afrikaans (WhisperCpp Tiny)",
@@ -34134,13 +34144,13 @@
             "lang_id": "pl"
         },
         {
-            "name": "English (FasterWhisper-Distil)",
+            "name": "English (FasterWhisper Distil)",
             "id": "en_fasterwhisper_distil",
             "engine": "stt_fasterwhisper",
             "lang_id": "en"
         },
         {
-            "name": "English (WhisperCpp-Distil)",
+            "name": "English (WhisperCpp Distil)",
             "id": "en_whisper_distil",
             "engine": "stt_whisper",
             "lang_id": "en"
