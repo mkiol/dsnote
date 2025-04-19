@@ -30074,7 +30074,31 @@
                 "name": "Mozilla Public License Version 2.0",
                 "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
                 "accept_required": false
-            }
+            },
+            "recommended_model": "ar_bergamot_aren"
+        },
+        {
+            "name": "من العربية إلى الإنجليزية (Arabic to English)",
+            "model_id": "ar_bergamot_aren",
+            "engine": "mnt_bergamot",
+            "lang_id": "ar",
+            "trg_lang_id": "en",
+            "checksum": "d8f8b9a5",
+            "checksum_quick": "b487fa21",
+            "size": "33139277",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7f8839023001333455abeaf58dfc21d53f35168e/models/prod/aren/model.aren.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7f8839023001333455abeaf58dfc21d53f35168e/models/prod/aren/lex.50.50.aren.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7f8839023001333455abeaf58dfc21d53f35168e/models/prod/aren/vocab.aren.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "recommended_model": "en_bergamot_enar"
         },
         {
             "name": "mill-Malti għall-Ingliż (Maltese to English)",
