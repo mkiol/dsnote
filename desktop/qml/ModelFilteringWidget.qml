@@ -484,7 +484,7 @@ ColumnLayout {
                     qsTr("Intermediate Results") + " STT",
                     qsTr("Punctuation") + " STT",
                     qsTr("Voice Cloning") + " TTS",
-                    qsTr("Prompt Description") + " TTS",
+                    qsTr("Voice Text Description") + " TTS",
 
                 ]
 

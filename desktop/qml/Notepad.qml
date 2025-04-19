@@ -178,7 +178,7 @@ ColumnLayout {
             icon.name: "audio-speakers-symbolic"
             enabled: app.tts_configured && app.state === DsnoteApp.StateIdle
             comboToolTip: listenReadCombos.second.comboRedBorder ?
-                              qsTr("This model requires a voice profile") + " " +
+                              qsTr("This model requires a voice profile.") + " " +
                               qsTr("Create one in %1.").arg("<i>" + qsTr("Voice profiles") + "</i>") : qsTr("Text to Speech model")
             combo2ToolTip: qsTr("Voice profile")
             combo3ToolTip: qsTr("Speech speed")

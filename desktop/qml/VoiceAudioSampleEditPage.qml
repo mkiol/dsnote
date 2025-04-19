@@ -28,7 +28,7 @@ DialogPage {
     readonly property bool nameTaken: _nameForm.textField.text.trim().length > 0 && !dataOk
     readonly property int effectiveWidth: root.implicitWidth - root._leftMargin - root._rightMargin - appWin.padding
 
-    title: qsTr("Edit voice audio sample")
+    title: qsTr("Edit audio sample")
 
     function cancel() {
         appWin.openDialog("VoiceMgmtPage.qml")
