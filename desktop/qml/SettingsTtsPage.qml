@@ -159,6 +159,11 @@ ColumnLayout {
         text: qsTranslate("SettingsPage", "When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.")
     }
 
+    BusyIndicator {
+        visible: app.busy && !ttsEnginesBar.visible
+        running: visible
+    }
+
     SectionLabel {
         text: qsTranslate("SettingsPage", "Engine options")
         visible: ttsEnginesBar.visible

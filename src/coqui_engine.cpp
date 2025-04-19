@@ -151,6 +151,35 @@ std::string coqui_engine::fix_config_file(const std::string& config_file,
     return vocoder ? vocoder_config_temp_file : config_temp_file;
 }
 
+bool coqui_engine::register_cancel_hook(const char* field, py::object obj) {
+    // run only under py thread
+    auto hook =
+        py::cpp_function{[this]([[maybe_unused]] const py::args& args,
+                                [[maybe_unused]] const py::kwargs& kwargs) {
+            if (is_shutdown()) {
+                throw std::runtime_error{"engine shutdown"};
+            }
+        }};
+
+    if (field == nullptr) {
+        if (py::hasattr(obj, "register_forward_hook"))
+            obj.attr("register_forward_hook")(hook);
+        if (py::hasattr(obj, "register_forward_pre_hook"))
+            obj.attr(field).attr("register_forward_pre_hook")(hook);
+        return true;
+    }
+
+    if (py::hasattr(obj, field)) {
+        if (py::hasattr(obj.attr(field), "register_forward_hook"))
+            obj.attr(field).attr("register_forward_hook")(hook);
+        if (py::hasattr(obj.attr(field), "register_forward_pre_hook"))
+            obj.attr(field).attr("register_forward_pre_hook")(hook);
+        return true;
+    }
+
+    return false;
+}
+
 void coqui_engine::create_model() {
     auto task = py_executor::instance()->execute([&]() {
         auto model_file = find_file_with_name_prefix(
@@ -226,28 +255,35 @@ void coqui_engine::create_model() {
                                     : static_cast<py::object>(py::none()),
                 "use_cuda"_a = use_cuda);
 
-            if (m_model) {
-                auto model = m_model->attr("tts_model");
+            auto model = m_model->attr("tts_model");
 
-                auto model_class_name =
-                    model.get_type().attr("__name__").cast<std::string>();
-                LOGD("model class name: " << model_class_name);
+            auto model_class_name =
+                model.get_type().attr("__name__").cast<std::string>();
+            LOGD("model class name: " << model_class_name);
 
-                if (py::hasattr(model, "length_scale")) {
-                    m_initial_length_scale =
-                        model.attr("length_scale").cast<float>();
-                    LOGD("initial length scale: " << *m_initial_length_scale);
-                } else if (py::hasattr(model, "duration_threshold")) {
-                    m_initial_duration_threshold =
-                        model.attr("duration_threshold").cast<float>();
-                    LOGD("initial duration threshold: "
-                         << *m_initial_duration_threshold);
-                } else if (model_class_name == "Xtts") {
-                    m_speed_supported = true;
-                } else {
-                    LOGD("model does not have initial speed");
-                }
+            if (py::hasattr(model, "length_scale")) {
+                m_initial_length_scale =
+                    model.attr("length_scale").cast<float>();
+                LOGD("initial length scale: " << *m_initial_length_scale);
+            } else if (py::hasattr(model, "duration_threshold")) {
+                m_initial_duration_threshold =
+                    model.attr("duration_threshold").cast<float>();
+                LOGD("initial duration threshold: "
+                     << *m_initial_duration_threshold);
+            } else if (model_class_name == "Xtts") {
+                m_speed_supported = true;
+            } else {
+                LOGD("model does not have initial speed");
             }
+
+            if (register_cancel_hook("gpt", model)) {
+                register_cancel_hook("gpt_inference", model.attr("gpt"));
+            }
+            register_cancel_hook("hifigan_decoder", model);
+            register_cancel_hook("text_encoder", model);
+            register_cancel_hook("posterior_encoder", model);
+            register_cancel_hook("flow", model);
+            register_cancel_hook("waveform_decoder", model);
         } catch (const std::exception& err) {
             LOGE("py error: " << err.what());
             return false;
@@ -311,6 +347,8 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
                 "reference_wav"_a = py::none(), "style_wav"_a = py::none(),
                 "style_text"_a = py::none(),
                 "reference_speaker_name"_a = py::none(), "speed"_a = speed_f);
+
+            if (is_shutdown()) throw std::runtime_error{"engine shutdown"};
 
             m_model->attr("save_wav")("wav"_a = wav, "path"_a = out_file);
         } catch (const std::exception& err) {

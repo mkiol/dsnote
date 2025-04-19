@@ -21,6 +21,11 @@ ColumnLayout {
         app.update_feature_statuses()
     }
 
+    BusyIndicator {
+        visible: app.busy
+        running: visible
+    }
+
     CheckBox {
         visible: app.feature_hotkeys
         checked: _settings.hotkeys_enabled

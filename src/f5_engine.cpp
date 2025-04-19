@@ -26,8 +26,7 @@ f5_engine::f5_engine(config_t config, callbacks_t call_backs)
     if ((cpu_tools::cpuinfo().feature_flags &
          cpu_tools::feature_flags_t::avx) == 0) {
         LOGE("avx not supported but f5 engine needs it");
-        throw std::runtime_error(
-            "failed to init f5 engine: avx not supported");
+        throw std::runtime_error("failed to init f5 engine: avx not supported");
     }
 
     if (m_config.model_files.hub_path.empty()) {
@@ -99,6 +98,20 @@ void f5_engine::create_model() {
             m_model = f5_api.attr("F5TTS")("ckpt_file"_a = model_file,
                                            "vocab_file"_a = vocab_file,
                                            "device"_a = m_device_str);
+
+            auto hook = py::cpp_function{
+                [this]([[maybe_unused]] const py::args& args,
+                       [[maybe_unused]] const py::kwargs& kwargs) {
+                    if (is_shutdown()) {
+                        throw std::runtime_error{"engine shutdown"};
+                    }
+                }};
+            m_model->attr("ema_model")
+                .attr("transformer")
+                .attr("register_forward_hook")(hook);
+            m_model->attr("ema_model")
+                .attr("transformer")
+                .attr("register_forward_pre_hook")(hook);
         } catch (const std::exception& err) {
             LOGE("py error: " << err.what());
             return false;
@@ -128,6 +141,8 @@ bool f5_engine::encode_speech_impl(const std::string& text,
                 "file_wave"_a = out_file, "speed"_a = speech_speed,
                 "remove_silence"_a = false, "seed"_a = py::none(),
                 "file_spec"_a = py::none());
+
+            if (is_shutdown()) throw std::runtime_error{"engine shutdown"};
         } catch (const std::exception& err) {
             LOGE("py error: " << err.what());
             return false;

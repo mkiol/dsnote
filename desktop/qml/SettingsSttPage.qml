@@ -231,6 +231,11 @@ ColumnLayout {
         }
     }
 
+    BusyIndicator {
+        visible: app.busy && !sttEnginesBar.visible
+        running: visible
+    }
+
     SectionLabel {
         text: qsTranslate("SettingsPage", "Engine options")
         visible: sttEnginesBar.visible

@@ -103,6 +103,17 @@ void kokoro_engine::create_model() {
             auto kokoro_api = py::module_::import("kokoro");
             m_model = kokoro_api.attr("KModel")("model"_a = model_file,
                                                 "config"_a = config_file);
+
+            auto hook = py::cpp_function{
+                [this]([[maybe_unused]] const py::args& args,
+                       [[maybe_unused]] const py::kwargs& kwargs) {
+                    if (is_shutdown()) {
+                        throw std::runtime_error{"engine shutdown"};
+                    }
+                }};
+            m_model->attr("register_forward_hook")(hook);
+            m_model->attr("register_forward_pre_hook")(hook);
+
             m_pipeline = kokoro_api.attr("KPipeline")(
                 "model"_a = m_model.value(),
                 "lang_code"_a = m_config.speaker_id.empty()
@@ -143,7 +154,7 @@ bool kokoro_engine::encode_speech_impl(const std::string& text,
             auto data_start = os.tellp();
 
             while (true) {
-                if (is_shutdown()) break;
+                if (is_shutdown()) throw std::runtime_error{"engine shutdown"};
 
                 try {
                     auto item = next();

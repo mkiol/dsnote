@@ -44,6 +44,7 @@ class coqui_engine : public tts_engine {
     void stop();
     static std::string fix_config_file(const std::string& config_file,
                                        const std::string& dir, bool vocoder);
+    bool register_cancel_hook(const char* field, py::object obj);
 };
 
 #endif  // COQUI_ENGINE_HPP
