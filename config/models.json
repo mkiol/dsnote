@@ -26734,37 +26734,43 @@
             "name": "English (WhisperSpeech Tiny)",
             "model_id": "en_whisperspeech_q4_tiny_enpl",
             "model_alias_of": "multilang_whisperspeech_q4_tiny_enpl",
-            "lang_id": "en"
+            "lang_id": "en",
+            "pack_id": "en_whisperspeech"
         },
         {
             "name": "Polski (WhisperSpeech Tiny)",
             "model_id": "pl_whisperspeech_q4_tiny_enpl",
             "model_alias_of": "multilang_whisperspeech_q4_tiny_enpl",
-            "lang_id": "pl"
+            "lang_id": "pl",
+            "pack_id": "pl_whisperspeech"
         },
         {
             "name": "English (WhisperSpeech Base)",
             "model_id": "en_whisperspeech_q4_base_enpl",
             "model_alias_of": "multilang_whisperspeech_q4_base_enpl",
-            "lang_id": "en"
+            "lang_id": "en",
+            "pack_id": "en_whisperspeech"
         },
         {
             "name": "Polski (WhisperSpeech Base)",
             "model_id": "pl_whisperspeech_q4_base_enpl",
             "model_alias_of": "multilang_whisperspeech_q4_base_enpl",
-            "lang_id": "pl"
+            "lang_id": "pl",
+            "pack_id": "pl_whisperspeech"
         },
         {
             "name": "English (WhisperSpeech Small)",
             "model_id": "en_whisperspeech_small",
             "model_alias_of": "multilang_whisperspeech_small",
-            "lang_id": "en"
+            "lang_id": "en",
+            "pack_id": "en_whisperspeech"
         },
         {
             "name": "Polski (WhisperSpeech Small)",
             "model_id": "pl_whisperspeech_q4_small_enpl",
             "model_alias_of": "multilang_whisperspeech_q4_small_enpl",
-            "lang_id": "pl"
+            "lang_id": "pl",
+            "pack_id": "pl_whisperspeech"
         },
         {
             "name": "Deutsch (WhisperSpeech Small)",
@@ -35213,6 +35219,18 @@
             "features": [
                 "tts_prompt"
             ]
+        },
+        {
+            "name": "English (WhisperSpeech)",
+            "id": "en_whisperspeech",
+            "engine": "tts_whisperspeech",
+            "lang_id": "en"
+        },
+        {
+            "name": "Polski (WhisperSpeech)",
+            "id": "pl_whisperspeech",
+            "engine": "tts_whisperspeech",
+            "lang_id": "pl"
         }
     ]
 }
