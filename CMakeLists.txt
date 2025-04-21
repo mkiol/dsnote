@@ -194,8 +194,9 @@ else()
 endif()
 
 if(WITH_PY)
-    if(arch_x8664)
-        set(info_libs_str "${info_libs_str} · Hugging Face Transformers · Coqui TTS · faster-whisper · Mimic 3 · Unikud · WhisperSpeech")
+    if(WITH_FLATPAK)
+        set(info_libs_str "${info_libs_str} · Hugging Face Transformers · Coqui TTS · faster-whisper · \
+Mimic 3 · Unikud · WhisperSpeech · Parler-TTS · Kokoro TTS · F5-TTS")
     endif()
 endif()
 
