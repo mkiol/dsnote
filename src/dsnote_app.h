@@ -471,7 +471,8 @@ class dsnote_app : public QObject {
                                        const QString &name,
                                        const QString &pattern,
                                        const QString &replace,
-                                       const QString &langs, unsigned int type);
+                                       const QString &langs, unsigned int type,
+                                       const QString &test_text);
     Q_INVOKABLE bool trans_rule_re_pattern_valid(const QString &pattern);
     [[nodiscard]] Q_INVOKABLE QVariantList available_stt_models_info() const;
     [[nodiscard]] Q_INVOKABLE QVariantList available_tts_models_info() const;

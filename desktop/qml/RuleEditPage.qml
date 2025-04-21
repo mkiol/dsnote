@@ -26,6 +26,7 @@ DialogPage {
     readonly property int ruleType: rule ? rule[1] : Settings.TransRuleTypeReplaceSimple
     readonly property string ruleLangs: rule ? rule[5] : ""
     readonly property bool ruleCaseSensitive: rule ? rule[0] & Settings.TransRuleCaseSensitive: false
+    readonly property string ruleTestText: (rule && rule.length > 6) ? rule[6] : ""
     readonly property bool canSave: _patternForm.textField.text.length > 0
     readonly property int effectiveWidth: root.implicitWidth - root._leftMargin - root._rightMargin - appWin.padding
 
@@ -64,6 +65,8 @@ DialogPage {
         else
             flags &= ~Settings.TransRuleCaseSensitive
 
+        var test_text = _testTextArea.textArea1.text.trim()
+
         app.update_trans_rule(
                    /*index=*/root.ruleIndex,
                    /*flags=*/flags,
@@ -71,7 +74,8 @@ DialogPage {
                    /*pattern=*/_patternForm.textField.text,
                    /*replace=*/_replaceForm.textField.text,
                    /*langs=*/langsCheckBox.checked ? "" : langsTextField.text.trim(),
-                   /*type=*/_typeForm.type)
+                   /*type=*/_typeForm.type,
+                   /*test_text=*/test_text)
         appWin.openDialog("RuleMgmtPage.qml")
     }
 
@@ -234,7 +238,12 @@ DialogPage {
                 color: _testTextArea.dimColor
             }
 
-            Component.onCompleted: _testTextArea.textArea1.text = app.trans_rules_test_text
+            Component.onCompleted: {
+                if (root.ruleTestText.length === 0)
+                    _testTextArea.textArea1.text = app.trans_rules_test_text
+                else
+                    _testTextArea.textArea1.text = root.ruleTestText
+            }
         }
 
         CheckBox {

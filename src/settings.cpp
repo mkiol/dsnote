@@ -2504,7 +2504,8 @@ QVariantList settings::make_default_trans_rules() {
         /*[3] pattern=*/
         QString{"[\\s\\,\\?\\!\\.]*period[\\s\\,\\?\\!\\.]*(\\w)?"},
         /*[4] replace=*/QString{". \\U\\1"},
-        /*[5] langs=*/QString{"en"}});
+        /*[5] langs=*/QString{"en"},
+        /*[6] test_test=*/QString{}});
     rules.push_back(QVariantList{
         /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetStt,
         /*[1] type=*/
@@ -2517,7 +2518,8 @@ QVariantList settings::make_default_trans_rules() {
         /*[3] pattern=*/
         QString{"[\\s\\,\\?\\!\\.]*comma[\\s\\,\\?\\!\\.]*(\\w)?"},
         /*[4] replace=*/QString{", \\u\\1"},
-        /*[5] langs=*/QString{"en"}});
+        /*[5] langs=*/QString{"en"},
+        /*[6] test_test=*/QString{}});
     rules.push_back(QVariantList{
         /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetStt,
         /*[1] type=*/
@@ -2529,7 +2531,8 @@ QVariantList settings::make_default_trans_rules() {
         /*[3] pattern=*/
         QString{"[\\s*\\,]?new[\\s\\-]*line[\\s\\,\\?\\!\\.]*"},
         /*[4] replace=*/QString{".\\n"},
-        /*[5] langs=*/QString{"en"}});
+        /*[5] langs=*/QString{"en"},
+        /*[6] test_test=*/QString{}});
     // rules.push_back(QVariantList{
     //     /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetTts,
     //     /*[1] type=*/
@@ -2540,7 +2543,8 @@ QVariantList settings::make_default_trans_rules() {
     //     /*[3] pattern=*/
     //     QString{"."},
     //     /*[4] replace=*/QString{". {silence:1s}"},
-    //     /*[5] langs=*/QString{}});
+    //     /*[5] langs=*/QString{},
+    //     /*[6] test_test=*/QString{}});
     rules.push_back(QVariantList{
         /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetTts,
         /*[1] type=*/
@@ -2552,7 +2556,8 @@ QVariantList settings::make_default_trans_rules() {
         /*[3] pattern=*/
         QString{"Micha[lł]"},
         /*[4] replace=*/QString{"Me how"},
-        /*[5] langs=*/QString{"en"}});
+        /*[5] langs=*/QString{"en"},
+        /*[6] test_test=*/QString{}});
     return rules;
 }
 

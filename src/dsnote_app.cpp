@@ -862,7 +862,7 @@ bool dsnote_app::trans_rule_re_pattern_valid(const QString &pattern) {
 void dsnote_app::update_trans_rule(int index, unsigned int flags,
                                    const QString &name, const QString &pattern,
                                    const QString &replace, const QString &langs,
-                                   unsigned int type) {
+                                   unsigned int type, const QString &test_text) {
     if (pattern.isEmpty()) {
         //qWarning() << "invalid trans rule";
         return;
@@ -882,6 +882,7 @@ void dsnote_app::update_trans_rule(int index, unsigned int flags,
         /*[3] pattern=*/pattern,
         /*[4] replace=*/replace,
         /*[5] langs=*/langs,
+        /*[6] test_text=*/test_text,
     };
 
     if (index < 0) {
@@ -895,11 +896,11 @@ void dsnote_app::update_trans_rule(int index, unsigned int flags,
     settings::instance()->set_trans_rules(rules);
 }
 
-QString dsnote_app::trans_rules_test_text() const { return m_translated_text; }
+QString dsnote_app::trans_rules_test_text() const { return m_trans_rules_test_text; }
 
 void dsnote_app::set_trans_rules_test_text(const QString &value) {
-    if (m_translated_text != value) {
-        m_translated_text = value;
+    if (m_trans_rules_test_text != value) {
+        m_trans_rules_test_text = value;
         emit trans_rules_test_text_changed();
     }
 }
