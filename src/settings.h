@@ -617,6 +617,7 @@ class settings : public QSettings, public singleton<settings> {
         TransRuleActionStopListening = 1U << 11U,
         TransRuleActionDeleteLastSentence = 1U << 12U,
         TransRuleActionReadLastSentence = 1U << 13U,
+        TransRuleCaseSensitive = 1U << 14U,
     };
     Q_ENUM(trans_rule_flags_t)
     friend trans_rule_flags_t operator|(trans_rule_flags_t a,

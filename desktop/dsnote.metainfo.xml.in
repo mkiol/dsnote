@@ -100,6 +100,11 @@
   <releases>
     <release version="4.8.0" date="2025-04-13">
       <description>
+      <p>General:</p>
+      <ul>
+      <li>Case-sensitive matching in 'Rules'.
+          To enable case-sensitive matching in text, use the option 'Case sensitive' in the rule editing form.</li>
+      </ul>
       <p>User Interface:</p>
       <ul>
       <li>Speech Note has been translated into Arabic, Catalan, Spanish and French-Canadian languages.</li>

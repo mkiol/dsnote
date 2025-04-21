@@ -724,31 +724,32 @@ settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
 
     // qDebug() << "trans rule:" << rule;
 
+    bool case_sens = (rule.flags & trans_rule_flags_t::TransRuleCaseSensitive);
     bool rule_matches = false;
 
     switch (rule.type) {
         case trans_rule_type_t::TransRuleTypeNone:
             break;
         case trans_rule_type_t::TransRuleTypeMatchSimple:
-            rule_matches = text.contains(rule.pattern, Qt::CaseInsensitive)
+            rule_matches = text.contains(rule.pattern, case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive)
                                ? rule.flags
                                : trans_rule_flags_t::TransRuleNone;
             break;
         case trans_rule_type_t::TransRuleTypeMatchRe:
             rule_matches =
-                text.contains(QRegExp{rule.pattern, Qt::CaseInsensitive});
+                text.contains(QRegExp{rule.pattern, case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive});
             break;
         case trans_rule_type_t::TransRuleTypeReplaceSimple: {
-            rule_matches = text.contains(rule.pattern, Qt::CaseInsensitive);
+            rule_matches = text.contains(rule.pattern, case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive);
             if (rule_matches)
-                text.replace(rule.pattern, rule.replace, Qt::CaseInsensitive);
+                text.replace(rule.pattern, rule.replace, case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive);
             break;
         }
         case trans_rule_type_t::TransRuleTypeReplaceRe: {
             auto replace = rule.replace;
             replace.replace("\\n", "\n");
 
-            QRegExp rx{rule.pattern, Qt::CaseInsensitive};
+            QRegExp rx{rule.pattern, case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive};
 
             rule_matches = text.contains(rx);
             if (rule_matches) {
@@ -832,7 +833,7 @@ dsnote_app::trans_rule_result_t dsnote_app::transform_text(
     return result;
 }
 
-QVariantList dsnote_app::test_trans_rule(const QString &text,
+QVariantList dsnote_app::test_trans_rule(unsigned int flags, const QString &text,
                                          const QString &pattern,
                                          const QString &replace,
                                          unsigned int type) {
@@ -843,14 +844,14 @@ QVariantList dsnote_app::test_trans_rule(const QString &text,
         return {false, out_text};
     }
 
-    auto flags = apply_trans_rule(
-        out_text, {/*flags=*/settings::trans_rule_flags_t::TransRuleNone,
+    auto rflags = apply_trans_rule(
+        out_text, {/*flags=*/static_cast<settings::trans_rule_flags_t>(flags),
                    /*type=*/static_cast<settings::trans_rule_type_t>(type),
                    /*name=*/{},
                    /*pattern=*/pattern,
                    /*replace=*/replace});
 
-    return {(flags & settings::trans_rule_flags_t::TransRuleMatched) > 0,
+    return {(rflags & settings::trans_rule_flags_t::TransRuleMatched) > 0,
             out_text};
 }
 

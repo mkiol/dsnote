@@ -1,4 +1,4 @@
-/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -25,6 +25,7 @@ DialogPage {
     readonly property string ruleReplace: rule ? rule[4] : ""
     readonly property int ruleType: rule ? rule[1] : Settings.TransRuleTypeReplaceSimple
     readonly property string ruleLangs: rule ? rule[5] : ""
+    readonly property bool ruleCaseSensitive: rule ? rule[0] & Settings.TransRuleCaseSensitive: false
     readonly property bool canSave: _patternForm.textField.text.length > 0
     readonly property int effectiveWidth: root.implicitWidth - root._leftMargin - root._rightMargin - appWin.padding
 
@@ -58,6 +59,11 @@ DialogPage {
         else
             flags &= ~Settings.TransRuleTargetTts
 
+        if (caseSensitiveCheckBox.checked)
+            flags |= Settings.TransRuleCaseSensitive
+        else
+            flags &= ~Settings.TransRuleCaseSensitive
+
         app.update_trans_rule(
                    /*index=*/root.ruleIndex,
                    /*flags=*/flags,
@@ -70,7 +76,14 @@ DialogPage {
     }
 
     function testRule() {
+        var flags = rule ? rule[0] : 0
+        if (caseSensitiveCheckBox.checked)
+            flags |= Settings.TransRuleCaseSensitive
+        else
+            flags &= ~Settings.TransRuleCaseSensitive
+
         var result = app.test_trans_rule(
+                    /*flags=*/flags,
                     /*text=*/_testTextArea.textArea1.text,
                     /*pattern=*/_patternForm.textField.text,
                     /*replace=*/_replaceForm.textField.text,
@@ -222,6 +235,14 @@ DialogPage {
             }
 
             Component.onCompleted: _testTextArea.textArea1.text = app.trans_rules_test_text
+        }
+
+        CheckBox {
+            id: caseSensitiveCheckBox
+
+            checked: root.ruleCaseSensitive
+            text: qsTr("Case sensitive")
+            onCheckedChanged: root.testRule()
         }
 
         ComboBoxForm {

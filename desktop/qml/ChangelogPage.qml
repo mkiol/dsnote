@@ -18,7 +18,12 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("User Interface") + "</p>
+        text: "<p>" + qsTr("General") + "</p>
+        <ul>
+        <li>Case-sensitive matching in <i>Rules</i>.
+            To enable case-sensitive matching in text, use the option <i>Case sensitive</i> in the rule editing form.</li>
+        </ul>
+        <p>" + qsTr("User Interface") + "</p>
         <ul>
         <li><i>Speech Note</i> has been translated into Arabic, Chinese, Catalan, Spanish and French-Canadian languages.</li>
         </ul>

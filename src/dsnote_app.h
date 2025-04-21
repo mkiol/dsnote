@@ -462,7 +462,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void set_app_window(QObject *app_window);
     Q_INVOKABLE QString special_key_name(int key) const;
     /* used in QML, returns list: [0] bool:matched, [0] string:out-text */
-    Q_INVOKABLE QVariantList test_trans_rule(const QString &text,
+    Q_INVOKABLE QVariantList test_trans_rule(unsigned int flags,
+                                             const QString &text,
                                              const QString &pattern,
                                              const QString &replace,
                                              unsigned int type);
