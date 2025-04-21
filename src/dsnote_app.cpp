@@ -756,7 +756,7 @@ settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
                     text.replace(rx, replace);
                 } else {
                     int pos = 0;
-                    while ((pos = rx.indexIn(text, pos)) != -1) {
+                    while (pos < text.size() && (pos = rx.indexIn(text, pos)) != -1 && rx.matchedLength() > 0) {
                         QString after = replace;
                         for (int i = 1; i < rx.captureCount() + 1; ++i) {
                             after.replace(QStringLiteral("\\U\\%1").arg(i),
@@ -839,7 +839,7 @@ QVariantList dsnote_app::test_trans_rule(const QString &text,
     QString out_text{text};
 
     if (pattern.isEmpty()) {
-        qWarning() << "invalid trans rule";
+        //qWarning() << "invalid trans rule";
         return {false, out_text};
     }
 
@@ -863,7 +863,7 @@ void dsnote_app::update_trans_rule(int index, unsigned int flags,
                                    const QString &replace, const QString &langs,
                                    unsigned int type) {
     if (pattern.isEmpty()) {
-        qWarning() << "invalid trans rule";
+        //qWarning() << "invalid trans rule";
         return;
     }
 
