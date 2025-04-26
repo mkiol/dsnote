@@ -150,20 +150,20 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="100"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="147"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="17"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="105"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="121"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="211"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="237"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="309"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="403"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="503"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="599"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="616"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="670"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="706"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="734"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="749"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="774"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="110"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="126"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="216"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="242"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="314"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="408"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="508"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="604"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="621"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="675"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="711"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="739"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="754"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="779"/>
         <source>Version %1</source>
         <translation>版本 %1</translation>
     </message>
@@ -172,16 +172,16 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="91"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="137"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="185"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="75"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="113"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="175"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="228"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="289"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="371"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="477"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="529"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="620"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="710"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="80"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="118"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="180"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="233"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="294"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="376"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="482"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="534"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="625"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="715"/>
         <source>Translator</source>
         <translation>翻译器</translation>
     </message>
@@ -190,34 +190,35 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="70"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="131"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="173"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="46"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="170"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="278"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="350"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="454"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="556"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="643"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="684"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="724"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="738"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="758"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="778"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="51"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="175"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="283"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="355"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="459"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="561"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="648"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="689"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="729"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="743"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="763"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="783"/>
         <source>Text to Speech</source>
         <translation>文本转语音</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ChangelogPage.qml" line="53"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="109"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="125"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="21"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="114"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="130"/>
         <source>General</source>
         <translation>通用</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="79"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="181"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="223"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="381"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="507"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="84"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="186"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="228"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="386"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="512"/>
         <source>Accessibility</source>
         <translation>可访问性</translation>
     </message>
@@ -225,24 +226,24 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="62"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="114"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="168"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="25"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="152"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="248"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="341"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="431"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="533"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="603"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="624"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="674"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="742"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="765"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="782"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="30"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="157"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="253"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="346"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="436"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="538"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="608"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="629"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="679"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="747"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="770"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="787"/>
         <source>Speech to Text</source>
         <translation>语音转文本</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="488"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="581"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="493"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="586"/>
         <source>Other</source>
         <translation>其他</translation>
     </message>
@@ -251,17 +252,17 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="87"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="104"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="151"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="21"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="136"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="219"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="241"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="313"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="418"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="518"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="654"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="699"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="718"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="753"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="26"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="141"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="224"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="246"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="318"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="423"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="523"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="659"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="704"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="723"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="758"/>
         <source>User Interface</source>
         <translation>用户界面</translation>
     </message>
@@ -1278,7 +1279,7 @@
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="487"/>
-        <source>Prompt Description</source>
+        <source>Voice Text Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1606,7 +1607,7 @@
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="181"/>
-        <source>This model requires a voice profile</source>
+        <source>This model requires a voice profile.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1705,251 +1706,256 @@
 <context>
     <name>RuleEditPage</name>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="31"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="33"/>
         <source>Edit rule</source>
         <translation>编辑规则</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="40"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="42"/>
         <source>Replace: %1</source>
         <translation>替换：%1</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="92"/>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="269"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="109"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="299"/>
         <source>Pattern</source>
         <translation>模式</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="97"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="114"/>
         <source>A pattern is used to find a match in the text and replace it with another text.</source>
         <translation>模式用于在文本中查找匹配项并将其替换为另一个文本。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="99"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="116"/>
         <source>To define a more advanced pattern, you can use a regular expression.</source>
         <translation>为了定义一个更复杂的模式，可以使用正则表达式。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="106"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="123"/>
         <source>When defining a regular expression pattern, you can use tags for the following character classes:</source>
         <translation>在定义正则表达式模式时，可以使用如下字符类的标记：</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="136"/>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="283"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="153"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="313"/>
         <source>Replacement text</source>
         <translation>替换文本</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="206"/>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="208"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="223"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="225"/>
         <source>Type here to see how the rule changes the text.</source>
         <translation>在此输入以查看规则如何改变文本。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="216"/>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="218"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="233"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="235"/>
         <source>Text after applying the rule.</source>
         <translation>应用规则之后的文本。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="216"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="233"/>
         <source>Red color means that pattern doesn&apos;t match the text.</source>
         <translation>红色表示该模式未匹配文本。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="242"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="272"/>
         <source>Pattern type</source>
         <translation>模式类别</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="244"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="274"/>
         <source>Type of a pattern.</source>
         <translation>模式类别</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="257"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="287"/>
         <source>Replace</source>
         <translation>替换</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="31"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="33"/>
         <source>Create a new rule</source>
         <translation>创建一条新的规则</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="108"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="125"/>
         <source>Matches any character (including newline).</source>
         <translation>匹配任何字符（包括换行符）。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="109"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="126"/>
         <source>Matches a newline.</source>
         <translation>匹配换行符。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="110"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="127"/>
         <source>Matches a non-digit.</source>
         <translation>匹配非数字字符。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="111"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="128"/>
         <source>Matches a whitespace character.</source>
         <translation>匹配空白字符。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="112"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="129"/>
         <source>Matches a non-whitespace character.</source>
         <translation>匹配非空白字符。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="113"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="130"/>
         <source>Matches a word character.</source>
         <translation>匹配单词字符。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="114"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="131"/>
         <source>Matches a non-word character.</source>
         <translation>匹配非单词字符。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="124"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="141"/>
         <source>Matches %1, %2 and %3.</source>
         <translation>匹配 %1，%2 和 %3。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="125"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="142"/>
         <source>Matches any text put in square brackets.</source>
         <translation>匹配方括号中的任何文本。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="126"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="143"/>
         <source>Captures any word ending in a period.</source>
         <translation>捕获任何以句点结尾的单词。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="141"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="158"/>
         <source>A replacement text is inserted instead of the text matched by the pattern.</source>
         <translation>匹配该模式的文本将被替换文本所取代。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="98"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="115"/>
         <source>A simple pattern is just plain text.</source>
         <translation>简单的模式就是纯文本。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="122"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="139"/>
         <source>Here are some examples of regular expression patterns:</source>
         <translation>以下是一些正则表达式模式的示例：</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="142"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="159"/>
         <source>Simple replacement text is just plain text.</source>
         <translation>简单的替换文本即为纯文本。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="143"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="160"/>
         <source>To define more advanced replacement, you can use a regular expression pattern that contains capturing groups.</source>
         <translation>要定义更高级的替换，可以在包含捕获组的正则表达式模式中进行。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="150"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="167"/>
         <source>To pass the captured text from the pattern as a replacement, use the following tags:</source>
         <translation>要将匹配到的文字作为替换文本传递，可以使用以下标签：</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="152"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="169"/>
         <source>Resolves to the text captured in the first capture group.</source>
         <translation>解析为第一个捕获组中捕获的文本。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="153"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="170"/>
         <source>Resolves to the text captured in the second capture group.</source>
         <translation>解析为第二个捕获组中捕获的文本。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="154"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="171"/>
         <source>Makes all characters in the first capture group be capitalized.</source>
         <translation>将第一个捕获组中的所有字符转换为大写。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="155"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="172"/>
         <source>Causes all characters in the first capture group to be lowercase.</source>
         <translation>将第一个捕获组中的所有字符转换为小写。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="179"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="196"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="189"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="206"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="245"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="253"/>
+        <source>Case sensitive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="275"/>
         <source>You can simply replace the found text or replace the text with a regular expression.</source>
         <translation>您可以简单地替换找到的文本，也可以使用正则表达式进行替换。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="258"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="288"/>
         <source>Replace (Regular expression)</source>
         <translation>替换（正则表达式）</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="294"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="324"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="295"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="325"/>
         <source>Optional name of the rule. If the name is not specified, the default name will be used.</source>
         <translation>规则的可选名称。如果没有指定名称，将使用默认名称。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="305"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="335"/>
         <source>Languages</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="311"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="341"/>
         <source>All languages</source>
         <translation>所有语言</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="320"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="350"/>
         <source>List of language codes</source>
         <translation>语言代码列表</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="323"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="353"/>
         <source>A comma separated list of language codes for which the rule should be enabled.</source>
         <translation>以逗号分隔的语言代码列表，指出规则应在哪些语言中启用。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="324"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="354"/>
         <source>Example: %1 means that the rule applies only to Czech, Slovak and Polish languages.</source>
         <translation>例如：%1 指出该规则仅应用于捷克语、斯洛伐克语和波兰语。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="332"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="362"/>
         <source>Types of usage</source>
         <translation>使用类型</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="338"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="368"/>
         <source>Speech to Text</source>
         <translation>语音转文本</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="348"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="378"/>
         <source>Text to Speech</source>
         <translation>文本转语音</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="358"/>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="388"/>
         <source>Read the text</source>
         <translation>朗读文本</translation>
     </message>
@@ -2714,27 +2720,27 @@
         <translation>关闭时清除缓存</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="27"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="32"/>
         <source>Use global keyboard shortcuts</source>
         <translation>使用全局快捷键</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="34"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="39"/>
         <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
         <translation>快捷键允许您使用键盘启动或停止听写和朗读。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="35"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="40"/>
         <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
         <translation>语音转文本的结果可以附加到当前笔记中，插入任何活动窗口（当前处于焦点状态的窗口）或复制到剪贴板。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="36"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="41"/>
         <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
         <translation>文本转语音阅读可以来自当前笔记或剪贴板中的文本。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="37"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="42"/>
         <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
         <translation>快捷键功能即使在应用程序不活动时（例如最小化或后台运行）也能生效。</translation>
     </message>
@@ -2826,160 +2832,160 @@
         <translation>切换到上一个TTS模型</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="43"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="48"/>
         <source>Configure global keyboard shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="61"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="66"/>
         <source>Global keyboard shortcuts</source>
         <translation type="unfinished">全局快捷键</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="82"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="87"/>
         <source>Allow external applications to invoke actions</source>
         <translation>允许外部应用程序调用操作</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="89"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="94"/>
         <source>Action allow external application to invoke certain operation when %1 is running.</source>
         <translation>操作允许外部应用程序在%1运行时调用某些操作。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="98"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="103"/>
         <source>Action allows external application to invoke certain operation when %1 is running.</source>
         <translation>操作允许外部应用程序在%1运行时调用某些操作。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="99"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="104"/>
         <source>An action can be triggered via DBus call or with command-line option.</source>
         <translation>操作可以通过DBus调用或命令行选项触发。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="100"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="105"/>
         <source>The following actions are currently supported:</source>
         <translation>目前支持以下操作：</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="102"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="107"/>
         <source>Starts listening.</source>
         <translation>开始听写。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="103"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="108"/>
         <source>Starts listening and always translate decoded text.</source>
         <translation>开始听写并始终翻译解码后的文本。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="104"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="109"/>
         <source>Starts listening. The decoded text is inserted into the active window.</source>
         <translation>开始听写，解码后的文本将插入到当前活动窗口中。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="105"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="110"/>
         <source>Starts listening. The decoded text is translated and inserted into the active window.</source>
         <translation>开始听写，解码后的文本将被翻译并插入到当前活动窗口中。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="106"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="111"/>
         <source>Starts listening. The decoded text is copied to the clipboard.</source>
         <translation>开始听写，解码后的文本将被复制到剪贴板。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="107"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="112"/>
         <source>Starts listening. The decoded text is translated and copied to the clipboard.</source>
         <translation>开始听写，解码后的文本将被翻译并复制到剪贴板。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="108"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="113"/>
         <source>Stops listening. The already captured voice is decoded into text.</source>
         <translation>停止听写，已捕获的语音将被解码为文本。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="109"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="114"/>
         <source>Starts reading.</source>
         <translation>开始朗读。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="110"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="115"/>
         <source>Starts reading text from the clipboard.</source>
         <translation>开始从剪贴板朗读文本。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="111"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="116"/>
         <source>Starts reading text from command-line option --text.</source>
         <translation>根据命令行选项--text开始朗读文本。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="112"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="117"/>
         <source>Pauses or resumes reading.</source>
         <translation>暂停或继续朗读。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="113"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="118"/>
         <source>Cancels any of the above operations.</source>
         <translation>取消上述任何操作。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="114"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="119"/>
         <source>Switches to next STT model.</source>
         <translation>切换到下一个STT模型。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="115"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="120"/>
         <source>Switches to previous STT model.</source>
         <translation>切换到上一个STT模型。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="116"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="121"/>
         <source>Switches to next TTS model.</source>
         <translation>切换到下一个TTS模型。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="117"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="122"/>
         <source>Switches to previous TTS model.</source>
         <translation>切换到上一个TTS模型。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="118"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="123"/>
         <source>Sets STT model.</source>
         <translation>设置STT模型。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="119"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="124"/>
         <source>Sets TTS model.</source>
         <translation>设置TTS模型。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="121"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="126"/>
         <source>For example, to trigger %1 action, execute the following command: %2.</source>
         <translation>例如，要触发%1操作，请执行以下命令：%2。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="132"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="137"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="380"/>
         <source>Unable to connect to %1 daemon.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="134"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="139"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="382"/>
         <source>For %1 action to work, %2 daemon must be installed and running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="137"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="142"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="385"/>
         <source>Also make sure that the Flatpak application has permission to access %1 daemon socket file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="143"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="148"/>
         <source>Toggle behavior for actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="150"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="155"/>
         <source>Start listening/reading shortcuts or actions will also stop listening/reading if they are triggered while listening/reading is active.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2995,15 +3001,15 @@
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="64"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="317"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="523"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="322"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="528"/>
         <source>Number of simultaneous threads</source>
         <translation>同时运行的线程数量</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="65"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="318"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="524"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="323"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="529"/>
         <source>Set the maximum number of simultaneous CPU threads.</source>
         <translation>设置最大同时运行的CPU线程数。</translation>
     </message>
@@ -3097,12 +3103,12 @@
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="251"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="334"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="359"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="400"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="427"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="540"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="565"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="339"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="364"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="405"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="432"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="545"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="570"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
@@ -3322,162 +3328,162 @@
         <translation>要使%1工作，请下载%2模型。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="235"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="261"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="163"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="233"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="240"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="266"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="168"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="238"/>
         <source>Engine options</source>
         <translation>引擎选项</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="151"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="278"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="484"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="283"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="489"/>
         <source>Profile</source>
         <translation>配置文件</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="172"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="279"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="485"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="284"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="490"/>
         <source>Profiles allow you to change the processing parameters in the engine.</source>
         <translation>配置文件允许您更改引擎中的处理参数。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="173"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="280"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="486"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="285"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="491"/>
         <source>You can set the parameters to get the fastest processing (%1) or the highest accuracy (%2).</source>
         <translation>您可以设置参数以获取最快的处理速度（%1）或最高的准确性（%2）。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="160"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="174"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="281"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="295"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="487"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="501"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="286"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="300"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="492"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="506"/>
         <source>Best performance</source>
         <translation>最佳性能</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="161"/>
         <location filename="../sfos/qml/SettingsPage.qml" line="175"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="282"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="296"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="488"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="502"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="287"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="301"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="493"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="507"/>
         <source>Best quality</source>
         <translation>最佳质量</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="283"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="489"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="288"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="494"/>
         <source>If you want to manually set individual engine parameters, select %1.</source>
         <translation>如果您想手动设置各个引擎参数，请选择 %1。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="284"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="297"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="371"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="385"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="490"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="503"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="289"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="302"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="376"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="390"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="495"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="508"/>
         <source>Custom</source>
         <translation>自定义</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="319"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="525"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="324"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="530"/>
         <source>A higher value does not necessarily speed up decoding.</source>
         <translation>较高的值不一定能加快解码。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="343"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="549"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="348"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="554"/>
         <source>Beam search width</source>
         <translation>束搜索宽度</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="344"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="550"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="349"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="555"/>
         <source>A higher value may improve quality, but decoding time may also increase.</source>
         <translation>较高的值可能会提高质量，但解码时间也可能增加。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="368"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="373"/>
         <source>Audio context size</source>
         <translation>音频上下文大小</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="369"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="374"/>
         <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
         <translation>当设置 %1 时，大小会根据每个音频片段动态调整。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="369"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="383"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="374"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="388"/>
         <source>Dynamic</source>
         <translation>动态</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="370"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="375"/>
         <source>When %1 is set, the default fixed size is used.</source>
         <translation>当设置 %1 时，将使用默认固定大小。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="370"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="384"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="375"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="389"/>
         <location filename="../desktop/qml/SettingsUiPage.qml" line="27"/>
         <source>Default</source>
         <translation>默认</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="371"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="376"/>
         <source>To define a custom size, use the %1 option.</source>
         <translation>要定义自定义大小，请使用 %1 选项。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="372"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="430"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="377"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="435"/>
         <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
         <translation>较小的值会加快解码，但可能会影响准确性。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="414"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="419"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="438"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="575"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="443"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="580"/>
         <source>Use Flash Attention</source>
         <translation>启用闪存注意力</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="445"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="582"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="450"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="587"/>
         <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
         <translation>闪存注意力可能在使用 GPU 加速时减少解码时间。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="446"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="583"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="451"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="588"/>
         <source>Disable this option if you observe problems.</source>
         <translation>如果你发现问题，请禁用该选项。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="454"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="459"/>
         <source>Use %1 model for automatic language detection</source>
         <translation>使用 %1 模型进行自动语言检测</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="461"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="466"/>
         <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
         <translation>在自动语言检测中，将使用 %1 模型而不是选定的模型。</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="462"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="467"/>
         <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
         <translation>这会减少处理时间，但自动检测的语言可能不正确。</translation>
     </message>
@@ -4057,7 +4063,7 @@
     <name>VoiceAudioSampleEditPage</name>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="31"/>
-        <source>Edit voice audio sample</source>
+        <source>Edit audio sample</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4570,550 +4576,550 @@
 <context>
     <name>dsnote_app</name>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4297"/>
+        <location filename="../src/dsnote_app.cpp" line="4299"/>
         <source>Audio</source>
         <translation>音频</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4300"/>
+        <location filename="../src/dsnote_app.cpp" line="4302"/>
         <source>Video</source>
         <translation>视频</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4303"/>
+        <location filename="../src/dsnote_app.cpp" line="4305"/>
         <source>Subtitles</source>
         <translation>字幕</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4312"/>
+        <location filename="../src/dsnote_app.cpp" line="4314"/>
         <source>Unnamed stream</source>
         <translation>未命名流</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4533"/>
+        <location filename="../src/dsnote_app.cpp" line="4535"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4713"/>
-        <location filename="../src/dsnote_app.cpp" line="4759"/>
+        <location filename="../src/dsnote_app.cpp" line="4715"/>
+        <location filename="../src/dsnote_app.cpp" line="4761"/>
         <source>Global keyboard shortcuts</source>
         <translation>全局快捷键</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4696"/>
-        <location filename="../src/dsnote_app.cpp" line="4763"/>
+        <location filename="../src/dsnote_app.cpp" line="4698"/>
+        <location filename="../src/dsnote_app.cpp" line="4765"/>
         <source>Insert text to active window</source>
         <translation>在活动窗口中插入文本</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5234"/>
+        <location filename="../src/dsnote_app.cpp" line="5236"/>
         <source>Voice</source>
         <translation>语音</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5522"/>
-        <location filename="../src/dsnote_app.cpp" line="5547"/>
+        <location filename="../src/dsnote_app.cpp" line="5524"/>
+        <location filename="../src/dsnote_app.cpp" line="5549"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5606"/>
+        <location filename="../src/dsnote_app.cpp" line="5608"/>
         <source>English</source>
         <translation>英语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5607"/>
+        <location filename="../src/dsnote_app.cpp" line="5609"/>
         <source>Chinese</source>
         <translation>中文</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5608"/>
+        <location filename="../src/dsnote_app.cpp" line="5610"/>
         <source>German</source>
         <translation>德语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5609"/>
+        <location filename="../src/dsnote_app.cpp" line="5611"/>
         <source>Spanish</source>
         <translation>西班牙语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5610"/>
+        <location filename="../src/dsnote_app.cpp" line="5612"/>
         <source>Russian</source>
         <translation>俄语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5611"/>
+        <location filename="../src/dsnote_app.cpp" line="5613"/>
         <source>Korean</source>
         <translation>韩语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5612"/>
+        <location filename="../src/dsnote_app.cpp" line="5614"/>
         <source>French</source>
         <translation>法语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5613"/>
+        <location filename="../src/dsnote_app.cpp" line="5615"/>
         <source>Japanese</source>
         <translation>日语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5614"/>
+        <location filename="../src/dsnote_app.cpp" line="5616"/>
         <source>Portuguese</source>
         <translation>葡萄牙语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5615"/>
+        <location filename="../src/dsnote_app.cpp" line="5617"/>
         <source>Turkish</source>
         <translation>土耳其语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5616"/>
+        <location filename="../src/dsnote_app.cpp" line="5618"/>
         <source>Polish</source>
         <translation>波兰语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5617"/>
+        <location filename="../src/dsnote_app.cpp" line="5619"/>
         <source>Catalan</source>
         <translation>加泰罗尼亚语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5618"/>
+        <location filename="../src/dsnote_app.cpp" line="5620"/>
         <source>Dutch</source>
         <translation>荷兰语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5619"/>
+        <location filename="../src/dsnote_app.cpp" line="5621"/>
         <source>Arabic</source>
         <translation>阿拉伯语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5620"/>
+        <location filename="../src/dsnote_app.cpp" line="5622"/>
         <source>Swedish</source>
         <translation>瑞典语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5621"/>
+        <location filename="../src/dsnote_app.cpp" line="5623"/>
         <source>Italian</source>
         <translation>意大利语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5622"/>
+        <location filename="../src/dsnote_app.cpp" line="5624"/>
         <source>Indonesian</source>
         <translation>印度尼西亚语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5623"/>
+        <location filename="../src/dsnote_app.cpp" line="5625"/>
         <source>Hindi</source>
         <translation>印地语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5624"/>
+        <location filename="../src/dsnote_app.cpp" line="5626"/>
         <source>Finnish</source>
         <translation>芬兰语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5625"/>
+        <location filename="../src/dsnote_app.cpp" line="5627"/>
         <source>Vietnamese</source>
         <translation>越南语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5626"/>
+        <location filename="../src/dsnote_app.cpp" line="5628"/>
         <source>Hebrew</source>
         <translation>希伯来语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5627"/>
+        <location filename="../src/dsnote_app.cpp" line="5629"/>
         <source>Ukrainian</source>
         <translation>乌克兰语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5628"/>
+        <location filename="../src/dsnote_app.cpp" line="5630"/>
         <source>Greek</source>
         <translation>希腊语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5629"/>
+        <location filename="../src/dsnote_app.cpp" line="5631"/>
         <source>Malay</source>
         <translation>马来语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5630"/>
+        <location filename="../src/dsnote_app.cpp" line="5632"/>
         <source>Czech</source>
         <translation>捷克语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5631"/>
+        <location filename="../src/dsnote_app.cpp" line="5633"/>
         <source>Romanian</source>
         <translation>罗马尼亚语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5632"/>
+        <location filename="../src/dsnote_app.cpp" line="5634"/>
         <source>Danish</source>
         <translation>丹麦语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5633"/>
+        <location filename="../src/dsnote_app.cpp" line="5635"/>
         <source>Hungarian</source>
         <translation>匈牙利语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5634"/>
+        <location filename="../src/dsnote_app.cpp" line="5636"/>
         <source>Tamil</source>
         <translation>泰米尔语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5635"/>
+        <location filename="../src/dsnote_app.cpp" line="5637"/>
         <source>Norwegian</source>
         <translation>挪威语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5636"/>
+        <location filename="../src/dsnote_app.cpp" line="5638"/>
         <source>Thai</source>
         <translation>泰语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5637"/>
+        <location filename="../src/dsnote_app.cpp" line="5639"/>
         <source>Urdu</source>
         <translation>乌尔都语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5638"/>
+        <location filename="../src/dsnote_app.cpp" line="5640"/>
         <source>Croatian</source>
         <translation>克罗地亚语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5639"/>
+        <location filename="../src/dsnote_app.cpp" line="5641"/>
         <source>Bulgarian</source>
         <translation>保加利亚语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5640"/>
+        <location filename="../src/dsnote_app.cpp" line="5642"/>
         <source>Lithuanian</source>
         <translation>立陶宛语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5641"/>
+        <location filename="../src/dsnote_app.cpp" line="5643"/>
         <source>Latin</source>
         <translation>拉丁语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5642"/>
+        <location filename="../src/dsnote_app.cpp" line="5644"/>
         <source>Maori</source>
         <translation>毛利语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5643"/>
+        <location filename="../src/dsnote_app.cpp" line="5645"/>
         <source>Malayalam</source>
         <translation>马拉雅拉姆语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5644"/>
+        <location filename="../src/dsnote_app.cpp" line="5646"/>
         <source>Welsh</source>
         <translation>威尔士语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5645"/>
+        <location filename="../src/dsnote_app.cpp" line="5647"/>
         <source>Slovak</source>
         <translation>斯洛伐克语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5646"/>
+        <location filename="../src/dsnote_app.cpp" line="5648"/>
         <source>Telugu</source>
         <translation>泰卢固语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5647"/>
+        <location filename="../src/dsnote_app.cpp" line="5649"/>
         <source>Persian</source>
         <translation>波斯语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5648"/>
+        <location filename="../src/dsnote_app.cpp" line="5650"/>
         <source>Latvian</source>
         <translation>拉脱维亚语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5649"/>
+        <location filename="../src/dsnote_app.cpp" line="5651"/>
         <source>Bengali</source>
         <translation>孟加拉语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5650"/>
+        <location filename="../src/dsnote_app.cpp" line="5652"/>
         <source>Serbian</source>
         <translation>塞尔维亚语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5651"/>
+        <location filename="../src/dsnote_app.cpp" line="5653"/>
         <source>Azerbaijani</source>
         <translation>阿塞拜疆语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5652"/>
+        <location filename="../src/dsnote_app.cpp" line="5654"/>
         <source>Slovenian</source>
         <translation>斯洛文尼亚语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5653"/>
+        <location filename="../src/dsnote_app.cpp" line="5655"/>
         <source>Kannada</source>
         <translation>卡纳达语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5654"/>
+        <location filename="../src/dsnote_app.cpp" line="5656"/>
         <source>Estonian</source>
         <translation>爱沙尼亚语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5655"/>
+        <location filename="../src/dsnote_app.cpp" line="5657"/>
         <source>Macedonian</source>
         <translation>马其顿语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5656"/>
+        <location filename="../src/dsnote_app.cpp" line="5658"/>
         <source>Breton</source>
         <translation>布雷顿语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5657"/>
+        <location filename="../src/dsnote_app.cpp" line="5659"/>
         <source>Basque</source>
         <translation>巴斯克语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5658"/>
+        <location filename="../src/dsnote_app.cpp" line="5660"/>
         <source>Icelandic</source>
         <translation>冰岛语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5659"/>
+        <location filename="../src/dsnote_app.cpp" line="5661"/>
         <source>Armenian</source>
         <translation>亚美尼亚语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5660"/>
+        <location filename="../src/dsnote_app.cpp" line="5662"/>
         <source>Nepali</source>
         <translation>尼泊尔语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5661"/>
+        <location filename="../src/dsnote_app.cpp" line="5663"/>
         <source>Mongolian</source>
         <translation>蒙古语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5662"/>
+        <location filename="../src/dsnote_app.cpp" line="5664"/>
         <source>Bosnian</source>
         <translation>波斯尼亚语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5663"/>
+        <location filename="../src/dsnote_app.cpp" line="5665"/>
         <source>Kazakh</source>
         <translation>哈萨克语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5664"/>
+        <location filename="../src/dsnote_app.cpp" line="5666"/>
         <source>Albanian</source>
         <translation>阿尔巴尼亚语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5665"/>
+        <location filename="../src/dsnote_app.cpp" line="5667"/>
         <source>Swahili</source>
         <translation>斯瓦希里语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5666"/>
+        <location filename="../src/dsnote_app.cpp" line="5668"/>
         <source>Galician</source>
         <translation>加利西亚语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5667"/>
+        <location filename="../src/dsnote_app.cpp" line="5669"/>
         <source>Marathi</source>
         <translation>马拉地语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5668"/>
+        <location filename="../src/dsnote_app.cpp" line="5670"/>
         <source>Punjabi</source>
         <translation>旁遮普语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5669"/>
+        <location filename="../src/dsnote_app.cpp" line="5671"/>
         <source>Sinhala</source>
         <translation>僧伽罗语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5670"/>
+        <location filename="../src/dsnote_app.cpp" line="5672"/>
         <source>Khmer</source>
         <translation>高棉语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5671"/>
+        <location filename="../src/dsnote_app.cpp" line="5673"/>
         <source>Shona</source>
         <translation>绍纳语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5672"/>
+        <location filename="../src/dsnote_app.cpp" line="5674"/>
         <source>Yoruba</source>
         <translation>约鲁巴语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5673"/>
+        <location filename="../src/dsnote_app.cpp" line="5675"/>
         <source>Somali</source>
         <translation>索马里语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5674"/>
+        <location filename="../src/dsnote_app.cpp" line="5676"/>
         <source>Afrikaans</source>
         <translation>南非语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5675"/>
+        <location filename="../src/dsnote_app.cpp" line="5677"/>
         <source>Occitan</source>
         <translation>奥克语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5676"/>
+        <location filename="../src/dsnote_app.cpp" line="5678"/>
         <source>Georgian</source>
         <translation>格鲁吉亚语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5677"/>
+        <location filename="../src/dsnote_app.cpp" line="5679"/>
         <source>Belarusian</source>
         <translation>白俄罗斯语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5678"/>
+        <location filename="../src/dsnote_app.cpp" line="5680"/>
         <source>Tajik</source>
         <translation>塔吉克语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5679"/>
+        <location filename="../src/dsnote_app.cpp" line="5681"/>
         <source>Sindhi</source>
         <translation>信德语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5680"/>
+        <location filename="../src/dsnote_app.cpp" line="5682"/>
         <source>Gujarati</source>
         <translation>古贾里语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5681"/>
+        <location filename="../src/dsnote_app.cpp" line="5683"/>
         <source>Amharic</source>
         <translation>阿姆哈拉语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5682"/>
+        <location filename="../src/dsnote_app.cpp" line="5684"/>
         <source>Yiddish</source>
         <translation>伊地语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5683"/>
+        <location filename="../src/dsnote_app.cpp" line="5685"/>
         <source>Lao</source>
         <translation>老挝语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5684"/>
+        <location filename="../src/dsnote_app.cpp" line="5686"/>
         <source>Uzbek</source>
         <translation>乌兹别克语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5685"/>
+        <location filename="../src/dsnote_app.cpp" line="5687"/>
         <source>Faroese</source>
         <translation>法罗语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5686"/>
+        <location filename="../src/dsnote_app.cpp" line="5688"/>
         <source>Haitian creole</source>
         <translation>海地克里奥尔语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5687"/>
+        <location filename="../src/dsnote_app.cpp" line="5689"/>
         <source>Pashto</source>
         <translation>普什图语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5688"/>
+        <location filename="../src/dsnote_app.cpp" line="5690"/>
         <source>Turkmen</source>
         <translation>土库曼语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5689"/>
+        <location filename="../src/dsnote_app.cpp" line="5691"/>
         <source>Nynorsk</source>
         <translation>挪威语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5690"/>
+        <location filename="../src/dsnote_app.cpp" line="5692"/>
         <source>Maltese</source>
         <translation>马耳他语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5691"/>
+        <location filename="../src/dsnote_app.cpp" line="5693"/>
         <source>Sanskrit</source>
         <translation>梵文</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5692"/>
+        <location filename="../src/dsnote_app.cpp" line="5694"/>
         <source>Luxembourgish</source>
         <translation>卢森堡语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5693"/>
+        <location filename="../src/dsnote_app.cpp" line="5695"/>
         <source>Myanmar</source>
         <translation>缅甸语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5694"/>
+        <location filename="../src/dsnote_app.cpp" line="5696"/>
         <source>Tibetan</source>
         <translation>藏语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5695"/>
+        <location filename="../src/dsnote_app.cpp" line="5697"/>
         <source>Tagalog</source>
         <translation>塔加洛语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5696"/>
+        <location filename="../src/dsnote_app.cpp" line="5698"/>
         <source>Malagasy</source>
         <translation>马达加斯加语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5697"/>
+        <location filename="../src/dsnote_app.cpp" line="5699"/>
         <source>Assamese</source>
         <translation>阿萨姆语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5698"/>
+        <location filename="../src/dsnote_app.cpp" line="5700"/>
         <source>Tatar</source>
         <translation>鞑靼语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5699"/>
+        <location filename="../src/dsnote_app.cpp" line="5701"/>
         <source>Hawaiian</source>
         <translation>夏威夷语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5700"/>
+        <location filename="../src/dsnote_app.cpp" line="5702"/>
         <source>Lingala</source>
         <translation>林加拉语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5701"/>
+        <location filename="../src/dsnote_app.cpp" line="5703"/>
         <source>Hausa</source>
         <translation>豪萨语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5702"/>
+        <location filename="../src/dsnote_app.cpp" line="5704"/>
         <source>Bashkir</source>
         <translation>巴什基尔语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5703"/>
+        <location filename="../src/dsnote_app.cpp" line="5705"/>
         <source>Javanese</source>
         <translation>爪哇语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5704"/>
+        <location filename="../src/dsnote_app.cpp" line="5706"/>
         <source>Sundanese</source>
         <translation>巽他语</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5705"/>
+        <location filename="../src/dsnote_app.cpp" line="5707"/>
         <source>Cantonese</source>
         <translation>广东话</translation>
     </message>
@@ -5466,12 +5472,12 @@
         <translation>示例：将“%1”替换为“%2”，并以大写字母开始下一个单词。</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2514"/>
+        <location filename="../src/settings.cpp" line="2515"/>
         <source>Example: Replace &quot;%1&quot; with &quot;%2&quot; and start the next word with a lowercase letter</source>
         <translation>示例：将“%1”替换为“%2”，并以小写字母开始下一个单词。</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2527"/>
+        <location filename="../src/settings.cpp" line="2529"/>
         <source>Example: Insert newline instead of the word &quot;%1&quot;</source>
         <translation>示例：用换行符代替单词“%1”</translation>
     </message>
@@ -5480,14 +5486,14 @@
         <translation type="vanished">示例：在“%1”后添加静音。</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2550"/>
+        <location filename="../src/settings.cpp" line="2554"/>
         <source>Example: Correct pronunciation of the Polish name &quot;%1&quot;</source>
         <translation>示例：正确发音的波兰名字“%1”</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2630"/>
-        <location filename="../src/settings.cpp" line="2632"/>
-        <location filename="../src/settings.cpp" line="2799"/>
+        <location filename="../src/settings.cpp" line="2635"/>
+        <location filename="../src/settings.cpp" line="2637"/>
+        <location filename="../src/settings.cpp" line="2804"/>
         <source>Clone of &quot;%1&quot;</source>
         <translation>克隆“%1”</translation>
     </message>
