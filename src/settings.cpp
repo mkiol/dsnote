@@ -476,17 +476,6 @@ void settings::set_py_path(const QString& value) {
     }
 }
 
-bool settings::use_toggle_for_hotkey() const {
-    return value(QStringLiteral("use_toggle_for_hotkey"), true).toBool();
-}
-
-void settings::set_use_toggle_for_hotkey(bool value) {
-    if (use_toggle_for_hotkey() != value) {
-        setValue(QStringLiteral("use_toggle_for_hotkey"), value);
-        emit use_toggle_for_hotkey_changed();
-    }
-}
-
 QString settings::default_tts_model_for_mnt_lang(const QString& lang) {
     return value(QStringLiteral("default_tts_model_for_mnt_%1").arg(lang), {})
         .toString();
@@ -909,39 +898,6 @@ void settings::set_mtag_artist_name(const QString& value) {
 
 QString settings::mtag_artist_name() const {
     return value(QStringLiteral("mtag_artist_name"), "Speech Note").toString();
-}
-
-bool settings::mtag() const {
-    return value(QStringLiteral("mtag"), false).toBool();
-}
-
-void settings::set_mtag(bool value) {
-    if (mtag() != value) {
-        setValue(QStringLiteral("mtag"), value);
-        emit mtag_changed();
-    }
-}
-
-bool settings::translator_mode() const {
-    return value(QStringLiteral("translator_mode"), false).toBool();
-}
-
-void settings::set_translator_mode(bool value) {
-    if (translator_mode() != value) {
-        setValue(QStringLiteral("translator_mode"), value);
-        emit translator_mode_changed();
-    }
-}
-
-bool settings::translate_when_typing() const {
-    return value(QStringLiteral("translate_when_typing"), false).toBool();
-}
-
-void settings::set_translate_when_typing(bool value) {
-    if (translate_when_typing() != value) {
-        setValue(QStringLiteral("translate_when_typing"), value);
-        emit translate_when_typing_changed();
-    }
 }
 
 settings::text_format_t settings::mnt_text_format() const {
@@ -1861,17 +1817,6 @@ void settings::set_audio_input_device(const QString& value) {
     if (value != audio_input_device()) {
         setValue(QStringLiteral("audio_input_device"), value);
         emit audio_input_device_changed();
-    }
-}
-
-bool settings::hotkeys_enabled() const {
-    return value(QStringLiteral("hotkeys_enabled"), false).toBool();
-}
-
-void settings::set_hotkeys_enabled(bool value) {
-    if (value != hotkeys_enabled()) {
-        setValue(QStringLiteral("hotkeys_enabled"), value);
-        emit hotkeys_enabled_changed();
     }
 }
 

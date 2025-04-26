@@ -40,7 +40,12 @@
     X(start_in_tray, false)                     \
     X(clean_ref_voice, true)                    \
     X(stt_clear_mic_audio_when_decoding, false) \
-    X(stt_play_beep, false)
+    X(stt_play_beep, false)                     \
+    X(translate_when_typing, false)             \
+    X(translator_mode, false)                   \
+    X(hotkeys_enabled, false)                   \
+    X(mtag, false)                              \
+    X(use_toggle_for_hotkey, true)
 
 // name, default value
 #define GPU_SCAN_TABLE                                                 \
@@ -158,7 +163,6 @@ class settings : public QSettings, public singleton<settings> {
                    NOTIFY video_file_save_dir_changed)
     Q_PROPERTY(QString video_file_save_filename READ video_file_save_filename
                    NOTIFY video_file_save_dir_changed)
-
     Q_PROPERTY(QString text_file_save_dir READ text_file_save_dir WRITE
                    set_text_file_save_dir NOTIFY text_file_save_dir_changed)
     Q_PROPERTY(QUrl text_file_save_dir_url READ text_file_save_dir_url WRITE
@@ -167,7 +171,6 @@ class settings : public QSettings, public singleton<settings> {
                    NOTIFY text_file_save_dir_changed)
     Q_PROPERTY(QString text_file_save_filename READ text_file_save_filename
                    NOTIFY text_file_save_dir_changed)
-
     Q_PROPERTY(QString file_open_dir READ file_open_dir WRITE set_file_open_dir
                    NOTIFY file_open_dir_changed)
     Q_PROPERTY(QUrl file_open_dir_url READ file_open_dir_url WRITE
@@ -176,11 +179,6 @@ class settings : public QSettings, public singleton<settings> {
                    file_open_dir_changed)
     Q_PROPERTY(QString prev_app_ver READ prev_app_ver WRITE set_prev_app_ver
                    NOTIFY prev_app_ver_changed)
-    Q_PROPERTY(bool translator_mode READ translator_mode WRITE
-                   set_translator_mode NOTIFY translator_mode_changed)
-    Q_PROPERTY(
-        bool translate_when_typing READ translate_when_typing WRITE
-            set_translate_when_typing NOTIFY translate_when_typing_changed)
     Q_PROPERTY(text_format_t mnt_text_format READ mnt_text_format WRITE
                    set_mnt_text_format NOTIFY mnt_text_format_changed)
     Q_PROPERTY(text_format_t stt_tts_text_format READ stt_tts_text_format WRITE
@@ -211,9 +209,6 @@ class settings : public QSettings, public singleton<settings> {
                    set_mtag_album_name NOTIFY mtag_album_name_changed)
     Q_PROPERTY(QString mtag_artist_name READ mtag_artist_name WRITE
                    set_mtag_artist_name NOTIFY mtag_artist_name_changed)
-    Q_PROPERTY(bool mtag READ mtag WRITE set_mtag NOTIFY mtag_changed)
-    Q_PROPERTY(bool hotkeys_enabled READ hotkeys_enabled WRITE
-                   set_hotkeys_enabled NOTIFY hotkeys_enabled_changed)
     Q_PROPERTY(hotkeys_type_t hotkeys_type READ hotkeys_type WRITE
                    set_hotkeys_type NOTIFY hotkeys_type_changed)
     Q_PROPERTY(QVariantList hotkeys_table READ hotkeys_table NOTIFY
@@ -224,9 +219,6 @@ class settings : public QSettings, public singleton<settings> {
     HOTKEY_TABLE
 #undef X
 
-    Q_PROPERTY(
-        bool use_toggle_for_hotkey READ use_toggle_for_hotkey WRITE
-            set_use_toggle_for_hotkey NOTIFY use_toggle_for_hotkey_changed)
     Q_PROPERTY(
         desktop_notification_policy_t desktop_notification_policy READ
             desktop_notification_policy WRITE set_desktop_notification_policy
@@ -723,10 +715,6 @@ class settings : public QSettings, public singleton<settings> {
     QString file_audio_open_dir() const;
     QString prev_app_ver() const;
     void set_prev_app_ver(const QString &value);
-    bool translator_mode() const;
-    void set_translator_mode(bool value);
-    bool translate_when_typing() const;
-    void set_translate_when_typing(bool value);
     void set_mnt_text_format(text_format_t value);
     text_format_t mnt_text_format() const;
     void set_stt_tts_text_format(text_format_t value);
@@ -755,12 +743,7 @@ class settings : public QSettings, public singleton<settings> {
     void set_mtag_album_name(const QString &value);
     QString mtag_artist_name() const;
     void set_mtag_artist_name(const QString &value);
-    void set_mtag(bool value);
-    bool mtag() const;
     QString audio_format_str() const;
-
-    bool hotkeys_enabled() const;
-    void set_hotkeys_enabled(bool value);
     hotkeys_type_t hotkeys_type() const;
     void set_hotkeys_type(hotkeys_type_t value);
     QVariantList hotkeys_table() const;
@@ -772,8 +755,6 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE void reset_hotkey_##name();
     HOTKEY_TABLE
 #undef X
-    void set_use_toggle_for_hotkey(bool value);
-    bool use_toggle_for_hotkey() const;
     desktop_notification_policy_t desktop_notification_policy() const;
     void set_desktop_notification_policy(desktop_notification_policy_t value);
     bool desktop_notification_details() const;
@@ -1013,8 +994,6 @@ class settings : public QSettings, public singleton<settings> {
     void file_open_dir_changed();
     void file_audio_open_dir_changed();
     void prev_app_ver_changed();
-    void translator_mode_changed();
-    void translate_when_typing_changed();
     void default_tts_models_for_mnt_changed(const QString &lang);
     void qt_style_changed();
     void restart_required_changed();
@@ -1026,8 +1005,6 @@ class settings : public QSettings, public singleton<settings> {
     void audio_quality_changed();
     void mtag_album_name_changed();
     void mtag_artist_name_changed();
-    void mtag_changed();
-    void hotkeys_enabled_changed();
     void hotkeys_changed();
     void hotkeys_type_changed();
     void hotkeys_table_changed();
@@ -1051,7 +1028,6 @@ class settings : public QSettings, public singleton<settings> {
     void mix_volume_change_changed();
     void x11_compose_file_changed();
     void fake_keyboard_layout_changed();
-    void use_toggle_for_hotkey_changed();
     void error_flags_changed();
     void settings_stt_engine_idx_changed();
     void settings_tts_engine_idx_changed();
