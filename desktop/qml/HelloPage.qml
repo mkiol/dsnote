@@ -25,7 +25,7 @@ DialogPage {
                    "<p>" + qsTr("To get started, you first need to set up the languages you want to use.") + "</p>" +
                    "<p>&rarr; " +
                    qsTr("Click the %1 button, select a language, and then download the model files you intend to use.")
-                   .arg("<i>" + qsTr("Languages & Models") + "</i>") + "</p>" +
+                   .arg("<i>" + qsTr("Languages and Models") + "</i>") + "</p>" +
                    "<p>" +
                    qsTr("To switch between %1 and %2 modes, use the toggle buttons in the upper right corner.")
                    .arg("<i>" + qsTr("Notepad") + "</i>").arg("<i>" + qsTr("Translator") + "</i>") + "</p>" +

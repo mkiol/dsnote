@@ -717,7 +717,7 @@
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="28"/>
-        <source>Languages &amp; Models</source>
+        <source>Languages and Models</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -934,7 +934,7 @@
         <location filename="../sfos/qml/MainToolBar.qml" line="31"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="169"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="176"/>
-        <source>Languages &amp; Models</source>
+        <source>Languages and Models</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1546,7 +1546,7 @@
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="109"/>
         <location filename="../desktop/qml/Notepad.qml" line="22"/>
-        <source>Languages &amp; Models</source>
+        <source>Languages and Models</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3857,7 +3857,7 @@
     <message>
         <location filename="../sfos/qml/Translator.qml" line="77"/>
         <location filename="../desktop/qml/Translator.qml" line="27"/>
-        <source>Languages &amp; Models</source>
+        <source>Languages and Models</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4490,7 +4490,7 @@
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="78"/>
-        <source>Include the term %1 to generate the highest quality audio, and %2 for high levels of background noise</source>
+        <source>Include the term %1 to generate the highest quality audio, and %2 for high levels of background noise.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

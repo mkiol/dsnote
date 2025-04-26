@@ -166,14 +166,14 @@ ToolBar {
                     ToolButton {
                         action: Action {
                             enabled: !app.busy
-                            text: qsTr("Languages & Models").replace("&", "&&")
+                            text: qsTr("Languages and Models")
                             shortcut: "Ctrl+L"
                             onTriggered: appWin.openDialog("LangsPage.qml")
                         }
 
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTr("Languages & Models") + " (Ctrl+L)"
+                        ToolTip.text: qsTr("Languages and Models") + " (Ctrl+L)"
                         hoverEnabled: true
                     }
 

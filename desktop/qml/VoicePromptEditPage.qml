@@ -75,7 +75,7 @@ DialogPage {
                 wrapMode: Text.Wrap
                 text: qsTr("Tips:") +
                       "<ul>" +
-                      "<li>" + qsTr("Include the term %1 to generate the highest quality audio, and %2 for high levels of background noise")
+                      "<li>" + qsTr("Include the term %1 to generate the highest quality audio, and %2 for high levels of background noise.")
                                 .arg("<i>\"very clear audio\"</i>").arg("<i>\"very noisy audio\"</i>") + "</li>" +
                       "<li>" + qsTr("Use emotions: %1, %2, %3, %4")
                                 .arg("<i>\"happy\"</i>").arg("<i>\"confused\"</i>").arg("<i>\"laughing\"</i>").arg("<i>\"sad\"</i>") + "</li>" +

@@ -24,7 +24,7 @@ ColumnLayout {
                                                   mntOutCombo.first.combo.implicitWidth)
     readonly property string placeholderText: qsTr("Translator model has not been set up yet.") + " " +
                                               qsTr("Go to the %1 to download models for the languages you intend to use.")
-                                                .arg("<i>" + qsTr("Languages & Models") + "</i>")
+                                                .arg("<i>" + qsTr("Languages and Models") + "</i>")
     readonly property alias verticalMode: grid.verticalMode
 
     Connections {
