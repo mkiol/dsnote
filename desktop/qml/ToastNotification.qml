@@ -14,6 +14,18 @@ ToolTip {
     delay: 0
     anchors.centerIn: parent
 
+    function invertColor(color) {
+        var r = 1 - color.r
+        var g = 1 - color.g
+        var b = 1 - color.b
+        return Qt.rgba(r, g, b, color.a)
+    }
+
+    Component.onCompleted: {
+        if (background && background.color)
+            contentItem.color = invertColor(background.color)
+    }
+
     contentItem: Label {
         text: root.text
         font: root.font
