@@ -61,10 +61,42 @@ std::ostream& operator<<(std::ostream& os,
 }
 
 namespace py_tools {
-libs_availability_t libs_availability() {
+libs_availability_t libs_availability(libs_scan_type_t scan_type) {
     // run only in py thread
 
     libs_availability_t availability{};
+
+    switch (scan_type) {
+        case libs_scan_type_t::on:
+            break;
+        case libs_scan_type_t::off_all_enabled:
+            if (cpu_tools::cpuinfo().feature_flags &
+                cpu_tools::feature_flags_t::avx) {
+                availability.coqui_tts = true;
+                availability.whisperspeech_tts = true;
+                availability.parler_tts = true;
+                availability.f5_tts = true;
+                availability.kokoro_tts = true;
+                availability.kokoro_ja = true;
+                availability.kokoro_zh = true;
+            }
+            availability.faster_whisper = true;
+            availability.mimic3_tts = true;
+            availability.transformers = true;
+            availability.unikud = true;
+            availability.gruut_de = true;
+            availability.gruut_es = true;
+            availability.gruut_fa = true;
+            availability.gruut_fr = true;
+            availability.gruut_it = true;
+            availability.gruut_nl = true;
+            availability.gruut_ru = true;
+            availability.gruut_sw = true;
+            availability.mecab = true;
+            break;
+        case libs_scan_type_t::off_all_disabled:
+            return availability;
+    }
 
 #ifdef USE_PY
     namespace py = pybind11;
@@ -103,7 +135,25 @@ libs_availability_t libs_availability() {
         } catch (const std::exception& err) {
             LOGD("torch cuda check py error: " << err.what());
         }
+    }
 
+    try {
+        LOGD("checking: ctranslate2-cuda");
+        auto ct2 = py::module_::import("ctranslate2");
+        LOGD("ctranslate2 version: "
+             << ct2.attr("__version__").cast<std::string>());
+        availability.ctranslate2_cuda =
+            py::len(ct2.attr("get_supported_compute_types")("cuda")) > 0;
+    } catch (const std::exception& err) {
+        LOGD("ctranslate2-cuda check py error: " << err.what());
+    }
+
+    if (scan_type == libs_scan_type_t::off_all_enabled ||
+        scan_type == libs_scan_type_t::off_all_disabled) {
+        return availability;
+    }
+
+    if (cpu_tools::cpuinfo().feature_flags & cpu_tools::feature_flags_t::avx) {
         try {
             LOGD("checking: coqui tts");
             py::module_::import("TTS");
@@ -168,17 +218,6 @@ libs_availability_t libs_availability() {
             availability.faster_whisper = true;
         } catch (const std::exception& err) {
             LOGD("faster-whisper check py error: " << err.what());
-        }
-
-        try {
-            LOGD("checking: ctranslate2-cuda");
-            auto ct2 = py::module_::import("ctranslate2");
-            LOGD("ctranslate2 version: "
-                 << ct2.attr("__version__").cast<std::string>());
-            availability.ctranslate2_cuda =
-                py::len(ct2.attr("get_supported_compute_types")("cuda")) > 0;
-        } catch (const std::exception& err) {
-            LOGD("ctranslate2-cuda check py error: " << err.what());
         }
 
         try {

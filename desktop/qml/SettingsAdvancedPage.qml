@@ -257,26 +257,42 @@ ColumnLayout {
         text: qsTranslate("SettingsPage", "Libraries")
     }
 
-    CheckBox {
-        checked: _settings.py_feature_scan
-        text: qsTranslate("SettingsPage", "Use Python libriaries")
-        onCheckedChanged: {
-            _settings.py_feature_scan = checked
+    ComboBoxForm {
+        id: pyScanModeCombo
+
+        label.text: qsTranslate("SettingsPage", "Detection of Python libraries")
+        toolTip: qsTranslate("SettingsPage", "Determine how and whether Python libraries are detected when the application is launched.")
+        comboBox {
+            currentIndex: {
+                if (_settings.py_scan_mode === Settings.PyScanOn) return 0
+                if (_settings.py_scan_mode === Settings.PyScanOffAllEnabled) return 1
+                if (_settings.py_scan_mode === Settings.PyScanOffAllDisabled) return 2
+                return _settings.is_xcb() ? 1 : 2
+            }
+            model: [
+                qsTranslate("SettingsPage", "On"),
+                qsTranslate("SettingsPage", "Off (Assume all are available)"),
+                qsTranslate("SettingsPage", "Off (Assume none are available)"),
+            ]
+            onActivated: {
+                if (index === 0) {
+                    _settings.py_scan_mode = Settings.PyScanOn
+                } else if (index === 1) {
+                    _settings.py_scan_mode = Settings.PyScanOffAllEnabled
+                } else if (index === 2) {
+                    _settings.py_scan_mode = Settings.PyScanOffAllDisabled
+                } else {
+                    _settings.py_scan_mode = Settings.PyScanOn;
+                }
+            }
         }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "Check the presence of the required Python libraries.") + " " +
-                      qsTranslate("SettingsPage", "Disable this option if you observe problems when launching the application.")
-        hoverEnabled: true
-
     }
 
     TextFieldForm {
         id: pyTextField
 
         indends: 1
-        visible: _settings.py_feature_scan
+        visible: _settings.py_scan_mode === Settings.PyScanOn || _settings.py_scan_mode === Settings.PyScanOffAllEnabled
         label.text: qsTranslate("SettingsPage", "Location of Python libraries (version: %1)").arg(app.py_version.length === 0 ? "0.0.0" : app.py_version)
         toolTip: qsTranslate("SettingsPage", "Python libraries directory (%1).").arg("<i>PYTHONPATH</i>") + " " +
                  qsTranslate("SettingsPage", "Leave blank to use the default value.") + " " +

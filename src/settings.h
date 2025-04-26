@@ -351,8 +351,8 @@ class settings : public QSettings, public singleton<settings> {
                    set_default_mnt_out_lang NOTIFY default_mnt_out_lang_changed)
     Q_PROPERTY(QString audio_input_device READ audio_input_device WRITE
                    set_audio_input_device NOTIFY audio_input_device_changed)
-    Q_PROPERTY(bool py_feature_scan READ py_feature_scan WRITE
-                   set_py_feature_scan NOTIFY py_feature_scan_changed)
+    Q_PROPERTY(py_scan_mode_t py_scan_mode READ py_scan_mode WRITE
+                   set_py_scan_mode NOTIFY py_scan_mode_changed)
     Q_PROPERTY(
         cache_audio_format_t cache_audio_format READ cache_audio_format WRITE
             set_cache_audio_format NOTIFY cache_audio_format_changed)
@@ -646,6 +646,13 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(voice_profile_type_t)
 
+    enum class py_scan_mode_t {
+        PyScanOn = 0,
+        PyScanOffAllDisabled = 1,
+        PyScanOffAllEnabled = 2
+    };
+    Q_ENUM(py_scan_mode_t)
+
     struct voice_profile_prompt_t {
         QString name;
         QString desc;
@@ -907,8 +914,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_enabled_models(const QStringList &value);
     QString audio_input_device() const;
     void set_audio_input_device(const QString &value);
-    bool py_feature_scan() const;
-    void set_py_feature_scan(bool value);
+    py_scan_mode_t py_scan_mode() const;
+    void set_py_scan_mode(py_scan_mode_t value);
     int num_threads() const;
     void set_num_threads(int value);
     QString py_path() const;
@@ -1053,7 +1060,7 @@ class settings : public QSettings, public singleton<settings> {
     void default_mnt_lang_changed();
     void default_mnt_out_lang_changed();
     void audio_input_device_changed();
-    void py_feature_scan_changed();
+    void py_scan_mode_changed();
     void cache_audio_format_changed();
     void cache_policy_changed();
     void num_threads_changed();

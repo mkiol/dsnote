@@ -27,6 +27,7 @@
 #include <thread>
 
 #include "config.h"
+#include "cpu_tools.hpp"
 #include "gpu_tools.hpp"
 #include "logger.hpp"
 #include "module_tools.hpp"
@@ -2104,14 +2105,21 @@ void settings::set_tts_tag_mode(tts_tag_mode_t value) {
     }
 }
 
-bool settings::py_feature_scan() const {
-    return value(QStringLiteral("service/py_feature_scan"), true).toBool();
+settings::py_scan_mode_t settings::py_scan_mode() const {
+    return static_cast<py_scan_mode_t>(
+        value(QStringLiteral("service/py_scan_mode"),
+              static_cast<int>(is_flatpak() && cpu_tools::arch() ==
+                                                   cpu_tools::arch_t::x86_64
+                                   ? py_scan_mode_t::PyScanOffAllEnabled
+                                   : py_scan_mode_t::PyScanOn))
+            .toInt());
 }
 
-void settings::set_py_feature_scan(bool value) {
-    if (value != py_feature_scan()) {
-        setValue(QStringLiteral("service/py_feature_scan"), value);
-        emit py_feature_scan_changed();
+void settings::set_py_scan_mode(py_scan_mode_t value) {
+    if (value != py_scan_mode()) {
+        setValue(QStringLiteral("service/py_scan_mode"),
+                 static_cast<int>(value));
+        emit py_scan_mode_changed();
 
         set_restart_required(true);
     }
@@ -2218,7 +2226,7 @@ void settings::disable_hw_scan() {
 }
 
 void settings::disable_py_scan() {
-    set_py_feature_scan(false);
+    set_py_scan_mode(py_scan_mode_t::PyScanOffAllDisabled);
     set_restart_required(false);
 }
 

@@ -11,6 +11,7 @@
 #include <iostream>
 
 namespace py_tools {
+enum class libs_scan_type_t { on, off_all_disabled, off_all_enabled };
 inline static const auto python_site_path = "python/site-packages";
 
 struct py_version_t {
@@ -46,7 +47,7 @@ struct libs_availability_t {
     bool mecab = false;
 };
 
-libs_availability_t libs_availability();
+libs_availability_t libs_availability(libs_scan_type_t scan_type);
 bool init_module();
 }  // namespace py_tools
 

@@ -106,12 +106,25 @@ void py_executor::loop() {
     try {
         m_py_interpreter.emplace();
 
-        if (settings::instance()->py_feature_scan()) {
-            libs_availability = py_tools::libs_availability();
-        } else {
-            LOGW("py scan is off");
-            libs_availability = py_tools::libs_availability_t{};
-        }
+#ifdef USE_PY
+        libs_availability = py_tools::libs_availability(
+            [scan_type = settings::instance()->py_scan_mode()] {
+                switch (scan_type) {
+                    case settings::py_scan_mode_t::PyScanOn:
+                        LOGD("py scan mode: on");
+                        return py_tools::libs_scan_type_t::on;
+                    case settings::py_scan_mode_t::PyScanOffAllEnabled:
+                        LOGD("py scan mode: off-all-enabled");
+                        return py_tools::libs_scan_type_t::off_all_enabled;
+                    case settings::py_scan_mode_t::PyScanOffAllDisabled:
+                        LOGD("py scan mode: off-all-disabled");
+                        return py_tools::libs_scan_type_t::off_all_disabled;
+                }
+                LOGF("invalid py scan mode");
+            }());
+#else
+        libs_availability = py_tools::libs_availability_t{};
+#endif
 
         while (!m_shutting_down) {
             std::unique_lock<std::mutex> lock{m_mutex};
