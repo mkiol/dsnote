@@ -31,6 +31,7 @@ class global_hotkeys_manager : public QObject {
     bool is_x11_supported() const;
     bool is_portal_supported() const;
     void set_portal_bindings();
+    void reset_portal_connection();
 
    Q_SIGNALS:
     void hotkey_activated(const QString& action_id, const QString& extra);
@@ -54,13 +55,14 @@ class global_hotkeys_manager : public QObject {
 #undef X
     };
     x11_hotkeys_t m_x11_hotkeys;
+    bool m_force_bind = false;
 
     void enable_x11();
     void disable_x11();
     void handle_x11_activated();
 #endif
 
-    void create_portal_session();
+    void create_portal_session(bool force_bind = false);
     void fetch_portal_shortcuts();
     QString get_portal_request_token();
     void enable_or_disable();

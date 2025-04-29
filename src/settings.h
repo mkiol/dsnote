@@ -669,6 +669,7 @@ class settings : public QSettings, public singleton<settings> {
     void disable_py_scan();
 #ifdef USE_DESKTOP
     void update_qt_style(QQmlApplicationEngine *engine);
+    bool use_default_qt_style();
 #endif
     // app
 #define X(name, _)     \
@@ -848,6 +849,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE bool is_wayland() const;
     Q_INVOKABLE bool is_xcb() const;
     Q_INVOKABLE bool is_flatpak() const;
+    Q_INVOKABLE bool is_kde() const { return m_kde; }
     Q_INVOKABLE QStringList qt_styles() const;
     Q_INVOKABLE bool file_exists(const QString &file_path) const;
     Q_INVOKABLE QString
@@ -1095,6 +1097,7 @@ class settings : public QSettings, public singleton<settings> {
     unsigned int m_error_flags = error_flags_t::ErrorNoError;
     unsigned int m_system_flags = system_flags_t::SystemNone;
     bool m_native_style = false;
+    bool m_kde = false;
 
     static QString settings_filepath();
     void set_restart_required(bool value);

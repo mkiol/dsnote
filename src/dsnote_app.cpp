@@ -5713,6 +5713,6 @@ QString dsnote_app::stt_auto_lang_name() const {
 
 void dsnote_app::open_hotkeys_editor() {
 #ifdef USE_DESKTOP
-    m_gs_manager.set_portal_bindings();
+    m_gs_manager.reset_portal_connection();
 #endif
 }

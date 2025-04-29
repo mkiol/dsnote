@@ -1321,7 +1321,7 @@ QStringList settings::qt_styles() const {
 bool settings::is_native_style() const { return m_native_style; }
 
 #ifdef USE_DESKTOP
-static bool use_default_qt_style() {
+bool settings::use_default_qt_style() {
     const auto* desk_name_str = getenv("XDG_CURRENT_DESKTOP");
     if (!desk_name_str) {
         LOGD("no XDG_CURRENT_DESKTOP");
@@ -1332,7 +1332,9 @@ static bool use_default_qt_style() {
 
     QString desk_name{desk_name_str};
 
-    return desk_name.contains("KDE") || desk_name.contains("XFCE");
+    m_kde = desk_name.contains("KDE");
+
+    return m_kde || desk_name.contains("XFCE");
 }
 
 void settings::update_qt_style(QQmlApplicationEngine* engine) {

@@ -8,6 +8,7 @@
 #include "global_hotkeys_manager.hpp"
 
 #include <QDebug>
+#include <QRandomGenerator>
 
 #include "config.h"
 #include "dbus_portal_request_inf.h"
@@ -103,12 +104,16 @@ void global_hotkeys_manager::handle_portal_activated(
     emit hotkey_activated(action_id, {});
 }
 
-void global_hotkeys_manager::create_portal_session() {
+void global_hotkeys_manager::create_portal_session(bool force_bind) {
     LOGD("[dbus] call CreateSession");
 
+    auto handle_token = QStringLiteral(APP_ID "_%1")
+                            .arg(QRandomGenerator::global()->generate());
+    m_force_bind = force_bind;
+
     auto reply = m_portal_inf.CreateSession({
-        {QLatin1String("session_handle_token"), APP_ID},
-        {QLatin1String("handle_token"), APP_ID},
+        {QLatin1String("session_handle_token"), handle_token},
+        {QLatin1String("handle_token"), handle_token},
     });
 
     reply.waitForFinished();
@@ -152,7 +157,7 @@ void global_hotkeys_manager::fetch_portal_shortcuts() {
         return;
     }
 
-    auto req = new OrgFreedesktopPortalRequestInterface(
+    auto *req = new OrgFreedesktopPortalRequestInterface(
         DBUS_SERVICE_NAME, reply.value().path(), QDBusConnection::sessionBus(),
         this);
 
@@ -178,7 +183,6 @@ void global_hotkeys_manager::handle_list_shortcuts_response(
     const auto arg = results["shortcuts"].value<QDBusArgument>();
     arg >> s;
 
-    QString desc;
     for (auto it = s.cbegin(), it_end = s.cend(); it != it_end; ++it) {
         LOGD("portal hotkey: " << it->first << " "
                                << it->second["description"].toString() << " "
@@ -187,6 +191,7 @@ void global_hotkeys_manager::handle_list_shortcuts_response(
 
     if (s.isEmpty()) {
         set_portal_bindings();
+        m_force_bind = false;
         return;
     }
 
@@ -204,11 +209,13 @@ void global_hotkeys_manager::handle_list_shortcuts_response(
         return true;
     }();
 
-    if (all_shortcuts_configured) {
+    if (all_shortcuts_configured && !m_force_bind) {
         LOGD("portal global shortcuts already configured");
     } else {
         set_portal_bindings();
     }
+
+    m_force_bind = false;
 }
 
 void global_hotkeys_manager::handle_bind_shortcuts_response(
@@ -327,6 +334,17 @@ void global_hotkeys_manager::handle_x11_activated() {
     auto action_id = sender()->property("action").toString();
     LOGD("x11 hotkey activated: " << action_id);
     emit hotkey_activated(action_id, {});
+}
+
+void global_hotkeys_manager::reset_portal_connection() {
+    if (!is_portal_supported()) {
+        LOGW("portal not supported");
+        return;
+    }
+
+    disable_portal();
+
+    create_portal_session(/*force_bind=*/true);
 }
 
 #endif  // USE_X11_FEATURES

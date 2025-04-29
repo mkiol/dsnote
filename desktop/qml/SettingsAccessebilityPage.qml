@@ -44,7 +44,9 @@ ColumnLayout {
     }
 
     Button {
-        visible: _settings.hotkeys_enabled && app.feature_hotkeys
+        id: gsConfButton
+
+        visible: _settings.hotkeys_enabled && app.feature_hotkeys && (_settings.hotkeys_type === Settings.HotkeysTypeX11 || _settings.is_kde())
         text: qsTranslate("SettingsPage", "Configure global keyboard shortcuts")
         Layout.leftMargin: appWin.padding
         onClicked: {
@@ -57,6 +59,14 @@ ColumnLayout {
                 break
             }
         }
+    }
+
+    TipMessage {
+        color: palette.text
+        indends: 1
+        visible: _settings.hotkeys_enabled && app.feature_hotkeys && !gsConfButton.visible
+        text: qsTranslate("SettingsPage", "Global keyboard shortcuts are managed through the %1.").arg("<i>XDG Desktop Portal</i>") + " " +
+              qsTranslate("SettingsPage", "Use your desktop environment configuration tool to change key bindings.")
     }
 
     Component {
