@@ -166,20 +166,20 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="100"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="147"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="17"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="110"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="126"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="216"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="242"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="314"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="408"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="508"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="604"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="621"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="675"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="711"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="739"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="754"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="779"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="112"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="128"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="218"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="244"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="316"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="410"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="510"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="606"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="623"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="677"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="713"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="741"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="756"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="781"/>
         <source>Version %1</source>
         <translation>Wersja %1</translation>
     </message>
@@ -188,16 +188,16 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="91"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="137"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="185"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="80"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="118"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="180"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="233"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="294"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="376"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="482"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="534"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="625"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="715"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="82"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="120"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="182"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="235"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="296"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="378"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="484"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="536"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="627"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="717"/>
         <source>Translator</source>
         <translation>Tłumacz</translation>
     </message>
@@ -206,35 +206,35 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="70"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="131"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="173"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="51"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="175"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="283"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="355"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="459"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="561"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="648"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="689"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="729"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="743"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="763"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="783"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="53"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="177"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="285"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="357"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="461"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="563"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="650"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="691"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="731"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="745"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="765"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="785"/>
         <source>Text to Speech</source>
         <translation>Tekst na Mowę</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ChangelogPage.qml" line="53"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="21"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="114"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="130"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="116"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="132"/>
         <source>General</source>
         <translation>Ogólne</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="84"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="186"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="228"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="386"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="512"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="86"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="188"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="230"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="388"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="514"/>
         <source>Accessibility</source>
         <translation>Dostępność</translation>
     </message>
@@ -243,23 +243,23 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="114"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="168"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="30"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="157"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="253"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="346"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="436"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="538"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="608"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="629"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="679"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="747"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="770"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="787"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="159"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="255"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="348"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="438"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="540"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="610"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="631"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="681"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="749"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="772"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="789"/>
         <source>Speech to Text</source>
         <translation>Mowa na Tekst</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="493"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="586"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="495"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="588"/>
         <source>Other</source>
         <translation>Inne</translation>
     </message>
@@ -269,16 +269,16 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="104"/>
         <location filename="../sfos/qml/ChangelogPage.qml" line="151"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="26"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="141"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="224"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="246"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="318"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="423"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="523"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="659"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="704"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="723"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="758"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="143"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="226"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="248"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="320"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="425"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="525"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="661"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="706"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="725"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="760"/>
         <source>User Interface</source>
         <translation>Interfejs użytkownika</translation>
     </message>
@@ -6058,230 +6058,240 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation type="vanished">Skróty rozpoczęcie słuchania/czytania zatrzymają również słuchanie/czytanie, jeśli zostaną uruchomione, gdy słuchanie/czytanie jest aktywne.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="48"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="50"/>
         <source>Configure global keyboard shortcuts</source>
         <translation>Konfiguruj globalne skróty klawiszowe</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="66"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="68"/>
+        <source>Global keyboard shortcuts are managed through the %1.</source>
+        <translation>Globalne skróty klawiszowe są zarządzane przez %1.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="69"/>
+        <source>Use your desktop environment configuration tool to change key bindings.</source>
+        <translation>Użyj narzędzia konfiguracji środowiska graficznego, aby zmienić przypisanie skrótów klawiszowych.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="76"/>
         <source>Global keyboard shortcuts</source>
         <translation>Globalne skróty klawiszowe</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="71"/>
+        <location filename="../src/settings.h" line="76"/>
         <source>Start listening</source>
         <translation>Rozpocznij słuchanie</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="74"/>
+        <location filename="../src/settings.h" line="79"/>
         <source>Start listening, always translate</source>
         <translation>Rozpocznij słuchanie, zawsze tłumacz</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="78"/>
+        <location filename="../src/settings.h" line="83"/>
         <source>Start listening, text to active window</source>
         <translation>Rozpocznij słuchanie, tekst do aktywnego okna</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="83"/>
+        <location filename="../src/settings.h" line="88"/>
         <source>Start listening, always translate, text to active window</source>
         <translation>Rozpocznij słuchanie, zawsze tłumacz, tekst do aktywnego okna</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="88"/>
+        <location filename="../src/settings.h" line="93"/>
         <source>Start listening, text to clipboard</source>
         <translation>Rozpocznij słuchanie, tekst do schowka</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="93"/>
+        <location filename="../src/settings.h" line="98"/>
         <source>Start listening, always translate, text to clipboard</source>
         <translation>Rozpocznij słuchanie, zawsze tłumacz, tekst do schowka</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="98"/>
+        <location filename="../src/settings.h" line="103"/>
         <source>Stop listening</source>
         <translation>Zatrzymaj słuchanie</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="101"/>
+        <location filename="../src/settings.h" line="106"/>
         <source>Start reading</source>
         <translation>Rozpocznij czytanie</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="104"/>
+        <location filename="../src/settings.h" line="109"/>
         <source>Start reading text from clipboard</source>
         <translation>Rozpocznij czytanie tekstu ze schowka</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="108"/>
+        <location filename="../src/settings.h" line="113"/>
         <source>Pause/Resume reading</source>
         <translation>Wstrzymaj/Wznów czytanie</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="113"/>
+        <location filename="../src/settings.h" line="118"/>
         <source>Switch to next STT model</source>
         <translation>Przełącz na następny model STT</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="119"/>
+        <location filename="../src/settings.h" line="124"/>
         <source>Switch to previous STT model</source>
         <translation>Przełącz na poprzedni model STT</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="116"/>
+        <location filename="../src/settings.h" line="121"/>
         <source>Switch to next TTS model</source>
         <translation>Przełącz na następny model TTS</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="123"/>
+        <location filename="../src/settings.h" line="128"/>
         <source>Switch to previous TTS model</source>
         <translation>Przełącz na poprzedni model TTS</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="87"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="97"/>
         <source>Allow external applications to invoke actions</source>
         <translation>Zezwalaj zewnętrznym aplikacjom na uruchamianie akcji</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="94"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="104"/>
         <source>Action allow external application to invoke certain operation when %1 is running.</source>
         <translation>Zezwalaj zewnętrznym aplikacjom na uruchamianie pewnych funkcji kiedy %1 jest uruchomiony.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="103"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="113"/>
         <source>Action allows external application to invoke certain operation when %1 is running.</source>
         <translation>Akcje pozwalają zewnętrznym aplikacjom na uruchamianie pewnych funkcji kiedy %1 jest uruchomiony.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="104"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="114"/>
         <source>An action can be triggered via DBus call or with command-line option.</source>
         <translation>Akcja może być uruchomiona za pomocą DBus albo za pomocą opcji w linii poleceń.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="105"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="115"/>
         <source>The following actions are currently supported:</source>
         <translation>Następujące akcje ją obecnie obsługiwane:</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="107"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="117"/>
         <source>Starts listening.</source>
         <translation>Rozpoczyna słuchanie.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="108"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="118"/>
         <source>Starts listening and always translate decoded text.</source>
         <translation>Rozpocznij słuchanie i zawsze tłumacz tekst.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="109"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="119"/>
         <source>Starts listening. The decoded text is inserted into the active window.</source>
         <translation>Rozpoczyna słuchanie. Tekst jest wstawiany do aktywnego okna.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="110"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="120"/>
         <source>Starts listening. The decoded text is translated and inserted into the active window.</source>
         <translation>Rozpoczyna słuchanie. Tekst jest tłumaczony i wstawiany do aktywnego okna.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="111"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="121"/>
         <source>Starts listening. The decoded text is copied to the clipboard.</source>
         <translation>Rozpoczyna słuchanie. Tekst jest kopiowany do schowka.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="112"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="122"/>
         <source>Starts listening. The decoded text is translated and copied to the clipboard.</source>
         <translation>Rozpoczyna słuchanie. Tekst jest tłumaczony i kopiowany do schowka.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="113"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="123"/>
         <source>Stops listening. The already captured voice is decoded into text.</source>
         <translation>Zatrzymuje słuchanie. Zarejestrowany głos jest przetwarzany na tekst.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="114"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="124"/>
         <source>Starts reading.</source>
         <translation>Rozpoczyna czytanie.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="115"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="125"/>
         <source>Starts reading text from the clipboard.</source>
         <translation>Rozpoczyna czytanie tekstu ze schowka.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="116"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="126"/>
         <source>Starts reading text from command-line option --text.</source>
         <translation>Rozpoczyna czytanie tekstu podanego w wierszu poleceń (opcja --text).</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="117"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="127"/>
         <source>Pauses or resumes reading.</source>
         <translation>Wstrzymuje lub wznawia czytanie.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="118"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="128"/>
         <source>Cancels any of the above operations.</source>
         <translation>Anuluje wszystkiepowyższe akcje.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="119"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="129"/>
         <source>Switches to next STT model.</source>
         <translation>Przełącza na nastepny model STT.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="120"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="130"/>
         <source>Switches to previous STT model.</source>
         <translation>Przełącza na poprzedni model STT.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="121"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="131"/>
         <source>Switches to next TTS model.</source>
         <translation>Przełącza na nastepny model TTS.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="122"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="132"/>
         <source>Switches to previous TTS model.</source>
         <translation>Przełącza na poprzedni model TTS.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="123"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="133"/>
         <source>Sets STT model.</source>
         <translation>Ustawia model STT.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="124"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="134"/>
         <source>Sets TTS model.</source>
         <translation>Ustawia model TTS.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="126"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="136"/>
         <source>For example, to trigger %1 action, execute the following command: %2.</source>
         <translation>Przykładowo, aby uruchomić akcję %1, użyj następującego polecenia: %2.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="137"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="380"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="147"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="396"/>
         <source>Unable to connect to %1 daemon.</source>
         <translation>Nie można połączyć się z demonem %1.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="139"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="382"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="149"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="398"/>
         <source>For %1 action to work, %2 daemon must be installed and running.</source>
         <translation>Aby akcja %1 działała, demon %2 musi być zainstalowany i uruchomiony.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="142"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="385"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="152"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="401"/>
         <source>Also make sure that the Flatpak application has permission to access %1 daemon socket file.</source>
         <translation>Upewnij się również, że aplikacja Flatpak ma uprawnienia dostępu do pliku socketa demona %1.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="148"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="158"/>
         <source>Toggle behavior for actions</source>
         <translation>Przełączanie zachowania dla akcji</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="155"/>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="165"/>
         <source>Start listening/reading shortcuts or actions will also stop listening/reading if they are triggered while listening/reading is active.</source>
         <translation>Rozpoczęcie słuchania/czytania skrótów lub akcji spowoduje również zatrzymanie słuchania/czytania, jeśli zostaną one uruchomione, gdy słuchanie/czytanie jest aktywne.</translation>
     </message>
@@ -6309,80 +6319,94 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation>Resetuj</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="284"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="352"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="263"/>
+        <source>Detection of Python libraries</source>
+        <translation>Wykrywanie bibliotek Pythona</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="264"/>
+        <source>Determine how and whether Python libraries are detected when the application is launched.</source>
+        <translation>Określenie, w jaki sposób i czy biblioteki Python są wykrywane podczas uruchamiania aplikacji.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="273"/>
+        <source>On</source>
+        <translation>Włączone</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="300"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="368"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="168"/>
         <source>Make sure that the Flatpak application has permissions to access the directory.</source>
         <translation>Upewnij się, że aplikacja Flatpak ma uprawnienia dostępu do katalogu.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="302"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="318"/>
         <source>Keystroke sending method</source>
         <translation>Metoda wysyłania naciśnięć klawiszy</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="313"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="329"/>
         <source>Legacy</source>
         <translation>Własny (przestarzały)</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="333"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="349"/>
         <source>Keystroke delay</source>
         <translation>Opóźnienie naciśnięcia klawisza</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="334"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="350"/>
         <source>The delay between simulated keystrokes used in %1.</source>
         <translation>Opóźnienie między symulowanymi naciśnięciami klawiszy używanymi w %1.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="348"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="364"/>
         <source>Compose file</source>
         <translation>Plik &quot;Compose&quot;</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="349"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="365"/>
         <source>X11 compose file used in %1.</source>
         <translation>Plik &quot;X11 compose&quot; używany w %1.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="363"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="379"/>
         <source>Keyboard layout</source>
         <translation>Układ klawiatury</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="364"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="380"/>
         <source>Keyboard layout used in %1.</source>
         <translation>Układ klawiatury używany w %1.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="391"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="407"/>
         <source>Other options</source>
         <translation>Inne opcje</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="398"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="414"/>
         <source>Global keyboard shortcuts method</source>
         <translation>Metoda globalnych skrótów klawiszowych</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="399"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="415"/>
         <source>Method used to set global keyboard shortcuts.</source>
         <translation>Metoda używana do ustawiania globalnych skrótów klawiszowych.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="295"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="304"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="334"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="349"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="364"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="311"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="320"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="350"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="365"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="380"/>
         <source>Insert into active window</source>
         <translation>Wstaw tekst do aktywnego okna</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="262"/>
         <source>Use Python libriaries</source>
-        <translation>Używaj bibliotek Python</translation>
+        <translation type="vanished">Używaj bibliotek Python</translation>
     </message>
     <message>
         <source>Translator</source>
@@ -6460,27 +6484,37 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation type="vanished">Położenie bibliotek Python</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="282"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="289"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="350"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="357"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="365"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="369"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="298"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="305"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="366"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="373"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="381"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="385"/>
         <source>Leave blank to use the default value.</source>
         <translation>Pozostaw puste aby używać domyślnego położenia.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="281"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="297"/>
         <source>Python libraries directory (%1).</source>
         <translation>Położenie blibliotek Python (%1).</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="280"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="274"/>
+        <source>Off (Assume all are available)</source>
+        <translation>Wyłączone (Załóż, że wszystkie są dostępne)</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="275"/>
+        <source>Off (Assume none are available)</source>
+        <translation>Wyłączone (Załóż, że żadne nie są dostępne)</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="296"/>
         <source>Location of Python libraries (version: %1)</source>
         <translation>Lokalizacja bibliotek Pythona (wersja: %1)</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="285"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="301"/>
         <source>This option may be useful if you use %1 module to manage Python libraries.</source>
         <translation>Opcja może być przydatna jeśli wykorzystujesz %1 do zarządzania bibliotekami Python.</translation>
     </message>
@@ -6489,7 +6523,7 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation type="vanished">Zapisz</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="303"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="319"/>
         <source>Simulated keystroke sending method used in %1.</source>
         <translation>Symulowana metoda wysyłania naciśnięć klawiszy używana w %1.</translation>
     </message>
@@ -6519,7 +6553,6 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="177"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="207"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="222"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="270"/>
         <source>Disable this option if you observe problems when launching the application.</source>
         <translation>Wyłącz tę opcję jeśli zauważysz problemy podczas uchuchamiania aplikacji.</translation>
     </message>
@@ -6838,9 +6871,8 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation type="vanished">Sprawdź zależności Python</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="269"/>
         <source>Check the presence of the required Python libraries.</source>
-        <translation>Sprawdź czy dostępne są w systemie wymagane bliblioteki Python-a.</translation>
+        <translation type="vanished">Sprawdź czy dostępne są w systemie wymagane bliblioteki Python-a.</translation>
     </message>
     <message>
         <source>Disable this option if you observe problems when using Speech to Text.</source>
@@ -6882,7 +6914,7 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation type="vanished">Wybierz preferowaną kartę graficzną do przyspieszenia sprzętowego.</translation>
     </message>
     <message>
-        <location filename="../src/settings.h" line="110"/>
+        <location filename="../src/settings.h" line="115"/>
         <source>Cancel</source>
         <translation>Anuluj</translation>
     </message>
@@ -12006,27 +12038,27 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
 <context>
     <name>settings</name>
     <message>
-        <location filename="../src/settings.cpp" line="899"/>
+        <location filename="../src/settings.cpp" line="889"/>
         <source>Speech notes</source>
         <translation>Notatki głosowe</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="1357"/>
+        <location filename="../src/settings.cpp" line="1314"/>
         <source>Don&apos;t force any style</source>
         <translation>Nie wymuszaj żadnego stylu</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2501"/>
+        <location filename="../src/settings.cpp" line="2456"/>
         <source>Example: Replace &quot;%1&quot; with &quot;%2&quot; and start the next word with a capital letter</source>
         <translation>Przykład: Zamień &quot;%1&quot; na &quot;%2&quot; i zacznij nowy wyraz wielką literą</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2515"/>
+        <location filename="../src/settings.cpp" line="2470"/>
         <source>Example: Replace &quot;%1&quot; with &quot;%2&quot; and start the next word with a lowercase letter</source>
         <translation>Przykład: Zamień &quot;%1&quot; na &quot;%2&quot; i zacznij nowy wyraz małą literą</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2529"/>
+        <location filename="../src/settings.cpp" line="2484"/>
         <source>Example: Insert newline instead of the word &quot;%1&quot;</source>
         <translation>Przykład: Wstaw nową linię zamiast wyrazu &quot;%1&quot;</translation>
     </message>
@@ -12035,14 +12067,14 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation type="vanished">Przykład: Wstaw ciszę po &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2554"/>
+        <location filename="../src/settings.cpp" line="2509"/>
         <source>Example: Correct pronunciation of the Polish name &quot;%1&quot;</source>
         <translation>Przykład: Popraw wymowę polskiego imienia &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2635"/>
-        <location filename="../src/settings.cpp" line="2637"/>
-        <location filename="../src/settings.cpp" line="2804"/>
+        <location filename="../src/settings.cpp" line="2590"/>
+        <location filename="../src/settings.cpp" line="2592"/>
+        <location filename="../src/settings.cpp" line="2759"/>
         <source>Clone of &quot;%1&quot;</source>
         <translation>Klon: &quot;%1&quot;</translation>
     </message>
@@ -12051,7 +12083,7 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
         <translation type="vanished">Nie wymuszaj</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="1482"/>
+        <location filename="../src/settings.cpp" line="1441"/>
         <source>Auto</source>
         <translation>Automatycznie</translation>
     </message>
