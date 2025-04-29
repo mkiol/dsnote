@@ -10,11 +10,16 @@ ExternalProject_Add(xdo
     CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR>
     BUILD_COMMAND make libxdo.a
     BUILD_ALWAYS False
-    INSTALL_COMMAND make PREFIX=<INSTALL_DIR> install && cp <BINARY_DIR>/libxdo.a ${external_lib_dir}/
+    INSTALL_COMMAND PKG_CONFIG_PATH=${external_lib_dir}/pkgconfig
+        make PREFIX=<INSTALL_DIR> install &&
+        cp <BINARY_DIR>/libxdo.a ${external_lib_dir}/
 )
 
 list(APPEND deps_libs "${external_lib_dir}/libxdo.a")
 list(APPEND deps xdo)
+if(BUILD_XKBCOMMON)
+    ExternalProject_Add_StepDependencies(xdo configure xkbcommon)
+endif()
 
 # libxdo depends on Xtst and Xinerama
 pkg_search_module(xtst REQUIRED xtst)
