@@ -23,7 +23,7 @@ Name: OpenBLAS
 Description: OpenBLAS
 Version: ${BALS_VERSION}
 URL: https://github.com/OpenMathLib/OpenBLAS
-Libs: -fopenmp -L\${libdir\} -l\${libnameprefix}openblas\${libnamesuffix\${libsuffix}
+Libs: -fopenmp -L\${libdir\} -l\${libnameprefix}openblas\${libnamesuffix}\${libsuffix}
 Cflags: -I\${includedir}
 ")
     # search again
