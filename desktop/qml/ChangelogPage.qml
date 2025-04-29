@@ -39,6 +39,8 @@ DialogPage {
             The models have significantly improved accuracy compared to regular Whisper models.
             Even \"Tiny\" model provides decent quality.
             KBLab models are available as both <i>FasterWhisper</i> and <i>WhisperCpp</i>.</li>
+        <li><i>FUTO</i> Whisper models.
+            New models used in the FUTO mobile keyboard app.</li>
         <li>Using an existing note as the initial context in decoding.
             This has the potential to improve transcription quality and reduce \"hallucination\" problem.
             If you observe a degradation in quality, turn off the <i>Use note as context</i> option.</li>
