@@ -718,11 +718,7 @@
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="28"/>
         <source>Languages and Models</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Languages</source>
-        <translation type="vanished">Lingue</translation>
+        <translation>Lingue e Modelli</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="30"/>
@@ -862,7 +858,7 @@
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="546"/>
         <source>Experimental</source>
-        <translation type="unfinished"></translation>
+        <translation>Sperimentale</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="589"/>
@@ -897,7 +893,7 @@
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="550"/>
         <source>This model is experimental and may not work well.</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo modello è sperimentale e potrebbe non funzionare bene.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="613"/>
@@ -937,7 +933,7 @@
         <location filename="../desktop/qml/MainToolBar.qml" line="169"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="176"/>
         <source>Languages and Models</source>
-        <translation type="unfinished"></translation>
+        <translation>Lingue e Modelli</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="38"/>
@@ -1001,10 +997,6 @@
         <translation>File</translation>
     </message>
     <message>
-        <source>Languages</source>
-        <translation type="vanished">Lingue</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="40"/>
         <source>Open Menu</source>
         <translation>Apri il menu</translation>
@@ -1064,11 +1056,7 @@
         <location filename="../desktop/qml/MainToolBar.qml" line="236"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="243"/>
         <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Voice samples</source>
-        <translation type="vanished">Campioni vocali</translation>
+        <translation>Profili delle voci</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="251"/>
@@ -1282,7 +1270,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="487"/>
         <source>Voice Text Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descrizione del testo vocale</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="504"/>
@@ -1418,12 +1406,12 @@
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="255"/>
         <source>Voice Text Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descrizione del testo vocale</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="269"/>
         <source>Model card</source>
-        <translation type="unfinished"></translation>
+        <translation>Modello scheda</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="295"/>
@@ -1443,7 +1431,7 @@
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="322"/>
         <source>This model is experimental and may not work well.</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo modello è sperimentale e potrebbe non funzionare bene.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="332"/>
@@ -1542,14 +1530,10 @@
         <translation>Vai su %1 per scaricare i modelli per le lingue che intendi utilizzare.</translation>
     </message>
     <message>
-        <source>Languages</source>
-        <translation type="vanished">Lingue</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/Notepad.qml" line="109"/>
         <location filename="../desktop/qml/Notepad.qml" line="22"/>
         <source>Languages and Models</source>
-        <translation type="unfinished"></translation>
+        <translation>Lingue e Modelli</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="123"/>
@@ -1610,30 +1594,22 @@
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="181"/>
         <source>This model requires a voice profile.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restart the application to apply changes.</source>
-        <translation type="obsolete">Riavviare l&apos;applicazione per applicare le modifiche.</translation>
+        <translation>Questo modello richiede un profilo voce.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="182"/>
         <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Profili delle voci</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="183"/>
         <source>Voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profilo della voce</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="186"/>
         <source>No voice profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This model requires a voice sample.</source>
-        <translation type="vanished">Questo modello richiede un campione vocale.</translation>
+        <translation>Nessun profilo voce</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="182"/>
@@ -1641,26 +1617,14 @@
         <translation>Modello di sintesi vocale</translation>
     </message>
     <message>
-        <source>Voice samples</source>
-        <translation type="vanished">Campioni vocali</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/Notepad.qml" line="182"/>
         <source>Create one in %1.</source>
         <translation>Creane uno in %1.</translation>
     </message>
     <message>
-        <source>Voice sample</source>
-        <translation type="vanished">Campione vocale</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/Notepad.qml" line="184"/>
         <source>Speech speed</source>
         <translation>Velocità del parlato</translation>
-    </message>
-    <message>
-        <source>No voice sample</source>
-        <translation type="vanished">Nessun campione vocale</translation>
     </message>
 </context>
 <context>
@@ -1707,13 +1671,6 @@
         <location filename="../sfos/qml/PackItem.qml" line="61"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Start listening, always translate</source>
-        <translation type="obsolete">Inizia ad ascoltare, traduci sempre</translation>
     </message>
 </context>
 <context>
@@ -1905,7 +1862,7 @@
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="253"/>
         <source>Case sensitive</source>
-        <translation type="unfinished"></translation>
+        <translation>Maiuscole e minuscole</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="275"/>
@@ -2200,13 +2157,6 @@
     </message>
 </context>
 <context>
-    <name>Settings</name>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Inizia ad ascoltare</translation>
-    </message>
-</context>
-<context>
     <name>SettingsPage</name>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="30"/>
@@ -2398,19 +2348,19 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="203"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="117"/>
         <source>Use note as context</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizzare la nota come contesto</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="207"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="124"/>
         <source>Use an existing note as the initial context in decoding.</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizzare una nota esistente come contesto iniziale nella decodifica.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="218"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="138"/>
         <source>Temporarily pause listening for the duration of audio processing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettere temporaneamente in pausa l&apos;ascolto per la durata dell&apos;elaborazione audio.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="516"/>
@@ -2689,25 +2639,25 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="458"/>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="72"/>
         <source>Normalize audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Normalizza l&apos;audio</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="459"/>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="79"/>
         <source>The volume of the audio will be normalized.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il volume dell&apos;audio verrà normalizzato.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="460"/>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="80"/>
         <source>The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il volume viene normalizzato in modo indipendente per ogni frase, il che può portare a livelli di volume instabili in frasi diverse.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="461"/>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="81"/>
         <source>Disable this option if you observe this problem.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se riscontri questo problema, disattiva questa opzione.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="522"/>
@@ -2741,36 +2691,24 @@
         <translation>Le scorciatoie da tastiera funzionano anche quando l&apos;applicazione non è attiva (ad esempio ridotta a icona o in background).</translation>
     </message>
     <message>
-        <source>This feature only works under X11.</source>
-        <translation type="vanished">Questa funzionalità funziona solo con X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="vanished">Attiva comportamento</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="vanished">Le scorciatoie Avvia ascolto/lettura interromperanno anche l&apos;ascolto/lettura se vengono attivate mentre l&apos;ascolto/lettura è attivo.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="50"/>
         <source>Configure global keyboard shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurare le scorciatoie da tastiera globale</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="68"/>
         <source>Global keyboard shortcuts are managed through the %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le scorciatoie da tastiera globale vengono gestite tramite %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="69"/>
         <source>Use your desktop environment configuration tool to change key bindings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Per modificare le associazioni dei tasti, utilizzare lo strumento di configurazione dell&apos;ambiente desktop.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="76"/>
         <source>Global keyboard shortcuts</source>
-        <translation type="unfinished">Tasti di scelta rapida globali</translation>
+        <translation>Tasti di scelta rapida globali</translation>
     </message>
     <message>
         <location filename="../src/settings.h" line="76"/>
@@ -2971,29 +2909,29 @@
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="147"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="396"/>
         <source>Unable to connect to %1 daemon.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile connettersi al demone %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="149"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="398"/>
         <source>For %1 action to work, %2 daemon must be installed and running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Per far funzionare l&apos;azione %1, il demone %2 deve essere installato e in esecuzione.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="152"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="401"/>
         <source>Also make sure that the Flatpak application has permission to access %1 daemon socket file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Assicurarsi inoltre che l&apos;applicazione Flatpak abbia l&apos;autorizzazione per accedere al file socket del demone %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="158"/>
         <source>Toggle behavior for actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Attiva il comportamento delle azioni</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="165"/>
         <source>Start listening/reading shortcuts or actions will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le scorciatoie o le azioni per avviare l&apos;ascolto/la lettura interromperanno anche l&apos;ascolto/la lettura se vengono attivate mentre l&apos;ascolto/la lettura è attiva.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="25"/>
@@ -3123,46 +3061,34 @@
         <translation>Librerie</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="274"/>
-        <source>Off (Assume all are available)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="275"/>
-        <source>Off (Assume none are available)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="vanished">Utilizza le librerie Python</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="vanished">Verificare la presenza delle librerie Python richieste.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="263"/>
         <source>Detection of Python libraries</source>
-        <translation type="unfinished"></translation>
+        <translation>Rilevamento delle librerie Python</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="264"/>
         <source>Determine how and whether Python libraries are detected when the application is launched.</source>
-        <translation type="unfinished"></translation>
+        <translation>Determina come e se le librerie Python vengono rilevate all&apos;avvio dell&apos;applicazione.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="273"/>
         <source>On</source>
-        <translation type="unfinished"></translation>
+        <translation>On</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="274"/>
+        <source>Off (Assume all are available)</source>
+        <translation>Off (si presume che tutti siano disponibili)</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="275"/>
+        <source>Off (Assume none are available)</source>
+        <translation>Off (si presume che non ce ne siano disponibili)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="296"/>
         <source>Location of Python libraries (version: %1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="vanished">Posizione delle librerie Python</translation>
+        <translation>Posizione delle librerie Python (versione: %1)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="297"/>
@@ -3184,7 +3110,7 @@
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="368"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="168"/>
         <source>Make sure that the Flatpak application has permissions to access the directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Assicurarsi che l&apos;applicazione Flatpak abbia le autorizzazioni per accedere alla directory.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="301"/>
@@ -3192,33 +3118,29 @@
         <translation>Questa opzione può essere utile se usi il modulo %1 per gestire le librerie Python.</translation>
     </message>
     <message>
-        <source>Save</source>
-        <translation type="vanished">Salva</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="318"/>
         <source>Keystroke sending method</source>
-        <translation type="unfinished"></translation>
+        <translation>Metodo di invio della sequenza di tasti</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="319"/>
         <source>Simulated keystroke sending method used in %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Metodo di invio della sequenza di tasti simulata utilizzato in %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="329"/>
         <source>Legacy</source>
-        <translation type="unfinished"></translation>
+        <translation>Legacy</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="349"/>
         <source>Keystroke delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Ritardo di battitura dei tasti</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="350"/>
         <source>The delay between simulated keystrokes used in %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ritardo tra le sequenze di tasti simulate utilizzate in %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="364"/>
@@ -3233,27 +3155,27 @@
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="379"/>
         <source>Keyboard layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Layout della tastiera</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="380"/>
         <source>Keyboard layout used in %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Layout di tastiera utilizzato in %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="407"/>
         <source>Other options</source>
-        <translation type="unfinished"></translation>
+        <translation>Altre opzioni</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="414"/>
         <source>Global keyboard shortcuts method</source>
-        <translation type="unfinished"></translation>
+        <translation>Metodo delle scorciatoie da tastiera globale</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="415"/>
         <source>Method used to set global keyboard shortcuts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Metodo utilizzato per impostare le scorciatoie da tastiera globale.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="311"/>
@@ -3359,13 +3281,13 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="214"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="131"/>
         <source>Pause listening while processing</source>
-        <translation type="unfinished"></translation>
+        <translation>Metti in pausa l&apos;ascolto durante l&apos;elaborazione</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="219"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="139"/>
         <source>This option can be useful when %1 is %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Questa opzione può essere utile quando %1 è %2.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="240"/>
@@ -3420,13 +3342,13 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="227"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="147"/>
         <source>Play tone when starting and stopping listening</source>
-        <translation type="unfinished"></translation>
+        <translation>Riproduci il tono all&apos;avvio e all&apos;interruzione dell&apos;ascolto</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="231"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="154"/>
         <source>Play an audible tone when starting and stopping listening.</source>
-        <translation type="unfinished"></translation>
+        <translation>Riproduce un segnale acustico all&apos;avvio e all&apos;interruzione dell&apos;ascolto.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="288"/>
@@ -3903,14 +3825,10 @@
         <translation>Vai su %1 per scaricare i modelli per le lingue che intendi utilizzare.</translation>
     </message>
     <message>
-        <source>Languages</source>
-        <translation type="vanished">Lingue</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/Translator.qml" line="77"/>
         <location filename="../desktop/qml/Translator.qml" line="27"/>
         <source>Languages and Models</source>
-        <translation type="unfinished"></translation>
+        <translation>Lingue e Modelli</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="105"/>
@@ -3989,10 +3907,6 @@
         <translation>Scegli la lingua da cui tradurre.</translation>
     </message>
     <message>
-        <source>This model requires a voice sample.</source>
-        <translation type="vanished">Questo modello richiede un campione vocale.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/Translator.qml" line="283"/>
         <source>Switch languages</source>
         <translation>Cambia lingua</translation>
@@ -4003,10 +3917,6 @@
         <translation>Creane uno nel menu %1</translation>
     </message>
     <message>
-        <source>Voice samples</source>
-        <translation type="vanished">Campioni vocali</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/Translator.qml" line="101"/>
         <source>Text to translate from</source>
         <translation>Testo da tradurre da</translation>
@@ -4015,7 +3925,7 @@
         <location filename="../desktop/qml/Translator.qml" line="193"/>
         <location filename="../desktop/qml/Translator.qml" line="385"/>
         <source>This model requires a voice profile.</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo modello richiede un profilo voce.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="194"/>
@@ -4026,7 +3936,7 @@
         <location filename="../desktop/qml/Translator.qml" line="194"/>
         <location filename="../desktop/qml/Translator.qml" line="386"/>
         <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Profili delle voci</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="195"/>
@@ -4034,24 +3944,16 @@
         <translation>Modello di sintesi vocale per la lingua da cui tradurre.</translation>
     </message>
     <message>
-        <source>No voice sample</source>
-        <translation type="vanished">Nessun campione vocale</translation>
-    </message>
-    <message>
-        <source>Voice sample</source>
-        <translation type="vanished">Campione vocale</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/Translator.qml" line="197"/>
         <location filename="../desktop/qml/Translator.qml" line="389"/>
         <source>No voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun profilo voce</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="198"/>
         <location filename="../desktop/qml/Translator.qml" line="390"/>
         <source>Voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profilo della voce</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="278"/>
@@ -4116,65 +4018,61 @@
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="31"/>
         <source>Edit audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica campione audio</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="75"/>
         <source>Text decoding has completed!</source>
-        <translation type="unfinished"></translation>
+        <translation>La decodifica del testo è completata!</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="102"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferma</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="102"/>
         <source>Play</source>
-        <translation type="unfinished">Avvia</translation>
+        <translation>Avvia</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="119"/>
         <source>Save</source>
-        <translation type="unfinished">Salva</translation>
+        <translation>Salva</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="129"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="171"/>
         <source>Decode text from audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Decodifica il testo dal campione audio</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="174"/>
         <source>Use the current active Speech to Text model to decode text from an audio sample.</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizzare il modello Speech to Text attualmente attivo per decodificare il testo da un campione audio.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="183"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="185"/>
         <source>This name is already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo nome è già stato usato</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="148"/>
         <source>Text spoken in audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Testo pronunciato nel campione audio</translation>
     </message>
 </context>
 <context>
     <name>VoiceImportPage</name>
-    <message>
-        <source>Create a new voice sample</source>
-        <translation type="vanished">Crea un nuovo campione vocale</translation>
-    </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="154"/>
         <source>Cancel</source>
@@ -4188,32 +4086,32 @@
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="92"/>
         <source>Tips:</source>
-        <translation type="unfinished"></translation>
+        <translation>Suggerimenti:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="94"/>
         <source>Audio sample should not be very long.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il campione audio non dovrebbe essere molto lungo.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="96"/>
         <source>If you&apos;re not satisfied with voice cloning quality, try creating a few different audio samples and see which one gives you the best result.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se non sei soddisfatto della qualità della clonazione vocale, prova a creare alcuni campioni audio diversi e vedi quale ti offre il risultato migliore.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="104"/>
         <source>Currently, voice cloning can be used in the following models:</source>
-        <translation type="unfinished"></translation>
+        <translation>Attualmente, la clonazione vocale può essere utilizzata nei seguenti modelli:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="131"/>
         <source>Help</source>
-        <translation type="unfinished">Aiuto</translation>
+        <translation>Aiuto</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="178"/>
         <source>Text decoding has completed!</source>
-        <translation type="unfinished"></translation>
+        <translation>La decodifica del testo è completata!</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="194"/>
@@ -4248,27 +4146,27 @@
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="345"/>
         <source>Text spoken in audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Testo pronunciato nel campione audio</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="368"/>
         <source>Decode text from audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Decodifica il testo dal campione audio</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="371"/>
         <source>Use the current active Speech to Text model to decode text from an audio sample.</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizzare il modello Speech to Text attualmente attivo per decodificare il testo da un campione audio.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="381"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="383"/>
         <source>This name is already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo nome è già stato usato</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="95"/>
@@ -4279,32 +4177,22 @@
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="73"/>
         <source>Create a new audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea un nuovo campione audio</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="79"/>
         <source>Audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Campione audio</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="84"/>
         <source>Audio sample lets you clone someone&apos;s voice.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il campione audio consente di clonare la voce di qualcuno.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="85"/>
         <source>It can be created by recording a audio sample directly from the microphone or by providing an audio file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceImportPage.qml" line="86"/>
-        <source>The text spoken in the audio sample should also be provided.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceImportPage.qml" line="97"/>
-        <source>More detailed instructions on the requirements for the audio sample can be found in the documentation for the specific TTS engine.</source>
-        <translation type="unfinished"></translation>
+        <translation>Può essere creato registrando un campione audio direttamente dal microfono oppure fornendo un file audio.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="321"/>
@@ -4317,22 +4205,24 @@
         <translation>Avvia</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/VoiceImportPage.qml" line="86"/>
+        <source>The text spoken in the audio sample should also be provided.</source>
+        <translation>È necessario fornire anche il testo pronunciato nel campione audio.</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="94"/>
         <source>The duration from 10 to 30 seconds is good enough.</source>
-        <translation type="unfinished"></translation>
+        <translation>La durata è più che sufficiente, da 10 a 30 secondi.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceImportPage.qml" line="97"/>
+        <source>More detailed instructions on the requirements for the audio sample can be found in the documentation for the specific TTS engine.</source>
+        <translation>Istruzioni più dettagliate sui requisiti del campione audio sono reperibili nella documentazione del motore TTS specifico.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="331"/>
         <source>Duration: %1 seconds</source>
         <translation>Durata: %1 secondi</translation>
-    </message>
-    <message>
-        <source>Voice name</source>
-        <translation type="vanished">Nome voce</translation>
-    </message>
-    <message>
-        <source>Tip: If you&apos;re not satisfied with voice cloning quality, try creating a few different voice samples and see which one gives you the best result.</source>
-        <translation type="vanished">Suggerimento: se non sei soddisfatto della qualità della clonazione della voce, prova a creare alcuni campioni vocali diversi e vedi quale ti dà il risultato migliore.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="407"/>
@@ -4363,82 +4253,74 @@
 <context>
     <name>VoiceMgmtPage</name>
     <message>
-        <source>Voice samples</source>
-        <translation type="vanished">Campioni vocali</translation>
-    </message>
-    <message>
-        <source>Create a new voice sample</source>
-        <translation type="vanished">Crea un nuovo campione vocale</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="26"/>
         <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Profili delle voci</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="73"/>
         <source>Voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profilo della voce</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="78"/>
         <source>Voice profile can be defined with an audio sample or text description.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il profilo vocale può essere definito con un campione audio o una descrizione testuale.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="87"/>
         <source>Voice Cloning</source>
-        <translation type="unfinished">Clonazione della voce</translation>
+        <translation>Clonazione della voce</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="96"/>
         <source>Allows you to define different speaker characteristics, such as gender, mood or pace.</source>
-        <translation type="unfinished"></translation>
+        <translation>Consente di definire diverse caratteristiche del parlante, come il genere, l&apos;umore o il ritmo.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="97"/>
         <source>Voice Text Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descrizione del testo vocale</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="84"/>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="147"/>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="184"/>
         <source>Audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Campione audio</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="86"/>
         <source>Allows you to clone someone&apos;s voice.</source>
-        <translation type="unfinished"></translation>
+        <translation>Permette di clonare la voce di qualcuno.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="87"/>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="97"/>
         <source>Can be used in models that support %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Può essere utilizzato nei modelli che supportano %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="94"/>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="148"/>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="196"/>
         <source>Text voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profilo vocale del testo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="217"/>
         <source>Create a new audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea un nuovo campione audio</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="219"/>
         <source>Create a new text voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea un nuovo profilo vocale di testo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="232"/>
         <source>Help</source>
-        <translation type="unfinished">Aiuto</translation>
+        <translation>Aiuto</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="252"/>
@@ -4449,34 +4331,23 @@
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="304"/>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="407"/>
         <source>Edit</source>
-        <translation type="unfinished">Modifica</translation>
+        <translation>Modifica</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="316"/>
         <source>Clone</source>
-        <translation type="unfinished">Clona</translation>
+        <translation>Clona</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="332"/>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="423"/>
+        <source>Delete</source>
+        <translation>Cancella</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="370"/>
         <source>Edit the audio sample and set the missing text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="440"/>
-        <source>You haven&apos;t created any voice profile yet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">Salva</translation>
-    </message>
-    <message>
-        <source>Save changes</source>
-        <translation type="vanished">Salva modifiche</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Annulla</translation>
+        <translation>Modifica il campione audio e imposta il testo mancante.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="392"/>
@@ -4489,18 +4360,9 @@
         <translation>Avvia</translation>
     </message>
     <message>
-        <source>Rename</source>
-        <translation type="vanished">Rinomina</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="332"/>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="423"/>
-        <source>Delete</source>
-        <translation>Cancella</translation>
-    </message>
-    <message>
-        <source>You haven&apos;t created voice samples yet.</source>
-        <translation type="vanished">Non hai ancora creato campioni vocali.</translation>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="440"/>
+        <source>You haven&apos;t created any voice profile yet.</source>
+        <translation>Non hai creato ancora nessun profilo vocale.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="441"/>
@@ -4513,87 +4375,87 @@
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="68"/>
         <source>Voice profile can be defined by text description.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il profilo vocale può essere definito tramite una descrizione testuale.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="69"/>
         <source>A simple description could be, for example: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Una descrizione semplice potrebbe essere, ad esempio: %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="76"/>
         <source>Tips:</source>
-        <translation type="unfinished"></translation>
+        <translation>Suggerimenti:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="80"/>
         <source>Use emotions: %1, %2, %3, %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa emozioni: %1, %2, %3, %4</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="90"/>
         <source>To learn more about how to create a good text description, check out the specific model&apos;s website.</source>
-        <translation type="unfinished"></translation>
+        <translation>Per saperne di più su come creare una buona descrizione testuale, consulta il sito web del modello specifico.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="27"/>
         <source>Edit text voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica il profilo vocale del testo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="27"/>
         <source>Create a new text voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea un nuovo profilo vocale testuale</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="63"/>
         <source>Text voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profilo vocale del testo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="78"/>
         <source>Include the term %1 to generate the highest quality audio, and %2 for high levels of background noise.</source>
-        <translation type="unfinished"></translation>
+        <translation>Includi il termine %1 per generare l&apos;audio di massima qualità e %2 per livelli elevati di rumore di fondo.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="82"/>
         <source>To ensure speaker consistency across generations, include speaker name.</source>
-        <translation type="unfinished"></translation>
+        <translation>Per garantire la coerenza del parlante tra le generazioni, includere il nome di chi parla.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="89"/>
         <source>Currently, text voice profiles can be used only in %1 models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Attualmente, i profili vocali di testo possono essere utilizzati solo nei modelli %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="118"/>
         <source>Help</source>
-        <translation type="unfinished">Aiuto</translation>
+        <translation>Aiuto</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="131"/>
         <source>Save</source>
-        <translation type="unfinished">Salva</translation>
+        <translation>Salva</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="141"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="159"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descrizione</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="174"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="176"/>
         <source>This name is already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo nome è già stato usato</translation>
     </message>
 </context>
 <context>
@@ -5278,6 +5140,36 @@
         <translation>Errore: si è verificato un problema sconosciuto.</translation>
     </message>
     <message>
+        <location filename="../sfos/qml/main.qml" line="353"/>
+        <location filename="../desktop/qml/main.qml" line="616"/>
+        <source>Error: Not all text has been translated.</source>
+        <translation>Errore: non tutto il testo è stato tradotto.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="356"/>
+        <location filename="../desktop/qml/main.qml" line="622"/>
+        <source>Error: Couldn&apos;t export to the file.</source>
+        <translation>Errore: impossibile esportare nel file.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="359"/>
+        <location filename="../desktop/qml/main.qml" line="625"/>
+        <source>Error: Couldn&apos;t import the file.</source>
+        <translation>Errore: impossibile importare il file.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="362"/>
+        <location filename="../desktop/qml/main.qml" line="628"/>
+        <source>Error: Couldn&apos;t import. The file does not contain audio or subtitles.</source>
+        <translation>Errore: impossibile importare. Il file non contiene audio o sottotitoli.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="374"/>
+        <location filename="../desktop/qml/main.qml" line="640"/>
+        <source>Error: Couldn&apos;t download a licence.</source>
+        <translation>Errore: impossibile scaricare una licenza.</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/main.qml" line="141"/>
         <source>Getting ready, please wait...</source>
         <translation>Quasi pronto,si prega di attendere...</translation>
@@ -5298,39 +5190,45 @@
         <translation>La lettura è in pausa.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/main.qml" line="150"/>
+        <location filename="../desktop/qml/main.qml" line="152"/>
+        <source>Say something...</source>
+        <translation>Dire qualcosa...</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/main.qml" line="198"/>
         <location filename="../desktop/qml/main.qml" line="203"/>
         <location filename="../desktop/qml/main.qml" line="209"/>
         <source>Audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Campione audio</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="203"/>
         <source>The selected model supports voice cloning. Create an %1 to clone someone&apos;s voice.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il modello selezionato supporta la clonazione vocale. Crea un %1 per clonare la voce di qualcuno.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="209"/>
         <location filename="../desktop/qml/main.qml" line="229"/>
         <source>You can make a new %1 in the %2 menu.</source>
-        <translation type="unfinished"></translation>
+        <translation>Puoi creare un nuovo %1 nel menu %2.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="209"/>
         <location filename="../desktop/qml/main.qml" line="229"/>
         <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Profili delle voci</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="218"/>
         <location filename="../desktop/qml/main.qml" line="229"/>
         <source>Text voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profilo vocale del testo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="223"/>
         <source>The selected model supports the voice characteristics defined in the text description.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il modello selezionato supporta le caratteristiche vocali definite nella descrizione del testo.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="251"/>
@@ -5378,16 +5276,6 @@
         <translation>Avvia</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="387"/>
-        <source>Try executing %1 before running Speech Note.</source>
-        <translation>Prova a eseguire %1 prima di eseguire Speech Note.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="375"/>
-        <source>To speed up processing, enable hardware acceleration in the settings.</source>
-        <translation>Per accelerare l&apos;elaborazione, abilitare l&apos;accelerazione hardware nelle impostazioni.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/main.qml" line="297"/>
         <source>Both %1 and %2 GPU acceleration add-ons are installed, which is not optimal. Uninstall one of them.</source>
         <translation>Sono installati entrambi i componenti aggiuntivi di accelerazione GPU %1 e %2, il che non è ottimale. Disinstallane uno.</translation>
@@ -5430,9 +5318,19 @@
         <translation>Installa</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/main.qml" line="375"/>
+        <source>To speed up processing, enable hardware acceleration in the settings.</source>
+        <translation>Per accelerare l&apos;elaborazione, abilitare l&apos;accelerazione hardware nelle impostazioni.</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/main.qml" line="386"/>
         <source>Most likely, %1 kernel module has not been fully initialized.</source>
         <translation>Molto probabilmente il modulo kernel %1 non è stato completamente inizializzato.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/main.qml" line="387"/>
+        <source>Try executing %1 before running Speech Note.</source>
+        <translation>Prova a eseguire %1 prima di eseguire Speech Note.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="517"/>
@@ -5453,42 +5351,6 @@
         <location filename="../desktop/qml/main.qml" line="619"/>
         <source>Error: Couldn&apos;t repair the text.</source>
         <translation>Errore: impossibile riparare il testo.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="353"/>
-        <location filename="../desktop/qml/main.qml" line="616"/>
-        <source>Error: Not all text has been translated.</source>
-        <translation>Errore: non tutto il testo è stato tradotto.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="356"/>
-        <location filename="../desktop/qml/main.qml" line="622"/>
-        <source>Error: Couldn&apos;t export to the file.</source>
-        <translation>Errore: impossibile esportare nel file.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="359"/>
-        <location filename="../desktop/qml/main.qml" line="625"/>
-        <source>Error: Couldn&apos;t import the file.</source>
-        <translation>Errore: impossibile importare il file.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="362"/>
-        <location filename="../desktop/qml/main.qml" line="628"/>
-        <source>Error: Couldn&apos;t import. The file does not contain audio or subtitles.</source>
-        <translation>Errore: impossibile importare. Il file non contiene audio o sottotitoli.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="374"/>
-        <location filename="../desktop/qml/main.qml" line="640"/>
-        <source>Error: Couldn&apos;t download a licence.</source>
-        <translation>Errore: impossibile scaricare una licenza.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="150"/>
-        <location filename="../desktop/qml/main.qml" line="152"/>
-        <source>Say something...</source>
-        <translation>Dire qualcosa...</translation>
     </message>
 </context>
 <context>
@@ -5534,10 +5396,6 @@
         <translation>Esempio: Inserisci una nuova riga al posto della parola &quot;%1&quot;</translation>
     </message>
     <message>
-        <source>Example: Add silence after &quot;%1&quot;</source>
-        <translation type="vanished">Esempio: Aggiungi silenzio dopo &quot;%1&quot;</translation>
-    </message>
-    <message>
         <location filename="../src/settings.cpp" line="2509"/>
         <source>Example: Correct pronunciation of the Polish name &quot;%1&quot;</source>
         <translation>Esempio: Pronuncia corretta del nome polacco &quot;%1&quot;</translation>
@@ -5566,7 +5424,7 @@
     <message>
         <location filename="../src/speech_service.cpp" line="3024"/>
         <source>Chinese</source>
-        <translation type="unfinished">Cinese</translation>
+        <translation>Cinese</translation>
     </message>
     <message>
         <location filename="../src/speech_service.cpp" line="3037"/>
@@ -5715,7 +5573,7 @@
     <message>
         <location filename="../src/tray_icon.cpp" line="282"/>
         <source>Start listening, always translate</source>
-        <translation type="unfinished">Inizia ad ascoltare, traduci sempre</translation>
+        <translation>Inizia ad ascoltare, traduci sempre</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="285"/>
@@ -5726,7 +5584,7 @@
     <message>
         <location filename="../src/tray_icon.cpp" line="293"/>
         <source>Start listening, always translate, text to active window</source>
-        <translation type="unfinished">Inizia ad ascoltare, traduci sempre, testo nella finestra attiva</translation>
+        <translation>Inizia ad ascoltare, traduci sempre, testo nella finestra attiva</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="297"/>
@@ -5737,7 +5595,7 @@
     <message>
         <location filename="../src/tray_icon.cpp" line="304"/>
         <source>Start listening, always translate, text to clipboard</source>
-        <translation type="unfinished">Inizia ad ascoltare, traduci sempre, testo negli appunti</translation>
+        <translation>Inizia ad ascoltare, traduci sempre, testo negli appunti</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="307"/>
