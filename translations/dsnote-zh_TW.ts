@@ -16,13 +16,13 @@
     <message>
         <location filename="../sfos/qml/AboutPage.qml" line="53"/>
         <source>Project website</source>
-        <translation>專案網址</translation>
+        <translation>專案網站</translation>
     </message>
     <message>
         <location filename="../sfos/qml/AboutPage.qml" line="57"/>
         <location filename="../desktop/qml/AboutPage.qml" line="58"/>
         <source>Changes</source>
-        <translation>更新</translation>
+        <translation>變更</translation>
     </message>
     <message>
         <location filename="../sfos/qml/AboutPage.qml" line="63"/>
@@ -40,7 +40,7 @@
         <location filename="../sfos/qml/AboutPage.qml" line="83"/>
         <location filename="../desktop/qml/AboutPage.qml" line="107"/>
         <source>Translators</source>
-        <translation>翻譯者</translation>
+        <translation>翻譯人員</translation>
     </message>
     <message>
         <location filename="../sfos/qml/AboutPage.qml" line="92"/>
@@ -51,7 +51,7 @@
     <message>
         <location filename="../desktop/qml/AboutPage.qml" line="51"/>
         <source>Note taking, reading and translating with Speech to Text, Text to Speech and Machine Translation</source>
-        <translation>使用語音轉文字、文字轉語音及機器翻譯進行筆記記錄、朗讀和翻譯</translation>
+        <translation>使用語音轉文字、文字轉語音和機器翻譯進行筆記記錄、朗讀和翻譯</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutPage.qml" line="17"/>
@@ -62,7 +62,7 @@
     <message>
         <location filename="../desktop/qml/AboutPage.qml" line="67"/>
         <source>Project website:</source>
-        <translation>專案地址：</translation>
+        <translation>專案網站：</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AboutPage.qml" line="73"/>
@@ -79,19 +79,19 @@
     <name>AddTextDialog</name>
     <message>
         <location filename="../sfos/qml/AddTextDialog.qml" line="33"/>
-        <location filename="../desktop/qml/AddTextDialog.qml" line="34"/>
+        <location filename="../desktop/qml/AddTextDialog.qml" line="35"/>
         <source>Add text to the current note or replace it?</source>
         <translation>將文字新增到當前筆記中還是替換它？</translation>
     </message>
     <message>
         <location filename="../sfos/qml/AddTextDialog.qml" line="41"/>
-        <location filename="../desktop/qml/AddTextDialog.qml" line="42"/>
+        <location filename="../desktop/qml/AddTextDialog.qml" line="43"/>
         <source>Add</source>
         <translation>新增</translation>
     </message>
     <message>
         <location filename="../sfos/qml/AddTextDialog.qml" line="49"/>
-        <location filename="../desktop/qml/AddTextDialog.qml" line="50"/>
+        <location filename="../desktop/qml/AddTextDialog.qml" line="51"/>
         <source>Replace</source>
         <translation>替換</translation>
     </message>
@@ -106,12 +106,12 @@
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="33"/>
         <source>To install Flatpak add-on, which provides GPU acceleration support for %1 graphics card, follow one of the steps below.</source>
-        <translation>為了安裝提供對 %1 圖形卡的 GPU 加速支援的 Flatpak 外掛，請參閱以下步驟之一。</translation>
+        <translation>要安裝 Flatpak 外掛，該外掛為 %1 顯示卡提供 GPU 加速支援，請執行以下步驟之一。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="43"/>
         <source>Use the software manager application on your system and install %1, or</source>
-        <translation>使用系統中的軟體管理應用程式安裝 %1，或</translation>
+        <translation>使用您系統的軟體管理器安裝 %1，或者</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="52"/>
@@ -122,17 +122,17 @@
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="70"/>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="85"/>
         <source>The add-on enables faster processing when using the following Speech to Text and Text to Speech engines:</source>
-        <translation>該外掛在使用以下語音轉文字和文字轉語音引擎時可提供更快的處理速度：</translation>
+        <translation>外掛啟用後，在使用以下語音轉文字和文字轉語音引擎時，可以實現更快的處理速度：</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="97"/>
         <source>If you&apos;re interested in fast and accurate Speech to Text processing, consider using %1 with Vulkan hardware acceleration, which works without installing an add-on.</source>
-        <translation>如果您對快速準確的語音轉文字處理感興趣，可以考慮使用 %1 與 Vulkan 硬體加速配合，無需安裝外掛。</translation>
+        <translation>如果您對快速且準確的語音轉文字處理感興趣，可以考慮使用 %1，它支援 Vulkan 硬體加速，無需安裝外掛即可工作。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="106"/>
         <source>Note that installing the add-on requires a significant amount of disk space.</source>
-        <translation>請注意安裝外掛所需的磁碟空間較大。</translation>
+        <translation>請注意，安裝此外掛需要大量的磁碟空間。</translation>
     </message>
 </context>
 <context>
@@ -141,7 +141,7 @@
         <location filename="../sfos/qml/ChangelogPage.qml" line="28"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="14"/>
         <source>Changes</source>
-        <translation>更新</translation>
+        <translation>變更</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ChangelogPage.qml" line="32"/>
@@ -369,7 +369,7 @@
         <location filename="../desktop/qml/ExportFilePage.qml" line="377"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="538"/>
         <source>Change</source>
-        <translation>修改</translation>
+        <translation>更改</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="132"/>
@@ -419,7 +419,7 @@
         <location filename="../desktop/qml/ExportFilePage.qml" line="204"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="400"/>
         <source>When %1 is selected, the format is chosen based on the file extension.</source>
-        <translation>當選擇 %1 時，格式將根據副檔名自動確定。</translation>
+        <translation>當選擇 %1 時，格式將根據副檔名自動選擇。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="309"/>
@@ -457,7 +457,7 @@
         <location filename="../sfos/qml/ExportFilePage.qml" line="364"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="435"/>
         <source>%1 results in a larger file size.</source>
-        <translation>%1 會導致檔案大小變大。</translation>
+        <translation>%1 會導致更大的檔案大小。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="373"/>
@@ -561,7 +561,7 @@
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="523"/>
         <source>Mix speech with audio from an existing file</source>
-        <translation>從現有檔案混合語音和音訊</translation>
+        <translation>將語音與現有檔案中的音訊混合</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="531"/>
@@ -576,7 +576,7 @@
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="548"/>
         <source>The file contains no audio.</source>
-        <translation>該檔案不含音訊。</translation>
+        <translation>該檔案不包含音訊。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="556"/>
@@ -586,22 +586,22 @@
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="562"/>
         <source>Volume change</source>
-        <translation>音量變化</translation>
+        <translation>音量調整</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="563"/>
         <source>Modify the volume of the audio from the file selected for mixing.</source>
-        <translation>修改所選混合檔案的音訊音量。</translation>
+        <translation>調整用於混合的檔案中的音訊音量。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="564"/>
         <source>Allowed values are between -30 dB and 30 dB.</source>
-        <translation>允許的值範圍在 -30 dB 到 30 dB 之間。</translation>
+        <translation>允許的範圍在 -30 dB 到 30 dB 之間。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="565"/>
         <source>When the value is set to 0, the volume will not be changed.</source>
-        <translation>當值設定為 0 時，音量不會改變。</translation>
+        <translation>當值設定為 0 時，音量將不改變。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="586"/>
@@ -619,22 +619,22 @@
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="37"/>
         <source>If a suitable hardware accelerator (CPU or graphics card) is found in the system, it will be used to speed up processing.</source>
-        <translation>使用系統中可用的硬體加速（CPU 或者 GPU）提高處理速度。</translation>
+        <translation>如果系統找到合適的硬體加速器（CPU或顯示卡），將用於加速處理。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="38"/>
         <source>Hardware acceleration significantly reduces the time of decoding.</source>
-        <translation>硬體加速會顯著降低解碼時長。</translation>
+        <translation>硬體加速能夠顯著縮短解碼時間。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="39"/>
         <source>Disable this option if you observe problems.</source>
-        <translation>如果你發現問題，請禁用該選項。</translation>
+        <translation>如果您發現問題，請停用該選項。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="46"/>
         <source>A suitable hardware accelerator could not be found.</source>
-        <translation>無法找到可用的硬體加速。</translation>
+        <translation>未能找到合適的硬體加速器。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="54"/>
@@ -644,7 +644,7 @@
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="55"/>
         <source>Select preferred hardware accelerator.</source>
-        <translation>選擇硬體加速。</translation>
+        <translation>選擇硬體加速器。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="69"/>
@@ -679,7 +679,7 @@
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="87"/>
         <source>Try executing %1 before running Speech Note.</source>
-        <translation>在執行語音筆記之前，嘗試執行%1。</translation>
+        <translation>嘗試在執行語音筆記前執行 %1。</translation>
     </message>
 </context>
 <context>
@@ -718,11 +718,7 @@
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="28"/>
         <source>Languages and Models</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Languages</source>
-        <translation type="vanished">語言</translation>
+        <translation>語言和模型</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="30"/>
@@ -742,7 +738,7 @@
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="32"/>
         <source>Have fun with %1!</source>
-        <translation>祝您使用 %1 愉快！</translation>
+        <translation>盡情享受 %1 吧！</translation>
     </message>
 </context>
 <context>
@@ -750,7 +746,7 @@
     <message>
         <location filename="../desktop/qml/InfoItem.qml" line="23"/>
         <source>Project website</source>
-        <translation>專案網址</translation>
+        <translation>專案網站</translation>
     </message>
 </context>
 <context>
@@ -860,12 +856,7 @@
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="546"/>
         <source>Experimental</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/LangsPage.qml" line="550"/>
-        <source>This model is experimental and may not work well.</source>
-        <translation type="unfinished"></translation>
+        <translation>實驗性</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="589"/>
@@ -880,7 +871,7 @@
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="637"/>
         <source>Disable</source>
-        <translation>禁用</translation>
+        <translation>停用</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="645"/>
@@ -898,6 +889,11 @@
         <translation>返回</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/LangsPage.qml" line="550"/>
+        <source>This model is experimental and may not work well.</source>
+        <translation>此模型是實驗性的，可能效果不佳。</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/LangsPage.qml" line="613"/>
         <source>Download</source>
         <translation>下載</translation>
@@ -906,13 +902,13 @@
         <location filename="../sfos/qml/LangsPage.qml" line="147"/>
         <location filename="../desktop/qml/LangsPage.qml" line="655"/>
         <source>There are no languages that match your search criteria.</source>
-        <translation>未找到符合搜尋條件的語言。</translation>
+        <translation>沒有符合您搜尋條件的語言。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/LangsPage.qml" line="148"/>
         <location filename="../desktop/qml/LangsPage.qml" line="656"/>
         <source>There are no models that match your search criteria.</source>
-        <translation>未找到符合搜尋條件的模型。</translation>
+        <translation>沒有符合您搜尋條件的模型。</translation>
     </message>
 </context>
 <context>
@@ -920,7 +916,7 @@
     <message>
         <location filename="../desktop/qml/MainTipMessage.qml" line="24"/>
         <source>Warning message</source>
-        <translation>警告資訊</translation>
+        <translation>警告提示</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainTipMessage.qml" line="24"/>
@@ -935,7 +931,7 @@
         <location filename="../desktop/qml/MainToolBar.qml" line="169"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="176"/>
         <source>Languages and Models</source>
-        <translation type="unfinished"></translation>
+        <translation>語言和模型</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="38"/>
@@ -959,7 +955,7 @@
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="62"/>
         <source>Mode: %1</source>
-        <translation>模式： %1</translation>
+        <translation>模式：%1</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="62"/>
@@ -997,10 +993,6 @@
         <location filename="../desktop/qml/MainToolBar.qml" line="106"/>
         <source>File</source>
         <translation>檔案</translation>
-    </message>
-    <message>
-        <source>Languages</source>
-        <translation type="vanished">語言</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="40"/>
@@ -1046,7 +1038,7 @@
         <location filename="../desktop/qml/MainToolBar.qml" line="210"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="220"/>
         <source>Restore diacritical marks (%1)</source>
-        <translation>恢復重音符號（%1）</translation>
+        <translation>恢復變音符號 (%1)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="210"/>
@@ -1062,11 +1054,7 @@
         <location filename="../desktop/qml/MainToolBar.qml" line="236"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="243"/>
         <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Voice samples</source>
-        <translation type="vanished">語音樣本</translation>
+        <translation>語音配置檔案</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="251"/>
@@ -1133,7 +1121,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="212"/>
         <source>Filtering by model type</source>
-        <translation>按模型型別篩選</translation>
+        <translation>正在按模型型別篩選</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="237"/>
@@ -1148,7 +1136,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="272"/>
         <source>Filtering by engine type</source>
-        <translation>按引擎型別篩選</translation>
+        <translation>正在按引擎型別篩選</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="276"/>
@@ -1168,7 +1156,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="345"/>
         <source>Filtering by speed</source>
-        <translation>按速度篩選</translation>
+        <translation>正在按速度篩選</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="349"/>
@@ -1189,7 +1177,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="364"/>
         <source>Slow</source>
-        <translation>緩慢</translation>
+        <translation>慢速</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="369"/>
@@ -1204,17 +1192,17 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="381"/>
         <source>Fast model works well even on older hardware.</source>
-        <translation>快速模型即使在舊硬體上也能很好地執行。</translation>
+        <translation>快速模型即使在較舊的硬體上也能很好地工作。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="382"/>
         <source>Slow model needs new CPU and sometimes works only when GPU acceleration is enabled.</source>
-        <translation>緩慢模型要求使用較新的CPU，並且可能僅在啟用了GPU加速的情況下才能正常執行。</translation>
+        <translation>慢速模型需要新的 CPU，有時只有在啟用 GPU 加速時才能正常工作。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="406"/>
         <source>Filtering by quality</source>
-        <translation>按質量篩選</translation>
+        <translation>正在按質量篩選</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="410"/>
@@ -1244,12 +1232,12 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="442"/>
         <source>In case of STT, it is the accuracy of speech recognition.</source>
-        <translation>對於 STT，這指的是語音識別的準確性。</translation>
+        <translation>在 STT 的情況下，指的是語音識別的準確度。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="443"/>
         <source>In case of TTS, it is the naturalness of synthesized voice.</source>
-        <translation>對於 TTS，這指的是合成語音的自然度。</translation>
+        <translation>在 TTS 的情況下，指的是合成語音的自然度。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="467"/>
@@ -1280,7 +1268,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="487"/>
         <source>Voice Text Description</source>
-        <translation type="unfinished"></translation>
+        <translation>語音文字描述</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="504"/>
@@ -1290,7 +1278,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="505"/>
         <source>Select to show only models with selected capabilities.</source>
-        <translation>選擇僅顯示具有選定功能的模型。</translation>
+        <translation>選擇顯示僅具有所選功能的模型。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="114"/>
@@ -1376,7 +1364,7 @@
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="204"/>
         <source>Slow</source>
-        <translation>緩慢</translation>
+        <translation>慢速</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="214"/>
@@ -1416,12 +1404,12 @@
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="255"/>
         <source>Voice Text Description</source>
-        <translation type="unfinished"></translation>
+        <translation>語音文字描述</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="269"/>
         <source>Model card</source>
-        <translation type="unfinished"></translation>
+        <translation>模型卡</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="295"/>
@@ -1441,7 +1429,7 @@
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="322"/>
         <source>This model is experimental and may not work well.</source>
-        <translation type="unfinished"></translation>
+        <translation>此模型是實驗性的，可能效果不佳。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="332"/>
@@ -1451,7 +1439,7 @@
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="340"/>
         <source>Files to download</source>
-        <translation>需要下載的檔案</translation>
+        <translation>下載的檔案</translation>
     </message>
 </context>
 <context>
@@ -1484,7 +1472,7 @@
     <message>
         <location filename="../sfos/qml/ModelItem.qml" line="71"/>
         <source>Disable</source>
-        <translation>禁用</translation>
+        <translation>停用</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ModelItem.qml" line="77"/>
@@ -1516,7 +1504,7 @@
         <location filename="../sfos/qml/Notepad.qml" line="64"/>
         <location filename="../desktop/qml/Notepad.qml" line="81"/>
         <source>Type here or press %1 to make a note...</source>
-        <translation>在此輸入或點選 %1 建立筆記...</translation>
+        <translation>在此處輸入或按 %1 建立筆記...</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="65"/>
@@ -1540,14 +1528,10 @@
         <translation>請訪問 %1 頁面下載所需的語言模型。</translation>
     </message>
     <message>
-        <source>Languages</source>
-        <translation type="vanished">語言</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/Notepad.qml" line="109"/>
         <location filename="../desktop/qml/Notepad.qml" line="22"/>
         <source>Languages and Models</source>
-        <translation type="unfinished"></translation>
+        <translation>語言和模型</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="123"/>
@@ -1608,26 +1592,22 @@
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="181"/>
         <source>This model requires a voice profile.</source>
-        <translation type="unfinished"></translation>
+        <translation>此模型需要一個語音配置檔案。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="182"/>
         <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
+        <translation>語音配置檔案</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="183"/>
         <source>Voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>語音配置檔案</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="186"/>
         <source>No voice profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This model requires a voice sample.</source>
-        <translation type="vanished">此模型需要一個語音樣本。</translation>
+        <translation>沒有語音配置檔案</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="182"/>
@@ -1635,26 +1615,14 @@
         <translation>文字轉語音模型</translation>
     </message>
     <message>
-        <source>Voice samples</source>
-        <translation type="vanished">語音樣本</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/Notepad.qml" line="182"/>
         <source>Create one in %1.</source>
         <translation>在 %1 中建立一個。</translation>
     </message>
     <message>
-        <source>Voice sample</source>
-        <translation type="vanished">語音樣本</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/Notepad.qml" line="184"/>
         <source>Speech speed</source>
         <translation>語音速度</translation>
-    </message>
-    <message>
-        <source>No voice sample</source>
-        <translation type="vanished">沒有語音樣本</translation>
     </message>
 </context>
 <context>
@@ -1690,7 +1658,7 @@
     <message>
         <location filename="../sfos/qml/PackItem.qml" line="55"/>
         <source>Disable</source>
-        <translation>禁用</translation>
+        <translation>停用</translation>
     </message>
     <message>
         <location filename="../sfos/qml/PackItem.qml" line="55"/>
@@ -1724,17 +1692,17 @@
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="114"/>
         <source>A pattern is used to find a match in the text and replace it with another text.</source>
-        <translation>模式用於在文字中查詢匹配項並將其替換為另一個文字。</translation>
+        <translation>模式用於在文字中找到匹配項，並將其替換為其他文字。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="116"/>
         <source>To define a more advanced pattern, you can use a regular expression.</source>
-        <translation>為了定義一個更復雜的模式，可以使用正則表示式。</translation>
+        <translation>使用正則表示式可以定義更高階的模式。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="123"/>
         <source>When defining a regular expression pattern, you can use tags for the following character classes:</source>
-        <translation>在定義正則表示式模式時，可以使用如下字元類的標記：</translation>
+        <translation>當定義正則表示式模式時，可以使用標籤來表示以下字元類別：</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="153"/>
@@ -1746,7 +1714,7 @@
         <location filename="../desktop/qml/RuleEditPage.qml" line="223"/>
         <location filename="../desktop/qml/RuleEditPage.qml" line="225"/>
         <source>Type here to see how the rule changes the text.</source>
-        <translation>在此輸入以檢視規則如何改變文字。</translation>
+        <translation>請在此處輸入以檢視規則如何更改文字。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="233"/>
@@ -1757,17 +1725,17 @@
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="233"/>
         <source>Red color means that pattern doesn&apos;t match the text.</source>
-        <translation>紅色表示該模式未匹配文字。</translation>
+        <translation>紅色表示模式與文字不匹配。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="272"/>
         <source>Pattern type</source>
-        <translation>模式類別</translation>
+        <translation>模式型別</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="274"/>
         <source>Type of a pattern.</source>
-        <translation>模式類別</translation>
+        <translation>模式型別</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="287"/>
@@ -1777,7 +1745,7 @@
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="33"/>
         <source>Create a new rule</source>
-        <translation>建立一條新的規則</translation>
+        <translation>建立新規則</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="125"/>
@@ -1832,7 +1800,7 @@
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="158"/>
         <source>A replacement text is inserted instead of the text matched by the pattern.</source>
-        <translation>匹配該模式的文字將被替換文字所取代。</translation>
+        <translation>匹配該模式的文字將被替換。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="115"/>
@@ -1847,37 +1815,37 @@
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="159"/>
         <source>Simple replacement text is just plain text.</source>
-        <translation>簡單的替換文字即為純文字。</translation>
+        <translation>簡單的替換文字就是純文字。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="160"/>
         <source>To define more advanced replacement, you can use a regular expression pattern that contains capturing groups.</source>
-        <translation>要定義更高階的替換，可以在包含捕獲組的正則表示式模式中進行。</translation>
+        <translation>使用包含捕獲組的正則表示式模式可以定義更高階的替換。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="167"/>
         <source>To pass the captured text from the pattern as a replacement, use the following tags:</source>
-        <translation>要將匹配到的文字作為替換文字傳遞，可以使用以下標籤：</translation>
+        <translation>為了將模式中捕獲的文字作為替換，請使用以下標籤：</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="169"/>
         <source>Resolves to the text captured in the first capture group.</source>
-        <translation>解析為第一個捕獲組中捕獲的文字。</translation>
+        <translation>對應於第一個捕獲組中捕獲的文字。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="170"/>
         <source>Resolves to the text captured in the second capture group.</source>
-        <translation>解析為第二個捕獲組中捕獲的文字。</translation>
+        <translation>對應於第二個捕獲組中捕獲的文字。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="171"/>
         <source>Makes all characters in the first capture group be capitalized.</source>
-        <translation>將第一個捕獲組中的所有字元轉換為大寫。</translation>
+        <translation>將第一個捕獲組中的所有字元大寫。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="172"/>
         <source>Causes all characters in the first capture group to be lowercase.</source>
-        <translation>將第一個捕獲組中的所有字元轉換為小寫。</translation>
+        <translation>將第一個捕獲組中的所有字元小寫。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="196"/>
@@ -1892,12 +1860,12 @@
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="253"/>
         <source>Case sensitive</source>
-        <translation type="unfinished"></translation>
+        <translation>區分大小寫</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="275"/>
         <source>You can simply replace the found text or replace the text with a regular expression.</source>
-        <translation>您可以簡單地替換找到的文字，也可以使用正則表示式進行替換。</translation>
+        <translation>您可以簡單地替換找到的文字，或使用正則表示式進行替換。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="288"/>
@@ -1978,12 +1946,12 @@
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="61"/>
         <source>%1 allows you to create text transformations that can be applied after Speech to Text or before Text to Speech.</source>
-        <translation>%1 允許您建立可在語音轉文字之後或文字轉語音之前應用的文字轉換。</translation>
+        <translation>%1 允許您建立文字轉換，可以在語音轉文字後或文字轉語音前應用。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="62"/>
         <source>With %1, you can easily and flexibly correct errors in decoded text or correct mispronounced words.</source>
-        <translation>透過%1，您可以輕鬆且靈活地糾正語音識別過程中產生的錯誤或將語音中誤讀的單詞進行更正。</translation>
+        <translation>透過 %1，您可以輕鬆靈活地糾正解碼文字中的錯誤或糾正發音不準確的詞語。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="69"/>
@@ -1998,12 +1966,12 @@
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="71"/>
         <source>Listening</source>
-        <translation>聽寫</translation>
+        <translation>正在聽寫</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="71"/>
         <source>Reading</source>
-        <translation>朗讀</translation>
+        <translation>正在朗讀</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="78"/>
@@ -2013,27 +1981,27 @@
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="80"/>
         <source>Converting a word (e.g., &quot;period&quot;, &quot;comma&quot;) into a punctuation mark in Speech to Text</source>
-        <translation>在語音轉文字中，將單詞（如“句點”、“逗號”）轉換成相應的標點符號。</translation>
+        <translation>語音識別中，將單詞（例如“句點”、“逗號”）轉換為標點符號。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="81"/>
         <source>Inserting a new line into a note while dictating</source>
-        <translation>口述時在筆記中插入新行</translation>
+        <translation>透過語音輸入時，在筆記中插入新行。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="82"/>
         <source>Changing the spelling of foreign language names (e.g., first or last names) to make the pronunciation correct</source>
-        <translation>調整外國語言中人名（例如，名字或姓氏）的拼寫，以確保其發音正確。</translation>
+        <translation>語音識別中，更改外語姓名拼寫（例如名字或姓氏）以確保發音正確。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="83"/>
         <source>Removing special characters from text that cause mispronunciation by Text to Speech engine</source>
-        <translation>去除可能導致文字轉語音引擎發音錯誤的特殊字元。</translation>
+        <translation>移除文字中的特殊字元，以避免文字轉語音引擎的誤讀。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="98"/>
         <source>Create a new rule</source>
-        <translation>建立一條新規則</translation>
+        <translation>建立新規則</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="107"/>
@@ -2098,42 +2066,42 @@
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="138"/>
         <source>Read selection</source>
-        <translation>朗讀所選部分</translation>
+        <translation>朗讀選定內容</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="138"/>
         <source>Read All</source>
-        <translation>全文朗讀</translation>
+        <translation>朗讀全部</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="152"/>
         <source>Read from cursor position</source>
-        <translation>從游標位置開始朗讀。</translation>
+        <translation>從游標位置朗讀</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="165"/>
         <source>Read to cursor position</source>
-        <translation>朗讀至游標位置</translation>
+        <translation>朗讀到游標位置</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="183"/>
         <source>Translate selection</source>
-        <translation>翻譯所選部分</translation>
+        <translation>翻譯選定內容</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="183"/>
         <source>Translate All</source>
-        <translation>全文翻譯</translation>
+        <translation>翻譯全部</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="199"/>
         <source>Translate from cursor position</source>
-        <translation>從游標位置開始翻譯</translation>
+        <translation>從游標位置翻譯</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="214"/>
         <source>Translate to cursor position</source>
-        <translation>翻譯至游標位置</translation>
+        <translation>翻譯到游標位置</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="106"/>
@@ -2198,13 +2166,13 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="41"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="22"/>
         <source>Remember the last note</source>
-        <translation>記住最後的筆記</translation>
+        <translation>記住上次的筆記</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="42"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="29"/>
         <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation>該筆記將自動儲存，因此當您重新啟動應用程式時，您的最後一條筆記將始終可用。</translation>
+        <translation>筆記會自動儲存，因此重啟應用時，您上次的筆記將始終可用。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="49"/>
@@ -2230,13 +2198,13 @@
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="74"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="105"/>
         <source>Replace an existing note</source>
-        <translation>替換現有註釋</translation>
+        <translation>替換現有筆記</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="70"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="63"/>
         <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation>從檔案匯入筆記時的操作。你可以將匯入的文字新增到現有筆記或替換現有筆記。</translation>
+        <translation>從檔案匯入筆記時的操作，您可以將匯入的文字新增到現有筆記或替換現有筆記。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="74"/>
@@ -2305,7 +2273,7 @@
         <location filename="../desktop/qml/SettingsSttPage.qml" line="46"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="58"/>
         <source>Press and hold</source>
-        <translation>按下並保持</translation>
+        <translation>按住</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="131"/>
@@ -2366,79 +2334,31 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="144"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="46"/>
         <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation>按住%1按鈕即可啟用聽寫功能。停止按住時，聽寫功能將關閉。</translation>
+        <translation>按住 %1 按鈕啟用聽寫模式。鬆開手指，聽寫模式將關閉。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="146"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="48"/>
         <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation>點選%1按鈕後，聽寫功能始終處於開啟狀態。</translation>
+        <translation>點選 %1 按鈕後，聽寫功能始終處於開啟狀態。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="203"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="117"/>
         <source>Use note as context</source>
-        <translation type="unfinished"></translation>
+        <translation>使用筆記作為上下文</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="207"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="124"/>
         <source>Use an existing note as the initial context in decoding.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="214"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="131"/>
-        <source>Pause listening while processing</source>
-        <translation type="unfinished"></translation>
+        <translation>在解碼時，使用現有筆記作為初始上下文。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="218"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="138"/>
         <source>Temporarily pause listening for the duration of audio processing.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="219"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="139"/>
-        <source>This option can be useful when %1 is %2.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="227"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="147"/>
-        <source>Play tone when starting and stopping listening</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="231"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="154"/>
-        <source>Play an audible tone when starting and stopping listening.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="458"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="72"/>
-        <source>Normalize audio</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="459"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="79"/>
-        <source>The volume of the audio will be normalized.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="460"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="80"/>
-        <source>The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="461"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="81"/>
-        <source>Disable this option if you observe this problem.</source>
-        <translation type="unfinished"></translation>
+        <translation>暫停聽寫，直到音訊處理完成。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="516"/>
@@ -2484,13 +2404,13 @@
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="27"/>
         <source>Restart the application to apply changes.</source>
-        <translation>請重啟應用程式以應用更改。</translation>
+        <translation>重新啟動程式以應用更改。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsPage.qml" line="71"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="95"/>
         <source>Advanced</source>
-        <translation>高階模式已啟用</translation>
+        <translation>高階功能</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="35"/>
@@ -2508,7 +2428,7 @@
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="425"/>
         <source>Restore diacritics before speech synthesis</source>
-        <translation>在語音合成之前，恢復音標。</translation>
+        <translation>在語音合成前恢復變音符號。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="474"/>
@@ -2528,7 +2448,7 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="499"/>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="122"/>
         <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation>閱讀或匯出到檔案時，字幕時間戳將被忽略。</translation>
+        <translation>字幕時間戳在朗讀時或匯出檔案時將被忽略</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="484"/>
@@ -2548,7 +2468,7 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="501"/>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="124"/>
         <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation>語音已根據時間戳同步。速度會自動調整，確保語音時長不超過字幕段落時長。</translation>
+        <translation>語音已根據時間戳同步。速度會自動調整，確保語音時長不超過字幕片段時長。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="486"/>
@@ -2562,7 +2482,7 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="502"/>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="125"/>
         <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation>語音已根據時間戳同步。速度會自動調整，使語音時長與字幕段落時長完全一致。</translation>
+        <translation>語音已根據時間戳同步。速度會自動調整，使語音時長與字幕片段時長完全一致。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="485"/>
@@ -2576,7 +2496,7 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="510"/>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="159"/>
         <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation>當使用SRT字幕文字格式時，更改語音速度將被禁用，因為速度將自動調整。</translation>
+        <translation>當使用 SRT 字幕格式時，更改語音速度將被停用，因為速度將自動調整。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="523"/>
@@ -2657,7 +2577,7 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="336"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="194"/>
         <source>Break text lines</source>
-        <translation>斷行</translation>
+        <translation>分段</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="346"/>
@@ -2687,7 +2607,7 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="437"/>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="51"/>
         <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation>這種做法可以加快朗讀速度，但在某些模型中可能會降低語音的自然度。</translation>
+        <translation>這可以加快朗讀速度，但在某些模型中，語音的自然度可能會降低。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="446"/>
@@ -2699,19 +2619,43 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="447"/>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="64"/>
         <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation>如果TTS引擎支援速度控制，將使用該功能。</translation>
+        <translation>如果 TTS 引擎支援速度控制，將使用該功能。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="448"/>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="65"/>
         <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation>當此選項禁用時，速度調整將在音訊後期處理中進行。</translation>
+        <translation>當此選項停用時，速度調整將在音訊後期處理中進行。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="449"/>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="66"/>
         <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
         <translation>經過音訊後期處理後的實際速度更加可預測，但語音的自然度可能會降低。</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="458"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="72"/>
+        <source>Normalize audio</source>
+        <translation>音訊標準化</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="459"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="79"/>
+        <source>The volume of the audio will be normalized.</source>
+        <translation>音訊的音量將被標準化。</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="460"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="80"/>
+        <source>The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.</source>
+        <translation>每個句子的音量將被獨立標準化，這可能導致不同句子音量水平不穩定。</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="461"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="81"/>
+        <source>Disable this option if you observe this problem.</source>
+        <translation>如果觀察到問題，請停用此選項。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="522"/>
@@ -2737,7 +2681,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="41"/>
         <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation>文字轉語音閱讀可以來自當前筆記或剪貼簿中的文字。</translation>
+        <translation>文字轉語音朗讀可以來自當前筆記或剪貼簿中的文字。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="42"/>
@@ -2745,16 +2689,24 @@
         <translation>快捷鍵功能即使在應用程式不活動時（例如最小化或後臺執行）也能生效。</translation>
     </message>
     <message>
-        <source>This feature only works under X11.</source>
-        <translation type="vanished">此功能僅在X11環境中生效。</translation>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="50"/>
+        <source>Configure global keyboard shortcuts</source>
+        <translation>配置全域性快捷鍵</translation>
     </message>
     <message>
-        <source>Toggle behavior</source>
-        <translation type="vanished">切換行為模式</translation>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="68"/>
+        <source>Global keyboard shortcuts are managed through the %1.</source>
+        <translation>全域性快捷鍵透過 %1 進行管理。</translation>
     </message>
     <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="vanished">開始聽寫/朗讀的快捷鍵如果在聽寫/朗讀已啟用時被觸發，則會停止聽寫/朗讀。</translation>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="69"/>
+        <source>Use your desktop environment configuration tool to change key bindings.</source>
+        <translation>使用您的桌面環境配置工具更改快捷鍵。</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="76"/>
+        <source>Global keyboard shortcuts</source>
+        <translation>全域性快捷鍵</translation>
     </message>
     <message>
         <location filename="../src/settings.h" line="76"/>
@@ -2814,42 +2766,22 @@
     <message>
         <location filename="../src/settings.h" line="118"/>
         <source>Switch to next STT model</source>
-        <translation>切換到下一個STT模型</translation>
+        <translation>切換到下一個 STT 模型</translation>
     </message>
     <message>
         <location filename="../src/settings.h" line="124"/>
         <source>Switch to previous STT model</source>
-        <translation>切換到上一個STT模型</translation>
+        <translation>切換到上一個 STT 模型</translation>
     </message>
     <message>
         <location filename="../src/settings.h" line="121"/>
         <source>Switch to next TTS model</source>
-        <translation>切換到下一個TTS模型</translation>
+        <translation>切換到下一個 TTS 模型</translation>
     </message>
     <message>
         <location filename="../src/settings.h" line="128"/>
         <source>Switch to previous TTS model</source>
-        <translation>切換到上一個TTS模型</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="50"/>
-        <source>Configure global keyboard shortcuts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="68"/>
-        <source>Global keyboard shortcuts are managed through the %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="69"/>
-        <source>Use your desktop environment configuration tool to change key bindings.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="76"/>
-        <source>Global keyboard shortcuts</source>
-        <translation type="unfinished">全域性快捷鍵</translation>
+        <translation>切換到上一個 TTS 模型</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="97"/>
@@ -2859,17 +2791,17 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="104"/>
         <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation>操作允許外部應用程式在%1執行時呼叫某些操作。</translation>
+        <translation>當 %1 執行時，允許外部應用程式呼叫特定操作。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="113"/>
         <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation>操作允許外部應用程式在%1執行時呼叫某些操作。</translation>
+        <translation>當 %1 執行時，允許外部應用程式呼叫特定操作。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="114"/>
         <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation>操作可以透過DBus呼叫或命令列選項觸發。</translation>
+        <translation>操作可以透過 DBus 呼叫或命令列選項觸發。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="115"/>
@@ -2924,7 +2856,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="126"/>
         <source>Starts reading text from command-line option --text.</source>
-        <translation>根據命令列選項--text開始朗讀文字。</translation>
+        <translation>從命令列選項 --text 開始朗讀文字。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="127"/>
@@ -2939,89 +2871,89 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="129"/>
         <source>Switches to next STT model.</source>
-        <translation>切換到下一個STT模型。</translation>
+        <translation>切換到下一個 STT 模型。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="130"/>
         <source>Switches to previous STT model.</source>
-        <translation>切換到上一個STT模型。</translation>
+        <translation>切換到上一個 STT 模型。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="131"/>
         <source>Switches to next TTS model.</source>
-        <translation>切換到下一個TTS模型。</translation>
+        <translation>切換到下一個 TTS 模型。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="132"/>
         <source>Switches to previous TTS model.</source>
-        <translation>切換到上一個TTS模型。</translation>
+        <translation>切換到上一個 TTS 模型。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="133"/>
         <source>Sets STT model.</source>
-        <translation>設定STT模型。</translation>
+        <translation>設定 STT 模型。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="134"/>
         <source>Sets TTS model.</source>
-        <translation>設定TTS模型。</translation>
+        <translation>設定 TTS 模型。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="136"/>
         <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation>例如，要觸發%1操作，請執行以下命令：%2。</translation>
+        <translation>例如，要觸發 %1 操作，請執行以下命令：%2。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="147"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="396"/>
         <source>Unable to connect to %1 daemon.</source>
-        <translation type="unfinished"></translation>
+        <translation>無法連線到 %1 守護程序。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="149"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="398"/>
         <source>For %1 action to work, %2 daemon must be installed and running.</source>
-        <translation type="unfinished"></translation>
+        <translation>為了使 %1 操作生效，%2 守護程序必須已安裝並正在執行。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="152"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="401"/>
         <source>Also make sure that the Flatpak application has permission to access %1 daemon socket file.</source>
-        <translation type="unfinished"></translation>
+        <translation>請確保 Flatpak 應用程式具有訪問 %1 守護程序套接字檔案的許可權。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="158"/>
         <source>Toggle behavior for actions</source>
-        <translation type="unfinished"></translation>
+        <translation>切換操作行為</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="165"/>
         <source>Start listening/reading shortcuts or actions will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果在聽寫/朗讀時觸發快捷鍵或操作，則聽寫/朗讀將停止。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="25"/>
         <source>Availability of optional features</source>
-        <translation>可選功能的可用性。</translation>
+        <translation>附加功能的可用性。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="60"/>
         <source>CPU options</source>
-        <translation>CPU選項</translation>
+        <translation>CPU 選項</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="64"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="322"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="528"/>
         <source>Number of simultaneous threads</source>
-        <translation>同時執行的執行緒數量</translation>
+        <translation>同時執行的執行緒數</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="65"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="323"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="529"/>
         <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation>設定最大同時執行的CPU執行緒數。</translation>
+        <translation>設定最大同時執行的 CPU 執行緒數。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="72"/>
@@ -3032,7 +2964,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="86"/>
         <source>Hardware acceleration options</source>
-        <translation>硬體加速選項。</translation>
+        <translation>硬體加速選項</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="92"/>
@@ -3043,7 +2975,7 @@
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="199"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="214"/>
         <source>Use %1</source>
-        <translation>使用%1</translation>
+        <translation>使用 %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="99"/>
@@ -3052,7 +2984,7 @@
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="206"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="221"/>
         <source>Try to find %1 compatible graphic cards in the system.</source>
-        <translation>嘗試在系統中查詢相容的%1圖形卡。</translation>
+        <translation>嘗試在系統中查詢與 %1 相容的顯示卡。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="100"/>
@@ -3063,27 +2995,27 @@
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="207"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="222"/>
         <source>Disable this option if you observe problems when launching the application.</source>
-        <translation>如果啟動應用程式時出現問題，請禁用此選項。</translation>
+        <translation>如果啟動應用程式時出現問題，請停用此選項。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="130"/>
         <source>Only dedicated graphics cards are included. To search for integrated graphics cards, also enable %1.</source>
-        <translation>僅包括專用圖形卡。若要搜尋整合圖形卡，請啟用%1。</translation>
+        <translation>僅包含專用顯示卡。要搜尋整合顯示卡，請同時啟用 %1。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="131"/>
         <source>Use %1 (Integrated GPU)</source>
-        <translation>使用 %1（整合顯示卡）</translation>
+        <translation>使用 %1 (整合 GPU)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="146"/>
         <source>Try to find %1 compatible integrated graphic cards in the system.</source>
-        <translation>嘗試在系統中查詢與%1相容的整合圖形卡。</translation>
+        <translation>嘗試在系統中查詢與 %1 相容的整合顯示卡。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="176"/>
         <source>Try to find %1 compatible hardware in the system.</source>
-        <translation>嘗試在系統中查詢與%1相容的硬體。</translation>
+        <translation>嘗試在系統中查詢與 %1 相容的硬體。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="229"/>
@@ -3093,7 +3025,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="236"/>
         <source>Override AMD GPU version.</source>
-        <translation>覆蓋 AMD 顯示卡版本。</translation>
+        <translation>覆蓋 AMD GPU 版本。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="237"/>
@@ -3108,7 +3040,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="245"/>
         <source>Value has the same effect as %1 environment variable.</source>
-        <translation>值與%1環境變數具有相同的效果。</translation>
+        <translation>該值與 %1 環境變數具有相同的效果。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="251"/>
@@ -3127,101 +3059,39 @@
         <translation>倉庫</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="274"/>
-        <source>Off (Assume all are available)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="275"/>
-        <source>Off (Assume none are available)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="vanished">使用 Python 庫</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="vanished">檢查所需的 Python 庫是否存在。</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="263"/>
         <source>Detection of Python libraries</source>
-        <translation type="unfinished"></translation>
+        <translation>檢測 Python 庫</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="264"/>
         <source>Determine how and whether Python libraries are detected when the application is launched.</source>
-        <translation type="unfinished"></translation>
+        <translation>確定應用程式啟動時如何及是否檢測 Python 庫。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="273"/>
         <source>On</source>
-        <translation type="unfinished"></translation>
+        <translation>開啟</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="274"/>
+        <source>Off (Assume all are available)</source>
+        <translation>關閉（假設全部可用）</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="275"/>
+        <source>Off (Assume none are available)</source>
+        <translation>關閉（假設全部不可用）</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="296"/>
         <source>Location of Python libraries (version: %1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="318"/>
-        <source>Keystroke sending method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="319"/>
-        <source>Simulated keystroke sending method used in %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="329"/>
-        <source>Legacy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="349"/>
-        <source>Keystroke delay</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="350"/>
-        <source>The delay between simulated keystrokes used in %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="379"/>
-        <source>Keyboard layout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="380"/>
-        <source>Keyboard layout used in %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="407"/>
-        <source>Other options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="414"/>
-        <source>Global keyboard shortcuts method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="415"/>
-        <source>Method used to set global keyboard shortcuts.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="vanished">Python 庫的位置</translation>
+        <translation>Python 庫位置（版本：%1）</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="297"/>
         <source>Python libraries directory (%1).</source>
-        <translation>Python 庫目錄 (%1)</translation>
+        <translation>Python 庫目錄 (%1)。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="298"/>
@@ -3238,7 +3108,7 @@
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="368"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="168"/>
         <source>Make sure that the Flatpak application has permissions to access the directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>確保 Flatpak 應用程式具有訪問該目錄的許可權。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="301"/>
@@ -3246,8 +3116,29 @@
         <translation>此選項在您使用 %1 模組管理 Python 庫時可能很有用。</translation>
     </message>
     <message>
-        <source>Save</source>
-        <translation type="vanished">儲存</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="318"/>
+        <source>Keystroke sending method</source>
+        <translation>按鍵傳送方法</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="319"/>
+        <source>Simulated keystroke sending method used in %1.</source>
+        <translation>%1 中使用的模擬按鍵傳送方法。</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="329"/>
+        <source>Legacy</source>
+        <translation>傳統</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="349"/>
+        <source>Keystroke delay</source>
+        <translation>按鍵延遲</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="350"/>
+        <source>The delay between simulated keystrokes used in %1.</source>
+        <translation>%1 中使用的模擬按鍵之間的延遲。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="364"/>
@@ -3258,6 +3149,31 @@
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="365"/>
         <source>X11 compose file used in %1.</source>
         <translation>在 %1 中使用的 X11 組合檔案</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="379"/>
+        <source>Keyboard layout</source>
+        <translation>鍵盤佈局</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="380"/>
+        <source>Keyboard layout used in %1.</source>
+        <translation>鍵盤佈局用於 %1。</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="407"/>
+        <source>Other options</source>
+        <translation>其他選項</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="414"/>
+        <source>Global keyboard shortcuts method</source>
+        <translation>全域性快捷鍵方法</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="415"/>
+        <source>Method used to set global keyboard shortcuts.</source>
+        <translation>設定全域性快捷鍵的方法。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="311"/>
@@ -3272,7 +3188,7 @@
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="35"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="50"/>
         <source>Show %1</source>
-        <translation>顯示%1</translation>
+        <translation>顯示 %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="35"/>
@@ -3285,17 +3201,17 @@
     <message>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="42"/>
         <source>%1 allows you to create text transformations that can be applied after Speech to Text or before Text to Speech.</source>
-        <translation>%1 允許您建立可在語音轉文字之後或文字轉語音之前應用的文字轉換。</translation>
+        <translation>%1 允許您建立文字轉換，可用於語音識別後的文字處理或文字轉語音前的文字處理。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="43"/>
         <source>With %1, you can easily and flexibly correct errors in decoded text or correct mispronounced words.</source>
-        <translation>透過%1，您可以輕鬆且靈活地糾正語音識別過程中產生的錯誤或將語音中誤讀的單詞進行更正。</translation>
+        <translation>透過 %1，您可以輕鬆靈活地糾正語音識別結果中的錯誤或修正發音不準確的詞語。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="44"/>
         <source>To configure the rules you need, go to %1 on the main toolbar.</source>
-        <translation>要配置所需的規則，請在主工具欄中轉到%1。</translation>
+        <translation>要配置所需的規則，請在主工具欄中轉到 %1。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="50"/>
@@ -3336,7 +3252,7 @@
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="85"/>
         <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation>啟用語音識別後的高階標點恢復。要使此功能生效，請確保已為您的語言啟用了%1模型。</translation>
+        <translation>啟用語音識別後的高階標點恢復。要使此功能生效，請確保已為您的語言啟用了 %1 模型。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="87"/>
@@ -3347,17 +3263,29 @@
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="88"/>
         <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation>當啟用此選項時，模型初始化會花費更長的時間，並且記憶體使用量更高。</translation>
+        <translation>當啟用此選項時，模型初始化會花費更長的時間，並且使用更多記憶體。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="89"/>
         <source>This option only works with models that do not natively support punctuation.</source>
-        <translation>此選項僅適用於不原生支援標點的模型。</translation>
+        <translation>此選項僅適用於原生不支援標點的模型。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="98"/>
         <source>To make %1 work, download %2 model.</source>
-        <translation>要使%1工作，請下載%2模型。</translation>
+        <translation>要使 %1 工作，請下載 %2 模型。</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="214"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="131"/>
+        <source>Pause listening while processing</source>
+        <translation>暫停聽寫，以進行處理</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="219"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="139"/>
+        <source>This option can be useful when %1 is %2.</source>
+        <translation>這個選項在 %1 是 %2 的時候很有用。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="240"/>
@@ -3407,6 +3335,18 @@
         <location filename="../desktop/qml/SettingsSttPage.qml" line="507"/>
         <source>Best quality</source>
         <translation>最佳質量</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="227"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="147"/>
+        <source>Play tone when starting and stopping listening</source>
+        <translation>啟動和停止聽寫時，播放提示音</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="231"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="154"/>
+        <source>Play an audible tone when starting and stopping listening.</source>
+        <translation>啟動和停止聽寫時，發出聲音提示。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="288"/>
@@ -3490,19 +3430,19 @@
         <location filename="../desktop/qml/SettingsSttPage.qml" line="443"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="580"/>
         <source>Use Flash Attention</source>
-        <translation>啟用快閃記憶體注意力</translation>
+        <translation>啟用快閃記憶體注意力機制</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="450"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="587"/>
         <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation>快閃記憶體注意力可能在使用 GPU 加速時減少解碼時間。</translation>
+        <translation>使用快閃記憶體注意力機制可能有助於縮短 GPU 加速時的解碼時間。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="451"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="588"/>
         <source>Disable this option if you observe problems.</source>
-        <translation>如果你發現問題，請禁用該選項。</translation>
+        <translation>如果您發現問題，請停用該選項。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="459"/>
@@ -3522,7 +3462,7 @@
     <message>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="22"/>
         <source>Restore diacritical marks before speech synthesis</source>
-        <translation>在語音合成前恢復重音符號</translation>
+        <translation>在語音合成前恢復變音符號</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="29"/>
@@ -3532,7 +3472,7 @@
     <message>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="38"/>
         <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation>希伯來語文字的重音符號恢復不可用。</translation>
+        <translation>希伯來語的變音符號恢復功能不可用。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="87"/>
@@ -3548,7 +3488,7 @@
     <message>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="97"/>
         <source>When this option is disabled, tags are ignored.</source>
-        <translation>當此選項禁用時，標籤將被忽略。</translation>
+        <translation>當此選項停用時，標籤將被忽略。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="106"/>
@@ -3558,7 +3498,7 @@
     <message>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="108"/>
         <source>The following control tags are currently supported:</source>
-        <translation>以下控制標籤目前受到支援：</translation>
+        <translation>當前支援的控制標籤如下：</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="110"/>
@@ -3633,12 +3573,12 @@
     <message>
         <location filename="../desktop/qml/SettingsUiPage.qml" line="107"/>
         <source>Use custom graphical style</source>
-        <translation>使用自定義圖形樣式</translation>
+        <translation>使用自定義圖形風格</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsUiPage.qml" line="116"/>
         <source>Graphical style</source>
-        <translation>圖形樣式</translation>
+        <translation>圖形風格</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsUiPage.qml" line="117"/>
@@ -3666,7 +3606,7 @@
     <message>
         <location filename="../desktop/qml/ShortcutForm.qml" line="64"/>
         <source>Detect special key presses (multimedia keys)</source>
-        <translation>檢測特殊按鍵（多媒體鍵）</translation>
+        <translation>檢測特殊鍵（多媒體鍵）</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ShortcutForm.qml" line="88"/>
@@ -3679,7 +3619,7 @@
     <message>
         <location filename="../sfos/qml/SpeechWidget.qml" line="45"/>
         <source>Starting...</source>
-        <translation>啟動...</translation>
+        <translation>正在啟動...</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SpeechWidget.qml" line="47"/>
@@ -3702,7 +3642,7 @@
         <location filename="../sfos/qml/SpeechWidget.qml" line="51"/>
         <location filename="../desktop/qml/SpeechWidget.qml" line="127"/>
         <source>Converting text to speech...</source>
-        <translation>將文字轉換為語音...</translation>
+        <translation>正在將文字轉換為語音...</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SpeechWidget.qml" line="53"/>
@@ -3726,7 +3666,7 @@
         <location filename="../sfos/qml/SpeechWidget.qml" line="59"/>
         <location filename="../desktop/qml/SpeechWidget.qml" line="141"/>
         <source>Transcribing audio file...</source>
-        <translation>轉錄音訊檔案...</translation>
+        <translation>正在轉錄音訊檔案...</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SpeechWidget.qml" line="62"/>
@@ -3761,7 +3701,7 @@
     <message>
         <location filename="../desktop/qml/SpeechWidget.qml" line="125"/>
         <source>Repairing the text...</source>
-        <translation>修復文字...</translation>
+        <translation>正在修復文字...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SpeechWidget.qml" line="221"/>
@@ -3808,7 +3748,7 @@
         <location filename="../sfos/qml/StreamSelectionDialog.qml" line="54"/>
         <location filename="../desktop/qml/StreamSelectionDialog.qml" line="81"/>
         <source>The file contains multiple streams. Select which one you want to import.</source>
-        <translation>檔案包含多個流，請選擇要匯入的。</translation>
+        <translation>檔案包含多個流，請選擇要匯入的流。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/StreamSelectionDialog.qml" line="62"/>
@@ -3883,14 +3823,10 @@
         <translation>前往 %1 頁面下載所需的語言模型。</translation>
     </message>
     <message>
-        <source>Languages</source>
-        <translation type="vanished">語言</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/Translator.qml" line="77"/>
         <location filename="../desktop/qml/Translator.qml" line="27"/>
         <source>Languages and Models</source>
-        <translation type="unfinished"></translation>
+        <translation>語言和模型</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="105"/>
@@ -3961,16 +3897,12 @@
         <location filename="../sfos/qml/Translator.qml" line="337"/>
         <location filename="../desktop/qml/Translator.qml" line="464"/>
         <source>Translate as you type</source>
-        <translation>實時翻譯</translation>
+        <translation>即時翻譯</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="174"/>
         <source>Pick the language to translate from.</source>
         <translation>選擇要翻譯的語言。</translation>
-    </message>
-    <message>
-        <source>This model requires a voice sample.</source>
-        <translation type="vanished">此模型需要一個語音樣本。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="283"/>
@@ -3980,11 +3912,7 @@
     <message>
         <location filename="../desktop/qml/Translator.qml" line="386"/>
         <source>Create one in %1 menu</source>
-        <translation>在%1選單中建立一個</translation>
-    </message>
-    <message>
-        <source>Voice samples</source>
-        <translation type="vanished">語音樣本</translation>
+        <translation>在 %1 選單中建立</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="101"/>
@@ -3995,48 +3923,40 @@
         <location filename="../desktop/qml/Translator.qml" line="193"/>
         <location filename="../desktop/qml/Translator.qml" line="385"/>
         <source>This model requires a voice profile.</source>
-        <translation type="unfinished"></translation>
+        <translation>此模型需要一個語音配置檔案。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="194"/>
         <source>Create one in %1.</source>
-        <translation>在 %1 中建立一個。</translation>
+        <translation>在 %1 中建立。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="194"/>
         <location filename="../desktop/qml/Translator.qml" line="386"/>
         <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
+        <translation>語音配置檔案</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="195"/>
         <source>Text to Speech model for language to translate from.</source>
-        <translation>用於將要翻譯成的語言的文字轉語音模型。</translation>
-    </message>
-    <message>
-        <source>No voice sample</source>
-        <translation type="vanished">沒有語音樣本</translation>
-    </message>
-    <message>
-        <source>Voice sample</source>
-        <translation type="vanished">語音樣本</translation>
+        <translation>文字轉語音模型, 用於翻譯的源語言。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="197"/>
         <location filename="../desktop/qml/Translator.qml" line="389"/>
         <source>No voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>沒有語音配置檔案</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="198"/>
         <location filename="../desktop/qml/Translator.qml" line="390"/>
         <source>Voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>語音配置檔案</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="278"/>
         <source>Replace the note with translated text and switch languages.</source>
-        <translation>用翻譯後的文字替換筆記並切換語言。</translation>
+        <translation>將筆記替換為翻譯後的文字並切換語言。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="290"/>
@@ -4061,7 +3981,7 @@
     <message>
         <location filename="../desktop/qml/Translator.qml" line="387"/>
         <source>Text to Speech model for language to translate into.</source>
-        <translation>用於將要翻譯成的語言的文字轉語音模型。</translation>
+        <translation>文字轉語音模型，用於翻譯的目標語言。</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="143"/>
@@ -4096,65 +4016,61 @@
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="31"/>
         <source>Edit audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>編輯音訊樣本</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="75"/>
         <source>Text decoding has completed!</source>
-        <translation type="unfinished"></translation>
+        <translation>文字解碼已完成！</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="102"/>
         <source>Stop</source>
-        <translation type="unfinished">停止</translation>
+        <translation>停止</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="102"/>
         <source>Play</source>
-        <translation type="unfinished">播放</translation>
+        <translation>播放</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="119"/>
         <source>Save</source>
-        <translation type="unfinished">儲存</translation>
+        <translation>儲存</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="129"/>
         <source>Cancel</source>
-        <translation type="unfinished">取消</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="148"/>
-        <source>Text spoken in audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="171"/>
         <source>Decode text from audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>從音訊樣本解碼文字</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="174"/>
         <source>Use the current active Speech to Text model to decode text from an audio sample.</source>
-        <translation type="unfinished"></translation>
+        <translation>使用當前活動的語音轉文字模型從音訊樣本解碼文字。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="183"/>
         <source>Name</source>
-        <translation type="unfinished">名稱</translation>
+        <translation>名稱</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="185"/>
         <source>This name is already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>此名稱已被佔用</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="148"/>
+        <source>Text spoken in audio sample</source>
+        <translation>音訊樣本中的文字</translation>
     </message>
 </context>
 <context>
     <name>VoiceImportPage</name>
-    <message>
-        <source>Create a new voice sample</source>
-        <translation type="vanished">建立新聲音樣本</translation>
-    </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="154"/>
         <source>Cancel</source>
@@ -4166,69 +4082,34 @@
         <translation>建立</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/VoiceImportPage.qml" line="73"/>
-        <source>Create a new audio sample</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceImportPage.qml" line="79"/>
-        <source>Audio sample</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceImportPage.qml" line="84"/>
-        <source>Audio sample lets you clone someone&apos;s voice.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceImportPage.qml" line="85"/>
-        <source>It can be created by recording a audio sample directly from the microphone or by providing an audio file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceImportPage.qml" line="86"/>
-        <source>The text spoken in the audio sample should also be provided.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="92"/>
         <source>Tips:</source>
-        <translation type="unfinished"></translation>
+        <translation>提示：</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="94"/>
         <source>Audio sample should not be very long.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceImportPage.qml" line="94"/>
-        <source>The duration from 10 to 30 seconds is good enough.</source>
-        <translation type="unfinished"></translation>
+        <translation>音訊樣本不宜過長。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="96"/>
         <source>If you&apos;re not satisfied with voice cloning quality, try creating a few different audio samples and see which one gives you the best result.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceImportPage.qml" line="97"/>
-        <source>More detailed instructions on the requirements for the audio sample can be found in the documentation for the specific TTS engine.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果您對語音克隆的質量不滿意，可以嘗試建立幾個不同的音訊樣本，看看哪個能給您最好的結果。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="104"/>
         <source>Currently, voice cloning can be used in the following models:</source>
-        <translation type="unfinished"></translation>
+        <translation>目前，語音克隆可應用於以下模型：</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="131"/>
         <source>Help</source>
-        <translation type="unfinished">幫助</translation>
+        <translation>幫助</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="178"/>
         <source>Text decoding has completed!</source>
-        <translation type="unfinished"></translation>
+        <translation>文字解碼已完成！</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="194"/>
@@ -4258,38 +4139,58 @@
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="228"/>
         <source>Automatically normalize volume and remove non-speech noise in a microphone recording or imported audio file.</source>
-        <translation>自動調整音量並去除麥克風錄音或匯入音訊檔案中的非語音噪音。</translation>
+        <translation>自動調整麥克風錄音或匯入音訊檔案的音量，並去除非語音噪音。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="345"/>
         <source>Text spoken in audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>音訊樣本中的文字</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="368"/>
         <source>Decode text from audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>從音訊樣本解碼文字</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="371"/>
         <source>Use the current active Speech to Text model to decode text from an audio sample.</source>
-        <translation type="unfinished"></translation>
+        <translation>使用當前活動的語音轉文字模型從音訊樣本解碼文字。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="381"/>
         <source>Name</source>
-        <translation type="unfinished">名稱</translation>
+        <translation>名稱</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="383"/>
         <source>This name is already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>此名稱已被佔用</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="95"/>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="239"/>
         <source>Use the range slider to clip the audio sample to the part containing speech.</source>
-        <translation>使用範圍滑塊將音訊樣本剪輯到包含語音的部分。</translation>
+        <translation>使用滑動條將音訊樣本剪輯到包含語音的部分。</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceImportPage.qml" line="73"/>
+        <source>Create a new audio sample</source>
+        <translation>建立新的音訊樣本</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceImportPage.qml" line="79"/>
+        <source>Audio sample</source>
+        <translation>音訊樣本</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceImportPage.qml" line="84"/>
+        <source>Audio sample lets you clone someone&apos;s voice.</source>
+        <translation>音訊樣本允許您克隆某人的聲音。</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceImportPage.qml" line="85"/>
+        <source>It can be created by recording a audio sample directly from the microphone or by providing an audio file.</source>
+        <translation>它可以直接從麥克風錄製音訊樣本，或者透過提供音訊檔案來建立。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="321"/>
@@ -4302,17 +4203,24 @@
         <translation>播放</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/VoiceImportPage.qml" line="86"/>
+        <source>The text spoken in the audio sample should also be provided.</source>
+        <translation>音訊樣本中語音的內容也應提供。</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceImportPage.qml" line="94"/>
+        <source>The duration from 10 to 30 seconds is good enough.</source>
+        <translation>10 到 30 秒的時長就足夠了。</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceImportPage.qml" line="97"/>
+        <source>More detailed instructions on the requirements for the audio sample can be found in the documentation for the specific TTS engine.</source>
+        <translation>有關音訊樣本要求的更多詳細說明，請參閱特定 TTS 引擎的文件。</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="331"/>
         <source>Duration: %1 seconds</source>
-        <translation>時長：%1秒</translation>
-    </message>
-    <message>
-        <source>Voice name</source>
-        <translation type="vanished">語音名稱</translation>
-    </message>
-    <message>
-        <source>Tip: If you&apos;re not satisfied with voice cloning quality, try creating a few different voice samples and see which one gives you the best result.</source>
-        <translation type="vanished">提示：如果你對聲音克隆的質量不滿意，可以嘗試建立幾個不同的聲音樣本，看看哪個能給你最好的效果。</translation>
+        <translation>時長：%1 秒</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="407"/>
@@ -4343,12 +4251,74 @@
 <context>
     <name>VoiceMgmtPage</name>
     <message>
-        <source>Voice samples</source>
-        <translation type="vanished">語音樣本</translation>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="26"/>
+        <source>Voice profiles</source>
+        <translation>語音配置檔案</translation>
     </message>
     <message>
-        <source>Create a new voice sample</source>
-        <translation type="vanished">建立新聲音樣本</translation>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="73"/>
+        <source>Voice profile</source>
+        <translation>語音配置檔案</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="78"/>
+        <source>Voice profile can be defined with an audio sample or text description.</source>
+        <translation>語音配置檔案可以透過音訊樣本或文字描述來定義。</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="87"/>
+        <source>Voice Cloning</source>
+        <translation>語音克隆</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="96"/>
+        <source>Allows you to define different speaker characteristics, such as gender, mood or pace.</source>
+        <translation>允許您定義不同的說話者特徵，例如性別、情緒或語速。</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="97"/>
+        <source>Voice Text Description</source>
+        <translation>語音文字描述</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="84"/>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="147"/>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="184"/>
+        <source>Audio sample</source>
+        <translation>音訊樣本</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="86"/>
+        <source>Allows you to clone someone&apos;s voice.</source>
+        <translation>允許您克隆某人的聲音。</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="87"/>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="97"/>
+        <source>Can be used in models that support %1.</source>
+        <translation>可用於支援 %1 的模型。</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="94"/>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="148"/>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="196"/>
+        <source>Text voice profile</source>
+        <translation>文字語音配置檔案</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="217"/>
+        <source>Create a new audio sample</source>
+        <translation>建立新的音訊樣本</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="219"/>
+        <source>Create a new text voice profile</source>
+        <translation>建立新的文字語音配置檔案</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="232"/>
+        <source>Help</source>
+        <translation>幫助</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="252"/>
@@ -4356,102 +4326,26 @@
         <translation>關閉</translation>
     </message>
     <message>
-        <source>Save</source>
-        <translation type="vanished">儲存</translation>
-    </message>
-    <message>
-        <source>Save changes</source>
-        <translation type="vanished">儲存更改</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">取消</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="26"/>
-        <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="73"/>
-        <source>Voice profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="78"/>
-        <source>Voice profile can be defined with an audio sample or text description.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="84"/>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="147"/>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="184"/>
-        <source>Audio sample</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="86"/>
-        <source>Allows you to clone someone&apos;s voice.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="87"/>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="97"/>
-        <source>Can be used in models that support %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="87"/>
-        <source>Voice Cloning</source>
-        <translation type="unfinished">語音克隆</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="94"/>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="148"/>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="196"/>
-        <source>Text voice profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="96"/>
-        <source>Allows you to define different speaker characteristics, such as gender, mood or pace.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="97"/>
-        <source>Voice Text Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="217"/>
-        <source>Create a new audio sample</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="219"/>
-        <source>Create a new text voice profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="232"/>
-        <source>Help</source>
-        <translation type="unfinished">幫助</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="304"/>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="407"/>
         <source>Edit</source>
-        <translation type="unfinished">編輯</translation>
+        <translation>編輯</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="316"/>
         <source>Clone</source>
-        <translation type="unfinished">克隆</translation>
+        <translation>克隆</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="332"/>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="423"/>
+        <source>Delete</source>
+        <translation>刪除</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="370"/>
         <source>Edit the audio sample and set the missing text.</source>
-        <translation type="unfinished"></translation>
+        <translation>編輯音訊樣本並填寫缺失的文字。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="392"/>
@@ -4466,114 +4360,100 @@
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="440"/>
         <source>You haven&apos;t created any voice profile yet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Rename</source>
-        <translation type="vanished">重新命名</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="332"/>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="423"/>
-        <source>Delete</source>
-        <translation>刪除</translation>
-    </message>
-    <message>
-        <source>You haven&apos;t created voice samples yet.</source>
-        <translation type="vanished">你還未建立聲音樣本。</translation>
+        <translation>您尚未建立任何語音配置檔案。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="441"/>
         <source>Use %1 to make a new one.</source>
-        <translation>使用 %1 來建立一個新規則。</translation>
+        <translation>使用 %1 進行建立。</translation>
     </message>
 </context>
 <context>
     <name>VoicePromptEditPage</name>
     <message>
-        <location filename="../desktop/qml/VoicePromptEditPage.qml" line="27"/>
-        <source>Edit text voice profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoicePromptEditPage.qml" line="27"/>
-        <source>Create a new text voice profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoicePromptEditPage.qml" line="63"/>
-        <source>Text voice profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="68"/>
         <source>Voice profile can be defined by text description.</source>
-        <translation type="unfinished"></translation>
+        <translation>語音配置檔案可以透過文字描述來定義。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="69"/>
         <source>A simple description could be, for example: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>例如，一個簡單的描述可以是：%1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="76"/>
         <source>Tips:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoicePromptEditPage.qml" line="78"/>
-        <source>Include the term %1 to generate the highest quality audio, and %2 for high levels of background noise.</source>
-        <translation type="unfinished"></translation>
+        <translation>提示：</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="80"/>
         <source>Use emotions: %1, %2, %3, %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoicePromptEditPage.qml" line="82"/>
-        <source>To ensure speaker consistency across generations, include speaker name.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoicePromptEditPage.qml" line="89"/>
-        <source>Currently, text voice profiles can be used only in %1 models.</source>
-        <translation type="unfinished"></translation>
+        <translation>使用情感：%1，%2，%3，%4</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="90"/>
         <source>To learn more about how to create a good text description, check out the specific model&apos;s website.</source>
-        <translation type="unfinished"></translation>
+        <translation>有關如何建立良好的文字描述，請訪問特定模型的網站。</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoicePromptEditPage.qml" line="27"/>
+        <source>Edit text voice profile</source>
+        <translation>編輯文字語音配置檔案</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoicePromptEditPage.qml" line="27"/>
+        <source>Create a new text voice profile</source>
+        <translation>建立新的文字語音配置檔案</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoicePromptEditPage.qml" line="63"/>
+        <source>Text voice profile</source>
+        <translation>文字語音配置檔案</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoicePromptEditPage.qml" line="78"/>
+        <source>Include the term %1 to generate the highest quality audio, and %2 for high levels of background noise.</source>
+        <translation>為了生成更高質量的音訊，請包含術語 %1， 對於高水平背景噪音，請包含 %2。</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoicePromptEditPage.qml" line="82"/>
+        <source>To ensure speaker consistency across generations, include speaker name.</source>
+        <translation>為了確保不同版本中的說話人一致性，請輸入說話人姓名。</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoicePromptEditPage.qml" line="89"/>
+        <source>Currently, text voice profiles can be used only in %1 models.</source>
+        <translation>目前，文字語音配置檔案僅適用於 %1 模型。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="118"/>
         <source>Help</source>
-        <translation type="unfinished">幫助</translation>
+        <translation>幫助</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="131"/>
         <source>Save</source>
-        <translation type="unfinished">儲存</translation>
+        <translation>儲存</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="141"/>
         <source>Cancel</source>
-        <translation type="unfinished">取消</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="159"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>描述</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="174"/>
         <source>Name</source>
-        <translation type="unfinished">名稱</translation>
+        <translation>名稱</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="176"/>
         <source>This name is already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>此名稱已被佔用</translation>
     </message>
 </context>
 <context>
@@ -4586,7 +4466,7 @@
     <message>
         <location filename="../desktop/qml/VoiceRecordPage.qml" line="32"/>
         <source>Press %1 to start recording.</source>
-        <translation>按%1開始錄製。</translation>
+        <translation>按 %1 開始錄製。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceRecordPage.qml" line="32"/>
@@ -5258,6 +5138,36 @@
         <translation>錯誤：發生了未知錯誤。</translation>
     </message>
     <message>
+        <location filename="../sfos/qml/main.qml" line="353"/>
+        <location filename="../desktop/qml/main.qml" line="616"/>
+        <source>Error: Not all text has been translated.</source>
+        <translation>錯誤：並非所有文字都已翻譯。</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="356"/>
+        <location filename="../desktop/qml/main.qml" line="622"/>
+        <source>Error: Couldn&apos;t export to the file.</source>
+        <translation>錯誤：無法匯出到檔案。</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="359"/>
+        <location filename="../desktop/qml/main.qml" line="625"/>
+        <source>Error: Couldn&apos;t import the file.</source>
+        <translation>錯誤：無法匯入檔案。</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="362"/>
+        <location filename="../desktop/qml/main.qml" line="628"/>
+        <source>Error: Couldn&apos;t import. The file does not contain audio or subtitles.</source>
+        <translation>錯誤：無法匯入，檔案中不包含音訊或字幕。</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="374"/>
+        <location filename="../desktop/qml/main.qml" line="640"/>
+        <source>Error: Couldn&apos;t download a licence.</source>
+        <translation>錯誤：無法下載許可證。</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/main.qml" line="141"/>
         <source>Getting ready, please wait...</source>
         <translation>準備中，請稍後...</translation>
@@ -5270,7 +5180,7 @@
     <message>
         <location filename="../desktop/qml/main.qml" line="145"/>
         <source>Reading a note...</source>
-        <translation>正在讀取筆記...</translation>
+        <translation>正在朗讀筆記...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="147"/>
@@ -5278,39 +5188,45 @@
         <translation>朗讀已暫停。</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/main.qml" line="150"/>
+        <location filename="../desktop/qml/main.qml" line="152"/>
+        <source>Say something...</source>
+        <translation>說點什麼吧…</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/main.qml" line="198"/>
         <location filename="../desktop/qml/main.qml" line="203"/>
         <location filename="../desktop/qml/main.qml" line="209"/>
         <source>Audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>音訊樣本</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="203"/>
         <source>The selected model supports voice cloning. Create an %1 to clone someone&apos;s voice.</source>
-        <translation type="unfinished"></translation>
+        <translation>所選模型支援語音克隆。建立 %1 即可克隆某人的聲音。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="209"/>
         <location filename="../desktop/qml/main.qml" line="229"/>
         <source>You can make a new %1 in the %2 menu.</source>
-        <translation type="unfinished"></translation>
+        <translation>你可以在 %2 選單中建立新的 %1。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="209"/>
         <location filename="../desktop/qml/main.qml" line="229"/>
         <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
+        <translation>語音配置檔案</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="218"/>
         <location filename="../desktop/qml/main.qml" line="229"/>
         <source>Text voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>文字語音配置檔案</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="223"/>
         <source>The selected model supports the voice characteristics defined in the text description.</source>
-        <translation type="unfinished"></translation>
+        <translation>所選模型支援文字描述中定義的語音特徵。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="251"/>
@@ -5345,7 +5261,7 @@
     <message>
         <location filename="../desktop/qml/main.qml" line="257"/>
         <source>Disable</source>
-        <translation>禁用</translation>
+        <translation>停用</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="258"/>
@@ -5356,16 +5272,6 @@
         <location filename="../desktop/qml/main.qml" line="259"/>
         <source>Start</source>
         <translation>開始</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="387"/>
-        <source>Try executing %1 before running Speech Note.</source>
-        <translation>嘗試在執行語音筆記前執行 %1。</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="375"/>
-        <source>To speed up processing, enable hardware acceleration in the settings.</source>
-        <translation>為了加快處理速度，請在設定中啟用硬體加速。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="297"/>
@@ -5382,27 +5288,27 @@
         <location filename="../desktop/qml/main.qml" line="310"/>
         <location filename="../desktop/qml/main.qml" line="321"/>
         <source>The required version of the add-on is %1.</source>
-        <translation>所需的擴充套件外掛版本是 %1。</translation>
+        <translation>所需的外掛版本是 %1。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="346"/>
         <source>Both %1 and %2 graphics cards have been detected.</source>
-        <translation>檢測到 %1 和 %2 圖形卡。</translation>
+        <translation>檢測到 %1 和 %2 顯示卡</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="348"/>
         <source>%1 graphics card has been detected.</source>
-        <translation>檢測到 %1 圖形卡。</translation>
+        <translation>檢測到 %1 顯示卡</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="350"/>
         <source>To add GPU acceleration support, install the additional Flatpak add-on.</source>
-        <translation>為了新增GPU加速支援，請安裝額外的Flatpak擴充套件外掛。</translation>
+        <translation>為了新增 GPU 加速支援，請安裝額外的 Flatpak 外掛。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="353"/>
         <source>Click to see instructions for installing the add-on.</source>
-        <translation>點選以檢視安裝擴充套件的說明。</translation>
+        <translation>點選檢視外掛安裝說明。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="355"/>
@@ -5410,14 +5316,24 @@
         <translation>安裝</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/main.qml" line="375"/>
+        <source>To speed up processing, enable hardware acceleration in the settings.</source>
+        <translation>為了加快處理速度，請在設定中啟用硬體加速。</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/main.qml" line="386"/>
         <source>Most likely, %1 kernel module has not been fully initialized.</source>
         <translation>最有可能的是，%1 核心模組尚未完全初始化。</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/main.qml" line="387"/>
+        <source>Try executing %1 before running Speech Note.</source>
+        <translation>嘗試在執行語音筆記前執行 %1。</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/main.qml" line="517"/>
         <source>Restart the application to apply changes.</source>
-        <translation>請重啟應用程式以應用更改。</translation>
+        <translation>重啟程式以應用更改。</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="570"/>
@@ -5433,42 +5349,6 @@
         <location filename="../desktop/qml/main.qml" line="619"/>
         <source>Error: Couldn&apos;t repair the text.</source>
         <translation>錯誤：無法修復文字。</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="353"/>
-        <location filename="../desktop/qml/main.qml" line="616"/>
-        <source>Error: Not all text has been translated.</source>
-        <translation>錯誤：並非所有文字都已翻譯。</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="356"/>
-        <location filename="../desktop/qml/main.qml" line="622"/>
-        <source>Error: Couldn&apos;t export to the file.</source>
-        <translation>錯誤：無法匯出到檔案。</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="359"/>
-        <location filename="../desktop/qml/main.qml" line="625"/>
-        <source>Error: Couldn&apos;t import the file.</source>
-        <translation>錯誤：無法匯入檔案。</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="362"/>
-        <location filename="../desktop/qml/main.qml" line="628"/>
-        <source>Error: Couldn&apos;t import. The file does not contain audio or subtitles.</source>
-        <translation>錯誤：無法匯入，檔案中不包含音訊或字幕。</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="374"/>
-        <location filename="../desktop/qml/main.qml" line="640"/>
-        <source>Error: Couldn&apos;t download a licence.</source>
-        <translation>錯誤：無法下載許可證。</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="150"/>
-        <location filename="../desktop/qml/main.qml" line="152"/>
-        <source>Say something...</source>
-        <translation>說點什麼吧…</translation>
     </message>
 </context>
 <context>
@@ -5491,7 +5371,7 @@
     <message>
         <location filename="../src/settings.cpp" line="1314"/>
         <source>Don&apos;t force any style</source>
-        <translation>不要強制使用任何風格。</translation>
+        <translation>不強制使用任何風格。</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="1441"/>
@@ -5512,10 +5392,6 @@
         <location filename="../src/settings.cpp" line="2484"/>
         <source>Example: Insert newline instead of the word &quot;%1&quot;</source>
         <translation>示例：用換行符代替單詞“%1”</translation>
-    </message>
-    <message>
-        <source>Example: Add silence after &quot;%1&quot;</source>
-        <translation type="vanished">示例：在“%1”後新增靜音。</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="2509"/>
@@ -5546,7 +5422,7 @@
     <message>
         <location filename="../src/speech_service.cpp" line="3024"/>
         <source>Chinese</source>
-        <translation type="unfinished">中文</translation>
+        <translation>中文</translation>
     </message>
     <message>
         <location filename="../src/speech_service.cpp" line="3037"/>
@@ -5616,7 +5492,7 @@
     <message>
         <location filename="../src/speech_service.cpp" line="3209"/>
         <source>Diacritics restoration for Hebrew</source>
-        <translation>希伯來文的重音符號恢復</translation>
+        <translation>希伯來文的變音符號恢復</translation>
     </message>
     <message>
         <location filename="../src/speech_service.cpp" line="4452"/>
@@ -5695,7 +5571,7 @@
     <message>
         <location filename="../src/tray_icon.cpp" line="282"/>
         <source>Start listening, always translate</source>
-        <translation type="unfinished">開始聽寫，並始終進行翻譯</translation>
+        <translation>開始聽寫，並始終進行翻譯</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="285"/>
@@ -5706,7 +5582,7 @@
     <message>
         <location filename="../src/tray_icon.cpp" line="293"/>
         <source>Start listening, always translate, text to active window</source>
-        <translation type="unfinished">開始聽寫，並始終進行翻譯，將文字插入活動視窗</translation>
+        <translation>開始聽寫，並始終進行翻譯，將文字插入活動視窗</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="297"/>
@@ -5717,7 +5593,7 @@
     <message>
         <location filename="../src/tray_icon.cpp" line="304"/>
         <source>Start listening, always translate, text to clipboard</source>
-        <translation type="unfinished">開始聽寫，並始終進行翻譯，將文字複製到剪貼簿</translation>
+        <translation>開始聽寫，並始終進行翻譯，將文字複製到剪貼簿</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="307"/>
