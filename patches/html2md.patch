@@ -1,7 +1,18 @@
+diff -ruN html2md-org/include/html2md.h html2md-patched/include/html2md.h
+--- html2md-org/include/html2md.h	2025-02-13 09:38:03.000000000 +0100
++++ html2md-patched/include/html2md.h	2025-05-10 20:17:11.600032700 +0200
+@@ -7,6 +7,7 @@
+ #include <memory>
+ #include <string>
+ #include <unordered_map>
++#include <cstdint>
+ 
+ /*!
+  * \brief html2md namespace
 diff -ruN html2md-org/src/html2md.cpp html2md-patched/src/html2md.cpp
---- html2md-org/src/html2md.cpp	2023-08-21 19:46:09.000000000 +0200
-+++ html2md-patched/src/html2md.cpp	2023-12-14 15:00:07.233043352 +0100
-@@ -188,8 +188,7 @@
+--- html2md-org/src/html2md.cpp	2025-02-13 09:38:03.000000000 +0100
++++ html2md-patched/src/html2md.cpp	2025-05-10 20:15:44.589932259 +0200
+@@ -186,8 +186,7 @@
    return this;
  }
  
@@ -11,7 +22,7 @@ diff -ruN html2md-org/src/html2md.cpp html2md-patched/src/html2md.cpp
    if (IsInIgnoredTag())
      return this;
  
-@@ -610,11 +609,11 @@
+@@ -607,11 +606,11 @@
  }
  
  void Converter::TagStrikethrought::OnHasLeftOpeningTag(Converter *c) {

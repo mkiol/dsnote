@@ -1,6 +1,6 @@
 if(BUILD_VOSK)
-    set(openfst_source_url "https://github.com/alphacep/openfst/archive/7dfd808194105162f20084bb4d8e4ee4b65266d5.zip")
-    set(openfst_checksum "734084e424d42f16424bd5279e4f0786")
+    set(openfst_source_url "https://github.com/alphacep/openfst/archive/18e94e63870ebcf79ebb42b7035cd3cb626ec090.zip")
+    set(openfst_checksum "7785d14d12789af2eba4bfd32fa3d08be2088e0a0666ada2befce26f6410d954")
     set(kaldi_source_url "https://github.com/alphacep/kaldi/archive/2abed6b15990d9438f70863f2b58bd8af8432043.zip")
     set(kaldi_checksum "4923c5b7599184c36db3342579676fbc")
     set(vosk_source_url "https://github.com/alphacep/vosk-api/archive/128c216c6137a36fbf5b0bf64d03501e91a6eeaa.zip")
@@ -21,7 +21,7 @@ if(BUILD_VOSK)
         BINARY_DIR ${PROJECT_BINARY_DIR}/external/openfst
         INSTALL_DIR ${PROJECT_BINARY_DIR}/external
         URL "${openfst_source_url}"
-        URL_MD5 "${openfst_checksum}"
+        URL_HASH SHA256=${openfst_checksum}
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                     -i ${patches_dir}/openfst.patch ||
                         echo "patch cmd failed, likely already patched"

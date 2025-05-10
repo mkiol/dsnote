@@ -435,6 +435,17 @@ diff -ruN bergamot-org/3rd_party/marian-dev/src/layers/lsh.h bergamot-patched/3r
  
    Expr apply(Expr query, Expr values, Expr bias);
  
+diff -ruN bergamot-org/3rd_party/marian-dev/src/microsoft/quicksand.h bergamot-patched/3rd_party/marian-dev/src/microsoft/quicksand.h
+--- bergamot-org/3rd_party/marian-dev/src/microsoft/quicksand.h	2023-07-08 17:36:56.240113019 +0200
++++ bergamot-patched/3rd_party/marian-dev/src/microsoft/quicksand.h	2025-05-10 20:20:20.011642719 +0200
+@@ -5,6 +5,7 @@
+ #include <unordered_set>
+ #include <vector>
+ #include <set>
++#include <cstdint>
+ 
+ namespace marian {
+ 
 diff -ruN bergamot-org/3rd_party/marian-dev/src/tensors/cpu/integer_common.h bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/integer_common.h
 --- bergamot-org/3rd_party/marian-dev/src/tensors/cpu/integer_common.h	2023-07-08 17:36:56.243446352 +0200
 +++ bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/integer_common.h	2023-07-31 11:43:04.106649054 +0200
