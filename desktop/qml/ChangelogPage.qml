@@ -78,6 +78,7 @@ DialogPage {
             Disable this option if you observe this problem.</li>
         <li>New <i>Piper</i> voices for Dutch, Finnish, German and Luxembourgish</li>
         <li>New <i>RHVoice</i> voice for Spanish</li>
+        <li>Updated <i>RHVoice</i> voice for Czech</li>
         </ul>
         <p>" + qsTr("Translator") + "</p>
         <ul>
