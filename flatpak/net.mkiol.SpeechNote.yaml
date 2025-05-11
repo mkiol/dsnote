@@ -1,6 +1,6 @@
 app-id: net.mkiol.SpeechNote
 runtime: org.kde.Platform
-runtime-version: "5.15-23.08"
+runtime-version: "5.15-24.08"
 sdk: org.kde.Sdk
 rename-icon: dsnote
 command: dsnote
@@ -19,7 +19,7 @@ finish-args:
   - --filesystem=xdg-documents
   - --filesystem=xdg-videos
   - --env=PYTORCH_TENSOREXPR=0
-  - --env=PYTHONPATH=/app/extensions/nvidia/lib/python3.11/site-packages:/app/extensions/amd/lib/python3.11/site-packages:/app/extensions/cpu/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
+  - --env=PYTHONPATH=/app/extensions/nvidia/lib/python3.12/site-packages:/app/extensions/amd/lib/python3.12/site-packages:/app/extensions/cpu/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
   - --env=LD_LIBRARY_PATH=/app/opt/intel/lib:/app/extensions/nvidia/lib:/app/extensions/amd/lib:/app/extensions/cpu/lib:/app/extensions/nvidia/cuda/lib64:/app/extensions/amd/rocm/lib:/app/extensions/amd/rocm/lib/llvm/lib:/app/extensions/amd/zluda
   - --env=OPENCL_VENDOR_PATH=/app/opt/opencl/vendors
   - --env=PERL5LIB=/app/lib/perl5/site_perl
@@ -34,16 +34,16 @@ cleanup:
   - /include
   - /lib/cmake
   - /lib/pkgconfig
-  - /lib/python3.11/site-packages/__pycache__
-  - /lib/python3.11/site-packages/nvidia*
-  - /lib/python3.11/site-packages/cmake*
-  - /lib/python3.11/site-packages/git*
-  - /lib/python3.11/site-packages/Git*
-  - /lib/python3.11/site-packages/torch/test
-  - /lib/python3.11/site-packages/torch/include
-  - /lib/python3.11/site-packages/pypinyin/__pycache__
-  - /lib/python3.11/site-packages/pandas/tests
-  - /lib/python3.11/site-packages/torchvision*
+  - /lib/python3.12/site-packages/__pycache__
+  - /lib/python3.12/site-packages/nvidia*
+  - /lib/python3.12/site-packages/cmake*
+  - /lib/python3.12/site-packages/git*
+  - /lib/python3.12/site-packages/Git*
+  - /lib/python3.12/site-packages/torch/test
+  - /lib/python3.12/site-packages/torch/include
+  - /lib/python3.12/site-packages/pypinyin/__pycache__
+  - /lib/python3.12/site-packages/pandas/tests
+  - /lib/python3.12/site-packages/torchvision*
   - /lib/libSPIRV*
   - /lib/libshaderc*
   - /lib/debug/opt
@@ -332,7 +332,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RHVoice/RHVoice.git
-        commit: 3e61d440308cedc53f56d0d9f22c380af80d933e
+        commit: 846293f4f966381802131ea3c94ff12461b6058a
       - type: patch
         path: ../patches/rhvoice.patch
 
@@ -770,7 +770,7 @@ modules:
       - x86_64
     buildsystem: simple
     build-commands:
-      - patch --batch --unified -p1 --directory=${FLATPAK_DEST}/lib/python3.11/site-packages/phonemizer -i "$(realpath .)"/phonemizer.patch
+      - patch --batch --unified -p1 --directory=${FLATPAK_DEST}/lib/python3.12/site-packages/phonemizer -i "$(realpath .)"/phonemizer.patch
     sources:
       - type: file
         path: ../patches/phonemizer.patch
@@ -781,7 +781,7 @@ modules:
     buildsystem: simple
     cleanup:
       - /bin
-      - /lib/python3.11/site-packages/pybind11*
+      - /lib/python3.12/site-packages/pybind11*
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "pybind11" --no-build-isolation
@@ -815,7 +815,7 @@ modules:
       - -DCMAKE_INSTALL_PREFIX=/app/extensions/cpu
       - -DCMAKE_SYSTEM_PREFIX_PATH=/app
     post-install:
-      - rm -rf ${FLATPAK_DEST}/lib/python3.11/site-packages/ctranslate2*
+      - rm -rf ${FLATPAK_DEST}/lib/python3.12/site-packages/ctranslate2*
       - mkdir -p ${FLATPAK_DEST}/extensions/cpu
       - cd python && python setup.py bdist_wheel
       - pip3 install --verbose --exists-action=i --no-index --prefix=${FLATPAK_DEST}/extensions/cpu --no-build-isolation python/dist/*.whl
@@ -848,23 +848,6 @@ modules:
       - type: archive
         url: https://github.com/progsource/maddy/archive/refs/tags/1.3.0.tar.gz
         sha256: 561681f8c8d2b998c153cda734107a0bc1dea4bb0df69fd813922da63fa9f3e7
-
-  - name: xkbcommon
-    buildsystem: meson
-    config-opts:
-      - --buildtype=release
-      - -Ddefault_library=static
-      - -Denable-docs=false
-      - -Denable-tools=false
-      - -Denable-bash-completion=false
-      - -Dx-locale-root=/usr/share/X11/locale
-    cleanup:
-      - /bin
-      - /libexec
-    sources:
-      - type: archive
-        url: https://xkbcommon.org/download/libxkbcommon-1.6.0.tar.xz
-        sha256: 0edc14eccdd391514458bc5f5a4b99863ed2d651e4dd761a90abf4f46ef99c2b
 
   - name: openvino
     only-arches:

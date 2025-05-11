@@ -60,6 +60,7 @@ option(BUILD_QQC2_BREEZE_STYLE "download sources of QQC2 Breeze Style, build and
 
 # options used only for testing
 option(DEV_USE_PYTHON311 OFF)
+option(DEV_USE_PYTHON312 OFF)
 
 if(${WITH_DESKTOP} AND ${WITH_SFOS})
     message(FATAL_ERROR "options WITH_DESKTOP and WITH_SFOS cannot be set together")
@@ -158,7 +159,7 @@ set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_conf_version "107")
-set(info_addon_version "1.3") # if run as a flatpak pkg, the required add-on version
+set(info_addon_version "1.4") # if run as a flatpak pkg, the required add-on version
 set(info_version_type "-beta")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv · Niklas Halvorsen · \
@@ -676,9 +677,14 @@ else()
     list(APPEND deps_libs ${ssplitcpp_path} ${pcre2_path} ${pcre2posix_path})
 endif()
 
-if(DEV_USE_PYTHON311)
-    pkg_search_module(python REQUIRED python-3.11)
-    set(python_LIBRARIES -lpython3.11)
+if(${DEV_USE_PYTHON311} OR ${DEV_USE_PYTHON312})
+    if(DEV_USE_PYTHON311)
+        pkg_search_module(python REQUIRED python-3.11)
+        set(python_LIBRARIES -lpython3.11)
+    else()
+        pkg_search_module(python REQUIRED python-3.12)
+        set(python_LIBRARIES -lpython3.12)
+    endif()
     list(APPEND deps_libs ${python_LIBRARIES})
     list(APPEND includes ${python_INCLUDE_DIRS})
 else()

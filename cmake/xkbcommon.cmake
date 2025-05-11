@@ -1,5 +1,5 @@
-set(xkbcommon_source_url "https://xkbcommon.org/download/libxkbcommon-1.7.0.tar.xz")
-set(xkbcommon_checksum "65782f0a10a4b455af9c6baab7040e2f537520caa2ec2092805cdfd36863b247")
+set(xkbcommon_source_url "https://github.com/xkbcommon/libxkbcommon/archive/refs/tags/xkbcommon-1.8.1.tar.gz")
+set(xkbcommon_checksum "c65c668810db305c4454ba26a10b6d84a96b5469719fe3c729e1c6542b8d0d87")
 
 if(${meson_bin} MATCHES "-NOTFOUND$")
    message(FATAL_ERROR "meson not found but it is required to build xkbcommon")

@@ -1,5 +1,5 @@
 set(rhvoice_source_url "https://github.com/RHVoice/RHVoice.git")
-set(rhvoice_tag "3e61d440308cedc53f56d0d9f22c380af80d933e")
+set(rhvoice_tag "846293f4f966381802131ea3c94ff12461b6058a")
 
 find_package(Boost)
 if(NOT ${Boost_FOUND})
