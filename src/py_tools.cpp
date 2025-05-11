@@ -32,7 +32,7 @@ std::ostream& operator<<(std::ostream& os, py_tools::py_version_t version) {
 
 std::ostream& operator<<(std::ostream& os,
                          const py_tools::libs_availability_t& availability) {
-    os << "py-version" << availability.py_version
+    os << "py-version=" << availability.py_version
        << ", coqui-tts=" << availability.coqui_tts
        << ", faster-whisper=" << availability.faster_whisper
        << ", ctranslate2-cuda=" << availability.ctranslate2_cuda
