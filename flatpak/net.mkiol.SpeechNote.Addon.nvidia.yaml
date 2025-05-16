@@ -1,8 +1,6 @@
 id: net.mkiol.SpeechNote.Addon.nvidia
 runtime: net.mkiol.SpeechNote
-sdk: org.kde.Sdk//5.15-23.08
-sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm16
+sdk: org.kde.Sdk//5.15-24.08
 build-extension: true
 build-options:
   no-debuginfo: true
@@ -16,7 +14,7 @@ modules:
       - x86_64
     buildsystem: simple
     build-commands:
-      - sh cuda_12.4.0_550.54.14_linux.run --target ./ --noexec
+      - sh cuda_12.9.0_575.51.03_linux.run --target ./ --noexec
       - rm -rf builds/*.*
       - rm -rf builds/bin builds/cuda_sanitizer_api builds/integration
       - rm -rf builds/nsight_compute builds/nsight_systems builds/cuda_gdb builds/cuda_documentation
@@ -68,8 +66,8 @@ modules:
       - /cuda/targets/x86_64-linux/res
     sources:
       - type: file
-        url: https://developer.download.nvidia.com/compute/cuda/12.4.0/local_installers/cuda_12.4.0_550.54.14_linux.run
-        sha256: e6a842f4eca9490575cdb68b6b1bb78d47b95a897de48dee292c431892e57d17
+        url: https://developer.download.nvidia.com/compute/cuda/12.9.0/local_installers/cuda_12.9.0_575.51.03_linux.run
+        sha256: bbce2b760fe2096ca1c86f729e03bf377c1519add7b2755ecc4e9b0a9e07ee43
 
   - name: whispercpp-cublas
     only-arches:
@@ -79,7 +77,7 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DGGML_NATIVE=OFF
       - -DGGML_CUDA=ON
-      - -DCMAKE_CUDA_ARCHITECTURES=50;52;53;60;61;62;70;72;75;80;86;87;89;90;90a
+      - -DCMAKE_CUDA_ARCHITECTURES=50;52;53;60;61;62;70;72;75;80;86;87;89;90;90a;100;100a
       - -DCUDAToolkit_ROOT=/app/extensions/nvidia/cuda
       - -DCMAKE_CUDA_COMPILER=/app/extensions/nvidia/cuda/bin/nvcc
       - -DGGML_AVX=ON
@@ -148,8 +146,8 @@ modules:
     sources:
       - type: archive
         archive-type: "tar-zst"
-        url: https://mirror.sunred.org/archlinux/extra/os/x86_64/nccl-2.21.5-1-x86_64.pkg.tar.zst
-        sha256: 91c7c06f758416965ba1c5301a1e0cfed1cdddbadb3e936703f3c6dca42d3a95
+        url: https://mirror.sunred.org/archlinux/extra/os/x86_64/nccl-2.26.5-1-x86_64.pkg.tar.zst
+        sha256: 14136cfcf9fa34b8ddf1300a16b2649143882d9c9bc09326d21d59c95fd84ed4
 
   - name: oneapi
     only-arches:
@@ -192,7 +190,7 @@ modules:
     buildsystem: simple
     cleanup:
       - /bin
-      - /lib/python3.11/site-packages/pybind11*
+      - /lib/python3.12/site-packages/pybind11*
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "pybind11" --no-build-isolation
@@ -207,7 +205,7 @@ modules:
     buildsystem: cmake-ninja
     build-options:
       env:
-        PYTHONPATH: /app/extensions/nvidia/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
+        PYTHONPATH: /app/extensions/nvidia/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
         CTRANSLATE2_ROOT: /app/extensions/nvidia
     cleanup:
       - /bin
@@ -220,8 +218,7 @@ modules:
       - -DWITH_CUDA=ON
       - -DWITH_CUDNN=ON
       - -DOPENMP_RUNTIME=COMP
-      - -DCUDA_ARCH_LIST=5.0 5.2 5.3 6.0 6.1 6.2 7.0 7.2 7.5 8.0 8.6 8.7 8.9 9.0 9.0
-      - -DCUDA_NVCC_FLAGS=-Xfatbin=-compress-all -allow-unsupported-compiler -ccbin /usr/lib/sdk/llvm16/bin/clang++
+      - -DCUDA_ARCH_LIST=5.0 5.2 5.3 6.0 6.1 6.2 7.0 7.2 7.5 8.0 8.6 8.7 8.9 9.0
       - -DWITH_MKL=ON
       - -DWITH_DNNL=ON
       - -DWITH_RUY=ON
@@ -247,25 +244,25 @@ modules:
     cleanup:
       - /bin/convert*
       - /bin/torch*
-      - /lib/python3.11/site-packages/nvidia*
-      - /lib/python3.11/site-packages/torch/include
+      - /lib/python3.12/site-packages/nvidia*
+      - /lib/python3.12/site-packages/torch/include
     build-options:
       strip: true
       env:
-        PYTHONPATH: /app/extensions/nvidia/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
+        PYTHONPATH: /app/extensions/nvidia/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} torch torchaudio triton --no-build-isolation
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/d1/35/e8b2daf02ce933e4518e6f5682c72fd0ed66c15910ea1fb4168f442b71c4/torch-2.5.1-cp311-cp311-manylinux1_x86_64.whl
-        sha256: de5b7d6740c4b636ef4db92be922f0edc425b65ed78c5076c43c42d362a45457
+        url: https://files.pythonhosted.org/packages/8b/5c/36c114d120bfe10f9323ed35061bc5878cc74f3f594003854b0ea298942f/torch-2.5.1-cp312-cp312-manylinux1_x86_64.whl
+        sha256: ed231a4b3a5952177fafb661213d690a72caaad97d5824dd4fc17ab9e15cec03
       - type: file
-        url: https://files.pythonhosted.org/packages/86/17/d9a5cf4fcf46291856d1e90762e36cbabd2a56c7265da0d1d9508c8e3943/triton-3.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: 0f34f6e7885d1bf0eaaf7ba875a5f0ce6f3c13ba98f9503651c1e6dc6757ed5c
+        url: https://files.pythonhosted.org/packages/78/eb/65f5ba83c2a123f6498a3097746607e5b2f16add29e36765305e4ac7fdd8/triton-3.1.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: c8182f42fd8080a7d39d666814fa36c5e30cc00ea7eeeb1a2983dbb4c99a0fdc
       - type: file
-        url: https://files.pythonhosted.org/packages/41/33/0f21b15f8e231bb55578f6b32e8c18675585b7bf97cb0aee96b1591e4193/torchaudio-2.5.1-cp311-cp311-manylinux1_x86_64.whl
-        sha256: 7af3f7f92fd33bc9f036a60cdeda4cbeb6bccebd18eae89776dd1e8ed042672e
+        url: https://files.pythonhosted.org/packages/34/1c/345d11bf492a1414dced70a9572ff1eb2c73013578d24fb4d728a91a09d1/torchaudio-2.5.1-cp312-cp312-manylinux1_x86_64.whl
+        sha256: 9c8fb06fbd8d2016e7b7caf15a3231867c792a2e3b0f2f8f9013633e9c2ce412
       - type: file
         url: https://files.pythonhosted.org/packages/ae/71/1c91302526c45ab494c23f61c7a84aa568b8c1f9d196efa5993957faf906/nvidia_cublas_cu12-12.4.5.8-py3-none-manylinux2014_x86_64.whl
         sha256: 2fc8da60df463fdefa81e323eef2e36489e1c94335b5358bcb38360adf75ac9b
@@ -302,6 +299,23 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/87/20/199b8713428322a2f22b722c62b8cc278cc53dffa9705d744484b5035ee9/nvidia_nvtx_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl
         sha256: 781e950d9b9f60d8241ccea575b32f5105a5baf4c2351cab5256a24869f12a1a
+
+  - name: python3-flash-attn-cuda
+    only-arches:
+      - x86_64
+    buildsystem: simple
+    build-options:
+      strip: true
+      env:
+        PYTHONPATH: /app/extensions/nvidia/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST} flash-attn --no-build-isolation
+    sources:
+      - type: file
+        url: https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.5cxx11abiFALSE-cp312-cp312-linux_x86_64.whl
+        dest-filename: flash_attn-2.7.4.post1-cp312-cp312-linux_x86_64.whl
+        sha256: a496f383c843ed0cc6e01302556a0947f56828f1ec2b54e5297c4c7eaae39357
 
   - name: metadata
     buildsystem: simple

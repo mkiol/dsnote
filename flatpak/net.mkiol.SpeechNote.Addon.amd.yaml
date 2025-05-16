@@ -1,6 +1,6 @@
 id: net.mkiol.SpeechNote.Addon.amd
 runtime: net.mkiol.SpeechNote
-sdk: org.kde.Sdk//5.15-23.08
+sdk: org.kde.Sdk//5.15-24.08
 build-extension: true
 build-options:
   no-debuginfo: true
@@ -108,7 +108,7 @@ modules:
     buildsystem: simple
     cleanup:
       - /bin
-      - /lib/python3.11/site-packages/pybind11*
+      - /lib/python3.12/site-packages/pybind11*
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} "pybind11" --no-build-isolation
@@ -123,7 +123,7 @@ modules:
     buildsystem: cmake-ninja
     build-options:
       env:
-        PYTHONPATH: /app/extensions/amd/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
+        PYTHONPATH: /app/extensions/amd/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
         CTRANSLATE2_ROOT: /app/extensions/amd
     cleanup:
       - /bin
@@ -158,35 +158,35 @@ modules:
     cleanup:
       - /bin/convert*
       - /bin/torch*
-      - /lib/python3.11/site-packages/torch/lib/rocblas
-      - /lib/python3.11/site-packages/torch/lib/libamd*
-      - /lib/python3.11/site-packages/torch/lib/libroc*
-      - /lib/python3.11/site-packages/torch/lib/libhip*
-      - /lib/python3.11/site-packages/torch/lib/libhsa*
-      - /lib/python3.11/site-packages/torch/lib/libMIOpen*
-      - /lib/python3.11/site-packages/torch/lib/librccl*
-      - /lib/python3.11/site-packages/torch/lib/libnuma*
-      - /lib/python3.11/site-packages/torch/lib/hipblas*
-      - /lib/python3.11/site-packages/torch/lib/msccl-algorithms
-      - /lib/python3.11/site-packages/torch/include
+      - /lib/python3.12/site-packages/torch/lib/rocblas
+      - /lib/python3.12/site-packages/torch/lib/libamd*
+      - /lib/python3.12/site-packages/torch/lib/libroc*
+      - /lib/python3.12/site-packages/torch/lib/libhip*
+      - /lib/python3.12/site-packages/torch/lib/libhsa*
+      - /lib/python3.12/site-packages/torch/lib/libMIOpen*
+      - /lib/python3.12/site-packages/torch/lib/librccl*
+      - /lib/python3.12/site-packages/torch/lib/libnuma*
+      - /lib/python3.12/site-packages/torch/lib/hipblas*
+      - /lib/python3.12/site-packages/torch/lib/msccl-algorithms
+      - /lib/python3.12/site-packages/torch/include
     build-options:
       env:
-        PYTHONPATH: /app/extensions/amd/lib/python3.11/site-packages:/app/lib/python3.11/site-packages
+        PYTHONPATH: /app/extensions/amd/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
         --prefix=${FLATPAK_DEST} torch torchaudio --no-build-isolation
     sources:
       - type: file
-        url: https://download.pytorch.org/whl/rocm6.2/torch-2.5.1%2Brocm6.2-cp311-cp311-linux_x86_64.whl
-        dest-filename: torch-2.5.1+rocm6.2-cp311-cp311-linux_x86_64.whl
-        sha256: 9c4c4d985923d0e31aab4108c56a1586ca599ab26abc919833b890f7f40dcc01
+        url: https://download.pytorch.org/whl/rocm6.2/torch-2.5.1%2Brocm6.2-cp312-cp312-linux_x86_64.whl
+        dest-filename: torch-2.5.1+rocm6.2-cp312-cp312-linux_x86_64.whl
+        sha256: 80c7af931acb3941530a717aaa1d142985ae7f29b7660a72e47f1a890fc191fb
       - type: file
-        url: https://download.pytorch.org/whl/rocm6.2/torchaudio-2.5.1%2Brocm6.2-cp311-cp311-linux_x86_64.whl
-        dest-filename: torchaudio-2.5.1+rocm6.2-cp311-cp311-linux_x86_64.whl
-        sha256: 334e2c8936533c656095022d89fcb74ac23278ac88e2210b63f49c1810c88e91
+        url: https://download.pytorch.org/whl/rocm6.2/torchaudio-2.5.1%2Brocm6.2-cp312-cp312-linux_x86_64.whl
+        dest-filename: torchaudio-2.5.1+rocm6.2-cp312-cp312-linux_x86_64.whl
+        sha256: 63d1cfe70d8fb6154d85b5b44dbd055587828fc260c2f86cf924433ca897b917
       - type: file
-        url: https://download.pytorch.org/whl/pytorch_triton_rocm-3.1.0-cp311-cp311-linux_x86_64.whl
-        sha256: 4b0a563986aa591ecbbfd69d53f171447f64ba453cecaafd80d853b3f1047eca
+        url: https://download.pytorch.org/whl/pytorch_triton_rocm-3.1.0-cp312-cp312-linux_x86_64.whl
+        sha256: 3b56b87886d03dcf3aeb8f78f372f5da60b29ffdffcba5cd767b4bfdec47175b
 
   - name: suitesparse
     buildsystem: cmake-ninja
@@ -239,6 +239,48 @@ modules:
         sha256: 97f19a32212f2f215e538ee37a16ff547aaebc54817bd8072034e02466ce6d55
       - type: patch
         path: ../patches/whispercpp.patch
+
+  - name: python3-ninja
+    only-arches:
+      - x86_64
+    buildsystem: simple
+    build-options:
+      strip: true
+      env:
+        PYTHONPATH: /app/extensions/amd/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
+        BUILD_TARGET: rocm
+        FLASH_ATTENTION_TRITON_AMD_ENABLE: TRUE
+        USE_TRITON_ROCM: TRUE
+        SKIP_CUDA_BUILD: TRUE
+        ROCM_HOME: /app/extensions/amd/rocm
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST} ninja --no-build-isolation
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/eb/7a/455d2877fe6cf99886849c7f9755d897df32eaf3a0fba47b56e615f880f7/ninja-1.11.1.4-py3-none-manylinux_2_12_x86_64.manylinux2010_x86_64.whl
+        sha256: 096487995473320de7f65d622c3f1d16c3ad174797602218ca8c967f51ec38a0
+
+  - name: python3-flash-attn-rocm
+    only-arches:
+      - x86_64
+    buildsystem: simple
+    build-options:
+      strip: true
+      env:
+        PYTHONPATH: /app/extensions/amd/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
+        BUILD_TARGET: rocm
+        FLASH_ATTENTION_TRITON_AMD_ENABLE: TRUE
+        USE_TRITON_ROCM: TRUE
+        SKIP_CUDA_BUILD: TRUE
+        ROCM_HOME: /app/extensions/amd/rocm
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST} flash-attn --no-build-isolation
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/11/34/9bf60e736ed7bbe15055ac2dab48ec67d9dbd088d2b4ae318fd77190ab4e/flash_attn-2.7.4.post1.tar.gz
+        sha256: f03485c9a49a4d68d0733acdcad80ab0e72afa025a777fdc2966ceccf9d51765
 
   - name: metadata
     buildsystem: simple

@@ -106,6 +106,7 @@ DialogPage {
             Python libraries are not included in Tiny or ARM packages, but using the <i>Location of Python libraries</i> option,
             you can set an external directory that contains the libraries.
             Make sure that the Flatpak application has permissions to access this directory.</li>
+        <li>Flatpak runtime update to version 5.15-24.08</li>
         </ul>"
     }
 
