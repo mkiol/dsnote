@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -29,10 +29,12 @@ Item {
     property bool canReadAll: false
     property bool canTranslateSelected: false
     property bool canTranslateAll: false
-    readonly property bool _fitContent: scrollView.availableHeight - 4 * appWin.padding >= scrollView.contentHeight
-    readonly property bool _contextActive: _textFormatCombo.hovered || copyButton.hovered || clearButton.hovered ||
-                                           undoButton.hovered || redoButton.hovered || pasteButton.hovered ||
-                                           _fitContent
+    // readonly property bool _fitContent: scrollView.availableHeight - 4 * appWin.padding >= scrollView.contentHeight
+    // readonly property bool _contextActive: _textFormatCombo.hovered || copyButton.hovered || clearButton.hovered ||
+    //                                        undoButton.hovered || redoButton.hovered || pasteButton.hovered ||
+    //                                        _fitContent
+    readonly property bool _fitContent: true
+    readonly property bool _contextActive: true
     signal clearClicked()
     signal copyClicked()
     signal undoFallbackClicked()
@@ -77,6 +79,7 @@ Item {
             Component.onCompleted: cursorIndicator.update(-1)
             onTextChanged: cursorIndicator.update(cursorPosition)
             Accessible.name: root.name
+            bottomPadding: _textFormatCombo.height + 2 * appWin.padding
 
             Rectangle {
                 id: cursorIndicator
