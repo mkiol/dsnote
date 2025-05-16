@@ -1296,7 +1296,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
 #define ENGINE_OPTS(name_) \
         switch(settings::instance()->name_##_profile()) {  \
         case settings::engine_profile_t::EngineProfilePerformance: \
-            config.beam_search = 1; \
+            config.beam_search = 2; \
             config.cpu_threads = 4; \
             config.audio_ctx_conf = stt_engine::audio_ctx_conf_t::dynamic; \
             config.audio_ctx_size = 1500; \
