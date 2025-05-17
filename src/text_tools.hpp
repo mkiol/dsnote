@@ -87,10 +87,6 @@ void trim_lines(std::string& text);
 void trim_line(std::string& text);
 void remove_hyphen_word_break(std::string& text);
 void clean_white_characters(std::string& text);
-bool has_uroman();
-void uroman(std::string& text, const std::string& lang_code,
-            const std::string& prefix_path);
-
 void numbers_to_words(std::string& text, const std::string& lang,
                       const std::string& prefix_path);
 void convert_text_format_to_html(std::string& text, text_format_t input_format);

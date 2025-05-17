@@ -44,7 +44,6 @@ option(BUILD_SSPLITCPP "download sources of ssplitcpp lib, build and link static
 option(BUILD_RHVOICE "download sources of rhvoice lib, build and install shared lib" ON)
 option(BUILD_RHVOICE_MODULE "make rhvoice module archive" ON)
 option(BUILD_BERGAMOT "download sources of bergamot-translator lib, build and install shared lib" ON)
-option(BUILD_UROMAN "download sources of uroman and install uroman lib" ON) # only for x86_64
 option(BUILD_RUBBERBAND "download sources of rubberband lib, build and link statically" ON)
 option(BUILD_FFMPEG "download sources of ffmpeg libs, build and link statically" ON)
 option(BUILD_TAGLIB "download sources of taglib, build and link statically" ON)
@@ -73,11 +72,6 @@ endif()
 
 if(NOT ${WITH_DESKTOP} AND NOT ${WITH_SFOS})
     message(FATAL_ERROR "one of the options should be set (WITH_DESKTOP or WITH_SFOS)")
-endif()
-
-if(NOT ${WITH_PY} AND ${BUILD_UROMAN})
-    set(BUILD_UROMAN OFF)
-    message(WARNING "disabling BUILD_UROMAN because WITH_PY is off")
 endif()
 
 if(WITH_DESKTOP)
@@ -166,7 +160,7 @@ set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashin
 Matjaž Jeran · Victor Alonso Barberan · Bruno Veilleux · Abdullah Albaroty · 李 阳")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · nlohmann JSON · eSpeak NG · Bergamot Translator · \
-Rubber Band Library · simdjson · uroman · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
+Rubber Band Library · simdjson · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
 libnumbertext · april-asr · html2md · maddy · SAM")
 if(WITH_DESKTOP)
     set(info_libs_str "${info_libs_str} · KDBusAddons")
@@ -719,12 +713,6 @@ else()
     list(APPEND deps_libs ${aprilasr_LIBRARIES})
     list(APPEND includes ${aprilasr_INCLUDE_DIRS})
 endif()
-
-if(arch_x8664)
-    if(BUILD_UROMAN)
-        include(${cmake_path}/uroman.cmake)
-    endif()
-endif(arch_x8664)
 
 if(BUILD_RUBBERBAND)
     include(${cmake_path}/rubberband.cmake)

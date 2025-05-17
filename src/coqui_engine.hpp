@@ -32,6 +32,7 @@ class coqui_engine : public tts_engine {
         "/tmp/tmp_coqui_vocoder_config.json";
 
     std::optional<py::object> m_model;
+    std::optional<py::object> m_uroman;
     std::optional<float> m_initial_length_scale;
     std::optional<float> m_initial_duration_threshold;
     bool m_speed_supported = false;

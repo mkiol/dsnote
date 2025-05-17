@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,7 +7,6 @@
 
 #include "text_tools.hpp"
 
-#include <ctype.h>
 #include <fmt/format.h>
 #include <html2md/html2md.h>
 #include <maddy/parser.h>
@@ -15,6 +14,7 @@
 #include <unistd.h>
 
 #include <algorithm>
+#include <cctype>
 #include <cstdlib>
 #include <cwctype>
 #include <libnumbertext/Numbertext.hxx>
@@ -443,34 +443,6 @@ static std::pair<FILE*, FILE*> popen2(const char* __command) {
         execl("/bin/sh", "/bin/sh", "-c", __command, NULL);
 
         exit(1);
-    }
-}
-
-bool has_uroman() { return std::system("perl --version > /dev/null") == 0; }
-
-void uroman(std::string& text, const std::string& lang_code,
-            const std::string& prefix_path) {
-    auto [p_stdin, p_stdout] =
-        popen2(fmt::format("perl {}/uroman/bin/uroman.pl -l {}", prefix_path,
-                           lang_code)
-                   .c_str());
-
-    std::string result;
-
-    if (p_stdin == nullptr || p_stdout == nullptr) {
-        LOGE("uroman popen error");
-    }
-
-    fwrite(text.c_str(), 1, text.size(), p_stdin);
-    fclose(p_stdin);
-
-    char buf[1024];
-    while (fgets(buf, 1024, p_stdout)) result.append(buf);
-
-    if (result.empty()) {
-        LOGW("uroman result is empty");
-    } else {
-        text.assign(result);
     }
 }
 
@@ -1184,7 +1156,7 @@ static bool has_option(char c, const std::string& options) {
 std::string processor::preprocess(const std::string& text,
                                   const std::string& options,
                                   const std::string& lang,
-                                  const std::string& lang_code,
+                                  [[maybe_unused]] const std::string& lang_code,
                                   const std::string& prefix_path,
                                   const std::string& diacritizer_path) {
     std::string new_text{text};
@@ -1194,11 +1166,6 @@ std::string processor::preprocess(const std::string& text,
     if (has_option('n', options)) {
         LOGD("numbers-to-words pre-processing needed");
         numbers_to_words(new_text, lang, prefix_path);
-    }
-
-    if (has_option('r', options)) {
-        LOGD("uroman pre-processing needed");
-        uroman(new_text, lang_code, prefix_path);
     }
 
     if (has_option('d', options) && !diacritizer_path.empty()) {

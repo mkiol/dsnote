@@ -695,38 +695,6 @@ modules:
         url: https://github.com/abb128/april-asr/archive/3308e68442664552de593957cad0fa443ea183dd.zip
         sha256: 0640fc16a43018afb1db9f17e93f545d7ac1f07e4bc47ba318d2c7311bef2df5
 
-  - name: uroman
-    only-arches:
-      - x86_64
-    buildsystem: simple
-    build-commands:
-      - "mkdir -p ${FLATPAK_DEST}/share/uroman"
-      - "cp -r ./bin ${FLATPAK_DEST}/share/uroman"
-      - "cp -r ./data ${FLATPAK_DEST}/share/uroman"
-      - "cp -r ./lib ${FLATPAK_DEST}/share/uroman"
-    sources:
-      - type: archive
-        url: https://github.com/isi-nlp/uroman/archive/refs/tags/v1.2.8.tar.gz
-        sha256: 08e5058341428f3f4ca2401d409df1f4341c386853c4de836e7ab2c2a750cb88
-
-  - name: perl
-    only-arches:
-      - x86_64
-    buildsystem: simple
-    build-options:
-      no-debuginfo: true
-    build-commands:
-      - ./configure.gnu -des
-      - make -j${FLATPAK_BUILDER_N_JOBS}
-      - mkdir -p ${FLATPAK_DEST}/bin
-      - cp perl ${FLATPAK_DEST}/bin/
-      - mkdir -p ${FLATPAK_DEST}/lib/perl5/site_perl
-      - cp -r lib/* ${FLATPAK_DEST}/lib/perl5/site_perl/
-    sources:
-      - type: archive
-        url: https://www.cpan.org/src/5.0/perl-5.38.0.tar.gz
-        sha256: 213ef58089d2f2c972ea353517dc60ec3656f050dcc027666e118b508423e517
-
   - name: oneapi
     only-arches:
       - x86_64

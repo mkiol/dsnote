@@ -1786,6 +1786,21 @@ modules:
       - *id068
       - *id069
 
+  - name: python3-uroman
+    buildsystem: simple
+    cleanup:
+      - /bin
+    build-options:
+      no-debuginfo: true
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST} uroman --no-build-isolation
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/78/e1/43722c41eebab0592c6f83410e5e35edc1d6e333f44feb0a543bd38dba3e/uroman-1.3.1.1-py3-none-any.whl
+        sha256: 394f965f7011fd56a84aca098a6c3b50082f365324f5d94c992852137918c8f5
+      - *id054
+
   - name: python3-unidic-fix
     buildsystem: simple
     build-commands:

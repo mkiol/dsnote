@@ -3127,11 +3127,10 @@ QVariantMap speech_service::features_availability() {
                 "coqui-tts-ja", QVariantList{py_availability->coqui_tts &&
                                                  py_availability->mecab,
                                              "Coqui TTS " + tr("Japanese")});
-            auto has_uroman = text_tools::has_uroman();
             m_features_availability.insert(
-                "coqui-tts-ko",
-                QVariantList{py_availability->coqui_tts && has_uroman,
-                             "Coqui TTS " + tr("Korean")});
+                "coqui-tts-ko", QVariantList{py_availability->coqui_tts &&
+                                                 py_availability->uroman,
+                                             "Coqui TTS " + tr("Korean")});
             m_features_availability.insert(
                 "mimic3-tts",
                 QVariantList{py_availability->mimic3_tts, "Mimic3 TTS"});
@@ -3305,7 +3304,7 @@ QVariantMap speech_service::features_availability() {
                  /*stt_whispercpp=*/stt_whispercpp,
                  /*mnt_bergamot=*/mnt,
                  /*ttt_hftc=*/py_availability->transformers,
-                 /*option_r=*/has_uroman});
+                 /*option_r=*/py_availability->uroman});
 
             settings::instance()->scan_hw_devices(hw_feature_flags);
 

@@ -196,12 +196,6 @@ if(BUILD_LIBNUMBERTEXT)
     install(DIRECTORY "${external_share_dir}/libnumbertext" DESTINATION ${share_install_dir})
 endif()
 
-if(BUILD_UROMAN)
-    if(arch_x8664)
-        install(DIRECTORY "${external_share_dir}/uroman" DESTINATION ${share_install_dir})
-    endif()
-endif()
-
 if(BUILD_APRILASR)
     strip_all("${external_lib_dir}/libaprilasr.so.2023.5.12")
     set_runpath("${external_lib_dir}/libaprilasr.so.2023.5.12")

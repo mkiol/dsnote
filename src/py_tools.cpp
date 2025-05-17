@@ -53,7 +53,7 @@ std::ostream& operator<<(std::ostream& os,
        << ", gruut_sw=" << availability.gruut_sw
        << ", kokoro_ja=" << availability.kokoro_ja
        << ", kokoro_zh=" << availability.kokoro_zh
-       << ", mecab=" << availability.mecab
+       << ", mecab=" << availability.mecab << ", uroman=" << availability.uroman
        << ", torch-cuda=" << availability.torch_cuda
        << ", torch-hip=" << availability.torch_hip;
 
@@ -93,6 +93,7 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type) {
             availability.gruut_ru = true;
             availability.gruut_sw = true;
             availability.mecab = true;
+            availability.uroman = true;
             break;
         case libs_scan_type_t::off_all_disabled:
             return availability;
@@ -328,6 +329,14 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type) {
         availability.mecab = true;
     } catch (const std::exception& err) {
         LOGD("mecab check py error: " << err.what());
+    }
+
+    try {
+        LOGD("checking: uroman");
+        py::module_::import("uroman");
+        availability.uroman = true;
+    } catch (const std::exception& err) {
+        LOGD("uroman check py error: " << err.what());
     }
 
     LOGD("py libs availability: [" << availability << "]");

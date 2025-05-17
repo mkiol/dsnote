@@ -2,7 +2,7 @@
 
 _pkgname='dsnote'
 pkgname="${_pkgname}-git"
-pkgver=r1374.9dc5b34
+pkgver=r1454.8c105b9
 pkgrel=1
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=(
@@ -26,7 +26,6 @@ depends=(
   'libxtst'
   'ocl-icd'
   'openblas'
-  'perl'
   'python>=3.11'
   'qt5-base'
   'qt5-declarative'

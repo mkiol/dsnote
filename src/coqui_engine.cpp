@@ -46,6 +46,7 @@ void coqui_engine::stop() {
     auto task = py_executor::instance()->execute([&]() {
         try {
             m_model.reset();
+            m_uroman.reset();
 
             // release mem
             py::module_::import("gc").attr("collect")();
@@ -226,6 +227,11 @@ void coqui_engine::create_model() {
                               << m_config.gpu_device.id);
 
         try {
+            if (m_config.has_option('r')) {
+                // uroman is required
+                m_uroman = py::module_::import("uroman").attr("Uroman")();
+            }
+
             auto api = py::module_::import("TTS.utils.synthesizer");
 
             m_model = api.attr("Synthesizer")(
@@ -331,8 +337,18 @@ bool coqui_engine::encode_speech_impl(const std::string& text,
                 }
             }
 
+            auto text_u = [&] {
+                if (m_uroman) {
+                    return m_uroman
+                        ->attr("romanize_string")(
+                            "s"_a = text, "lcode"_a = m_config.lang_code)
+                        .cast<std::string>();
+                }
+                return text;
+            }();
+
             auto wav = m_model->attr("tts")(
-                "text"_a = text,
+                "text"_a = text_u,
                 "speaker_name"_a =
                     m_config.speaker_id.empty()
                         ? static_cast<py::object>(py::none())

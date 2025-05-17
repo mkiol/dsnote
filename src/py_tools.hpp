@@ -45,6 +45,7 @@ struct libs_availability_t {
     bool kokoro_ja = false;
     bool kokoro_zh = false;
     bool mecab = false;
+    bool uroman = false;
 };
 
 libs_availability_t libs_availability(libs_scan_type_t scan_type);
