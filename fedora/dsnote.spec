@@ -27,6 +27,7 @@ BuildRequires:  libXinerama-devel
 BuildRequires:  libxkbcommon-x11-devel
 BuildRequires:  libXtst-devel
 BuildRequires:  libtool
+BuildRequires:  wayland-devel
 BuildRequires:  meson
 BuildRequires:  openblas-devel
 BuildRequires:  patchelf
@@ -34,6 +35,7 @@ BuildRequires:  pybind11-devel
 BuildRequires:  python3-devel
 BuildRequires:  python3-pybind11
 BuildRequires:  qt5-linguist
+BuildRequires:  qt5-qtbase-private-devel
 BuildRequires:  qt5-qtmultimedia-devel
 BuildRequires:  qt5-qtquickcontrols2-devel
 BuildRequires:  qt5-qtx11extras-devel
@@ -73,7 +75,7 @@ No data is sent to the Internet.
     -DBUILD_TAGLIB=OFF \
     -DBUILD_XDO=OFF \
     -DBUILD_WHISPERCPP_VULKAN=ON \
-    -DBUILD_XKBCOMMON=ON
+    -DBUILD_XKBCOMMON=ON # not needed on Fedora 42
 %cmake_build
 
 %install
