@@ -29974,14 +29974,15 @@
             "engine": "mnt_bergamot",
             "lang_id": "en",
             "trg_lang_id": "ja",
-            "checksum": "f8532995",
-            "checksum_quick": "25eebbc6",
-            "size": "47087540",
+            "checksum": "7cc2650d",
+            "checksum_quick": "6cbb488",
+            "size": "48438395",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/b47bece6db4703b26563b7403b3004ba3fe9d96d/models/prod/enja/model.enja.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/b47bece6db4703b26563b7403b3004ba3fe9d96d/models/prod/enja/lex.50.50.enja.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/b47bece6db4703b26563b7403b3004ba3fe9d96d/models/prod/enja/vocab.enja.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/8409428ea51db5d1f1b91c61accf08a0caf91844/models/prod/enja/model.enja.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/8409428ea51db5d1f1b91c61accf08a0caf91844/models/prod/enja/lex.50.50.enja.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/8409428ea51db5d1f1b91c61accf08a0caf91844/models/prod/enja/srcvocab.enja.spm.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/8409428ea51db5d1f1b91c61accf08a0caf91844/models/prod/enja/trgvocab.enja.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
