@@ -114,9 +114,13 @@ build() {
   FULL_BUILD=false
 
   if [[ "${CARCH}" == "x86_64" ]]; then
-    # Build for CUDA if needed package is found
-    pacman -Qi cuda &> /dev/null && $FULL_BUILD && CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=ON -DCMAKE_CUDA_ARCHITECTURES=native"
-    pacman -Qi cuda &> /dev/null && $FULL_BUILD && export CUDA_PATH=/opt/cuda
+    pacman -Qi cuda &> /dev/null && HAS_CUDA=true || HAS_CUDA=false
+
+    if [[ $HAS_CUDA = true ]] && [[ $FULL_BUILD = true ]]; then
+      CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=ON -DCMAKE_CUDA_ARCHITECTURES=native"
+      export CUDA_PATH=/opt/cuda
+      export NVCC_APPEND_FLAGS="-std=c++17 --compress-mode=size --split-compile=0 -Wno-deprecated-gpu-targets"
+    fi
   fi
 
   CI_BUILD=false
