@@ -98,7 +98,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.8.0" date="2025-04-13">
+    <release version="4.8.0" date="2025-05-31">
       <description>
       <p>General:</p>
       <ul>
@@ -108,6 +108,7 @@
       <p>User Interface:</p>
       <ul>
       <li>Speech Note has been translated into Arabic, Catalan, Spanish and French-Canadian languages.</li>
+      <li>Command line option and DBus API for exporting synthesized speech to an audio file instead of playing it aloud.</li>
       </ul>
       <p>Speech to Text:</p>
       <ul>

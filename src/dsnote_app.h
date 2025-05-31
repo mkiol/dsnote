@@ -440,7 +440,7 @@ class dsnote_app : public QObject {
                                                const QString &body,
                                                bool permanent = false);
     Q_INVOKABLE QVariantMap execute_action_id(const QString &action_id,
-                                              const QString &extra,
+                                              const QVariantMap &arguments,
                                               bool trusted_source);
     Q_INVOKABLE QVariantList features_availability();
     Q_INVOKABLE QString download_content(const QUrl &url);
@@ -667,6 +667,13 @@ class dsnote_app : public QObject {
             settings::trans_rule_flags_t::TransRuleNone;
     };
 
+    enum class action_when_busy_policy_t : uint8_t {
+        ignore,
+        cancel_current_and_process,
+        cancel_current_and_ignore,
+        add_to_queue
+    };
+
     QString m_active_stt_model;
     QVariantMap m_available_stt_models_map;
     QString m_active_tts_model;
@@ -714,7 +721,7 @@ class dsnote_app : public QObject {
     QString m_prev_text;
     bool m_undo_flag = false;  // true => undo, false => redu
     std::queue<QString> m_files_to_open;
-    std::optional<std::pair<action_t, QString>> m_pending_action;
+    std::queue<std::pair<action_t, QVariantMap>> m_pending_actions;
     text_destination_t m_text_destination = text_destination_t::note_add;
     std::optional<desktop_notification_t> m_desktop_notification;
     QVariantMap m_features_availability;
@@ -914,7 +921,7 @@ class dsnote_app : public QObject {
                                               int stream_index, bool replace);
     void open_next_file();
     void reset_files_queue();
-    void execute_action(action_t action, const QString &extra);
+    void execute_action(action_t action, const QVariantMap &arguments);
     action_t convert_action(action_t action) const;
     void execute_pending_action();
     void process_pending_desktop_notification();
@@ -992,6 +999,9 @@ class dsnote_app : public QObject {
     void set_trans_rules_test_text(const QString &text);
     static QString lang_from_model_id(const QString &model_id);
     QString py_version() const { return m_py_version; }
+    static action_when_busy_policy_t action_when_busy_policy_from_str(
+        const QString &policy);
+    void add_action_to_queue(action_t action, const QVariantMap &arguments);
 };
 
 #endif  // DSNOTE_APP_H

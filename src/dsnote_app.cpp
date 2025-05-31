@@ -469,8 +469,8 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(&m_tray, &tray_icon::action_triggered, this,
             &dsnote_app::execute_tray_action);
     connect(&m_gs_manager, &global_hotkeys_manager::hotkey_activated, this,
-            [this](const QString &action_id, const QString &extra) {
-                execute_action_id(action_id, extra, true);
+            [this](const QString &action_id, const QVariantMap &arguments) {
+                execute_action_id(action_id, arguments, true);
             });
 #endif
 }
@@ -1453,8 +1453,9 @@ void dsnote_app::handle_tts_speech_to_file_finished(const QStringList &files,
         return;
     }
 
-    if (QFile::exists(m_dest_file_info.output_path))
+    if (QFile::exists(m_dest_file_info.output_path)) {
         QFile::remove(m_dest_file_info.output_path);
+    }
 
     if (m_dest_file_info.input_path.isEmpty()) {
         export_to_audio_internal(files, m_dest_file_info.output_path);
@@ -3163,6 +3164,7 @@ void dsnote_app::speech_to_file_internal(
 
     m_dest_file_info.title_tag = title_tag;
     m_dest_file_info.track_tag = track_tag;
+    m_dest_file_info.audio_format = audio_format;
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->tts_speech_to_file(
@@ -4023,7 +4025,7 @@ void dsnote_app::export_to_audio_mix(const QString &input_file,
 
 void dsnote_app::export_to_audio_internal(const QStringList &input_files,
                                           const QString &dest_file) {
-    auto format = settings::instance()->audio_format();
+    auto format = m_dest_file_info.audio_format;
 
     if (format == settings::audio_format_t::AudioFormatAuto)
         format = settings::filename_to_audio_format_static(
@@ -4057,7 +4059,7 @@ void dsnote_app::export_to_audio_mix_internal(const QString &main_input_file,
                                               int main_stream_index,
                                               const QStringList &input_files,
                                               const QString &dest_file) {
-    auto format = settings::instance()->audio_format();
+    auto format = m_dest_file_info.audio_format;
 
     if (format == settings::audio_format_t::AudioFormatAuto)
         format = settings::filename_to_audio_format_static(
@@ -4837,21 +4839,27 @@ QVariantList dsnote_app::features_availability() {
 }
 
 void dsnote_app::execute_pending_action() {
-    if (!m_pending_action) return;
+    if (m_pending_actions.empty()) return;
 
     if (busy()) {
         m_action_delay_timer.start();
         return;
     }
 
-    execute_action(m_pending_action.value().first,
-                   m_pending_action.value().second);
+    const auto& pending_action = m_pending_actions.front();
 
-    m_pending_action.reset();
+    execute_action(pending_action.first,
+                   pending_action.second);
+
+    m_pending_actions.pop();
+
+    if (!m_pending_actions.empty()) {
+        m_action_delay_timer.start();
+    }
 }
 
 QVariantMap dsnote_app::execute_action_id(const QString &action_id,
-                                          const QString &extra,
+                                          const QVariantMap &arguments,
                                           bool trusted_source) {
     QVariantMap result;
 
@@ -4874,11 +4882,11 @@ QVariantMap dsnote_app::execute_action_id(const QString &action_id,
 #define X(name, str)                                             \
     }                                                            \
     else if (action_id.compare(str, Qt::CaseInsensitive) == 0) { \
-        execute_action(action_t::name, extra);
+        execute_action(action_t::name, arguments);
         ACTION_TABLE
 #undef X
     } else {
-        qWarning() << "invalid action:" << action_id << extra;
+        qWarning() << "invalid action:" << action_id << arguments;
         update_result(action_error_code_t::unknown_name);
         return result;
     }
@@ -4985,16 +4993,19 @@ dsnote_app::action_t dsnote_app::convert_action(action_t action) const {
     return action;
 }
 
-void dsnote_app::execute_action(action_t action, const QString &extra) {
+void dsnote_app::add_action_to_queue(action_t action, const QVariantMap &arguments) {
+    m_pending_actions.push({action, arguments});
+    m_action_delay_timer.start();
+    qDebug() << "action added to queue:" << action;
+}
+
+void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
     if (busy()) {
-        m_pending_action = std::make_pair(action, extra);
-        m_action_delay_timer.start();
-        qDebug() << "delaying action:" << action;
+        add_action_to_queue(action, arguments);
         return;
     }
 
-    qDebug() << "executing action:" << action
-             << "extra =" << extra.trimmed().left(10);
+    qDebug() << "executing action:" << action << "args=" << arguments;
 
     auto caction = convert_action(action);
 
@@ -5029,16 +5040,44 @@ void dsnote_app::execute_action(action_t action, const QString &extra) {
             break;
         case dsnote_app::action_t::start_reading_clipboard:
         case dsnote_app::action_t::start_reading_text: {
-            auto segment =
-                text_tools::raw_taged_segment_from_text(extra.toStdString());
-            play_speech_from_text(
-                caction == action_t::start_reading_clipboard
-                    ? QGuiApplication::clipboard()->text()
-                    : QString::fromStdString(segment.text),
-                segment.tags.empty() ||
-                        !text_tools::valid_model_id(segment.tags.front())
-                    ? active_tts_model()
-                    : QString::fromStdString(segment.tags.front()));
+            auto id = arguments.value("model-id").toString();
+            auto text = action == action_t::start_reading_clipboard
+                                        ? QGuiApplication::clipboard()->text()
+                                        : arguments.value("text").toString();
+            auto output_file = arguments.value("output-file").toString();
+
+            if (output_file.isEmpty()) {
+                play_speech_from_text(text,
+                    id.isEmpty() ? active_tts_model() : id);
+            } else {
+                if (service_state() != service_state_t::StateIdle) {
+                    qDebug() << "state is not idle => enforcing busy-policy";
+                    switch(action_when_busy_policy_from_str(arguments.value("busy-policy").toString())) {
+                    case action_when_busy_policy_t::ignore:
+                        qWarning() << "ignoring action request";
+                        return;
+                    case action_when_busy_policy_t::cancel_current_and_ignore:
+                        cancel();
+                        return;
+                    case action_when_busy_policy_t::cancel_current_and_process:
+                        break;
+                    case action_when_busy_policy_t::add_to_queue:
+                        add_action_to_queue(action, arguments);
+                        return;
+                    }
+                }
+
+                m_dest_file_info = dest_file_info_t{};
+                speech_to_file_internal(
+                            text, id, output_file, {}, {},
+                    tts_ref_voice_needed_by_id(id) ? active_tts_ref_voice() : QString{},
+                    tts_ref_prompt_needed_by_id(id)
+                        ? settings::instance()->tts_active_voice_prompt()
+                        : QString{},
+                    settings::text_format_t::TextFormatRaw,
+                    settings::filename_to_audio_format_static(output_file),
+                    settings::instance()->audio_quality());
+            }
             break;
         }
         case dsnote_app::action_t::pause_resume_reading:
@@ -5062,12 +5101,16 @@ void dsnote_app::execute_action(action_t action, const QString &extra) {
         case dsnote_app::action_t::switch_to_prev_tts_model:
             set_active_prev_tts_model();
             break;
-        case dsnote_app::action_t::set_stt_model:
-            if (!extra.isEmpty()) set_active_stt_model_or_lang(extra);
-            break;
-        case dsnote_app::action_t::set_tts_model:
-            if (!extra.isEmpty()) set_active_tts_model_or_lang(extra);
-            break;
+        case dsnote_app::action_t::set_stt_model: {
+            auto id = arguments.value("model-id").toString();
+                if (!id.isEmpty()) set_active_stt_model_or_lang(id);
+                break;
+            }
+        case dsnote_app::action_t::set_tts_model: {
+            auto id = arguments.value("model-id").toString();
+                if (!id.isEmpty()) set_active_tts_model_or_lang(id);
+                break;
+        }
     }
 }
 
@@ -5715,4 +5758,22 @@ void dsnote_app::open_hotkeys_editor() {
 #ifdef USE_DESKTOP
     m_gs_manager.reset_portal_connection();
 #endif
+}
+
+dsnote_app::action_when_busy_policy_t dsnote_app::action_when_busy_policy_from_str(
+            const QString &policy) {
+    if (policy.compare("ignore", Qt::CaseInsensitive) == 0) {
+        return action_when_busy_policy_t::ignore;
+    }
+    if (policy.compare("cancel-current-and-ignore", Qt::CaseInsensitive) == 0) {
+        return action_when_busy_policy_t::cancel_current_and_ignore;
+    }
+    if (policy.compare("cancel-current-and-process", Qt::CaseInsensitive) == 0) {
+        return action_when_busy_policy_t::cancel_current_and_process;
+    }
+    if (policy.compare("add-to-queue", Qt::CaseInsensitive) == 0) {
+        return action_when_busy_policy_t::add_to_queue;
+    }
+    // default
+    return action_when_busy_policy_t::add_to_queue;
 }

@@ -80,8 +80,20 @@ int app_server::request_another_instance(const cmd::options &options) {
     if (!options.action.isEmpty()) {
         qDebug() << "[dbus client] calling InvokeAction on another instance:"
                  << options.action;
-        auto result =
-            iface.InvokeAction(options.action, QDBusVariant{options.extra});
+
+        QVariantMap arguments;
+        if (!options.model_id.isEmpty()) {
+            arguments.insert("model-id", options.model_id);
+        }
+        if (!options.text.isEmpty()) {
+            arguments.insert("text", options.text);
+        }
+        if (!options.output_file.isEmpty()) {
+            arguments.insert("output-file",
+                             QFileInfo{options.output_file}.absoluteFilePath());
+        }
+
+        auto result = iface.InvokeAction(options.action, arguments);
         result.waitForFinished();
 
         if (result.isValid()) {
@@ -119,7 +131,7 @@ int app_server::request_another_instance(const cmd::options &options) {
         auto max_id_size = [](const QVariantList &models) {
             return std::accumulate(
                 models.cbegin(), models.cend(), 0, [](int size, const auto &m) {
-                    QVariantMap model = qdbus_cast<QVariantMap>(
+                    auto model = qdbus_cast<QVariantMap>(
                         m.template value<QDBusArgument>());
                     return std::max(model.contains("id")
                                         ? model.value("id").toString().size()
@@ -133,8 +145,7 @@ int app_server::request_another_instance(const cmd::options &options) {
             fmt::print("Available {} models: {}\n", name, models.size());
 
             for (const auto &m : models) {
-                QVariantMap model =
-                    qdbus_cast<QVariantMap>(m.value<QDBusArgument>());
+                auto model = qdbus_cast<QVariantMap>(m.value<QDBusArgument>());
                 if (!model.contains("id")) continue;
                 fmt::print(fmt::format("\t{{:{}}} \"{{}}\"\n",
                                        max_id_size > 0 ? max_id_size : 10),
@@ -258,19 +269,19 @@ void app_server::setDsnoteApp(QObject *app) {
 }
 
 QVariantMap app_server::InvokeAction(const QString &action_name,
-                                     const QDBusVariant &argument) {
+                                     const QVariantMap &arguments) {
     qDebug() << "[dbus app] InvokeAction called:" << action_name;
 
-    return invoke_action(action_name, argument.variant());
+    return invoke_action(action_name, arguments);
 }
 
 QVariantMap app_server::invoke_action(const QString &action_id,
-                                      const QVariant &argument) {
+                                      const QVariantMap &arguments) {
     QVariantMap map;
 
     QMetaObject::invokeMethod(
         m_dsnote_app, "execute_action_id", Q_RETURN_ARG(QVariantMap, map),
-        Q_ARG(QString, action_id), Q_ARG(QString, argument.toString()),
+        Q_ARG(QString, action_id), Q_ARG(QVariantMap, arguments),
         Q_ARG(bool, false));
 
     return map;
@@ -313,9 +324,12 @@ void app_server::ActivateAction(
     [[maybe_unused]] const QVariantMap &platform_data) {
     qDebug() << "[dbus app] ActivateAction called:" << action_name;
 
-    invoke_action(action_name, parameter.isEmpty()
-                                   ? QString{}
-                                   : parameter.front().toString());
+    QVariantMap argumets;
+    if (parameter.size() > 2) argumets.insert("output-file", parameter.at(2));
+    if (parameter.size() > 1) argumets.insert("text", parameter.at(1));
+    if (parameter.size() > 0) argumets.insert("model-id", parameter.at(0));
+
+    invoke_action(action_name, argumets);
 }
 
 void app_server::Open(const QStringList &uris,

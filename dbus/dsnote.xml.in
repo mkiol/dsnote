@@ -84,8 +84,8 @@
        start-listening-clipboard
        start-listening-translate-clipboard
        stop-listening
-       start-reading
-       start-reading-clipboard
+       start-reading *
+       start-reading-clipboard *
        start-reading-text *
        pause-resume-reading
        cancel
@@ -96,15 +96,17 @@
        set-stt-model *
        set-tts-model *
 
-      *) Optional 'argument' is used to pass model-id or
-      text to read. To pass both, set 'argument' to
-      "{model-id}text to read".
+      *) Optional @arguments dict used to pass additional options:
+        [model-id] => model ID
+        [text] => text to read
+        [output-file] => output file path
   -->
   <method name="InvokeAction">
     <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.In1" value="QVariantMap"/>
     <arg name="action_name" type="s" direction="in" />
-    <!-- optional argument (e.g. model-id, text to read) -->
-    <arg name="argument" type="v" direction="in" />
+    <!-- optional arguments (e.g. model-id, text to read, output-file) -->
+    <arg name="arguments" type="a{sv}" direction="in" />
     <arg name="result" type="a{sv}" direction="out" />
   </method>
 

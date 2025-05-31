@@ -34,7 +34,8 @@ class global_hotkeys_manager : public QObject {
     void reset_portal_connection();
 
    Q_SIGNALS:
-    void hotkey_activated(const QString& action_id, const QString& extra);
+    void hotkey_activated(const QString& action_id,
+                          const QVariantMap& arguments);
 
    private:
     inline static const QString DBUS_SERVICE_NAME{

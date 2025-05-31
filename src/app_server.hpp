@@ -44,7 +44,7 @@ class app_server : public QObject {
                           const QVariantMap &platform_data);
     // dbus dsnote api
     Q_INVOKABLE QVariantMap InvokeAction(const QString &action_name,
-                                         const QDBusVariant &argument);
+                                         const QVariantMap &arguments);
     Q_INVOKABLE QVariantList GetSttModels();
     Q_INVOKABLE QVariantList GetTtsModels();
 
@@ -82,7 +82,7 @@ class app_server : public QObject {
     int state() const;
     int task_state() const;
     QVariantMap invoke_action(const QString &action_id,
-                              const QVariant &argument);
+                              const QVariantMap &arguments);
    private Q_SLOTS:
     void handle_active_stt_model_change();
     void handle_active_tts_model_change();

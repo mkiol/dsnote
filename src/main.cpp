@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -152,6 +152,15 @@ static cmd::options check_options(const QCoreApplication& app) {
         QStringLiteral("text")};
     parser.addOption(text_opt);
 
+    QCommandLineOption output_file_opt{
+        QStringLiteral("output-file"),
+        QStringLiteral("Save the synthesized speech in an audio file instead "
+                       "of playing it aloud. Used together with "
+                       "start-reading-clipboard or "
+                       "start-reading-text action."),
+        QStringLiteral("output-file")};
+    parser.addOption(output_file_opt);
+
     QCommandLineOption gen_checksum_opt{
         QStringLiteral("gen-checksums"),
         QStringLiteral(
@@ -265,7 +274,7 @@ static cmd::options check_options(const QCoreApplication& app) {
                                id_opt.valueName().toStdString());
                     options.valid = false;
                 } else {
-                    options.extra = QStringLiteral("%1").arg(id);
+                    options.model_id = QStringLiteral("%1").arg(id);
                 }
             } else if (action.compare("start-reading-text",
                                       Qt::CaseInsensitive) == 0) {
@@ -275,18 +284,31 @@ static cmd::options check_options(const QCoreApplication& app) {
                                text_opt.valueName().toStdString());
                     options.valid = false;
                 } else if (!id_ok) {
-                    options.extra = std::move(text);
+                    options.text = std::move(text);
                 } else {
-                    options.extra = QStringLiteral("{%1}%2").arg(id, text);
+                    options.text = std::move(text);
+                    options.model_id = id;
                 }
             } else if (action.compare("start-reading-clipboard",
                                       Qt::CaseInsensitive) == 0) {
                 if (id_ok) {
-                    options.extra = QStringLiteral("%1").arg(id);
+                    options.model_id = QStringLiteral("%1").arg(id);
                 }
             }
 
             options.action = std::move(action);
+        }
+    }
+
+    options.output_file = parser.value(output_file_opt);
+    if (!options.output_file.isEmpty()) {
+        if (!options.action.startsWith("start-reading-", Qt::CaseInsensitive)) {
+            fmt::print(
+                stderr,
+                "Option --{} can be used only with start-reading-clipboard and "
+                "start-reading-text actions.\n",
+                output_file_opt.valueName().toStdString());
+            options.valid = false;
         }
     }
 
@@ -299,8 +321,9 @@ static cmd::options check_options(const QCoreApplication& app) {
             options.models_to_print_roles |= cmd::role_tts;
         }
         if (options.models_to_print_roles == cmd::role_none) {
+            auto names = print_models_opt.names();
             fmt::print(stderr, "Invalid model role in --{} option.\n",
-                       print_models_opt.names().front().toStdString());
+                       names.front().toStdString());
             options.valid = false;
         }
     }
@@ -314,8 +337,9 @@ static cmd::options check_options(const QCoreApplication& app) {
             options.active_model_to_print_role |= cmd::role_tts;
         }
         if (options.active_model_to_print_role == cmd::role_none) {
+            auto names = print_active_model_opt.names();
             fmt::print(stderr, "Invalid model role in --{} option.\n",
-                       print_active_model_opt.names().front().toStdString());
+                       names.front().toStdString());
             options.valid = false;
         }
     }
@@ -329,8 +353,9 @@ static cmd::options check_options(const QCoreApplication& app) {
             options.state_scope_to_print_flag |= cmd::scope_task;
         }
         if (options.state_scope_to_print_flag == cmd::scope_none) {
+            auto names = print_state_opt.names();
             fmt::print(stderr, "Invalid state scope in --{} option.\n",
-                       print_state_opt.names().front().toStdString());
+                       names.front().toStdString());
             options.valid = false;
         }
     }

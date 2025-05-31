@@ -40,9 +40,11 @@ struct options {
     std::underlying_type_t<role_flag> models_to_print_roles = role_none;
     std::underlying_type_t<role_flag> active_model_to_print_role = role_none;
     QString action;
-    QString extra;
+    QString text;
+    QString model_id;
     QStringList files;
     QString log_file;
+    QString output_file;
 };
 }  // namespace cmd
 
