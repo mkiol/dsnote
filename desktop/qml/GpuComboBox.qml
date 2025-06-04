@@ -18,6 +18,7 @@ ColumnLayout {
     property bool use_gpu: false
     property var devices
     property int device_index: -1
+    property bool show_rocm_warning: false
 
     Layout.fillWidth: true
 
@@ -67,7 +68,7 @@ ColumnLayout {
         color: palette.text
         visible: root.enabled && root.use_gpu && root.devices.length > 1 && gpuCombo.displayText.search("ROCm") !== -1
         text: qsTr("Tip: If you observe problems with hardware acceleration, try to enable %1 option.")
-              .arg("<i>" + qsTr("Other") + "</i> &rarr; <i>" +
+              .arg("<i>" + qsTr("Advanced") + "</i> &rarr; <i>" +
               qsTr("Override GPU version") + "</i>")
         label.textFormat: Text.RichText
     }
@@ -78,6 +79,14 @@ ColumnLayout {
         visible: root.enabled && root.use_gpu && root.devices.length > 1 && gpuCombo.displayText.search("OpenVINO") !== -1
         text: qsTr("Tip: %1 acceleration is most effective when processing long sentences with large models.").arg("OpenVINO") + " " +
               qsTr("For short sentences, better results can be obtained with %1 or without hardware acceleration enabled.").arg("Vulkan")
+    }
+
+    TipMessage {
+        indends: 2
+        color: palette.text
+        visible: root.show_rocm_warning && root.enabled && root.use_gpu && root.devices.length > 1 && gpuCombo.displayText.search("ROCm") !== -1
+        text: qsTr("This engine can be slow when using %1.").arg("ROCm") + " " +
+              qsTr("Disable hardware acceleration if you observe problems.")
     }
 
     TipMessage {

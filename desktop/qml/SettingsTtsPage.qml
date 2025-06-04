@@ -255,6 +255,7 @@ ColumnLayout {
                 devices: _settings.coqui_gpu_devices
                 device_index: _settings.coqui_gpu_device_idx
                 use_gpu: _settings.coqui_use_gpu
+                show_rocm_warning: true
                 onUse_gpuChanged: _settings.coqui_use_gpu = use_gpu
                 onDevice_indexChanged: _settings.coqui_gpu_device_idx = device_index
             }

@@ -31,17 +31,17 @@ DialogPage {
         </ul>
         <p>" + qsTr("Speech to Text") + "</p>
         <ul>
-        <li>New <i>CrisperWhisper</i> model for <i>FasterWhisper</i> engine.
+        <li>New <i><a href='https://huggingface.co/nyrahealth/CrisperWhisper'>CrisperWhisper</a></i> model for <i>FasterWhisper</i> engine.
             <i>CrisperWhisper</i> is designed for fast, precise, and verbatim speech recognition with accurate word-level timestamps.
             Unlike the original Whisper, which tends to omit disfluencies and follows more of a intended transcription style,
             <i>CrisperWhisper</i> aims to transcribe every spoken word exactly as it is, including fillers, pauses, stutters and false starts.
             <i>CrisperWhisper</i> model is enabled only for English and German languages.</li>
-        <li><i>KBLab Whisper</i> models for Swedish.
+        <li><i><a href='https://huggingface.co/KBLab'>KBLab Whisper</a></i> models for Swedish.
             The National Library of Sweden has released fine-tuned STT models trained on its library collections.
             The models have significantly improved accuracy compared to regular Whisper models.
             Even \"Tiny\" model provides decent quality.
             KBLab models are available as both <i>FasterWhisper</i> and <i>WhisperCpp</i>.</li>
-        <li><i>FUTO</i> Whisper models.
+        <li><i><a href='https://keyboard.futo.org/voice-input-models'>FUTO<a/></i> Whisper models.
             New models used in the FUTO mobile keyboard app.</li>
         <li>Using an existing note as the initial context in decoding.
             This has the potential to improve transcription quality and reduce \"hallucination\" problem.
@@ -54,24 +54,24 @@ DialogPage {
         </ul>
         <p>" + qsTr("Text to Speech") + "</p>
         <ul>
-        <li><i>Kokoro</i> TTS engine.
+        <li><i><a href='https://github.com/hexgrad/kokoro'>Kokoro</a></i> TTS engine.
             Kokoro is a compact yet powerful open-source multilingual TTS engine.
             Despite its modest size (trained on less than 100 hours of audio), it delivers impressive results.
             Unlike other engines with comparable quality, Kokoro offers the advantage of running even on devices without GPUs.
             Kokoro voices are enabled for: English, Chinese, Japanese, Hindi, Italian, French, Spanish and Portuguese.</li>
-        <li><i>F5-TTS: A Fairytaler that Fakes Fluent and Faithful Speech with Flow Matching</i> engine.
+        <li><i><a href='https://github.com/SWivid/F5-TTS'>F5-TTS</a></i> engine.
             The F5-TTS provides exceptional voice cloning capabilities. The currently enabled model works with English and Chinese languages.
             To work well, F5-TTS needs audio samples of the voice along with the transcribed text spoken in the sample.
             Make sure that the text spoken in the audio sample is set correctly in <i>Voice profiles</i> &rarr; <i>Audio sample</i> menu.
             F5-TTS works best with CUDA acceleration. CPU only processing can be very slow.</li>
-        <li><i>Parler-TTS</i> engine. Parler-TTS can generate high-quality, natural sounding speech in the style of a given speaker (gender, pitch, speaking style, etc).
+        <li><i><a href='https://github.com/huggingface/parler-tts'>Parler-TTS</a></i> engine. Parler-TTS can generate high-quality, natural sounding speech in the style of a given speaker (gender, pitch, speaking style, etc).
             The speaker's characteristics are defined by a text description (prompt).
             To use Parler-TTS models, you need to configure a <i>Text voice profile</i>. This can be done in the <i>Voice profiles</i> menu.
             To learn more about the unique features of this engine, check out <a href='https://github.com/huggingface/parler-tts/'>Parler TTS project website</a>.
             Parler-TTS primarily supports English, but a multilingual model for French, Spanish, Portuguese, Polish, German, Dutch and Italian is also included.
             Currently, the multilingual model provides rather poor quality and not entirely usable speech.
             Parler-TTS works best with CUDA acceleration. CPU only processing can be very slow.</li></li>
-        <li><i>S.A.M.</i> TTS engine. S.A.M. is a small speech synthesizer designed for the Commodore 64.
+        <li><i><a href='https://github.com/s-macke/SAM'>S.A.M.</a></i> TTS engine. S.A.M. is a small speech synthesizer designed for the Commodore 64.
             It features a robotic voice that evokes a strong sense of nostalgia.
             The S.A.M. voice is available in English only.</li>
         <li><i>Normalize audio</i> setting option.

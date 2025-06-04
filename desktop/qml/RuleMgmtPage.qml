@@ -42,7 +42,7 @@ DialogPage {
 
     onOpened: {
         if ((_settings.hint_done_flags & Settings.HintDoneRules) == 0) {
-            helpDialog.open()
+            appWin.openPopup(helpDialog)
         }
     }
 
