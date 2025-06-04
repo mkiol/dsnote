@@ -6,6 +6,7 @@ build-options:
   no-debuginfo: true
   prefix: /app/extensions/nvidia
 cleanup:
+  - /bin
   - /include
   - "*.a"
 modules:
@@ -19,6 +20,12 @@ modules:
       - rm -rf builds/bin builds/cuda_sanitizer_api builds/integration
       - rm -rf builds/nsight_compute builds/nsight_systems builds/cuda_gdb builds/cuda_documentation
       - mkdir -p ${FLATPAK_DEST}/cuda
+      - |
+        set -e
+        for f in $(find . -name "*.a" | grep -v "libcudart_static.a" | grep -P "static\.a|static_nocallback"); do
+          echo "removing $f"
+          rm -f "$f"
+        done
       - |
         set -e
         cd builds
@@ -37,11 +44,13 @@ modules:
           echo "copying $f => ${FLATPAK_DEST}/cuda/lib64/"
           cp -P $f ${FLATPAK_DEST}/cuda/lib64/
         done
+      - rm -rf builds
+      - rm -rf cuda_12.9.0_575.51.03_linux.run
+      - ${FLATPAK_DEST}/cuda/bin/nvcc nvcc -arch-ls -code-ls
     build-options:
       strip: true
     cleanup:
       - /cuda/bin
-      - /cuda/extras
       - /cuda/extras
       - /cuda/gds*
       - /cuda/include
@@ -73,11 +82,17 @@ modules:
     only-arches:
       - x86_64
     buildsystem: cmake-ninja
+    build-options:
+      env:
+        NVCC_APPEND_FLAGS: --compress-mode=size --split-compile=0 -Wno-deprecated-gpu-targets
+    cleanup:
+      - /lib/cmake
+      - /lib/pkgconfig
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DGGML_NATIVE=OFF
       - -DGGML_CUDA=ON
-      - -DCMAKE_CUDA_ARCHITECTURES=50;52;53;60;61;62;70;72;75;80;86;87;89;90;90a;100;100a
+      - -DCMAKE_CUDA_ARCHITECTURES=50;52;53;60;61;62;70;72;75;80;86;87;89;90;100
       - -DCUDAToolkit_ROOT=/app/extensions/nvidia/cuda
       - -DCMAKE_CUDA_COMPILER=/app/extensions/nvidia/cuda/bin/nvcc
       - -DGGML_AVX=ON
@@ -90,6 +105,8 @@ modules:
       - -DCMAKE_C_FLAGS=-O3
       - -DCMAKE_CXX_FLAGS=-O3
       - -DWHISPER_TARGET_NAME=whisper-cublas
+    post-install:
+      - rm ${FLATPAK_DEST}/lib/libggml.a
     sources:
       - type: archive
         url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.7.1.tar.gz
@@ -109,6 +126,12 @@ modules:
       - /cuda/include
     build-commands:
       - mkdir -p ${FLATPAK_DEST}/cuda/include
+      - |
+        set -e
+        for f in $(find . -name "*.a"); do
+          echo "removing $f"
+          rm -f "$f"
+        done
       - |
         set -e
         cd include
@@ -133,6 +156,8 @@ modules:
     only-arches:
       - x86_64
     buildsystem: simple
+    build-options:
+      strip: true
     build-commands:
       - |
         set -e
@@ -140,23 +165,46 @@ modules:
         for f in *.so*; do
           echo "copying $f => ${FLATPAK_DEST}/cuda/lib64/"
           cp -P $f ${FLATPAK_DEST}/cuda/lib64/
+          rm -rf $f
         done
-    build-options:
-      strip: true
     sources:
       - type: archive
         archive-type: "tar-zst"
         url: https://mirror.sunred.org/archlinux/extra/os/x86_64/nccl-2.26.5-1-x86_64.pkg.tar.zst
         sha256: 14136cfcf9fa34b8ddf1300a16b2649143882d9c9bc09326d21d59c95fd84ed4
 
-  - name: oneapi
+  - name: python3-pybind11
     only-arches:
       - x86_64
     buildsystem: simple
     cleanup:
+      - /bin
+      - /lib/python3.12/site-packages/pybind11*
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST} "pybind11" --no-build-isolation
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/06/55/9f73c32dda93fa4f539fafa268f9504e83c489f460c380371d94296126cd/pybind11-2.11.1-py3-none-any.whl
+        sha256: 33cdd02a6453380dd71cc70357ce388ad1ee8d32bd0e38fc22b273d050aa29b3
+
+  - name: oneapi
+    only-arches:
+      - x86_64
+    buildsystem: simple
+    build-options:
+      strip: true
+    cleanup:
       - /oneapi
     build-commands:
       - sh l_BaseKit_p_2024.0.0.49564_offline.sh --extract-folder ./oneapi -a --eula accept --silent --install-dir ${FLATPAK_DEST}/oneapi
+      - chmod -R +w ${FLATPAK_DEST}/oneapi && echo "done" || echo "done with errors"
+      - |
+        set -e
+        for f in $(find ${FLATPAK_DEST}/oneapi -type f -name "*.so*"); do
+          echo "removing $f"
+          rm -f "$f"
+        done
     sources:
       - type: file
         url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/20f4e6a1-6b0b-4752-b8c1-e5eacba10e01/l_BaseKit_p_2024.0.0.49564_offline.sh
@@ -166,6 +214,8 @@ modules:
     only-arches:
       - x86_64
     buildsystem: cmake-ninja
+    build-options:
+      strip: true
     cleanup:
       - /bin
       - /include
@@ -184,21 +234,6 @@ modules:
         url: https://github.com/oneapi-src/oneDNN/archive/refs/tags/v3.3.1.tar.gz
         sha256: e0b7a9452162e854cf08b4e90bcd1b382b9903ace6a61503a872573880d24c3f
 
-  - name: python3-pybind11
-    only-arches:
-      - x86_64
-    buildsystem: simple
-    cleanup:
-      - /bin
-      - /lib/python3.12/site-packages/pybind11*
-    build-commands:
-      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} "pybind11" --no-build-isolation
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/06/55/9f73c32dda93fa4f539fafa268f9504e83c489f460c380371d94296126cd/pybind11-2.11.1-py3-none-any.whl
-        sha256: 33cdd02a6453380dd71cc70357ce388ad1ee8d32bd0e38fc22b273d050aa29b3
-
   - name: ctranslate2-cuda
     only-arches:
       - x86_64
@@ -207,6 +242,7 @@ modules:
       env:
         PYTHONPATH: /app/extensions/nvidia/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
         CTRANSLATE2_ROOT: /app/extensions/nvidia
+        NVCC_APPEND_FLAGS: --compress-mode=size --split-compile=0 -Wno-deprecated-gpu-targets
     cleanup:
       - /bin
       - /include
@@ -252,7 +288,14 @@ modules:
         PYTHONPATH: /app/extensions/nvidia/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} torch torchaudio triton --no-build-isolation
+        --prefix=${FLATPAK_DEST} torch torchaudio triton flash-attn --no-build-isolation
+    post-install:
+      - |
+        set -e
+        for f in $(find ${FLATPAK_DEST}/lib/python3.12/site-packages -maxdepth 1 -name "nvidia*"); do
+          echo "removing $f"
+          rm -rf "$f"
+        done
     sources:
       - type: file
         url: https://files.pythonhosted.org/packages/8b/5c/36c114d120bfe10f9323ed35061bc5878cc74f3f594003854b0ea298942f/torch-2.5.1-cp312-cp312-manylinux1_x86_64.whl
@@ -299,19 +342,6 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/87/20/199b8713428322a2f22b722c62b8cc278cc53dffa9705d744484b5035ee9/nvidia_nvtx_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl
         sha256: 781e950d9b9f60d8241ccea575b32f5105a5baf4c2351cab5256a24869f12a1a
-
-  - name: python3-flash-attn-cuda
-    only-arches:
-      - x86_64
-    buildsystem: simple
-    build-options:
-      strip: true
-      env:
-        PYTHONPATH: /app/extensions/nvidia/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
-    build-commands:
-      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} flash-attn --no-build-isolation
-    sources:
       - type: file
         url: https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.5cxx11abiFALSE-cp312-cp312-linux_x86_64.whl
         dest-filename: flash_attn-2.7.4.post1-cp312-cp312-linux_x86_64.whl

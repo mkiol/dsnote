@@ -20,7 +20,7 @@
   <url type="bugtracker">https://github.com/mkiol/dsnote/issues</url>
   <update_contact>dsnote_AT_mkiol.net</update_contact>
   <releases>
-    <release version="1.4.0" date="2025-05-15">
+    <release version="1.4.0" date="2025-05-21">
       <description>
         <ul>
         <li>Flatpak runtime update to version 5.15-24.08</li>
