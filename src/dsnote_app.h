@@ -1002,6 +1002,7 @@ class dsnote_app : public QObject {
     static action_when_busy_policy_t action_when_busy_policy_from_str(
         const QString &policy);
     void add_action_to_queue(action_t action, const QVariantMap &arguments);
+    void clear_action_queue();
 };
 
 #endif  // DSNOTE_APP_H

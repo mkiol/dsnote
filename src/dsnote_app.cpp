@@ -4841,7 +4841,7 @@ QVariantList dsnote_app::features_availability() {
 void dsnote_app::execute_pending_action() {
     if (m_pending_actions.empty()) return;
 
-    if (busy()) {
+    if (busy() || service_state() != service_state_t::StateIdle) {
         m_action_delay_timer.start();
         return;
     }
@@ -4999,6 +4999,13 @@ void dsnote_app::add_action_to_queue(action_t action, const QVariantMap &argumen
     qDebug() << "action added to queue:" << action;
 }
 
+void dsnote_app::clear_action_queue() {
+    m_action_delay_timer.stop();
+    if (!m_pending_actions.empty()) {
+        m_pending_actions = {};
+    }
+}
+
 void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
     if (busy()) {
         add_action_to_queue(action, arguments);
@@ -5087,6 +5094,7 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
                 pause_speech();
             break;
         case dsnote_app::action_t::cancel:
+            clear_action_queue();
             cancel();
             break;
         case dsnote_app::action_t::switch_to_next_stt_model:
