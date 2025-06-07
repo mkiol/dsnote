@@ -72,6 +72,9 @@ HelpDialog {
               "<li>WhisperCpp STT</li>" +
               "<li>FasterWhisper STT</li>" +
               "<li>Coqui TTS</li>" +
+              "<li>F5-TTS/li>" +
+              "<li>Kokoro TTS</li>" +
+              "<li>Parler-TTS</li>" +
               "<li>WhisperSpeech TTS</li>" +
               "</ul>"
     }
@@ -86,6 +89,9 @@ HelpDialog {
               "<ul>" +
               "<li>WhisperCpp STT</li>" +
               "<li>Coqui TTS</li>" +
+              "<li>F5-TTS/li>" +
+              "<li>Kokoro TTS</li>" +
+              "<li>Parler-TTS</li>" +
               "<li>WhisperSpeech TTS</li>" +
               "</ul>"
     }
