@@ -3144,6 +3144,7 @@ void dsnote_app::speech_to_file_internal(
         if (l.size() > 1) options.insert("ref_voice_file", l.at(1));
     }
 
+    auto real_audio_format = settings::audio_format_from_filename(audio_format, dest_file);
     auto audio_format_str =
         settings::audio_format_str_from_filename(audio_format, dest_file);
     auto audio_ext = settings::audio_ext_from_filename(audio_format, dest_file);
@@ -3152,19 +3153,13 @@ void dsnote_app::speech_to_file_internal(
     options.insert("audio_quality", audio_quality_to_str(audio_quality));
 
     if (QFileInfo{dest_file}.suffix().toLower() != audio_ext) {
-        qDebug() << "file name doesn't have proper extension for audio format";
-        if (dest_file.endsWith('.'))
-            m_dest_file_info.output_path = dest_file + audio_ext;
-        else
-            m_dest_file_info.output_path =
-                m_dest_file_info.output_path + '.' + audio_ext;
-    } else {
-        m_dest_file_info.output_path = dest_file;
+        qWarning() << "file name doesn't have proper extension for audio format";
     }
 
+    m_dest_file_info.output_path = dest_file;
     m_dest_file_info.title_tag = title_tag;
     m_dest_file_info.track_tag = track_tag;
-    m_dest_file_info.audio_format = audio_format;
+    m_dest_file_info.audio_format = real_audio_format;
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->tts_speech_to_file(

@@ -867,6 +867,8 @@ class settings : public QSettings, public singleton<settings> {
     static QString audio_ext_from_filename(
         settings::audio_format_t audio_format, const QString &filename);
     static audio_format_t audio_format_from_filename(const QString &filename);
+    static audio_format_t audio_format_from_filename(
+        audio_format_t audio_format, const QString &filename);
     static audio_format_t filename_to_audio_format_static(
         const QString &filename);
     Q_INVOKABLE QString

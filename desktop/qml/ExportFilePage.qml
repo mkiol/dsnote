@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -304,7 +304,8 @@ DialogPage {
             }
 
             function save_file() {
-                var file_path = _settings.add_ext_to_audio_file_path(pathField1.text.trim())
+                var dont_add_extension = root.disable_manual_file_path
+                var file_path = dont_add_extension ? pathField1.text.trim() : _settings.add_ext_to_audio_file_path(pathField1.text.trim())
                 var title_tag = mtagTitleTextField.text.trim()
                 var track_tag = mtagTrackTextField.text.trim()
 
@@ -608,8 +609,10 @@ DialogPage {
                     selectExisting: false
                     selectMultiple: false
                     onAccepted: {
-                        pathField1.text =
-                                _settings.file_path_from_url(fileWriteDialog1.fileUrl)
+                        var dont_add_extension = root.disable_manual_file_path
+                        var file_path = _settings.file_path_from_url(fileWriteDialog1.fileUrl)
+                        pathField1.text = dont_add_extension ?
+                                    file_path.trim() : _settings.add_ext_to_audio_file_path(file_path.trim())
                         _settings.update_audio_file_save_path(pathField1.text)
                     }
                 }

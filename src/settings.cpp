@@ -1115,37 +1115,50 @@ void settings::set_restart_required(bool value) {
 
 settings::audio_format_t settings::audio_format_from_filename(
     const QString& filename) {
-    if (settings::instance()->audio_format() ==
-        settings::audio_format_t::AudioFormatAuto) {
+    if (instance()->audio_format() == audio_format_t::AudioFormatAuto) {
         return filename_to_audio_format_static(filename);
-    } else {
-        return settings::instance()->audio_format();
     }
+
+    return instance()->audio_format();
+}
+
+settings::audio_format_t settings::audio_format_from_filename(
+    audio_format_t audio_format, const QString& filename) {
+    if (audio_format == audio_format_t::AudioFormatAuto)
+        audio_format = instance()->audio_format();
+
+    if (audio_format == audio_format_t::AudioFormatAuto) {
+        auto real_format = filename_to_audio_format_static(filename);
+        return real_format == audio_format_t::AudioFormatAuto
+                   ? audio_format_t::AudioFormatMp3
+                   : real_format;
+    }
+
+    return audio_format;
 }
 
 QString settings::audio_format_str_from_filename(audio_format_t audio_format,
                                                  const QString& filename) {
-    if (audio_format == settings::audio_format_t::AudioFormatAuto)
-        audio_format = settings::instance()->audio_format();
+    if (audio_format == audio_format_t::AudioFormatAuto)
+        audio_format = instance()->audio_format();
 
-    if (audio_format == settings::audio_format_t::AudioFormatAuto) {
+    if (audio_format == audio_format_t::AudioFormatAuto) {
         return audio_format_to_str(filename_to_audio_format_static(filename));
-    } else {
-        return audio_format_to_str(audio_format);
     }
+
+    return audio_format_to_str(audio_format);
 }
 
 QString settings::audio_ext_from_filename(audio_format_t audio_format,
                                           const QString& filename) {
-    if (audio_format == settings::audio_format_t::AudioFormatAuto)
-        audio_format = settings::instance()->audio_format();
+    if (audio_format == audio_format_t::AudioFormatAuto)
+        audio_format = instance()->audio_format();
 
-    if (settings::instance()->audio_format() ==
-        settings::audio_format_t::AudioFormatAuto) {
+    if (instance()->audio_format() == audio_format_t::AudioFormatAuto) {
         return audio_format_to_ext(filename_to_audio_format_static(filename));
-    } else {
-        return audio_format_to_ext(audio_format);
     }
+
+    return audio_format_to_ext(audio_format);
 }
 
 settings::audio_format_t settings::filename_to_audio_format(
