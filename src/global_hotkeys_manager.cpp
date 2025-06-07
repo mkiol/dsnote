@@ -121,6 +121,10 @@ void global_hotkeys_manager::create_portal_session(bool force_bind) {
     if (reply.isError()) {
         LOGW("can't connect to portal global shortcuts service: "
              << reply.error().message());
+
+        // enable x11 key bindings if configured
+        enable_or_disable();
+
         return;
     }
 
@@ -137,12 +141,11 @@ void global_hotkeys_manager::handle_create_session_response(
     uint res, const QVariantMap &results) {
     if (res != 0) {
         LOGW("failed to create portal session: " << res);
-        return;
+    } else {
+        m_portal_session =
+            QDBusObjectPath{results["session_handle"].toString()};
+        LOGD("portal session created successfully");
     }
-
-    m_portal_session = QDBusObjectPath{results["session_handle"].toString()};
-
-    LOGD("portal session created successfully");
 
     enable_or_disable();
 }
