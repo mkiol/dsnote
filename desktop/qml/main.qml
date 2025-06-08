@@ -185,8 +185,8 @@ ApplicationWindow {
         visible = !hidded;
     }
 
-    width: Screen.width / 2
-    height: Screen.height / 2
+    width: Screen.width * _settings.window_size_ratio
+    height: Screen.height * _settings.window_size_ratio
     visible: false
     header: MainToolBar {}
     onActiveChanged: update_dektop_notification()
@@ -325,18 +325,11 @@ ApplicationWindow {
             id: warningTip2
 
             warning: false
-            // visible: _settings.hw_accel_supported() && _settings.is_flatpak() &&
-            //          _settings.addon_flags == Settings.AddonNone &&
-            //          ((_settings.hint_done_flags & Settings.HintDoneAddon) == 0) &&
-            //          (((_settings.system_flags & Settings.SystemAmdGpu) > 0) ||
-            //           ((_settings.system_flags & Settings.SystemNvidiaGpu) > 0))
-
-            // right now, ROCm 6.x causes many problems with Coqui TTS therefore
-            // "missing add-on" warning for AMD GPU is not shown
             visible: _settings.hw_accel_supported() && _settings.is_flatpak() &&
                      _settings.addon_flags == Settings.AddonNone &&
                      ((_settings.hint_done_flags & Settings.HintDoneAddon) == 0) &&
-                     ((_settings.system_flags & Settings.SystemNvidiaGpu) > 0)
+                     (((_settings.system_flags & Settings.SystemAmdGpu) > 0) ||
+                      ((_settings.system_flags & Settings.SystemNvidiaGpu) > 0))
             onCloseClicked: _settings.set_hint_done(Settings.HintDoneAddon)
             text: {
                 var nvidia_addon = (_settings.system_flags & Settings.SystemNvidiaGpu) > 0

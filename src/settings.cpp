@@ -273,17 +273,17 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
         .removeRecursively();
 }
 
-#define X(name, dvalue)                                       \
-    bool settings::name() const {                             \
-        return value(QStringLiteral(#name), dvalue).toBool(); \
-    }                                                         \
-    void settings::set_##name(bool value) {                   \
-        if (name() != value) {                                \
-            setValue(QStringLiteral(#name), value);           \
-            emit name##_changed();                            \
-        }                                                     \
+#define X(name, type, dvalue)                                             \
+    type settings::name() const {                                         \
+        return qvariant_cast<type>(value(QStringLiteral(#name), dvalue)); \
+    }                                                                     \
+    void settings::set_##name(type value) {                               \
+        if (name() != value) {                                            \
+            setValue(QStringLiteral(#name), value);                       \
+            emit name##_changed();                                        \
+        }                                                                 \
     }
-SETTINGS_BOOL_PROPERTY_TABLE
+SETTINGS_PROPERTY_TABLE
 #undef X
 
 QString settings::settings_filepath() {

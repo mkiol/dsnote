@@ -24,28 +24,29 @@
 #include "qdebug.h"
 #include "singleton.h"
 
-// name, setting str, default value
-#define SETTINGS_BOOL_PROPERTY_TABLE            \
-    X(stt_use_note_as_prompt, true)             \
-    X(stt_echo, false)                          \
-    X(tts_split_into_sentences, true)           \
-    X(show_repair_text, false)                  \
-    X(tts_use_engine_speed_control, true)       \
-    X(tts_normalize_audio, true)                \
-    X(stt_insert_stats, false)                  \
-    X(trans_rules_enabled, false)               \
-    X(mnt_clean_text, false)                    \
-    X(whisper_translate, false)                 \
-    X(use_tray, false)                          \
-    X(start_in_tray, false)                     \
-    X(clean_ref_voice, true)                    \
-    X(stt_clear_mic_audio_when_decoding, false) \
-    X(stt_play_beep, false)                     \
-    X(translate_when_typing, false)             \
-    X(translator_mode, false)                   \
-    X(hotkeys_enabled, false)                   \
-    X(mtag, false)                              \
-    X(use_toggle_for_hotkey, true)
+// name, setting str, type, default value
+#define SETTINGS_PROPERTY_TABLE                       \
+    X(stt_use_note_as_prompt, bool, true)             \
+    X(stt_echo, bool, false)                          \
+    X(tts_split_into_sentences, bool, true)           \
+    X(show_repair_text, bool, false)                  \
+    X(tts_use_engine_speed_control, bool, true)       \
+    X(tts_normalize_audio, bool, true)                \
+    X(stt_insert_stats, bool, false)                  \
+    X(trans_rules_enabled, bool, false)               \
+    X(mnt_clean_text, bool, false)                    \
+    X(whisper_translate, bool, false)                 \
+    X(use_tray, bool, false)                          \
+    X(start_in_tray, bool, false)                     \
+    X(clean_ref_voice, bool, true)                    \
+    X(stt_clear_mic_audio_when_decoding, bool, false) \
+    X(stt_play_beep, bool, false)                     \
+    X(translate_when_typing, bool, false)             \
+    X(translator_mode, bool, false)                   \
+    X(hotkeys_enabled, bool, false)                   \
+    X(mtag, bool, false)                              \
+    X(use_toggle_for_hotkey, bool, true)              \
+    X(window_size_ratio, double, 0.6)
 
 // name, default value
 #define GPU_SCAN_TABLE                                                 \
@@ -133,9 +134,9 @@ class settings : public QSettings, public singleton<settings> {
     Q_OBJECT
 
     // app
-#define X(name, _) \
-    Q_PROPERTY(bool name READ name WRITE set_##name NOTIFY name##_changed)
-    SETTINGS_BOOL_PROPERTY_TABLE
+#define X(name, type, dvalue) \
+    Q_PROPERTY(type name READ name WRITE set_##name NOTIFY name##_changed)
+    SETTINGS_PROPERTY_TABLE
 #undef X
     Q_PROPERTY(QString note READ note WRITE set_note NOTIFY note_changed)
     Q_PROPERTY(speech_mode_t speech_mode READ speech_mode WRITE set_speech_mode
@@ -672,10 +673,10 @@ class settings : public QSettings, public singleton<settings> {
     bool use_default_qt_style();
 #endif
     // app
-#define X(name, _)     \
-    bool name() const; \
-    void set_##name(bool value);
-    SETTINGS_BOOL_PROPERTY_TABLE
+#define X(name, type, dvalue) \
+    type name() const;        \
+    void set_##name(type value);
+    SETTINGS_PROPERTY_TABLE
 #undef X
 #define X(name, _)               \
     bool hw_scan_##name() const; \
@@ -989,8 +990,8 @@ class settings : public QSettings, public singleton<settings> {
 
    signals:
     // app
-#define X(name, _) void name##_changed();
-    SETTINGS_BOOL_PROPERTY_TABLE
+#define X(name, type, dvalue) void name##_changed();
+    SETTINGS_PROPERTY_TABLE
 #undef X
 #define X(name, _) void hw_scan_##name##_changed();
     GPU_SCAN_TABLE
