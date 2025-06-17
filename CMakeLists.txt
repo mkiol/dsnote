@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.19)
 
 option(WITH_DESKTOP "enable desktop ui" OFF)
 option(WITH_SFOS "enable sfos ui" OFF)
@@ -154,7 +154,8 @@ set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_conf_version "108")
 set(info_addon_version "1.4") # if run as a flatpak pkg, the required add-on version
-set(info_version_type "-beta")
+#set(info_version_type "-beta")
+set(info_version_type "")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv · Niklas Halvorsen · \
 Matjaž Jeran · Victor Alonso Barberan · Bruno Veilleux · Abdullah Albaroty · 李 阳")

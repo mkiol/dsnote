@@ -4668,7 +4668,11 @@ bool dsnote_app::feature_fake_keyboard() const {
 }
 
 bool dsnote_app::feature_fake_keyboard_ydo() const {
+#ifdef USE_DESKTOP
     return fake_keyboard::is_ydo_supported();
+#else
+    return false;
+#endif
 }
 
 bool dsnote_app::feature_hotkeys() const {
@@ -4676,12 +4680,16 @@ bool dsnote_app::feature_hotkeys() const {
 }
 
 bool dsnote_app::feature_hotkeys_portal() const {
+#ifdef USE_DESKTOP
     return m_gs_manager.is_portal_supported();
+#else
+    return false;
+#endif
 }
 
 void dsnote_app::update_feature_statuses() {
     bool changed = false;
-
+#ifdef USE_DESKTOP
     // update fake-keyboard status
     if (m_features_availability.contains(QStringLiteral("fake-keyboard"))) {
         auto new_value = fake_keyboard::is_supported();
@@ -4695,9 +4703,7 @@ void dsnote_app::update_feature_statuses() {
                 QVariantList{new_value, tr("Insert text to active window")});
             changed = true;
         }
-#ifdef USE_DESKTOP
         m_tray.set_fake_keyboard_supported(new_value);
-#endif
     }
 
     // update hotkeys status
@@ -4713,6 +4719,7 @@ void dsnote_app::update_feature_statuses() {
             changed = true;
         }
     }
+#endif
 
     if (changed) {
         emit features_changed();

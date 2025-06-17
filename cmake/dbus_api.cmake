@@ -19,8 +19,6 @@ add_custom_command(
     DEPENDS ${info_dbus_app_interface}.xml
     COMMENT "generate dbus app adaptor sources"
 )
-qt5_generate_moc("${PROJECT_BINARY_DIR}/dbus_dsnote_adaptor.h" dbus_dsnote_adaptor.moc)
-macro_add_file_dependencies(dbus_dsnote_adaptor.cpp dbus_dsnote_adaptor.moc)
 
 add_custom_command(
     OUTPUT dbus_dsnote_inf.h dbus_dsnote_inf.cpp
@@ -28,8 +26,6 @@ add_custom_command(
     DEPENDS ${info_dbus_app_interface}.xml
     COMMENT "generate dbus app inf sources"
 )
-qt5_generate_moc("${PROJECT_BINARY_DIR}/dbus_dsnote_inf.h" dbus_dsnote_inf.moc)
-macro_add_file_dependencies(dbus_dsnote_inf.cpp dbus_dsnote_inf.moc)
 
 list(APPEND dsnote_lib_sources
     dbus_dsnote_adaptor.cpp dbus_dsnote_adaptor.h
