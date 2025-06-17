@@ -25,7 +25,7 @@ DialogPage {
         </ul>
         <p>" + qsTr("User Interface") + "</p>
         <ul>
-        <li><i>Speech Note</i> has been translated into Arabic, Chinese, Catalan, Spanish and French-Canadian languages.</li>
+        <li><i>Speech Note</i> has been translated into Arabic, Chinese, Catalan, Spanish, Turkish and French-Canadian languages.</li>
         <li>Command line option and DBus API for exporting synthesized speech to an audio file instead of playing it aloud.
             Use <i>--output-file</i> together with <i>start-reading-clipboard</i> and <i>start-reading-text</i> actions.</li>
         </ul>

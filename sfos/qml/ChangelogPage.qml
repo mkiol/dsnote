@@ -35,7 +35,7 @@ Page {
             LogItem {
                 text: "<p>" + qsTr("User Interface") + "</p>
                 <ul>
-                <li><i>Speech Note</i> has been translated into Arabic, Chinese, Catalan, Spanish and French-Canadian languages.</li>
+                <li><i>Speech Note</i> has been translated into Arabic, Chinese, Catalan, Spanish, Turkish and French-Canadian languages.</li>
                 </ul>
                 <p>" + qsTr("Speech to Text") + "</p>
                 <ul>
