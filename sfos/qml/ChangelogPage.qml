@@ -33,7 +33,28 @@ Page {
             }
 
             LogItem {
-                text: "<p>" + qsTr("Text to Speech") + ":</p>
+                text: "<p>" + qsTr("User Interface") + "</p>
+                <ul>
+                <li><i>Speech Note</i> has been translated into Arabic, Chinese, Catalan, Spanish and French-Canadian languages.</li>
+                </ul>
+                <p>" + qsTr("Speech to Text") + "</p>
+                <ul>
+                <li><i><a href='https://huggingface.co/KBLab'>KBLab Whisper</a></i> models for Swedish.
+                    The National Library of Sweden has released fine-tuned STT models trained on its library collections.
+                    The models have significantly improved accuracy compared to regular Whisper models.
+                    Even \"Tiny\" model provides decent quality.</li>
+                <li><i><a href='https://keyboard.futo.org/voice-input-models'>FUTO<a/></i> Whisper models.
+                    New models used in the FUTO mobile keyboard app.</li>
+                <li>Using an existing note as the initial context in decoding.
+                    This has the potential to improve transcription quality and reduce \"hallucination\" problem.
+                    If you observe a degradation in quality, turn off the <i>Use note as context</i> option.</li>
+                <li>Option to pause listening while processing.
+                    This option can be useful when <i>Listening mode</i> is <i>Always on</i>.
+                    By default, listening continues even when a piece of audio data is being processed.
+                    Using this option, you can temporarily pause listening for the duration of processing.</li>
+                <li>Option to play an audible tone when starting and stopping listening</li>
+                </ul>
+                <p>" + qsTr("Text to Speech") + "</p>
                 <ul>
                 <li>S.A.M. TTS engine. S.A.M. is a small speech synthesizer designed for the Commodore 64.
                     It features a robotic voice that evokes a strong sense of nostalgia.
@@ -42,6 +63,13 @@ Page {
                     Use this option to enable/disable audio volume normalization.
                     The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.
                     Disable this option if you observe this problem.</li>
+                <li>New <i>Piper</i> voices for Dutch, Finnish, German and Luxembourgish</li>
+                <li>New <i>RHVoice</i> voice for Spanish</li>
+                <li>Updated <i>RHVoice</i> voice for Czech</li>
+                </ul>
+                <p>" + qsTr("Translator") + "</p>
+                <ul>
+                <li>New models: English to Chinese, English to Arabic, Arabic to English, English to Korean, English to Japanese</li>
                 </ul>"
             }
 
@@ -50,16 +78,16 @@ Page {
             }
 
             LogItem {
-                text: "<p>" + qsTr("General") + ":</p>
+                text: "<p>" + qsTr("General") + "</p>
                 <ul>
                 <li>New mode for replacing the current note instead of appending new text to it.
                     When the <i>Replace an existing note</i> option is set, whenever new text is added, it will replace the existing note.</li>
                 </ul>
-                <p>" + qsTr("User Interface") + ":</p>
+                <p>" + qsTr("User Interface") + "</p>
                 <ul>
                 <li><i>Speech Note</i> has been translated into Slovenian language.</li>
                 </ul>
-                <p>" + qsTr("Speech to Text") + ":</p>
+                <p>" + qsTr("Speech to Text") + "</p>
                 <ul>
                 <li>Settings option <i>Profile</i> which allows you to change <i>WhisperCpp</i> processing parameters.
                     There are two profiles to choose from: <i>Best Performance</i>, <i>Best Quality</i>.</li>
@@ -67,11 +95,11 @@ Page {
                     To enable, use the option in the settings (<i>Speech to Text</i> &rarr; <i>Echo mode</i>).</li>
                 <li>Update the <i>whisper.cpp</i> library to version 1.7.1. This provides a 10% increase in STT speed with <i>WhisperCpp</i> models.</li>
                 </ul>
-                <p>" + qsTr("Text to Speech") + ":</p>
+                <p>" + qsTr("Text to Speech") + "</p>
                 <ul>
                 <li>New <i>Piper</i> voice for Latvian</li>
                 </ul>
-                <p>" + qsTr("Translator") + ":</p>
+                <p>" + qsTr("Translator") + "</p>
                 <ul>
                 <li>New models: English to Finnish, English to Turkish, English to Swedish, Swedish to English,
                     English to Slovak, English to Indonesian, English to Romanian, English to Greek, Chinese to English</li>
@@ -84,11 +112,11 @@ Page {
             }
 
             LogItem {
-                text: "<p>" + qsTr("User Interface") + ":</p>
+                text: "<p>" + qsTr("User Interface") + "</p>
                 <ul>
                 <li>Swedish translation has been updated.</li>
                 </ul>
-                <p>" + qsTr("Translator") + ":</p>
+                <p>" + qsTr("Translator") + "</p>
                 <ul>
                 <li>New models: English to Latvian, English to Danish, English to Croatian, English to Slovenian,
                     Indonesian to English, Romanian to English</li>
@@ -101,7 +129,7 @@ Page {
             }
 
             LogItem {
-                text: "<p>" + qsTr("User Interface") + ":</p>
+                text: "<p>" + qsTr("User Interface") + "</p>
                 <ul>
                 <li><i>Speech Note</i> has been translated into Norwegian language.</li>
                 <li>Grouped models.
@@ -111,7 +139,7 @@ Page {
                     To simplify the user interface, the subtitle options is not visible by default.
                     To enable them, use the <i>Subtitles support</i> option in the settings.</li>
                 </ul>
-                <p>" + qsTr("Speech to Text") + ":</p>
+                <p>" + qsTr("Speech to Text") + "</p>
                 <ul>
                 <li>The name of the all Whisper models has been changed to <i>WhisperCpp</i> to better reflect the engine behind them.
                     Whisper is currently supported by the <i>WhisperCpp</i> engine, which is optimized for best performance.</li>
@@ -128,13 +156,13 @@ Page {
                     such as processing time and audio length. This can be useful for comparing the performance of different models,
                     engines and their parameters. Option works only with <i>WhisperCpp</i> engine.
                 </ul>
-                <p>" + qsTr("Text to Speech") + ":</p>
+                <p>" + qsTr("Text to Speech") + "</p>
                 <ul>
                 <li>Welsh language. New language is enabled with <i>Piper</i> voice.</li>
                 <li>New <i>Piper</i> voices for Spanish, Italian and English</li>
                 <li>New <i>RHVoice</i> voices for Slovak and Croatian</li>
                 </ul>
-                <p>" + qsTr("Translator") + ":</p>
+                <p>" + qsTr("Translator") + "</p>
                 <ul>
                 <li>New button for switching languages. <i>Switch languages</i> button have been placed is translated text area.</li>
                 <li>New models: English to Lithuanian, Croatian to English, Latvian to English, Danish to English, Serbian to English,
@@ -148,7 +176,7 @@ Page {
             }
 
             LogItem {
-                text: "<p>" + qsTr("User Interface") + ":</p>
+                text: "<p>" + qsTr("User Interface") + "</p>
                 <ul>
                 <li>Import subtitles in many formats and subtitles embedded into video file.
                     You can import and export subtitles in SRT, WebVTT and ASS formats.
@@ -165,12 +193,12 @@ Page {
                 <li><i>Speech Note</i> has been translated into Ukrainian and Russian languages.</li>
                 <li>Fix: Cancellation was blocking the user interface.</li>
                 </ul>
-                <p>" + qsTr("Speech to Text") + ":</p>
+                <p>" + qsTr("Speech to Text") + "</p>
                 <ul>
                 <li>Subtitles support in STT. To generate timestamped text in SRT format, change the text format to <i>SRT Subtitles</i> using
                     the button at the bottom of the text area. Check the settings to find more subtitle options.</li>
                 </ul>
-                <p>" + qsTr("Text to Speech") + ":</p>
+                <p>" + qsTr("Text to Speech") + "</p>
                 <ul>
                 <li>Speech synchronized with subtitle timestamps in TTS. When the text format is set to <i>SRT Subtitles</i>,
                     the generated speech will be synchronized with the subtitle timestamps.
@@ -182,7 +210,7 @@ Page {
                     This may be useful for creating voice overs.</li>
                 <li>Speech audio is always normalized after TTS processing.</li>
                 </ul>
-                <p>" + qsTr("Translator") + ":</p>
+                <p>" + qsTr("Translator") + "</p>
                 <ul>
                 <li>New models: Greek to English, Maltese to English,
                     Slovenian to English, Turkish to English, English to Catalan</li>
