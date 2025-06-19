@@ -1,4 +1,4 @@
-/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -72,7 +72,7 @@ HelpDialog {
               "<li>WhisperCpp STT</li>" +
               "<li>FasterWhisper STT</li>" +
               "<li>Coqui TTS</li>" +
-              "<li>F5-TTS/li>" +
+              "<li>F5-TTS</li>" +
               "<li>Kokoro TTS</li>" +
               "<li>Parler-TTS</li>" +
               "<li>WhisperSpeech TTS</li>" +
@@ -89,7 +89,7 @@ HelpDialog {
               "<ul>" +
               "<li>WhisperCpp STT</li>" +
               "<li>Coqui TTS</li>" +
-              "<li>F5-TTS/li>" +
+              "<li>F5-TTS</li>" +
               "<li>Kokoro TTS</li>" +
               "<li>Parler-TTS</li>" +
               "<li>WhisperSpeech TTS</li>" +
