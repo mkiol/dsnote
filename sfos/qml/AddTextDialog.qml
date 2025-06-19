@@ -18,10 +18,12 @@ DockedPanel {
     modal: true
 
     width: parent.width
-    height: Theme.itemSizeExtraLarge + Theme.paddingLarge
+    height: column.height + 2 * Theme.paddingLarge
     dock: Dock.Bottom
 
     Column {
+        id: column
+
         spacing: Theme.paddingLarge
         y: Theme.paddingMedium
         width: parent.width - 2 * Theme.paddingMedium

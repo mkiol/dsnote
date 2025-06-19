@@ -3188,7 +3188,6 @@ void dsnote_app::set_service_state(service_state_t new_service_state) {
         case media_converter::state_t::exporting_to_audio:
         case media_converter::state_t::exporting_to_audio_mix:
             new_service_state = service_state_t::StateExporting;
-
             break;
     }
 
@@ -3202,7 +3201,8 @@ void dsnote_app::set_service_state(service_state_t new_service_state) {
         m_service_state = new_service_state;
 
         if (settings::launch_mode == settings::launch_mode_t::app &&
-            m_service_state == service_state_t::StateIdle &&
+            (m_service_state == service_state_t::StateIdle ||
+             m_service_state == service_state_t::StateNotConfigured) &&
             m_service_reload_called) {
             m_service_reload_update_done = true;
         }
