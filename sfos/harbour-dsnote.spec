@@ -6,6 +6,8 @@ Name:       harbour-dsnote
 %define _unpackaged_files_terminate_build 0
 # << macros
 
+%global debug_package %{nil}
+
 Summary:        Speech Note
 Version:        4.8.0
 Release:        1
@@ -34,6 +36,7 @@ BuildRequires:  python3-devel
 BuildRequires:  git
 BuildRequires:  boost-devel
 BuildRequires:  meson
+BuildRequires:  patchelf
 
 %description
 Speech Note let you take, read and translate notes in multiple languages.

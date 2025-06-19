@@ -131,62 +131,74 @@ void whisper_engine::set_visible_devices() {
 }
 
 bool whisper_engine::has_cuda() {
+#ifdef ARCH_X86_64
     auto cpuinfo = cpu_tools::cpuinfo();
     if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
         (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
         LOGD("whisper-cublas is not supported due to lack of avx");
         return false;
     }
+#endif
     return try_open_lib("libwhisper-cublas.so");
 }
 
 bool whisper_engine::has_openvino() {
+#ifdef ARCH_X86_64
     auto cpuinfo = cpu_tools::cpuinfo();
     if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
         (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
         LOGD("whisper-openvino is not supported due to lack of avx");
         return false;
     }
+#endif
     return try_open_lib("libwhisper-openvino.so");
 }
 
 bool whisper_engine::has_opencl() {
+#ifdef ARCH_X86_64
     auto cpuinfo = cpu_tools::cpuinfo();
     if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
         (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
         LOGD("whisper-clblast is not supported due to lack of avx");
         return false;
     }
+#endif
     return try_open_lib("libwhisper-clblast.so");
 }
 
 bool whisper_engine::has_hip() {
+#ifdef ARCH_X86_64
     auto cpuinfo = cpu_tools::cpuinfo();
     if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
         (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
         LOGD("whisper-hip is not supported due to lack of avx");
         return false;
     }
+#endif
     return try_open_lib("libwhisper-hipblas.so");
 }
 
 bool whisper_engine::has_vulkan() {
+#ifdef ARCH_X86_64
     auto cpuinfo = cpu_tools::cpuinfo();
     if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
         (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
         LOGD("whisper-vulkan is not supported due to lack of avx");
         return false;
     }
+#endif
     return try_open_lib("libwhisper-vulkan.so");
 }
 
 bool whisper_engine::use_openvino() const {
+#ifdef ARCH_X86_64
     auto cpuinfo = cpu_tools::cpuinfo();
     if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
         (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
         LOGD("whisper-openvino is not supported due to lack of avx");
         return false;
     }
+#endif
     return m_config.gpu_device.api == gpu_api_t::openvino &&
            !m_config.model_files.openvino_model_file.empty();
 }
