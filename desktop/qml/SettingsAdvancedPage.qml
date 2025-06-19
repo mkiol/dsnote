@@ -345,7 +345,7 @@ ColumnLayout {
     }
 
     SpinBoxForm {
-        visible: app.feature_fake_keyboard && _settings.fake_keyboard_type !== Settings.FakeKeyboardTypeXdo
+        visible: app.feature_fake_keyboard
         label.text: qsTranslate("SettingsPage", "Keystroke delay")
         toolTip: qsTranslate("SettingsPage", "The delay between simulated keystrokes used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>")
         spinBox {

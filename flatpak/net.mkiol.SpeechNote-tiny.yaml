@@ -735,6 +735,8 @@ modules:
       - type: archive
         url: https://github.com/jordansissel/xdotool/archive/33092d8a74d60c9ad3ab39c4f05b90e047ea51d8.zip
         sha256: cba1c7d0c23cc60cd0b1f5483f84296ff91360598e2c19c57395aec530af99ad
+      - type: patch
+        path: ../patches/xdo.patch
 
   - name: sam
     buildsystem: cmake-ninja

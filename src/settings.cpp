@@ -2891,7 +2891,7 @@ void settings::set_fake_keyboard_type(fake_keyboard_type_t value) {
 }
 
 int settings::fake_keyboard_delay() const {
-    auto v = value(QStringLiteral("fake_keyboard_delay"), 10).toInt();
+    auto v = value(QStringLiteral("fake_keyboard_delay"), 20).toInt();
     return std::clamp(v, 1, 1000);
 }
 

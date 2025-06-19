@@ -98,7 +98,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.8.0" date="2025-05-31">
+    <release version="4.8.0" date="2025-06-19">
       <description>
       <p>General:</p>
       <ul>

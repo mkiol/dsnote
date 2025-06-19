@@ -315,7 +315,8 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
             ydo_uinput_emit(EV_KEY, m_l3_shift_keycode - 8, 1, true);
         ydo_uinput_emit(EV_KEY, keycode.code - 8, 1, true);
 
-        std::this_thread::sleep_for(20ms);
+        std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
+            settings::instance()->fake_keyboard_delay()));
 
         ydo_uinput_emit(EV_KEY, keycode.code - 8, 0, true);
         if (l3_shift && m_l3_shift_keycode > 8)
@@ -762,6 +763,9 @@ void fake_keyboard::send_keyevent_legacy() {
                reinterpret_cast<XEvent *>(&event));
 
     XSync(event.display, False);
+
+    std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
+        settings::instance()->fake_keyboard_delay()));
 
     event.type = KeyRelease;
     XSendEvent(event.display, event.window, True, KeyReleaseMask,

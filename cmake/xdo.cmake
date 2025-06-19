@@ -7,6 +7,9 @@ ExternalProject_Add(xdo
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL ${xdo_source_url}
     URL_HASH SHA256=${xdo_checksum}
+    PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
+                -i ${patches_dir}/xdo.patch ||
+                    echo "patch cmd failed, likely already patched"
     CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR>
     BUILD_COMMAND make libxdo.a
     BUILD_ALWAYS False
