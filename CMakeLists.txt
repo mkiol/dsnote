@@ -152,7 +152,7 @@ set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_conf_version "108")
+set(info_conf_version "109")
 set(info_addon_version "1.4") # if run as a flatpak pkg, the required add-on version
 #set(info_version_type "-beta")
 set(info_version_type "")
@@ -171,7 +171,7 @@ if(WITH_DESKTOP)
     endif()
 endif()
 
-project(${id} VERSION 4.8.0)
+project(${id} VERSION 4.8.1)
 
 set(arch_arm32 0)
 set(arch_arm64 0)

@@ -33,6 +33,17 @@ Page {
             }
 
             LogItem {
+                text: "<p>" + qsTr("Translator") + "</p>
+                <ul>
+                <li>Fix: Model download error for Portuguese, Dutch, Persian, Norwegian and Icelandic languages.</li>
+                </ul>"
+            }
+
+            SectionHeader {
+                text: qsTr("Version %1").arg("4.8.0")
+            }
+
+            LogItem {
                 text: "<p>" + qsTr("User Interface") + "</p>
                 <ul>
                 <li><i>Speech Note</i> has been translated into Arabic, Chinese, Catalan, Spanish, Turkish and French-Canadian languages.</li>

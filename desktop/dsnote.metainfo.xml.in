@@ -98,6 +98,14 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
+    <release version="4.8.1" date="2025-06-21">
+      <description>
+      <p>Translator:</p>
+      <ul>
+      <li>Fix: Model download error for Portuguese, Dutch, Persian, Norwegian and Icelandic languages.</li>
+      </ul>
+      </description>
+    </release>
     <release version="4.8.0" date="2025-06-19">
       <description>
       <p>General:</p>

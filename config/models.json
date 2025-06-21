@@ -28911,9 +28911,9 @@
             "size": "15872780",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/prod/enpt/model.enpt.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/prod/enpt/lex.50.50.enpt.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/prod/enpt/vocab.enpt.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/enpt/model.enpt.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/enpt/lex.50.50.enpt.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/enpt/vocab.enpt.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
@@ -28934,9 +28934,9 @@
             "size": "16380286",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/dev/enfa/model.enfa.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/dev/enfa/lex.50.50.enfa.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/dev/enfa/vocab.enfa.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/enfa/model.enfa.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/enfa/lex.50.50.enfa.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/enfa/vocab.enfa.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
@@ -28958,9 +28958,9 @@
             "size": "15955719",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/prod/ennl/model.ennl.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/prod/ennl/lex.50.50.ennl.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/prod/ennl/vocab.ennl.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/ennl/model.ennl.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/ennl/lex.50.50.ennl.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/ennl/vocab.ennl.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
@@ -29025,12 +29025,12 @@
             "trg_lang_id": "hu",
             "checksum": "5342bd6d",
             "checksum_quick": "5f433766",
-            "size": "36607631",
+            "size": "14467772",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/54f32a60bca591f2f9c71e0af09223e1aa046780/models/dev/enhu/model.enhu.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/54f32a60bca591f2f9c71e0af09223e1aa046780/models/dev/enhu/lex.50.50.enhu.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/54f32a60bca591f2f9c71e0af09223e1aa046780/models/dev/enhu/vocab.enhu.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/enhu/model.enhu.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/enhu/lex.50.50.enhu.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/enhu/vocab.enhu.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
@@ -29631,9 +29631,9 @@
             "size": "11283121",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/dev/nben/model.nben.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/dev/nben/lex.50.50.nben.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/dev/nben/vocab.nben.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/pten/vocab.pten.spm.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/nben/lex.50.50.nben.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/nben/vocab.nben.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
@@ -29677,9 +29677,9 @@
             "size": "16262036",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/prod/pten/model.pten.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/prod/pten/lex.50.50.pten.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/prod/pten/vocab.pten.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/pten/model.pten.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/pten/lex.50.50.pten.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/pten/vocab.pten.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
@@ -29695,14 +29695,14 @@
             "engine": "mnt_bergamot",
             "lang_id": "fa",
             "trg_lang_id": "en",
-            "checksum": "39f48e0c",
-            "checksum_quick": "78a3747d",
-            "size": "16736916",
+            "checksum": "7d400f5d",
+            "checksum_quick": "d13ebde7",
+            "size": "15434996",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/dev/faen/model.faen.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/dev/faen/lex.50.50.faen.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/dev/faen/vocab.faen.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/faen/model.faen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/faen/lex.50.50.faen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/faen/vocab.faen.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
@@ -29724,9 +29724,9 @@
             "size": "15917028",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/dev/isen/model.isen.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/dev/isen/lex.50.50.isen.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/dev/isen/vocab.isen.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/isen/model.isen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/isen/lex.50.50.isen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/isen/vocab.isen.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
@@ -29747,9 +29747,9 @@
             "size": "16282065",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/prod/nlen/model.nlen.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/prod/nlen/lex.50.50.nlen.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main/models/prod/nlen/vocab.nlen.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/nlen/model.nlen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/nlen/lex.50.50.nlen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/nlen/vocab.nlen.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",
@@ -29839,9 +29839,9 @@
             "size": "16387915",
             "comp": "dirgz",
             "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/58222938742c5f60480d6508775437f08c8aacaf/models/dev/huen/model.huen.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/58222938742c5f60480d6508775437f08c8aacaf/models/dev/huen/lex.50.50.huen.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/58222938742c5f60480d6508775437f08c8aacaf/models/dev/huen/vocab.huen.spm.gz"
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/huen/model.huen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/huen/lex.50.50.huen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/huen/vocab.huen.spm.gz"
             ],
             "license": {
                 "id": "MPL 2.0",

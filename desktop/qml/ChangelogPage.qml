@@ -18,6 +18,17 @@ DialogPage {
     }
 
     RichLabel {
+        text: "<p>" + qsTr("Translator") + "</p>
+        <ul>
+        <li>Fix: Model download error for Portuguese, Dutch, Persian, Norwegian and Icelandic languages.</li>
+        </ul>"
+    }
+
+    SectionLabel {
+        text: qsTr("Version %1").arg("4.8.0")
+    }
+
+    RichLabel {
         text: "<p>" + qsTr("General") + "</p>
         <ul>
         <li>Case-sensitive matching in <i>Rules</i>.
