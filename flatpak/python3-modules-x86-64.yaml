@@ -432,6 +432,8 @@ modules:
             rm "$file"
             cd "$tmp"
             zip -r "$file" .
+            cd ..
+            rm -rf "$tmp"
       - type: file
         url: https://files.pythonhosted.org/packages/9a/70/06422e12340342435a4f44e06448ed70bce8bf442fe6169a672611a68a87/coqui_tts_trainer-0.2.2-py3-none-any.whl
         sha256: ca9407eec2fe868b8648ff8f5e04617639a94377be3ec98793d0992fb64aa884
@@ -1308,6 +1310,8 @@ modules:
             rm "$file"
             cd "$tmp"
             zip -r "$file" .
+            cd ..
+            rm -rf "$tmp"
       - type: file
         url: https://files.pythonhosted.org/packages/50/b3/b51f09c2ba432a576fe63758bddc81f78f0c6309d9e5c10d194313bf021e/fastapi-0.115.12-py3-none-any.whl
         sha256: e94613d6c05e27be7ffebdd6ea5f388112e5e430c8f7d6494a9d1d88d43e814d
