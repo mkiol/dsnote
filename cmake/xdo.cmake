@@ -11,7 +11,7 @@ ExternalProject_Add(xdo
                 -i ${patches_dir}/xdo.patch ||
                     echo "patch cmd failed, likely already patched"
     CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR>
-    BUILD_COMMAND make libxdo.a
+    BUILD_COMMAND CPATH=${external_include_dir} make libxdo.a
     BUILD_ALWAYS False
     INSTALL_COMMAND PKG_CONFIG_PATH=${external_lib_dir}/pkgconfig
         make PREFIX=<INSTALL_DIR> install &&
