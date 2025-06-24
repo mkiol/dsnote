@@ -9,8 +9,8 @@ Name:       harbour-dsnote
 %global debug_package %{nil}
 
 Summary:        Speech Note
-Version:        4.8.0
-Release:        1
+Version:        4.8.1
+Release:        2
 Group:          Qt/Qt
 License:        LICENSE
 URL:            https://github.com/mkiol/dsnote

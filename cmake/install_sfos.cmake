@@ -70,7 +70,8 @@ if(BUILD_ESPEAK_MODULE)
 endif()
 
 if(BUILD_RHVOICE)
-    set_runpath("${external_lib_dir}/libRHVoice_core.so.1.2.2")
+    # patchelf seems to break libRHVoice_core.so.1.2.2 and make it "not aligned"
+    #set_runpath("${external_lib_dir}/libRHVoice_core.so.1.2.2")
     set_runpath("${external_lib_dir}/libRHVoice.so.1.2.2")
     install(PROGRAMS "${external_lib_dir}/libRHVoice_core.so.1.2.2" DESTINATION ${lib_install_dir})
     install(PROGRAMS "${external_lib_dir}/libRHVoice_core.so.1" DESTINATION ${lib_install_dir})
