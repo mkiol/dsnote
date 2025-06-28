@@ -31,6 +31,10 @@ DialogPage {
         <p>" + qsTr("Speech to Text") + "</p>
         <ul>
         <li>New very large <i>Vosk</i> model for German langauge: <i>Tuda-DE Large</i></li>
+        </ul>
+        <p>" + qsTr("User Interface") + "</p>
+        <ul>
+        <li><i>Speech Note</i> has been translated into German language.</li>
         </ul>"
     }
 

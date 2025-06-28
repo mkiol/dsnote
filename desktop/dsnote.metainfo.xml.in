@@ -114,6 +114,10 @@
       <ul>
       <li>New very large 'Vosk' model for German langauge: Tuda-DE Large</li>
       </ul>
+      <p>User Interface:</p>
+      <ul>
+      <li>Speech Note has been translated into German language.</li>
+      </ul>
       </description>
     </release>
     <release version="4.8.0" date="2025-06-19">
