@@ -8211,6 +8211,21 @@
             "pack_id": "de_vosk"
         },
         {
+            "name": "Deutsch (Vosk Tuda Large)",
+            "model_id": "de_vosk_large_tuda",
+            "engine": "stt_vosk",
+            "lang_id": "de",
+            "score": 5,
+            "checksum": "376e434e",
+            "checksum_quick": "2e247361",
+            "size": "4648854295",
+            "comp": "zip",
+            "urls": [
+                "https://alphacephei.com/vosk/models/vosk-model-de-tuda-0.6-900k.zip"
+            ],
+            "pack_id": "de_vosk"
+        },
+        {
             "name": "Español (Vosk Large)",
             "model_id": "es_vosk_large",
             "engine": "stt_vosk",

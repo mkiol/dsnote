@@ -27,6 +27,10 @@ DialogPage {
         <li>New models: Azerbaijani to English, Belarusian to English, Bengali to English, Gujarati to English,
             Hebrew to English, Hindi to English, Kannada to English, Malayalam to English, Malay to English,
             Albanian to English, Tamil to English.</li>
+        </ul>
+        <p>" + qsTr("Speech to Text") + "</p>
+        <ul>
+        <li>New very large <i>Vosk</i> model for German langauge: <i>Tuda-DE Large</i></li>
         </ul>"
     }
 

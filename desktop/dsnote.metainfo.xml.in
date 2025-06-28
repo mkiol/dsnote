@@ -110,6 +110,10 @@
           Hebrew to English, Hindi to English, Kannada to English, Malayalam to English, Malay to English,
           Albanian to English, Tamil to English.</li>
       </ul>
+      <p>Speech to Text:</p>
+      <ul>
+      <li>New very large 'Vosk' model for German langauge: Tuda-DE Large</li>
+      </ul>
       </description>
     </release>
     <release version="4.8.0" date="2025-06-19">
