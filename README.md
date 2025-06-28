@@ -189,12 +189,23 @@ If you don't need all the functionalities, you can use much smaller "Tiny" packa
 (available on [Releases](https://github.com/mkiol/dsnote/releases) page),
 which provides only the basic features. If you need, you can also use "Tiny" packages together with GPU acceleration add-on.
 
-Comparison between Base, Tiny and Add-ons Flatpak packages:
+Size comparison between Base, Tiny and Add-ons Flatpak packages:
 
 | **Sizes**     | **Base** | **Tiny** | **AMD add-on** | **NVIDIA add-on** |
 | ------------- | ---------| ---------| -------------- | ----------------- |
 | Download size | 1.2 GiB  |  48 MiB  |  +7.6 GiB      | +4.3 GiB          |
-| Unpacked size | 3.6 GiB  | 170 MiB  | +25.6 GiB      | +6.6 GiB          |
+| Unpacked size | 3.6 GiB  | 170 MiB  |  +34 GiB       | +9 GiB            |
+
+Add-on packages use so-called "extra-data". This means that during installation, several binary modules are downloaded from the original sources and merged with the Flatpak package. Due to this process, additional disk space is temporarily required when installing the add-on. Make sure you have enough disk space on the partition where flatpak applications are installed. When the Flatpak package is installed system-wide (default), the applications are stored in _/var/lib/flatpak_. In case of user installation (--user), the apps are stored in _~/.local/share/flatpak_.
+
+Disk space required for the installation of the add-on package:
+
+| **Add-on**    | **Size** |
+| --------------| ---------|
+| AMD add-on    | 55 GiB   |
+| NVIDIA add-on | 15 GiB   |
+
+Features comparison between Base, Tiny and Add-ons Flatpak packages:
 
 | **Features**                            | **Base** | **Tiny** | **AMD add-on** | **NVIDIA add-on** |
 | --------------------------------------- | ---------| ---------| -------------- | ----------------- |
