@@ -350,6 +350,31 @@
             "name": "Cymraeg",
             "name_en": "Welsh",
             "id": "cy"
+        },
+        {
+            "name": "Azərbaycanca",
+            "name_en": "Azerbaijani",
+            "id": "az"
+        },
+        {
+            "name": "Беларуская",
+            "name_en": "Belarusian",
+            "id": "be"
+        },
+        {
+            "name": "ಕನ್ನಡ",
+            "name_en": "Kannada",
+            "id": "kn"
+        },
+        {
+            "name": "മലയാളം",
+            "name_en": "Malayalam",
+            "id": "ml"
+        },
+        {
+            "name": "தமிழ்",
+            "name_en": "Tamil",
+            "id": "ta"
         }
     ],
     "models": [
@@ -28994,6 +29019,30 @@
             "recommended_model": "fa_bergamot_faen"
         },
         {
+            "name": "فارسی به انگلیسی (Persian to English)",
+            "model_id": "fa_bergamot_faen",
+            "engine": "mnt_bergamot",
+            "lang_id": "fa",
+            "trg_lang_id": "en",
+            "checksum": "7d400f5d",
+            "checksum_quick": "d13ebde7",
+            "size": "37315620",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/faen/model.faen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/faen/lex.50.50.faen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/faen/vocab.faen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "score": 0,
+            "recommended_model": "en_bergamot_enfa"
+        },
+        {
             "name": "English to Dutch",
             "model_id": "en_bergamot_ennl",
             "engine": "mnt_bergamot",
@@ -29824,30 +29873,6 @@
             "recommended_model": "en_bergamot_enpt"
         },
         {
-            "name": "فارسی به انگلیسی (Persian to English)",
-            "model_id": "fa_bergamot_faen",
-            "engine": "mnt_bergamot",
-            "lang_id": "fa",
-            "trg_lang_id": "en",
-            "checksum": "7d400f5d",
-            "checksum_quick": "d13ebde7",
-            "size": "15434996",
-            "comp": "dirgz",
-            "urls": [
-                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/faen/model.faen.intgemm.alphas.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/faen/lex.50.50.faen.s2t.bin.gz",
-                "https://github.com/mozilla/firefox-translations-models/raw/1109a620ee25abc21b1c82b28f25f7816c2cc402/models/tiny/faen/vocab.faen.spm.gz"
-            ],
-            "license": {
-                "id": "MPL 2.0",
-                "name": "Mozilla Public License Version 2.0",
-                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
-                "accept_required": false
-            },
-            "score": 0,
-            "recommended_model": "en_bergamot_enfa"
-        },
-        {
             "name": "Íslensku yfir á ensku (Icelandic to English)",
             "model_id": "is_bergamot_isen",
             "engine": "mnt_bergamot",
@@ -30283,6 +30308,282 @@
                 "accept_required": false
             },
             "recommended_model": "en_bergamot_enda"
+        },
+        {
+            "name": "Azərbaycandan ingiliscə (Azerbaijani to English)",
+            "model_id": "az_bergamot_azen",
+            "engine": "mnt_bergamot",
+            "lang_id": "az",
+            "trg_lang_id": "en",
+            "checksum": "a27ac43e",
+            "checksum_quick": "7a5927a9",
+            "size": "15434364",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/azen/model.azen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/azen/lex.50.50.azen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/azen/vocab.azen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "score": 0
+        },
+        {
+            "name": "беларускага на англійскую (Belarusian to English)",
+            "model_id": "be_bergamot_been",
+            "engine": "mnt_bergamot",
+            "lang_id": "be",
+            "trg_lang_id": "en",
+            "checksum": "ed6534d9",
+            "checksum_quick": "7711d3fd",
+            "size": "15054529",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/been/model.been.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/been/lex.50.50.been.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/been/vocab.been.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "score": 0
+        },
+        {
+            "name": "বাংলা থেকে ইংরেজি (Bengali to English)",
+            "model_id": "bn_bergamot_bnen",
+            "engine": "mnt_bergamot",
+            "lang_id": "bn",
+            "trg_lang_id": "en",
+            "checksum": "b9a743a0",
+            "checksum_quick": "a2005eb4",
+            "size": "16883964",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/bgen/model.bgen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/bgen/lex.50.50.bgen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/bgen/vocab.bgen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "score": 0
+        },
+        {
+            "name": "ગુજરાતી થી અંગ્રેજી (Gujarati to English)",
+            "model_id": "gu_bergamot_guen",
+            "engine": "mnt_bergamot",
+            "lang_id": "gu",
+            "trg_lang_id": "en",
+            "checksum": "7a0975f5",
+            "checksum_quick": "934bdca6",
+            "size": "15389756",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/guen/model.guen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/guen/lex.50.50.guen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/guen/vocab.guen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "score": 0
+        },
+        {
+            "name": "עברי לאנגלית (Hebrew to English)",
+            "model_id": "he_bergamot_heen",
+            "engine": "mnt_bergamot",
+            "lang_id": "he",
+            "trg_lang_id": "en",
+            "checksum": "f609d845",
+            "checksum_quick": "5eb907e4",
+            "size": "15652815",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/heen/model.heen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/heen/lex.50.50.heen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/heen/vocab.heen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "score": 0
+        },
+        {
+            "name": "हिंदी से अंग्रेजी (Hindi to English)",
+            "model_id": "hi_bergamot_hien",
+            "engine": "mnt_bergamot",
+            "lang_id": "hi",
+            "trg_lang_id": "en",
+            "checksum": "942cd89",
+            "checksum_quick": "103f880f",
+            "size": "15509976",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/hien/model.hien.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/hien/lex.50.50.hien.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/hien/vocab.hien.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "score": 0
+        },
+        {
+            "name": "ಕನ್ನಡದಿಂದ ಇಂಗ್ಲಿಷ್‌ಗೆ (Kannada to English)",
+            "model_id": "kn_bergamot_knen",
+            "engine": "mnt_bergamot",
+            "lang_id": "kn",
+            "trg_lang_id": "en",
+            "checksum": "ca1eb5f8",
+            "checksum_quick": "d332687e",
+            "size": "15664733",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/knen/model.knen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/knen/lex.50.50.knen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/knen/vocab.knen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "score": 0
+        },
+        {
+            "name": "മലയാളത്തിൽ നിന്ന് ഇംഗ്ലീഷിലേക്ക് (Malayalam to English)",
+            "model_id": "ml_bergamot_mlen",
+            "engine": "mnt_bergamot",
+            "lang_id": "ml",
+            "trg_lang_id": "en",
+            "checksum": "6f06bf72",
+            "checksum_quick": "fe075edd",
+            "size": "15551790",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/mlen/model.mlen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/mlen/lex.50.50.mlen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/mlen/vocab.mlen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "score": 0
+        },
+        {
+            "name": "Melayu ke Inggeris (Malay to English)",
+            "model_id": "ms_bergamot_msen",
+            "engine": "mnt_bergamot",
+            "lang_id": "ms",
+            "trg_lang_id": "en",
+            "checksum": "cc6ca4c8",
+            "checksum_quick": "dac8e38c",
+            "size": "15091870",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/msen/model.msen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/msen/lex.50.50.msen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/msen/vocab.msen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "score": 0
+        },
+        {
+            "name": "Shqip në Anglisht (Albanian to English)",
+            "model_id": "sq_bergamot_sqen",
+            "engine": "mnt_bergamot",
+            "lang_id": "sq",
+            "trg_lang_id": "en",
+            "checksum": "c30a68cc",
+            "checksum_quick": "6da1b818",
+            "size": "15178193",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/sqen/model.sqen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/sqen/lex.50.50.sqen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/sqen/vocab.sqen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "score": 0
+        },
+        {
+            "name": "தமிழிலிருந்து ஆங்கிலத்திற்கு (Tamil to English)",
+            "model_id": "ta_bergamot_taen",
+            "engine": "mnt_bergamot",
+            "lang_id": "ta",
+            "trg_lang_id": "en",
+            "checksum": "4e6f58d1",
+            "checksum_quick": "5fa934cd",
+            "size": "15419799",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/taen/model.taen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/taen/lex.50.50.taen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/taen/vocab.taen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "score": 0
+        },
+        {
+            "name": "తెలుగు నుండి ఇంగ్లీషుకు (Telugu to English)",
+            "model_id": "te_bergamot_teen",
+            "engine": "mnt_bergamot",
+            "lang_id": "te",
+            "trg_lang_id": "en",
+            "checksum": "acc6e335",
+            "checksum_quick": "d2d05090",
+            "size": "15868254",
+            "comp": "dirgz",
+            "urls": [
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/teen/model.teen.intgemm.alphas.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/teen/lex.50.50.teen.s2t.bin.gz",
+                "https://github.com/mozilla/firefox-translations-models/raw/7ae4bca89f50a3761d8d90e86a7dbd51eb0bf5e5/models/tiny/teen/vocab.teen.spm.gz"
+            ],
+            "license": {
+                "id": "MPL 2.0",
+                "name": "Mozilla Public License Version 2.0",
+                "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+                "accept_required": false
+            },
+            "score": 0
         },
         {
             "name": "Afrikaans (Mimic3 Google NWU Low)",

@@ -36,6 +36,12 @@ Page {
                 text: "<p>" + qsTr("Translator") + "</p>
                 <ul>
                 <li>Fix: Model download error for Portuguese, Dutch, Persian, Norwegian and Icelandic languages.</li>
+                <li>Updated models with improved accuracy: German to English, Dutch to English, English to Ukrainian,
+                    English to Hungarian, English to Catalan, Catalan to English, English to Lithuanian, English to Latvian,
+                    English to Slovenian, Slovenian to English, English to Slovak, English to Russian.</li>
+                <li>New models: Azerbaijani to English, Belarusian to English, Bengali to English, Gujarati to English,
+                    Hebrew to English, Hindi to English, Kannada to English, Malayalam to English, Malay to English,
+                    Albanian to English, Tamil to English.</li>
                 </ul>"
             }
 
