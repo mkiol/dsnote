@@ -28757,6 +28757,66 @@
             "size": "134856548"
         },
         {
+            "name": "ಕನ್ನಡ (Coqui MMS)",
+            "model_id": "kn_coqui_fairseq_kan",
+            "engine": "tts_coqui",
+            "lang_id": "kn",
+            "checksum": "81db1de8",
+            "checksum_quick": "3aa86121",
+            "size": "134903669",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/kan.tar.gz"
+            ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": true
+            },
+            "options": "an"
+        },
+        {
+            "name": "മലയാളം (Coqui MMS)",
+            "model_id": "ml_coqui_fairseq_mal",
+            "engine": "tts_coqui",
+            "lang_id": "ml",
+            "checksum": "ce2c6462",
+            "checksum_quick": "be2ebf2b",
+            "size": "134887477",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/mal.tar.gz"
+            ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": true
+            },
+            "options": "an"
+        },
+        {
+            "name": "தமிழ் (Coqui MMS)",
+            "model_id": "ta_coqui_fairseq_tam",
+            "engine": "tts_coqui",
+            "lang_id": "ta",
+            "checksum": "ecf8131d",
+            "checksum_quick": "8f45973f",
+            "size": "134885488",
+            "comp": "targz",
+            "urls": [
+                "https://dl.fbaipublicfiles.com/mms/tts/tam.tar.gz"
+            ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution-NonCommercial 4.0",
+                "url": "https://www.creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": true
+            },
+            "options": "an"
+        },
+        {
             "name": "English to German",
             "model_id": "en_bergamot_ende",
             "engine": "mnt_bergamot",

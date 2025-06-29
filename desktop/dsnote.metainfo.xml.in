@@ -98,7 +98,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.8.1" date="2025-06-28">
+    <release version="4.8.1" date="2025-06-29">
       <description>
       <p>Translator:</p>
       <ul>
@@ -113,6 +113,10 @@
       <p>Speech to Text:</p>
       <ul>
       <li>New very large 'Vosk' model for German langauge: Tuda-DE Large</li>
+      </ul>
+      <p>Text to Speech:</p>
+      <ul>
+      <li>Coqui MMS voices for the following new languages: Kannada, Malayalam, Tamil</li>
       </ul>
       <p>User Interface:</p>
       <ul>

@@ -32,6 +32,10 @@ DialogPage {
         <ul>
         <li>New very large <i>Vosk</i> model for German langauge: <i>Tuda-DE Large</i></li>
         </ul>
+        <p>" + qsTr("Text to Speech") + "</p>
+        <ul>
+        <li>Coqui MMS models for the following new languages: Kannada, Malayalam, Tamil</li>
+        </ul>
         <p>" + qsTr("User Interface") + "</p>
         <ul>
         <li><i>Speech Note</i> has been translated into German language.</li>

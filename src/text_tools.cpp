@@ -114,6 +114,7 @@ static astrunc::access::lang_t lang_str_to_astrunc_lang(
             if (lang[1] == 's') return astrunc::access::lang_t::MS;
             if (lang[1] == 'r') return astrunc::access::lang_t::MR;
             if (lang[1] == 'n') return astrunc::access::lang_t::MN;
+            if (lang[1] == 'l') return astrunc::access::lang_t::ML;
             break;
         case 'n':
             if (lang[1] == 'e') return astrunc::access::lang_t::NE;

@@ -62,6 +62,7 @@ class access {
         LA,       /** Latin         - 拉丁         */
         LV,       /** Latvia        - 拉脱维亚     */
         MK,       /** Macedonia     - 马其顿       */
+        ML,       /** Malayalam                   */
         MS,       /** Malay         - 马来         */
         MR,       /** Mara          - 马拉地       */
         MN,       /** Mongolia      - 蒙古         */
@@ -335,6 +336,7 @@ int astrunc::access::split( std::vector< std::string > &__vs, const std::string 
                     (astrunc::access::LA  == __lang) ||
                     (astrunc::access::LV  == __lang) ||
                     (astrunc::access::MK  == __lang) ||
+                    (astrunc::access::ML  == __lang) ||
                     (astrunc::access::MS  == __lang) ||
                     (astrunc::access::MR  == __lang) ||
                     (astrunc::access::NL  == __lang) ||
