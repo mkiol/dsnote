@@ -306,6 +306,29 @@ ColumnLayout {
         }
     }
 
+    function setScanFlags() {
+        var flags = Settings.ScanFlagNone
+        if (scanFlagTorchCheckbox.checked) flags |= Settings.ScanFlagNoTorchCuda
+        if (scanFlagCt2Checkbox.checked) flags |= Settings.ScanFlagNoCt2Cuda
+        _settings.scan_flags = flags
+    }
+
+    CheckBox {
+        id: scanFlagTorchCheckbox
+
+        checked: _settings.scan_flags & Settings.ScanFlagNoTorchCuda
+        text: qsTranslate("SettingsPage", "Disable detection of PyTorch")
+        onCheckedChanged: setScanFlags()
+    }
+
+    CheckBox {
+        id: scanFlagCt2Checkbox
+
+        checked: _settings.scan_flags & Settings.ScanFlagNoCt2Cuda
+        text: qsTranslate("SettingsPage", "Disable detection of CTranslate2")
+        onCheckedChanged: setScanFlags()
+    }
+
     SectionLabel {
         visible: app.feature_fake_keyboard || ydoMessage.visible
         text: qsTranslate("SettingsPage", "Insert into active window")

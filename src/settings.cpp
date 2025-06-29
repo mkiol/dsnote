@@ -2901,3 +2901,17 @@ void settings::set_fake_keyboard_delay(int value) {
         emit fake_keyboard_delay_changed();
     }
 }
+
+unsigned int settings::scan_flags() const {
+    return value(QStringLiteral("service/scan_flags"),
+                 scan_flags_t::ScanFlagNone)
+        .toUInt();
+}
+
+void settings::set_scan_flags(unsigned int flags) {
+    if (scan_flags() != flags) {
+        setValue(QStringLiteral("service/scan_flags"), flags);
+        emit scan_flags_changed();
+        set_restart_required(true);
+    }
+}

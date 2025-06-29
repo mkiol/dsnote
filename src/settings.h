@@ -368,6 +368,8 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(
         QString gpu_overrided_version READ gpu_overrided_version WRITE
             set_gpu_overrided_version NOTIFY gpu_overrided_version_changed)
+    Q_PROPERTY(unsigned int scan_flags READ scan_flags WRITE set_scan_flags
+                   NOTIFY scan_flags_changed)
 
     // engine options
 #define X(name)                                                           \
@@ -653,6 +655,13 @@ class settings : public QSettings, public singleton<settings> {
         PyScanOffAllEnabled = 2
     };
     Q_ENUM(py_scan_mode_t)
+
+    enum scan_flags_t : unsigned int {
+        ScanFlagNone = 0U,
+        ScanFlagNoTorchCuda = 1U << 0U,
+        ScanFlagNoCt2Cuda = 1U << 1U
+    };
+    Q_ENUM(scan_flags_t)
 
     struct voice_profile_prompt_t {
         QString name;
@@ -947,6 +956,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_gpu_override_version(bool value);
     QString gpu_overrided_version();
     void set_gpu_overrided_version(QString new_value);
+    unsigned int scan_flags() const;
+    void set_scan_flags(unsigned int flags);
 
 #define X(name)                            \
     bool name##_autolang_with_sup() const; \
@@ -1073,6 +1084,7 @@ class settings : public QSettings, public singleton<settings> {
     void gpu_override_version_changed();
     void gpu_overrided_version_changed();
     void gpu_devices_changed();
+    void scan_flags_changed();
 
 #define X(name) void name##_changed();
     X(whispercpp)

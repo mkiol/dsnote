@@ -121,7 +121,8 @@ void py_executor::loop() {
                         return py_tools::libs_scan_type_t::off_all_disabled;
                 }
                 LOGF("invalid py scan mode");
-            }());
+            }(),
+            settings::instance()->scan_flags());
 #else
         libs_availability = py_tools::libs_availability_t{};
 #endif

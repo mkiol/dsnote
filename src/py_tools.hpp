@@ -48,7 +48,8 @@ struct libs_availability_t {
     bool uroman = false;
 };
 
-libs_availability_t libs_availability(libs_scan_type_t scan_type);
+libs_availability_t libs_availability(libs_scan_type_t scan_type,
+                                      unsigned int scan_flags);
 bool init_module();
 }  // namespace py_tools
 

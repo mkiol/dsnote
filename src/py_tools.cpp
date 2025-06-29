@@ -20,6 +20,7 @@
 
 #include "cpu_tools.hpp"
 #include "logger.hpp"
+#include "settings.h"
 
 #ifdef USE_PYTHON_MODULE
 #include "module_tools.hpp"
@@ -61,7 +62,8 @@ std::ostream& operator<<(std::ostream& os,
 }
 
 namespace py_tools {
-libs_availability_t libs_availability(libs_scan_type_t scan_type) {
+libs_availability_t libs_availability(libs_scan_type_t scan_type,
+                                      unsigned int scan_flags) {
     // run only in py thread
 
     libs_availability_t availability{};
@@ -114,39 +116,50 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type) {
         LOGD("python version check py error: " << err.what());
     }
 
-    if (cpu_tools::cpuinfo().feature_flags & cpu_tools::feature_flags_t::avx) {
-        try {
-            LOGD("checking: torch cuda");
-            auto torch_cuda = py::module_::import("torch.cuda");
-            auto torch_ver = py::module_::import("torch.version");
-            if (torch_cuda.attr("is_available")().cast<bool>()) {
-                try {
-                    auto cuda_ver = torch_ver.attr("cuda").cast<std::string>();
-                    LOGD("torch cuda version: " << cuda_ver);
-                    availability.torch_cuda = !cuda_ver.empty();
-                } catch ([[maybe_unused]] const py::cast_error& err) {
+    if ((scan_flags & settings::ScanFlagNoTorchCuda) > 0) {
+        LOGD("checking: torch cuda (skipped)");
+    } else {
+        if (cpu_tools::cpuinfo().feature_flags &
+            cpu_tools::feature_flags_t::avx) {
+            try {
+                LOGD("checking: torch cuda");
+                auto torch_cuda = py::module_::import("torch.cuda");
+                auto torch_ver = py::module_::import("torch.version");
+                if (torch_cuda.attr("is_available")().cast<bool>()) {
+                    try {
+                        auto cuda_ver =
+                            torch_ver.attr("cuda").cast<std::string>();
+                        LOGD("torch cuda version: " << cuda_ver);
+                        availability.torch_cuda = !cuda_ver.empty();
+                    } catch ([[maybe_unused]] const py::cast_error& err) {
+                    }
+                    try {
+                        auto hip_ver =
+                            torch_ver.attr("hip").cast<std::string>();
+                        LOGD("torch hip version: " << hip_ver);
+                        availability.torch_hip = !hip_ver.empty();
+                    } catch ([[maybe_unused]] const py::cast_error& err) {
+                    }
                 }
-                try {
-                    auto hip_ver = torch_ver.attr("hip").cast<std::string>();
-                    LOGD("torch hip version: " << hip_ver);
-                    availability.torch_hip = !hip_ver.empty();
-                } catch ([[maybe_unused]] const py::cast_error& err) {
-                }
+            } catch (const std::exception& err) {
+                LOGD("torch cuda check py error: " << err.what());
             }
-        } catch (const std::exception& err) {
-            LOGD("torch cuda check py error: " << err.what());
         }
     }
 
-    try {
-        LOGD("checking: ctranslate2-cuda");
-        auto ct2 = py::module_::import("ctranslate2");
-        LOGD("ctranslate2 version: "
-             << ct2.attr("__version__").cast<std::string>());
-        availability.ctranslate2_cuda =
-            py::len(ct2.attr("get_supported_compute_types")("cuda")) > 0;
-    } catch (const std::exception& err) {
-        LOGD("ctranslate2-cuda check py error: " << err.what());
+    if ((scan_flags & settings::ScanFlagNoCt2Cuda) > 0) {
+        LOGD("checking: ctranslate2-cuda (skipped)");
+    } else {
+        try {
+            LOGD("checking: ctranslate2-cuda");
+            auto ct2 = py::module_::import("ctranslate2");
+            LOGD("ctranslate2 version: "
+                 << ct2.attr("__version__").cast<std::string>());
+            availability.ctranslate2_cuda =
+                py::len(ct2.attr("get_supported_compute_types")("cuda")) > 0;
+        } catch (const std::exception& err) {
+            LOGD("ctranslate2-cuda check py error: " << err.what());
+        }
     }
 
     if (scan_type == libs_scan_type_t::off_all_enabled ||
