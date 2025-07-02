@@ -32,7 +32,7 @@ build-arch:
     - cd _build
     - sed -i "s/CI_BUILD=false/CI_BUILD=true/" PKGBUILD # enable CI build
     - sed -i "s/FULL_BUILD=true/FULL_BUILD=false/" PKGBUILD # disable CUDA build
-    - sed -i "s/ || make/ || make -j$(nproc)/" PKGBUILD # user all cores to build
+    - sed -i "s/ || make/ || make -j$(nproc)/" PKGBUILD # use all cores to build
     - sudo -u archuser makepkg --syncdeps --noconfirm 1> /dev/null
     - rm dsnote.install PKGBUILD || true
     - rm -rf dsnote pkg src || true
