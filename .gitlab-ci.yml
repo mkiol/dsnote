@@ -30,7 +30,8 @@ build-arch:
     - chmod 0440 /etc/sudoers.d/90-archuser
     - sudo -u archuser git config --global --add safe.directory $PWD
     - cd _build
-    - sed -i "s/CI_BUILD=false/CI_BUILD=true/" PKGBUILD # enabled CI build
+    - sed -i "s/CI_BUILD=false/CI_BUILD=true/" PKGBUILD # enable CI build
+    - sed -i "s/FULL_BUILD=true/FULL_BUILD=false/" PKGBUILD # disable CUDA build
     - sed -i "s/ || make/ || make -j$(nproc)/" PKGBUILD # user all cores to build
     - sudo -u archuser makepkg --syncdeps --noconfirm 1> /dev/null
     - rm dsnote.install PKGBUILD || true
