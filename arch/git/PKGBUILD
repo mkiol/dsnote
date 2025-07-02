@@ -2,7 +2,7 @@
 
 _pkgname='dsnote'
 pkgname="${_pkgname}-git"
-pkgver=r1454.8c105b9
+pkgver=r1488.921fc7c
 pkgrel=1
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=(
@@ -107,11 +107,12 @@ build() {
   # CUDA support is experimental and may break!
   # In order to enable support for it, please uncomment
   # the respective entry in makedepends_x86_64 (or install
-  # the dependency package first) and change FULL_BUILD
-  # value below to true *before* making the build.
+  # the dependency package first) *before* making the build.
+  # You can disable CUDA support by changing FULL_BUILD
+  # below to false before building as well.
   ##########################################################
 
-  FULL_BUILD=false
+  FULL_BUILD=true
 
   if [[ "${CARCH}" == "x86_64" ]]; then
     pacman -Qi cuda &> /dev/null && HAS_CUDA=true || HAS_CUDA=false
