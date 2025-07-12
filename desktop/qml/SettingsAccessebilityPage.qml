@@ -46,7 +46,7 @@ ColumnLayout {
     Button {
         id: gsConfButton
 
-        visible: _settings.hotkeys_enabled && app.feature_hotkeys && (_settings.hotkeys_type === Settings.HotkeysTypeX11 || _settings.is_kde())
+        visible: _settings.hotkeys_enabled && app.feature_hotkeys && _settings.hotkeys_type === Settings.HotkeysTypeX11
         text: qsTranslate("SettingsPage", "Configure global keyboard shortcuts")
         Layout.leftMargin: appWin.padding
         onClicked: {
