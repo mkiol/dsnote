@@ -91,9 +91,9 @@ endif(BUILD_WHISPERCPP_CLBLAST)
 
 if(BUILD_WHISPERCPP_CUBLAS)
     if (NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-        set(CMAKE_CUDA_ARCHITECTURES "50\\\\\\\\\\\\;52\\\\\\\\\\\\;53\\\\\\\\\\\\;60\\\\\\\\\\\\;61\\\\\\\\\\\\;62\\\\\\\\\\\\;70\\\\\\\\\\\\;72\\\\\\\\\\\\;75\\\\\\\\\\\\;80\\\\\\\\\\\\;86\\\\\\\\\\\\;87\\\\\\\\\\\\;89\\\\\\\\\\\\;90\\\\\\\\\\\\;100")
+        set(CMAKE_CUDA_ARCHITECTURES 50 52 53 60 61 62 70 72 75 80 86 87 89 90 100)
     endif()
-
+    list(JOIN CMAKE_CUDA_ARCHITECTURES "\\\\\\\\\\;" CUDA_ARCHS_STRING)
     ExternalProject_Add(whispercppcublas
         SOURCE_DIR ${external_dir}/whispercppcublas
         BINARY_DIR ${PROJECT_BINARY_DIR}/external/whispercppcublas
@@ -109,7 +109,7 @@ if(BUILD_WHISPERCPP_CUBLAS)
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
             -DCMAKE_INSTALL_LIBDIR=lib
             -DGGML_NATIVE=OFF
-            -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=${CMAKE_CUDA_ARCHITECTURES}
+            -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES:STRING=${CUDA_ARCHS_STRING}
             -DGGML_AVX=ON -DGGML_AVX2=OFF -DGGML_FMA=OFF -DGGML_F16C=ON
             -DBUILD_SHARED_LIBS=ON
             -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
@@ -135,8 +135,14 @@ endif(BUILD_WHISPERCPP_CUBLAS)
 
 if(BUILD_WHISPERCPP_HIPBLAS)
     if (NOT DEFINED CMAKE_HIP_ARCHITECTURES)
-        set(CMAKE_HIP_ARCHITECTURES "gfx801\\\\\\\\\\\\;gfx802\\\\\\\\\\\\;gfx803\\\\\\\\\\\\;gfx805\\\\\\\\\\\\;gfx810\\\\\\\\\\\\;gfx900\\\\\\\\\\\\;gfx902\\\\\\\\\\\\;gfx904\\\\\\\\\\\\;gfx906\\\\\\\\\\\\;gfx908\\\\\\\\\\\\;gfx909\\\\\\\\\\\\;gfx90a\\\\\\\\\\\\;gfx90c\\\\\\\\\\\\;gfx940\\\\\\\\\\\\;gfx1010\\\\\\\\\\\\;gfx1011\\\\\\\\\\\\;gfx1012\\\\\\\\\\\\;gfx1013\\\\\\\\\\\\;gfx1030\\\\\\\\\\\\;gfx1031\\\\\\\\\\\\;gfx1032\\\\\\\\\\\\;gfx1033\\\\\\\\\\\\;gfx1034\\\\\\\\\\\\;gfx1035\\\\\\\\\\\\;gfx1036\\\\\\\\\\\\;gfx1100\\\\\\\\\\\\;gfx1101\\\\\\\\\\\\;gfx1102\\\\\\\\\\\\;gfx1103")
+        set(CMAKE_HIP_ARCHITECTURES gfx801 gfx802 gfx803 gfx805 gfx810
+            gfx900 gfx902 gfx904 gfx906 gfx908 gfx909 gfx90a gfx90c gfx940
+            gfx1010 gfx1011 gfx1012 gfx1013
+            gfx1030 gfx1031 gfx1032 gfx1033 gfx1034 gfx1035 gfx1036
+            gfx1100 gfx1101 gfx1102
+            gfx1103)
     endif()
+    list(JOIN CMAKE_HIP_ARCHITECTURES "\\\\\\\\\\;" HIP_ARCHS_STRING)
 
     ExternalProject_Add(whispercpphipblas
         SOURCE_DIR ${external_dir}/whispercpphipblas
@@ -153,7 +159,7 @@ if(BUILD_WHISPERCPP_HIPBLAS)
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
             -DCMAKE_INSTALL_LIBDIR=lib
             -DGGML_NATIVE=OFF
-            -DGGML_HIPBLAS=ON -DCMAKE_HIP_ARCHITECTURES=${CMAKE_HIP_ARCHITECTURES}
+            -DGGML_HIPBLAS=ON -DCMAKE_HIP_ARCHITECTURES=${HIP_ARCHS_STRING}
             -DGGML_AVX=ON -DGGML_AVX2=OFF -DGGML_FMA=OFF -DGGML_F16C=ON
             -DBUILD_SHARED_LIBS=ON
             -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
