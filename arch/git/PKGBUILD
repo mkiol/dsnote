@@ -119,7 +119,6 @@ build() {
 
     if [[ $HAS_CUDA = true ]] && [[ $FULL_BUILD = true ]]; then
       CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=ON -DCMAKE_CUDA_ARCHITECTURES=native"
-      export CUDA_PATH=/opt/cuda
       export NVCC_APPEND_FLAGS="-std=c++17 --compress-mode=size --split-compile=0 -Wno-deprecated-gpu-targets"
     fi
   fi
