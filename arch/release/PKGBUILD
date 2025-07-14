@@ -73,7 +73,7 @@ provides=(${_pkgname})
 conflicts=(${_pkgname}-git)
 install=${_pkgname}.install
 source=(https://github.com/mkiol/dsnote/archive/refs/tags/v${pkgver}.tar.gz)
-sha256sums=('3f9af5a29610477a631dca79ed0db571af2184f714372362bfecc14ec427cd9a')
+sha256sums=('9b6721066e2b8cb5e5e12f4f39a974f3a6f374b315b909e38d57474d35016661')
 
 build() {
   cd "${srcdir}/${_pkgname}-${pkgver}"
