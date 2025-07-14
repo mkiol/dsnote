@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION="4.7.1"
+VERSION="4.8.1"
 REV="1"
 ARCH="amd64"
 LDIR="$(
@@ -15,12 +15,12 @@ DS_DOC="${DS_DIR}/usr/share/doc/dsnote"
 SOURCEDIR="dsnote-${VERSION}"
 SOURCEFILE="v${VERSION}.tar.gz"
 SOURCEURL="https://github.com/mkiol/dsnote/archive/refs/tags/${SOURCEFILE}"
-SHA256SUM="6b3c5029b32b272bd5238fb830c3aadce0cec438f7bece13bb304a7e52676b1b"
+SHA256SUM="9b6721066e2b8cb5e5e12f4f39a974f3a6f374b315b909e38d57474d35016661"
 
-wget -c -q --show-progress "$SOURCEURL"
+[ -f "$SOURCEFILE" ] || wget -c -q --show-progress "$SOURCEURL"
 echo "${SHA256SUM}  ${SOURCEFILE}" | sha256sum --check
 
-tar xf "$SOURCEFILE"
+[ -d "$SOURCEDIR" ] || tar xf "$SOURCEFILE"
 cd "$SOURCEDIR"
 
 mkdir -p build && cd build
@@ -46,7 +46,11 @@ CMAKE="-DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON \
 # Build for CUDA if needed packages are found
 dpkg -s nvidia-cuda-dev &> /dev/null && CUDA1=true || CUDA1=false
 dpkg -s nvidia-cuda-toolkit &> /dev/null && CUDA2=true || CUDA2=false
-$CUDA1 && $CUDA2 && CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=ON -DCMAKE_CUDA_ARCHITECTURES=native"
+$CUDA1 && $CUDA2 && HAS_CUDA=true || HAS_CUDA=false
+if [[ $HAS_CUDA = true ]]; then
+    CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=ON -DCMAKE_CUDA_ARCHITECTURES=native"
+    export NVCC_APPEND_FLAGS="-std=c++17 -Wno-deprecated-gpu-targets"
+fi
 
 TEST_BUILD=false
 # Disable bergamot and RHVoice (shorter build time - for test only)
