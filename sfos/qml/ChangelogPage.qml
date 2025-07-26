@@ -36,6 +36,10 @@ Page {
                 text: "<p>" + qsTr("Text to Speech") + "</p>
                 <ul>
                 <li>New <i>Piper</i> voices for Argentine Spanish, Hindi, Malayalam and Nepali</li>
+                </ul>
+                <p>" + qsTr("Speech to Text") + "</p>
+                <ul>
+                <li>New languages enabled in Whisper: Azerbaijani, Belarusian, Kannada, Malayalam, Tamil</li>
                 </ul>"
             }
 

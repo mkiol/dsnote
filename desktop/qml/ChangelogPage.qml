@@ -23,6 +23,10 @@ DialogPage {
         <li>New <i>Piper</i> voices for Argentine Spanish, Hindi, Malayalam and Nepali</li>
         <li>Fix: Using the <i>Coqui TTS</i> engine causes the app to crash on some platforms.</li>
         </ul>
+        <p>" + qsTr("Speech to Text") + "</p>
+        <ul>
+        <li>New languages enabled in Whisper: Azerbaijani, Belarusian, Kannada, Malayalam, Tamil</li>
+        </ul>
         <p>Flatpak</p>
         <ul>
         <li>Downgrade <i>numba</i> Python package to 0.60.0 version</li>
