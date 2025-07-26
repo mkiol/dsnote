@@ -555,8 +555,8 @@ modules:
         sha256: 0b6415c4fd68bff4c29288abe67c6d80b587e0e1e2cfb0aad23e4559504a7fa1
       - &id110
         type: file
-        url: https://files.pythonhosted.org/packages/cb/da/8341fd3056419441286c8e26bf436923021005ece0bff5f41906476ae514/llvmlite-0.44.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: c0143a5ef336da14deaa8ec26c5449ad5b6a2b564df82fcef4be040b9cacfea9
+        url: https://files.pythonhosted.org/packages/00/5f/323c4d56e8401c50185fd0e875fcf06b71bf825a863699be1eb10aa2a9cb/llvmlite-0.43.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: df6509e1507ca0760787a199d19439cc887bfd82226f5af746d6977bd9f66844
       - *id046
       - *id047
       - &id111
@@ -598,8 +598,8 @@ modules:
         sha256: 1c8e5b00142fc2966fd8d685001e36c4a9911e070d1b120e1beb721fa1edb33d
       - &id113
         type: file
-        url: https://files.pythonhosted.org/packages/9a/2d/e518df036feab381c23a624dac47f8445ac55686ec7f11083655eb707da3/numba-0.61.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
-        sha256: 5b1bb509d01f23d70325d3a5a0e237cbc9544dd50e50588bc581ba860c213546
+        url: https://files.pythonhosted.org/packages/8b/41/ac11cf33524def12aa5bd698226ae196a1185831c05ed29dc0c56eaa308b/numba-0.60.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+        sha256: 0ebaa91538e996f708f1ab30ef4d3ddc344b64b5227b67a57aa74f401bb68b9d
       - *id014
       - *id027
       - &id114
