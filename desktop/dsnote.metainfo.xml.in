@@ -111,7 +111,7 @@
       </ul>
       <p>Flatpak:</p>
       <ul>
-      <li>Downgrade <i>numba</i> Python package to 0.60.0 version</li>
+      <li>Downgrade 'numba' Python package to 0.60.0 version</li>
       </ul>
       </description>
     </release>
