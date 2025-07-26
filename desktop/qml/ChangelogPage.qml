@@ -18,6 +18,22 @@ DialogPage {
     }
 
     RichLabel {
+        text: "<p>" + qsTr("Text to Speech") + "</p>
+        <ul>
+        <li>New <i>Piper</i> voices for Argentine Spanish, Hindi, Malayalam and Nepali</li>
+        <li>Fix: Using the <i>Coqui TTS</i> engine causes the app to crash on some platforms.</li>
+        </ul>
+        <p>Flatpak</p>
+        <ul>
+        <li>Downgrade <i>numba</i> Python package to 0.60.0 version</li>
+        </ul>"
+    }
+
+    SectionLabel {
+        text: qsTr("Version %1").arg("4.8.1")
+    }
+
+    RichLabel {
         text: "<p>" + qsTr("Translator") + "</p>
         <ul>
         <li>Fix: Model download error for Portuguese, Dutch, Persian, Norwegian and Icelandic languages.</li>

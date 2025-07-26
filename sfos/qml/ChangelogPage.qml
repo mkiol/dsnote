@@ -32,6 +32,17 @@ Page {
                 text: qsTr("Version %1").arg(APP_VERSION)
             }
 
+            RichLabel {
+                text: "<p>" + qsTr("Text to Speech") + "</p>
+                <ul>
+                <li>New <i>Piper</i> voices for Argentine Spanish, Hindi, Malayalam and Nepali</li>
+                </ul>"
+            }
+
+            SectionHeader {
+                text: qsTr("Version %1").arg("4.8.1")
+            }
+
             LogItem {
                 text: "<p>" + qsTr("Translator") + "</p>
                 <ul>

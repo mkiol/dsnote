@@ -23693,6 +23693,27 @@
             }
         },
         {
+            "name": "Español argentino (Piper Daniela High Female)",
+            "model_id": "es_piper_ar_daniela_high",
+            "engine": "tts_piper",
+            "lang_id": "es",
+            "checksum": "ea6a315",
+            "checksum_quick": "c6a727d3",
+            "size": "114214451",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/375a0fe641dea077c2a47b4e9a056d6da521eed3/es/es_AR/daniela/high/es_AR-daniela-high.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/375a0fe641dea077c2a47b4e9a056d6da521eed3/es/es_AR/daniela/high/es_AR-daniela-high.onnx.json"
+            ],
+            "info": "https://www.openslr.org/61/",
+            "license": {
+                "id": "CC BY-SA 4.0",
+                "name": "Creative Commons Attribution-ShareAlike 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
             "name": "Suomi (Piper Harri Low Male)",
             "model_id": "fi_piper_harri_low",
             "engine": "tts_piper",
@@ -24235,6 +24256,26 @@
             "model_alias_of": "ne_piper_google_medium",
             "lang_id": "ne",
             "speaker": "17"
+        },
+        {
+            "name": "नेपाली (Piper Chitwan Medium Male)",
+            "model_id": "ne_piper_chitwan_medium",
+            "engine": "tts_piper",
+            "lang_id": "ne",
+            "checksum": "c32117cd",
+            "checksum_quick": "fb1efdfe",
+            "size": "62963279",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/375a0fe641dea077c2a47b4e9a056d6da521eed3/ne/ne_NP/chitwan/medium/ne_NP-chitwan-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/375a0fe641dea077c2a47b4e9a056d6da521eed3/ne/ne_NP/chitwan/medium/ne_NP-chitwan-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Nederlands (Piper MLS 5809 Low Female)",
@@ -25258,6 +25299,76 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pl/pl_PL/gosia/medium/pl_PL-gosia-medium.onnx.json"
             ],
             "size": "63216406"
+        },
+        {
+            "name": "हिन्दी (Piper Pratham Medium Male)",
+            "model_id": "hi_piper_pratham_medium",
+            "engine": "tts_piper",
+            "lang_id": "hi",
+            "checksum": "4fdd865e",
+            "checksum_quick": "72ffd39f",
+            "size": "63529212",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/375a0fe641dea077c2a47b4e9a056d6da521eed3/hi/hi_IN/pratham/medium/hi_IN-pratham-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/375a0fe641dea077c2a47b4e9a056d6da521eed3/hi/hi_IN/pratham/medium/hi_IN-pratham-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC BY-NC-SA 4.0",
+                "name": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.txt",
+                "accept_required": true
+            }
+        },
+        {
+            "name": "हिन्दी (Piper Priyamvada Medium Female)",
+            "model_id": "hi_piper_priyamvada_medium",
+            "engine": "tts_piper",
+            "lang_id": "hi",
+            "checksum": "a1413a51",
+            "checksum_quick": "33d46eda",
+            "size": "63529215",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/375a0fe641dea077c2a47b4e9a056d6da521eed3/hi/hi_IN/priyamvada/medium/hi_IN-priyamvada-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/375a0fe641dea077c2a47b4e9a056d6da521eed3/hi/hi_IN/priyamvada/medium/hi_IN-priyamvada-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC BY-NC-SA 4.0",
+                "name": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.txt",
+                "accept_required": true
+            }
+        },
+        {
+            "name": "മലയാളം (Piper Arjun Medium Male)",
+            "model_id": "ml_piper_arjun_medium",
+            "engine": "tts_piper",
+            "lang_id": "ml",
+            "checksum": "1538fc",
+            "checksum_quick": "6a6f373e",
+            "size": "62963280",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/375a0fe641dea077c2a47b4e9a056d6da521eed3/ml/ml_IN/arjun/medium/ml_IN-arjun-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/375a0fe641dea077c2a47b4e9a056d6da521eed3/ml/ml_IN/arjun/medium/ml_IN-arjun-medium.onnx.json"
+            ],
+            "info": "https://www.kaggle.com/code/mpwolke/indic-tts-malayalam-speech-corpus"
+        },
+        {
+            "name": "മലയാളം (Piper Meera Medium Female)",
+            "model_id": "ml_piper_meera_medium",
+            "engine": "tts_piper",
+            "lang_id": "ml",
+            "checksum": "7f1315de",
+            "checksum_quick": "c75bcbab",
+            "size": "62963281",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/375a0fe641dea077c2a47b4e9a056d6da521eed3/ml/ml_IN/meera/medium/ml_IN-meera-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/375a0fe641dea077c2a47b4e9a056d6da521eed3/ml/ml_IN/meera/medium/ml_IN-meera-medium.onnx.json"
+            ],
+            "info": "https://www.kaggle.com/code/mpwolke/indic-tts-malayalam-speech-corpus"
         },
         {
             "name": "አማርኛ (Espeak Robot)",

@@ -98,6 +98,19 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
+    <release version="4.8.2" date="2025-07-26">
+      <description>
+      <p>Text to Speech:</p>
+      <ul>
+      <li>New Piper voices for Argentine Spanish, Hindi, Malayalam and Nepali</li>
+      <li>Fix: Using the Coqui TTS engine causes the app to crash on some platforms.</li>
+      </ul>
+      <p>Flatpak:</p>
+      <ul>
+      <li>Downgrade <i>numba</i> Python package to 0.60.0 version</li>
+      </ul>
+      </description>
+    </release>
     <release version="4.8.1" date="2025-06-29">
       <description>
       <p>Translator:</p>
