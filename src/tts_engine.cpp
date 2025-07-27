@@ -1056,11 +1056,11 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
 
     if (is_shutdown()) return;
 
-    if (!no_speech) {
+    if (!no_speech || last_task) {
         if (m_call_backs.speech_encoded) {
-            m_call_backs.speech_encoded(task.text, output_file,
-                                        m_config.audio_format, progress,
-                                        last_task);
+            m_call_backs.speech_encoded(no_speech && last_task ? "" : task.text,
+                                        output_file, m_config.audio_format,
+                                        progress, last_task);
         }
     }
 }
