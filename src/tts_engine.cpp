@@ -429,6 +429,14 @@ bool tts_engine::file_exists(const std::string& file_path) {
     return stat(file_path.c_str(), &buffer) == 0;
 }
 
+int64_t tts_engine::file_size(const std::string& file_path) {
+    struct stat buffer{};
+    if (stat(file_path.c_str(), &buffer) != 0) {
+        return 0;
+    }
+    return buffer.st_size;
+}
+
 // source: https://stackoverflow.com/a/217605
 // trim from start (in place)
 static inline void ltrim(std::string& s) {
@@ -871,6 +879,12 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
             return std::string{};
         }
 
+        if (file_size(output_file_wav) == 0) {
+            LOGW("tts engine returned empty wav file");
+            unlink(output_file_wav.c_str());
+            return std::string{};
+        }
+
         convert_wav_to_16bits(output_file_wav);
 
         post_process_wav(output_file_wav, m_config.has_option('0') ? 150 : 0);
@@ -1003,12 +1017,18 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
         return output_file;
     };
 
-    auto output_file = make_output_file();
-
+    std::string output_file = make_output_file();
     size_t speech_duration = 0;
+
     if (!output_file.empty()) {
         std::tie(speech_duration, m_last_speech_sample_rate) =
             media_compressor{}.duration_and_rate(output_file);
+        if (speech_duration == 0 || m_last_speech_sample_rate == 0) {
+            LOGW("can't get duration, most likely corupted audio file: "
+                 << output_file);
+            unlink(output_file.c_str());
+            output_file.clear();
+        }
     }
 
     bool no_speech = output_file.empty();

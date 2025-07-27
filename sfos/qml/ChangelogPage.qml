@@ -36,6 +36,7 @@ Page {
                 text: "<p>" + qsTr("Text to Speech") + "</p>
                 <ul>
                 <li>New <i>Piper</i> voices for Argentine Spanish, Hindi, Malayalam and Nepali</li>
+                <li>Fix: Crash when the TTS engine generates a corrupted audio file</li>
                 </ul>
                 <p>" + qsTr("Speech to Text") + "</p>
                 <ul>

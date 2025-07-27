@@ -9,6 +9,7 @@
 #define TTS_ENGINE_HPP
 
 #include <condition_variable>
+#include <cstdint>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -281,6 +282,7 @@ class tts_engine {
     void post_process_wav(const std::string& wav_file,
                           size_t silence_duration_msec) const;
     static bool file_exists(const std::string& file_path);
+    static int64_t file_size(const std::string& file_path);
     static bool convert_wav_to_16bits(const std::string& wav_file);
     static void make_hf_link(const char* model_name,
                              const std::string& hub_path,

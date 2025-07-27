@@ -98,12 +98,13 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.8.2" date="2025-07-26">
+    <release version="4.8.2" date="2025-07-27">
       <description>
       <p>Text to Speech:</p>
       <ul>
       <li>New Piper voices for Argentine Spanish, Hindi, Malayalam and Nepali</li>
       <li>Fix: Using the Coqui TTS engine causes the app to crash on some platforms.</li>
+      <li>Fix: Crash when the TTS engine generates a corrupted audio file</li>
       </ul>
       <p>Speech to Text:</p>
       <ul>
