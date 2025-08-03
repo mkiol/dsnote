@@ -32,7 +32,7 @@ Page {
                 text: qsTr("Version %1").arg(APP_VERSION)
             }
 
-            RichLabel {
+            LogItem {
                 text: "<p>" + qsTr("Text to Speech") + "</p>
                 <ul>
                 <li>New <i>Piper</i> voices for Argentine Spanish, Hindi, Malayalam and Nepali</li>
