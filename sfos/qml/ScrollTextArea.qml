@@ -116,22 +116,21 @@ SilicaItem {
         anchors.leftMargin: Theme.horizontalPageMargin
         height: size + Theme.paddingLarge
 
-        Button {
-            id: formatButton
-
-            preferredWidth: Theme.buttonWidthExtraSmall
-            anchors.left: parent.left
-            height: parent.size
-            visible: _settings.subtitles_support && text.length !== 0
-            onClicked: root.formatClicked()
-            color: root.formatInvalid ? Theme.errorColor : Theme.primaryColor
-            backgroundColor: Theme.rgba(color, 0.05)
-        }
-
         Row {
             spacing: Theme.paddingSmall
             height: parent.height
-            anchors.right: parent.right
+            anchors.left: parent.left
+
+            Button {
+                id: formatButton
+
+                preferredWidth: Theme.buttonWidthExtraSmall
+                height: toolsRow.size
+                visible: _settings.subtitles_support && text.length !== 0
+                onClicked: root.formatClicked()
+                color: root.formatInvalid ? Theme.errorColor : Theme.primaryColor
+                backgroundColor: Theme.rgba(color, 0.05)
+            }
 
             IconButton {
                 id: copyButton
@@ -143,6 +142,13 @@ SilicaItem {
                 icon.source: "image://theme/icon-m-clipboard?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
                 onClicked: root.copyClicked()
             }
+        }
+
+        Row {
+            spacing: Theme.paddingSmall
+            height: parent.height
+            anchors.right: parent.right
+
             IconButton {
                 id: clearButton
 
