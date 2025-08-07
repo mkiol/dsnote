@@ -10,7 +10,7 @@ Name:       harbour-dsnote
 
 Summary:        Speech Note
 Version:        4.8.2
-Release:        1
+Release:        2
 Group:          Qt/Qt
 License:        LICENSE
 URL:            https://github.com/mkiol/dsnote
