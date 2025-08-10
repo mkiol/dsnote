@@ -18,6 +18,21 @@ DialogPage {
     }
 
     RichLabel {
+        text: "<p>" + qsTr("General") + "</p>
+        <ul>
+        <li>Fix: The model cannot be activated when the license file cannot be downloaded due to an error.</li>
+        </ul>
+        <p>" + qsTr("Text to Speech") + "</p>
+        <ul>
+        <li>Fix: The Coqui XTTS model license cannot be downloaded.</li>
+        </ul>"
+    }
+
+    SectionLabel {
+        text: qsTr("Version %1").arg("4.8.2")
+    }
+
+    RichLabel {
         text: "<p>" + qsTr("Text to Speech") + "</p>
         <ul>
         <li>New <i>Piper</i> voices for Argentine Spanish, Hindi, Malayalam and Nepali</li>

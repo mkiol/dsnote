@@ -27438,7 +27438,7 @@
             "license": {
                 "id": "CPML",
                 "name": "Coqui Public Model License 1.0.0",
-                "url": "https://coqui.ai/cpml.txt",
+                "url": "https://huggingface.co/coqui/XTTS-v2/raw/b317f990aac396db797cc1c4548dba943330acc1/LICENSE.txt",
                 "accept_required": true
             },
             "comp": "dir",
@@ -27465,7 +27465,7 @@
             "license": {
                 "id": "CPML",
                 "name": "Coqui Public Model License 1.0.0",
-                "url": "https://coqui.ai/cpml.txt",
+                "url": "https://huggingface.co/coqui/XTTS-v2/raw/b317f990aac396db797cc1c4548dba943330acc1/LICENSE.txt",
                 "accept_required": true
             },
             "comp": "dir",

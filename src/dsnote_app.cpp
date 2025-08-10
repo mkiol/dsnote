@@ -5132,13 +5132,16 @@ QString dsnote_app::download_content(const QUrl &url) {
 
         auto data = downloader{}.download_data(url);
 
-        qDebug() << "downlaoded content:" << data.mime << data.bytes.size();
+        qDebug() << "downloaded content:" << data.mime << data.bytes.size();
 
         if (data.mime.contains(QLatin1String{"text"}, Qt::CaseInsensitive))
             text = QString::fromUtf8(data.bytes);
     }
 
-    if (text.isEmpty()) emit error(error_t::ErrorContentDownload);
+    if (text.isEmpty()) {
+        emit error(error_t::ErrorContentDownload);
+        text = " ";
+    }
 
     return text;
 }

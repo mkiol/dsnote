@@ -98,6 +98,18 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
+    <release version="4.8.3" date="2025-08-10">
+      <description>
+      <p>General:</p>
+      <ul>
+      <li>Fix: The model cannot be activated when the license file cannot be downloaded due to an error.</li>
+      </ul>
+      <p>Text to Speech:</p>
+      <ul>
+      <li>Fix: The Coqui XTTS model license cannot be downloaded.</li>
+      </ul>
+      </description>
+    </release>
     <release version="4.8.2" date="2025-07-27">
       <description>
       <p>Text to Speech:</p>
