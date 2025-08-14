@@ -22,9 +22,17 @@ DialogPage {
         <ul>
         <li>Fix: The model cannot be activated when the license file cannot be downloaded due to an error.</li>
         </ul>
+        <p>" + qsTr("Speech to Text") + "</p>
+        <ul>
+        <li>Fix: App crashes when WhisperCpp is used on certain CPUs.</li>
+        </ul>
         <p>" + qsTr("Text to Speech") + "</p>
         <ul>
         <li>Fix: The Coqui XTTS model license cannot be downloaded.</li>
+        </ul>
+        <p>" + qsTr("Translator") + "</p>
+        <ul>
+        <li>Fix: App crashes when the translator is used on certain CPUs.</li>
         </ul>"
     }
 

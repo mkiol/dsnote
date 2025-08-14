@@ -83,6 +83,9 @@ modules:
     build-options:
       no-debuginfo: true
       arch:
+        x86_64:
+          config-opts:
+            - -DTARGET=CORE2
         aarch64:
           config-opts:
             - -DTARGET=ARMV8

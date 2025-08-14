@@ -16,7 +16,9 @@ set(openblas_opts
     -DCMAKE_C_FLAGS=-Wno-error=incompatible-pointer-types
 )
 
-if(arch_arm32)
+if(arch_x8664)
+    list(APPEND openblas_opts -DTARGET=CORE2)
+elseif(arch_arm32)
     list(APPEND openblas_opts -DTARGET=ARMV7)
 elseif(arch_arm64)
     list(APPEND openblas_opts -DTARGET=ARMV8)

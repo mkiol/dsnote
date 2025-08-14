@@ -98,15 +98,23 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.8.3" date="2025-08-10">
+    <release version="4.8.3" date="2025-08-14">
       <description>
       <p>General:</p>
       <ul>
       <li>Fix: The model cannot be activated when the license file cannot be downloaded due to an error.</li>
       </ul>
+      <p>Speech to Text:</p>
+      <ul>
+      <li>Fix: App crashes when WhisperCpp is used on certain CPUs.</li>
+      </ul>
       <p>Text to Speech:</p>
       <ul>
       <li>Fix: The Coqui XTTS model license cannot be downloaded.</li>
+      </ul>
+      <p>Translator:</p>
+      <ul>
+      <li>Fix: App crashes when the translator is used on certain CPUs.</li>
       </ul>
       </description>
     </release>
