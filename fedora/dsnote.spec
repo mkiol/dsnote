@@ -75,7 +75,7 @@ No data is sent to the Internet.
     -DBUILD_TAGLIB=OFF \
     -DBUILD_XDO=OFF \
     -DBUILD_WHISPERCPP_VULKAN=ON \
-    -DBUILD_XKBCOMMON=ON # not needed on Fedora 42
+#    -DBUILD_XKBCOMMON=ON # not needed on Fedora 42
 %cmake_build
 
 %install

@@ -2,20 +2,22 @@
 
 set -e
 
-VERSION="4.8.1"
+VERSION="4.8.3"
 REV="1"
 ARCH="amd64"
+DIST="plucky"
+
 LDIR="$(
     cd "$(dirname "$0")"
     pwd -P
 )"
-DS_DIR="dsnote_${VERSION}-${REV}_${ARCH}"
+DS_DIR="dsnote_${VERSION}-${REV}+${DIST}_${ARCH}"
 DS_DEB="${DS_DIR}/DEBIAN"
 DS_DOC="${DS_DIR}/usr/share/doc/dsnote"
 SOURCEDIR="dsnote-${VERSION}"
 SOURCEFILE="v${VERSION}.tar.gz"
 SOURCEURL="https://github.com/mkiol/dsnote/archive/refs/tags/${SOURCEFILE}"
-SHA256SUM="9b6721066e2b8cb5e5e12f4f39a974f3a6f374b315b909e38d57474d35016661"
+SHA256SUM="da96b7f95a85d14e0e96d4f2ba5c00cde4c54b74d165bd50b7ebefb7bcbf814d"
 
 [ -f "$SOURCEFILE" ] || wget -c -q --show-progress "$SOURCEURL"
 echo "${SHA256SUM}  ${SOURCEFILE}" | sha256sum --check
