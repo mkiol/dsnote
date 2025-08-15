@@ -3,7 +3,7 @@ compatible=('*:oracular' '*:24.10')
 
 _pkgname='dsnote'
 pkgname="${_pkgname}"
-pkgver=4.7.1
+pkgver=4.8.3
 pkgrel=1
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=(
