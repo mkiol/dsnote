@@ -2,7 +2,7 @@
 
 _pkgname='dsnote'
 pkgname="${_pkgname}"
-pkgver=4.8.2
+pkgver=4.8.3
 pkgrel=1
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=(
@@ -73,7 +73,7 @@ provides=(${_pkgname})
 conflicts=(${_pkgname}-git)
 install=${_pkgname}.install
 source=(https://github.com/mkiol/dsnote/archive/refs/tags/v${pkgver}.tar.gz)
-sha256sums=('ca21b255d86545128561434a9b9c252a7aa1d8feec70ddc87d140833d3140197')
+sha256sums=('da96b7f95a85d14e0e96d4f2ba5c00cde4c54b74d165bd50b7ebefb7bcbf814d')
 
 build() {
   cd "${srcdir}/${_pkgname}-${pkgver}"
