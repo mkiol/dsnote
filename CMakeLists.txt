@@ -429,15 +429,16 @@ list(APPEND resources
 
 # executable
 
-add_executable(${info_binary_id} ${resources} "${sources_dir}/main.cpp")
+add_executable(${info_binary_id} "${sources_dir}/main.cpp" ${resources})
 set_property(TARGET ${info_binary_id} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-set_property(TARGET ${info_binary_id} PROPERTY AUTORCC TRUE)
+set_property(TARGET ${info_binary_id} PROPERTY AUTORCC ON)
+set_property(TARGET ${info_binary_id} PROPERTY AUTOUIC ON)
 
 target_link_libraries(${info_binary_id} dsnote_lib)
 
 add_custom_command(TARGET ${info_binary_id} POST_BUILD
     COMMAND $<$<CONFIG:Release>:${CMAKE_STRIP}>
-    ARGS --strip-all $<TARGET_FILE:${info_binary_id}>
+    ARGS --strip-debug $<TARGET_FILE:${info_binary_id}>
 )
 
 # tests

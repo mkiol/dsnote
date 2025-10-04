@@ -14,7 +14,7 @@ LDIR="$(
 DS_DIR="dsnote_${VERSION}-${REV}+${DIST}_${ARCH}"
 DS_DEB="${DS_DIR}/DEBIAN"
 DS_DOC="${DS_DIR}/usr/share/doc/dsnote"
-SOURCEDIR=".."
+SOURCEDIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 # Build from current repository source
 cd "$SOURCEDIR"
