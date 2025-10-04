@@ -7,6 +7,7 @@
 
 #include "dsnote_app.h"
 
+#include <QAudioOutput>
 #include <QClipboard>
 #include <QDBusConnection>
 #include <QDebug>
@@ -476,13 +477,12 @@ dsnote_app::dsnote_app(QObject *parent)
 }
 
 void dsnote_app::create_player() {
-    m_player = std::make_unique<QMediaPlayer>(QObject::parent(),
-                                              QMediaPlayer::LowLatency);
-    m_player->setNotifyInterval(100);
+    m_player = std::make_unique<QMediaPlayer>(QObject::parent());
+    m_player->setAudioOutput(new QAudioOutput(this));
 
     connect(
-        m_player.get(), &QMediaPlayer::stateChanged, this,
-        [this](QMediaPlayer::State state) {
+        m_player.get(), &QMediaPlayer::playbackStateChanged, this,
+        [this](QMediaPlayer::PlaybackState state) {
             qDebug() << "player state changed:" << state;
             emit player_playing_changed();
         },
@@ -1895,7 +1895,7 @@ void dsnote_app::update_available_tts_ref_voices() {
     QVariantMap new_available_tts_ref_voices_map{};
 
     const auto ref_voices_dir =
-        QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+        QDir{QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)}
             .filePath(s_ref_voices_dir_name);
 
     auto scan_ref_voices = [&] {
@@ -2841,8 +2841,8 @@ void dsnote_app::play_speech_selected(int start, int end) {
 
     if (size == 0) return;
 
-    start = std::clamp(start, 0, size);
-    end = end < 0 ? size : std::clamp(end, start, size);
+    start = std::clamp(static_cast<long long>(start), 0LL, size);
+    end = end < 0 ? size : std::clamp(static_cast<long long>(end), static_cast<long long>(start), size);
 
     if (start == end) return;
 
@@ -2861,8 +2861,8 @@ void dsnote_app::play_speech_translator_selected(int start, int end,
 
     if (size == 0) return;
 
-    start = std::clamp(start, 0, size);
-    end = end < 0 ? size : std::clamp(end, start, size);
+    start = std::clamp(static_cast<long long>(start), 0LL, size);
+    end = end < 0 ? size : std::clamp(static_cast<long long>(end), static_cast<long long>(start), size);
 
     if (start == end) return;
 
@@ -2995,8 +2995,8 @@ void dsnote_app::translate_selected(int start, int end) {
 
     if (size == 0) return;
 
-    start = std::clamp(start, 0, size);
-    end = end < 0 ? size : std::clamp(end, start, size);
+    start = std::clamp(static_cast<long long>(start), 0LL, size);
+    end = end < 0 ? size : std::clamp(static_cast<long long>(end), static_cast<long long>(start), size);
 
     if (start == end) return;
 
@@ -4791,8 +4791,8 @@ QVariantList dsnote_app::features_availability() {
     auto it = m_features_availability.cbegin();
     while (it != m_features_availability.cend()) {
         auto val = it.value().toList();
-        if (val.size() > 1 && val.at(0).type() == QVariant::Bool &&
-            val.at(1).type() == QVariant::String) {
+        if (val.size() > 1 && val.at(0).typeId() == QMetaType::Bool &&
+            val.at(1).typeId() == QMetaType::QString) {
             list.push_back(QVariantList{val.at(0), val.at(1)});
         }
         ++it;
@@ -5212,7 +5212,7 @@ QString dsnote_app::import_ref_voice_file_path() {
 void dsnote_app::player_stop_voice_ref() {
     if (!m_player) return;
 
-    m_player->setMedia({});
+    m_player->setSource(QUrl{});
 
     m_player_current_voice_ref_idx = -1;
     emit player_current_voice_ref_idx_changed();
@@ -5287,7 +5287,7 @@ void dsnote_app::player_import_rec() {
 void dsnote_app::player_set_path(const QString &wav_file_path) {
     if (!m_player) create_player();
 
-    m_player->setMedia(
+    m_player->setSource(
         QUrl{QStringLiteral("gst-pipeline: filesrc location=%1 ! wavparse ! "
                             "audioconvert ! alsasink")
                  .arg(wav_file_path)});
@@ -5340,7 +5340,7 @@ void dsnote_app::player_export_ref_voice(long long start, long long stop,
                                          const QString &name,
                                          const QString &text) {
     QDir ref_voices_dir{
-        QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+        QDir{QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)}
             .filePath(s_ref_voices_dir_name)};
 
     QString out_file_path;
@@ -5387,7 +5387,7 @@ void dsnote_app::player_reset() {
     if (!m_player) return;
 
     QFile{import_ref_voice_file_path()}.remove();
-    m_player->setMedia({});
+    m_player->setSource(QUrl{});
 }
 
 bool dsnote_app::player_ready() const {
@@ -5449,7 +5449,7 @@ void dsnote_app::recorder_stop() {
 void dsnote_app::recorder_reset() { m_recorder.reset(); }
 
 bool dsnote_app::player_playing() const {
-    return m_player && m_player->state() == QMediaPlayer::State::PlayingState;
+    return m_player && m_player->playbackState() == QMediaPlayer::PlaybackState::PlayingState;
 }
 
 void dsnote_app::player_set_position(long long position) {

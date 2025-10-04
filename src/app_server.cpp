@@ -130,7 +130,7 @@ int app_server::request_another_instance(const cmd::options &options) {
 
         auto max_id_size = [](const QVariantList &models) {
             return std::accumulate(
-                models.cbegin(), models.cend(), 0, [](int size, const auto &m) {
+                models.cbegin(), models.cend(), qsizetype{0}, [](qsizetype size, const auto &m) {
                     auto model = qdbus_cast<QVariantMap>(
                         m.template value<QDBusArgument>());
                     return std::max(model.contains("id")
@@ -140,7 +140,7 @@ int app_server::request_another_instance(const cmd::options &options) {
                 });
         };
 
-        auto print_models = [](const char *name, int max_id_size,
+        auto print_models = [](const char *name, qsizetype max_id_size,
                                const QVariantList &models) {
             fmt::print("Available {} models: {}\n", name, models.size());
 
@@ -154,7 +154,7 @@ int app_server::request_another_instance(const cmd::options &options) {
             }
         };
 
-        auto print_active_model = [](const char *name, int max_id_size,
+        auto print_active_model = [](const char *name, qsizetype max_id_size,
                                      const QVariantMap &model) {
             fmt::print("Active {} model:\n", name);
             fmt::print(fmt::format("\t{{:{}}} \"{{}}\"\n",
@@ -167,7 +167,7 @@ int app_server::request_another_instance(const cmd::options &options) {
                            : "-");
         };
 
-        int g_max_size = 1;
+        qsizetype g_max_size = 1;
 
         if ((options.models_to_print_roles & cmd::role_stt) &&
             (options.models_to_print_roles & cmd::role_tts)) {

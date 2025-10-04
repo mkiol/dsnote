@@ -528,8 +528,8 @@ pkg_search_module(pulse REQUIRED libpulse)
 list(APPEND deps_libs ${pulse_LIBRARIES})
 list(APPEND includes ${pulse_INCLUDE_DIRS})
 
-find_package(Qt6 COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick DBus LinguistTools REQUIRED)
-list(APPEND deps_libs Qt6::Core Qt6::Network Qt6::Multimedia Qt6::Gui Qt6::Quick Qt6::DBus Qt6::Xml)
+find_package(Qt6 COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick QuickControls2 DBus LinguistTools REQUIRED)
+list(APPEND deps_libs Qt6::Core Qt6::Network Qt6::Multimedia Qt6::Gui Qt6::Quick Qt6::QuickControls2 Qt6::DBus Qt6::Xml)
 
 if(WITH_DESKTOP)
     find_package(Qt6 COMPONENTS Widgets REQUIRED)

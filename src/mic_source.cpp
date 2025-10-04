@@ -8,6 +8,7 @@
 #include "mic_source.h"
 
 #include <QAudioFormat>
+#include <QMediaDevices>
 #include <QDebug>
 
 mic_source::mic_source(const QString& preferred_audio_input, QObject* parent)
@@ -19,16 +20,18 @@ mic_source::mic_source(const QString& preferred_audio_input, QObject* parent)
 
 mic_source::~mic_source() {
     qDebug() << "mic source dtor";
-    m_audio_input->suspend();
+    if (m_audio_source)
+        m_audio_source->stop();
 
     m_stopped = true;
 }
 
-bool mic_source::ok() const { return static_cast<bool>(m_audio_input); }
+bool mic_source::ok() const { return static_cast<bool>(m_audio_source); }
 
 void mic_source::stop() {
     qDebug() << "mic source stop";
-    m_audio_input->suspend();
+    if (m_audio_source)
+        m_audio_source->stop();
     m_stopped = true;
 }
 
@@ -44,27 +47,25 @@ static QAudioFormat audio_format() {
     QAudioFormat format;
     format.setSampleRate(16000);
     format.setChannelCount(1);
-    format.setSampleSize(16);
-    format.setCodec(QStringLiteral("audio/pcm"));
-    format.setByteOrder(QAudioFormat::LittleEndian);
-    format.setSampleType(QAudioFormat::SignedInt);
+    format.setSampleFormat(QAudioFormat::Int16);
 
     return format;
 }
 
 static bool has_audio_input(const QString& name) {
-    auto ad_list = QAudioDeviceInfo::availableDevices(QAudio::AudioInput);
-    return std::find_if(ad_list.cbegin(), ad_list.cend(),
-                        [&name](const auto& ad) {
-                            return ad.deviceName() == name;
-                        }) != ad_list.cend();
+    auto devices = QMediaDevices::audioInputs();
+    return std::find_if(devices.cbegin(), devices.cend(),
+                        [&name](const auto& device) {
+                            return device.description() == name;
+                        }) != devices.cend();
 }
 
-static QAudioDeviceInfo audio_input_info(const QString& name) {
-    auto ad_list = QAudioDeviceInfo::availableDevices(QAudio::AudioInput);
-    return *std::find_if(
-        ad_list.cbegin(), ad_list.cend(),
-        [&name](const auto& ad) { return ad.deviceName() == name; });
+static QAudioDevice audio_input_device(const QString& name) {
+    auto devices = QMediaDevices::audioInputs();
+    auto it = std::find_if(
+        devices.cbegin(), devices.cend(),
+        [&name](const auto& device) { return device.description() == name; });
+    return it != devices.cend() ? *it : QAudioDevice();
 }
 
 QStringList mic_source::audio_inputs() {
@@ -72,12 +73,12 @@ QStringList mic_source::audio_inputs() {
 
     auto format = audio_format();
 
-    auto ad_list = QAudioDeviceInfo::availableDevices(QAudio::AudioInput);
+    auto devices = QMediaDevices::audioInputs();
     qDebug() << "supported audio input devices:";
-    for (const auto& ad : ad_list) {
-        if (ad.isFormatSupported(format)) {
-            qDebug() << ad.deviceName();
-            list.push_back(ad.deviceName());
+    for (const auto& device : devices) {
+        if (device.isFormatSupported(format)) {
+            qDebug() << device.description();
+            list.push_back(device.description());
         }
     }
 
@@ -89,35 +90,38 @@ QStringList mic_source::audio_inputs() {
 void mic_source::init_audio(const QString& preferred_audio_input) {
     auto format = audio_format();
 
+    QAudioDevice device;
     auto input_name{preferred_audio_input};
+
     if (preferred_audio_input.isEmpty() ||
         !has_audio_input(preferred_audio_input)) {
-        auto info = QAudioDeviceInfo::defaultInputDevice();
-        if (info.isNull()) {
+        device = QMediaDevices::defaultAudioInput();
+        if (device.isNull()) {
             qWarning() << "no audio input";
             throw std::runtime_error("no audio input");
         }
 
-        input_name = info.deviceName();
+        input_name = device.description();
+    } else {
+        device = audio_input_device(input_name);
     }
 
-    auto input_info = audio_input_info(input_name);
-    if (!input_info.isFormatSupported(format)) {
+    if (!device.isFormatSupported(format)) {
         qWarning() << "format not supported for audio input:"
-                   << input_info.deviceName();
+                   << device.description();
         throw std::runtime_error("audio format is not supported");
     }
 
-    qDebug() << "using audio input:" << input_info.deviceName()
+    qDebug() << "using audio input:" << device.description()
              << "(preferred was " << preferred_audio_input << ")";
-    m_audio_input = std::make_unique<QAudioInput>(input_info, format);
+    m_audio_source = std::make_unique<QAudioSource>(device, format);
 
-    connect(m_audio_input.get(), &QAudioInput::stateChanged, this,
+    connect(m_audio_source.get(), &QAudioSource::stateChanged, this,
             &mic_source::handle_state_changed);
 }
 
 void mic_source::start() {
-    m_audio_device = m_audio_input->start();
+    m_audio_device = m_audio_source->start();
 
     m_timer.setInterval(200);  // 200 ms
     connect(&m_timer, &QTimer::timeout, this, &mic_source::handle_read_timeout);
@@ -130,25 +134,25 @@ void mic_source::handle_state_changed(QAudio::State new_state) {
     if (new_state == QAudio::State::StoppedState ||
         new_state == QAudio::State::SuspendedState || m_stopped) {
         qDebug() << "audio ended";
-        if (m_audio_input->error() == QAudio::NoError) m_eof = true;
+        if (m_audio_source->error() == QAudio::NoError) m_eof = true;
     }
 }
 
 void mic_source::handle_read_timeout() {
-    if (m_audio_input->error() != QAudio::NoError) {
-        qWarning() << "audio input error:" << m_audio_input->error();
+    if (m_audio_source->error() != QAudio::NoError) {
+        qWarning() << "audio input error:" << m_audio_source->error();
         m_timer.stop();
         emit error();
         return;
     }
 
-    if (m_stopped && m_audio_input->state() != QAudio::State::SuspendedState)
+    if (m_stopped && m_audio_source->state() != QAudio::State::SuspendedState)
         stop();
 
-    /*bool bytes_available = !m_eof || m_audio_input->bytesReady() > 0;
+    /*bool bytes_available = !m_eof || m_audio_source->bufferSize() > 0;
     qDebug() << "mic read timeout: b_avai=" << bytes_available
              << "eof=" << m_eof << "ended=" << m_ended << "sof=" << m_sof
-             << "b_ready=" << m_audio_input->bytesReady();*/
+             << "b_ready=" << m_audio_source->bufferSize();*/
 
     if (m_ended) {
         emit ended();
@@ -172,11 +176,11 @@ audio_source::audio_data mic_source::read_audio(char* buf, size_t max_size) {
     data.data = buf;
     data.sof = m_sof;
 
-    bool bytes_available = !m_eof || m_audio_input->bytesReady() > 0;
+    bool bytes_available = !m_eof || m_audio_device->bytesAvailable() > 0;
 
     /*qDebug() << "read_audio: b_avai=" << bytes_available << "eof=" << m_eof
              << "ended=" << m_ended << "sof=" << m_sof
-             << "b_ready=" << m_audio_input->bytesReady();*/
+             << "b_ready=" << m_audio_device->bytesAvailable();*/
 
     if (!bytes_available) {
         data.eof = m_eof;

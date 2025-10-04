@@ -22,7 +22,6 @@
 
 #ifdef USE_X11_FEATURES
 #include <QGuiApplication>
-#include <qpa/qplatformnativeinterface.h>
 
 struct xcb_connection_t;
 struct xkb_context;
