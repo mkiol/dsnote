@@ -1,0 +1,4 @@
+# Gitignore for SpeechNote
+build/
+build-test/
+external/

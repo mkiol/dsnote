@@ -103,9 +103,9 @@ dnf install rpmdevtools autoconf automake boost-devel cmake git \
     kf5-kdbusaddons-devel libarchive-devel libxdo-devel \
     libXinerama-devel libxkbcommon-x11-devel libXtst-devel \
     libtool meson openblas-devel patchelf pybind11-devel \
-    python3-devel python3-pybind11 qt5-linguist \
-    qt5-qtmultimedia-devel qt5-qtquickcontrols2-devel \
-    qt5-qtx11extras-devel rubberband-devel taglib-devel \
+    python3-devel python3-pybind11 qt6-linguist \
+    qt6-qtmultimedia-devel qt6-qtquickcontrols2-devel \
+    qt6-qtx11extras-devel rubberband-devel taglib-devel \
     vulkan-headers
 
 ./make_rpm.sh
@@ -113,11 +113,15 @@ dnf install rpmdevtools autoconf automake boost-devel cmake git \
 
 ### Ubuntu/Mint
 
-**WARNING**: Incomplete tutorial
-
 ```bash
-sudo apt-get install qt6-l10n-tools  # For Qt6LinguistTools
-sudo apt-get install qt6-multimedia-dev qt6-declarative-dev qt6-tools-dev
+sudo apt-get install \
+    cmake git \
+    libtool libtool-bin autoconf automake \
+    libboost-all-dev libxkbcommon-x11-dev \
+    libnoise-dev meson \
+    patchelf \
+    qt6-l10n-tools \
+    qt6-multimedia-dev qt6-declarative-dev qt6-tools-dev \
 ```
 
 Then go to the [direct build (advanced)](#direct-build-advanced) section.
