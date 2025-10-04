@@ -13,7 +13,7 @@ set(openblas_opts
     -DDYNAMIC_ARCH=ON
     -DBUILD_STATIC_LIBS=OFF
     -DBUILD_SHARED_LIBS=ON
-    -DCMAKE_C_FLAGS=-Wno-error=incompatible-pointer-types
+    -DCMAKE_C_FLAGS=-Wno-error=incompatible-pointer-types -Wno-unused-variable -Wno-unused-but-set-variable
 )
 
 if(arch_x8664)
