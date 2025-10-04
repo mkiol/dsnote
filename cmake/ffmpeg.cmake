@@ -22,6 +22,7 @@ ExternalProject_Add(nasm
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${nasm_source_url}"
     URL_HASH SHA256=${nasm_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> &&
         <BINARY_DIR>/configure --prefix=<INSTALL_DIR>
     BUILD_COMMAND ${MAKE}
@@ -35,6 +36,7 @@ ExternalProject_Add(lame
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${lame_source_url}"
     URL_HASH SHA256=${lame_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
         --bindir=<INSTALL_DIR>/bin --libdir=<INSTALL_DIR>/lib
         --enable-static=true --enable-shared=false
@@ -51,6 +53,7 @@ ExternalProject_Add(ogg
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${ogg_source_url}"
     URL_HASH SHA256=${ogg_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> &&
         autoreconf -vfi &&
         <BINARY_DIR>/configure --prefix=<INSTALL_DIR>
@@ -67,6 +70,7 @@ ExternalProject_Add(vorbis
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${vorbis_source_url}"
     URL_HASH SHA256=${vorbis_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
         --bindir=<INSTALL_DIR>/bin --libdir=<INSTALL_DIR>/lib
         --enable-static=true --enable-shared=false
@@ -82,6 +86,7 @@ ExternalProject_Add(opus
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${opus_source_url}"
     URL_HASH SHA256=${opus_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON
@@ -197,6 +202,7 @@ ExternalProject_Add(ffmpeg
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${ffmpeg_source_url}"
     URL_HASH SHA256=${ffmpeg_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/ffmpeg.patch ||
                     echo "patch cmd failed, likely already patched"

@@ -7,6 +7,7 @@ ExternalProject_Add(taglib
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${taglib_source_url}"
     URL_HASH SHA256=${taglib_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
         -DCMAKE_INSTALL_LIBDIR=lib
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON

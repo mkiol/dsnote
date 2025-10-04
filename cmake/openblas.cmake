@@ -32,6 +32,7 @@ ExternalProject_Add(openblas
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL ${openblas_source_url}
     URL_HASH SHA256=${openblas_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CMAKE_ARGS ${openblas_opts}
     BUILD_ALWAYS False
 )

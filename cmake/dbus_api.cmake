@@ -5,12 +5,9 @@ configure_file(${dbus_dir}/dsnote.xml.in ${dbus_dsnote_interface_file})
 find_package(Qt6 COMPONENTS DBus REQUIRED)
 
 unset(qdbusxml2cpp_bin CACHE)
-find_program(qdbusxml2cpp_bin qdbusxml2cpp)
-if(${qdbusxml2cpp_bin} MATCHES "-NOTFOUND$")
-   find_program(qdbusxml2cpp_bin qdbusxml2cpp-qt6)
-   if(${qdbusxml2cpp_bin} MATCHES "-NOTFOUND$")
-      message(FATAL_ERROR "qdbusxml2cpp not found but it is required")
-   endif()
+find_program(qdbusxml2cpp_bin NAMES qdbusxml2cpp qdbusxml2cpp-qt6 HINTS ${Qt6_DIR}/../../../bin /usr/lib/qt6/bin)
+if(NOT qdbusxml2cpp_bin)
+   message(FATAL_ERROR "qdbusxml2cpp not found but it is required")
 endif()
 
 add_custom_command(

@@ -7,6 +7,7 @@ ExternalProject_Add(qhotkey
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL ${qhotkey_source_url}
     URL_HASH SHA256=${qhotkey_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/qhotkey.patch ||
                     echo "patch cmd failed, likely already patched"
