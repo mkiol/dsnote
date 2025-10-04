@@ -14,33 +14,27 @@ LDIR="$(
 DS_DIR="dsnote_${VERSION}-${REV}+${DIST}_${ARCH}"
 DS_DEB="${DS_DIR}/DEBIAN"
 DS_DOC="${DS_DIR}/usr/share/doc/dsnote"
-SOURCEDIR="dsnote-${VERSION}"
-SOURCEFILE="v${VERSION}.tar.gz"
-SOURCEURL="https://github.com/mkiol/dsnote/archive/refs/tags/${SOURCEFILE}"
-SHA256SUM="da96b7f95a85d14e0e96d4f2ba5c00cde4c54b74d165bd50b7ebefb7bcbf814d"
+SOURCEDIR=".."
 
-[ -f "$SOURCEFILE" ] || wget -c -q --show-progress "$SOURCEURL"
-echo "${SHA256SUM}  ${SOURCEFILE}" | sha256sum --check
-
-[ -d "$SOURCEDIR" ] || tar xf "$SOURCEFILE"
+# Build from current repository source
 cd "$SOURCEDIR"
 
 mkdir -p build && cd build
 
 CMAKE="-DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON \
         -DWITH_PY=ON \
-        -DBUILD_LIBARCHIVE=OFF \
-        -DBUILD_FMT=OFF \
-        -DBUILD_CATCH2=OFF \
-        -DBUILD_OPENBLAS=OFF \
-        -DBUILD_XZ=OFF \
-        -DBUILD_PYBIND11=OFF \
-        -DBUILD_RUBBERBAND=OFF \
+        -DBUILD_LIBARCHIVE=ON \
+        -DBUILD_FMT=ON \
+        -DBUILD_CATCH2=ON \
+        -DBUILD_OPENBLAS=ON \
+        -DBUILD_XZ=ON \
+        -DBUILD_PYBIND11=ON \
+        -DBUILD_RUBBERBAND=ON \
         -DBUILD_FFMPEG=ON \
-        -DBUILD_TAGLIB=OFF \
+        -DBUILD_TAGLIB=ON \
         -DBUILD_VOSK=OFF \
         -DBUILD_WHISPERCPP_VULKAN=ON \
-        -DBUILD_QQC2_BREEZE_STYLE=ON \
+        -DBUILD_QQC2_BREEZE_STYLE=OFF \
         -DDOWNLOAD_VOSK=ON \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -Wno-dev"
@@ -66,6 +60,20 @@ mkdir -p "$DS_DEB"
 
 make DESTDIR="$DS_DIR" install
 
+# Create wrapper script to activate venv
+mkdir -p "$DS_DIR/usr/bin"
+mv "$DS_DIR/usr/bin/dsnote" "$DS_DIR/usr/bin/dsnote.bin"
+cat > "$DS_DIR/usr/bin/dsnote" << 'EOF'
+#!/bin/bash
+VENV_DIR="/opt/dsnote/venv"
+if [ -d "$VENV_DIR" ]; then
+    export PYTHONPATH="$VENV_DIR/lib/python3.12/site-packages:$PYTHONPATH"
+    export PATH="$VENV_DIR/bin:$PATH"
+fi
+exec /usr/bin/dsnote.bin "$@"
+EOF
+chmod +x "$DS_DIR/usr/bin/dsnote"
+
 cp -av "${LDIR}/debian/control" "$DS_DEB"
 cp -av "${LDIR}/debian/postinst" "$DS_DEB"
 
@@ -78,4 +86,4 @@ cp -av "${LDIR}/debian/copyright" "$DS_DOC"
 
 dpkg-deb --root-owner-group --build "$DS_DIR"
 
-mv "${DS_DIR}.deb" ../../
+mv "${DS_DIR}.deb" "${LDIR}/"
