@@ -7,6 +7,7 @@ ExternalProject_Add(html2md
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL ${html2md_source_url}
     URL_HASH SHA256=${html2md_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/html2md.patch ||
                     echo "patch cmd failed, likely already patched"

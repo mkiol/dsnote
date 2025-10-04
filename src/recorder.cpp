@@ -8,6 +8,7 @@
 #include "recorder.hpp"
 
 #include <QAudioFormat>
+#include <QMediaDevices>
 #include <QDebug>
 #include <QFileInfo>
 #include <chrono>
@@ -17,18 +18,19 @@
 #include "settings.h"
 
 static bool has_audio_input(const QString& name) {
-    auto ad_list = QAudioDeviceInfo::availableDevices(QAudio::AudioInput);
-    return std::find_if(ad_list.cbegin(), ad_list.cend(),
-                        [&name](const auto& ad) {
-                            return ad.deviceName() == name;
-                        }) != ad_list.cend();
+    auto devices = QMediaDevices::audioInputs();
+    return std::find_if(devices.cbegin(), devices.cend(),
+                        [&name](const auto& device) {
+                            return device.description() == name;
+                        }) != devices.cend();
 }
 
-static QAudioDeviceInfo audio_input_info(const QString& name) {
-    auto ad_list = QAudioDeviceInfo::availableDevices(QAudio::AudioInput);
-    return *std::find_if(
-        ad_list.cbegin(), ad_list.cend(),
-        [&name](const auto& ad) { return ad.deviceName() == name; });
+static QAudioDevice audio_input_device(const QString& name) {
+    auto devices = QMediaDevices::audioInputs();
+    auto it = std::find_if(
+        devices.cbegin(), devices.cend(),
+        [&name](const auto& device) { return device.description() == name; });
+    return it != devices.cend() ? *it : QAudioDevice();
 }
 
 recorder::recorder(QString wav_file_path, QObject* parent)
@@ -48,7 +50,7 @@ recorder::~recorder() {
     cancel();
     if (m_processing_thread.joinable()) m_processing_thread.join();
 
-    if (m_audio_input) m_audio_input->stop();
+    if (m_audio_source) m_audio_source->stop();
 }
 
 void recorder::cancel() {
@@ -70,37 +72,35 @@ void recorder::init() {
 
         auto format = make_audio_format();
 
+        QAudioDevice device;
         auto input_name = settings::instance()->audio_input_device();
         if (input_name.isEmpty() || !has_audio_input(input_name)) {
-            auto info = QAudioDeviceInfo::defaultInputDevice();
-            if (info.isNull()) {
+            device = QMediaDevices::defaultAudioInput();
+            if (device.isNull()) {
                 qWarning() << "no audio input";
                 throw std::runtime_error("no audio input");
             }
 
-            input_name = info.deviceName();
+            input_name = device.description();
+        } else {
+            device = audio_input_device(input_name);
         }
 
-        auto input_info = audio_input_info(input_name);
-        if (!input_info.isFormatSupported(format)) {
+        if (!device.isFormatSupported(format)) {
             qWarning() << "format not supported for audio input:"
-                       << input_info.deviceName();
+                       << device.description();
             throw std::runtime_error("audio format is not supported");
         }
 
-        qDebug() << "using audio input:" << input_info.deviceName();
-        m_audio_input = std::make_unique<QAudioInput>(input_info, format);
+        qDebug() << "using audio input:" << device.description();
+        m_audio_source = std::make_unique<QAudioSource>(device, format);
 
-        connect(m_audio_input.get(), &QAudioInput::stateChanged, this,
+        connect(m_audio_source.get(), &QAudioSource::stateChanged, this,
                 [this](QAudio::State new_state) {
                     qDebug() << "recorder state:" << new_state;
 
                     emit recording_changed();
                 });
-        connect(m_audio_input.get(), &QAudioInput::notify, this, [this]() {
-            m_duration = m_audio_input->elapsedUSecs() / 1000000;
-            emit duration_changed();
-        });
     }
 }
 
@@ -108,10 +108,7 @@ QAudioFormat recorder::make_audio_format() {
     QAudioFormat format;
     format.setSampleRate(m_sample_rate);
     format.setChannelCount(m_num_channels);
-    format.setSampleSize(16);
-    format.setCodec(QStringLiteral("audio/pcm"));
-    format.setByteOrder(QAudioFormat::LittleEndian);
-    format.setSampleType(QAudioFormat::SignedInt);
+    format.setSampleFormat(QAudioFormat::Int16);
 
     return format;
 }
@@ -148,7 +145,7 @@ static void write_wav_header(int sample_rate, int sample_width, int channels,
 }
 
 void recorder::start() {
-    if (!m_audio_input) return;
+    if (!m_audio_source) return;
 
     qDebug() << "recorder start";
 
@@ -161,7 +158,7 @@ void recorder::start() {
     if (m_audio_device.exists()) m_audio_device.remove();
     m_audio_device.open(QIODevice::OpenModeFlag::ReadWrite);
     m_audio_device.seek(sizeof(wav_header));
-    m_audio_input->start(&m_audio_device);
+    m_audio_source->start(&m_audio_device);
 }
 
 void recorder::denoise(int sample_rate) {
@@ -225,11 +222,11 @@ void recorder::denoise(int sample_rate) {
 }
 
 void recorder::stop() {
-    if (!m_audio_input) return;
+    if (!m_audio_source) return;
 
     qDebug() << "recorder stop";
 
-    m_audio_input->stop();
+    m_audio_source->stop();
 
     unsigned long pos = m_audio_device.pos();
 
@@ -294,7 +291,7 @@ void recorder::process_from_input_file() {
 void recorder::process() {
     if (m_processing_thread.joinable()) m_processing_thread.join();
 
-    if (m_audio_input) m_audio_input->reset();
+    if (m_audio_source) m_audio_source->reset();
 
     m_cancel_requested = false;
 
@@ -322,8 +319,8 @@ void recorder::process() {
 }
 
 bool recorder::recording() const {
-    return m_audio_input &&
-           m_audio_input->state() == QAudio::State::ActiveState;
+    return m_audio_source &&
+           m_audio_source->state() == QAudio::State::ActiveState;
 }
 
 bool recorder::processing() const { return m_processing; }

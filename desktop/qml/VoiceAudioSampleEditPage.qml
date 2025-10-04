@@ -5,9 +5,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import org.mkiol.dsnote.Settings 1.0
 import org.mkiol.dsnote.Dsnote 1.0

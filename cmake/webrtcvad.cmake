@@ -7,6 +7,7 @@ ExternalProject_Add(webrtcvad
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${webrtcvad_source_url}"
     URL_MD5 "${webrtcvad_checksum}"
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/webrtcvad.patch ||
                     echo "patch cmd failed, likely already patched"

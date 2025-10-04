@@ -7,6 +7,7 @@ ExternalProject_Add(qhotkey
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL ${qhotkey_source_url}
     URL_HASH SHA256=${qhotkey_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/qhotkey.patch ||
                     echo "patch cmd failed, likely already patched"
@@ -15,10 +16,12 @@ ExternalProject_Add(qhotkey
         -DCMAKE_INSTALL_LIBDIR=lib
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+        -DQT_DEFAULT_MAJOR_VERSION=6
     BUILD_ALWAYS False
 )
 
-find_package(Qt5 COMPONENTS X11Extras REQUIRED)
+# Qt6 removed X11Extras - functionality moved to Qt6::Gui
+# No additional Qt library needed for X11 support
 
-list(APPEND deps_libs Qt5::X11Extras "${external_lib_dir}/libqhotkey.a")
+list(APPEND deps_libs "${external_lib_dir}/libqhotkey.a")
 list(APPEND deps qhotkey)

@@ -103,13 +103,37 @@ dnf install rpmdevtools autoconf automake boost-devel cmake git \
     kf5-kdbusaddons-devel libarchive-devel libxdo-devel \
     libXinerama-devel libxkbcommon-x11-devel libXtst-devel \
     libtool meson openblas-devel patchelf pybind11-devel \
-    python3-devel python3-pybind11 qt5-linguist \
-    qt5-qtmultimedia-devel qt5-qtquickcontrols2-devel \
-    qt5-qtx11extras-devel rubberband-devel taglib-devel \
+    python3-devel python3-pybind11 qt6-linguist \
+    qt6-qtmultimedia-devel qt6-qtquickcontrols2-devel \
+    qt6-qtx11extras-devel rubberband-devel taglib-devel \
     vulkan-headers
 
 ./make_rpm.sh
 ```
+
+### Ubuntu/Mint
+
+```bash
+sudo apt-get install \
+    cmake git \
+    libtool libtool-bin autoconf automake \
+    libboost-all-dev libxkbcommon-x11-dev \
+    libnoise-dev meson \
+    patchelf \
+    qt6-l10n-tools qt6-base-dev-tools \
+    qt6-multimedia-dev qt6-declarative-dev qt6-tools-dev \
+    catch2
+```
+
+**Important**: Qt6 tools need to be added to your PATH:
+
+```bash
+export PATH="/usr/lib/qt6/bin:$PATH"
+```
+
+Add this to your `~/.bashrc` or `~/.zshrc` to make it permanent.
+
+Then go to the [direct build (advanced)](#direct-build-advanced) section.
 
 #### Flatpak (Recommended for Development)
 
@@ -204,11 +228,21 @@ Speech Note uses `.clang-format` for C++ code formatting (based on Google style)
 Speech Note includes unit tests in the `tests/` directory:
 
 ```bash
-cd build
-cmake ../ -DCMAKE_BUILD_TYPE=Debug -DWITH_TESTS=ON -DWITH_DESKTOP=ON
+# Ensure Qt6 tools are in PATH
+export PATH="/usr/lib/qt6/bin:$PATH"
+
+# Configure build with tests enabled
+mkdir -p build && cd build
+cmake ../ -DCMAKE_BUILD_TYPE=Debug -DWITH_TESTS=ON -DWITH_DESKTOP=ON -DBUILD_CATCH2=OFF
+
+# Build the project
 make
+
+# Run tests
 ctest --output-on-failure
 ```
+
+**Note**: We use `-DBUILD_CATCH2=OFF` to use the system-installed Catch2 package instead of downloading it.
 
 ### Writing Tests
 

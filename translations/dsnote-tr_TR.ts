@@ -78,19 +78,19 @@
 <context>
     <name>AddTextDialog</name>
     <message>
-        <location filename="../sfos/qml/AddTextDialog.qml" line="33"/>
+        <location filename="../sfos/qml/AddTextDialog.qml" line="35"/>
         <location filename="../desktop/qml/AddTextDialog.qml" line="34"/>
         <source>Add text to the current note or replace it?</source>
         <translation>Mevcut nota metin ekle veya değiştir?</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/AddTextDialog.qml" line="41"/>
+        <location filename="../sfos/qml/AddTextDialog.qml" line="43"/>
         <location filename="../desktop/qml/AddTextDialog.qml" line="42"/>
         <source>Add</source>
         <translation>Ekle</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/AddTextDialog.qml" line="49"/>
+        <location filename="../sfos/qml/AddTextDialog.qml" line="51"/>
         <location filename="../desktop/qml/AddTextDialog.qml" line="50"/>
         <source>Replace</source>
         <translation>Değiştir</translation>
@@ -145,127 +145,146 @@
     </message>
     <message>
         <location filename="../sfos/qml/ChangelogPage.qml" line="32"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="77"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="111"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="128"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="175"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="48"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="69"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="114"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="148"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="165"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="212"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="17"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="116"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="132"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="222"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="248"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="320"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="414"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="514"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="610"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="627"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="681"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="717"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="745"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="760"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="785"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="40"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="61"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="90"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="189"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="205"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="295"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="321"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="393"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="487"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="587"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="683"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="700"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="754"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="790"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="818"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="833"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="858"/>
         <source>Version %1</source>
         <translation>Sürüm %1</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="70"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="102"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="119"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="165"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="213"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="85"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="124"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="186"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="239"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="300"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="382"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="488"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="540"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="631"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="721"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="52"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="107"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="139"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="156"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="202"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="250"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="33"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="65"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="158"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="197"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="259"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="312"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="373"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="455"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="561"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="613"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="704"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="794"/>
         <source>Translator</source>
         <translation>Çevirmen</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="57"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="98"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="159"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="201"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="55"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="181"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="289"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="361"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="465"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="567"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="654"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="695"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="735"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="749"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="769"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="789"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="36"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="94"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="135"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="196"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="238"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="29"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="44"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="79"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="128"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="254"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="362"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="434"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="538"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="640"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="727"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="768"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="808"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="822"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="842"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="862"/>
         <source>Text to Speech</source>
         <translation>Metinden Konuşmaya</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="81"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="118"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="21"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="120"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="136"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="94"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="193"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="209"/>
         <source>General</source>
         <translation>Genel</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="89"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="192"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="234"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="392"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="518"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="162"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="265"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="307"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="465"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="591"/>
         <source>Accessibility</source>
         <translation>Erişilebilirlik</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="40"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="90"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="142"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="196"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="32"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="163"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="259"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="352"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="442"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="544"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="614"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="635"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="685"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="753"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="776"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="793"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="41"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="77"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="127"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="179"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="233"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="25"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="50"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="75"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="105"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="236"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="332"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="425"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="515"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="617"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="687"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="708"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="758"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="826"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="849"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="866"/>
         <source>Speech to Text</source>
         <translation>Konuşmadan Metne</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="499"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="592"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="572"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="665"/>
         <source>Other</source>
         <translation>Diğer</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="36"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="86"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="115"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="132"/>
-        <location filename="../sfos/qml/ChangelogPage.qml" line="179"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="26"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="147"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="230"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="252"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="324"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="429"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="529"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="665"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="710"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="729"/>
-        <location filename="../desktop/qml/ChangelogPage.qml" line="764"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="62"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="73"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="123"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="152"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="169"/>
+        <location filename="../sfos/qml/ChangelogPage.qml" line="216"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="83"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="99"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="220"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="303"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="325"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="397"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="502"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="602"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="738"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="783"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="802"/>
+        <location filename="../desktop/qml/ChangelogPage.qml" line="837"/>
         <source>User Interface</source>
         <translation>Kullanıcı Arayüzü</translation>
     </message>
@@ -1658,34 +1677,28 @@
 <context>
     <name>PackItem</name>
     <message>
-        <location filename="../sfos/qml/PackItem.qml" line="39"/>
         <source>Set as default for this language</source>
-        <translation>Bu dil için varsayılan olarak ayarla</translation>
+        <translation type="vanished">Bu dil için varsayılan olarak ayarla</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/PackItem.qml" line="49"/>
         <source>Enable</source>
-        <translation>Etkinleştir</translation>
+        <translation type="vanished">Etkinleştir</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/PackItem.qml" line="49"/>
         <source>Download</source>
-        <translation>İndir</translation>
+        <translation type="vanished">İndir</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/PackItem.qml" line="55"/>
         <source>Disable</source>
-        <translation>Devre Dışı Bırak</translation>
+        <translation type="vanished">Devre Dışı Bırak</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/PackItem.qml" line="55"/>
         <source>Delete</source>
-        <translation>Sil</translation>
+        <translation type="vanished">Sil</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/PackItem.qml" line="61"/>
         <source>Cancel</source>
-        <translation>İptal Et</translation>
+        <translation type="vanished">İptal Et</translation>
     </message>
 </context>
 <context>
@@ -2922,19 +2935,19 @@
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="147"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="396"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="419"/>
         <source>Unable to connect to %1 daemon.</source>
         <translation>%1 daemon&apos;a bağlanılamıyor.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="149"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="398"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="421"/>
         <source>For %1 action to work, %2 daemon must be installed and running.</source>
         <translation>%1 eyleminin çalışması için, %2 daemon&apos;unun yüklü ve çalışıyor olması gerekir.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="152"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="401"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="424"/>
         <source>Also make sure that the Flatpak application has permission to access %1 daemon socket file.</source>
         <translation>Ayrıca Flatpak uygulamasının %1 daemon soket dosyasına erişim iznine sahip olduğundan emin olun.</translation>
     </message>
@@ -3113,16 +3126,16 @@
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="298"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="305"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="366"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="373"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="381"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="385"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="389"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="396"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="404"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="408"/>
         <source>Leave blank to use the default value.</source>
         <translation>Varsayılan değeri kullanmak için boş bırakın.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="300"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="368"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="391"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="168"/>
         <source>Make sure that the Flatpak application has permissions to access the directory.</source>
         <translation>Flatpak uygulamasının dizine erişim izinlerine sahip olduğundan emin olun.</translation>
@@ -3133,71 +3146,81 @@
         <translation>Bu seçenek, Python kitaplıklarını yönetmek için %1 modülünü kullanıyorsanız faydalı olabilir.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="318"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="320"/>
+        <source>Disable detection of PyTorch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="328"/>
+        <source>Disable detection of CTranslate2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="341"/>
         <source>Keystroke sending method</source>
         <translation>Tuş basma yöntemi</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="319"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="342"/>
         <source>Simulated keystroke sending method used in %1.</source>
         <translation>%1&apos;de kullanılan simüle edilmiş tuş basma gönderme yöntemi.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="329"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="352"/>
         <source>Legacy</source>
         <translation>Eski</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="349"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="372"/>
         <source>Keystroke delay</source>
         <translation>Tuş basması gecikmesi</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="350"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="373"/>
         <source>The delay between simulated keystrokes used in %1.</source>
         <translation>%1&apos;de kullanılan simüle edilmiş tuş basmaları arasındaki gecikme.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="364"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="387"/>
         <source>Compose file</source>
         <translation>Oluşturma dosyası</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="365"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="388"/>
         <source>X11 compose file used in %1.</source>
         <translation>%1&apos;de kullanılan X11 oluşturma dosyası.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="379"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="402"/>
         <source>Keyboard layout</source>
         <translation>Klavye düzeni</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="380"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="403"/>
         <source>Keyboard layout used in %1.</source>
         <translation>%1&apos;de kullanılan klavye düzeni.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="407"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="430"/>
         <source>Other options</source>
         <translation>Diğer seçenekler</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="414"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="437"/>
         <source>Global keyboard shortcuts method</source>
         <translation>Genel klavye kısayolları yöntemi</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="415"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="438"/>
         <source>Method used to set global keyboard shortcuts.</source>
         <translation>Genel klavye kısayollarını ayarlamak için kullanılan yöntem.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="311"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="320"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="350"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="365"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="380"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="334"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="343"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="373"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="388"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="403"/>
         <source>Insert into active window</source>
         <translation>Etkin pencereye ekle</translation>
     </message>
@@ -4505,550 +4528,550 @@
 <context>
     <name>dsnote_app</name>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4296"/>
+        <location filename="../src/dsnote_app.cpp" line="4301"/>
         <source>Audio</source>
         <translation>Ses</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4299"/>
+        <location filename="../src/dsnote_app.cpp" line="4304"/>
         <source>Video</source>
         <translation>Video</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4302"/>
+        <location filename="../src/dsnote_app.cpp" line="4307"/>
         <source>Subtitles</source>
         <translation>Altyazılar</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4311"/>
+        <location filename="../src/dsnote_app.cpp" line="4316"/>
         <source>Unnamed stream</source>
         <translation>Adsız akış</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4532"/>
+        <location filename="../src/dsnote_app.cpp" line="4537"/>
         <source>Show</source>
         <translation>Göster</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4718"/>
-        <location filename="../src/dsnote_app.cpp" line="4765"/>
+        <location filename="../src/dsnote_app.cpp" line="4723"/>
+        <location filename="../src/dsnote_app.cpp" line="4770"/>
         <source>Global keyboard shortcuts</source>
         <translation>Global klavye kısayolları</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="4703"/>
-        <location filename="../src/dsnote_app.cpp" line="4769"/>
+        <location filename="../src/dsnote_app.cpp" line="4708"/>
+        <location filename="../src/dsnote_app.cpp" line="4774"/>
         <source>Insert text to active window</source>
         <translation>Etkin pencereye metin ekle</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5289"/>
+        <location filename="../src/dsnote_app.cpp" line="5297"/>
         <source>Voice</source>
         <translation>Ses</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5577"/>
-        <location filename="../src/dsnote_app.cpp" line="5602"/>
+        <location filename="../src/dsnote_app.cpp" line="5586"/>
+        <location filename="../src/dsnote_app.cpp" line="5611"/>
         <source>Auto</source>
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5661"/>
+        <location filename="../src/dsnote_app.cpp" line="5670"/>
         <source>English</source>
         <translation>İngilizce</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5662"/>
+        <location filename="../src/dsnote_app.cpp" line="5671"/>
         <source>Chinese</source>
         <translation>Çince</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5663"/>
+        <location filename="../src/dsnote_app.cpp" line="5672"/>
         <source>German</source>
         <translation>Almanca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5664"/>
+        <location filename="../src/dsnote_app.cpp" line="5673"/>
         <source>Spanish</source>
         <translation>İspanyolca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5665"/>
+        <location filename="../src/dsnote_app.cpp" line="5674"/>
         <source>Russian</source>
         <translation>Rusça</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5666"/>
+        <location filename="../src/dsnote_app.cpp" line="5675"/>
         <source>Korean</source>
         <translation>Korece</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5667"/>
+        <location filename="../src/dsnote_app.cpp" line="5676"/>
         <source>French</source>
         <translation>Fransızca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5668"/>
+        <location filename="../src/dsnote_app.cpp" line="5677"/>
         <source>Japanese</source>
         <translation>Japonca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5669"/>
+        <location filename="../src/dsnote_app.cpp" line="5678"/>
         <source>Portuguese</source>
         <translation>Portekizce</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5670"/>
+        <location filename="../src/dsnote_app.cpp" line="5679"/>
         <source>Turkish</source>
         <translation>Türkçe</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5671"/>
+        <location filename="../src/dsnote_app.cpp" line="5680"/>
         <source>Polish</source>
         <translation>Lehçe</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5672"/>
+        <location filename="../src/dsnote_app.cpp" line="5681"/>
         <source>Catalan</source>
         <translation>Katalanca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5673"/>
+        <location filename="../src/dsnote_app.cpp" line="5682"/>
         <source>Dutch</source>
         <translation>Hollandaca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5674"/>
+        <location filename="../src/dsnote_app.cpp" line="5683"/>
         <source>Arabic</source>
         <translation>Arapça</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5675"/>
+        <location filename="../src/dsnote_app.cpp" line="5684"/>
         <source>Swedish</source>
         <translation>İsveççe</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5676"/>
+        <location filename="../src/dsnote_app.cpp" line="5685"/>
         <source>Italian</source>
         <translation>İtalyanca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5677"/>
+        <location filename="../src/dsnote_app.cpp" line="5686"/>
         <source>Indonesian</source>
         <translation>Endonezce</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5678"/>
+        <location filename="../src/dsnote_app.cpp" line="5687"/>
         <source>Hindi</source>
         <translation>Hintçe</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5679"/>
+        <location filename="../src/dsnote_app.cpp" line="5688"/>
         <source>Finnish</source>
         <translation>Fince</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5680"/>
+        <location filename="../src/dsnote_app.cpp" line="5689"/>
         <source>Vietnamese</source>
         <translation>Vietnamca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5681"/>
+        <location filename="../src/dsnote_app.cpp" line="5690"/>
         <source>Hebrew</source>
         <translation>İbranice</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5682"/>
+        <location filename="../src/dsnote_app.cpp" line="5691"/>
         <source>Ukrainian</source>
         <translation>Ukraynaca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5683"/>
+        <location filename="../src/dsnote_app.cpp" line="5692"/>
         <source>Greek</source>
         <translation>Yunanca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5684"/>
+        <location filename="../src/dsnote_app.cpp" line="5693"/>
         <source>Malay</source>
         <translation>Malayca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5685"/>
+        <location filename="../src/dsnote_app.cpp" line="5694"/>
         <source>Czech</source>
         <translation>Çekçe</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5686"/>
+        <location filename="../src/dsnote_app.cpp" line="5695"/>
         <source>Romanian</source>
         <translation>Rumence</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5687"/>
+        <location filename="../src/dsnote_app.cpp" line="5696"/>
         <source>Danish</source>
         <translation>Danca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5688"/>
+        <location filename="../src/dsnote_app.cpp" line="5697"/>
         <source>Hungarian</source>
         <translation>Macarca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5689"/>
+        <location filename="../src/dsnote_app.cpp" line="5698"/>
         <source>Tamil</source>
         <translation>Tamilce</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5690"/>
+        <location filename="../src/dsnote_app.cpp" line="5699"/>
         <source>Norwegian</source>
         <translation>Norveççe</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5691"/>
+        <location filename="../src/dsnote_app.cpp" line="5700"/>
         <source>Thai</source>
         <translation>Tayca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5692"/>
+        <location filename="../src/dsnote_app.cpp" line="5701"/>
         <source>Urdu</source>
         <translation>Urduca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5693"/>
+        <location filename="../src/dsnote_app.cpp" line="5702"/>
         <source>Croatian</source>
         <translation>Hırvatça</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5694"/>
+        <location filename="../src/dsnote_app.cpp" line="5703"/>
         <source>Bulgarian</source>
         <translation>Bulgarca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5695"/>
+        <location filename="../src/dsnote_app.cpp" line="5704"/>
         <source>Lithuanian</source>
         <translation>Litvanyaca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5696"/>
+        <location filename="../src/dsnote_app.cpp" line="5705"/>
         <source>Latin</source>
         <translation>Latince</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5697"/>
+        <location filename="../src/dsnote_app.cpp" line="5706"/>
         <source>Maori</source>
         <translation>Maorice</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5698"/>
+        <location filename="../src/dsnote_app.cpp" line="5707"/>
         <source>Malayalam</source>
         <translation>Malayalamca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5699"/>
+        <location filename="../src/dsnote_app.cpp" line="5708"/>
         <source>Welsh</source>
         <translation>Galce</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5700"/>
+        <location filename="../src/dsnote_app.cpp" line="5709"/>
         <source>Slovak</source>
         <translation>Slovakça</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5701"/>
+        <location filename="../src/dsnote_app.cpp" line="5710"/>
         <source>Telugu</source>
         <translation>Teluguca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5702"/>
+        <location filename="../src/dsnote_app.cpp" line="5711"/>
         <source>Persian</source>
         <translation>Farsça</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5703"/>
+        <location filename="../src/dsnote_app.cpp" line="5712"/>
         <source>Latvian</source>
         <translation>Letonca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5704"/>
+        <location filename="../src/dsnote_app.cpp" line="5713"/>
         <source>Bengali</source>
         <translation>Bengalce</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5705"/>
+        <location filename="../src/dsnote_app.cpp" line="5714"/>
         <source>Serbian</source>
         <translation>Sırpça</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5706"/>
+        <location filename="../src/dsnote_app.cpp" line="5715"/>
         <source>Azerbaijani</source>
         <translation>Azerbaycanca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5707"/>
+        <location filename="../src/dsnote_app.cpp" line="5716"/>
         <source>Slovenian</source>
         <translation>Slovence</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5708"/>
+        <location filename="../src/dsnote_app.cpp" line="5717"/>
         <source>Kannada</source>
         <translation>Kannada dili</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5709"/>
+        <location filename="../src/dsnote_app.cpp" line="5718"/>
         <source>Estonian</source>
         <translation>Estonca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5710"/>
+        <location filename="../src/dsnote_app.cpp" line="5719"/>
         <source>Macedonian</source>
         <translation>Makedonca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5711"/>
+        <location filename="../src/dsnote_app.cpp" line="5720"/>
         <source>Breton</source>
         <translation>Bretonca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5712"/>
+        <location filename="../src/dsnote_app.cpp" line="5721"/>
         <source>Basque</source>
         <translation>Baskça</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5713"/>
+        <location filename="../src/dsnote_app.cpp" line="5722"/>
         <source>Icelandic</source>
         <translation>İzlandaca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5714"/>
+        <location filename="../src/dsnote_app.cpp" line="5723"/>
         <source>Armenian</source>
         <translation>Ermenice</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5715"/>
+        <location filename="../src/dsnote_app.cpp" line="5724"/>
         <source>Nepali</source>
         <translation>Nepalce</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5716"/>
+        <location filename="../src/dsnote_app.cpp" line="5725"/>
         <source>Mongolian</source>
         <translation>Moğolca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5717"/>
+        <location filename="../src/dsnote_app.cpp" line="5726"/>
         <source>Bosnian</source>
         <translation>Boşnakça</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5718"/>
+        <location filename="../src/dsnote_app.cpp" line="5727"/>
         <source>Kazakh</source>
         <translation>Kazakça</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5719"/>
+        <location filename="../src/dsnote_app.cpp" line="5728"/>
         <source>Albanian</source>
         <translation>Arnavutça</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5720"/>
+        <location filename="../src/dsnote_app.cpp" line="5729"/>
         <source>Swahili</source>
         <translation>Svahilice</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5721"/>
+        <location filename="../src/dsnote_app.cpp" line="5730"/>
         <source>Galician</source>
         <translation>Galiçyaca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5722"/>
+        <location filename="../src/dsnote_app.cpp" line="5731"/>
         <source>Marathi</source>
         <translation>Marathi dili</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5723"/>
+        <location filename="../src/dsnote_app.cpp" line="5732"/>
         <source>Punjabi</source>
         <translation>Pencapça</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5724"/>
+        <location filename="../src/dsnote_app.cpp" line="5733"/>
         <source>Sinhala</source>
         <translation>Seylanca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5725"/>
+        <location filename="../src/dsnote_app.cpp" line="5734"/>
         <source>Khmer</source>
         <translation>Kmerce</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5726"/>
+        <location filename="../src/dsnote_app.cpp" line="5735"/>
         <source>Shona</source>
         <translation>Şonaca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5727"/>
+        <location filename="../src/dsnote_app.cpp" line="5736"/>
         <source>Yoruba</source>
         <translation>Yorubaca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5728"/>
+        <location filename="../src/dsnote_app.cpp" line="5737"/>
         <source>Somali</source>
         <translation>Somalice</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5729"/>
+        <location filename="../src/dsnote_app.cpp" line="5738"/>
         <source>Afrikaans</source>
         <translation>Afrikaanca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5730"/>
+        <location filename="../src/dsnote_app.cpp" line="5739"/>
         <source>Occitan</source>
         <translation>Oksitanca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5731"/>
+        <location filename="../src/dsnote_app.cpp" line="5740"/>
         <source>Georgian</source>
         <translation>Gürcüce</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5732"/>
+        <location filename="../src/dsnote_app.cpp" line="5741"/>
         <source>Belarusian</source>
         <translation>Beyaz Rusça</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5733"/>
+        <location filename="../src/dsnote_app.cpp" line="5742"/>
         <source>Tajik</source>
         <translation>Tacikçe</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5734"/>
+        <location filename="../src/dsnote_app.cpp" line="5743"/>
         <source>Sindhi</source>
         <translation>Sindhi dili</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5735"/>
+        <location filename="../src/dsnote_app.cpp" line="5744"/>
         <source>Gujarati</source>
         <translation>Gujarati</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5736"/>
+        <location filename="../src/dsnote_app.cpp" line="5745"/>
         <source>Amharic</source>
         <translation>Amharca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5737"/>
+        <location filename="../src/dsnote_app.cpp" line="5746"/>
         <source>Yiddish</source>
         <translation>Yidiş</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5738"/>
+        <location filename="../src/dsnote_app.cpp" line="5747"/>
         <source>Lao</source>
         <translation>Lao</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5739"/>
+        <location filename="../src/dsnote_app.cpp" line="5748"/>
         <source>Uzbek</source>
         <translation>Özbekçe</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5740"/>
+        <location filename="../src/dsnote_app.cpp" line="5749"/>
         <source>Faroese</source>
         <translation>Faroece</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5741"/>
+        <location filename="../src/dsnote_app.cpp" line="5750"/>
         <source>Haitian creole</source>
         <translation>Haiti Kreolü</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5742"/>
+        <location filename="../src/dsnote_app.cpp" line="5751"/>
         <source>Pashto</source>
         <translation>Peştuca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5743"/>
+        <location filename="../src/dsnote_app.cpp" line="5752"/>
         <source>Turkmen</source>
         <translation>Türkmence</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5744"/>
+        <location filename="../src/dsnote_app.cpp" line="5753"/>
         <source>Nynorsk</source>
         <translation>Nynorsk</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5745"/>
+        <location filename="../src/dsnote_app.cpp" line="5754"/>
         <source>Maltese</source>
         <translation>Maltaca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5746"/>
+        <location filename="../src/dsnote_app.cpp" line="5755"/>
         <source>Sanskrit</source>
         <translation>Sanskritçe</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5747"/>
+        <location filename="../src/dsnote_app.cpp" line="5756"/>
         <source>Luxembourgish</source>
         <translation>Lüksemburgca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5748"/>
+        <location filename="../src/dsnote_app.cpp" line="5757"/>
         <source>Myanmar</source>
         <translation>Myanmar</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5749"/>
+        <location filename="../src/dsnote_app.cpp" line="5758"/>
         <source>Tibetan</source>
         <translation>Tibetçe</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5750"/>
+        <location filename="../src/dsnote_app.cpp" line="5759"/>
         <source>Tagalog</source>
         <translation>Tagalogca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5751"/>
+        <location filename="../src/dsnote_app.cpp" line="5760"/>
         <source>Malagasy</source>
         <translation>Malagasy</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5752"/>
+        <location filename="../src/dsnote_app.cpp" line="5761"/>
         <source>Assamese</source>
         <translation>Assamca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5753"/>
+        <location filename="../src/dsnote_app.cpp" line="5762"/>
         <source>Tatar</source>
         <translation>Tatarca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5754"/>
+        <location filename="../src/dsnote_app.cpp" line="5763"/>
         <source>Hawaiian</source>
         <translation>Hawaii dili</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5755"/>
+        <location filename="../src/dsnote_app.cpp" line="5764"/>
         <source>Lingala</source>
         <translation>Lingala</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5756"/>
+        <location filename="../src/dsnote_app.cpp" line="5765"/>
         <source>Hausa</source>
         <translation>Hausaca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5757"/>
+        <location filename="../src/dsnote_app.cpp" line="5766"/>
         <source>Bashkir</source>
         <translation>Başkırca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5758"/>
+        <location filename="../src/dsnote_app.cpp" line="5767"/>
         <source>Javanese</source>
         <translation>Cava dili</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5759"/>
+        <location filename="../src/dsnote_app.cpp" line="5768"/>
         <source>Sundanese</source>
         <translation>Sundaca</translation>
     </message>
     <message>
-        <location filename="../src/dsnote_app.cpp" line="5760"/>
+        <location filename="../src/dsnote_app.cpp" line="5769"/>
         <source>Cantonese</source>
         <translation>Kantonca</translation>
     </message>
@@ -5371,9 +5394,9 @@
 <context>
     <name>models_manager</name>
     <message>
-        <location filename="../src/models_manager.cpp" line="1464"/>
-        <location filename="../src/models_manager.cpp" line="1473"/>
-        <location filename="../src/models_manager.cpp" line="2457"/>
+        <location filename="../src/models_manager.cpp" line="1463"/>
+        <location filename="../src/models_manager.cpp" line="1472"/>
+        <location filename="../src/models_manager.cpp" line="2456"/>
         <source>Auto detected</source>
         <translation>Otomatik algılandı</translation>
     </message>
@@ -5381,44 +5404,44 @@
 <context>
     <name>settings</name>
     <message>
-        <location filename="../src/settings.cpp" line="889"/>
+        <location filename="../src/settings.cpp" line="890"/>
         <source>Speech notes</source>
         <translation>Konuşma notları</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="1327"/>
+        <location filename="../src/settings.cpp" line="1317"/>
         <source>Don&apos;t force any style</source>
         <translation>Hiçbir stil dayatma</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="1454"/>
+        <location filename="../src/settings.cpp" line="1440"/>
         <source>Auto</source>
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2469"/>
+        <location filename="../src/settings.cpp" line="2455"/>
         <source>Example: Replace &quot;%1&quot; with &quot;%2&quot; and start the next word with a capital letter</source>
         <translation>Örnek: &quot;%1&quot; kelimesini &quot;%2&quot; ile değiştir ve sonraki kelimeyi büyük harfle başlat</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2483"/>
+        <location filename="../src/settings.cpp" line="2469"/>
         <source>Example: Replace &quot;%1&quot; with &quot;%2&quot; and start the next word with a lowercase letter</source>
         <translation>Örnek: &quot;%1&quot; kelimesini &quot;%2&quot; ile değiştir ve sonraki kelimeyi küçük harfle başlat</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2497"/>
+        <location filename="../src/settings.cpp" line="2483"/>
         <source>Example: Insert newline instead of the word &quot;%1&quot;</source>
         <translation>Örnek: &quot;%1&quot; kelimesi yerine yeni satır ekle</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2522"/>
+        <location filename="../src/settings.cpp" line="2508"/>
         <source>Example: Correct pronunciation of the Polish name &quot;%1&quot;</source>
         <translation>Örnek: Lehçe &quot;%1&quot; adının doğru telaffuzu</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="2603"/>
-        <location filename="../src/settings.cpp" line="2605"/>
-        <location filename="../src/settings.cpp" line="2772"/>
+        <location filename="../src/settings.cpp" line="2589"/>
+        <location filename="../src/settings.cpp" line="2591"/>
+        <location filename="../src/settings.cpp" line="2758"/>
         <source>Clone of &quot;%1&quot;</source>
         <translation>&quot;%1&quot; kopyası</translation>
     </message>
@@ -5426,133 +5449,133 @@
 <context>
     <name>speech_service</name>
     <message>
-        <location filename="../src/speech_service.cpp" line="3203"/>
+        <location filename="../src/speech_service.cpp" line="3202"/>
         <source>Punctuation restoration</source>
         <translation>Noktalama işareti restorasyonu</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3020"/>
-        <location filename="../src/speech_service.cpp" line="3129"/>
+        <location filename="../src/speech_service.cpp" line="3019"/>
+        <location filename="../src/speech_service.cpp" line="3128"/>
         <source>Japanese</source>
         <translation>Japonca</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3024"/>
+        <location filename="../src/speech_service.cpp" line="3023"/>
         <source>Chinese</source>
         <translation>Çince</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3037"/>
-        <location filename="../src/speech_service.cpp" line="3041"/>
-        <location filename="../src/speech_service.cpp" line="3057"/>
-        <location filename="../src/speech_service.cpp" line="3061"/>
-        <location filename="../src/speech_service.cpp" line="3076"/>
-        <location filename="../src/speech_service.cpp" line="3080"/>
-        <location filename="../src/speech_service.cpp" line="3095"/>
-        <location filename="../src/speech_service.cpp" line="3099"/>
-        <location filename="../src/speech_service.cpp" line="3114"/>
-        <location filename="../src/speech_service.cpp" line="3118"/>
-        <location filename="../src/speech_service.cpp" line="3186"/>
-        <location filename="../src/speech_service.cpp" line="3225"/>
-        <location filename="../src/speech_service.cpp" line="3234"/>
-        <location filename="../src/speech_service.cpp" line="3243"/>
-        <location filename="../src/speech_service.cpp" line="3253"/>
-        <location filename="../src/speech_service.cpp" line="3262"/>
+        <location filename="../src/speech_service.cpp" line="3036"/>
+        <location filename="../src/speech_service.cpp" line="3040"/>
+        <location filename="../src/speech_service.cpp" line="3056"/>
+        <location filename="../src/speech_service.cpp" line="3060"/>
+        <location filename="../src/speech_service.cpp" line="3075"/>
+        <location filename="../src/speech_service.cpp" line="3079"/>
+        <location filename="../src/speech_service.cpp" line="3094"/>
+        <location filename="../src/speech_service.cpp" line="3098"/>
+        <location filename="../src/speech_service.cpp" line="3113"/>
+        <location filename="../src/speech_service.cpp" line="3117"/>
+        <location filename="../src/speech_service.cpp" line="3185"/>
+        <location filename="../src/speech_service.cpp" line="3224"/>
+        <location filename="../src/speech_service.cpp" line="3233"/>
+        <location filename="../src/speech_service.cpp" line="3242"/>
+        <location filename="../src/speech_service.cpp" line="3252"/>
+        <location filename="../src/speech_service.cpp" line="3261"/>
         <source>HW acceleration</source>
         <translation>Donanım hızlandırma</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3133"/>
+        <location filename="../src/speech_service.cpp" line="3132"/>
         <source>Korean</source>
         <translation>Korece</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3140"/>
+        <location filename="../src/speech_service.cpp" line="3139"/>
         <source>German</source>
         <translation>Almanca</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3144"/>
+        <location filename="../src/speech_service.cpp" line="3143"/>
         <source>Spanish</source>
         <translation>İspanyolca</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3148"/>
+        <location filename="../src/speech_service.cpp" line="3147"/>
         <source>French</source>
         <translation>Fransızca</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3152"/>
+        <location filename="../src/speech_service.cpp" line="3151"/>
         <source>Italian</source>
         <translation>İtalyanca</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3156"/>
+        <location filename="../src/speech_service.cpp" line="3155"/>
         <source>Russian</source>
         <translation>Rusça</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3160"/>
+        <location filename="../src/speech_service.cpp" line="3159"/>
         <source>Swahili</source>
         <translation>Svahili</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3164"/>
+        <location filename="../src/speech_service.cpp" line="3163"/>
         <source>Persian</source>
         <translation>Farsça</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3168"/>
+        <location filename="../src/speech_service.cpp" line="3167"/>
         <source>Dutch</source>
         <translation>Hollandaca</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="3208"/>
+        <location filename="../src/speech_service.cpp" line="3207"/>
         <source>Diacritics restoration for Hebrew</source>
         <translation>İbranice için sesli işaret restorasyonu</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="4451"/>
+        <location filename="../src/speech_service.cpp" line="4450"/>
         <source>No language has been set.</source>
         <translation>Dil ayarlanmamış.</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="4453"/>
+        <location filename="../src/speech_service.cpp" line="4452"/>
         <source>No translator model has been set.</source>
         <translation>Çevirmen modeli ayarlanmamış.</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="4454"/>
+        <location filename="../src/speech_service.cpp" line="4453"/>
         <source>Say something...</source>
         <translation>Bir şeyler söyleyin...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="4456"/>
+        <location filename="../src/speech_service.cpp" line="4455"/>
         <source>Press and say something...</source>
         <translation>Basın ve bir şeyler söyleyin...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="4458"/>
+        <location filename="../src/speech_service.cpp" line="4457"/>
         <source>Click and say something...</source>
         <translation>Tıklayın ve bir şeyler söyleyin...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="4459"/>
+        <location filename="../src/speech_service.cpp" line="4458"/>
         <source>Busy...</source>
         <translation>Meşgul...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="4460"/>
+        <location filename="../src/speech_service.cpp" line="4459"/>
         <source>Processing, please wait...</source>
         <translation>İşleniyor, lütfen bekleyin...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="4462"/>
+        <location filename="../src/speech_service.cpp" line="4461"/>
         <source>Getting ready, please wait...</source>
         <translation>Hazırlanıyor, lütfen bekleyin...</translation>
     </message>
     <message>
-        <location filename="../src/speech_service.cpp" line="4463"/>
+        <location filename="../src/speech_service.cpp" line="4462"/>
         <source>Translating...</source>
         <translation>Çevriliyor...</translation>
     </message>

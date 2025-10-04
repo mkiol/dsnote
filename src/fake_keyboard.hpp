@@ -21,7 +21,7 @@
 #include <thread>
 
 #ifdef USE_X11_FEATURES
-#include <QX11Info>
+#include <QGuiApplication>
 
 struct xcb_connection_t;
 struct xkb_context;

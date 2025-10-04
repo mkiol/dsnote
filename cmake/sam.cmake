@@ -7,6 +7,7 @@ ExternalProject_Add(sam
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${sam_source_url}"
     URL_HASH SHA256=${sam_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/sam.patch ||
                     echo "patch cmd failed, likely already patched"

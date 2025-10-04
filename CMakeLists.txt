@@ -528,12 +528,12 @@ pkg_search_module(pulse REQUIRED libpulse)
 list(APPEND deps_libs ${pulse_LIBRARIES})
 list(APPEND includes ${pulse_INCLUDE_DIRS})
 
-find_package(Qt5 COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick DBus LinguistTools REQUIRED)
-list(APPEND deps_libs Qt5::Core Qt5::Network Qt5::Multimedia Qt5::Gui Qt5::Quick Qt5::DBus Qt5::Xml)
+find_package(Qt6 COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick QuickControls2 DBus LinguistTools REQUIRED)
+list(APPEND deps_libs Qt6::Core Qt6::Network Qt6::Multimedia Qt6::Gui Qt6::Quick Qt6::QuickControls2 Qt6::DBus Qt6::Xml)
 
 if(WITH_DESKTOP)
-    find_package(Qt5 COMPONENTS QuickControls2 Widgets REQUIRED)
-    list(APPEND deps_libs Qt5::QuickControls2 Qt5::Widgets)
+    find_package(Qt6 COMPONENTS Widgets REQUIRED)
+    list(APPEND deps_libs Qt6::Widgets)
 
     pkg_search_module(wayland REQUIRED wayland-client)
     list(APPEND deps_libs ${wayland_LIBRARIES})
@@ -556,8 +556,8 @@ if(WITH_DESKTOP)
         find_package(X11 REQUIRED)
         list(APPEND deps_libs X11)
 
-        find_package(Qt5 COMPONENTS X11Extras REQUIRED)
-        list(APPEND deps_libs Qt5::X11Extras)
+        # Qt6 removed X11Extras - functionality moved to Qt6::Gui
+        # No additional library needed
 
         if(BUILD_QHOTKEY)
             include(${cmake_path}/qhotkey.cmake)

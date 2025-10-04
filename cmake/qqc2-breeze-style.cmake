@@ -10,6 +10,7 @@ ExternalProject_Add(qqc2breeze
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${qqc2breeze_source_url}"
     URL_HASH SHA256=${qqc2breeze_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
         -DCMAKE_INSTALL_LIBDIR=lib
@@ -22,6 +23,7 @@ ExternalProject_Add(kquickcharts
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${kquickcharts_source_url}"
     URL_HASH SHA256=${kquickcharts_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
         -DCMAKE_INSTALL_LIBDIR=lib

@@ -29,6 +29,7 @@ ExternalProject_Add(rnnoise
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${rnnoise_source_url}"
     URL_MD5 "${rnnoise_checksum}"
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> && <BINARY_DIR>/autogen.sh &&
         <BINARY_DIR>/configure --prefix=<INSTALL_DIR> --libdir=<INSTALL_DIR>/lib
         --disable-examples --disable-doc --disable-shared --enable-static --with-pic

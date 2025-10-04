@@ -11,10 +11,6 @@
 
 ListModel::ListModel(ListItem *prototype, QObject *parent)
     : QAbstractListModel(parent), m_prototype(prototype) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-#else
-    setRoleNames(m_prototype->roleNames());
-#endif
 }
 
 QHash<int, QByteArray> ListModel::roleNames() const {
