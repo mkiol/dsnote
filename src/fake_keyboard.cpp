@@ -402,7 +402,8 @@ void fake_keyboard::init_ydo() {
     if (!m_xkb_ctx) throw std::runtime_error{"no xkb context"};
 
 #ifdef USE_X11_FEATURES
-    auto *xcb_conn = QX11Info::connection();
+    auto *native = qApp->nativeInterface<QNativeInterface::QX11Application>();
+    auto *xcb_conn = native ? native->connection() : nullptr;
     if (xcb_conn) {
         auto device_id = xkb_x11_get_core_keyboard_device_id(xcb_conn);
         if (device_id == -1) throw std::runtime_error{"no xkb keyboard"};
@@ -591,10 +592,13 @@ void fake_keyboard::send_text_xdo(const QString &text) {
 void fake_keyboard::init_legacy() {
     LOGD("using legacy fake-keyboard");
 
-    m_x11_display = QX11Info::display();
+    auto *native = qApp->nativeInterface<QNativeInterface::QX11Application>();
+    if (!native) throw std::runtime_error{"no x11 native interface"};
+
+    m_x11_display = native->display();
     if (!m_x11_display) throw std::runtime_error{"no x11 display"};
 
-    m_xcb_conn = QX11Info::connection();
+    m_xcb_conn = native->connection();
     if (!m_xcb_conn) throw std::runtime_error{"no xcb connection"};
 
     auto device_id = xkb_x11_get_core_keyboard_device_id(m_xcb_conn);
@@ -653,11 +657,14 @@ void fake_keyboard::init_legacy() {
 void fake_keyboard::init_xdo() {
     LOGD("using xdo fake-keyboard");
 
-    if (!QX11Info::display()) {
+    auto *native = qApp->nativeInterface<QNativeInterface::QX11Application>();
+    auto *display = native ? native->display() : nullptr;
+
+    if (!display) {
         LOGF("no x11 display");
     }
 
-    m_xdo = xdo_new_with_opened_display(QX11Info::display(), nullptr, 0);
+    m_xdo = xdo_new_with_opened_display(display, nullptr, 0);
     if (!m_xdo) {
         LOGF("can't create xdo");
     }

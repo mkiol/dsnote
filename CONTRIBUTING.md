@@ -120,9 +120,18 @@ sudo apt-get install \
     libboost-all-dev libxkbcommon-x11-dev \
     libnoise-dev meson \
     patchelf \
-    qt6-l10n-tools \
+    qt6-l10n-tools qt6-base-dev-tools \
     qt6-multimedia-dev qt6-declarative-dev qt6-tools-dev \
+    catch2
 ```
+
+**Important**: Qt6 tools need to be added to your PATH:
+
+```bash
+export PATH="/usr/lib/qt6/bin:$PATH"
+```
+
+Add this to your `~/.bashrc` or `~/.zshrc` to make it permanent.
 
 Then go to the [direct build (advanced)](#direct-build-advanced) section.
 
@@ -219,11 +228,21 @@ Speech Note uses `.clang-format` for C++ code formatting (based on Google style)
 Speech Note includes unit tests in the `tests/` directory:
 
 ```bash
-cd build
-cmake ../ -DCMAKE_BUILD_TYPE=Debug -DWITH_TESTS=ON -DWITH_DESKTOP=ON
+# Ensure Qt6 tools are in PATH
+export PATH="/usr/lib/qt6/bin:$PATH"
+
+# Configure build with tests enabled
+mkdir -p build && cd build
+cmake ../ -DCMAKE_BUILD_TYPE=Debug -DWITH_TESTS=ON -DWITH_DESKTOP=ON -DBUILD_CATCH2=OFF
+
+# Build the project
 make
+
+# Run tests
 ctest --output-on-failure
 ```
+
+**Note**: We use `-DBUILD_CATCH2=OFF` to use the system-installed Catch2 package instead of downloading it.
 
 ### Writing Tests
 
