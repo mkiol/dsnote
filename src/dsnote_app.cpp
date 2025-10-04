@@ -14,7 +14,7 @@
 #include <QFile>
 #include <QGuiApplication>
 #include <QKeySequence>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QTextStream>
 #include <algorithm>
 #include <iterator>
@@ -735,10 +735,11 @@ settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
                                ? rule.flags
                                : trans_rule_flags_t::TransRuleNone;
             break;
-        case trans_rule_type_t::TransRuleTypeMatchRe:
-            rule_matches =
-                text.contains(QRegExp{rule.pattern, case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive});
+        case trans_rule_type_t::TransRuleTypeMatchRe: {
+            QRegularExpression rx{rule.pattern, case_sens ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption};
+            rule_matches = text.contains(rx);
             break;
+        }
         case trans_rule_type_t::TransRuleTypeReplaceSimple: {
             rule_matches = text.contains(rule.pattern, case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive);
             if (rule_matches)
@@ -749,26 +750,30 @@ settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
             auto replace = rule.replace;
             replace.replace("\\n", "\n");
 
-            QRegExp rx{rule.pattern, case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive};
+            QRegularExpression rx{rule.pattern, case_sens ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption};
 
             rule_matches = text.contains(rx);
             if (rule_matches) {
                 if (!rule.replace.contains("\\U") && !replace.contains("\\u")) {
                     text.replace(rx, replace);
                 } else {
-                    int pos = 0;
-                    while (pos < text.size() && (pos = rx.indexIn(text, pos)) != -1 && rx.matchedLength() > 0) {
+                    QRegularExpressionMatchIterator it = rx.globalMatch(text);
+                    int offset = 0;
+                    while (it.hasNext()) {
+                        QRegularExpressionMatch match = it.next();
+                        int pos = match.capturedStart() + offset;
+                        int len = match.capturedLength();
                         QString after = replace;
-                        for (int i = 1; i < rx.captureCount() + 1; ++i) {
+                        for (int i = 1; i <= match.lastCapturedIndex(); ++i) {
                             after.replace(QStringLiteral("\\U\\%1").arg(i),
-                                          rx.cap(i).toUpper());
+                                          match.captured(i).toUpper());
                             after.replace(QStringLiteral("\\u\\%1").arg(i),
-                                          rx.cap(i).toLower());
+                                          match.captured(i).toLower());
                             after.replace(QStringLiteral("\\%1").arg(i),
-                                          rx.cap(i));
+                                          match.captured(i));
                         }
-                        text.replace(pos, rx.matchedLength(), after);
-                        pos += after.size();
+                        text.replace(pos, len, after);
+                        offset += after.size() - len;
                     }
                 }
             }
@@ -856,7 +861,7 @@ QVariantList dsnote_app::test_trans_rule(unsigned int flags, const QString &text
 }
 
 bool dsnote_app::trans_rule_re_pattern_valid(const QString &pattern) {
-    return QRegExp{pattern}.isValid();
+    return QRegularExpression{pattern}.isValid();
 }
 
 void dsnote_app::update_trans_rule(int index, unsigned int flags,
@@ -5304,13 +5309,14 @@ QString dsnote_app::tts_ref_voice_unique_name(QString name,
     if (!add_number && !names.contains(name)) return name;
 
     int i = 1;
-    QRegExp rx{"\\d+$"};
-    if (auto idx = rx.indexIn(name); idx >= 0) {
+    QRegularExpression rx{"\\d+$"};
+    QRegularExpressionMatch match = rx.match(name);
+    if (match.hasMatch()) {
         bool ok = false;
-        auto ii = name.midRef(idx).toInt(&ok);
+        auto ii = match.captured(0).toInt(&ok);
         if (ok && ii < 99999) {
             i = ii;
-            name = name.mid(0, idx) + "%1";
+            name = name.mid(0, match.capturedStart()) + "%1";
         } else {
             name += " %1";
         }

@@ -282,9 +282,7 @@ static void remove_file_or_dir(const QString& path) {
 }
 
 models_manager::models_manager(QObject* parent) : QObject{parent} {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 9, 0)
     m_nam.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
-#endif
 
     connect(settings::instance(), &settings::models_dir_changed, this,
             static_cast<bool (models_manager::*)()>(

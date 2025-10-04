@@ -111,6 +111,17 @@ dnf install rpmdevtools autoconf automake boost-devel cmake git \
 ./make_rpm.sh
 ```
 
+### Ubuntu/Mint
+
+**WARNING**: Incomplete tutorial
+
+```bash
+sudo apt-get install qt6-l10n-tools  # For Qt6LinguistTools
+sudo apt-get install qt6-multimedia-dev qt6-declarative-dev qt6-tools-dev
+```
+
+Then go to the [direct build (advanced)](#direct-build-advanced) section.
+
 #### Flatpak (Recommended for Development)
 
 ```bash

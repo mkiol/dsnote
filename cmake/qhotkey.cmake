@@ -18,7 +18,8 @@ ExternalProject_Add(qhotkey
     BUILD_ALWAYS False
 )
 
-find_package(Qt5 COMPONENTS X11Extras REQUIRED)
+# Qt6 removed X11Extras - functionality moved to Qt6::Gui
+# No additional Qt library needed for X11 support
 
-list(APPEND deps_libs Qt5::X11Extras "${external_lib_dir}/libqhotkey.a")
+list(APPEND deps_libs "${external_lib_dir}/libqhotkey.a")
 list(APPEND deps qhotkey)

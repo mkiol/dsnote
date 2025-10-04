@@ -16,7 +16,6 @@
 #include <QQmlContext>
 #include <QString>
 #include <QStringList>
-#include <QTextCodec>
 #include <QTranslator>
 #include <QUrl>
 #include <csignal>
@@ -457,10 +456,8 @@ static void start_app(const cmd::options& options,
 
     settings::instance()->update_qt_style(engine.get());
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 7, 0)
     QGuiApplication::setDesktopFileName(APP_ICON_ID);
     LOGD("desktop file: " << QGuiApplication::desktopFileName());
-#endif
 #endif
     register_types();
 
@@ -520,7 +517,7 @@ int main(int argc, char* argv[]) {
 #ifdef USE_SFOS
     const auto& app = *SailfishApp::application(argc, argv);
 #else
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    // Qt6: High DPI scaling is enabled by default
     QApplication app(argc, argv);
     QGuiApplication::setWindowIcon(QIcon{QStringLiteral(":/app_icon.svg")});
 #endif

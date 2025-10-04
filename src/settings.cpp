@@ -18,7 +18,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QGuiApplication>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QStandardPaths>
 #include <QVariant>
 #include <QVariantList>
@@ -540,13 +540,14 @@ static QString file_save_filename(const QDir& dir, QString filename,
             return filename + '.' + ext;
         }
 
-        QRegExp rx{"\\d+$"};
-        if (auto idx = rx.indexIn(filename); idx >= 0) {
+        QRegularExpression rx{"\\d+$"};
+        QRegularExpressionMatch match = rx.match(filename);
+        if (match.hasMatch()) {
             bool ok = false;
-            auto ii = filename.midRef(idx).toInt(&ok);
+            auto ii = match.captured(0).toInt(&ok);
             if (ok && ii < max_i) {
                 i = ii;
-                filename = filename.mid(0, idx) + "%1." + ext;
+                filename = filename.mid(0, match.capturedStart()) + "%1." + ext;
             } else {
                 filename += "-%1." + ext;
             }
