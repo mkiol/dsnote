@@ -15,6 +15,15 @@ sudo apt install appstream autoconf build-essential cmake \
     python3-dev qt6-base-dev qt6-declarative-dev qt6-multimedia-dev \
     qml6-module-qtquick qml6-module-qtquick-controls qml6-module-qtquick-dialogs \
     zlib1g-dev
+
+# Alternative set: in case anything is missing/broken
+sudo apt-get install \
+    libtool libtool-bin automake \
+    libnoise-dev meson \
+    qt6-l10n-tools qt6-base-dev-tools \
+    qt6-multimedia-dev qt6-declarative-dev qt6-tools-dev \
+    catch2
+
 ```
 
 **Note:** The makedeb.sh script now builds most dependencies statically (libarchive, libfmt, libopenblas, librubberband, libtag, etc.) to ensure compatibility across different Ubuntu versions.

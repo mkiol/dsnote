@@ -92,13 +92,15 @@ makepkg -si
 
 This will build and install the latest git version with all dependencies.
 
+For more information, see the [arch/git/PKGBUILD](arch/git/PKGBUILD) file.
+
 #### Fedora/RHEL/Rocky Linux
 
 ```bash
 git clone https://github.com/mkiol/dsnote.git
 cd dsnote/fedora
 
-# Install build dependencies (optional)
+# Install build dependencies (optional but recommended)
 dnf install rpmdevtools autoconf automake boost-devel cmake git \
     kf5-kdbusaddons-devel libarchive-devel libxdo-devel \
     libXinerama-devel libxkbcommon-x11-devel libXtst-devel \
@@ -111,29 +113,56 @@ dnf install rpmdevtools autoconf automake boost-devel cmake git \
 ./make_rpm.sh
 ```
 
-### Ubuntu/Mint
+For more information, see the [fedora/make_rpm.sh](fedora/make_rpm.sh) and [fedora/dsnote.spec](fedora/dsnote.spec) files.
+
+#### Ubuntu/Debian/Mint
+
+**Note:** The project has migrated to Qt6. For older versions with Qt5, please check out an earlier release.
 
 ```bash
-sudo apt-get install \
-    cmake git \
-    libtool libtool-bin autoconf automake \
-    libboost-all-dev libxkbcommon-x11-dev \
-    libnoise-dev meson \
-    patchelf \
-    qt6-l10n-tools qt6-base-dev-tools \
-    qt6-multimedia-dev qt6-declarative-dev qt6-tools-dev \
-    catch2
+# First install OpenCL headers (required dependency)
+sudo apt install opencl-headers
+
+# Then install all build dependencies
+sudo apt install appstream autoconf build-essential cmake \
+    git libboost-all-dev libpulse-dev libwayland-dev libxinerama-dev \
+    libxkbcommon-x11-dev libxtst-dev ocl-icd-opencl-dev patchelf \
+    python3-dev qt6-base-dev qt6-declarative-dev qt6-multimedia-dev \
+    qml6-module-qtquick qml6-module-qtquick-controls qml6-module-qtquick-dialogs \
+    zlib1g-dev
 ```
 
-**Important**: Qt6 tools need to be added to your PATH:
+**Optional - For NVIDIA CUDA acceleration (experimental):**
 
 ```bash
-export PATH="/usr/lib/qt6/bin:$PATH"
+sudo apt install nvidia-cuda-dev nvidia-cuda-toolkit nvidia-cudnn
 ```
 
-Add this to your `~/.bashrc` or `~/.zshrc` to make it permanent.
+**Note:** CUDA support is experimental and tested only on Ubuntu 25.04. AMD GPUs have built-in Vulkan support that should work out of the box.
 
-Then go to the [direct build (advanced)](#direct-build-advanced) section.
+**Build the .deb package:**
+
+```bash
+git clone https://github.com/mkiol/dsnote.git
+cd dsnote/deb
+./makedeb.sh
+```
+
+**Install the .deb package:**
+
+```bash
+sudo dpkg -i dsnote_*_amd64.deb
+sudo apt-get install -f  # Install any missing dependencies
+```
+
+**Alternative - Running without installing (if .deb installation fails):**
+
+```bash
+cd dsnote-<version>/build   # replace <version> with the actual version number
+LD_LIBRARY_PATH=./external/lib ./dsnote
+```
+
+For more detailed information, see [deb/README.md](deb/README.md).
 
 #### Flatpak (Recommended for Development)
 
@@ -149,9 +178,12 @@ flatpak-builder --force-clean --user \
     net.mkiol.SpeechNote.yaml
 ```
 
+For more information, see the [flatpak/net.mkiol.SpeechNote.yaml](flatpak/net.mkiol.SpeechNote.yaml) file.
+
 #### Direct Build (Advanced)
 
-For a direct build without packaging:
+You can do a direct build without packaging.
+**Note**: Direct builds require many dependencies to be pre-installed. Check `CMakeLists.txt`, or the next section, for build options.
 
 ```bash
 git clone https://github.com/mkiol/dsnote.git
@@ -167,8 +199,6 @@ cmake ../ -DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON -DWITH_PY=OFF
 make -j$(nproc)
 ```
 
-**Note**: Direct builds require many dependencies to be pre-installed. Check `CMakeLists.txt` for build options.
-
 ### Build Options
 
 Key CMake options you can use:
@@ -180,6 +210,57 @@ Key CMake options you can use:
 - `-DWITH_FLATPAK=ON/OFF` - Flatpak-specific build
 
 See `CMakeLists.txt` for all available options.
+
+### Launching the Application
+
+After building, you can launch the application in different ways depending on your build method:
+
+#### From Direct Build
+
+```bash
+# From the build directory
+./dsnote
+
+# Or with verbose logging for debugging
+./dsnote --verbose
+```
+
+#### From Flatpak Build
+
+```bash
+# Install the built Flatpak locally
+flatpak --user install <local-repo-name> net.mkiol.SpeechNote
+
+# Run the installed Flatpak
+flatpak run net.mkiol.SpeechNote
+
+# Or with verbose logging
+flatpak run net.mkiol.SpeechNote --verbose
+```
+
+#### From Package Build (Arch/Fedora/Debian)
+
+If you built and installed via `makepkg -si`, `make_rpm.sh`, or `makedeb.sh` + `dpkg -i`, the application will be installed system-wide:
+
+```bash
+# Launch from application menu or command line
+dsnote
+
+# Or with verbose logging
+dsnote --verbose
+```
+
+#### Alternative - Running Without Installing (Debian/Ubuntu)
+
+If the .deb package installation fails due to dependency issues, you can run the application directly from the build directory:
+
+```bash
+cd dsnote-<version>/build   # replace <version> with the actual version number
+LD_LIBRARY_PATH=./external/lib ./dsnote
+
+# Or with verbose logging
+LD_LIBRARY_PATH=./external/lib ./dsnote --verbose
+```
 
 ## Pull-Merge request
 
