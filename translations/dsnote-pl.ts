@@ -408,8 +408,8 @@
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="122"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="267"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="378"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="539"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="377"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="538"/>
         <source>Change</source>
         <translation>Zmień</translation>
     </message>
@@ -431,7 +431,7 @@
         <location filename="../sfos/qml/ExportFilePage.qml" line="160"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="305"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="197"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="394"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="393"/>
         <source>The file exists and will be overwritten.</source>
         <translation>Plik już istnieje i zostanie nadpisany.</translation>
     </message>
@@ -449,9 +449,9 @@
         <location filename="../desktop/qml/ExportFilePage.qml" line="159"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="205"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="219"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="337"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="402"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="416"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="336"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="401"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="415"/>
         <source>Auto</source>
         <translation>Automatycznie</translation>
     </message>
@@ -459,91 +459,91 @@
         <location filename="../sfos/qml/ExportFilePage.qml" line="192"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="337"/>
         <location filename="../desktop/qml/ExportFilePage.qml" line="204"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="401"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="400"/>
         <source>When %1 is selected, the format is chosen based on the file extension.</source>
         <translation>Gdy opcja %1 jest wybrana to format zostanie określony na podstawie rozszerzenia pliku.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="309"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="400"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="399"/>
         <source>Audio file format</source>
         <translation>Format pliku audio</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="342"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="435"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="434"/>
         <source>Compression quality</source>
         <translation>Jakość kompresji</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="352"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="364"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="436"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="447"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="435"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="446"/>
         <source>High</source>
         <translation>Wysoka</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="353"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="448"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="447"/>
         <source>Medium</source>
         <translation>Średnia</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="354"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="449"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="448"/>
         <source>Low</source>
         <translation>Niska</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="364"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="436"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="435"/>
         <source>%1 results in a larger file size.</source>
         <translation>%1 spowoduje, że plik audio będzie miał większy rozmiar.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="373"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="467"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="466"/>
         <source>Write metadata to audio file</source>
         <translation>Zapisz meta dane do pliku audio</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="374"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="474"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="473"/>
         <source>Write track number, title, artist and album tags to audio file.</source>
         <translation>Zapisz tagi numer utworu, tytuł, artysta i album do pliku audio.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="385"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="386"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="482"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="481"/>
         <source>Track number</source>
         <translation>Numer utworu</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="398"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="399"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="492"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="491"/>
         <source>Title</source>
         <translation>Tytuł</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="409"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="410"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="500"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="499"/>
         <source>Album</source>
         <translation>Album</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="422"/>
         <location filename="../sfos/qml/ExportFilePage.qml" line="423"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="511"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="510"/>
         <source>Artist</source>
         <translation>Artysta</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ExportFilePage.qml" line="438"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="344"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="343"/>
         <source>Text to Speech model has not been set up yet.</source>
         <translation>Model Tekst na Mowę nie jest skonfigurowany.</translation>
     </message>
@@ -559,19 +559,19 @@
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="176"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="373"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="372"/>
         <source>File path</source>
         <translation>Ścieżka do pliku</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="179"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="376"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="375"/>
         <source>Select file to export</source>
         <translation>Wybierz plik do eksportu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="179"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="376"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="375"/>
         <source>Specify file to export</source>
         <translation>Określ plik do eksportu</translation>
     </message>
@@ -582,71 +582,71 @@
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="240"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="604"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="602"/>
         <source>Save File</source>
         <translation>Zapisz plik</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="242"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="589"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="606"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="588"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="604"/>
         <source>All supported files</source>
         <translation>Wszystkie obsługiwane pliki</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ExportFilePage.qml" line="243"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="590"/>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="607"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="589"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="605"/>
         <source>All files</source>
         <translation>Wszystkie pliki</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="524"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="523"/>
         <source>Mix speech with audio from an existing file</source>
         <translation>Miksuj mowę ze ścieżką dźwiękową z istniejącego pliku</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="532"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="531"/>
         <source>File for mixing</source>
         <translation>Plik do miksowania</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="535"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="534"/>
         <source>Set the file you want to use for mixing</source>
         <translation>Podaj plik, którego chcesz użyć do miksowania</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="549"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="548"/>
         <source>The file contains no audio.</source>
         <translation>Plik nie zawiera audio.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="557"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="556"/>
         <source>Audio stream</source>
         <translation>Strumień audio</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="563"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="562"/>
         <source>Volume change</source>
         <translation>Zmiana głośności</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="564"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="563"/>
         <source>Modify the volume of the audio from the file selected for mixing.</source>
         <translation>Modyfikuj głośność dźwięku z pliku wybranego do miksowania.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="565"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="564"/>
         <source>Allowed values are between -30 dB and 30 dB.</source>
         <translation>Dozwolone wartości są pomiędzy -30 dB a 30 dB.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="566"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="565"/>
         <source>When the value is set to 0, the volume will not be changed.</source>
         <translation>Jeśli wartość jest 0, głośność nie będzie zmieniona.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/ExportFilePage.qml" line="587"/>
+        <location filename="../desktop/qml/ExportFilePage.qml" line="586"/>
         <source>Open file</source>
         <translation>Otwórz plik</translation>
     </message>
@@ -5552,7 +5552,7 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="532"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="165"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="164"/>
         <source>Location of language files</source>
         <translation>Położenie plików z językami</translation>
     </message>
@@ -5562,13 +5562,13 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="534"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="166"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="165"/>
         <source>Directory where language files are downloaded to and stored.</source>
         <translation>Katalog do którego pliki z obsługą języków są pobierane i przechowywane.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="538"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="175"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="174"/>
         <location filename="../desktop/qml/SettingsUiPage.qml" line="33"/>
         <source>Change</source>
         <translation>Zmień</translation>
@@ -6366,7 +6366,7 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="300"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="391"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="168"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="167"/>
         <source>Make sure that the Flatpak application has permissions to access the directory.</source>
         <translation>Upewnij się, że aplikacja Flatpak ma uprawnienia dostępu do katalogu.</translation>
     </message>
@@ -6573,7 +6573,7 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="523"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="160"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="159"/>
         <source>When closing, delete all cached audio files.</source>
         <translation>Podczas zamykania usuń wszystkie podręczne pliki audio.</translation>
     </message>
@@ -6933,7 +6933,7 @@ Zawsze włączone: Nasłuchiwanie jest zawsze włączone.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="522"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="153"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="152"/>
         <source>Clear cache on close</source>
         <translation>Wyczyść podręczne pliki podczas zamykania</translation>
     </message>

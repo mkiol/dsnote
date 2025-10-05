@@ -128,9 +128,8 @@ ColumnLayout {
         Dialogs.FileDialog {
             //id: directoryDialog
             title: qsTranslate("SettingsPage", "Select Directory")
-            selectFolder: true
-            selectExisting: true
-            folder:  _settings.models_dir_url
+            fileMode: Dialogs.FileDialog.OpenFolder
+            currentFolder: _settings.models_dir_url
             onAccepted: {
                 _settings.models_dir_url = fileUrl
             }

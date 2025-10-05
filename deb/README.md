@@ -13,10 +13,13 @@ sudo apt install appstream autoconf build-essential cmake \
     git libboost-all-dev libpulse-dev libwayland-dev libxinerama-dev \
     libxkbcommon-x11-dev libxtst-dev ocl-icd-opencl-dev patchelf \
     python3-dev qt6-base-dev qt6-declarative-dev qt6-multimedia-dev \
-    qml6-module-qtquick qml6-module-qtquick-controls qml6-module-qtquick-dialogs \
+    qml6-module-qtquick qml6-module-qtquick-window \
+    qml6-module-qtquick-controls qml6-module-qtquick-dialogs \
+    qml6-module-qtquick-layouts qml6-module-qtqml-workerscript \
+    qml6-module-qtquick-templates \
     zlib1g-dev
 
-# Alternative set: in case anything is missing/broken
+# Optional set: in case anything is missing/broken
 sudo apt-get install \
     libtool libtool-bin automake \
     libnoise-dev meson \

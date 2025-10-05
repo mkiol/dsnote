@@ -13,6 +13,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QSysInfo>
 #include <cstdlib>
 
 #include "checksum_tools.hpp"
@@ -112,6 +113,13 @@ QString path_to_dir_for_path(const QString& dir, const QString& path) {
     path_full = QStringLiteral("/usr/share/%1/%2").arg(APP_BINARY_ID, path);
     if (QFileInfo::exists(path_full))
         return QStringLiteral("/usr/share/%1").arg(APP_BINARY_ID);
+
+    // search in architecture-specific Qt6 paths (e.g., /usr/lib/x86_64-linux-gnu/qt6)
+    path_full = QStringLiteral("/usr/lib/%1/qt6/%2/%3")
+                    .arg(QSysInfo::buildCpuArchitecture(), dir, path);
+    if (QFileInfo::exists(path_full))
+        return QStringLiteral("/usr/lib/%1/qt6/%2")
+            .arg(QSysInfo::buildCpuArchitecture(), dir);
 
     // search in /usr/local
 

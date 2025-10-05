@@ -339,9 +339,8 @@ ToolBar {
         nameFilters: [
             qsTr("All supported files") + " (*.txt *.srt *.ass *.ssa *.sub *.vtt *.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac *.mp4 *.mkv *.ogv *.webm)",
             qsTr("All files") + " (*)"]
-        folder: _settings.file_open_dir_url
-        selectExisting: true
-        selectMultiple: false
+        currentFolder: _settings.file_open_dir_url
+        fileMode: Dialogs.FileDialog.OpenFile
         onAccepted: {
             var file_path =
                 _settings.file_path_from_url(fileReadDialog.fileUrl)

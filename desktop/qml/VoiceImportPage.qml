@@ -410,9 +410,8 @@ DialogPage {
             qsTr("Audio files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac)",
             qsTr("Video files") + " (*.mp4 *.mkv *.ogv *.webm)",
             qsTr("All files") + " (*)"]
-        folder: _settings.file_audio_open_dir_url
-        selectExisting: true
-        selectMultiple: false
+        currentFolder: _settings.file_audio_open_dir_url
+        fileMode: Dialogs.FileDialog.OpenFile
         onAccepted: {
             _nameForm.textField.text = ""
             app.player_import_from_url(fileUrl);

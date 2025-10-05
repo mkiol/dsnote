@@ -241,9 +241,8 @@ DialogPage {
                 nameFilters: [
                     qsTr("All supported files") + " (*.txt *.srt *.ass *.ssa *.sub *.vtt)",
                     qsTr("All files") + " (*)"]
-                folder: _settings.text_file_save_dir_url
-                selectExisting: false
-                selectMultiple: false
+                currentFolder: _settings.text_file_save_dir_url
+                fileMode: Dialogs.FileDialog.SaveFile
                 onAccepted: {
                     pathField0.text =
                             _settings.file_path_from_url(fileWriteDialog0.fileUrl)
@@ -588,9 +587,8 @@ DialogPage {
                     nameFilters: [
                         qsTr("All supported files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac *.mp4 *.mkv *.ogv *.webm)",
                         qsTr("All files") + " (*)"]
-                    folder: _settings.file_open_dir_url
-                    selectExisting: true
-                    selectMultiple: false
+                    currentFolder: _settings.file_open_dir_url
+                    fileMode: Dialogs.FileDialog.OpenFile
                     onAccepted: {
                         pathFieldIn1.text =
                                 _settings.file_path_from_url(fileReadDialog1.fileUrl)
@@ -605,9 +603,8 @@ DialogPage {
                     nameFilters: [
                         qsTr("All supported files") + " (*.mp3 *.ogg *.oga *.opus *.wav)",
                         qsTr("All files") + " (*)"]
-                    folder: _settings.audio_file_save_dir_url
-                    selectExisting: false
-                    selectMultiple: false
+                    currentFolder: _settings.audio_file_save_dir_url
+                    fileMode: Dialogs.FileDialog.SaveFile
                     onAccepted: {
                         var dont_add_extension = root.disable_manual_file_path
                         var file_path = _settings.file_path_from_url(fileWriteDialog1.fileUrl)
