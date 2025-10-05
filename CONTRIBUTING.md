@@ -317,10 +317,10 @@ mkdir -p build && cd build
 cmake ../ -DCMAKE_BUILD_TYPE=Debug -DWITH_TESTS=ON -DWITH_DESKTOP=ON -DBUILD_CATCH2=OFF
 
 # Build the project
-make
+make tests
 
 # Run tests
-ctest --output-on-failure
+./tests
 ```
 
 **Note**: We use `-DBUILD_CATCH2=OFF` to use the system-installed Catch2 package instead of downloading it.

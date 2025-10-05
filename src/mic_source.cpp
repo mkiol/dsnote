@@ -20,19 +20,40 @@ mic_source::mic_source(const QString& preferred_audio_input, QObject* parent)
 
 mic_source::~mic_source() {
     qDebug() << "mic source dtor";
-    if (m_audio_source)
+
+    m_timer.stop();
+    disconnect(&m_timer, &QTimer::timeout, this, &mic_source::handle_read_timeout);
+
+    if (m_audio_source) {
+        disconnect(m_audio_source.get(), &QAudioSource::stateChanged, this,
+                   &mic_source::handle_state_changed);
         m_audio_source->stop();
+    }
 
     m_stopped = true;
+    m_audio_device = nullptr;
 }
 
 bool mic_source::ok() const { return static_cast<bool>(m_audio_source); }
 
 void mic_source::stop() {
     qDebug() << "mic source stop";
-    if (m_audio_source)
-        m_audio_source->stop();
+
+    if (m_stopped) return;  // Already stopped, prevent double-stop
+
     m_stopped = true;
+    m_eof = true;  // Mark as EOF so next read will signal end
+
+    // Disconnect the state changed signal before stopping to prevent callbacks during stop
+    if (m_audio_source) {
+        disconnect(m_audio_source.get(), &QAudioSource::stateChanged, this,
+                   &mic_source::handle_state_changed);
+        m_audio_source->stop();
+        m_audio_device = nullptr;  // Invalidate the device pointer as it's owned by QAudioSource
+    }
+
+    // Don't stop the timer here - let it continue to trigger one more read with EOF
+    // The timer will be stopped in handle_read_timeout() when m_ended is set
 }
 
 void mic_source::slowdown() {
@@ -134,20 +155,22 @@ void mic_source::handle_state_changed(QAudio::State new_state) {
     if (new_state == QAudio::State::StoppedState ||
         new_state == QAudio::State::SuspendedState || m_stopped) {
         qDebug() << "audio ended";
-        if (m_audio_source->error() == QAudio::NoError) m_eof = true;
+        if (m_audio_source && m_audio_source->error() == QAudio::NoError) m_eof = true;
     }
 }
 
 void mic_source::handle_read_timeout() {
+    if (!m_audio_source) {
+        m_timer.stop();
+        return;
+    }
+
     if (m_audio_source->error() != QAudio::NoError) {
         qWarning() << "audio input error:" << m_audio_source->error();
         m_timer.stop();
         emit error();
         return;
     }
-
-    if (m_stopped && m_audio_source->state() != QAudio::State::SuspendedState)
-        stop();
 
     /*bool bytes_available = !m_eof || m_audio_source->bufferSize() > 0;
     qDebug() << "mic read timeout: b_avai=" << bytes_available
@@ -166,6 +189,8 @@ void mic_source::handle_read_timeout() {
 void mic_source::clear() {
     qDebug() << "mic clear";
 
+    if (!m_audio_device) return;
+
     char buff[std::numeric_limits<short>::max()];
     while (m_audio_device->read(buff, std::numeric_limits<short>::max()))
         continue;
@@ -175,6 +200,12 @@ audio_source::audio_data mic_source::read_audio(char* buf, size_t max_size) {
     audio_data data;
     data.data = buf;
     data.sof = m_sof;
+
+    if (!m_audio_device) {
+        data.eof = true;
+        m_ended = true;
+        return data;
+    }
 
     bool bytes_available = !m_eof || m_audio_device->bytesAvailable() > 0;
 
