@@ -266,7 +266,11 @@ set(deps_libs "") # libs to link to dsnote_lib and dsnote
 set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_SKIP_RPATH ON)
+set(CMAKE_SKIP_BUILD_RPATH OFF)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH OFF)
+set(CMAKE_INSTALL_RPATH ${rpath_install_dir})
+set(CMAKE_BUILD_RPATH ${external_lib_dir})
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 set(ENV{PKG_CONFIG_PATH} $ENV{PKG_CONFIG_PATH}:${PROJECT_BINARY_DIR})
 message(STATUS "PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}")
 
@@ -477,7 +481,7 @@ else()
     target_link_options(compiler_flags INTERFACE "-pie;-flto;-fno-fat-lto-objects")
 endif()
 
-set(link_opts "-Wl,--enable-new-dtags;-Wl,-pie;-Wl,-rpath,${rpath_install_dir}")
+set(link_opts "-Wl,--enable-new-dtags;-Wl,-pie")
 target_link_options(compiler_flags INTERFACE ${link_opts})
 
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_TRACE_LOGS}>:USE_TRACE_LOGS>")
