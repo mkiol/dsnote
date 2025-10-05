@@ -12,14 +12,14 @@ endif()
 
 add_custom_command(
     OUTPUT dbus_dsnote_adaptor.h dbus_dsnote_adaptor.cpp
-    COMMAND ${qdbusxml2cpp_bin} ${info_dbus_app_interface}.xml -m -a dbus_dsnote_adaptor -c DsnoteAdaptor
+    COMMAND ${qdbusxml2cpp_bin} ${info_dbus_app_interface}.xml -a dbus_dsnote_adaptor -c DsnoteAdaptor
     DEPENDS ${info_dbus_app_interface}.xml
     COMMENT "generate dbus app adaptor sources"
 )
 
 add_custom_command(
     OUTPUT dbus_dsnote_inf.h dbus_dsnote_inf.cpp
-    COMMAND ${qdbusxml2cpp_bin} ${info_dbus_app_interface}.xml -m -p dbus_dsnote_inf -c DsnoteDbusInterface
+    COMMAND ${qdbusxml2cpp_bin} ${info_dbus_app_interface}.xml -p dbus_dsnote_inf -c DsnoteDbusInterface
     DEPENDS ${info_dbus_app_interface}.xml
     COMMENT "generate dbus app inf sources"
 )
