@@ -18,6 +18,7 @@ Linux desktop and Sailfish OS app for note taking, reading and translating with 
 - [How to support](#how-to-support)
 - [Reviews and demos](#reviews-and-demos)
 - [License](#license)
+- [Changelog](CHANGELOG.md)
 
 ## Description
 
@@ -484,6 +485,8 @@ flatpak run net.mkiol.SpeechNote --verbose --gen-checksums
 
 Any contribution is very welcome!
 
+For detailed information on how to contribute, please see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 Project is hosted both on [GitHub](https://github.com/mkiol/dsnote) and [GitLab](https://gitlab.com/mkiol/dsnote).
 Feel free to make a PR/MR, report an issue or reqest for new feature on the platform you prefer the most.
 
@@ -581,7 +584,7 @@ please consider doing one or two of the following:
 ## License
 
 **Speech Note** is an open source project. Source code is released under the
-[Mozilla Public License Version 2.0](https://www.mozilla.org/MPL/2.0/).
+[Mozilla Public License Version 2.0](https://www.mozilla.org/MPL/2.0/). See the copy of the  [LICENSE](./LICENSE)
 
 3rd party libraries:
 
