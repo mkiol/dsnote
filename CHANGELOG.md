@@ -2,15 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- More documentation: [CONTRIBUTING.md](./CONTRIBUTING.md) and CHANGELOG.md.
+
+### Changed
+
+- Upgrade from Qt5 to Qt6!
+
 ## [4.8.3] - 2025-08-15
 
-### Fixed
+### Fixed in 4.8.3
 
 - Support for older CPUs in OpenBLAS
 - Coqui XTTS license download error
 - Don't strip RHVoice STT libraries
 
-### Changed
+### Changed in 4.8.3
 
 - SFOS: Strip binaries
 - SFOS UI: Move copy button to left side
@@ -18,24 +28,24 @@ All notable changes to this project will be documented in this file.
 
 ## [4.8.2] - 2025-07-13
 
-### Fixed
+### Fixed in 4.8.2
 
 - Reading doesn't stop on TTS error
 - Crash when TTS engine gives corrupted audio file
 - Invalid metainfo file
 
-### Added
+### Added in 4.8.2
 
 - New languages in Whisper: Azerbaijani, Belarusian, Malayalam, Tamil, Kannada
 - New Piper voices: Spanish, Hindi, Malayalam, Nepali
 
-### Changed
+### Changed in 4.8.2
 
 - Flatpak: Downgrade numba to 0.60.0
 
 ## [4.8.1] - 2025-07-10
 
-### Fixed
+### Fixed in 4.8.1
 
 - 'Configure GKS' doesn't work on KDE Plasma
 - Outdated version
@@ -43,7 +53,7 @@ All notable changes to this project will be documented in this file.
 - XDO build error
 - RHVoice lib broken on SFOS aarch64
 
-### Added
+### Added in 4.8.1
 
 - Coqui MMS voices for: Kannada, Malayalam, Tamil
 - German translation
@@ -52,7 +62,7 @@ All notable changes to this project will be documented in this file.
 - Info about required disk space during install
 - Options to disable torch and CT2 detection
 
-### Changed
+### Changed in 4.8.1
 
 - Improve libwhisper build script
 - Update translator models
@@ -61,7 +71,7 @@ All notable changes to this project will be documented in this file.
 
 ## [4.8.0] - 2025-06-20
 
-### Added
+### Added in 4.8.0
 
 - Option for setting window size
 - CMD option for exporting TTS audio to a file
@@ -82,7 +92,7 @@ All notable changes to this project will be documented in this file.
 - Echo mode
 - Action for reading text from CMD interface
 
-### Fixed
+### Fixed in 4.8.0
 
 - Invalid rpath in RHVoice and libstt on SFOS
 - Build error on SFOS
@@ -96,7 +106,7 @@ All notable changes to this project will be documented in this file.
 - Dark text on dark background in toast notification
 - Invalid Kokoro initialization
 
-### Changed
+### Changed in 4.8.0
 
 - Enable speed control for XDO
 - Do not add extension to export filename
@@ -133,25 +143,25 @@ All notable changes to this project will be documented in this file.
 
 ## [4.7.1] - 2025-01-27
 
-### Fixed
+### Fixed in 4.7.1
 
 - Crash when CPU doesn't have AVX
 - Invalid task icon state when not configured
 
-### Added
+### Added in 4.7.1
 
 - New translator models
 - Spanish translation
 - French-Canadian translation
 
-### Changed
+### Changed in 4.7.1
 
 - UI: Expose keystroke delay option
 - Enable Spanish translation
 
 ## [4.7.0] - 2025-01-20
 
-### Added
+### Added in 4.7.0
 
 - Text transformation with "rules"
 - Echo mode
@@ -174,7 +184,7 @@ All notable changes to this project will be documented in this file.
 - Audio context size engine option
 - OpenVINO support in whisper-cpp engine
 
-### Fixed
+### Fixed in 4.7.0
 
 - Translator models missing on SFOS
 - Echo mode didn't work for voice cloning models
@@ -191,7 +201,7 @@ All notable changes to this project will be documented in this file.
 - Parallel build error when generating translation files
 - Build error with ffmpeg >= 61
 
-### Changed
+### Changed in 4.7.0
 
 - Make XDO keystrokes sending method default
 - Use libxdo for keystrokes sending
@@ -221,18 +231,18 @@ All notable changes to this project will be documented in this file.
 
 ## [4.6.1] - 2024-08-23
 
-### Fixed
+### Fixed in 4.6.1
 
 - Disabled TTS GPU acceleration on ROCm
 - Build error
 - Crash when BMI2 is not supported in CPU
 
-### Added
+### Added in 4.6.1
 
 - Fixes for ZLUDA
 - Support for x86free keys in global key shortcuts
 
-### Changed
+### Changed in 4.6.1
 
 - Update translator models
 - Don't require AVX2 and FMA for whisper-cpp on GPU
@@ -241,7 +251,7 @@ All notable changes to this project will be documented in this file.
 
 ## [4.6.0] - 2024-08-16
 
-### Added
+### Added in 4.6.0
 
 - Auto language detection for Whisper STT
 - New translator models
@@ -255,7 +265,7 @@ All notable changes to this project will be documented in this file.
 - OpenVINO support in whisper-cpp engine
 - Separate GPU options for engines
 
-### Fixed
+### Fixed in 4.6.0
 
 - Build error on SFOS arm32
 - STT stats option can't be disabled
@@ -269,7 +279,7 @@ All notable changes to this project will be documented in this file.
 - Flatpak GPU addon build error
 - Can't set Python path
 
-### Changed
+### Changed in 4.6.0
 
 - Remove 'beta' label
 - Improve STT stats tag removal
@@ -305,7 +315,7 @@ All notable changes to this project will be documented in this file.
 
 ## [4.5.0] - 2024-06-29
 
-### Added
+### Added in 4.5.0
 
 - Subtitles generation with STT
 - Option to mix speech with audio from existing file
@@ -334,7 +344,7 @@ All notable changes to this project will be documented in this file.
 - Czech translation
 - Lithuanian translation
 
-### Features
+### Features in 4.5.0
 
 - Speech-to-Text (STT) with multiple engines: Whisper, Faster-Whisper, Whisper.cpp, Vosk, April, DeepSpeech
 - Text-to-Speech (TTS) with multiple engines: Piper, RHVoice, Mimic3, Coqui XTTS, WhisperSpeech
@@ -351,7 +361,7 @@ All notable changes to this project will be documented in this file.
 
 ## [4.4.0] - 2024-01-25
 
-### Added
+### Added in 4.4.0
 
 - Distil Faster-Whisper models (large-v3, small)
 - License info to TTS models
@@ -366,7 +376,7 @@ All notable changes to this project will be documented in this file.
 - SFOS UI: Scroll to beginning/bottom buttons
 - New RHVoice Uzbek models
 
-### Fixed
+### Fixed in 4.4.0
 
 - Invalid path for translation files on SFOS
 - Invalid JSON returned by Vosk lib
@@ -390,7 +400,7 @@ All notable changes to this project will be documented in this file.
 - Busy icon missing
 - Typo errors
 
-### Changed
+### Changed in 4.4.0
 
 - Enable STT distil-large-v3 for English and Polish
 - Update ctranslate2 to version 4.2.1
@@ -429,7 +439,7 @@ All notable changes to this project will be documented in this file.
 
 ## [4.3.0] - 2023-11-12
 
-### Added
+### Added in 4.3.0
 
 - Faster-Whisper STT engine and models
 - Global keyboard shortcuts
@@ -452,7 +462,7 @@ All notable changes to this project will be documented in this file.
 - Delay for sending X11 key events
 - Map non-ASCII characters to key events
 
-### Fixed
+### Fixed in 4.3.0
 
 - Model 'count' wasn't updated
 - Previous April result isn't cleared on stream EOF
@@ -468,7 +478,7 @@ All notable changes to this project will be documented in this file.
 - Compilation error on SFOS
 - Model download error
 
-### Changed
+### Changed in 4.3.0
 
 - Use tabs in settings
 - Process already buffered samples on stop-listening action
@@ -512,17 +522,17 @@ All notable changes to this project will be documented in this file.
 
 ## [4.2.1] - 2023-09-29
 
-### Added
+### Added in 4.2.1
 
 - ROCm-OpenCL implementation
 
-### Fixed
+### Fixed in 4.2.1
 
 - Minor bug fixes
 
 ## [4.2.0] - 2023-09-25
 
-### Added
+### Added in 4.2.0
 
 - Opening files from command arguments and drag & drop
 - Menu option to open and save text file
@@ -542,14 +552,14 @@ All notable changes to this project will be documented in this file.
 - Command file interface
 - Opening files via sharing (SFOS)
 
-### Fixed
+### Fixed in 4.2.0
 
 - Invalid path to RHVoice data
 - Can't set OpenCL device
 - Crash on Whisper engine abort
 - Minor HIPblas fixes
 
-### Changed
+### Changed in 4.2.0
 
 - Don't stop TTS when single sentence encoding fails
 - Use URLs to Piper models pointing to specific commit
@@ -573,7 +583,7 @@ All notable changes to this project will be documented in this file.
 
 ## [4.1.0] - 2023-08-23
 
-### Added
+### Added in 4.1.0
 
 - 10 more VCTK English voices (Piper)
 - More Coqui models: Turkish, Japanese, Spanish
@@ -592,13 +602,13 @@ All notable changes to this project will be documented in this file.
 - Dutch translation
 - Italian translation
 
-### Fixed
+### Fixed in 4.1.0
 
 - Bengali eSpeak wasn't segmented into sentences
 - Invalid ID for VITS Piper models
 - Typos
 
-### Changed
+### Changed in 4.1.0
 
 - Add 'piper' to name of VCTK models
 - Use default system font size
@@ -628,7 +638,7 @@ All notable changes to this project will be documented in this file.
 
 ## [4.0.0] - 2023-08-07
 
-### Added
+### Added in 4.0.0
 
 - Offline neural machine translator (Bergamot)
 - Firefox-translations models
@@ -639,7 +649,7 @@ All notable changes to this project will be documented in this file.
 - More Piper models
 - Swedish translation
 
-### Fixed
+### Fixed in 4.0.0
 
 - On download error all models were deleted
 - Incorrect include directory for Piper
@@ -649,7 +659,7 @@ All notable changes to this project will be documented in this file.
 - Build error on ARM32
 - Invalid speaker-id for RHVoice Leticia
 
-### Changed
+### Changed in 4.0.0
 
 - Update Piper to version 1.2.0
 - Sort models by name instead of ID
@@ -669,30 +679,30 @@ All notable changes to this project will be documented in this file.
 
 ## [3.1.6] - 2023-07-13
 
-### Fixed
+### Fixed in 3.1.6
 
 - UI wasn't refreshed after default model change
 - RHVoice Uzbek language config was missing
 
-### Changed
+### Changed in 3.1.6
 
 - Better number of threads assignment
 
 ## [3.1.5] - 2023-07-07
 
-### Added
+### Added in 3.1.5
 
 - Coqui Jenny voice
 - Screenshot from phone
 
-### Fixed
+### Fixed in 3.1.5
 
 - Invalid XML tag
 - Speaker-id for RHVoice Leticia was invalid
 - Don't show changelog when other dialog is open
 - Desktop UI wasn't updated on model change
 
-### Changed
+### Changed in 3.1.5
 
 - Don't load too large Vosk models
 - Desktop UI improvements
@@ -706,7 +716,7 @@ All notable changes to this project will be documented in this file.
 
 ## [3.1.4] - 2023-07-03
 
-### Added
+### Added in 3.1.4
 
 - RHVoice model for Uzbek
 - New RHVoice model for English
@@ -718,12 +728,12 @@ All notable changes to this project will be documented in this file.
 - Piper and eSpeak models for Icelandic
 - Punctuation model for Slovak and Danish
 
-### Fixed
+### Fixed in 3.1.4
 
 - Build error on ARM32
 - Piper and RHVoice on ARM64
 
-### Changed
+### Changed in 3.1.4
 
 - Better UI layout for small screens
 - Show changes when app starts after update
@@ -742,7 +752,7 @@ All notable changes to this project will be documented in this file.
 
 ## [3.1.3] - 2023-06-24
 
-### Changed
+### Changed in 3.1.3
 
 - Don't use language ID with postfix
 - Use only first part of language code for Whisper engine
@@ -750,7 +760,7 @@ All notable changes to this project will be documented in this file.
 
 ## [3.1.2] - 2023-06-20
 
-### Added
+### Added in 3.1.2
 
 - New Latvian DeepSpeech model
 - Hello page
@@ -758,12 +768,12 @@ All notable changes to this project will be documented in this file.
 - Coqui TTS models
 - Flatpak support (aarch64)
 
-### Fixed
+### Fixed in 3.1.2
 
 - Missing settings properties
 - Typos
 
-### Changed
+### Changed in 3.1.2
 
 - Use downloads directory as default for models on SFOS
 - Update README
@@ -791,7 +801,7 @@ All notable changes to this project will be documented in this file.
 
 ## [3.1.1] - 2023-06-17
 
-### Added
+### Added in 3.1.1
 
 - More Vosk models
 - mbrola models
@@ -805,14 +815,14 @@ All notable changes to this project will be documented in this file.
 - Option to split text into sentences for TTS
 - STT/TTS language list to DBus API
 
-### Fixed
+### Fixed in 3.1.1
 
 - Don't write WAV when eSpeak returns no data
 - Invalid option name
 - Ignore WAV data when TTS is shutting down
 - Typos
 
-### Changed
+### Changed in 3.1.1
 
 - Disable some Vosk models on SFOS
 - Add more logging
@@ -837,7 +847,7 @@ All notable changes to this project will be documented in this file.
 
 ## [3.0.0] - 2023-05-22
 
-### Added
+### Added in 3.0.0
 
 - RHVoice TTS engine
 - eSpeak TTS engine
@@ -850,7 +860,7 @@ All notable changes to this project will be documented in this file.
 - Hello/welcome page
 - Flatpak support
 
-### Changed
+### Changed in 3.0.0
 
 - App description changed
 - Disable some Vosk models on SFOS
@@ -861,18 +871,18 @@ All notable changes to this project will be documented in this file.
 
 ## [2.0.1] - 2023-04-15
 
-### Added
+### Added in 2.0.1
 
 - RNNoise for noise reduction
 - Swedish translation
 - Dutch translation
 
-### Fixed
+### Fixed in 2.0.1
 
 - Use Swedish language name
 - Audio debugging improvements
 
-### Changed
+### Changed in 2.0.1
 
 - Improved denoising
 - Update Whisper.cpp
@@ -886,7 +896,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.0.0] - 2023-04-07
 
-### Added
+### Added in 2.0.0
 
 - Vosk STT engine and models
 - Whisper STT engine (whisper.cpp)
@@ -898,13 +908,13 @@ All notable changes to this project will be documented in this file.
 - Swahili Coqui model
 - Persian DeepSpeech model
 
-### Fixed
+### Fixed in 2.0.0
 
 - Minor app bugs
 - Missing build dependency
 - Lack of language ID
 
-### Changed
+### Changed in 2.0.0
 
 - Update translations
 - Disable Whisper small and medium models on SFOS
@@ -939,15 +949,15 @@ All notable changes to this project will be documented in this file.
 
 ## [1.8.0] - 2022-04-02
 
-### Added
+### Added in 1.8.0
 
 - Finnish model and scorer
 
-### Fixed
+### Fixed in 1.8.0
 
 - Incorrect app icon
 
-### Changed
+### Changed in 1.8.0
 
 - STT lib downgrade to v1.1.0
 - Disable sandboxing
@@ -963,18 +973,18 @@ All notable changes to this project will be documented in this file.
 
 ## [1.7.0] - 2022-03-04
 
-### Added
+### Added in 1.7.0
 
 - New experimental models: de-med, de-medn
 - New models: Estonian, English, Finnish, Mongolian
 - Option to cancel ongoing download
 - Qt logger
 
-### Fixed
+### Fixed in 1.7.0
 
 - Bugs discovered with clang-tidy
 
-### Changed
+### Changed in 1.7.0
 
 - Remove unused include file
 - Don't re-download model/scorer files if already downloaded
@@ -986,17 +996,17 @@ All notable changes to this project will be documented in this file.
 
 ## [1.6.1] - 2021-12-10
 
-### Added
+### Added in 1.6.1
 
 - New experimental model for German language
 
-### Changed
+### Changed in 1.6.1
 
 - Reset listening mode to default
 
 ## [1.6.0] - 2021-12-09
 
-### Added
+### Added in 1.6.0
 
 - One-sentence listening mode
 - Experimental models feature
@@ -1006,7 +1016,7 @@ All notable changes to this project will be documented in this file.
 - DBus API
 - Systemd service
 
-### Fixed
+### Fixed in 1.6.0
 
 - Create data directory when it does not exist
 - Proper path for systemd user unit on ARM64
@@ -1014,7 +1024,7 @@ All notable changes to this project will be documented in this file.
 - lib64 directory for aarch64
 - Typo
 
-### Changed
+### Changed in 1.6.0
 
 - Update translation files
 - Coqui libstt update to v1.1.0
@@ -1030,13 +1040,13 @@ All notable changes to this project will be documented in this file.
 
 ## [1.5.1] - 2021-11-17
 
-### Changed
+### Changed in 1.5.1
 
 - Minor version update
 
 ## [1.5.0] - 2021-11-16
 
-### Added
+### Added in 1.5.0
 
 - Romanian language model (later removed)
 - Ukrainian language model
@@ -1045,23 +1055,23 @@ All notable changes to this project will be documented in this file.
 - Systemd service
 - Models configuration in JSON
 
-### Changed
+### Changed in 1.5.0
 
 - Better error handling
 - Update README
 
 ## [1.4.0] - 2021-11-14
 
-### Added
+### Added in 1.4.0
 
 - Romanian language model
 - Use Coqui's libstt instead of libdeepspeech
 
-### Fixed
+### Fixed in 1.4.0
 
 - Missing header file
 
-### Changed
+### Changed in 1.4.0
 
 - Remove old model files
 - Updated ARM build of libstt
@@ -1069,7 +1079,7 @@ All notable changes to this project will be documented in this file.
 
 ## [1.3.0] - 2021-10-01
 
-### Added
+### Added in 1.3.0
 
 - French language model from Common Voice
 - Italian language model from MozillaItalia
@@ -1077,7 +1087,7 @@ All notable changes to this project will be documented in this file.
 - Support for model files compressed with gzip
 - Support for model files divided into parts
 
-### Changed
+### Changed in 1.3.0
 
 - Using github.com/MozillaItalia/DeepSpeech-Italian-Model as source for Italian model
 - Using github.com/rhasspy as download source for models
@@ -1085,20 +1095,20 @@ All notable changes to this project will be documented in this file.
 
 ## [1.2.0] - 2021-09-18
 
-### Added
+### Added in 1.2.0
 
 - Support for compressed model files
 - Support for split model files
 - Italian language support
 - French language support
 
-### Changed
+### Changed in 1.2.0
 
 - Improved model download system
 
 ## [1.0.0] - 2021-04-22
 
-### Added
+### Added in 1.0.0
 
 - Initial release
 - Speech-to-Text using Mozilla DeepSpeech/Coqui STT
