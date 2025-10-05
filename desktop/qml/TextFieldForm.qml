@@ -60,7 +60,7 @@ GridLayout {
     Button {
         id: _button
 
-        visible: text.length !== 0
+        visible: _button.text.length !== 0
         Layout.leftMargin: root.verticalMode ? (root.indends + 1) * appWin.padding : 0
 
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
