@@ -107,8 +107,8 @@ DialogPage {
 
         Layout.fillWidth: true
         Layout.topMargin: appWin.padding
-        height: currentItem.implicitHeight
-        implicitHeight: currentItem.implicitHeight
+        height: currentItem ? currentItem.implicitHeight : 0
+        implicitHeight: currentItem ? currentItem.implicitHeight : 0
         onIdxChanged: {
             switch(idx) {
             case 0:

@@ -39,9 +39,9 @@ ColumnLayout {
         id: fontDialog
 
         title: qsTranslate("SettingsPage", "Please choose a font")
-        font: _settings.notepad_font
+        currentFont: _settings.notepad_font
         onAccepted: {
-            _settings.notepad_font = fontDialog.font
+            _settings.notepad_font = fontDialog.currentFont
         }
     }
 
