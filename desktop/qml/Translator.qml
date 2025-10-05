@@ -30,17 +30,17 @@ ColumnLayout {
     Connections {
         target: app
 
-        onAvailable_mnt_langs_changed: root.update()
-        onAvailable_mnt_out_langs_changed: root.update()
-        onAvailable_tts_models_for_in_mnt_changed: root.update()
-        onAvailable_tts_models_for_out_mnt_changed: root.update()
-        onBusyChanged: root.update()
-        onActive_mnt_lang_changed: root.update()
-        onActive_mnt_out_lang_changed: root.update()
-        onActive_tts_model_for_in_mnt_changed: root.update()
-        onActive_tts_model_for_out_mnt_changed: update()
-        onNote_changed: update()
-        onTranslated_text_changed: update()
+        function onAvailable_mnt_langs_changed() { root.update() }
+        function onAvailable_mnt_out_langs_changed() { root.update() }
+        function onAvailable_tts_models_for_in_mnt_changed() { root.update() }
+        function onAvailable_tts_models_for_out_mnt_changed() { root.update() }
+        function onBusyChanged() { root.update() }
+        function onActive_mnt_lang_changed() { root.update() }
+        function onActive_mnt_out_lang_changed() { root.update() }
+        function onActive_tts_model_for_in_mnt_changed() { root.update() }
+        function onActive_tts_model_for_out_mnt_changed() { update() }
+        function onNote_changed() { update() }
+        function onTranslated_text_changed() { update() }
     }
 
     function update() {

@@ -504,8 +504,8 @@ ApplicationWindow {
 
     Connections {
         target: _settings
-        onTranslator_modeChanged: appWin.update()
-        onRestart_required_changed: {
+        function onTranslator_modeChanged() { appWin.update() }
+        function onRestart_required_changed() {
             if (_settings.restart_required)
                 toast.show(qsTr("Restart the application to apply changes."))
         }
@@ -513,11 +513,11 @@ ApplicationWindow {
 
     Connections {
         target: _app_server
-        onActivate_requested: {
+        function onActivate_requested() {
             appWin.show()
             appWin.raise()
         }
-        onFiles_to_open_requested: {
+        function onFiles_to_open_requested(files) {
             if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
                 var list_of_files = files
                 addTextDialog.addHandler = function(){app.import_files(list_of_files, false)}

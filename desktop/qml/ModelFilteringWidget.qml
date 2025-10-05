@@ -97,7 +97,7 @@ ColumnLayout {
 
     Connections {
         target: root.models_model
-        onFilterChanged: modelsSearchTextField.text = root.models_model.filter
+        function onFilterChanged() { modelsSearchTextField.text = root.models_model.filter }
     }
 
     RowLayout {

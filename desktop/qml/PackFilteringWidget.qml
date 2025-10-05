@@ -24,7 +24,7 @@ RowLayout {
 
     Connections {
         target: root.models_model
-        onFilterChanged: searchTextField.text = root.models_model.filter
+        function onFilterChanged() { searchTextField.text = root.models_model.filter }
     }
 
     TextField {

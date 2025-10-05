@@ -24,7 +24,7 @@ RowLayout {
 
     Connections {
         target: root.lang_model
-        onFilterChanged: langsSearchTextField.text = root.lang_model.filter
+        function onFilterChanged() { langsSearchTextField.text = root.lang_model.filter }
     }
 
     TextField {
