@@ -1100,9 +1100,9 @@ class settings : public QSettings, public singleton<settings> {
     inline static const QString settings_filename =
         QStringLiteral("settings.conf");
     inline static const QString default_qt_style =
-        QStringLiteral("org.kde.desktop");
+        QStringLiteral("Fusion");
     inline static const QString default_qt_style_fallback =
-        QStringLiteral("org.kde.breeze");
+        QStringLiteral("Fusion");
     bool m_restart_required = false;
 #define X(name, _) QStringList m_##name##_gpu_devices;
     GPU_ENGINE_TABLE

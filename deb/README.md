@@ -9,7 +9,9 @@
 sudo apt install opencl-headers
 
 # Then install all build dependencies
-sudo apt install appstream autoconf build-essential cmake \
+sudo apt install \
+    appstream autoconf build-essential \
+    cmake extra-cmake-modules \
     git libboost-all-dev libpulse-dev libwayland-dev libxinerama-dev \
     libxkbcommon-x11-dev libxtst-dev ocl-icd-opencl-dev patchelf \
     python3-dev qt6-base-dev qt6-declarative-dev qt6-multimedia-dev \
