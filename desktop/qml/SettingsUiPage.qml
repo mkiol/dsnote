@@ -5,10 +5,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2 as Dialogs
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs as Dialogs
+import QtQuick.Layouts
 
 import org.mkiol.dsnote.Settings 1.0
 
@@ -39,9 +39,9 @@ ColumnLayout {
         id: fontDialog
 
         title: qsTranslate("SettingsPage", "Please choose a font")
-        font: _settings.notepad_font
+        currentFont: _settings.notepad_font
         onAccepted: {
-            _settings.notepad_font = fontDialog.font
+            _settings.notepad_font = fontDialog.currentFont
         }
     }
 

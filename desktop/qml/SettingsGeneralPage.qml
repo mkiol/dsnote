@@ -5,10 +5,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2 as Dialogs
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs as Dialogs
+import QtQuick.Layouts
 
 import org.mkiol.dsnote.Settings 1.0
 
@@ -128,9 +128,8 @@ ColumnLayout {
         Dialogs.FileDialog {
             //id: directoryDialog
             title: qsTranslate("SettingsPage", "Select Directory")
-            selectFolder: true
-            selectExisting: true
-            folder:  _settings.models_dir_url
+            fileMode: Dialogs.FileDialog.OpenFolder
+            currentFolder: _settings.models_dir_url
             onAccepted: {
                 _settings.models_dir_url = fileUrl
             }

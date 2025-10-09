@@ -4,7 +4,7 @@ Architecture: amd64
 Homepage: https://github.com/mkiol/dsnote
 Maintainer: LFdev <lfdev+deb@envs.net>
 Section: misc
-Depends: breeze-icon-theme, hicolor-icon-theme, libarchive13t64, libc6, libfmt10, libkf5dbusaddons5, liblzma5, libopenblas0, libpython3.13, libqt5multimedia5, libqt5multimedia5-plugins, libqt5quickcontrols2-5, libqt5x11extras5, librubberband2, libtag2, libvulkan1, libxinerama1, libxtst6, ocl-icd-libopencl1, python3 (>=3.13), qml-module-org-kde-qqc2desktopstyle, qml-module-org-kde-quickcharts, qml-module-qtquick-controls, qml-module-qtquick-dialogs, zlib1g
+Depends: breeze-icon-theme, hicolor-icon-theme, libc6, libpython3.12t64, libqt6multimedia6, libqt6qml6, libqt6quick6, libqt6quickcontrols2-6, libqt6quickdialogs2-6, libvulkan1, libxinerama1, libxtst6, ocl-icd-libopencl1, python3 (>=3.12), python3-pip, python3-venv, qml6-module-qtquick, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, zlib1g
 Suggests: intel-opencl-icd, libcudart12, mesa-vulkan-drivers, nvidia-cudnn, ydotool
 Description: Offline note taking, reading and translating
  Note taking, reading and translating with offline Speech to Text,

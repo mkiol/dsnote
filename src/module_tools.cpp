@@ -13,6 +13,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QSysInfo>
 #include <cstdlib>
 
 #include "checksum_tools.hpp"
@@ -44,7 +45,7 @@ static QString runtime_prefix() {
 namespace module_tools {
 QString unpacked_dir(const QString& name) {
     return QStringLiteral("%1/%2").arg(
-        QStandardPaths::writableLocation(QStandardPaths::DataLocation), name);
+        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation), name);
 }
 
 bool init_module(const QString& name) {
@@ -113,6 +114,13 @@ QString path_to_dir_for_path(const QString& dir, const QString& path) {
     if (QFileInfo::exists(path_full))
         return QStringLiteral("/usr/share/%1").arg(APP_BINARY_ID);
 
+    // search in architecture-specific Qt6 paths (e.g., /usr/lib/x86_64-linux-gnu/qt6)
+    path_full = QStringLiteral("/usr/lib/%1/qt6/%2/%3")
+                    .arg(QSysInfo::buildCpuArchitecture(), dir, path);
+    if (QFileInfo::exists(path_full))
+        return QStringLiteral("/usr/lib/%1/qt6/%2")
+            .arg(QSysInfo::buildCpuArchitecture(), dir);
+
     // search in /usr/local
 
     path_full = QStringLiteral("/usr/local/%1/%2").arg(dir, path);
@@ -158,7 +166,7 @@ bool unpack_module(const QString& name) {
     }
 
     auto unpack_dir =
-        QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     auto unpack_file = QStringLiteral("%1/%2.tar").arg(unpack_dir, name);
 
     QDir{QStringLiteral("%1/%2").arg(unpack_dir, name)}.removeRecursively();

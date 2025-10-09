@@ -21,12 +21,8 @@ static const QByteArray user_agent = QByteArrayLiteral(
     "(KHTML, like Gecko) Version/12.1.2 Safari/605.1.15");
 
 static void set_request_props(QNetworkRequest &request) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 9, 0)
     request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
                          QNetworkRequest::NoLessSafeRedirectPolicy);
-#else
-    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
-#endif
     request.setRawHeader(QByteArrayLiteral("Range"),
                          QByteArrayLiteral("bytes=0-"));
     request.setRawHeader(QByteArrayLiteral("Connection"),

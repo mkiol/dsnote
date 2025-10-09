@@ -5,9 +5,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import org.mkiol.dsnote.Dsnote 1.0
 import org.mkiol.dsnote.Settings 1.0
@@ -24,15 +24,15 @@ ColumnLayout {
     Connections {
         target: app
 
-        onAvailable_stt_models_changed: root.update()
-        onAvailable_tts_models_changed: root.update()
-        onBusyChanged: root.update()
-        onStt_configuredChanged: root.update()
-        onTts_configuredChanged: root.update()
-        onActive_stt_model_changed: root.update()
-        onActive_tts_model_changed: root.update()
-        onNote_changed: update()
-        onLast_cursor_position_changed: {
+        function onAvailable_stt_models_changed() { root.update() }
+        function onAvailable_tts_models_changed() { root.update() }
+        function onBusyChanged() { root.update() }
+        function onStt_configuredChanged() { root.update() }
+        function onTts_configuredChanged() { root.update() }
+        function onActive_stt_model_changed() { root.update() }
+        function onActive_tts_model_changed() { root.update() }
+        function onNote_changed() { update() }
+        function onLast_cursor_position_changed() {
             if (app.last_cursor_position === root.noteTextArea.textArea.cursorPosition) return
             root.noteTextArea.textArea.cursorPosition = app.last_cursor_position
         }

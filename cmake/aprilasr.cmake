@@ -7,6 +7,7 @@ ExternalProject_Add(aprilasr
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${aprilasr_source_url}"
     URL_HASH SHA256=${aprilasr_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
         -DCMAKE_INSTALL_LIBDIR=lib

@@ -18,6 +18,7 @@ Linux desktop and Sailfish OS app for note taking, reading and translating with 
 - [How to support](#how-to-support)
 - [Reviews and demos](#reviews-and-demos)
 - [License](#license)
+- [Changelog](CHANGELOG.md)
 
 ## Description
 
@@ -31,25 +32,25 @@ respected. No data is sent to the Internet.
 Currently these are used:
 
 - Speech to Text (STT)
-    - [Coqui STT (a fork of Mozilla DeepSpeech)](https://github.com/coqui-ai/STT)
-    - [Vosk](https://alphacephei.com/vosk)
-    - [whisper.cpp](https://github.com/ggerganov/whisper.cpp)
-    - [Faster Whisper](https://github.com/guillaumekln/faster-whisper)
-    - [april-asr](https://github.com/abb128/april-asr)
+  - [Coqui STT (a fork of Mozilla DeepSpeech)](https://github.com/coqui-ai/STT)
+  - [Vosk](https://alphacephei.com/vosk)
+  - [whisper.cpp](https://github.com/ggerganov/whisper.cpp)
+  - [Faster Whisper](https://github.com/guillaumekln/faster-whisper)
+  - [april-asr](https://github.com/abb128/april-asr)
 - Text to Speech (TTS)
-    - [espeak-ng](https://github.com/espeak-ng/espeak-ng)
-    - [MBROLA](https://github.com/numediart/MBROLA)
-    - [Piper](https://github.com/rhasspy/piper)
-    - [RHVoice](https://github.com/RHVoice/RHVoice)
-    - [Coqui TTS](https://github.com/coqui-ai/TTS)
-    - [Mimic 3](https://mycroft.ai/mimic-3)
-    - [WhisperSpeech](https://collabora.github.io/WhisperSpeech/)
-    - [Kokoro](https://github.com/hexgrad/kokoro)
-    - [Parler-TTS](https://github.com/huggingface/parler-tts)
-    - [F5-TTS](https://github.com/SWivid/F5-TTS)
-    - [S.A.M.](https://discordier.github.io/sam)
+  - [espeak-ng](https://github.com/espeak-ng/espeak-ng)
+  - [MBROLA](https://github.com/numediart/MBROLA)
+  - [Piper](https://github.com/rhasspy/piper)
+  - [RHVoice](https://github.com/RHVoice/RHVoice)
+  - [Coqui TTS](https://github.com/coqui-ai/TTS)
+  - [Mimic 3](https://mycroft.ai/mimic-3)
+  - [WhisperSpeech](https://collabora.github.io/WhisperSpeech/)
+  - [Kokoro](https://github.com/hexgrad/kokoro)
+  - [Parler-TTS](https://github.com/huggingface/parler-tts)
+  - [F5-TTS](https://github.com/SWivid/F5-TTS)
+  - [S.A.M.](https://discordier.github.io/sam)
 - Machine Translation (MT)
-    - [Bergamot Translator](https://github.com/browsermt/bergamot-translator)
+  - [Bergamot Translator](https://github.com/browsermt/bergamot-translator)
 
 ## Languages and Models
 
@@ -181,9 +182,9 @@ zypper in speechnote-python-modules
 
 The app distributed via Flatpak (published on Flathub) consists of the following packages:
 
- - Base package "Speech Note" (net.mkiol.SpeechNote)
- - Optional add-on for NVIDIA graphics card "Speech Note NVIDIA" (net.mkiol.SpeechNote.Addon.nvidia)
- - Optional add-on for AMD graphics card "Speech Note AMD" (net.mkiol.SpeechNote.Addon.amd)
+- Base package "Speech Note" (net.mkiol.SpeechNote)
+- Optional add-on for NVIDIA graphics card "Speech Note NVIDIA" (net.mkiol.SpeechNote.Addon.nvidia)
+- Optional add-on for AMD graphics card "Speech Note AMD" (net.mkiol.SpeechNote.Addon.amd)
 
 Base package includes all the dependencies needed to run every feature of the application.
 Add-ons add the capability of GPU acceleration, which speeds up some operations in the application.
@@ -433,7 +434,7 @@ You can freely edit currently enabled models or add new ones.
 
 Model definition looks like this:
 
-```
+```json
 {
     "name": "<model name>",
     "model_id": "<model unique id>",
@@ -459,7 +460,7 @@ Checksums are calculated for all files after unpacking. If you are adding a new 
 
 For example:
 
-```
+```json
 {
     "name": "New Piper Voice",
     "model_id": "en_piper_new",
@@ -483,6 +484,8 @@ flatpak run net.mkiol.SpeechNote --verbose --gen-checksums
 ## Contributing to Speech Note
 
 Any contribution is very welcome!
+
+For detailed information on how to contribute, please see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Project is hosted both on [GitHub](https://github.com/mkiol/dsnote) and [GitLab](https://gitlab.com/mkiol/dsnote).
 Feel free to make a PR/MR, report an issue or reqest for new feature on the platform you prefer the most.
@@ -581,7 +584,7 @@ please consider doing one or two of the following:
 ## License
 
 **Speech Note** is an open source project. Source code is released under the
-[Mozilla Public License Version 2.0](https://www.mozilla.org/MPL/2.0/).
+[Mozilla Public License Version 2.0](https://www.mozilla.org/MPL/2.0/). See the copy of the  [LICENSE](./LICENSE)
 
 3rd party libraries:
 
@@ -629,4 +632,3 @@ please consider doing one or two of the following:
 The files in the directory `nonbreaking_prefixes` were copied from
 [mosesdecoder](https://github.com/moses-smt/mosesdecoder) project and distributed under the
 [GNU Lesser General Public License v2.1](https://github.com/moses-smt/mosesdecoder/raw/master/COPYING).
-

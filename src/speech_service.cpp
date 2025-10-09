@@ -262,7 +262,7 @@ speech_service::speech_service(QObject *parent)
     connect(
         this, &speech_service::requet_update_task_state, this,
         [this] { update_task_state(); }, Qt::QueuedConnection);
-    connect(&m_player, &QMediaPlayer::stateChanged, this,
+    connect(&m_player, &QMediaPlayer::playbackStateChanged, this,
             &speech_service::handle_player_state_changed, Qt::QueuedConnection);
     connect(
         settings::instance(), &settings::default_stt_model_changed, this,
@@ -2453,7 +2453,7 @@ void speech_service::play_beep(beep_role_t beep_role) {
     auto get_beep_file = [](const QString &name) {
         // get from user data dir
         auto file_user =
-            QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+            QDir{QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)}
                 .filePath(name);
         qDebug() << "file user:" << file_user;
         if (QFileInfo::exists(file_user)) {
@@ -2488,15 +2488,15 @@ void speech_service::play_beep(beep_role_t beep_role) {
         return;
     }
 
-    m_beep_player.setMedia(QMediaContent{QUrl::fromLocalFile(beep_file)});
+    m_beep_player.setSource(QUrl::fromLocalFile(beep_file));
     m_beep_player.play();
 }
 
 void speech_service::handle_tts_queue() {
     if (m_tts_queue.empty()) return;
 
-    if (m_player.state() == QMediaPlayer::State::PlayingState ||
-        m_player.state() == QMediaPlayer::State::PausedState)
+    if (m_player.playbackState() == QMediaPlayer::PlaybackState::PlayingState ||
+        m_player.playbackState() == QMediaPlayer::PlaybackState::PausedState)
         return;
 
     if (m_current_task && m_current_task->paused) return;
@@ -2514,8 +2514,7 @@ void speech_service::handle_tts_queue() {
             result.remove_audio_file = true;
         }
 
-        m_player.setMedia(
-            QMediaContent{QUrl::fromLocalFile(result.audio_file_path)});
+        m_player.setSource(QUrl::fromLocalFile(result.audio_file_path));
 
         m_player.play();
 
@@ -2624,12 +2623,12 @@ void speech_service::handle_ttt_text_repaired(const QString &text,
 }
 
 void speech_service::handle_player_state_changed(
-    QMediaPlayer::State new_state) {
+    QMediaPlayer::PlaybackState new_state) {
     qDebug() << "player new state:" << new_state;
 
     update_task_state();
 
-    if (new_state == QMediaPlayer::State::StoppedState && m_current_task &&
+    if (new_state == QMediaPlayer::PlaybackState::StoppedState && m_current_task &&
         m_current_task->engine == engine_t::tts && !m_current_task->paused &&
         !m_tts_queue.empty()) {
         const auto &result = m_tts_queue.front();
@@ -3871,7 +3870,7 @@ int speech_service::tts_pause_speech(int task) {
 
     m_current_task->paused = true;
 
-    if (m_player.state() == QMediaPlayer::PlayingState) m_player.pause();
+    if (m_player.playbackState() == QMediaPlayer::PlayingState) m_player.pause();
 
     update_task_state();
 
@@ -3904,7 +3903,7 @@ int speech_service::tts_resume_speech(int task) {
 
     m_current_task->paused = false;
 
-    if (m_player.state() == QMediaPlayer::PausedState) m_player.play();
+    if (m_player.playbackState() == QMediaPlayer::PausedState) m_player.play();
 
     handle_tts_queue();
 
@@ -4114,7 +4113,7 @@ void speech_service::update_task_state() {
     // 6 = Canceling
 
     auto new_task_state = [&] {
-        if (m_player.state() == QMediaPlayer::State::PlayingState &&
+        if (m_player.playbackState() == QMediaPlayer::PlaybackState::PlayingState &&
             m_state == state_t::playing_speech) {
             return 4;
         } else if (m_stt_engine && m_stt_engine->started()) {
@@ -4128,8 +4127,8 @@ void speech_service::update_task_state() {
                 case stt_engine::speech_detection_status_t::no_speech:
                     break;
             }
-        } else if (m_player.state() == QMediaPlayer::State::PausedState ||
-                   (m_player.state() == QMediaPlayer::State::StoppedState &&
+        } else if (m_player.playbackState() == QMediaPlayer::PlaybackState::PausedState ||
+                   (m_player.playbackState() == QMediaPlayer::PlaybackState::StoppedState &&
                     m_state == state_t::playing_speech && m_current_task &&
                     m_current_task->paused)) {
             return 5;

@@ -1,13 +1,17 @@
 if(BUILD_CATCH2)
     include(FetchContent)
 
+    set(catch2_source_url "https://github.com/catchorg/Catch2/archive/refs/tags/v3.5.2.tar.gz")
+    set(catch2_checksum "SHA256=269543a49eb76f40b3f93ff231d4c24c27a7e16c90e47d2e45bcc564de470c6e")
+
     FetchContent_Declare(
       Catch2
       URL ${catch2_source_url}
-      URL_HASH MD5=${catch2_checksum}
+      URL_HASH ${catch2_checksum}
       SOURCE_DIR "${external_dir}/catch2"
       BINARY_DIR "${PROJECT_BINARY_DIR}/external/catch2"
       INSTALL_DIR "${PROJECT_BINARY_DIR}/external"
+      DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     )
     FetchContent_MakeAvailable(Catch2)
 else()

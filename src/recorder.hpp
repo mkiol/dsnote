@@ -9,7 +9,7 @@
 #define RECORDER_H
 
 #include <QAudioFormat>
-#include <QAudioInput>
+#include <QAudioSource>
 #include <QFile>
 #include <QIODevice>
 #include <QObject>
@@ -61,7 +61,7 @@ class recorder final : public QObject {
         uint32_t data_size = 0;
     };
 
-    std::unique_ptr<QAudioInput> m_audio_input;
+    std::unique_ptr<QAudioSource> m_audio_source;
     QString m_input_file_path;
     QString m_wav_file_path;
     QFile m_audio_device;

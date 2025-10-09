@@ -1,0 +1,5 @@
+# Gitignore for SpeechNote
+build/
+build-test/
+external/
+deb/dsnote_*.deb

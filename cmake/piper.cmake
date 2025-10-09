@@ -31,6 +31,7 @@ ExternalProject_Add(onnx
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${onnx_url}"
     URL_HASH SHA256=${onnx_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     BUILD_ALWAYS False
@@ -45,6 +46,7 @@ ExternalProject_Add(piperphonemize
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${piperphonemize_source_url}"
     URL_HASH SHA256=${piperphonemize_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/piperphonemize.patch ||
                     echo "patch cmd failed, likely already patched"
@@ -61,6 +63,7 @@ ExternalProject_Add(spdlog
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${spdlog_source_url}"
     URL_HASH SHA256=${spdlog_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
         -DCMAKE_INSTALL_LIBDIR=${external_lib_dir}
@@ -76,6 +79,7 @@ ExternalProject_Add(piper
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${piper_source_url}"
     URL_HASH SHA256=${piper_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/piper.patch ||
                     echo "patch cmd failed, likely already patched"

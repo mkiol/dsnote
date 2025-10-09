@@ -7,6 +7,7 @@ ExternalProject_Add(libarchive
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${libarchive_source_url}"
     URL_MD5 "${libarchive_checksum}"
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
         --bindir=<INSTALL_DIR>/bin --libdir=<INSTALL_DIR>/lib
         --enable-shared=no --enable-static=yes --disable-acl --disable-xattr --disable-largefile

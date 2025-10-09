@@ -17,6 +17,7 @@ ExternalProject_Add(libnumbertext
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL ${libnumbertext_source_url}
     URL_HASH SHA256=${libnumbertext_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> && autoreconf -i &&
         <BINARY_DIR>/configure --prefix=<INSTALL_DIR> --libdir=<INSTALL_DIR>/lib
         --enable-shared=false --enable-static=true --with-pic=yes
