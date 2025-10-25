@@ -1008,13 +1008,42 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
         case text_destination_t::active_window:
 #ifdef USE_DESKTOP
             try {
-                m_fake_keyboard.emplace();
-                m_fake_keyboard->send_text(text);
+                // If this request was started as paste-to-active-window, copy to clipboard and paste via Ctrl+V
+                bool paste_mode = false;
+                if ((m_current_stt_request &&
+                     m_current_stt_request.value() == stt_request_t::listen_paste_active_window) ||
+                    (m_pending_stt_request &&
+                     m_pending_stt_request.value() == stt_request_t::listen_paste_active_window)) {
+                    paste_mode = true;
+                }
+ 
+                if (paste_mode) {
+                    // preserve current clipboard text, copy recognized text, paste via Ctrl+V,
+                    // then restore previous clipboard content after a short delay
+                    auto *clip = QGuiApplication::clipboard();
+                    const QString prev_clip_text = clip->text();
+                    // set recognized text to clipboard
+                    clip->setText(text);
+ 
+                    m_fake_keyboard.emplace();
+                    m_fake_keyboard->send_ctrl_v();
+ 
+                    emit text_decoded_to_clipboard();
+                    emit text_decoded_to_active_window();
+ 
+                    // restore previous clipboard text after a short delay
+                    int restore_delay_ms = std::max(200, settings::instance()->fake_keyboard_delay() * 2);
+                    QTimer::singleShot(restore_delay_ms, this, [prev_clip_text]() {
+                        QGuiApplication::clipboard()->setText(prev_clip_text);
+                    });
+                } else {
+                    m_fake_keyboard.emplace();
+                    m_fake_keyboard->send_text(text);
+                    emit text_decoded_to_active_window();
+                }
             } catch (const std::runtime_error &err) {
                 qWarning() << "fake-keyboard error:" << err.what();
             }
-
-            emit text_decoded_to_active_window();
 #else
             qWarning() << "send to keyboard is not implemented";
 #endif
@@ -4919,6 +4948,9 @@ void dsnote_app::execute_tray_action(tray_icon::action_t action, int value) {
         case tray_icon::action_t::start_listening_translate_clipboard:
             execute_action(action_t::start_listening_translate_clipboard, {});
             break;
+        case tray_icon::action_t::start_listening_paste_active_window:
+            execute_action(action_t::start_listening_paste_active_window, {});
+            break;
         case tray_icon::action_t::stop_listening:
             execute_action(action_t::stop_listening, {});
             break;
@@ -4965,6 +4997,7 @@ dsnote_app::action_t dsnote_app::convert_action(action_t action) const {
         case dsnote_app::action_t::start_listening_translate_active_window:
         case dsnote_app::action_t::start_listening_clipboard:
         case dsnote_app::action_t::start_listening_translate_clipboard:
+        case dsnote_app::action_t::start_listening_paste_active_window:
             if (service_state() ==
                     service_state_t::StateListeningSingleSentence ||
                 service_state() == service_state_t::StateListeningManual ||
@@ -5040,6 +5073,9 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
             break;
         case dsnote_app::action_t::start_listening_translate_clipboard:
             listen_translate_to_clipboard();
+            break;
+        case dsnote_app::action_t::start_listening_paste_active_window:
+            listen_to_active_window_and_paste();
             break;
         case dsnote_app::action_t::stop_listening:
             stop_listen();
@@ -5789,4 +5825,10 @@ dsnote_app::action_when_busy_policy_t dsnote_app::action_when_busy_policy_from_s
     }
     // default
     return action_when_busy_policy_t::add_to_queue;
+}
+
+void dsnote_app::listen_to_active_window_and_paste() {
+    listen_internal(stt_translate_req_t::off);
+    m_text_destination = text_destination_t::active_window;
+    m_pending_stt_request = stt_request_t::listen_paste_active_window;
 }

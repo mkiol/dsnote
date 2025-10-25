@@ -309,20 +309,111 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
     for (const auto &keycode : keycodes) {
         bool shift = keycode.mask == 1 || keycode.mask == 3;
         bool l3_shift = keycode.mask == 2 || keycode.mask == 3;
-
+ 
         if (shift) ydo_uinput_emit(EV_KEY, KEY_LEFTSHIFT, 1, true);
         if (l3_shift && m_l3_shift_keycode > 8)
             ydo_uinput_emit(EV_KEY, m_l3_shift_keycode - 8, 1, true);
         ydo_uinput_emit(EV_KEY, keycode.code - 8, 1, true);
-
+ 
         std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
             settings::instance()->fake_keyboard_delay()));
-
+ 
         ydo_uinput_emit(EV_KEY, keycode.code - 8, 0, true);
         if (l3_shift && m_l3_shift_keycode > 8)
             ydo_uinput_emit(EV_KEY, m_l3_shift_keycode - 8, 0, true);
         if (shift) ydo_uinput_emit(EV_KEY, KEY_LEFTSHIFT, 0, true);
     }
+}
+ 
+// Send Ctrl+V (paste) to the active window using the configured method
+void fake_keyboard::send_ctrl_v() {
+#ifdef USE_X11_FEATURES
+    switch (m_method) {
+        case method_t::ydo:
+            // Use ydotool daemon protocol to emit key events
+            ydo_uinput_emit(EV_KEY, KEY_LEFTCTRL, 1, true);
+            ydo_uinput_emit(EV_KEY, KEY_V, 1, true);
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            ydo_uinput_emit(EV_KEY, KEY_V, 0, true);
+            ydo_uinput_emit(EV_KEY, KEY_LEFTCTRL, 0, true);
+            break;
+        case method_t::legacy: {
+            if (!m_x11_display) {
+                LOGW("no x11 display for legacy send_ctrl_v");
+                break;
+            }
+            // Resolve keycodes
+            KeyCode ctrl_code = XKeysymToKeycode(m_x11_display, XK_Control_L);
+            KeyCode v_code = XKeysymToKeycode(m_x11_display, XK_V);
+            if (ctrl_code == 0 || v_code == 0) {
+                LOGW("failed to get keycodes for ctrl or v");
+                break;
+            }
+            // Create and send events: press ctrl, press v, release v, release ctrl
+            XKeyEvent event;
+            memset(&event, 0, sizeof(XKeyEvent));
+            event.display = m_x11_display;
+            event.window = m_focus_window;
+            event.root = m_root_window;
+            event.subwindow = None;
+            event.time = CurrentTime;
+            event.x = 1;
+            event.y = 1;
+            event.x_root = 1;
+            event.y_root = 1;
+            event.same_screen = True;
+ 
+            // press ctrl
+            event.type = KeyPress;
+            event.keycode = ctrl_code;
+            event.state = 0;
+            XSendEvent(event.display, event.window, True, KeyPressMask,
+                       reinterpret_cast<XEvent *>(&event));
+            XSync(event.display, False);
+ 
+            // press v
+            event.type = KeyPress;
+            event.keycode = v_code;
+            XSendEvent(event.display, event.window, True, KeyPressMask,
+                       reinterpret_cast<XEvent *>(&event));
+            XSync(event.display, False);
+ 
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+ 
+            // release v
+            event.type = KeyRelease;
+            event.keycode = v_code;
+            XSendEvent(event.display, event.window, True, KeyReleaseMask,
+                       reinterpret_cast<XEvent *>(&event));
+            XSync(event.display, False);
+ 
+            // release ctrl
+            event.type = KeyRelease;
+            event.keycode = ctrl_code;
+            XSendEvent(event.display, event.window, True, KeyReleaseMask,
+                       reinterpret_cast<XEvent *>(&event));
+            XSync(event.display, False);
+            break;
+        }
+        case method_t::xdo:
+            if (m_xdo) {
+                // Use xdo to send ctrl+v sequence to current window
+                xdo_send_keysequence_window(m_xdo, CURRENTWINDOW, "ctrl+v", 0);
+            }
+            break;
+    }
+#else
+    // Non-X11 build: use ydo path (Wayland) by default
+    if (m_ydo_daemon_socket >= 0) {
+        ydo_uinput_emit(EV_KEY, KEY_LEFTCTRL, 1, true);
+        ydo_uinput_emit(EV_KEY, KEY_V, 1, true);
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        ydo_uinput_emit(EV_KEY, KEY_V, 0, true);
+        ydo_uinput_emit(EV_KEY, KEY_LEFTCTRL, 0, true);
+    } else {
+        LOGW("no method available to send ctrl+v");
+    }
+#endif
 }
 
 int fake_keyboard::make_ydo_socket() {

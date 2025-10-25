@@ -172,6 +172,11 @@ void tray_icon::update_menu() {
                                                      m_state == state_t::idle &&
                                                      m_fake_keyboard_supported);
                 break;
+            case action_t::start_listening_paste_active_window:
+                p.second->setProperty("enabled", stt_configured &&
+                                                     m_state == state_t::idle &&
+                                                     m_fake_keyboard_supported);
+                break;
             case action_t::start_listening:
             case action_t::start_listening_clipboard:
                 p.second->setProperty(
@@ -287,6 +292,9 @@ void tray_icon::make_menu() {
                        "audio-input-microphone-symbolic",
                        tr("Start listening, text to active window"),
                        m_menu_translate);
+    add_action_to_menu(action_t::start_listening_paste_active_window,
+                       "audio-input-microphone-symbolic",
+                       tr("Start listening, paste to active window"), m_menu);
     add_action_to_menu(
         action_t::start_listening_translate_active_window,
         "audio-input-microphone-symbolic",

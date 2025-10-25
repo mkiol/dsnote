@@ -48,6 +48,8 @@ class fake_keyboard : public QObject {
     explicit fake_keyboard(QObject* parent = nullptr);
     ~fake_keyboard() override;
     void send_text(const QString& text);
+    // Send Ctrl+V (paste) to the active window
+    void send_ctrl_v();
 
    signals:
     void text_sending_completed();

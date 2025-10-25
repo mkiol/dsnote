@@ -42,6 +42,7 @@
     X(start_listening_clipboard, "start-listening-clipboard")         \
     X(start_listening_translate_clipboard,                            \
       "start-listening-translate-clipboard")                          \
+    X(start_listening_paste_active_window, "start-listening-paste-active-window") \
     X(stop_listening, "stop-listening")                               \
     X(start_reading, "start-reading")                                 \
     X(start_reading_clipboard, "start-reading-clipboard")             \
@@ -385,6 +386,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void listen_translate();
     Q_INVOKABLE void listen_to_active_window();
     Q_INVOKABLE void listen_translate_to_active_window();
+    Q_INVOKABLE void listen_to_active_window_and_paste();
     Q_INVOKABLE void listen_to_clipboard();
     Q_INVOKABLE void listen_translate_to_clipboard();
     Q_INVOKABLE void stop_listen();
@@ -647,6 +649,7 @@ class dsnote_app : public QObject {
         listen_translate_active_window,
         listen_clipboard,
         listen_translate_clipboard,
+        listen_paste_active_window,
         transcribe_file
     };
     friend QDebug operator<<(QDebug d, dsnote_app::stt_request_t request);
