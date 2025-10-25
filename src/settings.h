@@ -100,6 +100,12 @@
           "SettingsPage",                                                      \
           "Start listening, always translate, text to clipboard"),             \
       "Ctrl+Alt+Shift+,")                                                      \
+    X(start_listening_paste_active_window,                                     \
+      "start-listening-paste-active-window",                                   \
+      QCoreApplication::translate(                                             \
+          "SettingsPage",                                                      \
+          "Start listening paste into active window"),                         \
+      "Ctrl+Alt+Shift+U")                                                      \
     X(stop_listening, "stop-listening",                                        \
       QCoreApplication::translate("SettingsPage", "Stop listening"),           \
       "Ctrl+Alt+Shift+S")                                                      \

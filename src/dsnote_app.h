@@ -42,7 +42,8 @@
     X(start_listening_clipboard, "start-listening-clipboard")         \
     X(start_listening_translate_clipboard,                            \
       "start-listening-translate-clipboard")                          \
-    X(start_listening_paste_active_window, "start-listening-paste-active-window") \
+    X(start_listening_paste_active_window,                            \
+      "start-listening-paste-active-window")                          \
     X(stop_listening, "stop-listening")                               \
     X(start_reading, "start-reading")                                 \
     X(start_reading_clipboard, "start-reading-clipboard")             \
