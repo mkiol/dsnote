@@ -5639,10 +5639,5 @@
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="src/settings.h" line="90"/>
-        <source>Start listening paste into active window</source>
-        <translation>Start listening paste into active window</translation>
-    </message>
 </context>
 </TS>
