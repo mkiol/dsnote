@@ -1024,11 +1024,11 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
                     const QString prev_clip_text = clip->text();
                     // set recognized text to clipboard
                     clip->setText(text);
+
  
                     m_fake_keyboard.emplace();
                     m_fake_keyboard->send_ctrl_v();
  
-                    emit text_decoded_to_clipboard();
                     emit text_decoded_to_active_window();
  
                     // restore previous clipboard text after a short delay
