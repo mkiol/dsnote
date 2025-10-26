@@ -22,6 +22,7 @@
 #include <sys/types.h>
 #include <sys/un.h>
 #include <unistd.h>
+#include <cstring>
 #include <xkbcommon/xkbcommon-compose.h>
 #include <xkbcommon/xkbcommon.h>
 
@@ -145,7 +146,8 @@ bool fake_keyboard::is_legacy_supported() {
 // Copied from https://github.com/ReimuNotMoe/ydotool
 void fake_keyboard::ydo_uinput_emit(uint16_t type, uint16_t code, int32_t val,
                                     bool syn_report) const {
-    input_event ie{};
+    struct input_event ie;
+    std::memset(&ie, 0, sizeof(ie)); // zero timeval and other fields
     ie.type = type;
     ie.code = code;
     ie.value = val;
@@ -153,6 +155,7 @@ void fake_keyboard::ydo_uinput_emit(uint16_t type, uint16_t code, int32_t val,
     write(m_ydo_daemon_socket, &ie, sizeof(ie));
 
     if (syn_report) {
+        std::memset(&ie, 0, sizeof(ie));
         ie.type = EV_SYN;
         ie.code = SYN_REPORT;
         ie.value = 0;
@@ -325,96 +328,119 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
     }
 }
  
-// Send Ctrl+V (paste) to the active window using the configured method
-void fake_keyboard::send_ctrl_v() {
-#ifdef USE_X11_FEATURES
+ // Send Ctrl+V (paste) to the active window using the configured method
+ void fake_keyboard::send_ctrl_v() {
+    // Delay to allow clipboard to update
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+ 
+ #ifdef USE_X11_FEATURES
     switch (m_method) {
         case method_t::ydo:
-            // Use ydotool daemon protocol to emit key events
-            ydo_uinput_emit(EV_KEY, KEY_LEFTCTRL, 1, true);
-            ydo_uinput_emit(EV_KEY, KEY_V, 1, true);
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
-            ydo_uinput_emit(EV_KEY, KEY_V, 0, true);
-            ydo_uinput_emit(EV_KEY, KEY_LEFTCTRL, 0, true);
+            send_ctrl_v_ydo();
             break;
-        case method_t::legacy: {
-            if (!m_x11_display) {
-                LOGW("no x11 display for legacy send_ctrl_v");
-                break;
-            }
-            // Resolve keycodes
-            KeyCode ctrl_code = XKeysymToKeycode(m_x11_display, XK_Control_L);
-            KeyCode v_code = XKeysymToKeycode(m_x11_display, XK_V);
-            if (ctrl_code == 0 || v_code == 0) {
-                LOGW("failed to get keycodes for ctrl or v");
-                break;
-            }
-            // Create and send events: press ctrl, press v, release v, release ctrl
-            XKeyEvent event;
-            memset(&event, 0, sizeof(XKeyEvent));
-            event.display = m_x11_display;
-            event.window = m_focus_window;
-            event.root = m_root_window;
-            event.subwindow = None;
-            event.time = CurrentTime;
-            event.x = 1;
-            event.y = 1;
-            event.x_root = 1;
-            event.y_root = 1;
-            event.same_screen = True;
- 
-            // press ctrl
-            event.type = KeyPress;
-            event.keycode = ctrl_code;
-            event.state = 0;
-            XSendEvent(event.display, event.window, True, KeyPressMask,
-                       reinterpret_cast<XEvent *>(&event));
-            XSync(event.display, False);
- 
-            // press v
-            event.type = KeyPress;
-            event.keycode = v_code;
-            XSendEvent(event.display, event.window, True, KeyPressMask,
-                       reinterpret_cast<XEvent *>(&event));
-            XSync(event.display, False);
- 
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
- 
-            // release v
-            event.type = KeyRelease;
-            event.keycode = v_code;
-            XSendEvent(event.display, event.window, True, KeyReleaseMask,
-                       reinterpret_cast<XEvent *>(&event));
-            XSync(event.display, False);
- 
-            // release ctrl
-            event.type = KeyRelease;
-            event.keycode = ctrl_code;
-            XSendEvent(event.display, event.window, True, KeyReleaseMask,
-                       reinterpret_cast<XEvent *>(&event));
-            XSync(event.display, False);
+        case method_t::legacy:
+            send_ctrl_v_legacy();
             break;
-        }
         case method_t::xdo:
-            if (m_xdo) {
-                // Use xdo to send ctrl+v sequence to current window
-                xdo_send_keysequence_window(m_xdo, CURRENTWINDOW, "ctrl+v", 0);
-            }
+            send_ctrl_v_xdo();
             break;
     }
-#else
-    // Non-X11 build: use ydo path (Wayland) by default
-    if (m_ydo_daemon_socket >= 0) {
-        ydo_uinput_emit(EV_KEY, KEY_LEFTCTRL, 1, true);
-        ydo_uinput_emit(EV_KEY, KEY_V, 1, true);
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-        ydo_uinput_emit(EV_KEY, KEY_V, 0, true);
-        ydo_uinput_emit(EV_KEY, KEY_LEFTCTRL, 0, true);
-    } else {
-        LOGW("no method available to send ctrl+v");
+ #else
+     // Non-X11 build: use ydo path (Wayland) by default
+     if (m_ydo_daemon_socket >= 0) {
+         send_ctrl_v_ydo();
+     } else {
+         LOGW("no method available to send ctrl+v");
+     }
+ #endif
+ }
+ 
+ // Helper implementations split to avoid code duplication for the ydo path.
+ // ydo implementation is usable on both X11 and Wayland builds.
+ void fake_keyboard::send_ctrl_v_ydo() {
+    qWarning() << "Trying to Utilize YDO";
+
+    // helper closure: emit a key event and wait a small fixed duration
+    auto press_and_wait = [&](uint16_t code, int32_t val) {
+        ydo_uinput_emit(EV_KEY, code, val, 1);
+        // std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
+        //     settings::instance()->fake_keyboard_delay()));
+
+        usleep(settings::instance()->fake_keyboard_delay() * 1000);
+    };
+    
+
+
+    press_and_wait(KEY_LEFTCTRL, 1);
+    press_and_wait(KEY_V, 1);
+    press_and_wait(KEY_V, 0);
+    press_and_wait(KEY_LEFTCTRL, 0);
+ }
+ 
+ #ifdef USE_X11_FEATURES
+ void fake_keyboard::send_ctrl_v_legacy() {
+    qWarning() << "Trying to Utilize Legacy";
+    if (!m_x11_display) {
+        LOGW("no x11 display for legacy send_ctrl_v");
+        return;
     }
-#endif
-}
+    // Resolve keycodes
+    KeyCode ctrl_code = XKeysymToKeycode(m_x11_display, XK_Control_L);
+    KeyCode v_code = XKeysymToKeycode(m_x11_display, XK_V);
+    if (ctrl_code == 0 || v_code == 0) {
+        LOGW("failed to get keycodes for ctrl or v");
+        return;
+    }
+    // Create and send events: press ctrl, press v, release v, release ctrl
+    XKeyEvent event;
+    memset(&event, 0, sizeof(XKeyEvent));
+    event.display = m_x11_display;
+    event.window = m_focus_window;
+    event.root = m_root_window;
+    event.subwindow = None;
+    event.time = CurrentTime;
+    event.x = 1;
+    event.y = 1;
+    event.x_root = 1;
+    event.y_root = 1;
+    event.same_screen = True;
+
+    // helper closure: send event (press/release) and wait briefly
+    auto send_and_wait = [&](int type, KeyCode keycode) {
+        event.type = type;
+        event.keycode = keycode;
+        XSendEvent(event.display, event.window, True,
+                (type == KeyPress) ? KeyPressMask : KeyReleaseMask,
+                reinterpret_cast<XEvent *>(&event));
+        XSync(event.display, False);
+        std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
+            settings::instance()->fake_keyboard_delay()));
+    };
+
+    // press ctrl
+    send_and_wait(KeyPress, ctrl_code);
+    // press v
+    send_and_wait(KeyPress, v_code);
+
+    // wait for the system to process it
+    std::chrono::milliseconds(200ms);
+
+    // release v
+    send_and_wait(KeyRelease, v_code);
+    // release ctrl
+    send_and_wait(KeyRelease, ctrl_code);
+ }
+ 
+ void fake_keyboard::send_ctrl_v_xdo() {
+    if (m_xdo) {
+        qWarning() << "Trying to Utilize XDO";
+        // Use xdo to send ctrl+v sequence to current window
+        xdo_send_keysequence_window(m_xdo, CURRENTWINDOW, "ctrl+v", settings::instance()->fake_keyboard_delay());
+    } else {
+        qWarning() << "XDO not available";
+    }
+ }
+ #endif
 
 int fake_keyboard::make_ydo_socket() {
     auto ydo_daemon_socket = socket(AF_UNIX, SOCK_DGRAM, 0);
