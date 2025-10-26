@@ -425,6 +425,28 @@ ColumnLayout {
                         .arg("<i>ydotool</i>")) : "")
     }
 
+    ComboBoxForm {
+        id: textToWindowMethodCombo
+
+        visible: app.feature_fake_keyboard
+        label.text: qsTranslate("SettingsPage", "Text to window method")
+        toolTip: qsTranslate("SettingsPage", "Method used to insert recognized text into the active window.")
+        comboBox {
+            currentIndex: _settings.text_to_window_method === Settings.CtrlV ? 0 : 1
+            model: [
+                qsTranslate("SettingsPage", "Simulate copy and paste"),
+                qsTranslate("SettingsPage", "Simulate typing")
+            ]
+            onActivated: {
+                if (index === 0) {
+                    _settings.text_to_window_method = Settings.CtrlV
+                } else if (index === 1) {
+                    _settings.text_to_window_method = Settings.Typing
+                }
+            }
+        }
+    }
+
     SectionLabel {
         visible: hotkeysCombo.visible
         text: qsTranslate("SettingsPage", "Other options")

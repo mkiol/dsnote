@@ -387,7 +387,6 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void listen_translate();
     Q_INVOKABLE void listen_to_active_window();
     Q_INVOKABLE void listen_translate_to_active_window();
-    Q_INVOKABLE void listen_to_active_window_and_paste();
     Q_INVOKABLE void listen_to_clipboard();
     Q_INVOKABLE void listen_translate_to_clipboard();
     Q_INVOKABLE void stop_listen();

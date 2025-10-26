@@ -1009,14 +1009,7 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
 #ifdef USE_DESKTOP
             try {
                 // If this request was started as paste-to-active-window, copy to clipboard and paste via Ctrl+V
-                bool paste_mode = false;
-                if ((m_current_stt_request &&
-                     m_current_stt_request.value() == stt_request_t::listen_paste_active_window) ||
-                    (m_pending_stt_request &&
-                     m_pending_stt_request.value() == stt_request_t::listen_paste_active_window)) {
-                    paste_mode = true;
-                }
- 
+                bool paste_mode = settings::instance()->text_to_window_method() == settings::text_to_window_method_t::CtrlV;
                 if (paste_mode) {
                     // preserve current clipboard text, copy recognized text, paste via Ctrl+V,
                     // then restore previous clipboard content after a short delay
@@ -5075,7 +5068,7 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
             listen_translate_to_clipboard();
             break;
         case dsnote_app::action_t::start_listening_paste_active_window:
-            listen_to_active_window_and_paste();
+            listen_to_active_window();
             break;
         case dsnote_app::action_t::stop_listening:
             stop_listen();
@@ -5827,8 +5820,3 @@ dsnote_app::action_when_busy_policy_t dsnote_app::action_when_busy_policy_from_s
     return action_when_busy_policy_t::add_to_queue;
 }
 
-void dsnote_app::listen_to_active_window_and_paste() {
-    listen_internal(stt_translate_req_t::off);
-    m_text_destination = text_destination_t::active_window;
-    m_pending_stt_request = stt_request_t::listen_paste_active_window;
-}

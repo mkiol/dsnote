@@ -376,6 +376,8 @@ class settings : public QSettings, public singleton<settings> {
             set_gpu_overrided_version NOTIFY gpu_overrided_version_changed)
     Q_PROPERTY(unsigned int scan_flags READ scan_flags WRITE set_scan_flags
                    NOTIFY scan_flags_changed)
+    Q_PROPERTY(text_to_window_method_t text_to_window_method READ text_to_window_method WRITE set_text_to_window_method 
+                   NOTIFY text_to_window_method_changed)
 
     // engine options
 #define X(name)                                                           \
@@ -646,6 +648,12 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(fake_keyboard_type_t)
 
+    enum class text_to_window_method_t {
+        CtrlV = 0,
+        Typing = 1
+    };
+    Q_ENUM(text_to_window_method_t)
+
     enum class hotkeys_type_t { HotkeysTypeX11 = 0, HotkeysTypePortal = 1 };
     Q_ENUM(hotkeys_type_t)
 
@@ -849,6 +857,8 @@ class settings : public QSettings, public singleton<settings> {
     void set_fake_keyboard_type(fake_keyboard_type_t value);
     int fake_keyboard_delay() const;
     void set_fake_keyboard_delay(int value);
+    text_to_window_method_t text_to_window_method() const;
+    void set_text_to_window_method(text_to_window_method_t value);
     QString tts_desc_of_voice_prompt(const QString &name) const;
     std::optional<voice_profile_prompt_t> tts_voice_prompt(
         const QString &name) const;
@@ -1069,6 +1079,7 @@ class settings : public QSettings, public singleton<settings> {
     void tts_active_voice_prompt_for_out_mnt_changed();
     void fake_keyboard_type_changed();
     void fake_keyboard_delay_changed();
+    void text_to_window_method_changed();
     void active_voice_profile_type_changed();
 
     // service

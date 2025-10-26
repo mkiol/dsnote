@@ -2890,6 +2890,29 @@ void settings::set_fake_keyboard_type(fake_keyboard_type_t value) {
     }
 }
 
+settings::text_to_window_method_t settings::text_to_window_method() const {
+    return static_cast<text_to_window_method_t>(
+        value(QStringLiteral("text_to_window_method"),
+              static_cast<int>(text_to_window_method_t::CtrlV))
+            .toInt());
+}
+
+void settings::set_text_to_window_method(text_to_window_method_t value) {
+    if (text_to_window_method() != value) {
+        setValue(QStringLiteral("text_to_window_method"), static_cast<int>(value));
+
+        LOGE("=================================================");
+        bool text_to_window_method = value == text_to_window_method_t::CtrlV;
+        if (text_to_window_method) {
+            LOGE("Paste mode is enabled");
+        } else {
+            LOGE("Paste mode is disabled");
+        }
+        
+        emit text_to_window_method_changed();
+    }
+}
+
 int settings::fake_keyboard_delay() const {
     auto v = value(QStringLiteral("fake_keyboard_delay"), 20).toInt();
     return std::clamp(v, 1, 1000);
