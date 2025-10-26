@@ -27,7 +27,6 @@ class tray_icon : public QSystemTrayIcon {
         start_listening_translate_active_window,
         start_listening_clipboard,
         start_listening_translate_clipboard,
-        start_listening_paste_active_window,
         stop_listening,
         start_reading,
         start_reading_clipboard,

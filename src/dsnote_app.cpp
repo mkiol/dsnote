@@ -4941,9 +4941,6 @@ void dsnote_app::execute_tray_action(tray_icon::action_t action, int value) {
         case tray_icon::action_t::start_listening_translate_clipboard:
             execute_action(action_t::start_listening_translate_clipboard, {});
             break;
-        case tray_icon::action_t::start_listening_paste_active_window:
-            execute_action(action_t::start_listening_paste_active_window, {});
-            break;
         case tray_icon::action_t::stop_listening:
             execute_action(action_t::stop_listening, {});
             break;
@@ -4990,7 +4987,6 @@ dsnote_app::action_t dsnote_app::convert_action(action_t action) const {
         case dsnote_app::action_t::start_listening_translate_active_window:
         case dsnote_app::action_t::start_listening_clipboard:
         case dsnote_app::action_t::start_listening_translate_clipboard:
-        case dsnote_app::action_t::start_listening_paste_active_window:
             if (service_state() ==
                     service_state_t::StateListeningSingleSentence ||
                 service_state() == service_state_t::StateListeningManual ||
@@ -5066,9 +5062,6 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
             break;
         case dsnote_app::action_t::start_listening_translate_clipboard:
             listen_translate_to_clipboard();
-            break;
-        case dsnote_app::action_t::start_listening_paste_active_window:
-            listen_to_active_window();
             break;
         case dsnote_app::action_t::stop_listening:
             stop_listen();
