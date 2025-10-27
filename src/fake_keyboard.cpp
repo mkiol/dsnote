@@ -356,7 +356,6 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
  // Helper implementations split to avoid code duplication for the ydo path.
  // ydo implementation is usable on both X11 and Wayland builds.
  void fake_keyboard::send_ctrl_v_ydo() {
-    qWarning() << "Trying to Utilize YDO";
 
     // helper closure: emit a key event and wait a small fixed duration
     auto press_and_wait = [&](uint16_t code, int32_t val) {
