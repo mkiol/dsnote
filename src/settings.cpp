@@ -2903,14 +2903,6 @@ void settings::set_text_to_window_method(text_to_window_method_t value) {
         setValue(QStringLiteral("text_to_window_method"),
                  static_cast<int>(value));
 
-        bool text_to_window_method =
-            value == text_to_window_method_t::TextToWindowMethodCtrlV;
-        if (text_to_window_method) {
-            LOGD("Paste mode is enabled");
-        } else {
-            LOGD("Paste mode is disabled");
-        }
-
         emit text_to_window_method_changed();
     }
 }

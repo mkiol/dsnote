@@ -153,7 +153,6 @@ void fake_keyboard::ydo_uinput_emit(uint16_t type, uint16_t code, int32_t val,
     write(m_ydo_daemon_socket, &ie, sizeof(ie));
 
     if (syn_report) {
-        std::memset(&ie, 0, sizeof(ie));
         ie.type = EV_SYN;
         ie.code = SYN_REPORT;
         ie.value = 0;
@@ -362,7 +361,7 @@ void fake_keyboard::send_ctrl_v_ydo() {
         // std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
         //     settings::instance()->fake_keyboard_delay()));
 
-        usleep(settings::instance()->fake_keyboard_delay() * 1000);
+        std::this_thread::sleep_for(settings::instance()->fake_keyboard_delay() * 1000);
     };
 
     press_and_wait(KEY_LEFTCTRL, 1);
@@ -373,7 +372,6 @@ void fake_keyboard::send_ctrl_v_ydo() {
 
 #ifdef USE_X11_FEATURES
 void fake_keyboard::send_ctrl_v_legacy() {
-    qWarning() << "Trying to Utilize Legacy";
     if (!m_x11_display) {
         LOGW("no x11 display for legacy send_ctrl_v");
         return;
@@ -432,7 +430,7 @@ void fake_keyboard::send_ctrl_v_xdo() {
             m_xdo, CURRENTWINDOW, "ctrl+v",
             settings::instance()->fake_keyboard_delay());
     } else {
-        qWarning() << "XDO not available";
+        LOGW("XDO not available");
     }
 }
 #endif
