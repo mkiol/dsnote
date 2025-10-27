@@ -430,7 +430,6 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
  
  void fake_keyboard::send_ctrl_v_xdo() {
     if (m_xdo) {
-        qWarning() << "Trying to Utilize XDO";
         // Use xdo to send ctrl+v sequence to current window
         xdo_send_keysequence_window(m_xdo, CURRENTWINDOW, "ctrl+v", settings::instance()->fake_keyboard_delay());
     } else {
