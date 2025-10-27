@@ -1009,7 +1009,7 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
 #ifdef USE_DESKTOP
             try {
                 // If this request was started as paste-to-active-window, copy to clipboard and paste via Ctrl+V
-                bool paste_mode = settings::instance()->text_to_window_method() == settings::text_to_window_method_t::CtrlV;
+                bool paste_mode = settings::instance()->text_to_window_method() == settings::text_to_window_method_t::TextToWindowMethodCtrlV;
                 if (paste_mode) {
                     // preserve current clipboard text, copy recognized text, paste via Ctrl+V,
                     // then restore previous clipboard content after a short delay

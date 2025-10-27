@@ -432,16 +432,16 @@ ColumnLayout {
         label.text: qsTranslate("SettingsPage", "Text to window method")
         toolTip: qsTranslate("SettingsPage", "Method used to insert recognized text into the active window.")
         comboBox {
-            currentIndex: _settings.text_to_window_method === Settings.CtrlV ? 0 : 1
+            currentIndex: _settings.text_to_window_method === Settings.TextToWindowMethodCtrlV ? 0 : 1
             model: [
                 qsTranslate("SettingsPage", "Simulate copy and paste (Ctrl+V)"),
                 qsTranslate("SettingsPage", "Simulate typing")
             ]
             onActivated: {
                 if (index === 0) {
-                    _settings.text_to_window_method = Settings.CtrlV
+                    _settings.text_to_window_method = Settings.TextToWindowMethodCtrlV
                 } else if (index === 1) {
-                    _settings.text_to_window_method = Settings.Typing
+                    _settings.text_to_window_method = Settings.TextToWindowMethodTyping
                 }
             }
         }
