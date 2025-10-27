@@ -93,7 +93,6 @@ class fake_keyboard : public QObject {
     void ydo_uinput_emit(uint16_t type, uint16_t code, int32_t val,
                          bool syn_report) const;
     void ydo_type_char(uint32_t c);
-    // Split helpers for send_ctrl_v to avoid duplicating the ydo path
     void send_ctrl_v_legacy();
     void send_ctrl_v_xdo();
     void send_ctrl_v_ydo();

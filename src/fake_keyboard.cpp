@@ -427,7 +427,6 @@ void fake_keyboard::send_ctrl_v_legacy() {
 
 void fake_keyboard::send_ctrl_v_xdo() {
     if (m_xdo) {
-        qWarning() << "Trying to Utilize XDO";
         // Use xdo to send ctrl+v sequence to current window
         xdo_send_keysequence_window(
             m_xdo, CURRENTWINDOW, "ctrl+v",
