@@ -643,8 +643,8 @@ class settings : public QSettings, public singleton<settings> {
     Q_ENUM(fake_keyboard_type_t)
 
     enum class text_to_window_method_t {
-        CtrlV = 0,
-        Typing = 1
+        TextToWindowMethodCtrlV = 0,
+        TextToWindowMethodTyping = 1
     };
     Q_ENUM(text_to_window_method_t)
 
