@@ -146,8 +146,7 @@ bool fake_keyboard::is_legacy_supported() {
 // Copied from https://github.com/ReimuNotMoe/ydotool
 void fake_keyboard::ydo_uinput_emit(uint16_t type, uint16_t code, int32_t val,
                                     bool syn_report) const {
-    struct input_event ie;
-    std::memset(&ie, 0, sizeof(ie)); // zero timeval and other fields
+    input_event ie{};
     ie.type = type;
     ie.code = code;
     ie.value = val;
