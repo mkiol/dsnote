@@ -647,7 +647,6 @@ class dsnote_app : public QObject {
         listen_translate_active_window,
         listen_clipboard,
         listen_translate_clipboard,
-        listen_paste_active_window,
         transcribe_file
     };
     friend QDebug operator<<(QDebug d, dsnote_app::stt_request_t request);
