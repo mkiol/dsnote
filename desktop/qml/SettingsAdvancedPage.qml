@@ -434,7 +434,7 @@ ColumnLayout {
         comboBox {
             currentIndex: _settings.text_to_window_method === Settings.CtrlV ? 0 : 1
             model: [
-                qsTranslate("SettingsPage", "Simulate copy and paste"),
+                qsTranslate("SettingsPage", "Simulate copy and paste (Ctrl+V)"),
                 qsTranslate("SettingsPage", "Simulate typing")
             ]
             onActivated: {
