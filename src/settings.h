@@ -269,7 +269,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(QString x11_compose_file READ x11_compose_file WRITE
                    set_x11_compose_file NOTIFY x11_compose_file_changed)
     Q_PROPERTY(QString fake_keyboard_layout READ fake_keyboard_layout WRITE
-                   set_fake_keyboard_layout NOTIFY fake_keyboard_layout_changed)    
+                   set_fake_keyboard_layout NOTIFY fake_keyboard_layout_changed)
     Q_PROPERTY(
         unsigned int error_flags READ error_flags NOTIFY error_flags_changed)
     Q_PROPERTY(unsigned int hint_done_flags READ hint_done_flags NOTIFY
@@ -370,8 +370,9 @@ class settings : public QSettings, public singleton<settings> {
             set_gpu_overrided_version NOTIFY gpu_overrided_version_changed)
     Q_PROPERTY(unsigned int scan_flags READ scan_flags WRITE set_scan_flags
                    NOTIFY scan_flags_changed)
-    Q_PROPERTY(text_to_window_method_t text_to_window_method READ text_to_window_method WRITE set_text_to_window_method 
-                   NOTIFY text_to_window_method_changed)
+    Q_PROPERTY(text_to_window_method_t text_to_window_method READ
+                   text_to_window_method WRITE set_text_to_window_method NOTIFY
+                       text_to_window_method_changed)
 
     // engine options
 #define X(name)                                                           \
