@@ -2720,11 +2720,11 @@ std::optional<settings::voice_profile_prompt_t> settings::tts_voice_prompt(
     auto l = it->toList();
 
     return voice_profile_prompt_t{/*name=*/l.at(0).toString(),
-                          /*desc=*/l.at(1).toString()};
+                                  /*desc=*/l.at(1).toString()};
 }
 
-void settings::tts_update_voice_prompt(const QString& name,
-                                       const voice_profile_prompt_t& voice_prompt) {
+void settings::tts_update_voice_prompt(
+    const QString& name, const voice_profile_prompt_t& voice_prompt) {
     auto prompts = tts_voice_prompts();
 
     bool push_new = true;
@@ -2892,22 +2892,25 @@ void settings::set_fake_keyboard_type(fake_keyboard_type_t value) {
 
 settings::text_to_window_method_t settings::text_to_window_method() const {
     return static_cast<text_to_window_method_t>(
-        value(QStringLiteral("text_to_window_method"),
-              static_cast<int>(text_to_window_method_t::TextToWindowMethodTyping))
+        value(
+            QStringLiteral("text_to_window_method"),
+            static_cast<int>(text_to_window_method_t::TextToWindowMethodTyping))
             .toInt());
 }
 
 void settings::set_text_to_window_method(text_to_window_method_t value) {
     if (text_to_window_method() != value) {
-        setValue(QStringLiteral("text_to_window_method"), static_cast<int>(value));
+        setValue(QStringLiteral("text_to_window_method"),
+                 static_cast<int>(value));
 
-        bool text_to_window_method = value == text_to_window_method_t::TextToWindowMethodCtrlV;
+        bool text_to_window_method =
+            value == text_to_window_method_t::TextToWindowMethodCtrlV;
         if (text_to_window_method) {
             LOGD("Paste mode is enabled");
         } else {
             LOGD("Paste mode is disabled");
         }
-        
+
         emit text_to_window_method_changed();
     }
 }

@@ -310,28 +310,28 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
     for (const auto &keycode : keycodes) {
         bool shift = keycode.mask == 1 || keycode.mask == 3;
         bool l3_shift = keycode.mask == 2 || keycode.mask == 3;
- 
+
         if (shift) ydo_uinput_emit(EV_KEY, KEY_LEFTSHIFT, 1, true);
         if (l3_shift && m_l3_shift_keycode > 8)
             ydo_uinput_emit(EV_KEY, m_l3_shift_keycode - 8, 1, true);
         ydo_uinput_emit(EV_KEY, keycode.code - 8, 1, true);
- 
+
         std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
             settings::instance()->fake_keyboard_delay()));
- 
+
         ydo_uinput_emit(EV_KEY, keycode.code - 8, 0, true);
         if (l3_shift && m_l3_shift_keycode > 8)
             ydo_uinput_emit(EV_KEY, m_l3_shift_keycode - 8, 0, true);
         if (shift) ydo_uinput_emit(EV_KEY, KEY_LEFTSHIFT, 0, true);
     }
 }
- 
- // Send Ctrl+V (paste) to the active window using the configured method
- void fake_keyboard::send_ctrl_v() {
+
+// Send Ctrl+V (paste) to the active window using the configured method
+void fake_keyboard::send_ctrl_v() {
     // Delay to allow clipboard to update
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
- 
- #ifdef USE_X11_FEATURES
+
+#ifdef USE_X11_FEATURES
     switch (m_method) {
         case method_t::ydo:
             send_ctrl_v_ydo();
@@ -343,20 +343,19 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
             send_ctrl_v_xdo();
             break;
     }
- #else
-     // Non-X11 build: use ydo path (Wayland) by default
-     if (m_ydo_daemon_socket >= 0) {
-         send_ctrl_v_ydo();
-     } else {
-         LOGW("no method available to send ctrl+v");
-     }
- #endif
- }
- 
- // Helper implementations split to avoid code duplication for the ydo path.
- // ydo implementation is usable on both X11 and Wayland builds.
- void fake_keyboard::send_ctrl_v_ydo() {
+#else
+    // Non-X11 build: use ydo path (Wayland) by default
+    if (m_ydo_daemon_socket >= 0) {
+        send_ctrl_v_ydo();
+    } else {
+        LOGW("no method available to send ctrl+v");
+    }
+#endif
+}
 
+// Helper implementations split to avoid code duplication for the ydo path.
+// ydo implementation is usable on both X11 and Wayland builds.
+void fake_keyboard::send_ctrl_v_ydo() {
     // helper closure: emit a key event and wait a small fixed duration
     auto press_and_wait = [&](uint16_t code, int32_t val) {
         ydo_uinput_emit(EV_KEY, code, val, 1);
@@ -365,17 +364,15 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
 
         usleep(settings::instance()->fake_keyboard_delay() * 1000);
     };
-    
-
 
     press_and_wait(KEY_LEFTCTRL, 1);
     press_and_wait(KEY_V, 1);
     press_and_wait(KEY_V, 0);
     press_and_wait(KEY_LEFTCTRL, 0);
- }
- 
- #ifdef USE_X11_FEATURES
- void fake_keyboard::send_ctrl_v_legacy() {
+}
+
+#ifdef USE_X11_FEATURES
+void fake_keyboard::send_ctrl_v_legacy() {
     qWarning() << "Trying to Utilize Legacy";
     if (!m_x11_display) {
         LOGW("no x11 display for legacy send_ctrl_v");
@@ -407,8 +404,8 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
         event.type = type;
         event.keycode = keycode;
         XSendEvent(event.display, event.window, True,
-                (type == KeyPress) ? KeyPressMask : KeyReleaseMask,
-                reinterpret_cast<XEvent *>(&event));
+                   (type == KeyPress) ? KeyPressMask : KeyReleaseMask,
+                   reinterpret_cast<XEvent *>(&event));
         XSync(event.display, False);
         std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
             settings::instance()->fake_keyboard_delay()));
@@ -426,18 +423,20 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
     send_and_wait(KeyRelease, v_code);
     // release ctrl
     send_and_wait(KeyRelease, ctrl_code);
- }
- 
- void fake_keyboard::send_ctrl_v_xdo() {
+}
+
+void fake_keyboard::send_ctrl_v_xdo() {
     if (m_xdo) {
         qWarning() << "Trying to Utilize XDO";
         // Use xdo to send ctrl+v sequence to current window
-        xdo_send_keysequence_window(m_xdo, CURRENTWINDOW, "ctrl+v", settings::instance()->fake_keyboard_delay());
+        xdo_send_keysequence_window(
+            m_xdo, CURRENTWINDOW, "ctrl+v",
+            settings::instance()->fake_keyboard_delay());
     } else {
         qWarning() << "XDO not available";
     }
- }
- #endif
+}
+#endif
 
 int fake_keyboard::make_ydo_socket() {
     auto ydo_daemon_socket = socket(AF_UNIX, SOCK_DGRAM, 0);
@@ -958,8 +957,7 @@ void fake_keyboard::wly_global_callback(void *data, wl_registry *registry,
 
 void fake_keyboard::wly_global_remove_callback(
     [[maybe_unused]] void *data, [[maybe_unused]] wl_registry *registry,
-    [[maybe_unused]] uint32_t id) {
-}
+    [[maybe_unused]] uint32_t id) {}
 
 void fake_keyboard::wly_callback_callback([[maybe_unused]] void *data,
                                           wl_callback *cb,
