@@ -358,14 +358,15 @@ void fake_keyboard::send_ctrl_v_ydo() {
     // helper closure: emit a key event and wait a small fixed duration
     auto press_and_wait = [&](uint16_t code, int32_t val) {
         ydo_uinput_emit(EV_KEY, code, val, 1);
-        // std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
-        //     settings::instance()->fake_keyboard_delay()));
-
-        std::this_thread::sleep_for(settings::instance()->fake_keyboard_delay() * 1000);
+        std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
+            settings::instance()->fake_keyboard_delay()));
     };
 
     press_and_wait(KEY_LEFTCTRL, 1);
     press_and_wait(KEY_V, 1);
+
+    std::chrono::milliseconds(200ms);
+
     press_and_wait(KEY_V, 0);
     press_and_wait(KEY_LEFTCTRL, 0);
 }
@@ -409,17 +410,12 @@ void fake_keyboard::send_ctrl_v_legacy() {
             settings::instance()->fake_keyboard_delay()));
     };
 
-    // press ctrl
     send_and_wait(KeyPress, ctrl_code);
-    // press v
     send_and_wait(KeyPress, v_code);
 
-    // wait for the system to process it
     std::chrono::milliseconds(200ms);
 
-    // release v
     send_and_wait(KeyRelease, v_code);
-    // release ctrl
     send_and_wait(KeyRelease, ctrl_code);
 }
 
