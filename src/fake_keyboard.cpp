@@ -365,7 +365,7 @@ void fake_keyboard::send_ctrl_v_ydo() {
     press_and_wait(KEY_LEFTCTRL, 1);
     press_and_wait(KEY_V, 1);
 
-    std::chrono::milliseconds(200ms);
+    std::this_thread::sleep_for(200ms);
 
     press_and_wait(KEY_V, 0);
     press_and_wait(KEY_LEFTCTRL, 0);
