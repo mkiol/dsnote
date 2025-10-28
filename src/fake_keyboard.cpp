@@ -413,7 +413,7 @@ void fake_keyboard::send_ctrl_v_legacy() {
     send_and_wait(KeyPress, ctrl_code);
     send_and_wait(KeyPress, v_code);
 
-    std::chrono::milliseconds(200ms);
+    std::this_thread::sleep_for(200ms);
 
     send_and_wait(KeyRelease, v_code);
     send_and_wait(KeyRelease, ctrl_code);
