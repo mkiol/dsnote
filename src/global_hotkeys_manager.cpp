@@ -204,10 +204,16 @@ void global_hotkeys_manager::handle_list_shortcuts_response(
 #undef X
 
     bool all_shortcuts_configured = [&]() {
-        for (auto it = s.cbegin(), it_end = s.cend(); it != it_end; ++it) {
-            if (!shortcuts_id_list.contains(it->first)) {
-                return false;
+        // Ensure every id from HOTKEY_TABLE is present in the portal shortcuts list.
+        for (const auto &id : shortcuts_id_list) {
+            bool found = false;
+            for (auto it = s.cbegin(), it_end = s.cend(); it != it_end; ++it) {
+                if (it->first == id) {
+                    found = true;
+                    break;
+                }
             }
+            if (!found) return false;
         }
         return true;
     }();
