@@ -288,6 +288,8 @@ set(dsnote_lib_sources
     ${sources_dir}/dbus_application_inf.h
     ${sources_dir}/dbus_notifications_inf.cpp
     ${sources_dir}/dbus_notifications_inf.h
+    ${sources_dir}/dbus_klipper_inf.h
+    ${sources_dir}/dbus_klipper_inf.cpp
     ${sources_dir}/dirmodel.cpp
     ${sources_dir}/dirmodel.h
     ${sources_dir}/dsnote_app.cpp
