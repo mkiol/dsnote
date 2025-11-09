@@ -8,6 +8,7 @@
 #include "fake_keyboard.hpp"
 
 // clang-format off
+#include "dbus_speech_adaptor.h"
 #include "settings.h"
 // clang-format on
 
@@ -27,6 +28,8 @@
 
 #include <QFile>
 #include <QGuiApplication>
+#include <QClipboard>
+#include <QDBusConnection>
 #include <QLocale>
 #include <cstdint>
 #include <cstdio>
@@ -36,6 +39,7 @@
 #include <tuple>
 
 #include "logger.hpp"
+#include "dbus_klipper_inf.h"
 #include "qtlogger.hpp"
 
 using namespace std::chrono_literals;
@@ -324,6 +328,29 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
         if (shift) ydo_uinput_emit(EV_KEY, KEY_LEFTSHIFT, 0, true);
     }
 }
+
+// Set the clipboard text
+QString fake_keyboard::copy_to_clipboard(const QString& text) {
+    QString prev_clip_text;
+    auto platform = QGuiApplication::platformName();
+
+    if (QString::compare(platform, "wayland", Qt::CaseInsensitive) == 0) {
+        OrgKdeKlipperKlipperInterface klipper("org.kde.klipper", "/klipper", QDBusConnection::sessionBus());
+        prev_clip_text = klipper.getClipboardContents();
+        klipper.setClipboardContents(text);
+    } else {
+        auto *clip = QGuiApplication::clipboard();
+        prev_clip_text = clip->text();
+        clip->setText(text);
+    }
+
+    return prev_clip_text;
+}
+
+void fake_keyboard::restore_clipboard(const QString& prev_text) {
+    this->copy_to_clipboard(prev_text);
+}
+
 
 // Send Ctrl+V (paste) to the active window using the configured method
 void fake_keyboard::send_ctrl_v() {

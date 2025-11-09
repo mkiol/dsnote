@@ -8,7 +8,6 @@
 #include "dsnote_app.h"
 
 #include <QClipboard>
-#include <QDBusConnection>
 #include <QDebug>
 #include <QDir>
 #include <QFile>
@@ -1028,27 +1027,14 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
                     settings::instance()->text_to_window_method() ==
                     settings::text_to_window_method_t::TextToWindowMethodCtrlV;
                 if (paste_mode) {
-                    // preserve current clipboard text, copy recognized text,
-                    // paste via Ctrl+V, then restore previous clipboard content
-                    // after a short delay
-                    auto *clip = QGuiApplication::clipboard();
-                    const QString prev_clip_text = clip->text();
-                    // set recognized text to clipboard
-                    clip->setText(text);
+                    // Copy text to clipboard and paste via Ctrl+V. Then restore it
+                    auto prev_clip_text = m_fake_keyboard->copy_to_clipboard(text);
 
                     m_fake_keyboard.emplace();
                     m_fake_keyboard->send_ctrl_v();
+                    m_fake_keyboard->restore_clipboard(prev_clip_text);
 
                     emit text_decoded_to_active_window();
-
-                    // restore previous clipboard text after a short delay
-                    int restore_delay_ms = std::max(
-                        200, settings::instance()->fake_keyboard_delay() * 2);
-                    QTimer::singleShot(
-                        restore_delay_ms, this, [prev_clip_text]() {
-                            QGuiApplication::clipboard()->setText(
-                                prev_clip_text);
-                        });
                 } else {
                     m_fake_keyboard.emplace();
                     m_fake_keyboard->send_text(text);

@@ -19,6 +19,7 @@
 #include <queue>
 #include <string>
 #include <thread>
+#include "dbus_speech_adaptor.h"
 
 #ifdef USE_X11_FEATURES
 #include <QX11Info>
@@ -50,6 +51,8 @@ class fake_keyboard : public QObject {
     void send_text(const QString& text);
     // Send Ctrl+V (paste) to the active window
     void send_ctrl_v();
+    QString copy_to_clipboard(const QString& text);
+    void restore_clipboard(const QString& prev_text);
 
    signals:
     void text_sending_completed();
