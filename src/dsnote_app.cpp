@@ -8,6 +8,7 @@
 #include "dsnote_app.h"
 
 #include <QClipboard>
+#include <QDBusConnection>
 #include <QDebug>
 #include <QDir>
 #include <QFile>
@@ -1021,22 +1022,25 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
         case text_destination_t::active_window:
 #ifdef USE_DESKTOP
             try {
+                // Make sure keyboard exists!
+                m_fake_keyboard.emplace();
+
                 // If this request was started as paste-to-active-window, copy
                 // to clipboard and paste via Ctrl+V
                 bool paste_mode =
                     settings::instance()->text_to_window_method() ==
                     settings::text_to_window_method_t::TextToWindowMethodCtrlV;
                 if (paste_mode) {
-                    // Copy text to clipboard and paste via Ctrl+V. Then restore it
-                    auto prev_clip_text = m_fake_keyboard->copy_to_clipboard(text);
+                    // Copy text to clipboard and paste via Ctrl+V. Then restore
+                    // it
+                    auto prev_clip_text =
+                        m_fake_keyboard->copy_to_clipboard(text);
 
-                    m_fake_keyboard.emplace();
                     m_fake_keyboard->send_ctrl_v();
-                    m_fake_keyboard->restore_clipboard(prev_clip_text);
+                    m_fake_keyboard->copy_to_clipboard(prev_clip_text);
 
                     emit text_decoded_to_active_window();
                 } else {
-                    m_fake_keyboard.emplace();
                     m_fake_keyboard->send_text(text);
                     emit text_decoded_to_active_window();
                 }

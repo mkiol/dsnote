@@ -8,7 +8,6 @@
 #include "fake_keyboard.hpp"
 
 // clang-format off
-#include "dbus_speech_adaptor.h"
 #include "settings.h"
 // clang-format on
 
@@ -26,10 +25,10 @@
 #include <xkbcommon/xkbcommon-compose.h>
 #include <xkbcommon/xkbcommon.h>
 
-#include <QFile>
-#include <QGuiApplication>
 #include <QClipboard>
 #include <QDBusConnection>
+#include <QFile>
+#include <QGuiApplication>
 #include <QLocale>
 #include <cstdint>
 #include <cstdio>
@@ -38,8 +37,8 @@
 #include <string>
 #include <tuple>
 
-#include "logger.hpp"
 #include "dbus_klipper_inf.h"
+#include "logger.hpp"
 #include "qtlogger.hpp"
 
 using namespace std::chrono_literals;
@@ -330,15 +329,22 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
 }
 
 // Set the clipboard text
-QString fake_keyboard::copy_to_clipboard(const QString& text) {
+QString fake_keyboard::copy_to_clipboard(const QString &text) {
     QString prev_clip_text;
-    auto platform = QGuiApplication::platformName();
+    bool wayland = settings::instance()->is_wayland();
+    bool failed = false;
 
-    if (QString::compare(platform, "wayland", Qt::CaseInsensitive) == 0) {
-        OrgKdeKlipperKlipperInterface klipper("org.kde.klipper", "/klipper", QDBusConnection::sessionBus());
+    if (wayland) {
+        OrgKdeKlipperKlipperInterface klipper("org.kde.klipper", "/klipper",
+                                              QDBusConnection::sessionBus());
         prev_clip_text = klipper.getClipboardContents();
-        klipper.setClipboardContents(text);
-    } else {
+        auto reply = klipper.setClipboardContents(text);
+
+        failed = reply.isError();
+    }
+
+    // Fallback to QClipboard if failed to execute klipper or if not on wayland
+    if (failed || !wayland) {
         auto *clip = QGuiApplication::clipboard();
         prev_clip_text = clip->text();
         clip->setText(text);
@@ -346,11 +352,6 @@ QString fake_keyboard::copy_to_clipboard(const QString& text) {
 
     return prev_clip_text;
 }
-
-void fake_keyboard::restore_clipboard(const QString& prev_text) {
-    this->copy_to_clipboard(prev_text);
-}
-
 
 // Send Ctrl+V (paste) to the active window using the configured method
 void fake_keyboard::send_ctrl_v() {
