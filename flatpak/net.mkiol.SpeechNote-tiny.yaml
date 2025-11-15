@@ -753,6 +753,15 @@ modules:
       - type: patch
         path: ../patches/sam.patch
 
+  - name: wl-clipboard
+    buildsystem: meson
+    config-opts:
+      - --buildtype=release
+    sources:
+      - type: archive
+        url: https://github.com/bugaevc/wl-clipboard/archive/refs/tags/v2.2.1.tar.gz
+        sha256: 6eb8081207fb5581d1d82c4bcd9587205a31a3d47bea3ebeb7f41aa1143783eb
+
   - name: dsnote
     buildsystem: cmake-ninja
     config-opts:
