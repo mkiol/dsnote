@@ -340,30 +340,29 @@ QString fake_keyboard::copy_to_clipboard(const QString &text) {
     bool wayland = settings::instance()->is_wayland();
     bool failed = false;
 
-    // Try Wayland Clipboard
+    // Try wl-clipboard
     if (wayland) {
-        LOGD("Trying Wayland Clipboard");
+        LOGD("Trying wl-clipboard");
 
         if (!wl_paste_clipboard(prev_clip_text)) {
-            LOGE("Failed to paste from Wayland Clipboard");
+            LOGE("Failed to paste from wl-clipboard");
             failed = true;
         }
         if (!wl_copy_to_clipboard(text)) {
-            LOGE("Failed to copy to Wayland Clipboard");
+            LOGE("Failed to copy to wl-clipboard");
             failed = true;
         }
     }
 
-    // Try Klipper Clipboard
+    // Try Klipper
     if (failed && wayland) {
-        LOGD("Trying Klipper Clipboard");
+        LOGD("Trying Klipper");
         OrgKdeKlipperKlipperInterface klipper("org.kde.klipper", "/klipper",
                                               QDBusConnection::sessionBus());
         prev_clip_text = klipper.getClipboardContents();
         auto reply = klipper.setClipboardContents(text);
 
         failed = reply.isError();
-        failed = false;
     }
 
     // Try QClipboard
