@@ -40,6 +40,7 @@
 #include "dbus_klipper_inf.h"
 #include "logger.hpp"
 #include "qtlogger.hpp"
+#include "wl-clipboard.h"
 
 using namespace std::chrono_literals;
 
@@ -330,21 +331,44 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
 
 // Set the clipboard text
 QString fake_keyboard::copy_to_clipboard(const QString &text) {
+    if (text.isEmpty()) {
+        LOGE("Text is empty, skipping clipboard copy");
+        return QString("");
+    }
+
     QString prev_clip_text;
     bool wayland = settings::instance()->is_wayland();
     bool failed = false;
 
+    // Try Wayland Clipboard
     if (wayland) {
+        LOGE("Trying Wayland Clipboard");
+
+        if (!wl_paste_clipboard(prev_clip_text)) {
+            LOGE("Failed to paste from Wayland Clipboard");
+            failed = true;
+        }
+        if (!wl_copy_to_clipboard(text)) {
+            LOGE("Failed to copy to Wayland Clipboard");
+            failed = true;
+        }
+    }
+
+    // Try Klipper Clipboard
+    if (failed && wayland) {
+        LOGE("Trying Klipper Clipboard");
         OrgKdeKlipperKlipperInterface klipper("org.kde.klipper", "/klipper",
                                               QDBusConnection::sessionBus());
         prev_clip_text = klipper.getClipboardContents();
         auto reply = klipper.setClipboardContents(text);
 
         failed = reply.isError();
+        failed = false;
     }
 
-    // Fallback to QClipboard if failed to execute klipper or if not on wayland
+    // Try QClipboard
     if (failed || !wayland) {
+        LOGE("Trying QClipboard");
         auto *clip = QGuiApplication::clipboard();
         prev_clip_text = clip->text();
         clip->setText(text);
@@ -355,8 +379,10 @@ QString fake_keyboard::copy_to_clipboard(const QString &text) {
 
 // Send Ctrl+V (paste) to the active window using the configured method
 void fake_keyboard::send_ctrl_v() {
+    LOGE("Sending Control V");
+
     // Delay to allow clipboard to update
-    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 #ifdef USE_X11_FEATURES
     switch (m_method) {
@@ -393,7 +419,7 @@ void fake_keyboard::send_ctrl_v_ydo() {
     press_and_wait(KEY_LEFTCTRL, 1);
     press_and_wait(KEY_V, 1);
 
-    std::this_thread::sleep_for(200ms);
+    std::this_thread::sleep_for(50ms);
 
     press_and_wait(KEY_V, 0);
     press_and_wait(KEY_LEFTCTRL, 0);
@@ -441,7 +467,7 @@ void fake_keyboard::send_ctrl_v_legacy() {
     send_and_wait(KeyPress, ctrl_code);
     send_and_wait(KeyPress, v_code);
 
-    std::this_thread::sleep_for(200ms);
+    std::this_thread::sleep_for(50ms);
 
     send_and_wait(KeyRelease, v_code);
     send_and_wait(KeyRelease, ctrl_code);
