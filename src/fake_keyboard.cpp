@@ -342,7 +342,7 @@ QString fake_keyboard::copy_to_clipboard(const QString &text) {
 
     // Try Wayland Clipboard
     if (wayland) {
-        LOGE("Trying Wayland Clipboard");
+        LOGD("Trying Wayland Clipboard");
 
         if (!wl_paste_clipboard(prev_clip_text)) {
             LOGE("Failed to paste from Wayland Clipboard");
@@ -356,7 +356,7 @@ QString fake_keyboard::copy_to_clipboard(const QString &text) {
 
     // Try Klipper Clipboard
     if (failed && wayland) {
-        LOGE("Trying Klipper Clipboard");
+        LOGD("Trying Klipper Clipboard");
         OrgKdeKlipperKlipperInterface klipper("org.kde.klipper", "/klipper",
                                               QDBusConnection::sessionBus());
         prev_clip_text = klipper.getClipboardContents();
@@ -368,7 +368,7 @@ QString fake_keyboard::copy_to_clipboard(const QString &text) {
 
     // Try QClipboard
     if (failed || !wayland) {
-        LOGE("Trying QClipboard");
+        LOGD("Trying QClipboard");
         auto *clip = QGuiApplication::clipboard();
         prev_clip_text = clip->text();
         clip->setText(text);
@@ -379,7 +379,7 @@ QString fake_keyboard::copy_to_clipboard(const QString &text) {
 
 // Send Ctrl+V (paste) to the active window using the configured method
 void fake_keyboard::send_ctrl_v() {
-    LOGE("Sending Control V");
+    LOGD("Sending Control V");
 
     // Delay to allow clipboard to update
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
