@@ -16,6 +16,7 @@
 #include <QKeySequence>
 #include <QRegExp>
 #include <QTextStream>
+#include <QTimer>
 #include <algorithm>
 #include <iterator>
 #include <utility>
@@ -1036,8 +1037,11 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
                     auto prev_clip_text =
                         m_fake_keyboard->copy_to_clipboard(text);
 
-                    m_fake_keyboard->send_ctrl_v();
-                    m_fake_keyboard->copy_to_clipboard(prev_clip_text);
+                    QTimer::singleShot(0, [this, prev_clip_text]{
+                        m_fake_keyboard->send_ctrl_v();
+                        m_fake_keyboard->copy_to_clipboard(prev_clip_text);
+                    });
+
 
                     emit text_decoded_to_active_window();
                 } else {

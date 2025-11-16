@@ -3,13 +3,17 @@
 #include <QProcess>
 #include <QStandardPaths>
 #include <QTextCodec>
+#include <optional>
 
 #include "logger.hpp"
 
-const QString wl_copy_path = QStandardPaths::findExecutable("wl-copy");
-const QString wl_paste_path = QStandardPaths::findExecutable("wl-paste");
+bool wl_clipboard::setClipboard(const QString& text) {
+    static const auto wl_copy_path = QStandardPaths::findExecutable("wl-copy");
+    if (wl_copy_path.isEmpty()) {
+        LOGW("wl-copy not found");
+        return false;
+    }
 
-bool wl_copy_to_clipboard(const QString& text) {
     LOGD("wl_copy_path: " << wl_copy_path.toStdString());
 
     QProcess wl_copy;
@@ -27,7 +31,8 @@ bool wl_copy_to_clipboard(const QString& text) {
     return wl_copy.exitCode() == 0;
 }
 
-bool wl_paste_clipboard(QString& outText) {
+std::optional<QString> wl_clipboard::getClipboard() {
+    static const auto wl_paste_path = QStandardPaths::findExecutable("wl-paste");
     LOGD("wl-paste_path: " << wl_paste_path.toStdString());
 
     QProcess wl_paste;
@@ -35,14 +40,19 @@ bool wl_paste_clipboard(QString& outText) {
 
     if (!wl_paste.waitForStarted()) {
         LOGW("wl-paste failed to start");
-        return false;
+        return std::nullopt;
     }
     if (!wl_paste.waitForFinished()) {
         LOGW("wl-paste failed to finish");
-        return false;
+        return std::nullopt;
     }
 
-    outText = wl_paste.readAllStandardOutput();
-    LOGD("wl-paste output: " << outText.toStdString());
-    return wl_paste.exitCode() == 0;
+    if (wl_paste.exitCode() != 0) {
+        LOGW("wl-paste failed to exit");
+        return std::nullopt;
+    }
+
+    const auto output = wl_paste.readAllStandardOutput();
+    LOGD("wl-paste output: " << output.toStdString());
+    return output;
 }

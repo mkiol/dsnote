@@ -36,6 +36,7 @@
 #include <optional>
 #include <string>
 #include <tuple>
+#include <optional>
 
 #include "dbus_klipper_inf.h"
 #include "logger.hpp"
@@ -333,7 +334,7 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
 QString fake_keyboard::copy_to_clipboard(const QString &text) {
     if (text.isEmpty()) {
         LOGE("Text is empty, skipping clipboard copy");
-        return QString("");
+        return {};
     }
 
     QString prev_clip_text;
@@ -342,13 +343,18 @@ QString fake_keyboard::copy_to_clipboard(const QString &text) {
 
     // Try wl-clipboard
     if (wayland) {
-        LOGD("Trying wl-clipboard");
+        LOGD("trying wl-clipboard");
 
-        if (!wl_paste_clipboard(prev_clip_text)) {
+        std::optional<QString> prev_clip_text_opt = wl_clipboard::getClipboard();
+
+        if (prev_clip_text_opt == std::nullopt) {
             LOGE("Failed to paste from wl-clipboard");
             failed = true;
+        } else {
+            prev_clip_text = prev_clip_text_opt.value();
         }
-        if (!wl_copy_to_clipboard(text)) {
+
+        if (!wl_clipboard::setClipboard(text)) {
             LOGE("Failed to copy to wl-clipboard");
             failed = true;
         }
@@ -356,7 +362,7 @@ QString fake_keyboard::copy_to_clipboard(const QString &text) {
 
     // Try Klipper
     if (failed && wayland) {
-        LOGD("Trying Klipper");
+        LOGD("trying Klipper");
         OrgKdeKlipperKlipperInterface klipper("org.kde.klipper", "/klipper",
                                               QDBusConnection::sessionBus());
         prev_clip_text = klipper.getClipboardContents();
@@ -367,7 +373,7 @@ QString fake_keyboard::copy_to_clipboard(const QString &text) {
 
     // Try QClipboard
     if (failed || !wayland) {
-        LOGD("Trying QClipboard");
+        LOGD("trying QClipboard");
         QEventLoop loop;
         auto *clip = QGuiApplication::clipboard();
         prev_clip_text = clip->text();
@@ -381,7 +387,7 @@ QString fake_keyboard::copy_to_clipboard(const QString &text) {
 
 // Send Ctrl+V (paste) to the active window using the configured method
 void fake_keyboard::send_ctrl_v() {
-    LOGD("Sending Control V");
+    LOGD("sending Control V");
 
     // Delay to allow clipboard to update
     std::this_thread::sleep_for(std::chrono::milliseconds(10));

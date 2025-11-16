@@ -12,7 +12,9 @@ ExternalProject_Add(wl_clipboard
     URL ${wl_clipboard_source_url}
     URL_HASH SHA256=${wl_clipboard_checksum}
     CONFIGURE_COMMAND ${meson_bin} setup --prefix=<INSTALL_DIR> --buildtype=release --libdir=<SOURCE_DIR>/lib-dir 
-        --datadir=<SOURCE_DIR>/data-dir  -Dfishcompletiondir=<SOURCE_DIR>/completions
+        --datadir=<SOURCE_DIR>/data-dir  --datadir=<SOURCE_DIR>/data-dir 
+        -Dfishcompletiondir=no
+        -Dzshcompletiondir=no
         <BINARY_DIR> <SOURCE_DIR>
     BUILD_COMMAND ninja -C <BINARY_DIR>
     BUILD_ALWAYS False

@@ -758,6 +758,8 @@ modules:
     buildsystem: meson
     config-opts:
       - --buildtype=release
+      - -Dfishcompletiondir=no
+      - -Dzshcompletiondir=no
     sources:
       - type: archive
         url: https://github.com/bugaevc/wl-clipboard/archive/refs/tags/v2.2.1.tar.gz
