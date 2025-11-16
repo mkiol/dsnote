@@ -23,6 +23,7 @@ finish-args:
   - --env=QT_QUICK_CONTROLS_HOVER_ENABLED=1
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.kde.StatusNotifierWatcher # system tray icon
+  - --talk-name=org.kde.klipper # advanced access to the system clipboard
 cleanup:
   - /cmake
   - /etc
