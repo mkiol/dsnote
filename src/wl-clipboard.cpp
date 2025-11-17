@@ -52,7 +52,7 @@ std::optional<QString> wl_clipboard::getClipboard() {
         return std::nullopt;
     }
 
-    const auto output = wl_paste.readAllStandardOutput();
+    return wl_paste.readAllStandardOutput();
     LOGD("wl-paste output: " << output.toStdString());
     return output;
 }
