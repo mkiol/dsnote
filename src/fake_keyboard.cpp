@@ -374,12 +374,9 @@ QString fake_keyboard::copy_to_clipboard(const QString &text) {
     // Try QClipboard
     if (failed || !wayland) {
         LOGD("trying QClipboard");
-        QEventLoop loop;
         auto *clip = QGuiApplication::clipboard();
         prev_clip_text = clip->text();
-        loop.processEvents();
         clip->setText(text);
-        loop.processEvents();
     }
 
     return prev_clip_text;

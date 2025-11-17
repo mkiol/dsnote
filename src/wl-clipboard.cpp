@@ -14,8 +14,6 @@ bool wl_clipboard::setClipboard(const QString& text) {
         return false;
     }
 
-    LOGD("wl_copy_path: " << wl_copy_path.toStdString());
-
     QProcess wl_copy;
     wl_copy.start(wl_copy_path, QStringList() << text);
 
@@ -33,7 +31,10 @@ bool wl_clipboard::setClipboard(const QString& text) {
 
 std::optional<QString> wl_clipboard::getClipboard() {
     static const auto wl_paste_path = QStandardPaths::findExecutable("wl-paste");
-    LOGD("wl-paste_path: " << wl_paste_path.toStdString());
+    if (wl_paste_path.isEmpty()) {
+        LOGW("wl-paste not found");
+        return std::nullopt;
+    }
 
     QProcess wl_paste;
     wl_paste.start(wl_paste_path, QStringList());
@@ -53,6 +54,5 @@ std::optional<QString> wl_clipboard::getClipboard() {
     }
 
     const auto output = wl_paste.readAllStandardOutput();
-    LOGD("wl-paste output: " << output.toStdString());
     return output;
 }
