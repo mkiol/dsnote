@@ -5,8 +5,8 @@
 #include <optional>
 
 namespace wl_clipboard {
-    bool setClipboard(const QString& text);
-    std::optional<QString> getClipboard();
+    bool set_clipboard(const QString& text);
+    std::optional<QString> get_clipboard();
 }
 
 #endif

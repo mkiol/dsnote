@@ -7,7 +7,7 @@
 
 #include "logger.hpp"
 
-bool wl_clipboard::setClipboard(const QString& text) {
+bool wl_clipboard::set_clipboard(const QString& text) {
     static const auto wl_copy_path = QStandardPaths::findExecutable("wl-copy");
     if (wl_copy_path.isEmpty()) {
         LOGW("wl-copy not found");
@@ -29,7 +29,7 @@ bool wl_clipboard::setClipboard(const QString& text) {
     return wl_copy.exitCode() == 0;
 }
 
-std::optional<QString> wl_clipboard::getClipboard() {
+std::optional<QString> wl_clipboard::get_clipboard() {
     static const auto wl_paste_path = QStandardPaths::findExecutable("wl-paste");
     if (wl_paste_path.isEmpty()) {
         LOGW("wl-paste not found");
