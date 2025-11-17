@@ -1038,6 +1038,7 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
                         m_fake_keyboard->copy_to_clipboard(text);
 
                     QTimer::singleShot(0, [this, prev_clip_text]{
+                        if (!m_fake_keyboard) return;
                         m_fake_keyboard->send_ctrl_v();
                         m_fake_keyboard->copy_to_clipboard(prev_clip_text);
                     });
