@@ -53,6 +53,5 @@ std::optional<QString> wl_clipboard::get_clipboard() {
         return std::nullopt;
     }
 
-    const auto output = wl_paste.readAllStandardOutput();
-    return output;
+    return wl_paste.readAllStandardOutput();
 }
