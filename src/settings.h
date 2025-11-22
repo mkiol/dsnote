@@ -678,8 +678,10 @@ class settings : public QSettings, public singleton<settings> {
     void disable_hw_scan();
     void disable_py_scan();
 #ifdef USE_DESKTOP
+    void set_qt_style();
     void update_qt_style(QQmlApplicationEngine *engine);
     bool use_default_qt_style();
+    static QStringList availableStyles();
 #endif
     // app
 #define X(name, type, dvalue) \
@@ -1100,9 +1102,9 @@ class settings : public QSettings, public singleton<settings> {
     inline static const QString settings_filename =
         QStringLiteral("settings.conf");
     inline static const QString default_qt_style =
-        QStringLiteral("Fusion");
+        QStringLiteral("org.kde.desktop");
     inline static const QString default_qt_style_fallback =
-        QStringLiteral("Fusion");
+        QStringLiteral("org.kde.breeze");
     bool m_restart_required = false;
 #define X(name, _) QStringList m_##name##_gpu_devices;
     GPU_ENGINE_TABLE

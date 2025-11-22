@@ -9,6 +9,7 @@
 
 #include <QCommandLineParser>
 #include <QDebug>
+#include <QDir>
 #include <QGuiApplication>
 #include <QIcon>
 #include <QLocale>
@@ -38,6 +39,7 @@
 #else
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QQuickStyle>
 #endif
 
 #include "app_server.hpp"
@@ -423,6 +425,69 @@ static void install_translator() {
     }
 }
 
+/**
+ * @brief Configures icon theme for Qt6 desktop applications.
+ *
+ * Sets up icon theme search paths and attempts to find and configure a working
+ * icon theme for freedesktop icon names used in QML. This is independent of
+ * Qt Quick Controls style (Fusion/Universal/Material/etc.) and is required for
+ * icon.name properties in QML to work correctly.
+ *
+ * @note Only active on Qt6 desktop builds (USE_DESKTOP defined)
+ */
+static void configure_icon_theme() {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && defined(USE_DESKTOP)
+    // Set icon theme search paths to common system locations
+    QStringList searchPaths = QIcon::themeSearchPaths();
+    searchPaths << "/usr/share/icons"
+                << "/usr/local/share/icons"
+                << "/app/share/icons"  // Flatpak and other sandboxed environments
+                << QDir::homePath() + "/.local/share/icons"
+                << QDir::homePath() + "/.icons";
+    QIcon::setThemeSearchPaths(searchPaths);
+
+    LOGD("icon theme search paths: " << QIcon::themeSearchPaths().join(", "));
+
+    // Always try to set an icon theme, even if one is already set
+    // This ensures consistency across different desktop environments
+    QString currentTheme = QIcon::themeName();
+    if (!currentTheme.isEmpty()) {
+        LOGD("system icon theme detected: " << currentTheme);
+    }
+
+    // Try to find and set an available icon theme
+    // Priority: current theme (if set), breeze, breeze-dark, Adwaita, hicolor (fallback)
+    QStringList iconThemes;
+    if (!currentTheme.isEmpty() && currentTheme != "hicolor") {
+        iconThemes << currentTheme;
+    }
+    iconThemes << "breeze" << "breeze-dark" << "Adwaita" << "hicolor";
+
+    bool themeSet = false;
+    for (const auto& theme : iconThemes) {
+        QIcon::setThemeName(theme);
+        // Test if theme actually provides symbolic icons
+        if (QIcon::hasThemeIcon("document-save-symbolic") ||
+            QIcon::hasThemeIcon("document-save")) {
+            LOGD("using icon theme: " << theme << " (verified working)");
+            themeSet = true;
+            break;
+        }
+    }
+
+    if (!themeSet) {
+        // Fallback: set breeze even if not available
+        // Icons may still work if the theme is installed but not detected
+        QIcon::setThemeName("breeze");
+        LOGW("no working icon theme detected, using 'breeze' as fallback");
+        LOGW("if icons don't appear, install an icon theme:");
+        LOGW("  Ubuntu/Debian: sudo apt install breeze-icon-theme");
+        LOGW("  Fedora: sudo dnf install breeze-icon-theme");
+        LOGW("  Arch: sudo pacman -S breeze-icons");
+    }
+#endif
+}
+
 static void start_service(const cmd::options& options) {
     if (options.hw_scan_off) settings::instance()->disable_hw_scan();
     if (options.py_scan_off) settings::instance()->disable_py_scan();
@@ -451,9 +516,11 @@ static void start_app(const cmd::options& options,
     auto* context = view->rootContext();
 #else
     QCoreApplication::libraryPaths();
+
     auto engine = std::make_unique<QQmlApplicationEngine>();
     auto* context = engine->rootContext();
 
+    // Update import paths and detect available styles
     settings::instance()->update_qt_style(engine.get());
 
     QGuiApplication::setDesktopFileName(APP_ICON_ID);
@@ -518,8 +585,27 @@ int main(int argc, char* argv[]) {
     const auto& app = *SailfishApp::application(argc, argv);
 #else
     // Qt6: High DPI scaling is enabled by default
+    // Qt5: Need to enable it explicitly
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
+
+    // CRITICAL: Set organization/app name BEFORE creating QApplication
+    // This is needed so settings can find the config file
+    QCoreApplication::setApplicationName(QStringLiteral(APP_ID));
+    QCoreApplication::setOrganizationName(QStringLiteral(APP_ORG));
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && defined(USE_DESKTOP)
+    // Qt6: Style must be configured BEFORE QApplication creation
+    // Create settings instance and configure style based on user preferences
+    settings::instance()->set_qt_style();
+#endif
+
     QApplication app(argc, argv);
     QGuiApplication::setWindowIcon(QIcon{QStringLiteral(":/app_icon.svg")});
+
+    configure_icon_theme();
 #endif
     QGuiApplication::setApplicationName(QStringLiteral(APP_ID));
     QGuiApplication::setOrganizationName(QStringLiteral(APP_ORG));

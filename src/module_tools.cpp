@@ -114,11 +114,17 @@ QString path_to_dir_for_path(const QString& dir, const QString& path) {
     if (QFileInfo::exists(path_full))
         return QStringLiteral("/usr/share/%1").arg(APP_BINARY_ID);
 
-    // search in architecture-specific Qt6 paths (e.g., /usr/lib/x86_64-linux-gnu/qt6)
+    // search in architecture-specific Qt paths (e.g., /usr/lib/x86_64-linux-gnu/qt6 or qt5)
     path_full = QStringLiteral("/usr/lib/%1/qt6/%2/%3")
                     .arg(QSysInfo::buildCpuArchitecture(), dir, path);
     if (QFileInfo::exists(path_full))
         return QStringLiteral("/usr/lib/%1/qt6/%2")
+            .arg(QSysInfo::buildCpuArchitecture(), dir);
+
+    path_full = QStringLiteral("/usr/lib/%1/qt5/%2/%3")
+                    .arg(QSysInfo::buildCpuArchitecture(), dir, path);
+    if (QFileInfo::exists(path_full))
+        return QStringLiteral("/usr/lib/%1/qt5/%2")
             .arg(QSysInfo::buildCpuArchitecture(), dir);
 
     // search in /usr/local

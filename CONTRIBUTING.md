@@ -1,6 +1,8 @@
 # Contributing to Speech Note
 
-Thank you for your interest in contributing to Speech Note! This document will help you get started with contributing to this open-source speech-to-text, text-to-speech, and translation application.
+Thank you for your interest in contributing to Speech Note!
+This document will help you get started with contributing to this
+open-source speech-to-text, text-to-speech, and translation application.
 
 ## Table of Contents
 
@@ -28,7 +30,8 @@ There are many ways to contribute to Speech Note:
 
 ## Getting Started
 
-Speech Note is hosted on both [GitHub](https://github.com/mkiol/dsnote) and [GitLab](https://gitlab.com/mkiol/dsnote). You can contribute on either platform - choose the one you're most comfortable with.
+Speech Note is hosted on both [GitHub](https://github.com/mkiol/dsnote) and [GitLab](https://gitlab.com/mkiol/dsnote).
+You can contribute on either platform - choose the one you're most comfortable with.
 
 ### Prerequisites
 
@@ -78,7 +81,9 @@ dsnote/
 
 ### Building from Source
 
-Speech Note uses CMake as its build system and has many dependencies. The recommended way to build is using the Flatpak toolchain, but direct builds are also possible.
+Speech Note uses CMake as its build system and has many dependencies.
+The recommended way to build is using the Flatpak toolchain,
+but direct builds are also possible.
 
 #### Arch Linux
 
@@ -113,11 +118,13 @@ dnf install rpmdevtools autoconf automake boost-devel cmake git \
 ./make_rpm.sh
 ```
 
-For more information, see the [fedora/make_rpm.sh](fedora/make_rpm.sh) and [fedora/dsnote.spec](fedora/dsnote.spec) files.
+For more information, see the [fedora/make_rpm.sh](fedora/make_rpm.sh) and
+[fedora/dsnote.spec](fedora/dsnote.spec) files.
 
 #### Ubuntu/Debian/Mint
 
-**Note:** The project has migrated to Qt6. For older versions with Qt5, please check out an earlier release.
+**Note:** The project has migrated to Qt6.
+For older versions with Qt5, please check out an earlier release.
 
 ```bash
 # First install OpenCL headers (required dependency)
@@ -138,7 +145,8 @@ sudo apt install appstream autoconf build-essential cmake \
 sudo apt install nvidia-cuda-dev nvidia-cuda-toolkit nvidia-cudnn
 ```
 
-**Note:** CUDA support is experimental and tested only on Ubuntu 25.04. AMD GPUs have built-in Vulkan support that should work out of the box.
+**Note:** CUDA support is experimental and tested only on Ubuntu 25.04.
+AMD GPUs have built-in Vulkan support that should work out of the box.
 
 **Build the .deb package:**
 
@@ -178,12 +186,14 @@ flatpak-builder --force-clean --user \
     net.mkiol.SpeechNote.yaml
 ```
 
-For more information, see the [flatpak/net.mkiol.SpeechNote.yaml](flatpak/net.mkiol.SpeechNote.yaml) file.
+For more information, see the
+[flatpak/net.mkiol.SpeechNote.yaml](flatpak/net.mkiol.SpeechNote.yaml) file.
 
 #### Direct Build (Advanced)
 
 You can do a direct build without packaging.
-**Note**: Direct builds require many dependencies to be pre-installed. Check `CMakeLists.txt`, or the next section, for build options.
+**Note**: Direct builds require many dependencies to be pre-installed.
+Check `CMakeLists.txt`, or the next section, for build options.
 
 ```bash
 git clone https://github.com/mkiol/dsnote.git
@@ -213,7 +223,8 @@ See `CMakeLists.txt` for all available options.
 
 ### Launching the Application
 
-After building, you can launch the application in different ways depending on your build method:
+After building, you can launch the application in different ways depending on
+your build method:
 
 #### From Direct Build
 
@@ -240,7 +251,8 @@ flatpak run net.mkiol.SpeechNote --verbose
 
 #### From Package Build (Arch/Fedora/Debian)
 
-If you built and installed via `makepkg -si`, `make_rpm.sh`, or `makedeb.sh` + `dpkg -i`, the application will be installed system-wide:
+If you built and installed via `makepkg -si`, `make_rpm.sh`,
+or `makedeb.sh` + `dpkg -i`, the application will be installed system-wide:
 
 ```bash
 # Launch from application menu or command line
@@ -252,7 +264,8 @@ dsnote --verbose
 
 #### Alternative - Running Without Installing (Debian/Ubuntu)
 
-If the .deb package installation fails due to dependency issues, you can run the application directly from the build directory:
+If the .deb package installation fails due to dependency issues,
+you can run the application directly from the build directory:
 
 ```bash
 cd dsnote-<version>/build   # replace <version> with the actual version number
@@ -323,7 +336,8 @@ make tests
 ./tests
 ```
 
-**Note**: We use `-DBUILD_CATCH2=OFF` to use the system-installed Catch2 package instead of downloading it.
+**Note**: We use `-DBUILD_CATCH2=OFF` to use the system-installed Catch2
+package instead of downloading it.
 
 ### Writing Tests
 
@@ -344,7 +358,8 @@ Before submitting:
 
 ## Translation
 
-Speech Note supports multiple languages. Translation is done via Qt's translation system.
+Speech Note supports multiple languages.
+Translation is done via Qt's translation system.
 
 ### Via Transifex (Recommended)
 
@@ -418,8 +433,10 @@ When suggesting a feature:
 
 ## License
 
-By contributing to Speech Note, you agree that your contributions will be licensed under the [Mozilla Public License Version 2.0](LICENSE).
+By contributing to Speech Note, you agree that your contributions will
+be licensed under the [Mozilla Public License Version 2.0](LICENSE).
 
 ---
 
-Thank you for contributing to Speech Note! Your help makes this project better for everyone. 🎉
+Thank you for contributing to Speech Note!
+Your help makes this project better for everyone. 🎉
