@@ -498,10 +498,6 @@ target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_arm32}>:ARC
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_arm64}>:ARCH_ARM_64>")
 target_compile_definitions(compiler_flags INTERFACE "INSTALL_PREFIX=\"${CMAKE_INSTALL_PREFIX}\"")
 
-# translations
-
-include(${cmake_path}/translations.cmake)
-
 # dependencies
 
 list(APPEND deps_libs
@@ -533,17 +529,35 @@ pkg_search_module(pulse REQUIRED libpulse)
 list(APPEND deps_libs ${pulse_LIBRARIES})
 list(APPEND includes ${pulse_INCLUDE_DIRS})
 
-find_package(Qt6 COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick QuickControls2 DBus LinguistTools REQUIRED)
-list(APPEND deps_libs Qt6::Core Qt6::Network Qt6::Multimedia Qt6::Gui Qt6::Quick Qt6::QuickControls2 Qt6::DBus Qt6::Xml)
+# Try Qt6 first, fall back to Qt5
+find_package(Qt6 COMPONENTS Core QUIET)
+if(Qt6_FOUND)
+    set(QT_VERSION_MAJOR 6)
+    message(STATUS "Using Qt6")
+else()
+    find_package(Qt5 5.15 COMPONENTS Core QUIET)
+    if(Qt5_FOUND)
+        set(QT_VERSION_MAJOR 5)
+        message(STATUS "Using Qt5")
+    else()
+        message(FATAL_ERROR "Neither Qt6 nor Qt5 found")
+    endif()
+endif()
+
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick QuickControls2 DBus LinguistTools REQUIRED)
+list(APPEND deps_libs Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::QuickControls2 Qt${QT_VERSION_MAJOR}::DBus Qt${QT_VERSION_MAJOR}::Xml Qt${QT_VERSION_MAJOR}::Sql)
+
+# translations (requires QT_VERSION_MAJOR to be set)
+include(${cmake_path}/translations.cmake)
 
 if(WITH_DESKTOP)
-    find_package(Qt6 COMPONENTS Widgets REQUIRED)
-    list(APPEND deps_libs Qt6::Widgets)
+    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
+    list(APPEND deps_libs Qt${QT_VERSION_MAJOR}::Widgets)
 
     pkg_search_module(wayland REQUIRED wayland-client)
     list(APPEND deps_libs ${wayland_LIBRARIES})
     list(APPEND includes ${wayland_INCLUDE_DIRS})
-    include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+    include_directories(${Qt${QT_VERSION_MAJOR}Gui_PRIVATE_INCLUDE_DIRS})
 
     if(BUILD_XKBCOMMON)
         include(${cmake_path}/xkbcommon.cmake)
@@ -562,7 +576,11 @@ if(WITH_DESKTOP)
         list(APPEND deps_libs X11)
 
         # Qt6 removed X11Extras - functionality moved to Qt6::Gui
-        # No additional library needed
+        # Qt5 needs X11Extras
+        if(QT_VERSION_MAJOR EQUAL 5)
+            find_package(Qt5 COMPONENTS X11Extras REQUIRED)
+            list(APPEND deps_libs Qt5::X11Extras)
+        endif()
 
         if(BUILD_QHOTKEY)
             include(${cmake_path}/qhotkey.cmake)

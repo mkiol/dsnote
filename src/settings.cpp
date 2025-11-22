@@ -1008,14 +1008,20 @@ void settings::set_qt_style_auto(bool value) {
 
 int settings::qt_style_idx() const {
 #ifdef USE_DESKTOP
-    // Qt6: availableStyles() was removed
-#endif
+    auto styles = availableStyles();
+    auto name = qt_style_name();
+    return styles.indexOf(name);
+#else
     return -1;
+#endif
 }
 
 void settings::set_qt_style_idx([[maybe_unused]] int value) {
 #ifdef USE_DESKTOP
-    // Qt6: availableStyles() was removed
+    auto styles = availableStyles();
+    if (value >= 0 && value < styles.size()) {
+        set_qt_style_name(styles.at(value));
+    }
 #endif
 }
 
@@ -1024,7 +1030,13 @@ QString settings::qt_style_name() const {
     auto name =
         value(QStringLiteral("qt_style_name"), default_qt_style).toString();
 
-    // Qt6: availableStyles() was removed, just return the saved name
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    // Qt5: Validate against availableStyles()
+    auto styles = availableStyles();
+    if (!styles.contains(name) && !styles.isEmpty()) {
+        name = styles.first();
+    }
+#endif
     return name;
 #else
     return {};
@@ -1033,7 +1045,14 @@ QString settings::qt_style_name() const {
 
 void settings::set_qt_style_name([[maybe_unused]] QString name) {
 #ifdef USE_DESKTOP
-    // Qt6: availableStyles() was removed, just save the name
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    // Qt5: Validate against availableStyles()
+    auto styles = availableStyles();
+    if (!styles.contains(name)) {
+        LOGW("qt style not available: " << name);
+        return;
+    }
+#endif
 
     if (qt_style_name() != name) {
         setValue(QStringLiteral("qt_style_name"), name);
@@ -1310,10 +1329,7 @@ QString settings::audio_format_str() const {
 
 QStringList settings::qt_styles() const {
 #ifdef USE_DESKTOP
-    // Qt6: availableStyles() was removed
-    // Return common Qt Quick Control styles
-    QStringList styles;
-    styles << "Basic" << "Fusion" << "Imagine" << "Material" << "Universal";
+    QStringList styles = availableStyles();
     styles.append(tr("Don't force any style"));
     return styles;
 #else
@@ -1340,6 +1356,160 @@ bool settings::use_default_qt_style() {
     return m_kde || desk_name.contains("XFCE");
 }
 
+QStringList settings::availableStyles() {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    // Qt6: Auto-discover available Qt Quick Controls styles
+    QStringList styles;
+
+    const QStringList search_paths = {
+        "/usr/lib/x86_64-linux-gnu/qt6/qml",      // Debian/Ubuntu x86_64
+        "/usr/lib/aarch64-linux-gnu/qt6/qml",     // Debian/Ubuntu ARM64
+        "/usr/lib/arm-linux-gnueabihf/qt6/qml",   // Debian/Ubuntu ARM 32-bit
+        "/usr/lib/riscv64-linux-gnu/qt6/qml",     // Debian/Ubuntu RISC-V 64-bit
+        "/usr/lib/qt6/qml",                       // Generic/Arch/openSUSE
+        "/usr/lib64/qt6/qml",                     // Fedora/RHEL x86_64
+        "/usr/local/lib/qt6/qml",                 // Manual installations
+        "/app/lib/qt6/qml"                        // Flatpak
+    };
+
+    // Scan for QtQuick/Controls/<StyleName> directories
+    for (const auto& search_path : search_paths) {
+        QDir controlsDir(search_path + "/QtQuick/Controls");
+        if (controlsDir.exists()) {
+            // Get all subdirectories that could be styles
+            QFileInfoList entries = controlsDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
+            for (const auto& entry : entries) {
+                QString styleName = entry.fileName();
+
+                // Skip non-style directories
+                if (styleName == "impl" || styleName == "designer" ||
+                    styleName.startsWith('.')) {
+                    continue;
+                }
+
+                // Check if it has a qmldir file (indicates it's a valid style)
+                QFile qmldirFile(entry.absoluteFilePath() + "/qmldir");
+                if (qmldirFile.exists() && !styles.contains(styleName)) {
+                    styles << styleName;
+                }
+            }
+        }
+    }
+
+    // Also check for KDE-style dotted names (org.kde.desktop, etc.)
+    const QStringList kde_styles = {"org.kde.desktop", "org.kde.breeze"};
+    for (const auto& kde_style : kde_styles) {
+        QString style_subpath = QString(kde_style).replace('.', '/');
+        for (const auto& search_path : search_paths) {
+            QDir dir(search_path + "/" + style_subpath);
+            if (dir.exists() && QFile::exists(dir.absolutePath() + "/qmldir")) {
+                if (!styles.contains(kde_style)) {
+                    styles << kde_style;
+                }
+                break;
+            }
+        }
+    }
+
+    // Fallback to common styles if discovery failed
+    if (styles.isEmpty()) {
+        // Fusion first - it has better icon support than Basic
+        styles << "Fusion" << "Imagine" << "Material" << "Universal" << "Basic";
+    }
+
+    return styles;
+#else
+    // Qt5: Use availableStyles()
+    return QQuickStyle::availableStyles();
+#endif
+}
+
+void settings::set_qt_style() {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    LOGD("=== Qt Style Configuration START ===");
+
+    // Log configuration file being used
+    LOGD("config file path: " << settings_filepath());
+
+    // Log current settings
+    bool auto_style = qt_style_auto();
+    int style_idx = qt_style_idx();
+    LOGD("qt_style_auto: " << auto_style);
+    LOGD("qt_style_idx: " << style_idx);
+
+    // Qt6: Must set style BEFORE creating QQmlApplicationEngine
+    // Discover all available Qt Quick Controls styles
+    QStringList styles = availableStyles();
+
+    LOGD("available styles: " << styles);
+
+    QString style;
+
+    if (auto_style) {
+        LOGD("using auto qt style mode");
+        LOGD("default_qt_style: " << default_qt_style);
+        LOGD("default_qt_style_fallback: " << default_qt_style_fallback);
+
+        bool use_default = use_default_qt_style();
+        LOGD("use_default_qt_style(): " << use_default);
+
+        if (styles.contains(default_qt_style_fallback)) {
+            style = use_default && styles.contains(default_qt_style)
+                        ? default_qt_style
+                        : default_qt_style_fallback;
+            LOGD("selected style from KDE fallback: " << style);
+        } else if (styles.contains(default_qt_style)) {
+            style = default_qt_style;
+            LOGD("selected default KDE style: " << style);
+        } else {
+            LOGW("default qt style not found, falling back to Fusion");
+            // Fallback to Fusion if KDE styles aren't available
+            if (styles.contains("Fusion")) {
+                style = "Fusion";
+                LOGD("selected Fusion as fallback");
+            }
+        }
+    } else {
+        LOGD("using custom qt style mode");
+
+        if (style_idx >= 0 && style_idx < styles.size()) {
+            style = styles.at(style_idx);
+            LOGD("selected style from index " << style_idx << ": " << style);
+        } else {
+            LOGW("invalid qt style index: " << style_idx
+                                            << " (valid range: 0-" << (styles.size() - 1) << ")");
+            LOGW("falling back to Fusion");
+            if (styles.contains("Fusion")) {
+                style = "Fusion";
+            }
+        }
+
+        if (!style.isEmpty() && !styles.contains(style)) {
+            LOGW("qt style not in available list: " << style << ", falling back to Fusion");
+            style = styles.contains("Fusion") ? "Fusion" : QString();
+        }
+    }
+
+    if (style.isEmpty()) {
+        LOGD("no qt style selected, not forcing any style");
+        m_native_style = true;
+    } else {
+        // Qt6 CRITICAL FIX: Set environment variable for QML style resolution
+        // This must happen before QApplication creation for Qt Quick Controls to work
+        LOGD("setting QT_QUICK_CONTROLS_STYLE environment variable to: " << style);
+        qputenv("QT_QUICK_CONTROLS_STYLE", style.toUtf8());
+
+        LOGD("calling QQuickStyle::setStyle(\"" << style << "\")");
+        QQuickStyle::setStyle(style);
+        LOGD("QQuickStyle::setStyle() completed");
+        m_native_style = style == default_qt_style;
+        LOGD("m_native_style: " << m_native_style);
+    }
+
+    LOGD("=== Qt Style Configuration END ===");
+#endif
+}
+
 void settings::update_qt_style(QQmlApplicationEngine* engine) {
     if (auto prefix = module_tools::path_to_dir_for_path(
             QStringLiteral("lib"), QStringLiteral("plugins"));
@@ -1354,51 +1524,53 @@ void settings::update_qt_style(QQmlApplicationEngine* engine) {
         engine->addImportPath(QStringLiteral("%1/qml").arg(prefix));
     }
 
-    // Qt6: addStylePath() and stylePathList() were removed
-    // Get available styles (hardcoded common ones in Qt6)
-    QStringList styles;
-    styles << "Basic" << "Fusion" << "Imagine" << "Material" << "Universal";
-
-    LOGD("Qt Quick Controls 2 style management simplified in Qt6");
-    LOGD("available styles: " << styles);
     LOGD("import paths: " << engine->importPathList());
     LOGD("library paths: " << QCoreApplication::libraryPaths());
 
-    QString style;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    // Probe for KDE styles by checking import paths (for information only)
+    const QStringList kde_styles = {"org.kde.desktop", "org.kde.breeze"};
+    const QStringList search_paths = {
+        "/usr/lib/x86_64-linux-gnu/qt6/qml",      // Debian/Ubuntu x86_64
+        "/usr/lib/aarch64-linux-gnu/qt6/qml",     // Debian/Ubuntu ARM64
+        "/usr/lib/arm-linux-gnueabihf/qt6/qml",   // Debian/Ubuntu ARM 32-bit
+        "/usr/lib/riscv64-linux-gnu/qt6/qml",     // Debian/Ubuntu RISC-V 64-bit
+        "/usr/lib/qt6/qml",                       // Generic/Arch/openSUSE
+        "/usr/lib64/qt6/qml",                     // Fedora/RHEL x86_64
+        "/usr/local/lib/qt6/qml",                 // Manual installations
+        "/app/lib/qt6/qml"                        // Flatpak
+    };
 
-    if (qt_style_auto()) {
-        LOGD("using auto qt style");
+    auto import_paths = engine->importPathList();
+    for (const auto& kde_style : kde_styles) {
+        QString style_subpath = QString(kde_style).replace('.', '/');
+        bool found = false;
 
-        if (styles.contains(default_qt_style_fallback)) {
-            style = use_default_qt_style() && styles.contains(default_qt_style)
-                        ? default_qt_style
-                        : default_qt_style_fallback;
-        } else if (styles.contains(default_qt_style)) {
-            style = default_qt_style;
-        } else {
-            LOGW("default qt style not found");
+        // Check engine import paths first
+        for (const auto& import_path : import_paths) {
+            QDir dir(import_path + "/" + style_subpath);
+            if (dir.exists()) {
+                found = true;
+                break;
+            }
         }
-    } else {
-        auto idx = qt_style_idx();
 
-        if (idx >= 0 && idx < styles.size()) style = styles.at(idx);
+        // Check common system paths if not found
+        if (!found) {
+            for (const auto& search_path : search_paths) {
+                QDir dir(search_path + "/" + style_subpath);
+                if (dir.exists()) {
+                    found = true;
+                    break;
+                }
+            }
+        }
 
-        if (!styles.contains(style)) {
-            LOGW("qt style not found: " << style);
-            style.clear();
+        if (found) {
+            LOGD("detected KDE style: " << kde_style);
         }
     }
-
-    if (style.isEmpty()) {
-        LOGD("don't forcing any qt style");
-        m_native_style = true;
-    } else {
-        LOGD("switching to style: " << style);
-
-        QQuickStyle::setStyle(style);
-
-        m_native_style = style == default_qt_style;
-    }
+#endif
 }
 #endif
 

@@ -119,7 +119,7 @@ ColumnLayout {
         comboBox {
             currentIndex: _settings.qt_style_idx
             model: _settings.qt_styles()
-            onActivated: _settings.qt_style_idx = index
+            onActivated: (index) => { _settings.qt_style_idx = index }
         }
     }
 

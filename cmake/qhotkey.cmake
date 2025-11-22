@@ -16,12 +16,12 @@ ExternalProject_Add(qhotkey
         -DCMAKE_INSTALL_LIBDIR=lib
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-        -DQT_DEFAULT_MAJOR_VERSION=6
+        -DQT_DEFAULT_MAJOR_VERSION=${QT_VERSION_MAJOR}
     BUILD_ALWAYS False
 )
 
 # Qt6 removed X11Extras - functionality moved to Qt6::Gui
-# No additional Qt library needed for X11 support
+# Qt5 needs X11Extras (handled in main CMakeLists.txt) for X11 support
 
 list(APPEND deps_libs "${external_lib_dir}/libqhotkey.a")
 list(APPEND deps qhotkey)
