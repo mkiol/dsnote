@@ -401,8 +401,8 @@ set(dsnote_lib_sources
     ${sources_dir}/f5_engine.hpp
     ${sources_dir}/kokoro_engine.cpp
     ${sources_dir}/kokoro_engine.hpp
-    ${sources_dir}/wl-clipboard.cpp
-    ${sources_dir}/wl-clipboard.h
+    ${sources_dir}/wl_clipboard.cpp
+    ${sources_dir}/wl_clipboard.hpp
 )
 
 if(WITH_DESKTOP)

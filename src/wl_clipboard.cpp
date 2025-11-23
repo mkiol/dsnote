@@ -1,4 +1,4 @@
-#include "wl-clipboard.h"
+#include "wl_clipboard.hpp"
 
 #include <QProcess>
 #include <QStandardPaths>

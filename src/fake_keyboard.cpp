@@ -41,7 +41,7 @@
 #include "dbus_klipper_inf.h"
 #include "logger.hpp"
 #include "qtlogger.hpp"
-#include "wl-clipboard.h"
+#include "wl_clipboard.hpp"
 
 using namespace std::chrono_literals;
 
