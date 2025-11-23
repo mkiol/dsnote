@@ -441,11 +441,11 @@ cmake ../  -DWITH_DESKTOP=ON \
 make
 ```
 
-## Building wl-clipboard
+## Building WlClipboard
 
 If you want to build wl-clipboard or if you do not have access to wl-clipboard in your system, and KDE Klipper or QClipboard are not working when you use simulated Ctrl+V when pasting text into the active window.
 
-You can add this flag to build wl-clipboard statically:
+You can add this flag to build wl-clipboard:
 
 ```sh
 

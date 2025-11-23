@@ -341,21 +341,21 @@ QString fake_keyboard::copy_to_clipboard(const QString &text) {
     bool wayland = settings::instance()->is_wayland();
     bool failed = false;
 
-    // Try wl-clipboard
+    // Try wl_clipboard
     if (wayland) {
-        LOGD("trying wl-clipboard");
+        LOGD("trying wl_clipboard");
 
         std::optional<QString> prev_clip_text_opt = wl_clipboard::get_clipboard();
 
         if (prev_clip_text_opt == std::nullopt) {
-            LOGE("Failed to paste from wl-clipboard");
+            LOGE("Failed to paste from wl_clipboard");
             failed = true;
         } else {
             prev_clip_text = prev_clip_text_opt.value();
         }
 
         if (!wl_clipboard::set_clipboard(text)) {
-            LOGE("Failed to copy to wl-clipboard");
+            LOGE("Failed to copy to wl_clipboard");
             failed = true;
         }
     }

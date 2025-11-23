@@ -558,7 +558,7 @@ if(WITH_DESKTOP)
     endif()
 
     if(BUILD_WL_CLIPBOARD)
-        include(${cmake_path}/wl-clipboard.cmake)
+        include(${cmake_path}/wl_clipboard.cmake)
     endif()
 
     if(WITH_X11_FEATURES)
