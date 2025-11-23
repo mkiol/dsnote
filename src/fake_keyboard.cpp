@@ -25,6 +25,8 @@
 #include <xkbcommon/xkbcommon-compose.h>
 #include <xkbcommon/xkbcommon.h>
 
+#include <QClipboard>
+#include <QDBusConnection>
 #include <QFile>
 #include <QGuiApplication>
 #include <QLocale>
@@ -34,9 +36,12 @@
 #include <optional>
 #include <string>
 #include <tuple>
+#include <optional>
 
+#include "dbus_klipper_inf.h"
 #include "logger.hpp"
 #include "qtlogger.hpp"
+#include "wl_clipboard.hpp"
 
 using namespace std::chrono_literals;
 
@@ -325,10 +330,64 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
     }
 }
 
+// Set the clipboard text
+QString fake_keyboard::copy_to_clipboard(const QString &text) {
+    if (text.isEmpty()) {
+        LOGE("Text is empty, skipping clipboard copy");
+        return {};
+    }
+
+    QString prev_clip_text;
+    bool wayland = settings::instance()->is_wayland();
+    bool failed = false;
+
+    // Try wl_clipboard
+    if (wayland) {
+        LOGD("trying wl_clipboard");
+
+        std::optional<QString> prev_clip_text_opt = wl_clipboard::get_clipboard();
+
+        if (prev_clip_text_opt == std::nullopt) {
+            LOGE("Failed to paste from wl_clipboard");
+            failed = true;
+        } else {
+            prev_clip_text = prev_clip_text_opt.value();
+        }
+
+        if (!wl_clipboard::set_clipboard(text)) {
+            LOGE("Failed to copy to wl_clipboard");
+            failed = true;
+        }
+    }
+
+    // Try Klipper
+    if (failed && wayland) {
+        LOGD("trying Klipper");
+        OrgKdeKlipperKlipperInterface klipper("org.kde.klipper", "/klipper",
+                                              QDBusConnection::sessionBus());
+        prev_clip_text = klipper.getClipboardContents();
+        auto reply = klipper.setClipboardContents(text);
+
+        failed = reply.isError();
+    }
+
+    // Try QClipboard
+    if (failed || !wayland) {
+        LOGD("trying QClipboard");
+        auto *clip = QGuiApplication::clipboard();
+        prev_clip_text = clip->text();
+        clip->setText(text);
+    }
+
+    return prev_clip_text;
+}
+
 // Send Ctrl+V (paste) to the active window using the configured method
 void fake_keyboard::send_ctrl_v() {
+    LOGD("sending Control V");
+
     // Delay to allow clipboard to update
-    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 #ifdef USE_X11_FEATURES
     switch (m_method) {
@@ -365,7 +424,7 @@ void fake_keyboard::send_ctrl_v_ydo() {
     press_and_wait(KEY_LEFTCTRL, 1);
     press_and_wait(KEY_V, 1);
 
-    std::this_thread::sleep_for(200ms);
+    std::this_thread::sleep_for(50ms);
 
     press_and_wait(KEY_V, 0);
     press_and_wait(KEY_LEFTCTRL, 0);
@@ -413,7 +472,7 @@ void fake_keyboard::send_ctrl_v_legacy() {
     send_and_wait(KeyPress, ctrl_code);
     send_and_wait(KeyPress, v_code);
 
-    std::this_thread::sleep_for(200ms);
+    std::this_thread::sleep_for(50ms);
 
     send_and_wait(KeyRelease, v_code);
     send_and_wait(KeyRelease, ctrl_code);

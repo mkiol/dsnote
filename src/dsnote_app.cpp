@@ -16,6 +16,7 @@
 #include <QKeySequence>
 #include <QRegExp>
 #include <QTextStream>
+#include <QTimer>
 #include <algorithm>
 #include <iterator>
 #include <utility>
@@ -1022,35 +1023,29 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
         case text_destination_t::active_window:
 #ifdef USE_DESKTOP
             try {
+                // Make sure keyboard exists!
+                m_fake_keyboard.emplace();
+
                 // If this request was started as paste-to-active-window, copy
                 // to clipboard and paste via Ctrl+V
                 bool paste_mode =
                     settings::instance()->text_to_window_method() ==
                     settings::text_to_window_method_t::TextToWindowMethodCtrlV;
                 if (paste_mode) {
-                    // preserve current clipboard text, copy recognized text,
-                    // paste via Ctrl+V, then restore previous clipboard content
-                    // after a short delay
-                    auto *clip = QGuiApplication::clipboard();
-                    const QString prev_clip_text = clip->text();
-                    // set recognized text to clipboard
-                    clip->setText(text);
+                    // Copy text to clipboard and paste via Ctrl+V. Then restore
+                    // it
+                    auto prev_clip_text =
+                        m_fake_keyboard->copy_to_clipboard(text);
 
-                    m_fake_keyboard.emplace();
-                    m_fake_keyboard->send_ctrl_v();
+                    QTimer::singleShot(0, [this, prev_clip_text]{
+                        if (!m_fake_keyboard) return;
+                        m_fake_keyboard->send_ctrl_v();
+                        m_fake_keyboard->copy_to_clipboard(prev_clip_text);
+                    });
+
 
                     emit text_decoded_to_active_window();
-
-                    // restore previous clipboard text after a short delay
-                    int restore_delay_ms = std::max(
-                        200, settings::instance()->fake_keyboard_delay() * 2);
-                    QTimer::singleShot(
-                        restore_delay_ms, this, [prev_clip_text]() {
-                            QGuiApplication::clipboard()->setText(
-                                prev_clip_text);
-                        });
                 } else {
-                    m_fake_keyboard.emplace();
                     m_fake_keyboard->send_text(text);
                     emit text_decoded_to_active_window();
                 }

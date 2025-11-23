@@ -50,6 +50,7 @@ class fake_keyboard : public QObject {
     void send_text(const QString& text);
     // Send Ctrl+V (paste) to the active window
     void send_ctrl_v();
+    static QString copy_to_clipboard(const QString& text);
 
    signals:
     void text_sending_completed();

@@ -23,6 +23,7 @@ finish-args:
   - --env=QT_QUICK_CONTROLS_HOVER_ENABLED=1
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.kde.StatusNotifierWatcher # system tray icon
+  - --talk-name=org.kde.klipper # advanced access to the system clipboard
 cleanup:
   - /cmake
   - /etc
@@ -752,6 +753,17 @@ modules:
         sha256: 342e245c84b14945b33dd8b272373eee517d239c612763ec01d3fa3bbee6bcb1
       - type: patch
         path: ../patches/sam.patch
+
+  - name: wl-clipboard
+    buildsystem: meson
+    config-opts:
+      - --buildtype=release
+      - -Dfishcompletiondir=no
+      - -Dzshcompletiondir=no
+    sources:
+      - type: archive
+        url: https://github.com/bugaevc/wl-clipboard/archive/refs/tags/v2.2.1.tar.gz
+        sha256: 6eb8081207fb5581d1d82c4bcd9587205a31a3d47bea3ebeb7f41aa1143783eb
 
   - name: dsnote
     buildsystem: cmake-ninja

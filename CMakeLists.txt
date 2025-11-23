@@ -54,6 +54,7 @@ option(BUILD_HTML2MD "download sources of html2md lib, build and link statically
 option(BUILD_MADDY "download sources of maddy lib" ON)
 option(BUILD_XDO "download sources of xdo lib and link statically" ON)
 option(BUILD_SAM "download sources of sam and link statically" ON)
+option(BUILD_WL_CLIPBOARD "download sources of wl-clipboard, build and install" OFF)
 option(BUILD_XKBCOMMON "download sources of xkbcommon build and link statically" OFF)
 option(BUILD_QQC2_BREEZE_STYLE "download sources of QQC2 Breeze Style, build and install" OFF)
 
@@ -288,6 +289,8 @@ set(dsnote_lib_sources
     ${sources_dir}/dbus_application_inf.h
     ${sources_dir}/dbus_notifications_inf.cpp
     ${sources_dir}/dbus_notifications_inf.h
+    ${sources_dir}/dbus_klipper_inf.h
+    ${sources_dir}/dbus_klipper_inf.cpp
     ${sources_dir}/dirmodel.cpp
     ${sources_dir}/dirmodel.h
     ${sources_dir}/dsnote_app.cpp
@@ -398,6 +401,8 @@ set(dsnote_lib_sources
     ${sources_dir}/f5_engine.hpp
     ${sources_dir}/kokoro_engine.cpp
     ${sources_dir}/kokoro_engine.hpp
+    ${sources_dir}/wl_clipboard.cpp
+    ${sources_dir}/wl_clipboard.hpp
 )
 
 if(WITH_DESKTOP)
@@ -550,6 +555,10 @@ if(WITH_DESKTOP)
         pkg_search_module(xkbcommonx11 REQUIRED xkbcommon-x11>=1.6.0)
         list(APPEND deps_libs ${xkbcommonx11_LIBRARIES})
         list(APPEND includes ${xkbcommonx11_INCLUDE_DIRS})
+    endif()
+
+    if(BUILD_WL_CLIPBOARD)
+        include(${cmake_path}/wl_clipboard.cmake)
     endif()
 
     if(WITH_X11_FEATURES)

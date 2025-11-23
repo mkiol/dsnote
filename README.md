@@ -418,6 +418,40 @@ To make build without support for Python components, add `-DWITH_PY=OFF` in cmak
 
 To see other build options search for `option(BUILD_XXX)` in `CMakeList.txt` file.
 
+### Minimal Linux (direct build)
+
+For developing features locally, going through the whole build process can be time-consuming; use this to make a minimal direct build.
+
+```sh
+git clone <git repository url>
+
+cd dsnote
+mkdir build
+cd build
+
+cmake ../  -DWITH_DESKTOP=ON \
+  -DWITH_PY=ON \
+  -DDOWNLOAD_VOSK=ON \
+  -DBUILD_VOSK=OFF \
+  -DBUILD_WHISPERCPP=OFF \
+  -DBUILD_OPENBLAS=OFF \
+  -DBUILD_RHVOICE=OFF \
+  -DBUILD_RHVOICE_MODULE=OFF \
+  -DBUILD_BERGAMOT=OFF
+make
+```
+
+## Building WlClipboard
+
+If you want to build wl-clipboard or if you do not have access to wl-clipboard in your system, and KDE Klipper or QClipboard are not working when you use simulated Ctrl+V when pasting text into the active window.
+
+You can add this flag to build wl-clipboard:
+
+```sh
+
+cmake ../  -DWITH_DESKTOP=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_WL_CLIPBOARD
+```
+
 ## How to enable a custom model
 
 All models available for download are specified in the configuration file (config/models.json).
