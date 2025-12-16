@@ -4,8 +4,6 @@
 #include <QStandardPaths>
 #include <QTextCodec>
 #include <optional>
-#include <thread>
-#include <chrono>
 
 #include "logger.hpp"
 
