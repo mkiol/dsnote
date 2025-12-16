@@ -4,6 +4,8 @@
 #include <QStandardPaths>
 #include <QTextCodec>
 #include <optional>
+#include <thread>
+#include <chrono>
 
 #include "logger.hpp"
 
@@ -25,6 +27,9 @@ bool wl_clipboard::set_clipboard(const QString& text) {
         LOGW("wl-copy failed to finish");
         return false;
     }
+
+    // Sleep for 200 ms, this fixes an error, where the program doesn't have time to write the clipboard
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
     return wl_copy.exitCode() == 0;
 }
