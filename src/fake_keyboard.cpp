@@ -379,6 +379,9 @@ QString fake_keyboard::copy_to_clipboard(const QString &text) {
         clip->setText(text);
     }
 
+    // Sleep for 200 ms, fix clipboard not being written to the clipboard
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    
     return prev_clip_text;
 }
 
