@@ -38,6 +38,7 @@
 #include "whisper_engine.hpp"
 
 #ifdef USE_PY
+#include "canary_engine.hpp"
 #include "coqui_engine.hpp"
 #include "f5_engine.hpp"
 #include "fasterwhisper_engine.hpp"
@@ -1473,6 +1474,8 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
 #ifdef USE_PY
         if (model_config->stt->engine == models_manager::model_engine_t::stt_fasterwhisper) {
             ENGINE_OPTS(fasterwhisper)
+        } else if (model_config->stt->engine == models_manager::model_engine_t::stt_canary) {
+            ENGINE_OPTS(canary)
         }
 #endif
 #undef ENGINE_OPTS
@@ -3135,6 +3138,8 @@ QVariantMap speech_service::features_availability() {
     m_features_availability.insert(
         "faster-whisper-stt",
         QVariantList{py_availability->faster_whisper, "FasterWhisper STT"});
+    m_features_availability.insert(
+        "canary-stt", QVariantList{py_availability->nemo_asr, "Canary STT"});
 #ifdef ARCH_X86_64
     bool stt_fasterwhisper_cuda = py_availability->faster_whisper &&
                                   py_availability->ctranslate2_cuda &&
@@ -3158,6 +3163,26 @@ QVariantMap speech_service::features_availability() {
     if (stt_fasterwhisper_hip) {
         hw_feature_flags |=
             settings::hw_feature_flags_t::hw_feature_stt_fasterwhisper_hip;
+    }
+    bool stt_canary_cuda =
+        py_availability->nemo_asr && py_availability->torch_cuda && has_cuda;
+    bool stt_canary_hip =
+        py_availability->nemo_asr && py_availability->torch_hip && has_hip;
+    m_features_availability.insert(
+        "canary-stt-cuda",
+        QVariantList{stt_canary_cuda,
+                     "Canary STT CUDA " + tr("HW acceleration")});
+    m_features_availability.insert(
+        "canary-stt-hip",
+        QVariantList{stt_canary_hip,
+                     "Canary STT ROCm " + tr("HW acceleration")});
+    if (stt_canary_cuda) {
+        hw_feature_flags |=
+            settings::hw_feature_flags_t::HW_FEATURE(cuda, canary, stt);
+    }
+    if (stt_canary_hip) {
+        hw_feature_flags |=
+            settings::hw_feature_flags_t::HW_FEATURE(hip, canary, stt);
     }
 #endif  // ARCH_X86_64
     m_features_availability.insert("punctuator",
@@ -3185,6 +3210,7 @@ QVariantMap speech_service::features_availability() {
     ma.tts_kokoro_ja = py_availability->kokoro_ja;
     ma.tts_kokoro_zh = py_availability->kokoro_zh;
     ma.stt_fasterwhisper = py_availability->faster_whisper;
+    ma.stt_canary = py_availability->nemo_asr;
     ma.ttt_hftc = py_availability->transformers;
     ma.ttt_unikud = py_availability->unikud;
     ma.option_r = py_availability->uroman;

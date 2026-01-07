@@ -12,11 +12,13 @@
 
 namespace checksum_tools {
 QString make_checksum(const QString& file_or_dir);
+QString make_sha256_checksum(const QString& file_or_dir);
 QString make_file_checksum(const QString& file);
+QString make_file_sha256_checksum(const QString& file);
 QString make_dir_checksum(const QString& dir);
 QString make_quick_checksum(const QString& file_or_dir);
 QString make_file_quick_checksum(const QString& file);
 QString make_dir_quick_checksum(const QString& file);
 }  // namespace checksum_tools
 
-#endif // CHECKSUM_TOOLS_HPP
+#endif  // CHECKSUM_TOOLS_HPP

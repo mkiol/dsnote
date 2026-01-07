@@ -30,6 +30,7 @@
 #include <fstream>
 #include <functional>
 #include <iostream>
+#include <optional>
 #include <set>
 #include <string>
 #include <thread>
@@ -224,6 +225,98 @@ static void remove_file_or_dir(const QString& path) {
         QDir{path}.removeRecursively();
     else
         QFile::remove(path);
+}
+
+struct hf_file_ref_t {
+    QUrl endpoint;
+    QString repo_id;
+    QString revision;
+    QString filename;
+};
+
+static QUrl endpoint_from_url(const QUrl& url) {
+    QUrl endpoint;
+    endpoint.setScheme(url.scheme());
+    endpoint.setHost(url.host());
+    if (url.port() != -1) endpoint.setPort(url.port());
+    return endpoint;
+}
+
+static std::optional<hf_file_ref_t> hf_file_ref_from_url(const QUrl& url) {
+    auto path_parts = url.path().split(QLatin1Char{'/'}, Qt::SkipEmptyParts);
+
+    if (url.scheme() == QStringLiteral("hf")) {
+        QUrlQuery query{url};
+        auto endpoint =
+            QUrl{query.hasQueryItem(QStringLiteral("endpoint"))
+                     ? query.queryItemValue(QStringLiteral("endpoint"))
+                     : QStringLiteral("https://huggingface.co")};
+        auto revision = query.hasQueryItem(QStringLiteral("revision"))
+                            ? query.queryItemValue(QStringLiteral("revision"))
+                            : QStringLiteral("main");
+
+        QString repo_id;
+        QString filename;
+        if (url.host() == QStringLiteral("model") ||
+            url.host() == QStringLiteral("models")) {
+            if (path_parts.size() < 3) return std::nullopt;
+            repo_id = path_parts.at(0) + QLatin1Char{'/'} + path_parts.at(1);
+            filename = path_parts.mid(2).join(QLatin1Char{'/'});
+        } else {
+            if (url.host().isEmpty() || path_parts.size() < 2)
+                return std::nullopt;
+            repo_id = url.host() + QLatin1Char{'/'} + path_parts.at(0);
+            filename = path_parts.mid(1).join(QLatin1Char{'/'});
+        }
+
+        return hf_file_ref_t{std::move(endpoint), std::move(repo_id),
+                             std::move(revision), std::move(filename)};
+    }
+
+    if ((url.scheme() == QStringLiteral("https") ||
+         url.scheme() == QStringLiteral("http")) &&
+        url.host() == QStringLiteral("huggingface.co")) {
+        auto resolve_idx = path_parts.indexOf(QStringLiteral("resolve"));
+        if (resolve_idx < 2 || path_parts.size() <= resolve_idx + 2)
+            return std::nullopt;
+
+        auto repo_id = path_parts.at(0) + QLatin1Char{'/'} + path_parts.at(1);
+        auto revision = path_parts.at(resolve_idx + 1);
+        auto filename = path_parts.mid(resolve_idx + 2).join(QLatin1Char{'/'});
+        return hf_file_ref_t{endpoint_from_url(url), std::move(repo_id),
+                             std::move(revision), std::move(filename)};
+    }
+
+    return std::nullopt;
+}
+
+static QUrl hf_resolve_url(const hf_file_ref_t& ref) {
+    auto url = ref.endpoint;
+    url.setPath(QStringLiteral("/%1/resolve/%2/%3")
+                    .arg(ref.repo_id, ref.revision, ref.filename));
+    return url;
+}
+
+static void prepare_hf_metadata_request(QNetworkRequest& request) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 9, 0)
+    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
+                         QNetworkRequest::ManualRedirectPolicy);
+#endif
+    request.setRawHeader("Accept-Encoding", "identity");
+}
+
+static void prepare_download_request(QNetworkRequest& request) {
+#if QT_VERSION < QT_VERSION_CHECK(5, 9, 0)
+    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+#else
+    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
+                         QNetworkRequest::NoLessSafeRedirectPolicy);
+#endif
+}
+
+static void copy_dynamic_properties(const QObject* from, QObject* to) {
+    for (const auto& name : from->dynamicPropertyNames())
+        to->setProperty(name.constData(), from->property(name.constData()));
 }
 
 models_manager::models_manager(QObject* parent) : QObject{parent} {
@@ -753,14 +846,6 @@ void models_manager::download(const QString& id, download_type type, int part,
                     ? model.size + sup_models_total_size(model.sup_models)
                     : model.size;
 
-    QNetworkRequest request{url};
-#if QT_VERSION < QT_VERSION_CHECK(5, 9, 0)
-    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
-#else
-    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
-                         QNetworkRequest::NoLessSafeRedirectPolicy);
-#endif
-
     if (type == download_type::all || type == download_type::model_sup) {
         path = model_path(model.file_name);
         checksum = model.checksum;
@@ -820,6 +905,61 @@ void models_manager::download(const QString& id, download_type type, int part,
         return;
     }
 
+    auto set_reply_properties = [&](QNetworkReply* reply) {
+        reply->setProperty("out_path", path);
+        reply->setProperty("out_path_2", path_2);
+        reply->setProperty("model_id", id);
+        reply->setProperty("download_type", static_cast<int>(type));
+        reply->setProperty("download_next_type", static_cast<int>(next_type));
+        reply->setProperty("checksum", checksum);
+        reply->setProperty("checksum_2", checksum_2);
+        reply->setProperty("comp", static_cast<int>(comp));
+        reply->setProperty("size", size);
+        reply->setProperty("part", part);
+        reply->setProperty("next_part", next_part);
+        reply->setProperty("sup_idx", static_cast<unsigned int>(sup_idx));
+        reply->setProperty("next_sup_idx",
+                           static_cast<unsigned int>(next_sup_idx));
+        reply->setProperty("path_in_archive", path_in_archive);
+        reply->setProperty("path_in_archive_2", path_in_archive_2);
+    };
+
+    auto mark_download_started = [&] {
+        if (!model.downloading) {
+            model.downloading = true;
+            update_dl_off(m_models);
+            emit download_started(id);
+        }
+
+        if (part < 0) emit models_changed();
+    };
+
+    if (auto hf_ref = hf_file_ref_from_url(url)) {
+        auto hf_url = hf_resolve_url(*hf_ref);
+        QNetworkRequest request{hf_url};
+        prepare_hf_metadata_request(request);
+
+        auto* reply = m_nam.head(request);
+        set_reply_properties(reply);
+        reply->setProperty("out_file_path", out_file_path);
+
+        connect(reply, &QNetworkReply::finished, this,
+                [this, reply] { handle_hf_metadata_finished(reply); });
+        connect(reply, &QNetworkReply::sslErrors, this,
+                &models_manager::handle_ssl_errors);
+
+        qDebug() << "resolving hf download: url=" << hf_url
+                 << ", configured url=" << url << ", type=" << type
+                 << ", out path=" << path
+                 << ", out file path=" << out_file_path;
+
+        mark_download_started();
+        return;
+    }
+
+    QNetworkRequest request{url};
+    prepare_download_request(request);
+
     auto* out_file =
         new std::ofstream{out_file_path.toStdString(), std::ofstream::out};
 
@@ -830,21 +970,7 @@ void models_manager::download(const QString& id, download_type type, int part,
 
     reply->setProperty("out_file",
                        QVariant::fromValue(static_cast<void*>(out_file)));
-    reply->setProperty("out_path", path);
-    reply->setProperty("out_path_2", path_2);
-    reply->setProperty("model_id", id);
-    reply->setProperty("download_type", static_cast<int>(type));
-    reply->setProperty("download_next_type", static_cast<int>(next_type));
-    reply->setProperty("checksum", checksum);
-    reply->setProperty("checksum_2", checksum_2);
-    reply->setProperty("comp", static_cast<int>(comp));
-    reply->setProperty("size", size);
-    reply->setProperty("part", part);
-    reply->setProperty("next_part", next_part);
-    reply->setProperty("sup_idx", static_cast<unsigned int>(sup_idx));
-    reply->setProperty("next_sup_idx", static_cast<unsigned int>(next_sup_idx));
-    reply->setProperty("path_in_archive", path_in_archive);
-    reply->setProperty("path_in_archive_2", path_in_archive_2);
+    set_reply_properties(reply);
 
     connect(reply, &QNetworkReply::downloadProgress, this,
             &models_manager::handle_download_progress);
@@ -855,13 +981,7 @@ void models_manager::download(const QString& id, download_type type, int part,
     connect(reply, &QNetworkReply::sslErrors, this,
             &models_manager::handle_ssl_errors);
 
-    if (!model.downloading) {
-        model.downloading = true;
-        update_dl_off(m_models);
-        emit download_started(id);
-    }
-
-    if (part < 0) emit models_changed();
+    mark_download_started();
 }
 
 void models_manager::handle_ssl_errors(const QList<QSslError>& errors) {
@@ -881,16 +1001,172 @@ void models_manager::handle_download_ready_read() {
     }
 }
 
+static bool is_sha256_checksum(const QString& checksum) {
+    return checksum.startsWith(QStringLiteral("sha256:"), Qt::CaseInsensitive);
+}
+
+static QString normalized_checksum(QString checksum) {
+    checksum = checksum.trimmed().toLower();
+    if (is_sha256_checksum(checksum))
+        return QStringLiteral("sha256:") + checksum.mid(7);
+    return checksum;
+}
+
+static QString make_checksum_for_expected(const QString& path,
+                                          const QString& expected) {
+    if (is_sha256_checksum(expected)) {
+        auto checksum = checksum_tools::make_sha256_checksum(path);
+        return checksum.isEmpty() ? QString{}
+                                  : QStringLiteral("sha256:") + checksum;
+    }
+
+    return checksum_tools::make_checksum(path);
+}
+
+static QString reply_header(const QNetworkReply* reply,
+                            const QByteArray& header_name) {
+    for (const auto& name : reply->rawHeaderList()) {
+        if (!name.compare(header_name, Qt::CaseInsensitive))
+            return QString::fromLatin1(reply->rawHeader(name)).trimmed();
+    }
+    return {};
+}
+
+static QString hf_linked_checksum(const QNetworkReply* reply) {
+    auto etag = reply_header(reply, QByteArrayLiteral("x-linked-etag"));
+    if (etag.isEmpty()) etag = reply_header(reply, QByteArrayLiteral("etag"));
+
+    etag = etag.trimmed().toLower();
+    if (etag.startsWith(QStringLiteral("w/"))) etag.remove(0, 2);
+    if (etag.startsWith(QLatin1Char{'"'}) && etag.endsWith(QLatin1Char{'"'}))
+        etag = etag.mid(1, etag.size() - 2);
+
+    if (etag.size() == 64) return QStringLiteral("sha256:") + etag;
+    return etag;
+}
+
+void models_manager::handle_hf_metadata_finished(QNetworkReply* reply) {
+    auto id = reply->property("model_id").toString();
+    auto path = reply->property("out_path").toString();
+    auto comp = static_cast<comp_type>(reply->property("comp").toInt());
+    auto part = reply->property("part").toInt();
+    auto& model = m_models.at(id);
+
+    auto finish_with_error = [&](bool report_error) {
+        remove_downloaded_files_on_error(path, comp, part);
+        if (report_error) emit download_error(id);
+
+        reply->deleteLater();
+
+        model.downloading = false;
+        model.download_progress = 0.0;
+        model.downloaded_part_data = 0;
+
+        update_dl_multi(m_models);
+        update_dl_off(m_models);
+
+        emit models_changed();
+    };
+
+    if (auto cancel = check_model_download_cancel(reply);
+        cancel || reply->error() != QNetworkReply::NoError) {
+        qWarning() << "hf metadata error:" << reply->error();
+        finish_with_error(!cancel &&
+                          reply->error() !=
+                              QNetworkReply::OperationCanceledError);
+        return;
+    }
+
+    auto location = reply_header(reply, QByteArrayLiteral("location"));
+    QUrl download_url;
+    if (location.isEmpty()) {
+        download_url = reply->url();
+    } else {
+        auto target = QUrl{location};
+        if (target.isRelative()) {
+            QNetworkRequest request{reply->url().resolved(target)};
+            prepare_hf_metadata_request(request);
+            auto* next_reply = m_nam.head(request);
+            copy_dynamic_properties(reply, next_reply);
+            connect(next_reply, &QNetworkReply::finished, this,
+                    [this, next_reply] {
+                        handle_hf_metadata_finished(next_reply);
+                    });
+            connect(next_reply, &QNetworkReply::sslErrors, this,
+                    &models_manager::handle_ssl_errors);
+            reply->deleteLater();
+            return;
+        }
+        download_url = std::move(target);
+    }
+
+    auto expected_checksum =
+        normalized_checksum(reply->property("checksum").toString());
+    auto linked_checksum = normalized_checksum(hf_linked_checksum(reply));
+    if (is_sha256_checksum(expected_checksum) &&
+        is_sha256_checksum(linked_checksum) &&
+        expected_checksum != linked_checksum) {
+        qWarning() << "hf metadata checksum mismatch:" << linked_checksum
+                   << "(expected:" << expected_checksum << ")" << id;
+        finish_with_error(true);
+        return;
+    }
+
+    bool size_ok = false;
+    auto linked_size =
+        reply_header(reply, QByteArrayLiteral("x-linked-size")).toLongLong(
+            &size_ok);
+    if (size_ok && linked_size > 0 && reply->property("size").toLongLong() <= 0)
+        reply->setProperty("size", linked_size);
+
+    auto out_file_path = reply->property("out_file_path").toString();
+    auto* out_file =
+        new std::ofstream{out_file_path.toStdString(), std::ofstream::out};
+    if (!out_file->good()) {
+        qWarning() << "failed to open output file:" << out_file_path;
+        delete out_file;
+        finish_with_error(true);
+        return;
+    }
+
+    QNetworkRequest request{download_url};
+    prepare_download_request(request);
+    request.setRawHeader("Accept-Encoding", "identity");
+
+    auto* download_reply = m_nam.get(request);
+    copy_dynamic_properties(reply, download_reply);
+    download_reply->setProperty(
+        "out_file", QVariant::fromValue(static_cast<void*>(out_file)));
+
+    connect(download_reply, &QNetworkReply::downloadProgress, this,
+            &models_manager::handle_download_progress);
+    connect(download_reply, &QNetworkReply::finished, this,
+            &models_manager::handle_download_finished);
+    connect(download_reply, &QNetworkReply::readyRead, this,
+            &models_manager::handle_download_ready_read);
+    connect(download_reply, &QNetworkReply::sslErrors, this,
+            &models_manager::handle_ssl_errors);
+
+    qDebug() << "hf download resolved: url=" << download_url
+             << ", commit="
+             << reply_header(reply, QByteArrayLiteral("x-repo-commit"))
+             << ", checksum=" << linked_checksum << ", size=" << linked_size
+             << ", out file path=" << out_file_path;
+
+    reply->deleteLater();
+}
+
 models_manager::checksum_check_t models_manager::check_checksum(
     const QString& path, const QString& checksum) {
-    auto real_checksum = checksum_tools::make_checksum(path);
+    auto expected_checksum = normalized_checksum(checksum);
+    auto real_checksum = make_checksum_for_expected(path, expected_checksum);
     auto real_quick_checksum = checksum_tools::make_quick_checksum(path);
 
-    bool ok = real_checksum == checksum;
+    bool ok = real_checksum == expected_checksum;
 
     if (!ok) {
         qWarning() << "checksum 1 is invalid:" << real_checksum << "(expected"
-                   << checksum << ")";
+                   << expected_checksum << ")";
         qDebug() << "quick checksum 1:" << real_quick_checksum;
     }
 
@@ -1589,12 +1865,16 @@ bool models_manager::checksum_ok(const QString& checksum,
 
     if (checksum_quick.isEmpty()) {
         expected_checksum = checksum;
-        real_checksum = checksum_tools::make_checksum(model_path(file_name));
+        real_checksum =
+            make_checksum_for_expected(model_path(file_name), checksum);
     } else {
         expected_checksum = checksum_quick;
         real_checksum =
             checksum_tools::make_quick_checksum(model_path(file_name));
     }
+
+    expected_checksum = normalized_checksum(expected_checksum);
+    real_checksum = normalized_checksum(real_checksum);
 
     auto ok = expected_checksum == real_checksum;
 
@@ -2288,7 +2568,8 @@ void models_manager::add_implicit_model_options(priv_model_t& model) {
              !model.options.contains('c')) {
         // add char replacement option for all coqui tts models
         model.options.push_back('c');
-    } else if ((model.engine == model_engine_t::stt_fasterwhisper) &&
+    } else if ((model.engine == model_engine_t::stt_fasterwhisper ||
+                model.engine == model_engine_t::stt_canary) &&
                !model.disabled && !model.hidden &&
                model.options.contains('t') && model.lang_id == "en") {
         // remove translate to english option for all english models

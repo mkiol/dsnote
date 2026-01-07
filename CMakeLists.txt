@@ -425,6 +425,8 @@ if(WITH_PY)
         ${sources_dir}/punctuator.cpp
         ${sources_dir}/fasterwhisper_engine.hpp
         ${sources_dir}/fasterwhisper_engine.cpp
+        ${sources_dir}/canary_engine.hpp
+        ${sources_dir}/canary_engine.cpp
         ${sources_dir}/mimic3_engine.hpp
         ${sources_dir}/mimic3_engine.cpp
         ${sources_dir}/parler_engine.cpp
