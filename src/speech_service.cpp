@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -26,6 +26,7 @@
 #include "espeak_engine.hpp"
 #include "f5_engine.hpp"
 #include "fasterwhisper_engine.hpp"
+#include "canary_engine.hpp"
 #include "file_source.h"
 #include "gpu_tools.hpp"
 #include "kokoro_engine.hpp"
@@ -1347,6 +1348,8 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             }
         } else if (model_config->stt->engine == models_manager::model_engine_t::stt_fasterwhisper) {
             ENGINE_OPTS(fasterwhisper)
+        } else if (model_config->stt->engine == models_manager::model_engine_t::stt_canary) {
+            ENGINE_OPTS(canary)
         }
 #undef ENGINE_OPTS
         // clang-format on
@@ -1370,6 +1373,10 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             if (model_config->stt->engine ==
                     models_manager::model_engine_t::stt_fasterwhisper &&
                 type != typeid(fasterwhisper_engine))
+                return true;
+            if (model_config->stt->engine ==
+                    models_manager::model_engine_t::stt_canary &&
+                type != typeid(canary_engine))
                 return true;
             if (model_config->stt->engine ==
                     models_manager::model_engine_t::stt_april &&
@@ -1461,6 +1468,10 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                         break;
                     case models_manager::model_engine_t::stt_fasterwhisper:
                         m_stt_engine = std::make_unique<fasterwhisper_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
+                    case models_manager::model_engine_t::stt_canary:
+                        m_stt_engine = std::make_unique<canary_engine>(
                             std::move(config), std::move(call_backs));
                         break;
                     case models_manager::model_engine_t::stt_april:

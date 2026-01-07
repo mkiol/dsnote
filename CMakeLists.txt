@@ -374,6 +374,8 @@ set(dsnote_lib_sources
     ${sources_dir}/app_server.cpp
     ${sources_dir}/fasterwhisper_engine.hpp
     ${sources_dir}/fasterwhisper_engine.cpp
+    ${sources_dir}/canary_engine.hpp
+    ${sources_dir}/canary_engine.cpp
     ${sources_dir}/mimic3_engine.hpp
     ${sources_dir}/mimic3_engine.cpp
     ${sources_dir}/april_engine.hpp

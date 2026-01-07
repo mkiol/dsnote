@@ -49,6 +49,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         stt_whisper,
         stt_fasterwhisper,
         stt_april,
+        stt_canary,
         ttt_hftc,
         ttt_tashkeel,
         ttt_unikud,
@@ -81,6 +82,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         engine_stt_whisper = 1U << 8U,
         engine_stt_fasterwhisper = 1U << 9U,
         engine_stt_april = 1U << 10U,
+        engine_stt_canary = 1U << 21U,
         engine_tts_espeak = 1U << 11U,
         engine_tts_piper = 1U << 12U,
         engine_tts_rhvoice = 1U << 13U,
@@ -190,6 +192,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool tts_kokoro_ja = false;
         bool tts_kokoro_zh = false;
         bool stt_fasterwhisper = false;
+        bool stt_canary = false;
         bool stt_ds = false;
         bool stt_vosk = false;
         bool stt_whispercpp = false;
