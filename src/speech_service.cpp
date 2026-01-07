@@ -3310,6 +3310,7 @@ QVariantMap speech_service::features_availability() {
                  /*tts_kokoro_ja=*/py_availability->kokoro_ja,
                  /*tts_kokoro_zh=*/py_availability->kokoro_zh,
                  /*stt_fasterwhisper=*/py_availability->faster_whisper,
+                 /*stt_canary=*/py_availability->nemo_asr,
                  /*stt_ds=*/stt_ds,
                  /*stt_vosk=*/stt_vosk,
                  /*stt_whispercpp=*/stt_whispercpp,

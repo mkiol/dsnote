@@ -36,6 +36,7 @@ std::ostream& operator<<(std::ostream& os,
     os << "py-version=" << availability.py_version
        << ", coqui-tts=" << availability.coqui_tts
        << ", faster-whisper=" << availability.faster_whisper
+       << ", nemo-asr=" << availability.nemo_asr
        << ", ctranslate2-cuda=" << availability.ctranslate2_cuda
        << ", mimic3-tts=" << availability.mimic3_tts
        << ", whisperspeech-tts=" << availability.whisperspeech_tts
@@ -232,6 +233,14 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type,
             availability.faster_whisper = true;
         } catch (const std::exception& err) {
             LOGD("faster-whisper check py error: " << err.what());
+        }
+
+        try {
+            LOGD("checking: nemo-asr");
+            py::module_::import("nemo.collections.asr");
+            availability.nemo_asr = true;
+        } catch (const std::exception& err) {
+            LOGD("nemo-asr check py error: " << err.what());
         }
 
         try {
