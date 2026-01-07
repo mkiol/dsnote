@@ -134,7 +134,7 @@ int app_server::request_another_instance(const cmd::options &options) {
                     auto model = qdbus_cast<QVariantMap>(
                         m.template value<QDBusArgument>());
                     return std::max(model.contains("id")
-                                        ? model.value("id").toString().size()
+                                        ? static_cast<int>(model.value("id").toString().size())
                                         : size,
                                     size);
                 });
@@ -204,10 +204,10 @@ int app_server::request_another_instance(const cmd::options &options) {
             g_max_size =
                 std::max(g_max_size,
                          std::max(modelStt.contains("id")
-                                      ? modelStt.value("id").toString().size()
+                                      ? static_cast<int>(modelStt.value("id").toString().size())
                                       : 1,
                                   modelTts.contains("id")
-                                      ? modelTts.value("id").toString().size()
+                                      ? static_cast<int>(modelTts.value("id").toString().size())
                                       : 1));
             print_active_model("STT", g_max_size, modelStt);
             print_active_model("TTS", g_max_size, modelTts);
@@ -215,14 +215,14 @@ int app_server::request_another_instance(const cmd::options &options) {
             auto modelStt = iface.activeSttModel();
             g_max_size = std::max(g_max_size,
                                   modelStt.contains("id")
-                                      ? modelStt.value("id").toString().size()
+                                      ? static_cast<int>(modelStt.value("id").toString().size())
                                       : 1);
             print_active_model("STT", g_max_size, modelStt);
         } else if (options.active_model_to_print_role & cmd::role_tts) {
             auto modelTts = iface.activeTtsModel();
             g_max_size = std::max(g_max_size,
                                   modelTts.contains("id")
-                                      ? modelTts.value("id").toString().size()
+                                      ? static_cast<int>(modelTts.value("id").toString().size())
                                       : 1);
             print_active_model("TTS", g_max_size, modelTts);
         }

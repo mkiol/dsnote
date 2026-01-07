@@ -18,7 +18,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QGuiApplication>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QStandardPaths>
 #include <QVariant>
 #include <QVariantList>
@@ -32,6 +32,19 @@
 #include "logger.hpp"
 #include "module_tools.hpp"
 #include "qtlogger.hpp"
+
+#ifdef USE_DESKTOP
+static QStringList qt6_available_styles() {
+    return QStringList{
+        QStringLiteral("Basic"),
+        QStringLiteral("Fusion"),
+        QStringLiteral("Material"),
+        QStringLiteral("Universal"),
+        QStringLiteral("org.kde.desktop"),
+        QStringLiteral("org.kde.breeze")
+    };
+}
+#endif
 
 QDebug operator<<(QDebug d, settings::mode_t mode) {
     switch (mode) {
@@ -540,10 +553,12 @@ static QString file_save_filename(const QDir& dir, QString filename,
             return filename + '.' + ext;
         }
 
-        QRegExp rx{"\\d+$"};
-        if (auto idx = rx.indexIn(filename); idx >= 0) {
+        QRegularExpression rx{QStringLiteral("\\d+$")};
+        QRegularExpressionMatch match = rx.match(filename);
+        if (match.hasMatch()) {
+            auto idx = match.capturedStart();
             bool ok = false;
-            auto ii = filename.midRef(idx).toInt(&ok);
+            auto ii = QStringView{filename}.mid(idx).toInt(&ok);
             if (ok && ii < max_i) {
                 i = ii;
                 filename = filename.mid(0, idx) + "%1." + ext;
@@ -1009,7 +1024,7 @@ int settings::qt_style_idx() const {
 #ifdef USE_DESKTOP
     auto name = qt_style_name();
 
-    auto styles = QQuickStyle::availableStyles();
+    auto styles = qt6_available_styles();
 
     if (name.isEmpty()) return styles.size();
 
@@ -1020,7 +1035,7 @@ int settings::qt_style_idx() const {
 
 void settings::set_qt_style_idx([[maybe_unused]] int value) {
 #ifdef USE_DESKTOP
-    auto styles = QQuickStyle::availableStyles();
+    auto styles = qt6_available_styles();
 
     if (value < 0 || value >= styles.size()) {
         set_qt_style_name({});
@@ -1036,7 +1051,7 @@ QString settings::qt_style_name() const {
     auto name =
         value(QStringLiteral("qt_style_name"), default_qt_style).toString();
 
-    if (!QQuickStyle::availableStyles().contains(name)) return {};
+    if (!qt6_available_styles().contains(name)) return {};
 
     return name;
 #else
@@ -1046,7 +1061,7 @@ QString settings::qt_style_name() const {
 
 void settings::set_qt_style_name([[maybe_unused]] QString name) {
 #ifdef USE_DESKTOP
-    if (!QQuickStyle::availableStyles().contains(name)) name.clear();
+    if (!qt6_available_styles().contains(name)) name.clear();
 
     if (qt_style_name() != name) {
         setValue(QStringLiteral("qt_style_name"), name);
@@ -1323,7 +1338,7 @@ QString settings::audio_format_str() const {
 
 QStringList settings::qt_styles() const {
 #ifdef USE_DESKTOP
-    auto styles = QQuickStyle::availableStyles();
+    auto styles = qt6_available_styles();
     styles.append(tr("Don't force any style"));
     return styles;
 #else
@@ -1364,17 +1379,9 @@ void settings::update_qt_style(QQmlApplicationEngine* engine) {
         engine->addImportPath(QStringLiteral("%1/qml").arg(prefix));
     }
 
-    if (auto prefix = module_tools::path_to_dir_for_path(
-            QStringLiteral("lib"), QStringLiteral("qml/QtQuick/Controls.2"));
-        !prefix.isEmpty()) {
-        QQuickStyle::addStylePath(
-            QStringLiteral("%1/qml/QtQuick/Controls.2").arg(prefix));
-    }
-
-    auto styles = QQuickStyle::availableStyles();
+    auto styles = qt6_available_styles();
 
     LOGD("available styles: " << styles);
-    LOGD("style paths: " << QQuickStyle::stylePathList());
     LOGD("import paths: " << engine->importPathList());
     LOGD("library paths: " << QCoreApplication::libraryPaths());
 
@@ -1750,6 +1757,7 @@ X(whispercpp)
     }
 X(whispercpp)
 X(fasterwhisper)
+X(canary)
 #undef X
 
 #define X(name, enabled)                                                      \

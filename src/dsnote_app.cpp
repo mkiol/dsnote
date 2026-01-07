@@ -14,7 +14,7 @@
 #include <QFile>
 #include <QGuiApplication>
 #include <QKeySequence>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QTextStream>
 #include <QTimer>
 #include <algorithm>
@@ -477,13 +477,11 @@ dsnote_app::dsnote_app(QObject *parent)
 }
 
 void dsnote_app::create_player() {
-    m_player = std::make_unique<QMediaPlayer>(QObject::parent(),
-                                              QMediaPlayer::LowLatency);
-    m_player->setNotifyInterval(100);
+    m_player = std::make_unique<QMediaPlayer>(QObject::parent());
 
     connect(
-        m_player.get(), &QMediaPlayer::stateChanged, this,
-        [this](QMediaPlayer::State state) {
+        m_player.get(), &QMediaPlayer::playbackStateChanged, this,
+        [this](QMediaPlayer::PlaybackState state) {
             qDebug() << "player state changed:" << state;
             emit player_playing_changed();
         },
@@ -738,11 +736,12 @@ settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
                     ? rule.flags
                     : trans_rule_flags_t::TransRuleNone;
             break;
-        case trans_rule_type_t::TransRuleTypeMatchRe:
-            rule_matches = text.contains(
-                QRegExp{rule.pattern,
-                        case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive});
+        case trans_rule_type_t::TransRuleTypeMatchRe: {
+            QRegularExpression::PatternOptions opts = QRegularExpression::NoPatternOption;
+            if (!case_sens) opts |= QRegularExpression::CaseInsensitiveOption;
+            rule_matches = text.contains(QRegularExpression{rule.pattern, opts});
             break;
+        }
         case trans_rule_type_t::TransRuleTypeReplaceSimple: {
             rule_matches =
                 text.contains(rule.pattern, case_sens ? Qt::CaseSensitive
@@ -757,29 +756,30 @@ settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
             auto replace = rule.replace;
             replace.replace("\\n", "\n");
 
-            QRegExp rx{rule.pattern,
-                       case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive};
+            QRegularExpression::PatternOptions opts = QRegularExpression::NoPatternOption;
+            if (!case_sens) opts |= QRegularExpression::CaseInsensitiveOption;
+            QRegularExpression rx{rule.pattern, opts};
 
             rule_matches = text.contains(rx);
             if (rule_matches) {
                 if (!rule.replace.contains("\\U") && !replace.contains("\\u")) {
                     text.replace(rx, replace);
                 } else {
-                    int pos = 0;
+                    qsizetype pos = 0;
+                    QRegularExpressionMatch match;
                     while (pos < text.size() &&
-                           (pos = rx.indexIn(text, pos)) != -1 &&
-                           rx.matchedLength() > 0) {
+                           (match = rx.match(text, pos)).hasMatch()) {
                         QString after = replace;
-                        for (int i = 1; i < rx.captureCount() + 1; ++i) {
+                        for (int i = 1; i <= match.lastCapturedIndex(); ++i) {
                             after.replace(QStringLiteral("\\U\\%1").arg(i),
-                                          rx.cap(i).toUpper());
+                                          match.captured(i).toUpper());
                             after.replace(QStringLiteral("\\u\\%1").arg(i),
-                                          rx.cap(i).toLower());
+                                          match.captured(i).toLower());
                             after.replace(QStringLiteral("\\%1").arg(i),
-                                          rx.cap(i));
+                                          match.captured(i));
                         }
-                        text.replace(pos, rx.matchedLength(), after);
-                        pos += after.size();
+                        text.replace(match.capturedStart(), match.capturedLength(), after);
+                        pos = match.capturedStart() + after.size();
                     }
                 }
             }
@@ -868,7 +868,7 @@ QVariantList dsnote_app::test_trans_rule(unsigned int flags,
 }
 
 bool dsnote_app::trans_rule_re_pattern_valid(const QString &pattern) {
-    return QRegExp{pattern}.isValid();
+    return QRegularExpression{pattern}.isValid();
 }
 
 void dsnote_app::update_trans_rule(int index, unsigned int flags,
@@ -1927,7 +1927,7 @@ void dsnote_app::update_available_tts_ref_voices() {
     QVariantMap new_available_tts_ref_voices_map{};
 
     const auto ref_voices_dir =
-        QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+        QDir{QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)}
             .filePath(s_ref_voices_dir_name);
 
     auto scan_ref_voices = [&] {
@@ -2873,7 +2873,7 @@ void dsnote_app::play_speech() {
 }
 
 void dsnote_app::play_speech_selected(int start, int end) {
-    auto size = note().size();
+    auto size = static_cast<int>(note().size());
 
     if (size == 0) return;
 
@@ -2893,7 +2893,7 @@ void dsnote_app::play_speech_selected(int start, int end) {
 
 void dsnote_app::play_speech_translator_selected(int start, int end,
                                                  bool transtalated) {
-    auto size = transtalated ? m_translated_text.size() : note().size();
+    auto size = static_cast<int>(transtalated ? m_translated_text.size() : note().size());
 
     if (size == 0) return;
 
@@ -3027,7 +3027,7 @@ void dsnote_app::handle_translate_delayed() {
 }
 
 void dsnote_app::translate_selected(int start, int end) {
-    auto size = note().size();
+    auto size = static_cast<int>(note().size());
 
     if (size == 0) return;
 
@@ -5254,7 +5254,7 @@ QString dsnote_app::import_ref_voice_file_path() {
 void dsnote_app::player_stop_voice_ref() {
     if (!m_player) return;
 
-    m_player->setMedia({});
+    m_player->setSource(QUrl{});
 
     m_player_current_voice_ref_idx = -1;
     emit player_current_voice_ref_idx_changed();
@@ -5329,7 +5329,7 @@ void dsnote_app::player_import_rec() {
 void dsnote_app::player_set_path(const QString &wav_file_path) {
     if (!m_player) create_player();
 
-    m_player->setMedia(
+    m_player->setSource(
         QUrl{QStringLiteral("gst-pipeline: filesrc location=%1 ! wavparse ! "
                             "audioconvert ! alsasink")
                  .arg(wav_file_path)});
@@ -5351,10 +5351,12 @@ QString dsnote_app::tts_ref_voice_unique_name(QString name,
     if (!add_number && !names.contains(name)) return name;
 
     int i = 1;
-    QRegExp rx{"\\d+$"};
-    if (auto idx = rx.indexIn(name); idx >= 0) {
+    QRegularExpression rx{QStringLiteral("\\d+$")};
+    QRegularExpressionMatch match = rx.match(name);
+    if (match.hasMatch()) {
+        auto idx = match.capturedStart();
         bool ok = false;
-        auto ii = name.midRef(idx).toInt(&ok);
+        auto ii = QStringView{name}.mid(idx).toInt(&ok);
         if (ok && ii < 99999) {
             i = ii;
             name = name.mid(0, idx) + "%1";
@@ -5381,7 +5383,7 @@ void dsnote_app::player_export_ref_voice(long long start, long long stop,
                                          const QString &name,
                                          const QString &text) {
     QDir ref_voices_dir{
-        QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+        QDir{QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)}
             .filePath(s_ref_voices_dir_name)};
 
     QString out_file_path;
@@ -5428,7 +5430,7 @@ void dsnote_app::player_reset() {
     if (!m_player) return;
 
     QFile{import_ref_voice_file_path()}.remove();
-    m_player->setMedia({});
+    m_player->setSource(QUrl{});
 }
 
 bool dsnote_app::player_ready() const {
@@ -5487,7 +5489,7 @@ void dsnote_app::recorder_stop() {
 void dsnote_app::recorder_reset() { m_recorder.reset(); }
 
 bool dsnote_app::player_playing() const {
-    return m_player && m_player->state() == QMediaPlayer::State::PlayingState;
+    return m_player && m_player->playbackState() == QMediaPlayer::PlaybackState::PlayingState;
 }
 
 void dsnote_app::player_set_position(long long position) {

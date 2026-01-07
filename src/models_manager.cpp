@@ -814,7 +814,8 @@ void models_manager::download(const QString& id, download_type type, int part,
                     : model.size;
 
     QNetworkRequest request{url};
-    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
+                         QNetworkRequest::NoLessSafeRedirectPolicy);
 
     if (type == download_type::all || type == download_type::model_sup) {
         path = model_path(model.file_name);
@@ -1354,7 +1355,7 @@ void models_manager::init_config() {
     }
 
     QString data_dir{
-        QStandardPaths::writableLocation(QStandardPaths::DataLocation)};
+        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)};
     QDir dir{data_dir};
     if (!dir.exists())
         if (!dir.mkpath(data_dir)) qWarning() << "failed to create data dir";
@@ -2724,7 +2725,7 @@ void models_manager::reset_models() {
     qDebug() << "removing models file";
 
     auto models_file_path =
-        QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+        QDir{QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)}
             .filePath(models_file);
 
     QFile{models_file_path}.remove();
@@ -2734,7 +2735,7 @@ void models_manager::parse_models_file(
     bool reset, langs_t* langs, packs_t* packs, models_t* models,
     std::optional<models_availability_t> models_availability) {
     const auto models_file_path =
-        QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+        QDir{QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)}
             .filePath(models_file);
     if (!QFile::exists(models_file_path)) init_config();
 

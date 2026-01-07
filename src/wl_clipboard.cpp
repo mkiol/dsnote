@@ -2,7 +2,7 @@
 
 #include <QProcess>
 #include <QStandardPaths>
-#include <QTextCodec>
+
 #include <optional>
 
 #include "logger.hpp"

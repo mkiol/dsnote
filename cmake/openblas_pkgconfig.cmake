@@ -1,6 +1,6 @@
 pkg_search_module(openblas openblas)
 
-if(NOT DEFINED ${openblas_FOUND})
+if(NOT openblas_FOUND)
     # check without pkg-config
     set(BLA_STATIC OFF)
     set(BLA_VENDOR "OpenBLAS")

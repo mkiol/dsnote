@@ -13,7 +13,6 @@
 
 #include <fmt/format.h>
 #include <linux/uinput.h>
-#include <qpa/qplatformnativeinterface.h>
 #include <sys/epoll.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
@@ -567,7 +566,10 @@ void fake_keyboard::init_ydo() {
     if (!m_xkb_ctx) throw std::runtime_error{"no xkb context"};
 
 #ifdef USE_X11_FEATURES
-    auto *xcb_conn = QX11Info::connection();
+    xcb_connection_t *xcb_conn = nullptr;
+    if (auto *x11App = qGuiApp->nativeInterface<QNativeInterface::QX11Application>()) {
+        xcb_conn = x11App->connection();
+    }
     if (xcb_conn) {
         auto device_id = xkb_x11_get_core_keyboard_device_id(xcb_conn);
         if (device_id == -1) throw std::runtime_error{"no xkb keyboard"};
@@ -756,10 +758,13 @@ void fake_keyboard::send_text_xdo(const QString &text) {
 void fake_keyboard::init_legacy() {
     LOGD("using legacy fake-keyboard");
 
-    m_x11_display = QX11Info::display();
+    auto *x11App = qGuiApp->nativeInterface<QNativeInterface::QX11Application>();
+    if (!x11App) throw std::runtime_error{"no x11 application"};
+
+    m_x11_display = x11App->display();
     if (!m_x11_display) throw std::runtime_error{"no x11 display"};
 
-    m_xcb_conn = QX11Info::connection();
+    m_xcb_conn = x11App->connection();
     if (!m_xcb_conn) throw std::runtime_error{"no xcb connection"};
 
     auto device_id = xkb_x11_get_core_keyboard_device_id(m_xcb_conn);
@@ -818,11 +823,12 @@ void fake_keyboard::init_legacy() {
 void fake_keyboard::init_xdo() {
     LOGD("using xdo fake-keyboard");
 
-    if (!QX11Info::display()) {
+    auto *x11App = qGuiApp->nativeInterface<QNativeInterface::QX11Application>();
+    if (!x11App || !x11App->display()) {
         LOGF("no x11 display");
     }
 
-    m_xdo = xdo_new_with_opened_display(QX11Info::display(), nullptr, 0);
+    m_xdo = xdo_new_with_opened_display(x11App->display(), nullptr, 0);
     if (!m_xdo) {
         LOGF("can't create xdo");
     }
@@ -947,14 +953,13 @@ void fake_keyboard::connect_wayland() {
 
     std::lock_guard lock{m_wl_mtx};
 
-    auto *native = QGuiApplication::platformNativeInterface();
-    if (!native) {
-        LOGW("can't get native interface");
+    auto *waylandApp = qGuiApp->nativeInterface<QNativeInterface::QWaylandApplication>();
+    if (!waylandApp) {
+        LOGW("can't get wayland native interface");
         return;
     }
 
-    m_wl_display = static_cast<wl_display *>(
-        native->nativeResourceForIntegration("display"));
+    m_wl_display = waylandApp->display();
     if (!m_wl_display) {
         LOGW("can't get wl display interface");
         return;

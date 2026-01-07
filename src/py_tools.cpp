@@ -380,7 +380,7 @@ bool init_module() {
     if (!module_tools::init_module(QStringLiteral("python"))) return false;
 
     auto py_path =
-        QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/" +
+        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" +
         python_site_path;
 
     qDebug() << "setting env PYTHONPATH=" << py_path;
