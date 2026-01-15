@@ -231,6 +231,126 @@ ColumnLayout {
         }
     }
 
+    ColumnLayout {
+        Layout.fillWidth: true
+        spacing: 0
+        visible: _settings.stt_tts_text_format === Settings.TextFormatInlineTimestamp
+
+        SectionLabel {
+            text: qsTranslate("SettingsPage", "Inline timestamp settings")
+        }
+
+        TextFieldForm {
+            label.text: qsTranslate("SettingsPage", "Template")
+            compact: true
+            textField {
+                text: _settings.inline_timestamp_template
+                readOnly: true
+                color: palette.text
+                background: Rectangle {
+                    color: palette.base
+                    border.color: palette.mid
+                    border.width: 1
+                    radius: 2
+                }
+            }
+            button {
+                text: qsTranslate("SettingsPage", "Edit")
+                onClicked: inlineTimestampDialog.open()
+            }
+        }
+
+        SpinBoxForm {
+            label.text: qsTranslate("SettingsPage", "Timestamp interval")
+            toolTip: qsTranslate("SettingsPage", "Minimum seconds between timestamps.")
+            spinBox {
+                from: 5
+                to: 3600
+                stepSize: 5
+                value: _settings.inline_timestamp_min_interval
+                editable: true
+                textFromValue: function(value) { return value + " s" }
+                valueFromText: function(text) { return parseInt(text) }
+                onValueModified: {
+                    _settings.inline_timestamp_min_interval = value
+                }
+            }
+        }
+    }
+
+    Dialog {
+        id: inlineTimestampDialog
+
+        modal: true
+        title: qsTranslate("SettingsPage", "Edit Timestamp Template")
+        parent: Overlay.overlay
+        anchors.centerIn: parent
+        width: Math.min(450, parent.width - 40)
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        onAccepted: {
+            var newText = templateEditField.text.trim()
+            if (newText === "") newText = "[{mm}:{ss}] {text}"
+            _settings.inline_timestamp_template = newText
+        }
+
+        onOpened: {
+            templateEditField.text = _settings.inline_timestamp_template
+            templateEditField.forceActiveFocus()
+            templateEditField.selectAll()
+        }
+
+        ColumnLayout {
+            width: parent.width
+            spacing: 12
+
+            TextField {
+                id: templateEditField
+                Layout.fillWidth: true
+                placeholderText: "[{hh}:{mm}:{ss}] {text}"
+                selectByMouse: true
+            }
+
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                font.pixelSize: appWin.textFontSize * 0.9
+                color: palette.text
+                textFormat: Text.RichText
+                text: qsTranslate("SettingsPage", "Available tokens:<br><b>{hh}</b> (hours), <b>{mm}</b> (minutes), <b>{ss}</b> (seconds), <b>{text}</b> (transcribed text)")
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                height: 1
+                color: palette.mid
+                opacity: 0.5
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 8
+
+                Label {
+                    text: qsTranslate("SettingsPage", "Presets:")
+                    color: palette.text
+                    opacity: 0.8
+                }
+
+                Button {
+                    text: qsTranslate("SettingsPage", "Standard")
+                    onClicked: templateEditField.text = "[{hh}:{mm}:{ss}] {text}"
+                }
+
+                Button {
+                    text: qsTranslate("SettingsPage", "Short")
+                    onClicked: templateEditField.text = "[{mm}:{ss}] {text}"
+                }
+            }
+        }
+    }
+
     BusyIndicator {
         visible: app.busy && !sttEnginesBar.visible
         running: visible

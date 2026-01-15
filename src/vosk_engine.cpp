@@ -435,7 +435,8 @@ void vosk_engine::decode_speech(const vosk_buf_t& buf, bool eof) {
     }
 
     if (ret == 0 && !eof) {
-        if (m_config.text_format == text_format_t::subrip) {
+        if (m_config.text_format == text_format_t::subrip ||
+            m_config.text_format == text_format_t::inline_timestamp) {
             return;
         } else {
             // append silence to force partial result
@@ -452,7 +453,9 @@ void vosk_engine::decode_speech(const vosk_buf_t& buf, bool eof) {
 
     const char* old_locale = setlocale(LC_NUMERIC, "C");
 
-    if (m_config.text_format == text_format_t::subrip && eof) {
+    if ((m_config.text_format == text_format_t::subrip ||
+         m_config.text_format == text_format_t::inline_timestamp) &&
+        eof) {
         auto segments = segments_from_json(
             m_vosk_api.vosk_recognizer_final_result(m_vosk_recognizer));
 
@@ -462,13 +465,22 @@ void vosk_engine::decode_speech(const vosk_buf_t& buf, bool eof) {
                                                         segments.second);
         }
 
-        text_tools::break_segments_to_multiline(
-            m_config.sub_config.min_line_length,
-            m_config.sub_config.max_line_length, segments.second);
+        if (m_config.text_format == text_format_t::subrip) {
+            text_tools::break_segments_to_multiline(
+                m_config.sub_config.min_line_length,
+                m_config.sub_config.max_line_length, segments.second);
 
-        set_intermediate_text(
-            text_tools::segments_to_subrip_text(segments.second),
-            m_config.lang);
+            set_intermediate_text(
+                text_tools::segments_to_subrip_text(segments.second),
+                m_config.lang);
+        } else {
+            set_intermediate_text(
+                text_tools::format_segments_inline(
+                    segments.second, m_config.inline_timestamp_template,
+                    m_config.inline_timestamp_min_interval,
+                    m_last_inline_timestamp_t0),
+                m_config.lang);
+        }
     } else {
         auto result =
             eof ? text_from_json(m_vosk_api.vosk_recognizer_final_result(
