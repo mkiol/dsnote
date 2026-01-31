@@ -784,6 +784,7 @@ modules:
       - -DWITH_RUY=ON
       - -DINTEL_ROOT=/app/opt/oneapi
       - -DCMAKE_CXX_FLAGS=-msse4.1
+      - -DCMAKE_SHARED_LINKER_FLAGS=-Wl,-z,noexecstack
       - -DCMAKE_INSTALL_PREFIX=/app/extensions/cpu
       - -DCMAKE_SYSTEM_PREFIX_PATH=/app
     post-install:

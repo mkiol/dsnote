@@ -260,7 +260,9 @@ modules:
       - -DWITH_RUY=ON
       - -DINTEL_ROOT=/app/extensions/nvidia/oneapi
       - -DCUDA_TOOLKIT_ROOT_DIR=/app/extensions/nvidia/cuda
-      - -DCMAKE_CXX_FLAGS=-msse4.1 -DTHRUST_IGNORE_CUB_VERSION_CHECK=1
+      - -DCMAKE_CXX_FLAGS=-msse4.1
+      - -DCMAKE_SHARED_LINKER_FLAGS=-Wl,-z,noexecstack
+      - -DTHRUST_IGNORE_CUB_VERSION_CHECK=1
       - -DCMAKE_SYSTEM_PREFIX_PATH=/app
     post-install:
       - cd python && python setup.py bdist_wheel
