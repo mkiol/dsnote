@@ -3,7 +3,7 @@ set(enabled_translations ar ca_ES cs de en es fr fr_CA it nl no pl ru sv sl tr_T
 # finished translations
 set(enabled_translations ar ca_ES de en es fr fr_CA it nl no pl ru sv sl tr_TR uk zh_CN zh_TW)
 
-find_package(Qt5 COMPONENTS Core LinguistTools)
+find_package(Qt6 COMPONENTS Core LinguistTools)
 
 set(ts_files "")
 foreach(lang ${enabled_translations})
@@ -24,6 +24,6 @@ function(ADD_TRANSLATIONS_RESOURCE res_file)
     set(${res_file} ${_res_file} PARENT_SCOPE)
 endfunction()
 
-qt5_create_translation(qm_files ${CMAKE_SOURCE_DIR}/src ${desktop_dir}/qml ${sfos_dir}/qml ${ts_files})
+qt_add_translation(qm_files ${ts_files})
 
 add_translations_resource(translations_res ${qm_files})

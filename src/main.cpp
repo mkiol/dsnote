@@ -16,7 +16,7 @@
 #include <QQmlContext>
 #include <QString>
 #include <QStringList>
-#include <QTextCodec>
+
 #include <QTranslator>
 #include <QUrl>
 #include <csignal>
@@ -520,7 +520,6 @@ int main(int argc, char* argv[]) {
 #ifdef USE_SFOS
     const auto& app = *SailfishApp::application(argc, argv);
 #else
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
     QGuiApplication::setWindowIcon(QIcon{QStringLiteral(":/app_icon.svg")});
 #endif

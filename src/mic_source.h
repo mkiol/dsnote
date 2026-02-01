@@ -8,7 +8,7 @@
 #ifndef MIC_SOURCE_H
 #define MIC_SOURCE_H
 
-#include <QAudioInput>
+#include <QAudioSource>
 #include <QIODevice>
 #include <QObject>
 #include <QStringList>
@@ -33,7 +33,7 @@ class mic_source : public audio_source {
     static QStringList audio_inputs();
 
    private:
-    std::unique_ptr<QAudioInput> m_audio_input;
+    std::unique_ptr<QAudioSource> m_audio_input;
     QTimer m_timer;
     QIODevice* m_audio_device = nullptr;
     bool m_eof = false;

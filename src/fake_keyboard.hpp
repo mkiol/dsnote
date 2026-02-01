@@ -21,8 +21,8 @@
 #include <thread>
 
 #ifdef USE_X11_FEATURES
-#include <QX11Info>
-
+struct _XDisplay;
+typedef struct _XDisplay Display;
 struct xcb_connection_t;
 struct xkb_context;
 struct xkb_keymap;
