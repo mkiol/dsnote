@@ -15,6 +15,7 @@
 #include <iostream>
 #include <optional>
 #include <piper-phonemize/tashkeel.hpp>
+#include <regex>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -102,6 +103,16 @@ std::string segment_to_subrip_text(const segment_t& segment);
 std::string segments_to_subrip_text(const std::vector<segment_t>& segments);
 std::vector<segment_t> subrip_text_to_segments(const std::string& text,
                                                size_t offset);
+std::string format_segment_inline(const segment_t& segment,
+                                  const std::string& tmpl);
+std::string format_segments_inline(const std::vector<segment_t>& segments,
+                                   const std::string& tmpl,
+                                   int min_interval_s,
+                                   std::optional<size_t>& last_timestamped_t0);
+std::optional<std::regex> compile_inline_timestamp_regex(
+    const std::string& tmpl);
+std::string strip_inline_timestamps(const std::string& text,
+                                    const std::regex& pattern);
 void restore_punctuation_in_segment(const std::string& text_with_punctuation,
                                     segment_t& segment);
 void restore_punctuation_in_segments(const std::string& text_with_punctuation,

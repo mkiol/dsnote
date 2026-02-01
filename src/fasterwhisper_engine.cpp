@@ -364,6 +364,9 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
             std::ostringstream os;
 
             bool subrip = m_config.text_format == text_format_t::subrip;
+            bool inline_ts = m_config.text_format == text_format_t::inline_timestamp;
+
+            std::vector<text_tools::segment_t> inline_segments;
 
             auto i = 0;
             for (auto& segment : segments) {
@@ -377,7 +380,7 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
                 LOGD("segment: " << text);
 #endif
 
-                if (subrip) {
+                if (subrip || inline_ts) {
                     auto t0 = static_cast<size_t>(std::max(
                                   0.0, segment.attr("start").cast<double>())) *
                               1000;
@@ -388,19 +391,30 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
                     t0 += m_segment_time_offset;
                     t1 += m_segment_time_offset;
 
-                    text_tools::segment_t segment{i + 1 + m_segment_offset, t0,
-                                                  t1, text};
-                    text_tools::break_segment_to_multiline(
-                        m_config.sub_config.min_line_length,
-                        m_config.sub_config.max_line_length, segment);
+                    text_tools::segment_t seg{i + 1 + m_segment_offset, t0,
+                                              t1, text};
 
-                    text_tools::segment_to_subrip_text(segment, os);
+                    if (subrip) {
+                        text_tools::break_segment_to_multiline(
+                            m_config.sub_config.min_line_length,
+                            m_config.sub_config.max_line_length, seg);
+                        text_tools::segment_to_subrip_text(seg, os);
+                    } else {
+                        inline_segments.push_back(std::move(seg));
+                    }
                 } else {
                     if (i != 0) os << ' ';
                     os << std::move(text);
                 }
 
                 ++i;
+            }
+
+            if (inline_ts && !inline_segments.empty()) {
+                os << text_tools::format_segments_inline(
+                    inline_segments, m_config.inline_timestamp_template,
+                    m_config.inline_timestamp_min_interval,
+                    m_last_inline_timestamp_t0);
             }
 
             m_segment_offset += i;

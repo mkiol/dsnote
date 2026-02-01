@@ -254,7 +254,8 @@ void april_engine::decode_speech(april_buf_t& buf, bool eof) {
 #endif
 
     bool prev_segment_finished =
-        m_config.text_format == text_format_t::subrip &&
+        (m_config.text_format == text_format_t::subrip ||
+         m_config.text_format == text_format_t::inline_timestamp) &&
         ((m_prev_segment_end_time && m_prev_segment_start_time) || eof);
 
     if (prev_segment_finished) {
@@ -290,7 +291,8 @@ void april_engine::decode_speech(april_buf_t& buf, bool eof) {
         m_prev_segment_end_time.reset();
     }
 
-    if (eof && m_config.text_format == text_format_t::subrip) {
+    if (eof && (m_config.text_format == text_format_t::subrip ||
+                m_config.text_format == text_format_t::inline_timestamp)) {
         ltrim(m_result_prev_segment);
         rtrim(m_result_prev_segment);
 
@@ -304,12 +306,21 @@ void april_engine::decode_speech(april_buf_t& buf, bool eof) {
         text_tools::restore_punctuation_in_segments(m_result_prev_segment,
                                                     m_segments);
 
-        text_tools::break_segments_to_multiline(
-            m_config.sub_config.min_line_length,
-            m_config.sub_config.max_line_length, m_segments);
+        if (m_config.text_format == text_format_t::subrip) {
+            text_tools::break_segments_to_multiline(
+                m_config.sub_config.min_line_length,
+                m_config.sub_config.max_line_length, m_segments);
 
-        set_intermediate_text(text_tools::segments_to_subrip_text(m_segments),
-                              m_config.lang);
+            set_intermediate_text(text_tools::segments_to_subrip_text(m_segments),
+                                  m_config.lang);
+        } else if (m_config.text_format == text_format_t::inline_timestamp) {
+            set_intermediate_text(
+                text_tools::format_segments_inline(
+                    m_segments, m_config.inline_timestamp_template,
+                    m_config.inline_timestamp_min_interval,
+                    m_last_inline_timestamp_t0),
+                m_config.lang);
+        }
 
         m_result_prev_segment.clear();
         m_result_size_consumed = 0;

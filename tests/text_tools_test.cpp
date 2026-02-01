@@ -313,3 +313,69 @@ TEST_CASE("text_tools", "[subrip_text_start]") {
         REQUIRE_FALSE(start);
     }
 }
+
+TEST_CASE("text_tools", "[inline_timestamps]") {
+    SECTION("automatically_appends_text_token_if_missing") {
+        std::vector<text_tools::segment_t> segments = {{1, 5000, 6000, "Hello"}};
+        std::string tmpl = "[{ss}]";
+        std::optional<size_t> state;
+        
+        REQUIRE(text_tools::format_segments_inline(segments, tmpl, 0, state) == "[05] Hello");
+    }
+
+    SECTION("sequence_respects_min_interval") {
+        std::string tmpl = "[{ss}] {text}";
+        int interval = 5;
+        std::optional<size_t> state;
+        
+        std::vector<text_tools::segment_t> segments = {
+            {1, 0, 1000, "Start"},
+            {2, 2000, 3000, "Skip"},
+            {3, 6000, 7000, "Print"}
+        };
+
+        std::string result = text_tools::format_segments_inline(segments, tmpl, interval, state);
+
+        REQUIRE(result == "[00] Start Skip\n[06] Print");
+        REQUIRE(state.value() == 6000);
+    }
+
+    SECTION("sequence_respects_interval_across_batches") {
+        std::string tmpl = "[{ss}] {text}";
+        int interval = 5;
+        std::optional<size_t> state = 0;
+
+        std::vector<text_tools::segment_t> segments = {
+            {1, 3000, 4000, "Continuation"}
+        };
+
+        std::string result = text_tools::format_segments_inline(segments, tmpl, interval, state);
+
+        REQUIRE(result == " Continuation");
+        REQUIRE(state.value() == 0);
+    }
+}
+
+TEST_CASE("text_tools", "[compile_inline_timestamp_regex]") {
+    SECTION("compiles_valid_complex_formats") {
+        auto regex = text_tools::compile_inline_timestamp_regex("| {hh}:{mm}:{ss}.{ms} | {text} |");
+        REQUIRE(regex.has_value());
+    }
+
+    SECTION("rejects_invalid_templates") {
+        REQUIRE_FALSE(text_tools::compile_inline_timestamp_regex("").has_value());
+        REQUIRE_FALSE(text_tools::compile_inline_timestamp_regex("No time tokens here").has_value());
+    }
+}
+
+TEST_CASE("text_tools", "[strip_inline_timestamps]") {
+    SECTION("strips_complex_formats_and_cleans_whitespace") {
+        auto regex = text_tools::compile_inline_timestamp_regex("| Time -> ({mm}:{ss}.{ms}) {text} |");
+        REQUIRE(regex.has_value());
+
+        std::string text = "| Time -> (00:17.123) The meeting started. |   | Time -> (00:20.000) Next topic. |";
+        std::string result = text_tools::strip_inline_timestamps(text, *regex);
+
+        REQUIRE(result == "The meeting started. Next topic.");
+    }
+}

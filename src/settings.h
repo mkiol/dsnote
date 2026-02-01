@@ -184,6 +184,12 @@ class settings : public QSettings, public singleton<settings> {
                    set_mnt_text_format NOTIFY mnt_text_format_changed)
     Q_PROPERTY(text_format_t stt_tts_text_format READ stt_tts_text_format WRITE
                    set_stt_tts_text_format NOTIFY stt_tts_text_format_changed)
+    Q_PROPERTY(QString inline_timestamp_template READ inline_timestamp_template
+                   WRITE set_inline_timestamp_template NOTIFY
+                       inline_timestamp_template_changed)
+    Q_PROPERTY(int inline_timestamp_min_interval READ inline_timestamp_min_interval
+                   WRITE set_inline_timestamp_min_interval NOTIFY
+                       inline_timestamp_min_interval_changed)
     Q_PROPERTY(int qt_style_idx READ qt_style_idx WRITE set_qt_style_idx NOTIFY
                    qt_style_changed)
     Q_PROPERTY(QString qt_style_name READ qt_style_name WRITE set_qt_style_name
@@ -509,7 +515,8 @@ class settings : public QSettings, public singleton<settings> {
         TextFormatRaw = 0,
         TextFormatHtml = 1,
         TextFormatMarkdown = 2,
-        TextFormatSubRip = 3
+        TextFormatSubRip = 3,
+        TextFormatInlineTimestamp = 4
     };
     Q_ENUM(text_format_t)
 
@@ -746,6 +753,10 @@ class settings : public QSettings, public singleton<settings> {
     text_format_t mnt_text_format() const;
     void set_stt_tts_text_format(text_format_t value);
     text_format_t stt_tts_text_format() const;
+    QString inline_timestamp_template() const;
+    void set_inline_timestamp_template(const QString &value);
+    int inline_timestamp_min_interval() const;
+    void set_inline_timestamp_min_interval(int value);
     QString default_tts_model_for_mnt_lang(const QString &lang);
     void set_default_tts_model_for_mnt_lang(const QString &lang,
                                             const QString &value);
@@ -1051,6 +1062,8 @@ class settings : public QSettings, public singleton<settings> {
     void active_tts_for_out_mnt_ref_voice_changed();
     void mnt_text_format_changed();
     void stt_tts_text_format_changed();
+    void inline_timestamp_template_changed();
+    void inline_timestamp_min_interval_changed();
     void addon_flags_changed();
     void system_flags_changed();
     void hint_done_flags_changed();
