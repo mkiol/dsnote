@@ -2574,6 +2574,10 @@ void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
         s->stt_use_note_as_prompt()) {
         options.insert("initial_prompt", note_as_prompt());
     }
+    options.insert("inline_timestamp_template",
+                   s->inline_timestamp_template());
+    options.insert("inline_timestamp_min_interval",
+                   s->inline_timestamp_min_interval());
 
     m_current_stt_request = stt_request_t::transcribe_file;
 
@@ -2709,6 +2713,10 @@ void dsnote_app::listen_internal(stt_translate_req_t translate_req) {
         s->stt_use_note_as_prompt()) {
         options.insert("initial_prompt", note_as_prompt());
     }
+    options.insert("inline_timestamp_template",
+                   s->inline_timestamp_template());
+    options.insert("inline_timestamp_min_interval",
+                   s->inline_timestamp_min_interval());
 
     auto out_lang = [&]() {
         switch (translate_req) {
@@ -2846,6 +2854,8 @@ void dsnote_app::play_speech_internal(QString text, const QString &model_id,
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
         if (l.size() > 1) options.insert("ref_voice_file", l.at(1));
     }
+    options.insert("inline_timestamp_template",
+                   settings::instance()->inline_timestamp_template());
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->tts_play_speech(text, model_id,
@@ -3184,6 +3194,8 @@ void dsnote_app::speech_to_file_internal(
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
         if (l.size() > 1) options.insert("ref_voice_file", l.at(1));
     }
+    options.insert("inline_timestamp_template",
+                   settings::instance()->inline_timestamp_template());
 
     auto real_audio_format =
         settings::audio_format_from_filename(audio_format, dest_file);

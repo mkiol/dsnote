@@ -345,11 +345,6 @@ speech_service::speech_service(QObject *parent)
             emit default_mnt_out_lang_changed();
         },
         Qt::QueuedConnection);
-    connect(
-        settings::instance(), &settings::inline_timestamp_template_changed,
-            this, &speech_service::update_inline_timestamp_regex);
-    update_inline_timestamp_regex();
-
     if (settings::launch_mode == settings::launch_mode_t::service) {
         connect(
             this, &speech_service::state_changed, this,
@@ -1292,9 +1287,12 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                 options)));
         config.sub_config = stt_sub_config_from_options(options);
         config.inline_timestamp_template =
-            settings::instance()->inline_timestamp_template().toStdString();
+            get_string_value_from_options("inline_timestamp_template", {},
+                                         options)
+                .toStdString();
         config.inline_timestamp_min_interval =
-            settings::instance()->inline_timestamp_min_interval();
+            get_int_value_from_options("inline_timestamp_min_interval", 30,
+                                      options);
         config.cache_dir = settings::instance()->cache_dir().toStdString();
         config.insert_stats =
             get_bool_value_from_options("insert_stats", false, options);
@@ -3715,10 +3713,16 @@ int speech_service::tts_play_speech(const QString &text, QString lang,
     auto text_format = static_cast<settings::text_format_t>(
         options.value("text_format").toInt());
     if (text_format == settings::text_format_t::TextFormatInlineTimestamp) {
-        if (m_inline_timestamp_regex) {
-            text_to_speak = QString::fromStdString(
-                text_tools::strip_inline_timestamps(
-                    text_to_speak.toStdString(), *m_inline_timestamp_regex));
+        auto tmpl = get_string_value_from_options(
+            "inline_timestamp_template", {}, options);
+        if (!tmpl.isEmpty()) {
+            auto regex = text_tools::compile_inline_timestamp_regex(
+                tmpl.toStdString());
+            if (regex) {
+                text_to_speak = QString::fromStdString(
+                    text_tools::strip_inline_timestamps(
+                        text_to_speak.toStdString(), *regex));
+            }
         }
     }
 
@@ -3777,7 +3781,24 @@ int speech_service::tts_speech_to_file(const QString &text, QString lang,
         return INVALID_TASK;
     }
 
-    if (m_tts_engine) m_tts_engine->encode_speech(text.toStdString());
+    QString text_to_speak = text;
+    auto text_format = static_cast<settings::text_format_t>(
+        options.value("text_format").toInt());
+    if (text_format == settings::text_format_t::TextFormatInlineTimestamp) {
+        auto tmpl = get_string_value_from_options(
+            "inline_timestamp_template", {}, options);
+        if (!tmpl.isEmpty()) {
+            auto regex = text_tools::compile_inline_timestamp_regex(
+                tmpl.toStdString());
+            if (regex) {
+                text_to_speak = QString::fromStdString(
+                    text_tools::strip_inline_timestamps(
+                        text_to_speak.toStdString(), *regex));
+            }
+        }
+    }
+
+    if (m_tts_engine) m_tts_engine->encode_speech(text_to_speak.toStdString());
 
     start_keepalive_current_task();
 
@@ -4074,16 +4095,6 @@ void speech_service::handle_audio_ended() {
         qDebug() << "file audio source ended successfuly";
     } else {
         qDebug() << "audio source ended successfuly";
-    }
-}
-
-void speech_service::update_inline_timestamp_regex() {
-    auto tmpl = settings::instance()->inline_timestamp_template();
-    if (tmpl.isEmpty()) {
-        m_inline_timestamp_regex.reset();
-    } else {
-        m_inline_timestamp_regex =
-            text_tools::compile_inline_timestamp_regex(tmpl.toStdString());
     }
 }
 

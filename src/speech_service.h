@@ -408,8 +408,6 @@ class speech_service : public QObject, public singleton<speech_service> {
     std::queue<tts_partial_result_t> m_tts_queue;
     QVariantMap m_features_availability;
     bool m_models_changed_handled = false;
-    std::optional<std::regex> m_inline_timestamp_regex;
-
     inline bool feature_discovery_done() const {
         return !m_features_availability.isEmpty();
     }
@@ -455,7 +453,6 @@ class speech_service : public QObject, public singleton<speech_service> {
     void handle_processing_changed(bool processing);
     void handle_audio_error();
     void handle_audio_ended();
-    void update_inline_timestamp_regex();
     QString restart_stt_engine(speech_mode_t speech_mode,
                                const QString &model_id,
                                const QString &out_lang_id,
