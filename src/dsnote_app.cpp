@@ -1028,27 +1028,46 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
 
                 // If this request was started as paste-to-active-window, copy
                 // to clipboard and paste via Ctrl+V
-                bool paste_mode =
-                    settings::instance()->text_to_window_method() ==
-                    settings::text_to_window_method_t::TextToWindowMethodCtrlV;
+                bool paste_mode = [] {
+                    switch (settings::instance()->text_to_window_method()) {
+                        case settings::text_to_window_method_t::
+                            TextToWindowMethodCtrlV:
+                        case settings::text_to_window_method_t::
+                            TextToWindowMethodCtrlShiftV:
+                            return true;
+                        case settings::text_to_window_method_t::
+                            TextToWindowMethodTyping:
+                            return false;
+                    }
+                    return false;
+                }();
+
                 if (paste_mode) {
-                    // Copy text to clipboard and paste via Ctrl+V. Then restore
-                    // it
+                    // copy text to clipboard
                     auto prev_clip_text =
                         m_fake_keyboard->copy_to_clipboard(text);
 
-                    QTimer::singleShot(0, [this, prev_clip_text]{
+                    // execute paste and restore clipboard content after
+                    // event-loop iter
+                    QTimer::singleShot(0, [this, prev_clip_text] {
                         if (!m_fake_keyboard) return;
-                        m_fake_keyboard->send_ctrl_v();
-                        m_fake_keyboard->copy_to_clipboard(prev_clip_text);
+                        bool shift =
+                            settings::instance()->text_to_window_method() ==
+                            settings::text_to_window_method_t::
+                                TextToWindowMethodCtrlShiftV;
+                        m_fake_keyboard->send_ctrl_v(shift);
+
+                        // delay clipboard restore to give time
+                        // for the paste to happen
+                        QTimer::singleShot(500, [this, prev_clip_text] {
+                            if (!m_fake_keyboard) return;
+                            m_fake_keyboard->copy_to_clipboard(prev_clip_text);
+                        });
                     });
-
-
-                    emit text_decoded_to_active_window();
                 } else {
                     m_fake_keyboard->send_text(text);
-                    emit text_decoded_to_active_window();
                 }
+                emit text_decoded_to_active_window();
             } catch (const std::runtime_error &err) {
                 qWarning() << "fake-keyboard error:" << err.what();
             }

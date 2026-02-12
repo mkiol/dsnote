@@ -24,29 +24,31 @@
 #include "qdebug.h"
 #include "singleton.h"
 
-// name, setting str, type, default value
-#define SETTINGS_PROPERTY_TABLE                       \
-    X(stt_use_note_as_prompt, bool, true)             \
-    X(stt_echo, bool, false)                          \
-    X(tts_split_into_sentences, bool, true)           \
-    X(show_repair_text, bool, false)                  \
-    X(tts_use_engine_speed_control, bool, true)       \
-    X(tts_normalize_audio, bool, true)                \
-    X(stt_insert_stats, bool, false)                  \
-    X(trans_rules_enabled, bool, false)               \
-    X(mnt_clean_text, bool, false)                    \
-    X(whisper_translate, bool, false)                 \
-    X(use_tray, bool, false)                          \
-    X(start_in_tray, bool, false)                     \
-    X(clean_ref_voice, bool, true)                    \
-    X(stt_clear_mic_audio_when_decoding, bool, false) \
-    X(stt_play_beep, bool, false)                     \
-    X(translate_when_typing, bool, false)             \
-    X(translator_mode, bool, false)                   \
-    X(hotkeys_enabled, bool, false)                   \
-    X(mtag, bool, false)                              \
-    X(use_toggle_for_hotkey, bool, true)              \
-    X(window_size_ratio, double, 0.6)
+// property-name, type, default-value, restart-required
+#define SETTINGS_PROPERTY_TABLE                                 \
+    X(stt_use_note_as_prompt, bool, true, false)                \
+    X(stt_echo, bool, false, false)                             \
+    X(tts_split_into_sentences, bool, true, false)              \
+    X(show_repair_text, bool, false, false)                     \
+    X(tts_use_engine_speed_control, bool, true, false)          \
+    X(tts_normalize_audio, bool, true, false)                   \
+    X(stt_insert_stats, bool, false, false)                     \
+    X(trans_rules_enabled, bool, false, false)                  \
+    X(mnt_clean_text, bool, false, false)                       \
+    X(whisper_translate, bool, false, false)                    \
+    X(use_tray, bool, false, false)                             \
+    X(start_in_tray, bool, false, false)                        \
+    X(clean_ref_voice, bool, true, false)                       \
+    X(stt_clear_mic_audio_when_decoding, bool, false, false)    \
+    X(stt_play_beep, bool, false, false)                        \
+    X(translate_when_typing, bool, false, false)                \
+    X(translator_mode, bool, false, false)                      \
+    X(hotkeys_enabled, bool, false, false)                      \
+    X(mtag, bool, false, false)                                 \
+    X(use_toggle_for_hotkey, bool, true, false)                 \
+    X(window_size_ratio, double, 0.6, false)                    \
+    X(text_to_window_method, settings::text_to_window_method_t, \
+      settings::text_to_window_method_t::TextToWindowMethodTyping, false)
 
 // name, default value
 #define GPU_SCAN_TABLE                                                 \
@@ -134,7 +136,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_OBJECT
 
     // app
-#define X(name, type, dvalue) \
+#define X(name, type, dvalue, restart) \
     Q_PROPERTY(type name READ name WRITE set_##name NOTIFY name##_changed)
     SETTINGS_PROPERTY_TABLE
 #undef X
@@ -376,9 +378,6 @@ class settings : public QSettings, public singleton<settings> {
             set_gpu_overrided_version NOTIFY gpu_overrided_version_changed)
     Q_PROPERTY(unsigned int scan_flags READ scan_flags WRITE set_scan_flags
                    NOTIFY scan_flags_changed)
-    Q_PROPERTY(text_to_window_method_t text_to_window_method READ
-                   text_to_window_method WRITE set_text_to_window_method NOTIFY
-                       text_to_window_method_changed)
 
     // engine options
 #define X(name)                                                           \
@@ -652,7 +651,8 @@ class settings : public QSettings, public singleton<settings> {
 
     enum class text_to_window_method_t {
         TextToWindowMethodCtrlV = 0,
-        TextToWindowMethodTyping = 1
+        TextToWindowMethodCtrlShiftV = 1,
+        TextToWindowMethodTyping = 2
     };
     Q_ENUM(text_to_window_method_t)
 
@@ -698,9 +698,9 @@ class settings : public QSettings, public singleton<settings> {
     bool use_default_qt_style();
 #endif
     // app
-#define X(name, type, dvalue) \
-    type name() const;        \
-    void set_##name(type value);
+#define X(name, type, dvalue, restart) \
+    type name() const;                 \
+    void set_##name(const type &value);
     SETTINGS_PROPERTY_TABLE
 #undef X
 #define X(name, _)               \
@@ -863,8 +863,6 @@ class settings : public QSettings, public singleton<settings> {
     void set_fake_keyboard_type(fake_keyboard_type_t value);
     int fake_keyboard_delay() const;
     void set_fake_keyboard_delay(int value);
-    text_to_window_method_t text_to_window_method() const;
-    void set_text_to_window_method(text_to_window_method_t value);
     QString tts_desc_of_voice_prompt(const QString &name) const;
     std::optional<voice_profile_prompt_t> tts_voice_prompt(
         const QString &name) const;
@@ -1023,7 +1021,7 @@ class settings : public QSettings, public singleton<settings> {
 
    signals:
     // app
-#define X(name, type, dvalue) void name##_changed();
+#define X(name, type, dvalue, restart) void name##_changed();
     SETTINGS_PROPERTY_TABLE
 #undef X
 #define X(name, _) void hw_scan_##name##_changed();
@@ -1087,7 +1085,6 @@ class settings : public QSettings, public singleton<settings> {
     void tts_active_voice_prompt_for_out_mnt_changed();
     void fake_keyboard_type_changed();
     void fake_keyboard_delay_changed();
-    void text_to_window_method_changed();
     void active_voice_profile_type_changed();
 
     // service

@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -273,15 +273,30 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
         .removeRecursively();
 }
 
-#define X(name, type, dvalue)                                             \
-    type settings::name() const {                                         \
-        return qvariant_cast<type>(value(QStringLiteral(#name), dvalue)); \
-    }                                                                     \
-    void settings::set_##name(type value) {                               \
-        if (name() != value) {                                            \
-            setValue(QStringLiteral(#name), value);                       \
-            emit name##_changed();                                        \
-        }                                                                 \
+#define X(name, type, dvalue, restart)                                       \
+    type settings::name() const {                                            \
+        return [&](auto v) {                                                 \
+            if constexpr (std::is_enum_v<decltype(v)>) {                     \
+                return static_cast<type>(                                    \
+                    value(QStringLiteral(#name), static_cast<int>(v))        \
+                        .toInt());                                           \
+            } else {                                                         \
+                return qvariant_cast<type>(value(QStringLiteral(#name), v)); \
+            }                                                                \
+        }(dvalue);                                                           \
+    }                                                                        \
+    void settings::set_##name(const type& value) {                           \
+        if (name() != value) {                                               \
+            [&](auto v) {                                                    \
+                if constexpr (std::is_enum_v<decltype(v)>) {                 \
+                    setValue(QStringLiteral(#name), static_cast<int>(v));    \
+                } else {                                                     \
+                    setValue(QStringLiteral(#name), v);                      \
+                }                                                            \
+                emit name##_changed();                                       \
+                if (restart) set_restart_required(true);                     \
+            }(value);                                                        \
+        }                                                                    \
     }
 SETTINGS_PROPERTY_TABLE
 #undef X
@@ -2911,23 +2926,6 @@ void settings::set_fake_keyboard_type(fake_keyboard_type_t value) {
     if (fake_keyboard_type() != value) {
         setValue(QStringLiteral("fake_keyboard_type"), static_cast<int>(value));
         emit fake_keyboard_type_changed();
-    }
-}
-
-settings::text_to_window_method_t settings::text_to_window_method() const {
-    return static_cast<text_to_window_method_t>(
-        value(
-            QStringLiteral("text_to_window_method"),
-            static_cast<int>(text_to_window_method_t::TextToWindowMethodTyping))
-            .toInt());
-}
-
-void settings::set_text_to_window_method(text_to_window_method_t value) {
-    if (text_to_window_method() != value) {
-        setValue(QStringLiteral("text_to_window_method"),
-                 static_cast<int>(value));
-
-        emit text_to_window_method_changed();
     }
 }
 

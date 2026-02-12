@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -36,7 +36,6 @@
 #include <optional>
 #include <string>
 #include <tuple>
-#include <optional>
 
 #include "dbus_klipper_inf.h"
 #include "logger.hpp"
@@ -46,6 +45,7 @@
 using namespace std::chrono_literals;
 
 #ifdef USE_X11_FEATURES
+#include <X11/X.h>
 #include <X11/XKBlib.h>
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
@@ -380,28 +380,28 @@ QString fake_keyboard::copy_to_clipboard(const QString &text) {
     }
 
     // Sleep for 200 ms, fix clipboard not being written to the clipboard
-    std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    
+    std::this_thread::sleep_for(200ms);
+
     return prev_clip_text;
 }
 
 // Send Ctrl+V (paste) to the active window using the configured method
-void fake_keyboard::send_ctrl_v() {
-    LOGD("sending Control V");
+void fake_keyboard::send_ctrl_v(bool shift) {
+    LOGD("sending ctrl_v: shift=" << shift);
 
     // Delay to allow clipboard to update
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    std::this_thread::sleep_for(10ms);
 
 #ifdef USE_X11_FEATURES
     switch (m_method) {
         case method_t::ydo:
-            send_ctrl_v_ydo();
+            send_ctrl_v_ydo(shift);
             break;
         case method_t::legacy:
-            send_ctrl_v_legacy();
+            send_ctrl_v_legacy(shift);
             break;
         case method_t::xdo:
-            send_ctrl_v_xdo();
+            send_ctrl_v_xdo(shift);
             break;
     }
 #else
@@ -416,7 +416,7 @@ void fake_keyboard::send_ctrl_v() {
 
 // Helper implementations split to avoid code duplication for the ydo path.
 // ydo implementation is usable on both X11 and Wayland builds.
-void fake_keyboard::send_ctrl_v_ydo() {
+void fake_keyboard::send_ctrl_v_ydo(bool shift) {
     // helper closure: emit a key event and wait a small fixed duration
     auto press_and_wait = [&](uint16_t code, int32_t val) {
         ydo_uinput_emit(EV_KEY, code, val, 1);
@@ -425,67 +425,56 @@ void fake_keyboard::send_ctrl_v_ydo() {
     };
 
     press_and_wait(KEY_LEFTCTRL, 1);
+    if (shift) {
+        press_and_wait(KEY_LEFTSHIFT, 1);
+    }
     press_and_wait(KEY_V, 1);
 
     std::this_thread::sleep_for(50ms);
 
     press_and_wait(KEY_V, 0);
+    if (shift) {
+        press_and_wait(KEY_LEFTSHIFT, 0);
+    }
     press_and_wait(KEY_LEFTCTRL, 0);
 }
 
 #ifdef USE_X11_FEATURES
-void fake_keyboard::send_ctrl_v_legacy() {
+void fake_keyboard::send_ctrl_v_legacy(bool shift) {
     if (!m_x11_display) {
         LOGW("no x11 display for legacy send_ctrl_v");
         return;
     }
-    // Resolve keycodes
-    KeyCode ctrl_code = XKeysymToKeycode(m_x11_display, XK_Control_L);
-    KeyCode v_code = XKeysymToKeycode(m_x11_display, XK_V);
-    if (ctrl_code == 0 || v_code == 0) {
-        LOGW("failed to get keycodes for ctrl or v");
+
+    auto v_key = key_from_character(shift ? 'V' : 'v');
+    if (v_key.empty()) {
+        LOGW("no v key for legacy send_ctrl_v");
         return;
     }
-    // Create and send events: press ctrl, press v, release v, release ctrl
-    XKeyEvent event;
-    memset(&event, 0, sizeof(XKeyEvent));
-    event.display = m_x11_display;
-    event.window = m_focus_window;
-    event.root = m_root_window;
-    event.subwindow = None;
-    event.time = CurrentTime;
-    event.x = 1;
-    event.y = 1;
-    event.x_root = 1;
-    event.y_root = 1;
-    event.same_screen = True;
 
-    // helper closure: send event (press/release) and wait briefly
-    auto send_and_wait = [&](int type, KeyCode keycode) {
-        event.type = type;
-        event.keycode = keycode;
-        XSendEvent(event.display, event.window, True,
-                   (type == KeyPress) ? KeyPressMask : KeyReleaseMask,
-                   reinterpret_cast<XEvent *>(&event));
-        XSync(event.display, False);
-        std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
-            settings::instance()->fake_keyboard_delay()));
-    };
+    auto event = create_key_event(m_x11_display, m_focus_window, m_root_window,
+                                  v_key.at(0));
+    event.type = KeyPress;
+    event.state |= ControlMask;
+    XSendEvent(event.display, event.window, True, KeyPressMask,
+               reinterpret_cast<XEvent *>(&event));
+    XSync(event.display, False);
 
-    send_and_wait(KeyPress, ctrl_code);
-    send_and_wait(KeyPress, v_code);
+    std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
+        settings::instance()->fake_keyboard_delay()));
 
-    std::this_thread::sleep_for(50ms);
-
-    send_and_wait(KeyRelease, v_code);
-    send_and_wait(KeyRelease, ctrl_code);
+    event.type = KeyRelease;
+    XSendEvent(event.display, event.window, True, KeyReleaseMask,
+               reinterpret_cast<XEvent *>(&event));
+    XSync(event.display, False);
 }
 
-void fake_keyboard::send_ctrl_v_xdo() {
+void fake_keyboard::send_ctrl_v_xdo(bool shift) {
     if (m_xdo) {
         // Use xdo to send ctrl+v sequence to current window
+
         xdo_send_keysequence_window(
-            m_xdo, CURRENTWINDOW, "ctrl+v",
+            m_xdo, CURRENTWINDOW, shift ? "ctrl+shift+v" : "ctrl+v",
             settings::instance()->fake_keyboard_delay());
     } else {
         LOGW("XDO not available");

@@ -49,7 +49,7 @@ class fake_keyboard : public QObject {
     ~fake_keyboard() override;
     void send_text(const QString& text);
     // Send Ctrl+V (paste) to the active window
-    void send_ctrl_v();
+    void send_ctrl_v(bool shift);
     static QString copy_to_clipboard(const QString& text);
 
    signals:
@@ -94,9 +94,9 @@ class fake_keyboard : public QObject {
     void ydo_uinput_emit(uint16_t type, uint16_t code, int32_t val,
                          bool syn_report) const;
     void ydo_type_char(uint32_t c);
-    void send_ctrl_v_legacy();
-    void send_ctrl_v_xdo();
-    void send_ctrl_v_ydo();
+    void send_ctrl_v_legacy(bool shift);
+    void send_ctrl_v_xdo(bool shift);
+    void send_ctrl_v_ydo(bool shift);
     std::vector<fake_keyboard::key_code_t> key_from_character(
         uint32_t character);
     uint32_t get_l3_shift_keycode();
