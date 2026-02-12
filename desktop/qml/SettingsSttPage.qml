@@ -234,7 +234,6 @@ ColumnLayout {
     ColumnLayout {
         Layout.fillWidth: true
         spacing: 0
-        visible: _settings.stt_tts_text_format === Settings.TextFormatInlineTimestamp
 
         SectionLabel {
             text: qsTranslate("SettingsPage", "Inline timestamp settings")
