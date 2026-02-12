@@ -270,6 +270,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_SKIP_RPATH ON)
 set(ENV{PKG_CONFIG_PATH} $ENV{PKG_CONFIG_PATH}:${PROJECT_BINARY_DIR})
 message(STATUS "PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # includes
 
@@ -460,11 +461,12 @@ endif ()
 
 add_library(compiler_flags INTERFACE)
 target_compile_features(compiler_flags INTERFACE cxx_std_17)
+set(warning_flags "-Wall;-Wextra;-Wpedantic;-Wno-attributes;-Werror=switch;-Werror=implicit-fallthrough")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     if(WITH_SANITIZERS)
         target_compile_options(compiler_flags INTERFACE
-            "-pie;-Wall;-Wextra;-Wpedantic;-O1;-g3;-fsanitize=address,undefined")
+            "${warning_flags};-pie;-O1;-g3;-fsanitize=address,undefined")
         if(WITH_STATIC_SANITIZERS)
             target_link_options(compiler_flags INTERFACE
               "-pie;-static-libasan;-static-libubsan;-fsanitize=address,undefined")
@@ -472,12 +474,11 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
             target_link_options(compiler_flags INTERFACE "-pie;-fsanitize=address,undefined")
         endif()
     else()
-        target_compile_options(compiler_flags INTERFACE
-            "-pie;-Wall;-Wextra;-Wpedantic;-O1;-g3")
+        target_compile_options(compiler_flags INTERFACE "${warning_flags};-pie;-O1;-g")
         target_link_options(compiler_flags INTERFACE "-pie")
     endif()
 else()
-    target_compile_options(compiler_flags INTERFACE "-pie;-Wall;-Wextra;-Wpedantic;-Wno-attributes;-O3;-g")
+    target_compile_options(compiler_flags INTERFACE "${warning_flags};-pie;-O3;-g")
     target_link_options(compiler_flags INTERFACE "-pie;-flto;-fno-fat-lto-objects")
 endif()
 

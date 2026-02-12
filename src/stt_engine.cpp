@@ -184,6 +184,9 @@ std::ostream& operator<<(std::ostream& os,
         case stt_engine::text_format_t::subrip:
             os << "subrip";
             break;
+        case stt_engine::text_format_t::inline_timestamp:
+            os << "inline-timestamp";
+            break;
     }
 
     return os;
