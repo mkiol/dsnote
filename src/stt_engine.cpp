@@ -637,6 +637,7 @@ void stt_engine::reset_segment_counters() {
     m_segment_time_offset = 0;
     m_segment_time_discarded_before = 0;
     m_segment_time_discarded_after = 0;
+    m_last_inline_timestamp_t0.reset();
 }
 
 std::string stt_engine::report_stats(size_t nb_samples, size_t sample_rate,

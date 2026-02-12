@@ -688,6 +688,7 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
     auto decoding_start = std::chrono::steady_clock::now();
 
     bool subrip = m_config.text_format == text_format_t::subrip;
+    bool inline_ts = m_config.text_format == text_format_t::inline_timestamp;
 
     if (m_config.audio_ctx_conf == audio_ctx_conf_t::dynamic &&
         !use_openvino() && !use_gpu()) {
@@ -740,6 +741,8 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 
         bool add_spc = false;
         int seg_n = 0;
+        std::vector<text_tools::segment_t> inline_segments;
+
         for (auto i = 0; i < n; ++i) {
             std::string text =
                 m_whisper_api.whisper_full_get_segment_text(m_whisper_ctx, i);
@@ -751,7 +754,7 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 #ifdef DEBUG
             LOGD("segment " << i << ": " << text);
 #endif
-            if (subrip) {
+            if (subrip || inline_ts) {
                 size_t t0 = std::max<int64_t>(
                                 0, m_whisper_api.whisper_full_get_segment_t0(
                                        m_whisper_ctx, i)) *
@@ -766,11 +769,15 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 
                 text_tools::segment_t segment{i + 1 + m_segment_offset, t0, t1,
                                               text};
-                text_tools::break_segment_to_multiline(
-                    m_config.sub_config.min_line_length,
-                    m_config.sub_config.max_line_length, segment);
 
-                text_tools::segment_to_subrip_text(segment, os);
+                if (subrip) {
+                    text_tools::break_segment_to_multiline(
+                        m_config.sub_config.min_line_length,
+                        m_config.sub_config.max_line_length, segment);
+                    text_tools::segment_to_subrip_text(segment, os);
+                } else {
+                    inline_segments.push_back(std::move(segment));
+                }
             } else {
                 if (add_spc) os << ' ';
                 os << text;
@@ -778,6 +785,13 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
             }
 
             ++seg_n;
+        }
+
+        if (inline_ts && !inline_segments.empty()) {
+            os << text_tools::format_segments_inline(
+                inline_segments, m_config.inline_timestamp_template,
+                m_config.inline_timestamp_min_interval,
+                m_last_inline_timestamp_t0);
         }
 
         m_segment_offset += seg_n;

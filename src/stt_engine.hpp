@@ -56,7 +56,7 @@ class stt_engine {
     enum class audio_ctx_conf_t { dynamic, no_change, custom };
     friend std::ostream& operator<<(std::ostream& os, audio_ctx_conf_t conf);
 
-    enum class text_format_t { raw, subrip };
+    enum class text_format_t { raw, subrip, inline_timestamp };
     friend std::ostream& operator<<(std::ostream& os,
                                     text_format_t text_format);
 
@@ -138,6 +138,8 @@ class stt_engine {
         int audio_ctx_size = 1500;     /*extra whisper feature*/
         std::string initial_prompt;    /*extra whisper feature*/
         text_format_t text_format = text_format_t::raw;
+        std::string inline_timestamp_template;
+        int inline_timestamp_min_interval = 30;
         std::string options;
         gpu_device_t gpu_device;
         std::vector<int> available_devices;
@@ -173,6 +175,8 @@ class stt_engine {
     void set_sub_config(sub_config_t value) { m_config.sub_config = value; }
     bool stop_requested() const { return m_thread_exit_requested; }
     void set_insert_stats(bool value) { m_config.insert_stats = value; }
+    void set_inline_timestamp_template(std::string value) { m_config.inline_timestamp_template = std::move(value); }
+    void set_inline_timestamp_min_interval(int value) { m_config.inline_timestamp_min_interval = value; }
     auto audio_ctx_conf() const { return m_config.audio_ctx_conf; }
     auto audio_ctx_size() const { return m_config.audio_ctx_size; }
     auto cpu_threads() const { return m_config.cpu_threads; }
@@ -239,6 +243,7 @@ class stt_engine {
     size_t m_segment_time_offset = 0;
     size_t m_segment_time_discarded_before = 0;
     size_t m_segment_time_discarded_after = 0;
+    std::optional<size_t> m_last_inline_timestamp_t0;
 
     static void ltrim(std::string& s);
     static void rtrim(std::string& s);

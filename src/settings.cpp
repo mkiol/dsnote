@@ -938,6 +938,30 @@ void settings::set_stt_tts_text_format(text_format_t value) {
     }
 }
 
+QString settings::inline_timestamp_template() const {
+    return value(QStringLiteral("inline_timestamp_template"),
+                 QStringLiteral("[{hh}:{mm}:{ss}] {text}"))
+        .toString();
+}
+
+void settings::set_inline_timestamp_template(const QString& value) {
+    if (inline_timestamp_template() != value) {
+        setValue(QStringLiteral("inline_timestamp_template"), value);
+        emit inline_timestamp_template_changed();
+    }
+}
+
+int settings::inline_timestamp_min_interval() const {
+    return value(QStringLiteral("inline_timestamp_min_interval"), 30).toInt();
+}
+
+void settings::set_inline_timestamp_min_interval(int value) {
+    if (inline_timestamp_min_interval() != value) {
+        setValue(QStringLiteral("inline_timestamp_min_interval"), value);
+        emit inline_timestamp_min_interval_changed();
+    }
+}
+
 unsigned int settings::hint_done_flags() const {
     return value(QStringLiteral("hint_done_flags"), 0).toUInt();
 }
