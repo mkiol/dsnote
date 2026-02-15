@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -73,6 +73,14 @@ static void signal_handler(int sig) {
 static cmd::options check_options(const QCoreApplication& app) {
     QCommandLineParser parser;
 
+    QString action_list_str = [] {
+        QStringList list;
+#define X(name, str) list << (str);
+        ACTION_TABLE
+#undef X
+        return list.join(", ");
+    }();
+
     parser.addPositionalArgument(
         "files", "Text, Audio or Video files to open, optionally.",
         "[files...]");
@@ -121,18 +129,8 @@ static cmd::options check_options(const QCoreApplication& app) {
 
     QCommandLineOption action_opt{
         QStringLiteral("action"),
-        QStringLiteral(
-            "Invokes an <action>. Supported actions are: "
-            "start-listening, start-listening-translate, "
-            "start-listening-active-window, "
-            "start-listening-translate-active-window, "
-            "start-listening-clipboard, start-listening-translate-clipboard, "
-            "stop-listening, "
-            "start-reading, start-reading-clipboard, start-reading-text, "
-            "pause-resume-reading, "
-            "cancel, switch-to-next-stt-model, switch-to-prev-stt-model, "
-            "switch-to-next-tts-model, switch-to-prev-tts-model, "
-            "set-stt-model, set-tts-model."),
+        QStringLiteral("Invokes an <action>. Supported actions are: %1.")
+            .arg(action_list_str),
         QStringLiteral("action")};
     parser.addOption(action_opt);
 
@@ -247,17 +245,8 @@ static cmd::options check_options(const QCoreApplication& app) {
         ) {
             fmt::print(
                 stderr,
-                "Invalid action. Use one option from the following: "
-                "start-listening, start-listening-translate, "
-                "start-listening-active-window, "
-                "start-listening-translate-active-window, "
-                "start-listening-clipboard, "
-                "start-listening-translate-clipboard, stop-listening, "
-                "start-reading, start-reading-clipboard, start-reading-text, "
-                "pause-resume-reading, "
-                "cancel, switch-to-next-stt-model, switch-to-prev-stt-model, "
-                "switch-to-next-tts-model, switch-to-prev-tts-model, "
-                "set-stt-model, set-tts-model.\n");
+                "Invalid action. Use one option from the following: {}.\n",
+                action_list_str.toStdString());
             options.valid = false;
         } else {
             auto id = parser.value(id_opt);
@@ -290,6 +279,8 @@ static cmd::options check_options(const QCoreApplication& app) {
                     options.model_id = id;
                 }
             } else if (action.compare("start-reading-clipboard",
+                                      Qt::CaseInsensitive) == 0 ||
+                       action.compare("start-reading-selected",
                                       Qt::CaseInsensitive) == 0) {
                 if (id_ok) {
                     options.model_id = QStringLiteral("%1").arg(id);
@@ -302,7 +293,9 @@ static cmd::options check_options(const QCoreApplication& app) {
 
     options.output_file = parser.value(output_file_opt);
     if (!options.output_file.isEmpty()) {
-        if (!options.action.startsWith("start-reading-", Qt::CaseInsensitive)) {
+        if (action.compare("start-reading-clipboard", Qt::CaseInsensitive) !=
+                0 &&
+            action.compare("start-reading-text", Qt::CaseInsensitive) != 0) {
             fmt::print(
                 stderr,
                 "Option --{} can be used only with start-reading-clipboard and "

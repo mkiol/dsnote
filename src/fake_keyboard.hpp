@@ -48,9 +48,12 @@ class fake_keyboard : public QObject {
     explicit fake_keyboard(QObject* parent = nullptr);
     ~fake_keyboard() override;
     void send_text(const QString& text);
-    // Send Ctrl+V (paste) to the active window
+    // send ctrl+v (paste) to the active window
     void send_ctrl_v(bool shift);
+    // send ctrl+c (copy) to the active window
+    void send_ctrl_c(bool shift);
     static QString copy_to_clipboard(const QString& text);
+    static QString copy_from_clipboard();
 
    signals:
     void text_sending_completed();
@@ -94,9 +97,16 @@ class fake_keyboard : public QObject {
     void ydo_uinput_emit(uint16_t type, uint16_t code, int32_t val,
                          bool syn_report) const;
     void ydo_type_char(uint32_t c);
+
+    void send_ctrl_legacy(fake_keyboard::key_code_t key);
     void send_ctrl_v_legacy(bool shift);
+    void send_ctrl_c_legacy(bool shift);
+    void send_ctrl_xdo(const char* key);
     void send_ctrl_v_xdo(bool shift);
+    void send_ctrl_c_xdo(bool shift);
+    void send_ctrl_ydo(int key, bool shift);
     void send_ctrl_v_ydo(bool shift);
+    void send_ctrl_c_ydo(bool shift);
     std::vector<fake_keyboard::key_code_t> key_from_character(
         uint32_t character);
     uint32_t get_l3_shift_keycode();

@@ -1950,7 +1950,7 @@ void settings::set_num_threads(int value) {
 
 QVariantList settings::hotkeys_table() const {
     QVariantList table;
-#define X(name, id, desc, key) \
+#define X(name, id, desc, key, on_deactivate) \
     table.push_back(QStringList{id, desc, hotkey_##name()});
     HOTKEY_TABLE
 #undef X
@@ -1958,26 +1958,26 @@ QVariantList settings::hotkeys_table() const {
 }
 
 void settings::reset_hotkey(const QString& requested_id) {
-#define X(name, id, desc, key) \
-    if (requested_id == id) {  \
-        reset_hotkey_##name(); \
-        return;                \
+#define X(name, id, desc, key, on_deactivate) \
+    if (requested_id == id) {                 \
+        reset_hotkey_##name();                \
+        return;                               \
     }
     HOTKEY_TABLE
 #undef X
 }
 
 void settings::set_hotkey(const QString& requested_id, const QString& value) {
-#define X(name, id, desc, key)    \
-    if (requested_id == id) {     \
-        set_hotkey_##name(value); \
-        return;                   \
+#define X(name, id, desc, key, on_deactivate) \
+    if (requested_id == id) {                 \
+        set_hotkey_##name(value);             \
+        return;                               \
     }
     HOTKEY_TABLE
 #undef X
 }
 
-#define X(name, id, desc, key)                                             \
+#define X(name, id, desc, key, on_deactivate)                              \
     QString settings::hotkey_##name() const {                              \
         return value(QStringLiteral("hotkey_" #name), QStringLiteral(key)) \
             .toString();                                                   \

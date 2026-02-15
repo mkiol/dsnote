@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -22,6 +22,7 @@
 #include <utility>
 
 #include "downloader.hpp"
+#include "fake_keyboard.hpp"
 #include "media_compressor.hpp"
 #include "module_tools.hpp"
 #include "mtag_tools.hpp"
@@ -1021,10 +1022,14 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
             break;
         }
         case text_destination_t::active_window:
+            if (text.isEmpty()) {
+                break;
+            }
 #ifdef USE_DESKTOP
             try {
-                // Make sure keyboard exists!
-                m_fake_keyboard.emplace();
+                if (!m_fake_keyboard) {
+                    m_fake_keyboard.emplace();
+                }
 
                 // If this request was started as paste-to-active-window, copy
                 // to clipboard and paste via Ctrl+V
@@ -1045,7 +1050,7 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
                 if (paste_mode) {
                     // copy text to clipboard
                     auto prev_clip_text =
-                        m_fake_keyboard->copy_to_clipboard(text);
+                        fake_keyboard::copy_to_clipboard(text);
 
                     // execute paste and restore clipboard content after
                     // event-loop iter
@@ -1059,9 +1064,8 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
 
                         // delay clipboard restore to give time
                         // for the paste to happen
-                        QTimer::singleShot(500, [this, prev_clip_text] {
-                            if (!m_fake_keyboard) return;
-                            m_fake_keyboard->copy_to_clipboard(prev_clip_text);
+                        QTimer::singleShot(500, [prev_clip_text] {
+                            fake_keyboard::copy_to_clipboard(prev_clip_text);
                         });
                     });
                 } else {
@@ -5047,6 +5051,7 @@ dsnote_app::action_t dsnote_app::convert_action(action_t action) const {
             break;
         case dsnote_app::action_t::start_reading:
         case dsnote_app::action_t::start_reading_clipboard:
+        case dsnote_app::action_t::start_reading_active_window:
         case dsnote_app::action_t::start_reading_text: {
             if (service_state() == service_state_t::StatePlayingSpeech) {
                 action = action_t::cancel;
@@ -5121,12 +5126,25 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
         case dsnote_app::action_t::start_reading:
             play_speech();
             break;
+        case dsnote_app::action_t::start_reading_active_window:
+            play_speech_selected_in_active_window(
+                arguments.value("model-id").toString());
+            break;
         case dsnote_app::action_t::start_reading_clipboard:
         case dsnote_app::action_t::start_reading_text: {
             auto id = arguments.value("model-id").toString();
-            auto text = action == action_t::start_reading_clipboard
-                            ? QGuiApplication::clipboard()->text()
-                            : arguments.value("text").toString();
+
+            QString text;
+            if (action == action_t::start_reading_clipboard) {
+#ifdef USE_DESKTOP
+                text = fake_keyboard::copy_from_clipboard();
+#else
+                text = QGuiApplication::clipboard()->text();
+#endif
+            } else {
+                text = arguments.value("text").toString();
+            }
+
             auto output_file = arguments.value("output-file").toString();
 
             if (output_file.isEmpty()) {
@@ -5202,6 +5220,48 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
     }
 }
 
+void dsnote_app::play_speech_selected_in_active_window(
+    const QString &model_id) {
+#ifdef USE_DESKTOP
+    // clear current current clipboard, but save old value
+    auto prev_text = fake_keyboard::copy_to_clipboard({});
+    try {
+        if (!m_fake_keyboard) {
+            m_fake_keyboard.emplace();
+        }
+
+        // delay to let user to release hotkey
+        QTimer::singleShot(200, [this, prev_text = std::move(prev_text),
+                                 model_id] {
+            if (!m_fake_keyboard) return;
+            bool shift =
+                settings::instance()->text_to_window_method() ==
+                settings::text_to_window_method_t::TextToWindowMethodCtrlShiftV;
+            m_fake_keyboard->send_ctrl_c(shift);
+
+            // delay to give time for the copy to happen
+            QTimer::singleShot(400, [this, prev_text, model_id] {
+                auto text = fake_keyboard::copy_from_clipboard();
+                if (!text.isEmpty()) {
+                    play_speech_from_text(text, model_id.isEmpty()
+                                                    ? active_tts_model()
+                                                    : model_id);
+                }
+
+                // restore original text in clipboard
+                QTimer::singleShot(0, [prev_text] {
+                    fake_keyboard::copy_to_clipboard(prev_text);
+                });
+            });
+        });
+    } catch (const std::runtime_error &err) {
+        qWarning() << "fake-keyboard error:" << err.what();
+    }
+#else
+    qWarning() << "not supported";
+#endif
+}
+
 QString dsnote_app::download_content(const QUrl &url) {
     QString text;
 
@@ -5212,8 +5272,9 @@ QString dsnote_app::download_content(const QUrl &url) {
 
         qDebug() << "downloaded content:" << data.mime << data.bytes.size();
 
-        if (data.mime.contains(QLatin1String{"text"}, Qt::CaseInsensitive))
+        if (data.mime.contains(QLatin1String{"text"}, Qt::CaseInsensitive)) {
             text = QString::fromUtf8(data.bytes);
+        }
     }
 
     if (text.isEmpty()) {
