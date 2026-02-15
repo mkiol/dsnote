@@ -33,6 +33,20 @@ Page {
             }
 
             LogItem {
+                text: "<p>" + qsTr("Speech to Text") + "</p>
+                <ul>
+                <li>Inline timestamps in text output.
+                A new output format is now available, displaying timestamps that show when each segment of text was recognized in the audio.
+                To enable new format set <i>Text format</i> to <i>Inline timestamps</i>. 
+                You can also customize the timestamp interval and format in the settings.</li>
+                </ul>"
+            }
+
+            SectionHeader {
+                text: qsTr("Version %1").arg("4.8.3")
+            }
+
+            LogItem {
                 text: "<p>" + qsTr("Text to Speech") + "</p>
                 <ul>
                 <li>New <i>Piper</i> voices for Argentine Spanish, Hindi, Malayalam and Nepali</li>

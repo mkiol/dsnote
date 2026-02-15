@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2024-2025 Michal Kosciesza -->
+<!-- Copyright 2024-2026 Michal Kosciesza -->
 <component type="desktop-application">
   <id>@info_app_icon_id@</id>
   <metadata_license>CC0-1.0</metadata_license>
@@ -69,6 +69,7 @@
   <url type="bugtracker">https://github.com/mkiol/dsnote/issues</url>
   <url type="translate">https://app.transifex.com/mkiol/dsnote</url>
   <url type="donation">https://github.com/mkiol/dsnote#how-to-support</url>
+  <url type="vcs-browser">https://github.com/mkiol/dsnote</url>
   <update_contact>dsnote_AT_mkiol.net</update_contact>
   <launchable type="desktop-id">@info_app_icon_id@.desktop</launchable>
   <content_rating type="oars-1.1" />
@@ -98,6 +99,30 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
+    <release version="4.9.0" date="2026-02-15">
+      <description>
+      <p>Accessibility:</p>
+      <ul>
+      <li>Improved 'Insert into active window'.
+        For faster text insertion, adjust the 'Text to window method' in the advanced settings.
+        The new options simulate 'Ctrl+V' keystrokes, allowing text to be pasted immediately
+        after STT recognition.</li>
+      <li>Improved clipboard text reading under Wayland.
+        You can now use the 'start-reading-clipboard' action or a global keyboard shortcut to read text from the clipboard,
+        even when the app window is in the background - removing previous Wayland restrictions.</li>
+      <li>Read selected text from active window.
+        You can now read selected text from any active window using the new 'start-reading-active-window' action
+        or a global keyboard shortcut. This feature automatically copies the selected text (simulating 'Ctrl+C')
+        and reads it aloud using TTS.</li>
+      </ul>
+      <p>Speech to Text:</p>
+      <ul>
+      <li>Inline timestamps in text output.
+        A new output format is now available, displaying timestamps that show when
+        each segment of text was recognized in the audio.</li>
+      </ul>
+      </description>
+    </release>
     <release version="4.8.3" date="2025-08-14">
       <description>
       <p>General:</p>

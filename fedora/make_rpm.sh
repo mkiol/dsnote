@@ -7,7 +7,7 @@
 # make_rpm.sh [spec_file_path] [output_dir]
 #
 
-VERSION="4.8.3"
+VERSION="4.9.0"
 NAME=dsnote
 
 spec_file="${1:-"$(realpath "$(dirname "$0")")/dsnote.spec"}"

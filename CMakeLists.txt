@@ -146,7 +146,7 @@ if(WITH_FLATPAK)
 endif()
 set(info_author "Michal Kosciesza")
 set(info_author_email "michal@mkiol.net")
-set(info_copyright_year "2021-2025")
+set(info_copyright_year "2021-2026")
 set(info_support_email "${id}@mkiol.net")
 set(info_webpage "https://github.com/mkiol/${id}")
 set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
@@ -155,8 +155,8 @@ set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_conf_version "113")
 set(info_addon_version "1.4") # if run as a flatpak pkg, the required add-on version
-#set(info_version_type "-beta")
-set(info_version_type "")
+set(info_version_type "-beta")
+#set(info_version_type "")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv · Niklas Halvorsen · \
 Matjaž Jeran · Victor Alonso Barberan · Bruno Veilleux · Abdullah Albaroty · 李 阳 · Erdem Uygun · Armin Maier")
@@ -172,7 +172,7 @@ if(WITH_DESKTOP)
     endif()
 endif()
 
-project(${id} VERSION 4.8.3)
+project(${id} VERSION 4.9.0)
 
 set(arch_arm32 0)
 set(arch_arm64 0)
