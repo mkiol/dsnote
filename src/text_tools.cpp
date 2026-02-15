@@ -420,33 +420,6 @@ void trim_lines(std::string& text) {
     text.assign(std::move(s));
 }
 
-// source: https://stackoverflow.com/a/64359731/7767358
-static std::pair<FILE*, FILE*> popen2(const char* __command) {
-    int pipes[2][2];
-
-    pipe(pipes[0]);
-    pipe(pipes[1]);
-
-    if (fork() > 0) {
-        // parent
-        close(pipes[0][0]);
-        close(pipes[1][1]);
-
-        return {fdopen(pipes[0][1], "w"), fdopen(pipes[1][0], "r")};
-    } else {
-        // child
-        close(pipes[0][1]);
-        close(pipes[1][0]);
-
-        dup2(pipes[0][0], STDIN_FILENO);
-        dup2(pipes[1][1], STDOUT_FILENO);
-
-        execl("/bin/sh", "/bin/sh", "-c", __command, NULL);
-
-        exit(1);
-    }
-}
-
 void numbers_to_words(std::string& text, const std::string& lang,
                       const std::string& prefix_path) {
     Numbertext nt{};
