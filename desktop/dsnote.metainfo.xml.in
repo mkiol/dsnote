@@ -99,7 +99,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.9.0" date="2026-02-15">
+    <release version="4.9.0" date="2026-02-22">
       <description>
       <p>Accessibility:</p>
       <ul>
@@ -120,6 +120,11 @@
       <li>Inline timestamps in text output.
         A new output format is now available, displaying timestamps that show when
         each segment of text was recognized in the audio.</li>
+      </ul>
+      <p>User Interface</p>
+      <ul>
+      <li>Setting option to force the English language in the user interface</li>
+      <li>Speech Note has been translated into Portuguese-Brazilian language.</li>
       </ul>
       </description>
     </release>

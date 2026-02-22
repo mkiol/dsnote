@@ -385,7 +385,7 @@ modules:
       - -DUSE_INTRINSICS_ARMV7_NEONVFPV4=ON
     build-options:
       arch:
-        x86-64:
+        x86_64:
           config-opts:
             - -DBUILD_ARCH=x86-64
         aarch64:
