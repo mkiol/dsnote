@@ -9,6 +9,7 @@
 
 #include <QCommandLineParser>
 #include <QDebug>
+#include <QDirIterator>
 #include <QGuiApplication>
 #include <QIcon>
 #include <QLocale>
@@ -398,19 +399,60 @@ static void install_translator() {
 #else
     auto trans_dir = QStringLiteral(":/translations");
 #endif
-    if (!translator->load(QLocale{}, QStringLiteral("dsnote"),
-                          QStringLiteral("-"), trans_dir,
-                          QStringLiteral(".qm"))) {
-        LOGD("failed to load translation: " << QLocale::system().name() << " "
-                                            << trans_dir);
-        if (!translator->load(QStringLiteral("dsnote-en"), trans_dir)) {
-            LOGE("failed to load default translation");
-            delete translator;
-            return;
-        }
-    } else {
-        LOGD("translation: " << QLocale::system().name());
+    bool success =
+        translator->load(QLocale::system(), QStringLiteral("dsnote"),
+                         QStringLiteral("-"), trans_dir, QStringLiteral(".qm"));
+
+    auto name = QLocale::system().name();
+
+    QString lang;
+    if (auto l = name.split('_'); l.size() > 1) {
+        lang = l.front();
     }
+
+    if (!success && !lang.isEmpty()) {
+        LOGD("failed to load translation: " << name);
+        // try to load language without region
+        name = lang;
+        success =
+            translator->load(QStringLiteral("dsnote-%1").arg(name), trans_dir);
+    }
+
+    if (!success && !lang.isEmpty()) {
+        LOGD("failed to load translation: " << name);
+        // try to first for the same language but other region
+        name.clear();
+        QDirIterator qm_it(trans_dir,
+                           {QStringLiteral("dsnote-%1_*.qm").arg(lang)},
+                           QDir::Files);
+        while (qm_it.hasNext()) {
+            QFileInfo fi{qm_it.next()};
+            name = fi.baseName().remove("dsnote-");
+            break;
+        }
+        if (!name.isEmpty()) {
+            success = translator->load(QStringLiteral("dsnote-%1").arg(name),
+                                       trans_dir);
+        }
+    }
+
+    if (!success) {
+        if (!name.isEmpty()) {
+            LOGD("failed to load translation: " << name);
+        }
+        // try to load english
+        name = "en";
+        success =
+            translator->load(QStringLiteral("dsnote-%1").arg(name), trans_dir);
+    }
+
+    if (!success) {
+        LOGE("failed to load translation: " << name << " " << trans_dir);
+        delete translator;
+        return;
+    }
+
+    LOGD("translation loaded: " << name);
 
     if (!QGuiApplication::installTranslator(translator)) {
         LOGW("failed to install translation");
@@ -418,8 +460,15 @@ static void install_translator() {
 }
 
 static void start_service(const cmd::options& options) {
-    if (options.hw_scan_off) settings::instance()->disable_hw_scan();
-    if (options.py_scan_off) settings::instance()->disable_py_scan();
+    auto* s = settings::instance();
+    if (s->translate_ui()) {
+        install_translator();
+    } else {
+        LOGD("ui translation is disabled");
+    }
+
+    if (options.hw_scan_off) s->disable_hw_scan();
+    if (options.py_scan_off) s->disable_py_scan();
 
     speech_service::instance();
 
@@ -430,8 +479,15 @@ static void start_service(const cmd::options& options) {
 
 static void start_app(const cmd::options& options,
                       app_server& dbus_app_server) {
-    if (options.hw_scan_off) settings::instance()->disable_hw_scan();
-    if (options.py_scan_off) settings::instance()->disable_py_scan();
+    auto* s = settings::instance();
+    if (s->translate_ui()) {
+        install_translator();
+    } else {
+        LOGD("ui translation is disabled");
+    }
+
+    if (options.hw_scan_off) s->disable_hw_scan();
+    if (options.py_scan_off) s->disable_py_scan();
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         speech_service::instance();
@@ -448,7 +504,7 @@ static void start_app(const cmd::options& options,
     auto engine = std::make_unique<QQmlApplicationEngine>();
     auto* context = engine->rootContext();
 
-    settings::instance()->update_qt_style(engine.get());
+    s->update_qt_style(engine.get());
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 7, 0)
     QGuiApplication::setDesktopFileName(APP_ICON_ID);
@@ -540,11 +596,11 @@ int main(int argc, char* argv[]) {
 
     cpu_tools::cpuinfo();
 
-    install_translator();
-
     signal(SIGINT, signal_handler);
 
-    if (cmd_opts.reset_models) models_manager::reset_models();
+    if (cmd_opts.reset_models) {
+        models_manager::reset_models();
+    }
 
     settings::launch_mode = cmd_opts.launch_mode;
 
@@ -565,8 +621,6 @@ int main(int argc, char* argv[]) {
     QGuiApplication::setApplicationName(QStringLiteral(APP_DBUS_APP_ID));
     app_server dbus_app_server{cmd_opts};
     QGuiApplication::setApplicationName(QStringLiteral(APP_ID));
-
-    settings::instance();
 
     start_app(cmd_opts, dbus_app_server);
 

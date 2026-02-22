@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -25,32 +25,33 @@
 #include "singleton.h"
 
 // property-name, type, default-value, restart-required
-#define SETTINGS_PROPERTY_TABLE                                           \
-    X(stt_use_note_as_prompt, bool, true, false)                          \
-    X(stt_echo, bool, false, false)                                       \
-    X(tts_split_into_sentences, bool, true, false)                        \
-    X(show_repair_text, bool, false, false)                               \
-    X(tts_use_engine_speed_control, bool, true, false)                    \
-    X(tts_normalize_audio, bool, true, false)                             \
-    X(stt_insert_stats, bool, false, false)                               \
-    X(trans_rules_enabled, bool, false, false)                            \
-    X(mnt_clean_text, bool, false, false)                                 \
-    X(whisper_translate, bool, false, false)                              \
-    X(use_tray, bool, false, false)                                       \
-    X(start_in_tray, bool, false, false)                                  \
-    X(clean_ref_voice, bool, true, false)                                 \
-    X(stt_clear_mic_audio_when_decoding, bool, false, false)              \
-    X(stt_play_beep, bool, false, false)                                  \
-    X(translate_when_typing, bool, false, false)                          \
-    X(translator_mode, bool, false, false)                                \
-    X(hotkeys_enabled, bool, false, false)                                \
-    X(mtag, bool, false, false)                                           \
-    X(use_toggle_for_hotkey, bool, true, false)                           \
-    X(window_size_ratio, double, 0.6, false)                              \
-    X(text_to_window_method, settings::text_to_window_method_t,           \
-      settings::text_to_window_method_t::TextToWindowMethodTyping, false) \
-    X(text_from_window_method, settings::text_from_window_method_t,       \
-      settings::text_from_window_method_t::TextFromWindowMethodCtrlC, false)
+#define SETTINGS_PROPERTY_TABLE                                              \
+    X(stt_use_note_as_prompt, bool, true, false)                             \
+    X(stt_echo, bool, false, false)                                          \
+    X(tts_split_into_sentences, bool, true, false)                           \
+    X(show_repair_text, bool, false, false)                                  \
+    X(tts_use_engine_speed_control, bool, true, false)                       \
+    X(tts_normalize_audio, bool, true, false)                                \
+    X(stt_insert_stats, bool, false, false)                                  \
+    X(trans_rules_enabled, bool, false, false)                               \
+    X(mnt_clean_text, bool, false, false)                                    \
+    X(whisper_translate, bool, false, false)                                 \
+    X(use_tray, bool, false, false)                                          \
+    X(start_in_tray, bool, false, false)                                     \
+    X(clean_ref_voice, bool, true, false)                                    \
+    X(stt_clear_mic_audio_when_decoding, bool, false, false)                 \
+    X(stt_play_beep, bool, false, false)                                     \
+    X(translate_when_typing, bool, false, false)                             \
+    X(translator_mode, bool, false, false)                                   \
+    X(hotkeys_enabled, bool, false, false)                                   \
+    X(mtag, bool, false, false)                                              \
+    X(use_toggle_for_hotkey, bool, true, false)                              \
+    X(window_size_ratio, double, 0.6, false)                                 \
+    X(text_to_window_method, settings::text_to_window_method_t,              \
+      settings::text_to_window_method_t::TextToWindowMethodTyping, false)    \
+    X(text_from_window_method, settings::text_from_window_method_t,          \
+      settings::text_from_window_method_t::TextFromWindowMethodCtrlC, false) \
+    X(translate_ui, bool, true, true)
 
 // name, default-value
 #define GPU_SCAN_TABLE                                                 \
