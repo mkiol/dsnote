@@ -44,7 +44,7 @@ static QString runtime_prefix() {
 namespace module_tools {
 QString unpacked_dir(const QString& name) {
     return QStringLiteral("%1/%2").arg(
-        QStandardPaths::writableLocation(QStandardPaths::DataLocation), name);
+        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation), name);
 }
 
 bool init_module(const QString& name) {
@@ -158,7 +158,7 @@ bool unpack_module(const QString& name) {
     }
 
     auto unpack_dir =
-        QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     auto unpack_file = QStringLiteral("%1/%2.tar").arg(unpack_dir, name);
 
     QDir{QStringLiteral("%1/%2").arg(unpack_dir, name)}.removeRecursively();

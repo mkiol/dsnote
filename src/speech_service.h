@@ -446,7 +446,7 @@ class speech_service : public QObject, public singleton<speech_service> {
                                    double progress, bool last);
     void handle_tts_speech_encoded(tts_partial_result_t result);
     void handle_speech_to_file(const tts_partial_result_t &result);
-    void handle_player_state_changed(QMediaPlayer::State new_state);
+    void handle_player_state_changed(QMediaPlayer::PlaybackState new_state);
     void handle_audio_available();
     void handle_stt_engine_state_changed(
         stt_engine::speech_detection_status_t status, int task_id);

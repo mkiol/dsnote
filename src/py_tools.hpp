@@ -26,6 +26,7 @@ struct libs_availability_t {
     bool torch_cuda = false;
     bool torch_hip = false;
     bool faster_whisper = false;
+    bool nemo_asr = false;
     bool ctranslate2_cuda = false;
     bool mimic3_tts = false;
     bool whisperspeech_tts = false;

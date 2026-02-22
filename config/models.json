@@ -35923,6 +35923,29 @@
             "lang_id": "zh"
         },
         {
+            "name": "Multilingual (Canary 1B v2)",
+            "model_id": "multilang_canary_1b_v2",
+            "engine": "stt_canary",
+            "lang_id": "multilang",
+            "info": "NVIDIA Canary 1B v2 - 4.89% WER, 5x faster than Whisper (RTFx 630), best accuracy-per-watt",
+            "options": "ti",
+            "score": 5,
+            "features": ["high_quality", "medium_processing", "stt_punctuation"],
+            "default_for_lang": true,
+            "hidden": false
+        },
+        {
+            "name": "Multilingual (Canary Qwen 2.5B)",
+            "model_id": "multilang_canary_qwen",
+            "engine": "stt_canary",
+            "lang_id": "multilang",
+            "info": "NVIDIA Canary Qwen 2.5B - Larger model for maximum accuracy",
+            "options": "ti",
+            "score": 4,
+            "features": ["high_quality", "slow_processing", "stt_punctuation"],
+            "hidden": false
+        },
+        {
             "name": "中文 (WhisperCpp)",
             "id": "zh_whisper",
             "engine": "stt_whisper",

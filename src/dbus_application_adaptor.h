@@ -19,7 +19,7 @@ class QByteArray;
 template<class T> class QList;
 template<class Key, class Value> class QMap;
 class QString;
-class QStringList;
+// class QStringList; // Removed: typedef in Qt6
 class QVariant;
 QT_END_NAMESPACE
 

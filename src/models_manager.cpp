@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -136,6 +136,7 @@ QDebug operator<<(QDebug d, models_manager::feature_flags flags) {
     if (flags & models_manager::engine_stt_fasterwhisper)
         d << "engine-stt-fasterwhisper, ";
     if (flags & models_manager::engine_stt_april) d << "engine-stt-april, ";
+    if (flags & models_manager::engine_stt_canary) d << "engine-stt-canary, ";
     if (flags & models_manager::engine_tts_espeak) d << "engine-tts-espeak, ";
     if (flags & models_manager::engine_tts_piper) d << "engine-tts-piper, ";
     if (flags & models_manager::engine_tts_rhvoice) d << "engine-tts-rhvoice, ";
@@ -172,6 +173,9 @@ QDebug operator<<(QDebug d, models_manager::model_engine_t engine) {
             break;
         case models_manager::model_engine_t::stt_april:
             d << "stt-april";
+            break;
+        case models_manager::model_engine_t::stt_canary:
+            d << "stt-canary";
             break;
         case models_manager::model_engine_t::ttt_hftc:
             d << "ttt-hftc";
@@ -262,6 +266,7 @@ QDebug operator<<(QDebug d,
     if (models_availability.tts_kokoro_ja) d << "tts_kokoro_ja,";
     if (models_availability.tts_kokoro_zh) d << "tts_kokoro_zh,";
     if (models_availability.stt_fasterwhisper) d << "stt_fasterwhisper,";
+    if (models_availability.stt_canary) d << "stt_canary,";
     if (models_availability.stt_ds) d << "stt_ds,";
     if (models_availability.stt_vosk) d << "stt_vosk,";
     if (models_availability.stt_whispercpp) d << "stt_whispercpp,";
@@ -809,7 +814,8 @@ void models_manager::download(const QString& id, download_type type, int part,
                     : model.size;
 
     QNetworkRequest request{url};
-    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
+                         QNetworkRequest::NoLessSafeRedirectPolicy);
 
     if (type == download_type::all || type == download_type::model_sup) {
         path = model_path(model.file_name);
@@ -1349,7 +1355,7 @@ void models_manager::init_config() {
     }
 
     QString data_dir{
-        QStandardPaths::writableLocation(QStandardPaths::DataLocation)};
+        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)};
     QDir dir{data_dir};
     if (!dir.exists())
         if (!dir.mkpath(data_dir)) qWarning() << "failed to create data dir";
@@ -1581,6 +1587,7 @@ bool models_manager::is_modelless_engine(model_engine_t engine) {
         case model_engine_t::stt_whisper:
         case model_engine_t::stt_fasterwhisper:
         case model_engine_t::stt_april:
+        case model_engine_t::stt_canary:
         case model_engine_t::ttt_hftc:
         case model_engine_t::ttt_tashkeel:
         case model_engine_t::ttt_unikud:
@@ -1606,6 +1613,7 @@ bool models_manager::is_ignore_on_sfos(model_engine_t engine,
         case model_engine_t::ttt_tashkeel:
         case model_engine_t::ttt_unikud:
         case model_engine_t::stt_fasterwhisper:
+        case model_engine_t::stt_canary:
         case model_engine_t::tts_mimic3:
         case model_engine_t::tts_whisperspeech:
         case model_engine_t::tts_parler:
@@ -1704,6 +1712,7 @@ models_manager::model_role_t models_manager::role_of_engine(
         case model_engine_t::stt_whisper:
         case model_engine_t::stt_fasterwhisper:
         case model_engine_t::stt_april:
+        case model_engine_t::stt_canary:
             return model_role_t::stt;
         case model_engine_t::ttt_hftc:
         case model_engine_t::ttt_tashkeel:
@@ -1736,6 +1745,7 @@ models_manager::model_engine_t models_manager::engine_from_name(
     if (name == QStringLiteral("stt_fasterwhisper"))
         return model_engine_t::stt_fasterwhisper;
     if (name == QStringLiteral("stt_april")) return model_engine_t::stt_april;
+    if (name == QStringLiteral("stt_canary")) return model_engine_t::stt_canary;
     if (name == QStringLiteral("ttt_hftc")) return model_engine_t::ttt_hftc;
     if (name == QStringLiteral("ttt_tashkeel"))
         return model_engine_t::ttt_tashkeel;
@@ -1884,6 +1894,7 @@ models_manager::feature_flags models_manager::add_new_feature(
         case feature_flags::engine_stt_whisper:
         case feature_flags::engine_stt_fasterwhisper:
         case feature_flags::engine_stt_april:
+        case feature_flags::engine_stt_canary:
         case feature_flags::engine_tts_espeak:
         case feature_flags::engine_tts_piper:
         case feature_flags::engine_tts_rhvoice:
@@ -1901,6 +1912,7 @@ models_manager::feature_flags models_manager::add_new_feature(
                 existing_features & feature_flags::engine_stt_whisper ||
                 existing_features & feature_flags::engine_stt_fasterwhisper ||
                 existing_features & feature_flags::engine_stt_april ||
+                existing_features & feature_flags::engine_stt_canary ||
                 existing_features & feature_flags::engine_tts_espeak ||
                 existing_features & feature_flags::engine_tts_piper ||
                 existing_features & feature_flags::engine_tts_rhvoice ||
@@ -1965,11 +1977,14 @@ models_manager::feature_flags models_manager::add_implicit_feature_flags(
             break;
         case model_engine_t::stt_whisper:
         case model_engine_t::stt_fasterwhisper:
+        case model_engine_t::stt_canary:
             existing_features =
                 add_new_feature(existing_features,
                                 engine == model_engine_t::stt_whisper
                                     ? feature_flags::engine_stt_whisper
-                                    : feature_flags::engine_stt_fasterwhisper);
+                                    : engine == model_engine_t::stt_canary
+                                        ? feature_flags::engine_stt_canary
+                                        : feature_flags::engine_stt_fasterwhisper);
             if (model_id.contains("tiny")) {
                 existing_features =
                     add_new_feature(existing_features,
@@ -2268,7 +2283,8 @@ auto models_manager::extract_models(
                             return model_alias_of;
                         }
                         if (engine != model_engine_t::stt_whisper &&
-                            engine != model_engine_t::stt_fasterwhisper) {
+                            engine != model_engine_t::stt_fasterwhisper &&
+                            engine != model_engine_t::stt_canary) {
                             return {};
                         }
                         auto l = model_id.split('_');
@@ -2395,6 +2411,11 @@ auto models_manager::extract_models(
             if (!models_availability->stt_fasterwhisper &&
                 engine == model_engine_t::stt_fasterwhisper) {
                 qDebug() << "ignoring fasterwhisper model:" << model_id;
+                continue;
+            }
+            if (!models_availability->stt_canary &&
+                engine == model_engine_t::stt_canary) {
+                qDebug() << "ignoring canary model:" << model_id;
                 continue;
             }
             if (!models_availability->stt_ds &&
@@ -2552,7 +2573,8 @@ auto models_manager::extract_models(
             // add split by words option for all sam tts models
             model.options.push_back('w');
         } else if ((model.engine == model_engine_t::stt_whisper ||
-                    model.engine == model_engine_t::stt_fasterwhisper) &&
+                    model.engine == model_engine_t::stt_fasterwhisper ||
+                    model.engine == model_engine_t::stt_canary) &&
                    !model.disabled && !model.hidden &&
                    model.options.contains('t') && model.lang_id == "en") {
             // remove translate to english option for all english models
@@ -2703,7 +2725,7 @@ void models_manager::reset_models() {
     qDebug() << "removing models file";
 
     auto models_file_path =
-        QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+        QDir{QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)}
             .filePath(models_file);
 
     QFile{models_file_path}.remove();
@@ -2713,7 +2735,7 @@ void models_manager::parse_models_file(
     bool reset, langs_t* langs, packs_t* packs, models_t* models,
     std::optional<models_availability_t> models_availability) {
     const auto models_file_path =
-        QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+        QDir{QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)}
             .filePath(models_file);
     if (!QFile::exists(models_file_path)) init_config();
 
@@ -2780,6 +2802,7 @@ QString models_manager::file_name_from_id(const QString& id,
         case model_engine_t::ttt_tashkeel:
             return id + ".ort";
         case model_engine_t::stt_fasterwhisper:
+        case model_engine_t::stt_canary:
         case model_engine_t::stt_vosk:
         case model_engine_t::ttt_hftc:
         case model_engine_t::ttt_unikud:
@@ -3019,6 +3042,11 @@ void models_manager::update_models_using_availability_internal() {
         }
         if (!m_models_availability->stt_fasterwhisper &&
             pair.second.engine == model_engine_t::stt_fasterwhisper) {
+            pair.second.disabled = true;
+            return;
+        }
+        if (!m_models_availability->stt_canary &&
+            pair.second.engine == model_engine_t::stt_canary) {
             pair.second.disabled = true;
             return;
         }

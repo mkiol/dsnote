@@ -36,6 +36,7 @@ std::ostream& operator<<(std::ostream& os,
     os << "py-version=" << availability.py_version
        << ", coqui-tts=" << availability.coqui_tts
        << ", faster-whisper=" << availability.faster_whisper
+       << ", nemo-asr=" << availability.nemo_asr
        << ", ctranslate2-cuda=" << availability.ctranslate2_cuda
        << ", mimic3-tts=" << availability.mimic3_tts
        << ", whisperspeech-tts=" << availability.whisperspeech_tts
@@ -235,6 +236,14 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type,
         }
 
         try {
+            LOGD("checking: nemo-asr");
+            py::module_::import("nemo.collections.asr");
+            availability.nemo_asr = true;
+        } catch (const std::exception& err) {
+            LOGD("nemo-asr check py error: " << err.what());
+        }
+
+        try {
             LOGD("checking: transformers");
             py::module_::import("transformers");
             LOGD("checking: accelerate");
@@ -371,7 +380,7 @@ bool init_module() {
     if (!module_tools::init_module(QStringLiteral("python"))) return false;
 
     auto py_path =
-        QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/" +
+        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" +
         python_site_path;
 
     qDebug() << "setting env PYTHONPATH=" << py_path;
