@@ -56,7 +56,6 @@ if(arch_x8664)
             -DBUILD_ARCH=${bergamot_build_arch}
             -DCMAKE_INSTALL_RPATH=${rpath_install_dir}
             -DBERGAMOTAPI_TARGET_NAME=bergamot_api-fallback
-            -DCMAKE_VERBOSE_MAKEFILE=ON
             -DCMAKE_POLICY_VERSION_MINIMUM=3.5
         BUILD_ALWAYS False
     )
