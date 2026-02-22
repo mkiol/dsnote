@@ -159,7 +159,8 @@ set(info_version_type "-beta")
 #set(info_version_type "")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv · Niklas Halvorsen · \
-Matjaž Jeran · Victor Alonso Barberan · Bruno Veilleux · Abdullah Albaroty · 李 阳 · Erdem Uygun · Armin Maier")
+Matjaž Jeran · Victor Alonso Barberan · Bruno Veilleux · Abdullah Albaroty · 李 阳 · Erdem Uygun · Armin Maier · \
+Alexandre Cerqueira Leite")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · nlohmann JSON · eSpeak NG · Bergamot Translator · \
 Rubber Band Library · simdjson · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
