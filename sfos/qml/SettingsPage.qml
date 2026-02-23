@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -42,6 +42,20 @@ Page {
                             description: qsTr("The note will be saved automatically, so when you restart the app, your last note will always be available.")
                             onClicked: {
                                 _settings.keep_last_note = !_settings.keep_last_note
+                            }
+                        }
+
+                        ComboBox {
+                            label: qsTranslate("Language")
+                            comboBox {
+                                currentIndex: _settings.translate_ui ? 0 : 1
+                                menu: ContextMenu {
+                                    MenuItem { text: qsTr("Auto") }
+                                    MenuItem { text: qsTr("English") }
+                                }
+                                onCurrentIndexChanged: {
+                                    _settings.translate_ui = (currentIndex === 0 ? true : false)
+                                }
                             }
                         }
 

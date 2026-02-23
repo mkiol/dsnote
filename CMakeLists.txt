@@ -54,6 +54,7 @@ option(BUILD_HTML2MD "download sources of html2md lib, build and link statically
 option(BUILD_MADDY "download sources of maddy lib" ON)
 option(BUILD_XDO "download sources of xdo lib and link statically" ON)
 option(BUILD_SAM "download sources of sam and link statically" ON)
+option(BUILD_WL_CLIPBOARD "download sources of wl-clipboard, build and install" OFF)
 option(BUILD_XKBCOMMON "download sources of xkbcommon build and link statically" OFF)
 option(BUILD_QQC2_BREEZE_STYLE "download sources of QQC2 Breeze Style, build and install" OFF)
 
@@ -145,7 +146,7 @@ if(WITH_FLATPAK)
 endif()
 set(info_author "Michal Kosciesza")
 set(info_author_email "michal@mkiol.net")
-set(info_copyright_year "2021-2025")
+set(info_copyright_year "2021-2026")
 set(info_support_email "${id}@mkiol.net")
 set(info_webpage "https://github.com/mkiol/${id}")
 set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
@@ -154,11 +155,12 @@ set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_conf_version "113")
 set(info_addon_version "1.4") # if run as a flatpak pkg, the required add-on version
-#set(info_version_type "-beta")
-set(info_version_type "")
+set(info_version_type "-beta")
+#set(info_version_type "")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv · Niklas Halvorsen · \
-Matjaž Jeran · Victor Alonso Barberan · Bruno Veilleux · Abdullah Albaroty · 李 阳 · Erdem Uygun · Armin Maier")
+Matjaž Jeran · Victor Alonso Barberan · Bruno Veilleux · Abdullah Albaroty · 李 阳 · Erdem Uygun · Armin Maier · \
+Alexandre Cerqueira Leite")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · nlohmann JSON · eSpeak NG · Bergamot Translator · \
 Rubber Band Library · simdjson · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
@@ -171,7 +173,7 @@ if(WITH_DESKTOP)
     endif()
 endif()
 
-project(${id} VERSION 4.8.3)
+project(${id} VERSION 4.9.0)
 
 set(arch_arm32 0)
 set(arch_arm64 0)
@@ -273,6 +275,7 @@ set(CMAKE_BUILD_RPATH ${external_lib_dir})
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 set(ENV{PKG_CONFIG_PATH} $ENV{PKG_CONFIG_PATH}:${PROJECT_BINARY_DIR})
 message(STATUS "PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # includes
 
@@ -292,6 +295,8 @@ set(dsnote_lib_sources
     ${sources_dir}/dbus_application_inf.h
     ${sources_dir}/dbus_notifications_inf.cpp
     ${sources_dir}/dbus_notifications_inf.h
+    ${sources_dir}/dbus_klipper_inf.h
+    ${sources_dir}/dbus_klipper_inf.cpp
     ${sources_dir}/dirmodel.cpp
     ${sources_dir}/dirmodel.h
     ${sources_dir}/dsnote_app.cpp
@@ -402,6 +407,8 @@ set(dsnote_lib_sources
     ${sources_dir}/f5_engine.hpp
     ${sources_dir}/kokoro_engine.cpp
     ${sources_dir}/kokoro_engine.hpp
+    ${sources_dir}/wl_clipboard.cpp
+    ${sources_dir}/wl_clipboard.hpp
 )
 
 if(WITH_DESKTOP)
@@ -460,11 +467,12 @@ endif ()
 
 add_library(compiler_flags INTERFACE)
 target_compile_features(compiler_flags INTERFACE cxx_std_17)
+set(warning_flags "-Wall;-Wextra;-Wpedantic;-Wno-attributes;-Werror=switch;-Werror=implicit-fallthrough")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     if(WITH_SANITIZERS)
         target_compile_options(compiler_flags INTERFACE
-            "-pie;-Wall;-Wextra;-Wpedantic;-O1;-g3;-fsanitize=address,undefined")
+            "${warning_flags};-pie;-O1;-g3;-fsanitize=address,undefined")
         if(WITH_STATIC_SANITIZERS)
             target_link_options(compiler_flags INTERFACE
               "-pie;-static-libasan;-static-libubsan;-fsanitize=address,undefined")
@@ -472,12 +480,11 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
             target_link_options(compiler_flags INTERFACE "-pie;-fsanitize=address,undefined")
         endif()
     else()
-        target_compile_options(compiler_flags INTERFACE
-            "-pie;-Wall;-Wextra;-Wpedantic;-O1;-g3")
+        target_compile_options(compiler_flags INTERFACE "${warning_flags};-pie;-O1;-g")
         target_link_options(compiler_flags INTERFACE "-pie")
     endif()
 else()
-    target_compile_options(compiler_flags INTERFACE "-pie;-Wall;-Wextra;-Wpedantic;-Wno-attributes;-O3;-g")
+    target_compile_options(compiler_flags INTERFACE "${warning_flags};-pie;-O3;-g")
     target_link_options(compiler_flags INTERFACE "-pie;-flto;-fno-fat-lto-objects")
 endif()
 
@@ -569,6 +576,10 @@ if(WITH_DESKTOP)
         pkg_search_module(xkbcommonx11 REQUIRED xkbcommon-x11>=1.6.0)
         list(APPEND deps_libs ${xkbcommonx11_LIBRARIES})
         list(APPEND includes ${xkbcommonx11_INCLUDE_DIRS})
+    endif()
+
+    if(BUILD_WL_CLIPBOARD)
+        include(${cmake_path}/wl_clipboard.cmake)
     endif()
 
     if(WITH_X11_FEATURES)

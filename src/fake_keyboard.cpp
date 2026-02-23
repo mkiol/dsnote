@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -25,6 +25,8 @@
 #include <xkbcommon/xkbcommon-compose.h>
 #include <xkbcommon/xkbcommon.h>
 
+#include <QClipboard>
+#include <QDBusConnection>
 #include <QFile>
 #include <QGuiApplication>
 #include <QLocale>
@@ -39,12 +41,15 @@
 #include <qpa/qplatformnativeinterface.h>
 #endif
 
+#include "dbus_klipper_inf.h"
 #include "logger.hpp"
 #include "qtlogger.hpp"
+#include "wl_clipboard.hpp"
 
 using namespace std::chrono_literals;
 
 #ifdef USE_X11_FEATURES
+#include <X11/X.h>
 #include <X11/XKBlib.h>
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
@@ -70,7 +75,7 @@ static XKeyEvent create_key_event(Display *display, Window &win,
     event.y_root = 1;
     event.same_screen = True;
     event.keycode = key.code;
-    event.state = key.mask | key.layout << 13;
+    event.state = key.mask | key.layout << 13U;
 
     // layout index is in 'Group index'
     // https://www.x.org/releases/X11R7.6/doc/libX11/specs/
@@ -331,6 +336,246 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
         if (shift) ydo_uinput_emit(EV_KEY, KEY_LEFTSHIFT, 0, true);
     }
 }
+
+// Set the clipboard text
+QString fake_keyboard::copy_to_clipboard(const QString &text) {
+    QString prev_clip_text;
+    bool wayland = settings::instance()->is_wayland();
+    bool failed = false;
+
+    // Try wl_clipboard
+    if (wayland) {
+        LOGD("trying wl_clipboard");
+
+        std::optional<QString> prev_clip_text_opt = wl_clipboard::get_clipboard();
+
+        if (prev_clip_text_opt == std::nullopt) {
+            LOGE("Failed to paste from wl_clipboard");
+            failed = true;
+        } else {
+            prev_clip_text = prev_clip_text_opt.value();
+        }
+
+        if (!wl_clipboard::set_clipboard(text)) {
+            LOGE("Failed to copy to wl_clipboard");
+            failed = true;
+        }
+    }
+
+    // Try Klipper
+    if (failed && wayland) {
+        LOGD("trying Klipper");
+        OrgKdeKlipperKlipperInterface klipper("org.kde.klipper", "/klipper",
+                                              QDBusConnection::sessionBus());
+        prev_clip_text = klipper.getClipboardContents();
+        auto reply = klipper.setClipboardContents(text);
+
+        failed = reply.isError();
+    }
+
+    // Try QClipboard
+    if (failed || !wayland) {
+        LOGD("trying QClipboard");
+        auto *clip = QGuiApplication::clipboard();
+        prev_clip_text = clip->text();
+        clip->setText(text);
+    }
+
+    // Sleep for 200 ms, fix clipboard not being written to the clipboard
+    std::this_thread::sleep_for(200ms);
+
+    return prev_clip_text;
+}
+
+QString fake_keyboard::copy_from_clipboard() {
+    QString clip_text;
+    bool wayland = settings::instance()->is_wayland();
+    bool failed = false;
+
+    // try wl_clipboard
+    if (wayland) {
+        auto clip_text_opt = wl_clipboard::get_clipboard();
+        if (clip_text_opt) {
+            clip_text = std::move(clip_text_opt.value());
+        } else {
+            failed = true;
+        }
+    }
+    // try klipper
+    if (failed && wayland) {
+        OrgKdeKlipperKlipperInterface klipper("org.kde.klipper", "/klipper",
+                                              QDBusConnection::sessionBus());
+        auto reply = klipper.getClipboardContents();
+        if (reply.isError()) {
+            failed = true;
+        } else {
+            clip_text = reply.value();
+        }
+    }
+    // try qclipboard
+    if (failed || !wayland) {
+        auto *clip = QGuiApplication::clipboard();
+        clip_text = clip->text();
+    }
+
+    return clip_text;
+}
+
+// Send Ctrl+V (paste) to the active window using the configured method
+void fake_keyboard::send_ctrl_v(bool shift) {
+    LOGD("sending ctrl_v: shift=" << shift);
+
+    // Delay to allow clipboard to update
+    std::this_thread::sleep_for(10ms);
+
+#ifdef USE_X11_FEATURES
+    switch (m_method) {
+        case method_t::ydo:
+            send_ctrl_v_ydo(shift);
+            break;
+        case method_t::legacy:
+            send_ctrl_v_legacy(shift);
+            break;
+        case method_t::xdo:
+            send_ctrl_v_xdo(shift);
+            break;
+    }
+#else
+    // Non-X11 build: use ydo path (Wayland) by default
+    if (m_ydo_daemon_socket >= 0) {
+        send_ctrl_v_ydo();
+    } else {
+        LOGW("no method available to send ctrl+v");
+    }
+#endif
+}
+
+void fake_keyboard::send_ctrl_c(bool shift) {
+    LOGD("sending ctrl_c: shift=" << shift);
+
+    // Delay to allow clipboard to update
+    std::this_thread::sleep_for(10ms);
+
+#ifdef USE_X11_FEATURES
+    switch (m_method) {
+        case method_t::ydo:
+            send_ctrl_c_ydo(shift);
+            break;
+        case method_t::legacy:
+            send_ctrl_c_legacy(shift);
+            break;
+        case method_t::xdo:
+            send_ctrl_c_xdo(shift);
+            break;
+    }
+#else
+    // Non-X11 build: use ydo path (Wayland) by default
+    if (m_ydo_daemon_socket >= 0) {
+        send_ctrl_c_ydo();
+    } else {
+        LOGW("no method available to send ctrl+c");
+    }
+#endif
+}
+
+// Helper implementations split to avoid code duplication for the ydo path.
+// ydo implementation is usable on both X11 and Wayland builds.
+void fake_keyboard::send_ctrl_ydo(int key, bool shift) {
+    // helper closure: emit a key event and wait a small fixed duration
+    auto press_and_wait = [&](uint16_t code, int32_t val) {
+        ydo_uinput_emit(EV_KEY, code, val, true);
+        std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
+            settings::instance()->fake_keyboard_delay()));
+    };
+
+    press_and_wait(KEY_LEFTCTRL, 1);
+    if (shift) {
+        press_and_wait(KEY_LEFTSHIFT, 1);
+    }
+    press_and_wait(key, 1);
+
+    std::this_thread::sleep_for(50ms);
+
+    press_and_wait(key, 0);
+    if (shift) {
+        press_and_wait(KEY_LEFTSHIFT, 0);
+    }
+    press_and_wait(KEY_LEFTCTRL, 0);
+}
+
+void fake_keyboard::send_ctrl_v_ydo(bool shift) { send_ctrl_ydo(KEY_V, shift); }
+
+void fake_keyboard::send_ctrl_c_ydo(bool shift) { send_ctrl_ydo(KEY_C, shift); }
+
+#ifdef USE_X11_FEATURES
+void fake_keyboard::send_ctrl_legacy(fake_keyboard::key_code_t key) {
+    auto event =
+        create_key_event(m_x11_display, m_focus_window, m_root_window, key);
+    event.type = KeyPress;
+    event.state |= ControlMask;
+    XSendEvent(event.display, event.window, True, KeyPressMask,
+               reinterpret_cast<XEvent *>(&event));
+    XSync(event.display, False);
+
+    std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
+        settings::instance()->fake_keyboard_delay()));
+
+    event.type = KeyRelease;
+    XSendEvent(event.display, event.window, True, KeyReleaseMask,
+               reinterpret_cast<XEvent *>(&event));
+    XSync(event.display, False);
+}
+
+void fake_keyboard::send_ctrl_v_legacy(bool shift) {
+    if (!m_x11_display) {
+        LOGW("no x11 display for legacy send_ctrl_v");
+        return;
+    }
+
+    auto v_key = key_from_character(shift ? 'V' : 'v');
+    if (v_key.empty()) {
+        LOGW("no v key for legacy send_ctrl_v");
+        return;
+    }
+
+    send_ctrl_legacy(v_key.at(0));
+}
+
+void fake_keyboard::send_ctrl_c_legacy(bool shift) {
+    if (!m_x11_display) {
+        LOGW("no x11 display for legacy send_ctrl_c");
+        return;
+    }
+
+    auto c_key = key_from_character(shift ? 'C' : 'c');
+    if (c_key.empty()) {
+        LOGW("no c key for legacy send_ctrl_c");
+        return;
+    }
+
+    send_ctrl_legacy(c_key.at(0));
+}
+
+void fake_keyboard::send_ctrl_xdo(const char *key) {
+    if (m_xdo) {
+        // Use xdo to send ctrl sequence to current window
+
+        xdo_send_keysequence_window(
+            m_xdo, CURRENTWINDOW, key,
+            settings::instance()->fake_keyboard_delay());
+    } else {
+        LOGW("XDO not available");
+    }
+}
+
+void fake_keyboard::send_ctrl_v_xdo(bool shift) {
+    send_ctrl_xdo(shift ? "ctrl+shift+v" : "ctrl+v");
+}
+
+void fake_keyboard::send_ctrl_c_xdo(bool shift) {
+    send_ctrl_xdo(shift ? "ctrl+shift+c" : "ctrl+c");
+}
+#endif
 
 int fake_keyboard::make_ydo_socket() {
     auto ydo_daemon_socket = socket(AF_UNIX, SOCK_DGRAM, 0);
@@ -892,8 +1137,7 @@ void fake_keyboard::wly_global_callback(void *data, wl_registry *registry,
 
 void fake_keyboard::wly_global_remove_callback(
     [[maybe_unused]] void *data, [[maybe_unused]] wl_registry *registry,
-    [[maybe_unused]] uint32_t id) {
-}
+    [[maybe_unused]] uint32_t id) {}
 
 void fake_keyboard::wly_callback_callback([[maybe_unused]] void *data,
                                           wl_callback *cb,

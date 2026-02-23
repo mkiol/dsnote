@@ -1,4 +1,4 @@
-/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -42,6 +42,20 @@ ColumnLayout {
         currentFont: _settings.notepad_font
         onAccepted: {
             _settings.notepad_font = fontDialog.currentFont
+        }
+    }
+
+    ComboBoxForm {
+        label.text: qsTranslate("SettingsPage", "Language")
+        comboBox {
+            currentIndex: _settings.translate_ui ? 0 : 1
+            model: [
+                qsTranslate("SettingsPage", "Auto"),
+                qsTranslate("SettingsPage", "English")
+            ]
+            onActivated: {
+                _settings.translate_ui = (index === 0 ? true : false)
+            }
         }
     }
 

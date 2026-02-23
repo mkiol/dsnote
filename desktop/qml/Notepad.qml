@@ -95,17 +95,21 @@ ColumnLayout {
             currentIndex: {
                 if (_settings.stt_tts_text_format === Settings.TextFormatRaw) return 0
                 if (_settings.stt_tts_text_format === Settings.TextFormatSubRip) return 1
+                if (_settings.stt_tts_text_format === Settings.TextFormatInlineTimestamp) return 2
                 return 0
             }
             model: [
                 qsTr("Plain text"),
-                qsTr("SRT Subtitles")
+                qsTr("SRT Subtitles"),
+                qsTr("Inline timestamps")
             ]
             onActivated: {
                 if (index === 0)
                     _settings.stt_tts_text_format = Settings.TextFormatRaw
                 else if (index === 1)
                     _settings.stt_tts_text_format = Settings.TextFormatSubRip
+                else if (index === 2)
+                    _settings.stt_tts_text_format = Settings.TextFormatInlineTimestamp
             }
         }
 

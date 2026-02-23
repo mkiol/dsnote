@@ -60,14 +60,15 @@ class media_compressor {
         std::string language;
         int volume_change = 0; /* -30 dB <=> 30 dB */
     };
-    friend std::ostream& operator<<(std::ostream& os, stream_t stream);
+    friend std::ostream& operator<<(std::ostream& os, const stream_t& stream);
 
     struct media_info_t {
         std::vector<stream_t> audio_streams;
         std::vector<stream_t> video_streams;
         std::vector<stream_t> subtitles_streams;
     };
-    friend std::ostream& operator<<(std::ostream& os, media_info_t media_info);
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const media_info_t& media_info);
 
     struct clip_info_t {
         static const uint64_t max = std::numeric_limits<uint64_t>::max();

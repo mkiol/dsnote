@@ -19,6 +19,7 @@
 #include <memory>
 #include <optional>
 #include <queue>
+#include <regex>
 #include <set>
 #include <string>
 #include <utility>
@@ -407,7 +408,6 @@ class speech_service : public QObject, public singleton<speech_service> {
     std::queue<tts_partial_result_t> m_tts_queue;
     QVariantMap m_features_availability;
     bool m_models_changed_handled = false;
-
     inline bool feature_discovery_done() const {
         return !m_features_availability.isEmpty();
     }

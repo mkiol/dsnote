@@ -1,7 +1,7 @@
 # all translations
-set(enabled_translations ar ca_ES cs de en es fr fr_CA it nl no pl ru sv sl tr_TR uk zh_CN zh_TW)
+set(enabled_translations ar ca_ES cs de en es fr fr_CA it nl no pt_BR pl ru sv sl tr_TR uk zh_CN zh_TW)
 # finished translations
-set(enabled_translations ar ca_ES de en es fr fr_CA it nl no pl ru sv sl tr_TR uk zh_CN zh_TW)
+set(enabled_translations ar ca_ES de en es fr fr_CA it nl no pt_BR pl ru sv sl tr_TR uk zh_CN zh_TW)
 
 # QT_VERSION_MAJOR is set in main CMakeLists.txt
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core LinguistTools)

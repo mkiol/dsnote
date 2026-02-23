@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -273,15 +273,30 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
         .removeRecursively();
 }
 
-#define X(name, type, dvalue)                                             \
-    type settings::name() const {                                         \
-        return qvariant_cast<type>(value(QStringLiteral(#name), dvalue)); \
-    }                                                                     \
-    void settings::set_##name(type value) {                               \
-        if (name() != value) {                                            \
-            setValue(QStringLiteral(#name), value);                       \
-            emit name##_changed();                                        \
-        }                                                                 \
+#define X(name, type, dvalue, restart)                                       \
+    type settings::name() const {                                            \
+        return [&](auto v) {                                                 \
+            if constexpr (std::is_enum_v<decltype(v)>) {                     \
+                return static_cast<type>(                                    \
+                    value(QStringLiteral(#name), static_cast<int>(v))        \
+                        .toInt());                                           \
+            } else {                                                         \
+                return qvariant_cast<type>(value(QStringLiteral(#name), v)); \
+            }                                                                \
+        }(dvalue);                                                           \
+    }                                                                        \
+    void settings::set_##name(const type& value) {                           \
+        if (name() != value) {                                               \
+            [&](auto v) {                                                    \
+                if constexpr (std::is_enum_v<decltype(v)>) {                 \
+                    setValue(QStringLiteral(#name), static_cast<int>(v));    \
+                } else {                                                     \
+                    setValue(QStringLiteral(#name), v);                      \
+                }                                                            \
+                emit name##_changed();                                       \
+                if (restart) set_restart_required(true);                     \
+            }(value);                                                        \
+        }                                                                    \
     }
 SETTINGS_PROPERTY_TABLE
 #undef X
@@ -936,6 +951,30 @@ void settings::set_stt_tts_text_format(text_format_t value) {
         setValue(QStringLiteral("stt_tts_text_format"),
                  static_cast<int>(value));
         emit stt_tts_text_format_changed();
+    }
+}
+
+QString settings::inline_timestamp_template() const {
+    return value(QStringLiteral("inline_timestamp_template"),
+                 QStringLiteral("[{hh}:{mm}:{ss}] {text}"))
+        .toString();
+}
+
+void settings::set_inline_timestamp_template(const QString& value) {
+    if (inline_timestamp_template() != value) {
+        setValue(QStringLiteral("inline_timestamp_template"), value);
+        emit inline_timestamp_template_changed();
+    }
+}
+
+int settings::inline_timestamp_min_interval() const {
+    return value(QStringLiteral("inline_timestamp_min_interval"), 30).toInt();
+}
+
+void settings::set_inline_timestamp_min_interval(int value) {
+    if (inline_timestamp_min_interval() != value) {
+        setValue(QStringLiteral("inline_timestamp_min_interval"), value);
+        emit inline_timestamp_min_interval_changed();
     }
 }
 
@@ -2069,7 +2108,7 @@ void settings::set_num_threads(int value) {
 
 QVariantList settings::hotkeys_table() const {
     QVariantList table;
-#define X(name, id, desc, key) \
+#define X(name, id, desc, key, on_deactivate) \
     table.push_back(QStringList{id, desc, hotkey_##name()});
     HOTKEY_TABLE
 #undef X
@@ -2077,26 +2116,26 @@ QVariantList settings::hotkeys_table() const {
 }
 
 void settings::reset_hotkey(const QString& requested_id) {
-#define X(name, id, desc, key) \
-    if (requested_id == id) {  \
-        reset_hotkey_##name(); \
-        return;                \
+#define X(name, id, desc, key, on_deactivate) \
+    if (requested_id == id) {                 \
+        reset_hotkey_##name();                \
+        return;                               \
     }
     HOTKEY_TABLE
 #undef X
 }
 
 void settings::set_hotkey(const QString& requested_id, const QString& value) {
-#define X(name, id, desc, key)    \
-    if (requested_id == id) {     \
-        set_hotkey_##name(value); \
-        return;                   \
+#define X(name, id, desc, key, on_deactivate) \
+    if (requested_id == id) {                 \
+        set_hotkey_##name(value);             \
+        return;                               \
     }
     HOTKEY_TABLE
 #undef X
 }
 
-#define X(name, id, desc, key)                                             \
+#define X(name, id, desc, key, on_deactivate)                              \
     QString settings::hotkey_##name() const {                              \
         return value(QStringLiteral("hotkey_" #name), QStringLiteral(key)) \
             .toString();                                                   \
@@ -2878,11 +2917,11 @@ std::optional<settings::voice_profile_prompt_t> settings::tts_voice_prompt(
     auto l = it->toList();
 
     return voice_profile_prompt_t{/*name=*/l.at(0).toString(),
-                          /*desc=*/l.at(1).toString()};
+                                  /*desc=*/l.at(1).toString()};
 }
 
-void settings::tts_update_voice_prompt(const QString& name,
-                                       const voice_profile_prompt_t& voice_prompt) {
+void settings::tts_update_voice_prompt(
+    const QString& name, const voice_profile_prompt_t& voice_prompt) {
     auto prompts = tts_voice_prompts();
 
     bool push_new = true;

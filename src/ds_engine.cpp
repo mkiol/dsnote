@@ -344,7 +344,8 @@ void ds_engine::decode_speech(const ds_buf_t& buf, bool eof) {
 
     m_ds_api.STT_FeedAudioContent(m_ds_stream, buf.data(), buf.size());
 
-    if (eof && m_config.text_format == text_format_t::subrip) {
+    if (eof && (m_config.text_format == text_format_t::subrip ||
+                m_config.text_format == text_format_t::inline_timestamp)) {
         auto* meta = m_ds_api.STT_FinishStreamWithMetadata(m_ds_stream, 1);
 
         LOGD("speech decoded");
@@ -360,13 +361,22 @@ void ds_engine::decode_speech(const ds_buf_t& buf, bool eof) {
                                                         segments.second);
         }
 
-        text_tools::break_segments_to_multiline(
-            m_config.sub_config.min_line_length,
-            m_config.sub_config.max_line_length, segments.second);
+        if (m_config.text_format == text_format_t::subrip) {
+            text_tools::break_segments_to_multiline(
+                m_config.sub_config.min_line_length,
+                m_config.sub_config.max_line_length, segments.second);
 
-        set_intermediate_text(
-            text_tools::segments_to_subrip_text(segments.second),
-            m_config.lang);
+            set_intermediate_text(
+                text_tools::segments_to_subrip_text(segments.second),
+                m_config.lang);
+        } else if (m_config.text_format == text_format_t::inline_timestamp) {
+            set_intermediate_text(
+                text_tools::format_segments_inline(
+                    segments.second, m_config.inline_timestamp_template,
+                    m_config.inline_timestamp_min_interval,
+                    m_last_inline_timestamp_t0),
+                m_config.lang);
+        }
     } else {
         auto* cstr = eof ? m_ds_api.STT_FinishStream(m_ds_stream)
                          : m_ds_api.STT_IntermediateDecode(m_ds_stream);

@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -46,6 +46,7 @@
     X(start_reading, "start-reading")                                 \
     X(start_reading_clipboard, "start-reading-clipboard")             \
     X(start_reading_text, "start-reading-text")                       \
+    X(start_reading_active_window, "start-reading-active-window")     \
     X(pause_resume_reading, "pause-resume-reading")                   \
     X(cancel, "cancel")                                               \
     X(switch_to_next_stt_model, "switch-to-next-stt-model")           \
@@ -598,16 +599,16 @@ class dsnote_app : public QObject {
     struct task_t {
         int current = INVALID_TASK;
         int previous = INVALID_TASK;
-        inline void set(int id) {
+        void set(int id) {
             previous = current;
             current = id;
         }
-        inline bool operator==(int id) const {
+        bool operator==(int id) const {
             return id > INVALID_TASK && (current == id || previous == id);
         }
-        inline bool operator!=(int id) const { return !this->operator==(id); }
-        inline operator bool() const { return current > INVALID_TASK; }
-        inline void reset() { this->set(INVALID_TASK); }
+        bool operator!=(int id) const { return !this->operator==(id); }
+        operator bool() const { return current > INVALID_TASK; }
+        void reset() { this->set(INVALID_TASK); }
     };
 
     struct desktop_notification_t {
@@ -1003,6 +1004,7 @@ class dsnote_app : public QObject {
         const QString &policy);
     void add_action_to_queue(action_t action, const QVariantMap &arguments);
     void clear_action_queue();
+    void play_speech_selected_in_active_window(const QString &model_id);
 };
 
 #endif  // DSNOTE_APP_H

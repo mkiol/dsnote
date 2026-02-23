@@ -1,4 +1,4 @@
-/* Copyright (C) 2024-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -423,6 +423,66 @@ ColumnLayout {
                 .arg("<i>ydotool</i>") + (_settings.is_flatpak() ? (" " +
               qsTranslate("SettingsPage", "Also make sure that the Flatpak application has permission to access %1 daemon socket file.")
                         .arg("<i>ydotool</i>")) : "")
+    }
+
+    ComboBoxForm {
+        id: textToWindowMethodCombo
+
+        visible: app.feature_fake_keyboard
+        label.text: qsTranslate("SettingsPage", "Text to window method")
+        toolTip: qsTranslate("SettingsPage", "Method used to insert recognized text into the active window.")
+        comboBox {
+            currentIndex: {
+                switch(_settings.text_to_window_method) {
+                    case Settings.TextToWindowMethodCtrlV: return 0
+                    case Settings.TextToWindowMethodCtrlShiftV: return 1
+                    case Settings.TextToWindowMethodTyping: return 2
+                }
+                return 0
+            }
+            model: [
+                qsTranslate("SettingsPage", "Simulate paste (%1)").arg("Ctrl+V"),
+                qsTranslate("SettingsPage", "Simulate paste in terminal (%1)").arg("Ctrl+Shift+V"),
+                qsTranslate("SettingsPage", "Simulate typing")
+            ]
+            onActivated: {
+                if (index === 0) {
+                    _settings.text_to_window_method = Settings.TextToWindowMethodCtrlV
+                } else if (index === 1) {
+                    _settings.text_to_window_method = Settings.TextToWindowMethodCtrlShiftV
+                } else if (index === 2) {
+                    _settings.text_to_window_method = Settings.TextToWindowMethodTyping
+                }
+            }
+        }
+    }
+
+    ComboBoxForm {
+        id: textFromWindowMethodCombo
+
+        visible: app.feature_fake_keyboard
+        label.text: qsTranslate("SettingsPage", "Text from window method")
+        toolTip: qsTranslate("SettingsPage", "Method used to get selected text from the active window.")
+        comboBox {
+            currentIndex: {
+                switch(_settings.text_from_window_method) {
+                    case Settings.TextFromWindowMethodCtrlC: return 0
+                    case Settings.TextFromWindowMethodCtrlShiftC: return 1
+                }
+                return 0
+            }
+            model: [
+                qsTranslate("SettingsPage", "Simulate copy (%1)").arg("Ctrl+C"),
+                qsTranslate("SettingsPage", "Simulate copy in terminal (%1)").arg("Ctrl+Shift+C")
+            ]
+            onActivated: {
+                if (index === 0) {
+                    _settings.text_from_window_method = Settings.TextFromWindowMethodCtrlC
+                } else if (index === 1) {
+                    _settings.text_from_window_method = Settings.TextFromWindowMethodCtrlShiftC
+                }
+            }
+        }
     }
 
     SectionLabel {

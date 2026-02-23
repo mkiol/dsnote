@@ -1,4 +1,4 @@
-/* Copyright (C) 2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,6 +9,7 @@
 #define GLOBAL_HOTKEYS_MANAGER_H
 
 #include <QDBusObjectPath>
+#include <QHash>
 #include <QMetaObject>
 #include <QObject>
 #include <QString>
@@ -49,9 +50,11 @@ class global_hotkeys_manager : public QObject {
     OrgFreedesktopPortalGlobalShortcutsInterface m_portal_inf;
     QDBusObjectPath m_portal_session;
     QMetaObject::Connection m_portal_activated_conn;
+    QMetaObject::Connection m_portal_deactivated_conn;
+    QHash<QString, bool> m_hotkey_on_deactivate_map;
 #ifdef USE_X11_FEATURES
     struct x11_hotkeys_t {
-#define X(name, id, desc, key) QHotkey name;
+#define X(name, id, desc, key, on_deactivate) QHotkey name;
         HOTKEY_TABLE
 #undef X
     };
@@ -72,6 +75,10 @@ class global_hotkeys_manager : public QObject {
     void handle_portal_activated(const QDBusObjectPath& session_handle,
                                  const QString& action_id, qulonglong timestamp,
                                  const QVariantMap& options);
+    void handle_portal_deactivated(const QDBusObjectPath& session_handle,
+                                   const QString& action_id,
+                                   qulonglong timestamp,
+                                   const QVariantMap& options);
 
    public Q_SLOTS:
     void handle_create_session_response(uint res, const QVariantMap& results);

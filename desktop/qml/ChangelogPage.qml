@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,6 +15,39 @@ DialogPage {
 
     SectionLabel {
         text: qsTr("Version %1").arg(APP_VERSION)
+    }
+
+    RichLabel {
+        text: "<p>" + qsTr("Accessibility") + "</p>
+        <ul>
+        <li>Improved <i>Insert into active window</i>.
+        For faster text insertion, adjust the <i>Text to window method</i> in the advanced settings.
+        The new options simulate <i>Ctrl+V</i> keystrokes, allowing text to be pasted immediately
+        after STT recognition. To enable pasting in terminals, you can also select the <i>Ctrl+Shift+V</i> mode.</li>
+        <li>Improved clipboard text reading under Wayland.
+        You can now use the <i>start-reading-clipboard</i> action or a global keyboard shortcut to read text from the clipboard,
+        even when the app window is in the background - removing previous Wayland restrictions.</li>
+        <li>Read selected text from active window.
+        You can now read selected text from any active window using the new <i>start-reading-active-window</i> action
+        or a global keyboard shortcut. This feature automatically copies the selected text (simulating <i>Ctrl+C</i>)
+        and reads it aloud using TTS.</li>
+        </ul>
+        <p>" + qsTr("Speech to Text") + "</p>
+        <ul>
+        <li>Inline timestamps in text output.
+        A new output format is now available, displaying timestamps that show when each segment of text was recognized in the audio.
+        To enable new format set <i>Text format</i> to <i>Inline timestamps</i>. 
+        You can also customize the timestamp interval and format in the settings.</li>
+        </ul>
+        <p>" + qsTr("User Interface") + "</p>
+        <ul>
+        <li>Setting option to force the English language in the user interface</li>
+        <li><i>Speech Note</i> has been translated into Portuguese-Brazilian language.</li>
+        </ul>"
+    }
+
+    SectionLabel {
+        text: qsTr("Version %1").arg("4.8.3")
     }
 
     RichLabel {

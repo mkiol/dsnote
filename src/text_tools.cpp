@@ -420,33 +420,6 @@ void trim_lines(std::string& text) {
     text.assign(std::move(s));
 }
 
-// source: https://stackoverflow.com/a/64359731/7767358
-static std::pair<FILE*, FILE*> popen2(const char* __command) {
-    int pipes[2][2];
-
-    pipe(pipes[0]);
-    pipe(pipes[1]);
-
-    if (fork() > 0) {
-        // parent
-        close(pipes[0][0]);
-        close(pipes[1][1]);
-
-        return {fdopen(pipes[0][1], "w"), fdopen(pipes[1][0], "r")};
-    } else {
-        // child
-        close(pipes[0][1]);
-        close(pipes[1][0]);
-
-        dup2(pipes[0][0], STDIN_FILENO);
-        dup2(pipes[1][1], STDOUT_FILENO);
-
-        execl("/bin/sh", "/bin/sh", "-c", __command, NULL);
-
-        exit(1);
-    }
-}
-
 void numbers_to_words(std::string& text, const std::string& lang,
                       const std::string& prefix_path) {
     Numbertext nt{};
@@ -846,6 +819,165 @@ std::string segments_to_subrip_text(const std::vector<segment_t>& segments) {
         [&os](const auto& segment) { segment_to_subrip_text(segment, os); });
 
     return os.str();
+}
+
+std::string format_segment_inline(const segment_t& segment,
+                                  const std::string& tmpl) {
+    size_t msec = segment.t0;
+    size_t hr = std::min<size_t>(msec / (1000 * 60 * 60), 99);
+    msec = msec % (1000 * 60 * 60);
+    size_t min = msec / (1000 * 60);
+    msec = msec % (1000 * 60);
+    size_t sec = msec / 1000;
+    size_t ms = msec % 1000;
+
+    std::string result = tmpl;
+
+    auto replace_token = [&result](const std::string& token,
+                                   const std::string& value) {
+        size_t pos;
+        while ((pos = result.find(token)) != std::string::npos) {
+            result.replace(pos, token.length(), value);
+        }
+    };
+
+    char buf[64];
+    snprintf(buf, sizeof(buf), "%02zu", hr);
+    replace_token("{hh}", buf);
+    snprintf(buf, sizeof(buf), "%02zu", min);
+    replace_token("{mm}", buf);
+    snprintf(buf, sizeof(buf), "%02zu", sec);
+    replace_token("{ss}", buf);
+    snprintf(buf, sizeof(buf), "%03zu", ms);
+    replace_token("{ms}", buf);
+    replace_token("{text}", segment.text);
+
+    return result;
+}
+
+std::string format_segments_inline(const std::vector<segment_t>& segments,
+                                   const std::string& tmpl,
+                                   int min_interval_s,
+                                   std::optional<size_t>& last_timestamped_t0) {
+    if (segments.empty()) return {};
+
+    std::string safe_tmpl = tmpl;
+    if (safe_tmpl.find("{text}") == std::string::npos) {
+        safe_tmpl += " {text}";
+    }
+
+    std::ostringstream os;
+    const int64_t min_interval_ms = static_cast<int64_t>(min_interval_s) * 1000;
+    bool is_first_entry = true;
+
+    for (const auto& seg : segments) {
+        bool needs_timestamp = false;
+
+        if (!last_timestamped_t0) {
+            needs_timestamp = true;
+        } else if ((static_cast<int64_t>(seg.t0) -
+                    static_cast<int64_t>(*last_timestamped_t0)) >=
+                       min_interval_ms) {
+            needs_timestamp = true;
+        }
+
+        if (needs_timestamp) {
+            if (!is_first_entry) os << '\n';
+            os << format_segment_inline(seg, safe_tmpl);
+            last_timestamped_t0 = seg.t0;
+            is_first_entry = false;
+        } else {
+            std::string_view text_view = seg.text;
+            if (!text_view.empty()) {
+                if (text_view.front() == ' ') text_view.remove_prefix(1);
+                os << ' ' << text_view;
+                is_first_entry = false;
+            }
+        }
+    }
+
+    return os.str();
+}
+
+static std::string escape_regex_special_chars(const std::string& str) {
+    static const std::string metacharacters = R"(\^$.|?*+()[]{}-)";
+    std::string escaped;
+    escaped.reserve(str.size() * 2);
+    for (char c : str) {
+        if (metacharacters.find(c) != std::string::npos) {
+            escaped += '\\';
+        }
+        escaped += c;
+    }
+    return escaped;
+}
+
+static void replace_all(std::string& str, const std::string& from,
+                        const std::string& to) {
+    size_t pos = 0;
+    while ((pos = str.find(from, pos)) != std::string::npos) {
+        str.replace(pos, from.length(), to);
+        pos += to.length();
+    }
+}
+
+std::optional<std::regex> compile_inline_timestamp_regex(const std::string& tmpl) {
+    if (tmpl.empty()) return std::nullopt;
+
+    bool has_time_token = tmpl.find("{hh}") != std::string::npos ||
+                          tmpl.find("{mm}") != std::string::npos ||
+                          tmpl.find("{ss}") != std::string::npos ||
+                          tmpl.find("{ms}") != std::string::npos;
+                          
+    if (!has_time_token) return std::nullopt;
+
+    auto process_segment = [](std::string s) -> std::string {
+        if (s.empty()) return "";
+        std::string p = escape_regex_special_chars(s);
+        replace_all(p, R"(\{hh\})", R"(\d{1,2})");
+        replace_all(p, R"(\{mm\})", R"(\d{1,2})");
+        replace_all(p, R"(\{ss\})", R"(\d{1,2})");
+        replace_all(p, R"(\{ms\})", R"(\d{3})");
+        return p;
+    };
+
+    std::string prefix_pattern;
+    std::string suffix_pattern;
+    size_t text_pos = tmpl.find("{text}");
+
+    if (text_pos != std::string::npos) {
+        prefix_pattern = process_segment(tmpl.substr(0, text_pos));
+        suffix_pattern = process_segment(tmpl.substr(text_pos + 6)); // +6 skips "{text}"
+    } else {
+        prefix_pattern = process_segment(tmpl);
+    }
+
+    if (!prefix_pattern.empty()) {
+        prefix_pattern = R"(\s*)" + prefix_pattern + R"(\s*)";
+    }
+
+    std::string final_pattern;
+    if (!prefix_pattern.empty() && !suffix_pattern.empty()) {
+        final_pattern = "(" + prefix_pattern + ")|(" + suffix_pattern + ")";
+    } else {
+        final_pattern = prefix_pattern + suffix_pattern;
+    }
+
+    try {
+        return std::regex{final_pattern, std::regex::optimize};
+    } catch (const std::regex_error& e) {
+        LOGE("failed to compile inline timestamp regex: " << e.what());
+        return std::nullopt;
+    }
+}
+
+std::string strip_inline_timestamps(const std::string& text,
+                                    const std::regex& pattern) {
+    std::string result = std::regex_replace(text, pattern, " ");
+    static const std::regex multi_space{R"(\s{2,})"};
+    result = std::regex_replace(result, multi_space, " ");
+    trim_line(result);
+    return result;
 }
 
 static std::optional<std::pair<size_t, size_t>> parse_subrip_time_line(

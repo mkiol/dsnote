@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,13 +8,13 @@
 #include "media_compressor.hpp"
 
 #include <fmt/format.h>
-#include <locale.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
 #include <algorithm>
 #include <array>
+#include <clocale>
 #include <iostream>
 #include <stdexcept>
 
@@ -138,14 +138,20 @@ static const char* str_from_av_error(int av_err) {
 
 static AVSampleFormat best_sample_format(const AVCodec* encoder,
                                          AVSampleFormat decoder_sample_fmt) {
-    if (encoder->sample_fmts == nullptr)
-        throw std::runtime_error(
-            "audio encoder does not support any sample fmts");
+    const AVSampleFormat* sample_fmts = nullptr;
+    [[maybe_unused]] int sample_fmts_nb = 0;
+    avcodec_get_supported_config(
+        nullptr, encoder, AVCodecConfig::AV_CODEC_CONFIG_SAMPLE_FORMAT, 0,
+        reinterpret_cast<const void**>(&sample_fmts), &sample_fmts_nb);
+
+    if (sample_fmts == nullptr || sample_fmts[0] == AV_SAMPLE_FMT_NONE) {
+        LOGF("audio encoder does not support any sample fmts");
+    }
 
     AVSampleFormat best_fmt = AV_SAMPLE_FMT_NONE;
 
-    for (int i = 0; encoder->sample_fmts[i] != AV_SAMPLE_FMT_NONE; ++i) {
-        best_fmt = encoder->sample_fmts[i];
+    for (int i = 0; sample_fmts[i] != AV_SAMPLE_FMT_NONE; ++i) {
+        best_fmt = sample_fmts[i];
         if (best_fmt == decoder_sample_fmt) {
             LOGD("sample fmt exact match");
             break;
@@ -156,19 +162,27 @@ static AVSampleFormat best_sample_format(const AVCodec* encoder,
 }
 
 static int best_sample_rate(const AVCodec* encoder, int decoder_sample_rate) {
-    if (encoder->supported_samplerates == nullptr) return decoder_sample_rate;
+    const int* supported_samplerates = nullptr;
+    [[maybe_unused]] int supported_samplerates_nb = 0;
+    avcodec_get_supported_config(
+        nullptr, encoder, AVCodecConfig::AV_CODEC_CONFIG_SAMPLE_RATE, 0,
+        reinterpret_cast<const void**>(&supported_samplerates),
+        &supported_samplerates_nb);
+
+    if (supported_samplerates == nullptr || supported_samplerates[0] == 0) {
+        return decoder_sample_rate;
+    }
 
     int best_rate = 0;
 
-    if (strcmp(encoder->name, "libopus") == 0) return 48000;
+    if (strcmp(encoder->name, "libopus") == 0) {
+        return 48000;
+    }
 
-    for (int i = 0; encoder->supported_samplerates[i] != 0; ++i) {
-        if (best_rate == 0) best_rate = encoder->supported_samplerates[i];
-
-        if (encoder->supported_samplerates[i] < decoder_sample_rate) break;
-
-        best_rate = encoder->supported_samplerates[i];
-
+    for (int i = 0; supported_samplerates[i] != 0; ++i) {
+        if (best_rate == 0) best_rate = supported_samplerates[i];
+        if (supported_samplerates[i] < decoder_sample_rate) break;
+        best_rate = supported_samplerates[i];
         if (best_rate == decoder_sample_rate) {
             LOGD("sample rate exact match");
             break;
@@ -256,7 +270,8 @@ std::ostream& operator<<(std::ostream& os,
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, media_compressor::stream_t stream) {
+std::ostream& operator<<(std::ostream& os,
+                         const media_compressor::stream_t& stream) {
     os << "index=" << stream.index << ", media-type=" << stream.media_type
        << ", title=" << stream.title << ", lang=" << stream.language;
 
@@ -264,7 +279,7 @@ std::ostream& operator<<(std::ostream& os, media_compressor::stream_t stream) {
 }
 
 std::ostream& operator<<(std::ostream& os,
-                         media_compressor::media_info_t media_info) {
+                         const media_compressor::media_info_t& media_info) {
     os << "audio=[";
     for (const auto& stream : media_info.audio_streams)
         os << "[" << stream << "], ";

@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -10,6 +10,7 @@
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QDir>
+#include <QDirIterator>
 #include <QGuiApplication>
 #include <QIcon>
 #include <QLocale>
@@ -74,6 +75,14 @@ static void signal_handler(int sig) {
 static cmd::options check_options(const QCoreApplication& app) {
     QCommandLineParser parser;
 
+    QString action_list_str = [] {
+        QStringList list;
+#define X(name, str) list << (str);
+        ACTION_TABLE
+#undef X
+        return list.join(", ");
+    }();
+
     parser.addPositionalArgument(
         "files", "Text, Audio or Video files to open, optionally.",
         "[files...]");
@@ -122,18 +131,8 @@ static cmd::options check_options(const QCoreApplication& app) {
 
     QCommandLineOption action_opt{
         QStringLiteral("action"),
-        QStringLiteral(
-            "Invokes an <action>. Supported actions are: "
-            "start-listening, start-listening-translate, "
-            "start-listening-active-window, "
-            "start-listening-translate-active-window, "
-            "start-listening-clipboard, start-listening-translate-clipboard, "
-            "stop-listening, "
-            "start-reading, start-reading-clipboard, start-reading-text, "
-            "pause-resume-reading, "
-            "cancel, switch-to-next-stt-model, switch-to-prev-stt-model, "
-            "switch-to-next-tts-model, switch-to-prev-tts-model, "
-            "set-stt-model, set-tts-model."),
+        QStringLiteral("Invokes an <action>. Supported actions are: %1.")
+            .arg(action_list_str),
         QStringLiteral("action")};
     parser.addOption(action_opt);
 
@@ -248,17 +247,8 @@ static cmd::options check_options(const QCoreApplication& app) {
         ) {
             fmt::print(
                 stderr,
-                "Invalid action. Use one option from the following: "
-                "start-listening, start-listening-translate, "
-                "start-listening-active-window, "
-                "start-listening-translate-active-window, "
-                "start-listening-clipboard, "
-                "start-listening-translate-clipboard, stop-listening, "
-                "start-reading, start-reading-clipboard, start-reading-text, "
-                "pause-resume-reading, "
-                "cancel, switch-to-next-stt-model, switch-to-prev-stt-model, "
-                "switch-to-next-tts-model, switch-to-prev-tts-model, "
-                "set-stt-model, set-tts-model.\n");
+                "Invalid action. Use one option from the following: {}.\n",
+                action_list_str.toStdString());
             options.valid = false;
         } else {
             auto id = parser.value(id_opt);
@@ -291,6 +281,8 @@ static cmd::options check_options(const QCoreApplication& app) {
                     options.model_id = id;
                 }
             } else if (action.compare("start-reading-clipboard",
+                                      Qt::CaseInsensitive) == 0 ||
+                       action.compare("start-reading-selected",
                                       Qt::CaseInsensitive) == 0) {
                 if (id_ok) {
                     options.model_id = QStringLiteral("%1").arg(id);
@@ -303,7 +295,9 @@ static cmd::options check_options(const QCoreApplication& app) {
 
     options.output_file = parser.value(output_file_opt);
     if (!options.output_file.isEmpty()) {
-        if (!options.action.startsWith("start-reading-", Qt::CaseInsensitive)) {
+        if (action.compare("start-reading-clipboard", Qt::CaseInsensitive) !=
+                0 &&
+            action.compare("start-reading-text", Qt::CaseInsensitive) != 0) {
             fmt::print(
                 stderr,
                 "Option --{} can be used only with start-reading-clipboard and "
@@ -406,19 +400,60 @@ static void install_translator() {
 #else
     auto trans_dir = QStringLiteral(":/translations");
 #endif
-    if (!translator->load(QLocale{}, QStringLiteral("dsnote"),
-                          QStringLiteral("-"), trans_dir,
-                          QStringLiteral(".qm"))) {
-        LOGD("failed to load translation: " << QLocale::system().name() << " "
-                                            << trans_dir);
-        if (!translator->load(QStringLiteral("dsnote-en"), trans_dir)) {
-            LOGE("failed to load default translation");
-            delete translator;
-            return;
-        }
-    } else {
-        LOGD("translation: " << QLocale::system().name());
+    bool success =
+        translator->load(QLocale::system(), QStringLiteral("dsnote"),
+                         QStringLiteral("-"), trans_dir, QStringLiteral(".qm"));
+
+    auto name = QLocale::system().name();
+
+    QString lang;
+    if (auto l = name.split('_'); l.size() > 1) {
+        lang = l.front();
     }
+
+    if (!success && !lang.isEmpty()) {
+        LOGD("failed to load translation: " << name);
+        // try to load language without region
+        name = lang;
+        success =
+            translator->load(QStringLiteral("dsnote-%1").arg(name), trans_dir);
+    }
+
+    if (!success && !lang.isEmpty()) {
+        LOGD("failed to load translation: " << name);
+        // try to first for the same language but other region
+        name.clear();
+        QDirIterator qm_it(trans_dir,
+                           {QStringLiteral("dsnote-%1_*.qm").arg(lang)},
+                           QDir::Files);
+        while (qm_it.hasNext()) {
+            QFileInfo fi{qm_it.next()};
+            name = fi.baseName().remove("dsnote-");
+            break;
+        }
+        if (!name.isEmpty()) {
+            success = translator->load(QStringLiteral("dsnote-%1").arg(name),
+                                       trans_dir);
+        }
+    }
+
+    if (!success) {
+        if (!name.isEmpty()) {
+            LOGD("failed to load translation: " << name);
+        }
+        // try to load english
+        name = "en";
+        success =
+            translator->load(QStringLiteral("dsnote-%1").arg(name), trans_dir);
+    }
+
+    if (!success) {
+        LOGE("failed to load translation: " << name << " " << trans_dir);
+        delete translator;
+        return;
+    }
+
+    LOGD("translation loaded: " << name);
 
     if (!QGuiApplication::installTranslator(translator)) {
         LOGW("failed to install translation");
@@ -489,8 +524,15 @@ static void configure_icon_theme() {
 }
 
 static void start_service(const cmd::options& options) {
-    if (options.hw_scan_off) settings::instance()->disable_hw_scan();
-    if (options.py_scan_off) settings::instance()->disable_py_scan();
+    auto* s = settings::instance();
+    if (s->translate_ui()) {
+        install_translator();
+    } else {
+        LOGD("ui translation is disabled");
+    }
+
+    if (options.hw_scan_off) s->disable_hw_scan();
+    if (options.py_scan_off) s->disable_py_scan();
 
     speech_service::instance();
 
@@ -501,8 +543,15 @@ static void start_service(const cmd::options& options) {
 
 static void start_app(const cmd::options& options,
                       app_server& dbus_app_server) {
-    if (options.hw_scan_off) settings::instance()->disable_hw_scan();
-    if (options.py_scan_off) settings::instance()->disable_py_scan();
+    auto* s = settings::instance();
+    if (s->translate_ui()) {
+        install_translator();
+    } else {
+        LOGD("ui translation is disabled");
+    }
+
+    if (options.hw_scan_off) s->disable_hw_scan();
+    if (options.py_scan_off) s->disable_py_scan();
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         speech_service::instance();
@@ -521,7 +570,7 @@ static void start_app(const cmd::options& options,
     auto* context = engine->rootContext();
 
     // Update import paths and detect available styles
-    settings::instance()->update_qt_style(engine.get());
+    s->update_qt_style(engine.get());
 
     QGuiApplication::setDesktopFileName(APP_ICON_ID);
     LOGD("desktop file: " << QGuiApplication::desktopFileName());
@@ -630,11 +679,11 @@ int main(int argc, char* argv[]) {
 
     cpu_tools::cpuinfo();
 
-    install_translator();
-
     signal(SIGINT, signal_handler);
 
-    if (cmd_opts.reset_models) models_manager::reset_models();
+    if (cmd_opts.reset_models) {
+        models_manager::reset_models();
+    }
 
     settings::launch_mode = cmd_opts.launch_mode;
 
@@ -655,8 +704,6 @@ int main(int argc, char* argv[]) {
     QGuiApplication::setApplicationName(QStringLiteral(APP_DBUS_APP_ID));
     app_server dbus_app_server{cmd_opts};
     QGuiApplication::setApplicationName(QStringLiteral(APP_ID));
-
-    settings::instance();
 
     start_app(cmd_opts, dbus_app_server);
 

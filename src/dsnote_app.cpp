@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -17,11 +17,13 @@
 #include <QKeySequence>
 #include <QRegularExpression>
 #include <QTextStream>
+#include <QTimer>
 #include <algorithm>
 #include <iterator>
 #include <utility>
 
 #include "downloader.hpp"
+#include "fake_keyboard.hpp"
 #include "media_compressor.hpp"
 #include "module_tools.hpp"
 #include "mtag_tools.hpp"
@@ -731,9 +733,11 @@ settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
         case trans_rule_type_t::TransRuleTypeNone:
             break;
         case trans_rule_type_t::TransRuleTypeMatchSimple:
-            rule_matches = text.contains(rule.pattern, case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive)
-                               ? rule.flags
-                               : trans_rule_flags_t::TransRuleNone;
+            rule_matches =
+                text.contains(rule.pattern, case_sens ? Qt::CaseSensitive
+                                                      : Qt::CaseInsensitive)
+                    ? rule.flags
+                    : trans_rule_flags_t::TransRuleNone;
             break;
         case trans_rule_type_t::TransRuleTypeMatchRe: {
             QRegularExpression rx{rule.pattern, case_sens ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption};
@@ -741,9 +745,13 @@ settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
             break;
         }
         case trans_rule_type_t::TransRuleTypeReplaceSimple: {
-            rule_matches = text.contains(rule.pattern, case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive);
+            rule_matches =
+                text.contains(rule.pattern, case_sens ? Qt::CaseSensitive
+                                                      : Qt::CaseInsensitive);
             if (rule_matches)
-                text.replace(rule.pattern, rule.replace, case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive);
+                text.replace(
+                    rule.pattern, rule.replace,
+                    case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive);
             break;
         }
         case trans_rule_type_t::TransRuleTypeReplaceRe: {
@@ -838,14 +846,15 @@ dsnote_app::trans_rule_result_t dsnote_app::transform_text(
     return result;
 }
 
-QVariantList dsnote_app::test_trans_rule(unsigned int flags, const QString &text,
+QVariantList dsnote_app::test_trans_rule(unsigned int flags,
+                                         const QString &text,
                                          const QString &pattern,
                                          const QString &replace,
                                          unsigned int type) {
     QString out_text{text};
 
     if (pattern.isEmpty()) {
-        //qWarning() << "invalid trans rule";
+        // qWarning() << "invalid trans rule";
         return {false, out_text};
     }
 
@@ -867,9 +876,10 @@ bool dsnote_app::trans_rule_re_pattern_valid(const QString &pattern) {
 void dsnote_app::update_trans_rule(int index, unsigned int flags,
                                    const QString &name, const QString &pattern,
                                    const QString &replace, const QString &langs,
-                                   unsigned int type, const QString &test_text) {
+                                   unsigned int type,
+                                   const QString &test_text) {
     if (pattern.isEmpty()) {
-        //qWarning() << "invalid trans rule";
+        // qWarning() << "invalid trans rule";
         return;
     }
 
@@ -901,7 +911,9 @@ void dsnote_app::update_trans_rule(int index, unsigned int flags,
     settings::instance()->set_trans_rules(rules);
 }
 
-QString dsnote_app::trans_rules_test_text() const { return m_trans_rules_test_text; }
+QString dsnote_app::trans_rules_test_text() const {
+    return m_trans_rules_test_text;
+}
 
 void dsnote_app::set_trans_rules_test_text(const QString &value) {
     if (m_trans_rules_test_text != value) {
@@ -1011,15 +1023,59 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
             break;
         }
         case text_destination_t::active_window:
+            if (text.isEmpty()) {
+                break;
+            }
 #ifdef USE_DESKTOP
             try {
-                m_fake_keyboard.emplace();
-                m_fake_keyboard->send_text(text);
+                if (!m_fake_keyboard) {
+                    m_fake_keyboard.emplace();
+                }
+
+                // If this request was started as paste-to-active-window, copy
+                // to clipboard and paste via Ctrl+V
+                bool paste_mode = [] {
+                    switch (settings::instance()->text_to_window_method()) {
+                        case settings::text_to_window_method_t::
+                            TextToWindowMethodCtrlV:
+                        case settings::text_to_window_method_t::
+                            TextToWindowMethodCtrlShiftV:
+                            return true;
+                        case settings::text_to_window_method_t::
+                            TextToWindowMethodTyping:
+                            return false;
+                    }
+                    return false;
+                }();
+
+                if (paste_mode) {
+                    // copy text to clipboard
+                    auto prev_clip_text =
+                        fake_keyboard::copy_to_clipboard(text);
+
+                    // execute paste and restore clipboard content after
+                    // event-loop iter
+                    QTimer::singleShot(0, [this, prev_clip_text] {
+                        if (!m_fake_keyboard) return;
+                        bool shift =
+                            settings::instance()->text_to_window_method() ==
+                            settings::text_to_window_method_t::
+                                TextToWindowMethodCtrlShiftV;
+                        m_fake_keyboard->send_ctrl_v(shift);
+
+                        // delay clipboard restore to give time
+                        // for the paste to happen
+                        QTimer::singleShot(500, [prev_clip_text] {
+                            fake_keyboard::copy_to_clipboard(prev_clip_text);
+                        });
+                    });
+                } else {
+                    m_fake_keyboard->send_text(text);
+                }
+                emit text_decoded_to_active_window();
             } catch (const std::runtime_error &err) {
                 qWarning() << "fake-keyboard error:" << err.what();
             }
-
-            emit text_decoded_to_active_window();
 #else
             qWarning() << "send to keyboard is not implemented";
 #endif
@@ -1047,8 +1103,7 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
     }
 }
 
-void dsnote_app::handle_tts_partial_speech(const QString &text,
-                                         int task) {
+void dsnote_app::handle_tts_partial_speech(const QString &text, int task) {
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
 #ifdef DEBUG
         qDebug() << "tts partial speech:" << text << task;
@@ -1181,9 +1236,9 @@ void dsnote_app::connect_service_signals() {
         connect(speech_service::instance(), &speech_service::stt_text_decoded,
                 this, &dsnote_app::handle_stt_text_decoded,
                 Qt::QueuedConnection);
-        connect(speech_service::instance(), &speech_service::tts_partial_speech_playing,
-                this, &dsnote_app::handle_tts_partial_speech,
-                Qt::QueuedConnection);
+        connect(speech_service::instance(),
+                &speech_service::tts_partial_speech_playing, this,
+                &dsnote_app::handle_tts_partial_speech, Qt::QueuedConnection);
         connect(speech_service::instance(),
                 &speech_service::mnt_translate_progress_changed, this,
                 &dsnote_app::handle_mnt_translate_progress,
@@ -1253,7 +1308,8 @@ void dsnote_app::connect_service_signals() {
                 &dsnote_app::handle_stt_intermediate_text);
         connect(&m_dbus_service, &OrgMkiolSpeechInterface::SttTextDecoded, this,
                 &dsnote_app::handle_stt_text_decoded);
-        connect(&m_dbus_service, &OrgMkiolSpeechInterface::TtsPartialSpeechPlaying, this,
+        connect(&m_dbus_service,
+                &OrgMkiolSpeechInterface::TtsPartialSpeechPlaying, this,
                 &dsnote_app::handle_tts_partial_speech);
         connect(&m_dbus_service,
                 &OrgMkiolSpeechInterface::TtsSpeechToFileProgress, this,
@@ -2537,9 +2593,15 @@ void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
         options.insert("sub_min_line_length", s->sub_min_line_length());
         options.insert("sub_max_line_length", s->sub_max_line_length());
     }
-    if (!replace && s->stt_tts_text_format() == settings::text_format_t::TextFormatRaw && s->stt_use_note_as_prompt()) {
+    if (!replace &&
+        s->stt_tts_text_format() == settings::text_format_t::TextFormatRaw &&
+        s->stt_use_note_as_prompt()) {
         options.insert("initial_prompt", note_as_prompt());
     }
+    options.insert("inline_timestamp_template",
+                   s->inline_timestamp_template());
+    options.insert("inline_timestamp_min_interval",
+                   s->inline_timestamp_min_interval());
 
     m_current_stt_request = stt_request_t::transcribe_file;
 
@@ -2663,16 +2725,22 @@ void dsnote_app::listen_internal(stt_translate_req_t translate_req) {
             ? s->stt_insert_stats()
             : false;
     options.insert("insert_stats", insert_stats);
-    options.insert("stt_clear_mic_audio_when_decoding", s->stt_clear_mic_audio_when_decoding());
+    options.insert("stt_clear_mic_audio_when_decoding",
+                   s->stt_clear_mic_audio_when_decoding());
     options.insert("stt_play_beep", s->stt_play_beep());
     options.insert("sub_min_segment_dur", s->sub_min_segment_dur());
     if (s->sub_break_lines()) {
         options.insert("sub_min_line_length", s->sub_min_line_length());
         options.insert("sub_max_line_length", s->sub_max_line_length());
     }
-    if (text_format == settings::text_format_t::TextFormatRaw && s->stt_use_note_as_prompt()) {
+    if (text_format == settings::text_format_t::TextFormatRaw &&
+        s->stt_use_note_as_prompt()) {
         options.insert("initial_prompt", note_as_prompt());
     }
+    options.insert("inline_timestamp_template",
+                   s->inline_timestamp_template());
+    options.insert("inline_timestamp_min_interval",
+                   s->inline_timestamp_min_interval());
 
     auto out_lang = [&]() {
         switch (translate_req) {
@@ -2810,6 +2878,8 @@ void dsnote_app::play_speech_internal(QString text, const QString &model_id,
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
         if (l.size() > 1) options.insert("ref_voice_file", l.at(1));
     }
+    options.insert("inline_timestamp_template",
+                   settings::instance()->inline_timestamp_template());
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->tts_play_speech(text, model_id,
@@ -3148,8 +3218,11 @@ void dsnote_app::speech_to_file_internal(
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
         if (l.size() > 1) options.insert("ref_voice_file", l.at(1));
     }
+    options.insert("inline_timestamp_template",
+                   settings::instance()->inline_timestamp_template());
 
-    auto real_audio_format = settings::audio_format_from_filename(audio_format, dest_file);
+    auto real_audio_format =
+        settings::audio_format_from_filename(audio_format, dest_file);
     auto audio_format_str =
         settings::audio_format_str_from_filename(audio_format, dest_file);
     auto audio_ext = settings::audio_ext_from_filename(audio_format, dest_file);
@@ -3158,7 +3231,8 @@ void dsnote_app::speech_to_file_internal(
     options.insert("audio_quality", audio_quality_to_str(audio_quality));
 
     if (QFileInfo{dest_file}.suffix().toLower() != audio_ext) {
-        qWarning() << "file name doesn't have proper extension for audio format";
+        qWarning()
+            << "file name doesn't have proper extension for audio format";
     }
 
     m_dest_file_info.output_path = dest_file;
@@ -3930,7 +4004,7 @@ void dsnote_app::handle_translator_settings_changed() {
 void dsnote_app::handle_note_changed() {
     emit note_changed();
 
-    if (!settings::instance()->subtitles_support() || note().isEmpty()) {
+    if (!settings::instance()->subtitles_support()) {
         settings::instance()->set_stt_tts_text_format(
             settings::text_format_t::TextFormatRaw);
         settings::instance()->set_mnt_text_format(
@@ -4853,10 +4927,9 @@ void dsnote_app::execute_pending_action() {
         return;
     }
 
-    const auto& pending_action = m_pending_actions.front();
+    const auto &pending_action = m_pending_actions.front();
 
-    execute_action(pending_action.first,
-                   pending_action.second);
+    execute_action(pending_action.first, pending_action.second);
 
     m_pending_actions.pop();
 
@@ -4979,6 +5052,7 @@ dsnote_app::action_t dsnote_app::convert_action(action_t action) const {
             break;
         case dsnote_app::action_t::start_reading:
         case dsnote_app::action_t::start_reading_clipboard:
+        case dsnote_app::action_t::start_reading_active_window:
         case dsnote_app::action_t::start_reading_text: {
             if (service_state() == service_state_t::StatePlayingSpeech) {
                 action = action_t::cancel;
@@ -5000,7 +5074,8 @@ dsnote_app::action_t dsnote_app::convert_action(action_t action) const {
     return action;
 }
 
-void dsnote_app::add_action_to_queue(action_t action, const QVariantMap &arguments) {
+void dsnote_app::add_action_to_queue(action_t action,
+                                     const QVariantMap &arguments) {
     m_pending_actions.push({action, arguments});
     m_action_delay_timer.start();
     qDebug() << "action added to queue:" << action;
@@ -5052,39 +5127,56 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
         case dsnote_app::action_t::start_reading:
             play_speech();
             break;
+        case dsnote_app::action_t::start_reading_active_window:
+            play_speech_selected_in_active_window(
+                arguments.value("model-id").toString());
+            break;
         case dsnote_app::action_t::start_reading_clipboard:
         case dsnote_app::action_t::start_reading_text: {
             auto id = arguments.value("model-id").toString();
-            auto text = action == action_t::start_reading_clipboard
-                                        ? QGuiApplication::clipboard()->text()
-                                        : arguments.value("text").toString();
+
+            QString text;
+            if (action == action_t::start_reading_clipboard) {
+#ifdef USE_DESKTOP
+                text = fake_keyboard::copy_from_clipboard();
+#else
+                text = QGuiApplication::clipboard()->text();
+#endif
+            } else {
+                text = arguments.value("text").toString();
+            }
+
             auto output_file = arguments.value("output-file").toString();
 
             if (output_file.isEmpty()) {
                 play_speech_from_text(text,
-                    id.isEmpty() ? active_tts_model() : id);
+                                      id.isEmpty() ? active_tts_model() : id);
             } else {
                 if (service_state() != service_state_t::StateIdle) {
                     qDebug() << "state is not idle => enforcing busy-policy";
-                    switch(action_when_busy_policy_from_str(arguments.value("busy-policy").toString())) {
-                    case action_when_busy_policy_t::ignore:
-                        qWarning() << "ignoring action request";
-                        return;
-                    case action_when_busy_policy_t::cancel_current_and_ignore:
-                        cancel();
-                        return;
-                    case action_when_busy_policy_t::cancel_current_and_process:
-                        break;
-                    case action_when_busy_policy_t::add_to_queue:
-                        add_action_to_queue(action, arguments);
-                        return;
+                    switch (action_when_busy_policy_from_str(
+                        arguments.value("busy-policy").toString())) {
+                        case action_when_busy_policy_t::ignore:
+                            qWarning() << "ignoring action request";
+                            return;
+                        case action_when_busy_policy_t::
+                            cancel_current_and_ignore:
+                            cancel();
+                            return;
+                        case action_when_busy_policy_t::
+                            cancel_current_and_process:
+                            break;
+                        case action_when_busy_policy_t::add_to_queue:
+                            add_action_to_queue(action, arguments);
+                            return;
                     }
                 }
 
                 m_dest_file_info = dest_file_info_t{};
                 speech_to_file_internal(
-                            text, id, output_file, {}, {},
-                    tts_ref_voice_needed_by_id(id) ? active_tts_ref_voice() : QString{},
+                    text, id, output_file, {}, {},
+                    tts_ref_voice_needed_by_id(id) ? active_tts_ref_voice()
+                                                   : QString{},
                     tts_ref_prompt_needed_by_id(id)
                         ? settings::instance()->tts_active_voice_prompt()
                         : QString{},
@@ -5118,15 +5210,57 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
             break;
         case dsnote_app::action_t::set_stt_model: {
             auto id = arguments.value("model-id").toString();
-                if (!id.isEmpty()) set_active_stt_model_or_lang(id);
-                break;
-            }
+            if (!id.isEmpty()) set_active_stt_model_or_lang(id);
+            break;
+        }
         case dsnote_app::action_t::set_tts_model: {
             auto id = arguments.value("model-id").toString();
-                if (!id.isEmpty()) set_active_tts_model_or_lang(id);
-                break;
+            if (!id.isEmpty()) set_active_tts_model_or_lang(id);
+            break;
         }
     }
+}
+
+void dsnote_app::play_speech_selected_in_active_window(
+    const QString &model_id) {
+#ifdef USE_DESKTOP
+    // clear current current clipboard, but save old value
+    auto prev_text = fake_keyboard::copy_to_clipboard({});
+    try {
+        if (!m_fake_keyboard) {
+            m_fake_keyboard.emplace();
+        }
+
+        // delay to let user to release hotkey
+        QTimer::singleShot(200, [this, prev_text = std::move(prev_text),
+                                 model_id] {
+            if (!m_fake_keyboard) return;
+            bool shift =
+                settings::instance()->text_to_window_method() ==
+                settings::text_to_window_method_t::TextToWindowMethodCtrlShiftV;
+            m_fake_keyboard->send_ctrl_c(shift);
+
+            // delay to give time for the copy to happen
+            QTimer::singleShot(400, [this, prev_text, model_id] {
+                auto text = fake_keyboard::copy_from_clipboard();
+                if (!text.isEmpty()) {
+                    play_speech_from_text(text, model_id.isEmpty()
+                                                    ? active_tts_model()
+                                                    : model_id);
+                }
+
+                // restore original text in clipboard
+                QTimer::singleShot(0, [prev_text] {
+                    fake_keyboard::copy_to_clipboard(prev_text);
+                });
+            });
+        });
+    } catch (const std::runtime_error &err) {
+        qWarning() << "fake-keyboard error:" << err.what();
+    }
+#else
+    qWarning() << "not supported";
+#endif
 }
 
 QString dsnote_app::download_content(const QUrl &url) {
@@ -5139,8 +5273,9 @@ QString dsnote_app::download_content(const QUrl &url) {
 
         qDebug() << "downloaded content:" << data.mime << data.bytes.size();
 
-        if (data.mime.contains(QLatin1String{"text"}, Qt::CaseInsensitive))
+        if (data.mime.contains(QLatin1String{"text"}, Qt::CaseInsensitive)) {
             text = QString::fromUtf8(data.bytes);
+        }
     }
 
     if (text.isEmpty()) {
@@ -5403,10 +5538,7 @@ void dsnote_app::create_mic_recorder() {
 
     connect(
         m_recorder.get(), &recorder::recording_changed, this,
-        [this]() {
-            emit recorder_recording_changed();
-        },
-        Qt::QueuedConnection);
+        [this]() { emit recorder_recording_changed(); }, Qt::QueuedConnection);
     connect(
         m_recorder.get(), &recorder::duration_changed, this,
         [this]() { emit recorder_duration_changed(); }, Qt::QueuedConnection);
@@ -5779,15 +5911,16 @@ void dsnote_app::open_hotkeys_editor() {
 #endif
 }
 
-dsnote_app::action_when_busy_policy_t dsnote_app::action_when_busy_policy_from_str(
-            const QString &policy) {
+dsnote_app::action_when_busy_policy_t
+dsnote_app::action_when_busy_policy_from_str(const QString &policy) {
     if (policy.compare("ignore", Qt::CaseInsensitive) == 0) {
         return action_when_busy_policy_t::ignore;
     }
     if (policy.compare("cancel-current-and-ignore", Qt::CaseInsensitive) == 0) {
         return action_when_busy_policy_t::cancel_current_and_ignore;
     }
-    if (policy.compare("cancel-current-and-process", Qt::CaseInsensitive) == 0) {
+    if (policy.compare("cancel-current-and-process", Qt::CaseInsensitive) ==
+        0) {
         return action_when_busy_policy_t::cancel_current_and_process;
     }
     if (policy.compare("add-to-queue", Qt::CaseInsensitive) == 0) {
