@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,10 +7,12 @@
 
 #include "recorder.hpp"
 
+#include <qglobal.h>
+
 #include <QAudioFormat>
-#include <QMediaDevices>
 #include <QDebug>
 #include <QFileInfo>
+#include <QMediaDevices>
 #include <chrono>
 
 #include "denoiser.hpp"
@@ -156,7 +158,10 @@ void recorder::start() {
 
     m_audio_device.setFileName(m_wav_file_path);
     if (m_audio_device.exists()) m_audio_device.remove();
-    m_audio_device.open(QIODevice::OpenModeFlag::ReadWrite);
+    if (!m_audio_device.open(QIODevice::OpenModeFlag::ReadWrite)) {
+        qWarning() << "failed to open audio dev";
+        return;
+    }
     m_audio_device.seek(sizeof(wav_header));
     m_audio_source->start(&m_audio_device);
 }
