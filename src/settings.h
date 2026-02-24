@@ -710,7 +710,7 @@ class settings : public QSettings, public singleton<settings> {
     void set_qt_style();
     void update_qt_style(QQmlApplicationEngine *engine);
     bool use_default_qt_style();
-    static QStringList availableStyles();
+    void detect_qt_styles();
 #endif
     // app
 #define X(name, type, dvalue, restart) \
@@ -778,7 +778,7 @@ class settings : public QSettings, public singleton<settings> {
     int qt_style_idx() const;
     void set_qt_style_idx(int value);
     QString qt_style_name() const;
-    void set_qt_style_name(QString value);
+    void set_qt_style_name(const QString &value);
     void set_qt_style_auto(bool value);
     bool qt_style_auto() const;
     bool restart_required() const;
@@ -1150,6 +1150,7 @@ class settings : public QSettings, public singleton<settings> {
     unsigned int m_system_flags = system_flags_t::SystemNone;
     bool m_native_style = false;
     bool m_kde = false;
+    QStringList m_available_qt_styles;
 
     static QString settings_filepath();
     void set_restart_required(bool value);

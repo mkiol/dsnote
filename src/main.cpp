@@ -531,12 +531,16 @@ static void start_service(const cmd::options& options) {
         LOGD("ui translation is disabled");
     }
 
-    if (options.hw_scan_off) s->disable_hw_scan();
-    if (options.py_scan_off) s->disable_py_scan();
+    if (options.hw_scan_off) {
+        s->disable_hw_scan();
+    }
+    if (options.py_scan_off) {
+        s->disable_py_scan();
+    }
 
-    speech_service::instance();
-
-    if (options.gen_cheksums) models_manager::instance()->generate_checksums();
+    if (options.gen_cheksums) {
+        models_manager::instance()->generate_checksums();
+    }
 
     QGuiApplication::exec();
 }
@@ -550,14 +554,15 @@ static void start_app(const cmd::options& options,
         LOGD("ui translation is disabled");
     }
 
-    if (options.hw_scan_off) s->disable_hw_scan();
-    if (options.py_scan_off) s->disable_py_scan();
+    if (options.hw_scan_off) {
+        s->disable_hw_scan();
+    }
+    if (options.py_scan_off) {
+        s->disable_py_scan();
+    }
 
-    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
-        speech_service::instance();
-
-        if (options.gen_cheksums)
-            models_manager::instance()->generate_checksums();
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone && options.gen_cheksums) {
+        models_manager::instance()->generate_checksums();
     }
 
 #ifdef USE_SFOS
@@ -638,17 +643,6 @@ int main(int argc, char* argv[]) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-#endif
-
-    // CRITICAL: Set organization/app name BEFORE creating QApplication
-    // This is needed so settings can find the config file
-    QCoreApplication::setApplicationName(QStringLiteral(APP_ID));
-    QCoreApplication::setOrganizationName(QStringLiteral(APP_ORG));
-
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && defined(USE_DESKTOP)
-    // Qt6: Style must be configured BEFORE QApplication creation
-    // Create settings instance and configure style based on user preferences
-    settings::instance()->set_qt_style();
 #endif
 
     QApplication app(argc, argv);
