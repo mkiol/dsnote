@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+# Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -6,7 +6,7 @@
 
 cmake_minimum_required(VERSION 3.19)
 
-option(WITH_DESKTOP "enable desktop ui" OFF)
+option(WITH_DESKTOP "enable desktop ui" ON) # default
 option(WITH_SFOS "enable sfos ui" OFF)
 
 option(WITH_FLATPAK "enable flatpak build" OFF)
@@ -427,6 +427,19 @@ endif()
 
 configure_file(config.h.in config.h)
 
+# qt version selection
+if(SFOS)
+    # on sfos use qt5
+    find_package(Qt5 COMPONENTS Core REQUIRED)
+    set(QT_VERSION_MAJOR 5)
+    message(STATUS "Using Qt5")
+else()
+    # on everything else use qt6
+    find_package(Qt6 COMPONENTS Core REQUIRED)
+    set(QT_VERSION_MAJOR 6)
+    message(STATUS "Using Qt6")
+endif() 
+
 include(${cmake_path}/dbus_api.cmake)
 
 add_library(dsnote_lib STATIC ${dsnote_lib_sources})
@@ -536,23 +549,10 @@ pkg_search_module(pulse REQUIRED libpulse)
 list(APPEND deps_libs ${pulse_LIBRARIES})
 list(APPEND includes ${pulse_INCLUDE_DIRS})
 
-# Try Qt6 first, fall back to Qt5
-find_package(Qt6 COMPONENTS Core QUIET)
-if(Qt6_FOUND)
-    set(QT_VERSION_MAJOR 6)
-    message(STATUS "Using Qt6")
-else()
-    find_package(Qt5 5.15 COMPONENTS Core QUIET)
-    if(Qt5_FOUND)
-        set(QT_VERSION_MAJOR 5)
-        message(STATUS "Using Qt5")
-    else()
-        message(FATAL_ERROR "Neither Qt6 nor Qt5 found")
-    endif()
-endif()
-
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick QuickControls2 DBus LinguistTools REQUIRED)
-list(APPEND deps_libs Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::QuickControls2 Qt${QT_VERSION_MAJOR}::DBus Qt${QT_VERSION_MAJOR}::Xml Qt${QT_VERSION_MAJOR}::Sql)
+list(APPEND deps_libs Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Multimedia 
+    Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::QuickControls2 
+    Qt${QT_VERSION_MAJOR}::DBus Qt${QT_VERSION_MAJOR}::Xml Qt${QT_VERSION_MAJOR}::Sql)
 
 # translations (requires QT_VERSION_MAJOR to be set)
 include(${cmake_path}/translations.cmake)
@@ -595,7 +595,7 @@ if(WITH_DESKTOP)
 
         if(BUILD_QHOTKEY)
             include(${cmake_path}/qhotkey.cmake)
-        else()
+        else() 
             find_library(qhotkey_path qhotkey REQUIRED)
             list(APPEND deps_libs ${qhotkey_path})
         endif()
@@ -878,9 +878,7 @@ endif()
 
 if(WITH_SFOS)
     include(${cmake_path}/install_sfos.cmake)
-endif()
-
-if(WITH_DESKTOP)
+else()
     include(${cmake_path}/install_desktop.cmake)
 endif()
 
