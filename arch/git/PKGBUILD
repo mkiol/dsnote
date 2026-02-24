@@ -16,9 +16,9 @@ depends=(
   'fmt'
   'glslang'
   'hicolor-icon-theme'
-  'kconfigwidgets5'
-  'kdbusaddons5'
-  'kiconthemes5'
+  'kconfigwidgets'
+  'kdbusaddons'
+  'kiconthemes'
   'kirigami2'
   'libarchive'
   'libpulse'
@@ -27,11 +27,10 @@ depends=(
   'ocl-icd'
   'openblas'
   'python>=3.11'
-  'qt5-base'
-  'qt5-declarative'
-  'qt5-multimedia'
-  'qt5-quickcontrols2'
-  'qt5-x11extras'
+  'qqc2-breeze-style'
+  'qt6-base'
+  'qt6-declarative'
+  'qt6-multimedia'
   'rubberband'
   'taglib'
   'vulkan-icd-loader'
@@ -46,7 +45,7 @@ makedepends=(
   'meson'
   'patchelf'
   'pybind11'
-  'qt5-tools'
+  'qt6-tools'
   'vulkan-headers'
 )
 makedepends_x86_64=(
@@ -72,7 +71,7 @@ options=('!debug')
 provides=(${_pkgname})
 conflicts=(${_pkgname})
 install=${_pkgname}.install
-source=(git+https://github.com/mkiol/dsnote.git)
+source=('git+https://github.com/mkiol/dsnote.git#branch=qt6')
 sha256sums=('SKIP')
 
 pkgver() {
@@ -98,7 +97,6 @@ build() {
         -DBUILD_TAGLIB=OFF \
         -DBUILD_VOSK=OFF \
         -DBUILD_WHISPERCPP_VULKAN=ON \
-        -DBUILD_QQC2_BREEZE_STYLE=ON \
         -DDOWNLOAD_VOSK=ON \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -Wno-dev"
