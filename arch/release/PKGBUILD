@@ -15,6 +15,7 @@ depends=(
   'boost-libs'
   'fmt'
   'glslang'
+  'gst-plugins-good'
   'hicolor-icon-theme'
   'kconfigwidgets5'
   'kdbusaddons5'
