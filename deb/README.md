@@ -13,22 +13,15 @@ sudo apt install \
     appstream autoconf build-essential \
     cmake extra-cmake-modules \
     git libboost-all-dev libpulse-dev libwayland-dev libxinerama-dev \
-    libxkbcommon-x11-dev libxtst-dev ocl-icd-opencl-dev patchelf \
+    libxkbcommon-x11-dev libxtst-dev linguist-qt6 ninja-build \
+    ocl-icd-opencl-dev patchelf libtool libtool-bin automake \
     python3-dev qt6-base-dev qt6-declarative-dev qt6-multimedia-dev \
-    qml6-module-qtquick qml6-module-qtquick-window \
+    qt6-tools-dev qml6-module-qtquick qml6-module-qtquick-window \
     qml6-module-qtquick-controls qml6-module-qtquick-dialogs \
     qml6-module-qtquick-layouts qml6-module-qtqml-workerscript \
-    qml6-module-qtquick-templates \
-    zlib1g-dev
-
-# Optional set: in case anything is missing/broken
-sudo apt-get install \
-    libtool libtool-bin automake \
+    qml6-module-qtquick-templates qt6-l10n-tools qt6-base-dev-tools \
     libnoise-dev meson \
-    qt6-l10n-tools qt6-base-dev-tools \
-    qt6-multimedia-dev qt6-declarative-dev qt6-tools-dev \
-    catch2
-
+    zlib1g-dev
 ```
 
 **Note:** The makedeb.sh script now builds most dependencies statically (libarchive, libfmt, libopenblas, librubberband, libtag, etc.) to ensure compatibility across different Ubuntu versions.
