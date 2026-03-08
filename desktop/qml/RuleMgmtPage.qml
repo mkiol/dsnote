@@ -1,4 +1,4 @@
-/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -134,32 +134,35 @@ DialogPage {
     Component {
         id: ruleDelegate
 
-        Control {
-            id: control
+        ItemDelegate {
+            id: itemDelegate
 
             readonly property bool ruleTargetStt: (modelData[0] & Settings.TransRuleTargetStt) != 0
             readonly property bool ruleTargetTts: (modelData[0] & Settings.TransRuleTargetTts) != 0
             readonly property string ruleName: modelData[2].length > 0 ? modelData[2] :
                                                                          defaultRuleName(modelData[1], modelData[3], modelData[4])
 
-            background: Rectangle {
-                id: bg
+            text: ruleName
+            width: ListView.view.width
+            onClicked: openEdit()
+            Accessible.name: ruleName
+            leftPadding: root._leftMargin
+            bottomInset: 0
+            topInset: 0
 
-                anchors.fill: parent
-                color: palette.text
-                opacity: control.hovered ? 0.1 : 0.0
+            Component.onCompleted: {
+                if (background && background.color) {
+                    background.color = "transparent"
+                }
             }
 
-            width: root.listViewStackItem.currentItem.width
-            height: deleteButton.height
-            leftPadding: root._leftMargin
+            function openEdit() {
+                appWin.openDialog("RuleEditPage.qml", {rule: modelData, ruleIndex: index})
+            }
 
-            RowLayout {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                anchors.rightMargin: root._rightMargin
-                anchors.left: parent.left
-                anchors.leftMargin: root._leftMargin
+            contentItem: RowLayout {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
 
                 Label {
                     text: "" + (index + 1) + " "
@@ -178,6 +181,7 @@ DialogPage {
                     ToolTip.text: text
                     hoverEnabled: true
                 }
+                
                 Button {
                     icon.name: "arrow-down-symbolic"
                     display: Button.IconOnly
@@ -194,7 +198,7 @@ DialogPage {
                 Label {
                     id: nameField
 
-                    text: control.ruleName
+                    text: itemDelegate.ruleName
                     elide: Text.ElideRight
                     Layout.alignment: Qt.AlignHCenter
                     Layout.leftMargin: appWin.padding
@@ -204,7 +208,7 @@ DialogPage {
                 Switch {
                     id: sttSwitch
 
-                    checked: control.ruleTargetStt
+                    checked: itemDelegate.ruleTargetStt
                     Layout.alignment: Qt.AlignHCenter
                     onCheckedChanged: {
                         _settings.trans_rule_set_target_stt(index, checked)
@@ -220,7 +224,7 @@ DialogPage {
                 Switch {
                     id: ttsSwitch
 
-                    checked: control.ruleTargetTts
+                    checked: itemDelegate.ruleTargetTts
                     Layout.alignment: Qt.AlignHCenter
                     onCheckedChanged: {
                         _settings.trans_rule_set_target_tts(index, checked)
@@ -240,7 +244,7 @@ DialogPage {
                     icon.name: "edit-entry-symbolic"
                     display: Button.IconOnly
                     Layout.alignment: Qt.AlignHCenter
-                    onClicked: appWin.openDialog("RuleEditPage.qml", {rule: modelData, ruleIndex: index})
+                    onClicked: itemDelegate.openEdit()
 
                     ToolTip.visible: hovered
                     ToolTip.text: text
@@ -293,7 +297,7 @@ DialogPage {
 
             focus: true
             clip: true
-            spacing: appWin.padding
+            spacing: 0
 
             Keys.onUpPressed: listViewScrollBar.decrease()
             Keys.onDownPressed: listViewScrollBar.increase()
@@ -304,10 +308,6 @@ DialogPage {
 
             model: _settings.trans_rules
             delegate: ruleDelegate
-
-            header: Item {
-                height: appWin.padding
-            }
         }
     }
 }

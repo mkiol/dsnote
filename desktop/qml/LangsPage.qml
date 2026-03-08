@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -30,8 +30,9 @@ DialogPage {
     readonly property bool verticalMode: modelTypeTabBar.implicitWidth > (root.width - 2 * appWin.padding)
 
     title: langsView ? qsTr("Languages") : packView ? packName : langName
+    spacing: 0
 
-    function reset(lang_id, pack_id, reset_filter) {
+    function reset_models(lang_id, pack_id, reset_filter) {
         service.models_model.lang = lang_id
         service.pack_model.lang = lang_id
         service.pack_model.pack = pack_id
@@ -44,11 +45,10 @@ DialogPage {
         modelFilteringWidget.close()
         modelFilteringWidget.reset()
         modelFilteringWidget.update()
-
     }
 
     function switchToModels(langId, langName) {
-        root.reset(langId, "", false)
+        root.reset_models(langId, "", false)
         root.langName = langName
         root.langId = langId
         root.packId = ""
@@ -92,7 +92,7 @@ DialogPage {
     }
 
     function switchToPack(packId, packName) {
-        root.reset(langId, packId, false)
+        root.reset_models(langId, packId, false)
         root.packName = packName
         root.packId = packId
 
@@ -102,7 +102,7 @@ DialogPage {
     }
 
     function switchToLangs() {
-        root.reset("", "", true)
+        root.reset_models("", "", true)
         root.langName = ""
         root.packName = ""
         root.langId = ""
@@ -150,7 +150,7 @@ DialogPage {
         listViewStackItem.push(listViewComp)
 
         service.langs_model.filter = ""
-        reset(root.langId, "", true)
+        reset_models(root.langId, "", true)
         updateModels()
 
         listViewStackItem.focus = true
@@ -207,7 +207,6 @@ DialogPage {
             }
         }
 
-
         ColumnLayout {
             visible: root.verticalMode
             Layout.fillWidth: true
@@ -260,8 +259,8 @@ DialogPage {
             }
             visible: !root.verticalMode && !root.langsView &&
                      !root.packView && !modelFilteringWidget.opened
-            Layout.leftMargin: root.leftPadding + appWin.padding
-            Layout.rightMargin: root.rightPadding + appWin.padding
+            Layout.leftMargin: 1
+            Layout.rightMargin: 1
 
             TabButton {
                 id: sttTabButton
@@ -313,42 +312,43 @@ DialogPage {
         }
     }
 
-    footer: Item {
-        height: closeButton.height + appWin.padding
+    footer: RowLayout {
+        Button {
+            Layout.leftMargin: root.leftPadding + appWin.padding
+            Layout.bottomMargin: root.bottomPadding
 
-        RowLayout {
-            anchors {
-                right: parent.right
-                rightMargin: root.rightPadding + appWin.padding
-                bottom: parent.bottom
-                bottomMargin: root.bottomPadding
+            visible: root.listViewStackItem.depth > 1
+            display: AbstractButton.IconOnly
+            DialogButtonBox.buttonRole: DialogButtonBox.ResetRole
+            action: Action {
+                icon.name: "go-previous-symbolic"
+                text: qsTr("Go back")
+                shortcut: StandardKey.Back
+                onTriggered: root.switchPop()
             }
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: text
+            hoverEnabled: true
+        }
 
-            Button {
-                visible: root.listViewStackItem.depth > 1
-                display: AbstractButton.IconOnly
-                DialogButtonBox.buttonRole: DialogButtonBox.ResetRole
-                action: Action {
-                    icon.name: "go-previous-symbolic"
-                    text: qsTr("Go back")
-                    shortcut: StandardKey.Back
-                    onTriggered: root.switchPop()
-                }
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: text
-                hoverEnabled: true
-            }
+        Item {
+            width: 1
+            height: 1
+            Layout.fillWidth: true
+        }
 
-            Button {
-                id: closeButton
+        Button {
+            id: closeButton
 
-                action: Action {
-                    icon.name: "window-close-symbolic"
-                    text: qsTr("Close")
-                    shortcut: StandardKey.Cancel
-                    onTriggered: root.reject()
-                }
+            Layout.rightMargin: root.rightPadding + appWin.padding
+            Layout.bottomMargin: root.bottomPadding
+
+            action: Action {
+                icon.name: "window-close-symbolic"
+                text: qsTr("Close")
+                shortcut: StandardKey.Cancel
+                onTriggered: root.reject()
             }
         }
     }
@@ -361,6 +361,16 @@ DialogPage {
             text: model.name
             onClicked: root.switchToModels(model.id, model.name)
             leftPadding: root._leftMargin
+            bottomInset: 0
+            topInset: 0
+            topPadding: appWin.padding
+            bottomPadding: appWin.padding
+
+            Component.onCompleted: {
+                if (background && background.color) {
+                    background.color = "transparent"
+                }
+            }
 
             BusyIndicator {
                 visible: !model.available
@@ -373,9 +383,9 @@ DialogPage {
 
             Label {
                 visible: model.available
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.contentItem.right
                 anchors.rightMargin: root._rightMargin
+                anchors.verticalCenter: parent.contentItem.verticalCenter
                 font.pixelSize: Qt.application.font.pixelSize * 1.5
                 text: "\u2714"
                 font.bold: true
@@ -411,7 +421,7 @@ DialogPage {
             property bool isPack: model && model.pack_id.length !== 0
 
             width: ListView.view.width
-            height: Math.max(packDelegate.height, control.height)
+            height: isPack ? packDelegate.height : control.height
 
             ItemDelegate {
                 id: packDelegate
@@ -423,8 +433,18 @@ DialogPage {
                 onClicked: root.switchToPack(model.id, model.name)
                 Accessible.name: model.name
                 leftPadding: root._leftMargin
+                bottomInset: 0
+                topInset: 0
+
+                Component.onCompleted: {
+                    if (background && background.color) {
+                        background.color = "transparent"
+                    }
+                }
 
                 contentItem: RowLayout {
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
                     Text {
                         text: packDelegate.text
                         font: packDelegate.font
@@ -493,11 +513,26 @@ DialogPage {
                  }
             }
 
-            Control {
+            ItemDelegate {
                 id: control
 
                 visible: !isPack
                 property bool infoAvailable: model && model.id.length !== 0
+
+                anchors.centerIn: parent
+                width: root.listViewStackItem.currentItem.width
+                text: model.name
+                onClicked: show_info()
+                Accessible.name: model.name
+                leftPadding: packDelegate.leftPadding
+                bottomInset: 0
+                topInset: 0
+
+                Component.onCompleted: {
+                    if (background && background.color) {
+                        background.color = "transparent"
+                    }
+                }
 
                 function download_model() {
                     if (model.license_accept_required) {
@@ -509,27 +544,14 @@ DialogPage {
                 }
 
                 function show_info() {
-                    appWin.showModelInfoDialog(model)
+                    if (infoAvailable) {
+                        appWin.showModelInfoDialog(model)
+                    }
                 }
-
-                background: Rectangle {
-                    id: bg
-
-                    color: palette.text
-                    opacity: control.hovered ? 0.1 : 0.0
-                }
-
-                anchors.centerIn: parent
-                width: root.listViewStackItem.currentItem.width
-                topInset: 0
-                bottomInset: 0
-                topPadding: 0
-                bottomPadding: 0
-                leftPadding: packDelegate.leftPadding
-                height: downloadButton.height
-                Accessible.name: model.name
 
                 contentItem: RowLayout {
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
                     Label {
                         text: model.name
                         elide: Text.ElideRight
@@ -669,10 +691,10 @@ DialogPage {
             property string packName: ""
             readonly property bool langsView: langId.length === 0
             readonly property bool packView: packId.length !== 0
-
+            Layout.fillWidth: true
             focus: true
             clip: true
-            spacing: appWin.padding
+            spacing: 0
             Keys.onUpPressed: listViewScrollBar.decrease()
             Keys.onDownPressed: listViewScrollBar.increase()
             ScrollBar.vertical: ScrollBar {
@@ -683,9 +705,6 @@ DialogPage {
             section.property: "role"
             // dont show sections when displaying languages and when filtering widget is hidded
             section.delegate: root.langsView || !modelFilteringWidget.opened ? null : modelSectionDelegate
-            header: Item {
-                height: appWin.padding
-            }
         }
     }
 }

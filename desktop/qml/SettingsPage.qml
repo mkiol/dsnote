@@ -32,81 +32,107 @@ DialogPage {
         id: fixer
     }
 
-    TabBar {
-        id: bar
+    header: ColumnLayout {
+        visible: root.title.length !== 0
+        spacing: appWin.padding
 
-        visible: !root.verticalMode
-        Layout.fillWidth: true
-        onCurrentIndexChanged: {
-            comboBar.currentIndex = currentIndex
-            stack.idx = currentIndex
-        }
-
-        TabButton {
-            text: qsTr("General")
-            width: implicitWidth
-        }
-
-        TabButton {
-            text: qsTr("User Interface")
-            width: implicitWidth
-        }
-
-        TabButton {
-            text: qsTr("Speech to Text")
-            width: implicitWidth
-        }
-
-        TabButton {
-            text: qsTr("Text to Speech")
-            width: implicitWidth
-        }
-
-        TabButton {
-            text: qsTr("Accessibility")
-            width: implicitWidth
-        }
-
-        TabButton {
-            text: qsTr("Advanced")
-            width: implicitWidth
-        }
-    }
-
-    ColumnLayout {
-        visible: root.verticalMode
-        Layout.fillWidth: true
-
-        ComboBox {
-            id: comboBar
-
+        RowLayout {
             Layout.fillWidth: true
+            Layout.leftMargin: root.leftPadding
+            Layout.rightMargin: root.rightPadding
+            Layout.topMargin: root.topPadding
+
+            Label {
+                id: titleLabel
+
+                text: root.title
+                font.pixelSize: Qt.application.font.pixelSize * 1.2
+                elide: Label.ElideRight
+                horizontalAlignment: Qt.AlignLeft
+                verticalAlignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+                Layout.leftMargin: appWin.padding
+                Layout.alignment: Qt.AlignVCenter
+            }
+        }
+
+        ColumnLayout {
+            visible: root.verticalMode
+            Layout.fillWidth: true
+            Layout.leftMargin: root.leftPadding + appWin.padding
+            Layout.rightMargin: root.rightPadding + appWin.padding
+
+            ComboBox {
+                id: comboBar
+
+                Layout.fillWidth: true
+                onCurrentIndexChanged: {
+                    bar.currentIndex = currentIndex
+                    stack.idx = currentIndex
+                }
+
+                model: [
+                    qsTr("General"),
+                    qsTr("User Interface"),
+                    qsTr("Speech to Text"),
+                    qsTr("Text to Speech"),
+                    qsTr("Accessibility"),
+                    qsTr("Advanced")
+                ]
+            }
+        }
+
+        TabBar {
+            id: bar
+
+            visible: !root.verticalMode
+            Layout.fillWidth: true
+            Layout.leftMargin: 1
+            Layout.rightMargin: 1
             onCurrentIndexChanged: {
-                bar.currentIndex = currentIndex
+                comboBar.currentIndex = currentIndex
                 stack.idx = currentIndex
             }
 
-            model: [
-                qsTr("General"),
-                qsTr("User Interface"),
-                qsTr("Speech to Text"),
-                qsTr("Text to Speech"),
-                qsTr("Accessibility"),
-                qsTr("Advanced")
-            ]
-        }
+            TabButton {
+                text: qsTr("General")
+                width: implicitWidth
+            }
 
-        HorizontalLine{}
+            TabButton {
+                text: qsTr("User Interface")
+                width: implicitWidth
+            }
+
+            TabButton {
+                text: qsTr("Speech to Text")
+                width: implicitWidth
+            }
+
+            TabButton {
+                text: qsTr("Text to Speech")
+                width: implicitWidth
+            }
+
+            TabButton {
+                text: qsTr("Accessibility")
+                width: implicitWidth
+            }
+
+            TabButton {
+                text: qsTr("Advanced")
+                width: implicitWidth
+            }
+        }
     }
 
-    StackView {
+    StackViewQuick {
         id: stack
 
         property int idx: -1
         property alias verticalMode: root.verticalMode
 
         Layout.fillWidth: true
-        Layout.topMargin: appWin.padding
         height: currentItem ? currentItem.implicitHeight : 0
         implicitHeight: currentItem ? currentItem.implicitHeight : 0
         onIdxChanged: {

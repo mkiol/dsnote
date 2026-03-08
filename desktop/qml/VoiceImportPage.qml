@@ -161,17 +161,19 @@ DialogPage {
 
     Connections {
         target: app
-        onPlayer_duration_changed: {
+        function onPlayer_duration_changed() {
             rangeSlider.from = 0
             rangeSlider.to = app.player_duration
             rangeSlider.first.value = 0
             rangeSlider.second.value = app.player_duration
         }
-        onRecorder_new_stream_name: {
+        function onRecorder_new_stream_name() {
             _nameForm.textField.text = name
         }
-        onRecorder_new_probs: root.update_probs(probs)
-        onText_decoded_internal: {
+        function onRecorder_new_probs() {
+            root.update_probs(probs)
+        }
+        function onText_decoded_internal() {
             var new_text = text.trim()
             if (new_text.length > 0) {
                 _textForm.text = new_text
@@ -382,7 +384,6 @@ DialogPage {
         valid: !root.nameTaken
         toolTip: valid ? "" : qsTr("This name is already taken")
         textField {
-            text: root.dataName
             placeholderText: _nameForm.label.text
         }
     }
@@ -414,8 +415,8 @@ DialogPage {
         fileMode: Dialogs.FileDialog.OpenFile
         onAccepted: {
             _nameForm.textField.text = ""
-            app.player_import_from_url(fileUrl);
-            _settings.file_audio_open_dir_url = fileUrl
+            app.player_import_from_url(selectedFile);
+            _settings.file_audio_open_dir_url = selectedFile
         }
     }
 }

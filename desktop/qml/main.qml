@@ -422,8 +422,9 @@ ApplicationWindow {
         id: modelInfoLoader
 
         anchors.fill: parent
+        anchors.centerIn: parent
         onLoaded: {
-            item.anchors.centerIn = modelInfoLoader
+            item.anchors.centerIn = Overlay.overlay
             item.open()
             item.onRejected.connect(function(){modelInfoLoader.source = ""});
             item.onAccepted.connect(function(){modelInfoLoader.source = ""});
@@ -433,9 +434,10 @@ ApplicationWindow {
     Loader {
         id: modelLicenseLoader
 
+        anchors.centerIn: parent
         anchors.fill: parent
         onLoaded: {
-            item.anchors.centerIn = modelLicenseLoader
+            item.anchors.centerIn = Overlay.overlay
             item.open()
             item.onRejected.connect(function(){modelLicenseLoader.source = ""});
             item.onAccepted.connect(function(){modelLicenseLoader.source = ""});
@@ -473,6 +475,7 @@ ApplicationWindow {
         anchors.centerIn: parent
         anchors.fill: parent
         onLoaded: {
+            item.anchors.centerIn = Overlay.overlay
             item.onClosed.connect(function(){
                 popupLoader.sourceComponent = undefined
                 popupLoader.source = ""

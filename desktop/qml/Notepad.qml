@@ -196,7 +196,7 @@ ColumnLayout {
                          !listenReadCombos.second.off &&
                          app.state === DsnoteApp.StateIdle
                 model: app.available_tts_models
-                onActivated: app.set_active_tts_model_idx(index)
+                onActivated: (index) => app.set_active_tts_model_idx(index)
                 currentIndex: app.active_tts_model_idx
             }
             combo2 {

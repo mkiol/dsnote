@@ -17,6 +17,10 @@ ToolBar {
     id: root
 
     property bool verticalMode: (toolsRow.width + tabRow.width + 4 * appWin.padding) > appWin.width
+    bottomPadding: 1
+    bottomInset: 0
+    rightPadding: 0
+    leftPadding: 0
 
     ColumnLayout {
         anchors.fill: parent
@@ -26,6 +30,10 @@ ToolBar {
             columns: root.verticalMode ? 1 : 2
 
             RowLayout {
+                Layout.bottomMargin: 5
+                Layout.leftMargin: appWin.padding
+                Layout.rightMargin: appWin.padding
+
                 RowLayout {
                     id: toolsRow
 
@@ -52,7 +60,9 @@ ToolBar {
 
                         Menu {
                             id: menuMenu
+
                             y: menuButton.height
+                            width: implicitWidth + 100 /* space for shortcut */
 
                             MenuItem {
                                 id: settingMenuItem
@@ -66,6 +76,8 @@ ToolBar {
                             }
 
                             MenuItem {
+                                id: aboutMenuItem
+
                                 action: Action {
                                     icon.name: "starred-symbolic"
                                     text: qsTr("About %1").arg(APP_NAME)
@@ -110,6 +122,7 @@ ToolBar {
                             id: fileMenu
 
                             y: fileButton.height
+                            width: implicitWidth + 100 /* space for shortcut */
 
                             MenuItem {
                                 enabled: !app.busy && app.state === DsnoteApp.StateIdle
@@ -191,6 +204,7 @@ ToolBar {
                             id: rapairTextMenu
 
                             y: repairTextButton.height
+                            width: implicitWidth + 100 /* space for shortcut */
 
                             MenuItem {
                                 action: Action {
@@ -267,6 +281,7 @@ ToolBar {
             }
 
             RowLayout {
+                Layout.alignment: Qt.AlignBottom
                 Item {
                     visible: !root.verticalMode
                     height: 1
@@ -275,6 +290,9 @@ ToolBar {
 
                 TabBar {
                     id: tabRow
+
+                    // Layout.leftMargin: 1
+                    // Layout.rightMargin: 1
 
                     currentIndex: _settings.translator_mode ? 1 : 0
                     onCurrentIndexChanged: {
@@ -328,7 +346,6 @@ ToolBar {
                     Layout.fillWidth: true
                 }
             }
-
         }
     }
 
@@ -343,7 +360,7 @@ ToolBar {
         fileMode: Dialogs.FileDialog.OpenFile
         onAccepted: {
             var file_path =
-                _settings.file_path_from_url(fileReadDialog.fileUrl)
+                _settings.file_path_from_url(fileReadDialog.selectedFile)
             appWin.openFile(file_path)
         }
     }

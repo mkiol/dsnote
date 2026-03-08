@@ -364,6 +364,8 @@ ColumnLayout {
         id: sttEnginesBar
 
         Layout.fillWidth: true
+        Layout.leftMargin: 1
+        Layout.rightMargin: 1
         currentIndex: !app.feature_whispercpp_stt ? 1 :
                       !app.feature_fasterwhisper_stt ? 0 :
                       _settings.settings_stt_engine_idx

@@ -173,6 +173,8 @@ ColumnLayout {
         id: ttsEnginesBar
 
         Layout.fillWidth: true
+        Layout.leftMargin: 1
+        Layout.rightMargin: 1
         currentIndex: {
             var idx = _settings.settings_tts_engine_idx
             var coqui_enable = app.feature_coqui_tts && app.feature_coqui_gpu;

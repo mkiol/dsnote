@@ -68,7 +68,7 @@ DialogPage {
 
     Connections {
         target: app
-        onText_decoded_internal: {
+        function onText_decoded_internal(text) {
             var new_text = text.trim()
             if (new_text.length > 0) {
                 _textForm.text = new_text

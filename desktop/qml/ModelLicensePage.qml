@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -103,7 +103,8 @@ Dialog {
         id: scrollView
 
         anchors { left: parent.left; right: parent.right }
-        height: Math.min(textArea.implicitHeight, root.parent.height * 0.75)
+        height: Math.min(textArea.implicitHeight, 
+            root.parent && root.parent.height ? root.parent.height * 0.75 : 0)
         clip: true
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
         ScrollBar.vertical.policy: ScrollBar.AlwaysOn
