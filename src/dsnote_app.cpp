@@ -5421,11 +5421,7 @@ void dsnote_app::player_import_rec() {
 
 void dsnote_app::player_set_path(const QString &wav_file_path) {
     if (!m_player) create_player();
-
-    m_player->setSource(
-        QUrl{QStringLiteral("gst-pipeline: filesrc location=%1 ! wavparse ! "
-                            "audioconvert ! alsasink")
-                 .arg(wav_file_path)});
+    m_player->setSource(QUrl::fromLocalFile(wav_file_path));
 }
 
 QString dsnote_app::tts_ref_voice_auto_name() const {

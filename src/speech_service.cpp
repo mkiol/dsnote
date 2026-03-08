@@ -567,6 +567,9 @@ speech_service::speech_service(QObject *parent)
         }
     });
 
+    m_player.setAudioOutput(&m_player_audio_output);
+    m_beep_player.setAudioOutput(&m_beep_player_audio_output);
+
     if (settings::launch_mode == settings::launch_mode_t::service) {
         m_keepalive_timer.start();
     }

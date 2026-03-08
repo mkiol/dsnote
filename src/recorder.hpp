@@ -14,6 +14,7 @@
 #include <QIODevice>
 #include <QObject>
 #include <QString>
+#include <QTimer>
 #include <cstdint>
 #include <memory>
 #include <optional>
@@ -65,6 +66,7 @@ class recorder final : public QObject {
     QString m_input_file_path;
     QString m_wav_file_path;
     QFile m_audio_device;
+    QTimer m_timer;
     long long m_duration = 0;
     std::thread m_processing_thread;
     bool m_processing = false;

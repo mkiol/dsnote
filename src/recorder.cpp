@@ -9,6 +9,7 @@
 
 #include <qglobal.h>
 
+#include <QAudioDevice>
 #include <QAudioFormat>
 #include <QDebug>
 #include <QFileInfo>
@@ -96,13 +97,23 @@ void recorder::init() {
 
         qDebug() << "using audio input:" << device.description();
         m_audio_source = std::make_unique<QAudioSource>(device, format);
-
         connect(m_audio_source.get(), &QAudioSource::stateChanged, this,
                 [this](QAudio::State new_state) {
                     qDebug() << "recorder state:" << new_state;
-
+                    if (new_state == QtAudio::ActiveState) {
+                        m_timer.start();
+                    } else {
+                        m_timer.stop();
+                    }
                     emit recording_changed();
                 });
+
+        m_timer.setInterval(1000);
+        m_timer.setSingleShot(false);
+        connect(&m_timer, &QTimer::timeout, this, [this]() {
+            m_duration = m_audio_source->elapsedUSecs() / 1000000;
+            emit duration_changed();
+        });
     }
 }
 
