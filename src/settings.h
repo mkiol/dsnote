@@ -70,6 +70,7 @@
 #define GPU_ENGINE_TABLE    \
     X(whispercpp, false)    \
     X(fasterwhisper, false) \
+    X(canary, true)         \
     X(coqui, true)          \
     X(whisperspeech, true)  \
     X(parler, true)         \
@@ -409,6 +410,7 @@ class settings : public QSettings, public singleton<settings> {
                    set_##name##_profile NOTIFY name##_changed)
     X(whispercpp)
     X(fasterwhisper)
+    X(canary)
 #undef X
 #define X(name, _)                                                           \
     Q_PROPERTY(bool name##_use_gpu READ name##_use_gpu WRITE                 \
@@ -1018,6 +1020,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE void reset_##name##_options();
     X(whispercpp)
     X(fasterwhisper)
+    X(canary)
 #undef X
 #define X(name, _)                                      \
     bool name##_use_gpu() const;                        \
@@ -1124,6 +1127,7 @@ class settings : public QSettings, public singleton<settings> {
 #define X(name) void name##_changed();
     X(whispercpp)
     X(fasterwhisper)
+    X(canary)
 #undef X
 #define X(name, _)                    \
     void name##_gpu_device_changed(); \
