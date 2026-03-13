@@ -71,7 +71,7 @@ options=('!debug')
 provides=(${_pkgname})
 conflicts=(${_pkgname})
 install=${_pkgname}.install
-source=('git+https://github.com/mkiol/dsnote.git#branch=qt6')
+source=('git+https://github.com/mkiol/dsnote.git')
 sha256sums=('SKIP')
 
 pkgver() {
