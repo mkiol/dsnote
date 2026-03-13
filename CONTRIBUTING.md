@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to Speech Note!
 This document will help you get started with contributing to this
-open-source speech-to-text, text-to-speech, and translation application.
+open-source project.
 
 ## Table of Contents
 
@@ -32,14 +32,6 @@ There are many ways to contribute to Speech Note:
 
 Speech Note is hosted on both [GitHub](https://github.com/mkiol/dsnote) and [GitLab](https://gitlab.com/mkiol/dsnote).
 You can contribute on either platform - choose the one you're most comfortable with.
-
-### Prerequisites
-
-Before you start, you should have:
-
-- Basic knowledge of C++ and/or QML (for code contributions)
-- Familiarity with Git and GitHub/GitLab workflows
-- A development environment set up (see [Development Setup](#development-setup))
 
 ## Project Structure
 
@@ -299,22 +291,6 @@ Speech Note uses `.clang-format` for C++ code formatting (based on Google style)
 - Add comments for complex logic
 - Prefer RAII and modern C++ features
 
-### QML Code Style
-
-- Use 4 spaces for indentation
-- Follow Qt QML coding conventions
-- Keep components modular and reusable
-- Use property bindings when appropriate
-- Add comments for complex UI logic
-
-### General Guidelines
-
-- **Keep changes focused**: One PR/MR should address one issue or feature
-- **Write clean code**: Easy to read and maintain
-- **Document public APIs**: Add documentation for public functions/classes
-- **Handle errors gracefully**: Don't crash on unexpected input
-- **Be consistent**: Follow the existing code style
-
 ## Testing
 
 ### Running Tests
@@ -338,23 +314,6 @@ make tests
 
 **Note**: We use `-DBUILD_CATCH2=OFF` to use the system-installed Catch2
 package instead of downloading it.
-
-### Writing Tests
-
-- Add tests for new features
-- Tests use the Catch2 framework
-- Place tests in `tests/` directory
-- Follow existing test patterns
-
-### Manual Testing
-
-Before submitting:
-
-1. Build and run the application
-2. Test your changes thoroughly
-3. Test on different platforms if possible
-4. Check for memory leaks (use valgrind or similar)
-5. Ensure no regressions in existing functionality
 
 ## Translation
 
@@ -398,38 +357,6 @@ If you prefer to work directly with `.ts` files:
 - **GitHub Issues**: <https://github.com/mkiol/dsnote/issues>
 - **GitLab Issues**: <https://gitlab.com/mkiol/dsnote/-/issues>
 - Check existing issues before creating a new one
-- For questions, create an issue with the "question" label
-
-### Reporting Bugs
-
-When reporting a bug, include:
-
-1. **Description**: What went wrong?
-2. **Steps to reproduce**: How to trigger the bug?
-3. **Expected behavior**: What should happen?
-4. **Actual behavior**: What actually happens?
-5. **Environment**:
-   - OS and version
-   - Application version
-   - Installation method (Flatpak, AUR, etc.)
-6. **Logs**: Include relevant error messages or logs
-
-### Feature Requests
-
-When suggesting a feature:
-
-1. **Use case**: Why is this feature needed?
-2. **Description**: What should it do?
-3. **Alternatives**: Any alternative solutions you've considered?
-4. **Additional context**: Screenshots, mockups, etc.
-
-## Code of Conduct
-
-- Be respectful and inclusive
-- Welcome newcomers and help them learn
-- Focus on constructive feedback
-- Give credit where it's due
-- Follow the project's technical decisions
 
 ## License
 
