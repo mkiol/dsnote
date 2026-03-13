@@ -5420,7 +5420,7 @@ void dsnote_app::player_import_rec() {
 }
 
 void dsnote_app::player_set_path(const QString &wav_file_path) {
-    if (!m_player) create_player();
+    create_player();
     m_player->setSource(QUrl::fromLocalFile(wav_file_path));
 }
 
