@@ -756,15 +756,6 @@ QString settings::file_open_dir_name() const {
     return file_open_dir_url().fileName();
 }
 
-QString settings::file_audio_open_dir() const {
-    auto dir = value(QStringLiteral("file_audio_open_dir")).toString();
-    if (dir.isEmpty() || !QFileInfo::exists(dir)) {
-        dir = QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
-    }
-
-    return dir;
-}
-
 settings::mode_t settings::mode() const {
     return static_cast<mode_t>(
         value(QStringLiteral("mode"), static_cast<int>(mode_t::Stt)).toInt());

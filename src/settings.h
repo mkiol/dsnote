@@ -761,7 +761,6 @@ class settings : public QSettings, public singleton<settings> {
     QUrl file_open_dir_url() const;
     void set_file_open_dir_url(const QUrl &value);
     QString file_open_dir_name() const;
-    QString file_audio_open_dir() const;
     QString prev_app_ver() const;
     void set_prev_app_ver(const QString &value);
     void set_mnt_text_format(text_format_t value);
@@ -1050,7 +1049,6 @@ class settings : public QSettings, public singleton<settings> {
     void video_file_save_dir_changed();
     void text_file_save_dir_changed();
     void file_open_dir_changed();
-    void file_audio_open_dir_changed();
     void prev_app_ver_changed();
     void default_tts_models_for_mnt_changed(const QString &lang);
     void qt_style_changed();
