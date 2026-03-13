@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to Speech Note!
 This document will help you get started with contributing to this
-open-source speech-to-text, text-to-speech, and translation application.
+open-source project.
 
 ## Table of Contents
 
@@ -22,24 +22,14 @@ There are many ways to contribute to Speech Note:
 
 - **Code contributions**: Bug fixes, new features, performance improvements
 - **Translation**: Help translate the app into your language
-- **Documentation**: Improve README, add examples, write tutorials
 - **Bug reports**: Report issues you encounter
 - **Feature requests**: Suggest new features or improvements
 - **Testing**: Test beta releases and provide feedback
-- **Reviews**: Review pull/merge requests
 
 ## Getting Started
 
 Speech Note is hosted on both [GitHub](https://github.com/mkiol/dsnote) and [GitLab](https://gitlab.com/mkiol/dsnote).
 You can contribute on either platform - choose the one you're most comfortable with.
-
-### Prerequisites
-
-Before you start, you should have:
-
-- Basic knowledge of C++ and/or QML (for code contributions)
-- Familiarity with Git and GitHub/GitLab workflows
-- A development environment set up (see [Development Setup](#development-setup))
 
 ## Project Structure
 
@@ -121,10 +111,7 @@ dnf install rpmdevtools autoconf automake boost-devel cmake git \
 For more information, see the [fedora/make_rpm.sh](fedora/make_rpm.sh) and
 [fedora/dsnote.spec](fedora/dsnote.spec) files.
 
-#### Ubuntu/Debian/Mint
-
-**Note:** The project has migrated to Qt6.
-For older versions with Qt5, please check out an earlier release.
+#### Ubuntu
 
 ```bash
 # First install OpenCL headers (required dependency)
@@ -139,7 +126,7 @@ sudo apt install appstream autoconf build-essential cmake \
     zlib1g-dev
 ```
 
-**Optional - For NVIDIA CUDA acceleration (experimental):**
+**Optional - For NVIDIA CUDA acceleration:**
 
 ```bash
 sudo apt install nvidia-cuda-dev nvidia-cuda-toolkit nvidia-cudnn
@@ -154,20 +141,6 @@ AMD GPUs have built-in Vulkan support that should work out of the box.
 git clone https://github.com/mkiol/dsnote.git
 cd dsnote/deb
 ./makedeb.sh
-```
-
-**Install the .deb package:**
-
-```bash
-sudo dpkg -i dsnote_*_amd64.deb
-sudo apt-get install -f  # Install any missing dependencies
-```
-
-**Alternative - Running without installing (if .deb installation fails):**
-
-```bash
-cd dsnote-<version>/build   # replace <version> with the actual version number
-LD_LIBRARY_PATH=./external/lib ./dsnote
 ```
 
 For more detailed information, see [deb/README.md](deb/README.md).
@@ -201,10 +174,7 @@ cd dsnote
 mkdir build && cd build
 
 # Basic desktop build
-cmake ../ -DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON
-
-# Build without Python components (faster)
-cmake ../ -DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON -DWITH_PY=OFF
+cmake ../ -DWITH_DESKTOP=ON
 
 make -j$(nproc)
 ```
@@ -281,6 +251,7 @@ LD_LIBRARY_PATH=./external/lib ./dsnote --verbose
 - Add tests if applicable
 - Update documentation if needed
 - Test your changes thoroughly
+- If you don't change translations, don't update translation files (*.ts)
 
 ## Code Style Guidelines
 
@@ -298,22 +269,8 @@ Speech Note uses `.clang-format` for C++ code formatting (based on Google style)
 - Use descriptive variable and function names
 - Add comments for complex logic
 - Prefer RAII and modern C++ features
-
-### QML Code Style
-
-- Use 4 spaces for indentation
-- Follow Qt QML coding conventions
-- Keep components modular and reusable
-- Use property bindings when appropriate
-- Add comments for complex UI logic
-
-### General Guidelines
-
-- **Keep changes focused**: One PR/MR should address one issue or feature
-- **Write clean code**: Easy to read and maintain
-- **Document public APIs**: Add documentation for public functions/classes
-- **Handle errors gracefully**: Don't crash on unexpected input
-- **Be consistent**: Follow the existing code style
+- If you're using Qt, ensure the file you're editing is not a 'Qt-less' file - this applies to most engine files
+- The source code must be compatible with both Qt5 and Qt6. If you use Qt6-specific APIs, also provide a Qt5 implementation wrapped in `#ifdef` directives.
 
 ## Testing
 
@@ -338,23 +295,6 @@ make tests
 
 **Note**: We use `-DBUILD_CATCH2=OFF` to use the system-installed Catch2
 package instead of downloading it.
-
-### Writing Tests
-
-- Add tests for new features
-- Tests use the Catch2 framework
-- Place tests in `tests/` directory
-- Follow existing test patterns
-
-### Manual Testing
-
-Before submitting:
-
-1. Build and run the application
-2. Test your changes thoroughly
-3. Test on different platforms if possible
-4. Check for memory leaks (use valgrind or similar)
-5. Ensure no regressions in existing functionality
 
 ## Translation
 
@@ -398,38 +338,6 @@ If you prefer to work directly with `.ts` files:
 - **GitHub Issues**: <https://github.com/mkiol/dsnote/issues>
 - **GitLab Issues**: <https://gitlab.com/mkiol/dsnote/-/issues>
 - Check existing issues before creating a new one
-- For questions, create an issue with the "question" label
-
-### Reporting Bugs
-
-When reporting a bug, include:
-
-1. **Description**: What went wrong?
-2. **Steps to reproduce**: How to trigger the bug?
-3. **Expected behavior**: What should happen?
-4. **Actual behavior**: What actually happens?
-5. **Environment**:
-   - OS and version
-   - Application version
-   - Installation method (Flatpak, AUR, etc.)
-6. **Logs**: Include relevant error messages or logs
-
-### Feature Requests
-
-When suggesting a feature:
-
-1. **Use case**: Why is this feature needed?
-2. **Description**: What should it do?
-3. **Alternatives**: Any alternative solutions you've considered?
-4. **Additional context**: Screenshots, mockups, etc.
-
-## Code of Conduct
-
-- Be respectful and inclusive
-- Welcome newcomers and help them learn
-- Focus on constructive feedback
-- Give credit where it's due
-- Follow the project's technical decisions
 
 ## License
 
