@@ -21,8 +21,8 @@ DialogPage {
     readonly property bool langsView: langId.length === 0
     readonly property bool packView: packId.length !== 0
     readonly property real _rightMargin: (!root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
-                                             appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
-                                             appWin.padding
+                                             listViewStackItem.currentItem.ScrollBar.vertical.width :
+                                             0
     readonly property real _leftMargin: (root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
                                              appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
                                              appWin.padding
@@ -357,12 +357,12 @@ DialogPage {
         id: langItemDelegate
 
         ItemDelegate {
-            width: ListView.view.width
             text: model.name
             onClicked: root.switchToModels(model.id, model.name)
-            leftPadding: root._leftMargin
+            width: ListView.view.width - root._rightMargin
             bottomInset: 0
             topInset: 0
+            leftPadding: root._leftMargin
             topPadding: appWin.padding
             bottomPadding: appWin.padding
 
@@ -377,14 +377,12 @@ DialogPage {
                 height: parent.height
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.rightMargin: root._rightMargin
                 running: model.downloading
             }
 
             Label {
                 visible: model.available
                 anchors.right: parent.contentItem.right
-                anchors.rightMargin: root._rightMargin
                 anchors.verticalCenter: parent.contentItem.verticalCenter
                 font.pixelSize: Qt.application.font.pixelSize * 1.5
                 text: "\u2714"
@@ -400,7 +398,7 @@ DialogPage {
 
         SectionLabel {
             x: appWin.padding
-            width: root.listViewStackItem.currentItem.width - appWin.padding - root._rightMargin
+            width: ListView.view.width - appWin.padding - root._rightMargin
             text: {
                 if (section == ModelsListModel.Stt)
                     return qsTr("Speech to Text")
@@ -427,14 +425,13 @@ DialogPage {
                 id: packDelegate
 
                 visible: isPack
-                anchors.centerIn: parent
-                width: parent.width
                 text: model.name
                 onClicked: root.switchToPack(model.id, model.name)
                 Accessible.name: model.name
-                leftPadding: root._leftMargin
+                width: parent.width - x - root._rightMargin
                 bottomInset: 0
                 topInset: 0
+                leftPadding: root._leftMargin
 
                 Component.onCompleted: {
                     if (background && background.color) {
@@ -486,7 +483,6 @@ DialogPage {
                         Layout.preferredWidth: downloadButton.width + infoButton.width
                         Layout.preferredHeight: downloadButton.height
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.rightMargin: root._rightMargin
 
                         Label {
                             text: model.role == ModelsListModel.Tts ?
@@ -519,14 +515,13 @@ DialogPage {
                 visible: !isPack
                 property bool infoAvailable: model && model.id.length !== 0
 
-                anchors.centerIn: parent
-                width: root.listViewStackItem.currentItem.width
                 text: model.name
                 onClicked: show_info()
                 Accessible.name: model.name
-                leftPadding: packDelegate.leftPadding
+                width: parent.width - x - root._rightMargin
                 bottomInset: 0
                 topInset: 0
+                leftPadding: root._leftMargin
 
                 Component.onCompleted: {
                     if (background && background.color) {
@@ -626,7 +621,6 @@ DialogPage {
                         Layout.preferredWidth: appWin.buttonWithIconWidth
                         Layout.preferredHeight: appWin.buttonHeight
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.rightMargin: root._rightMargin
 
                         Button {
                             anchors.fill: parent
@@ -691,15 +685,19 @@ DialogPage {
             property string packName: ""
             readonly property bool langsView: langId.length === 0
             readonly property bool packView: packId.length !== 0
+            
             Layout.fillWidth: true
             focus: true
             clip: true
             spacing: 0
+
             Keys.onUpPressed: listViewScrollBar.decrease()
             Keys.onDownPressed: listViewScrollBar.increase()
             ScrollBar.vertical: ScrollBar {
                 id: listViewScrollBar
+                policy: listView.contentHeight > listView.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
             }
+
             model: langsView ? service.langs_model : packView ? service.pack_model : service.models_model
             delegate: langsView ? langItemDelegate : modelItemDelegate
             section.property: "role"

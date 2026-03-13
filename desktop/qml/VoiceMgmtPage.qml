@@ -17,8 +17,8 @@ DialogPage {
 
     readonly property bool verticalMode: width < appWin.height
     readonly property real _rightMargin: (!root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
-                                             appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
-                                             appWin.padding
+                                             listViewStackItem.currentItem.ScrollBar.vertical.width :
+                                             0
     readonly property real _leftMargin: (root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
                                              appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
                                              appWin.padding
@@ -274,13 +274,13 @@ DialogPage {
             readonly property string voiceName: modelData[0]
             readonly property string voiceDesc: modelData[1]
 
-            width: ListView.view.width
             text: voiceName
             onClicked: openEdit()
             Accessible.name: voiceName
-            leftPadding: root._leftMargin
+            width: ListView.view.width - root._rightMargin
             bottomInset: 0
             topInset: 0
+            leftPadding: root._leftMargin
 
             Component.onCompleted: {
                 if (background && background.color) {
@@ -300,7 +300,6 @@ DialogPage {
                     text: voicePromptDelegate.voiceName
                     elide: Text.ElideRight
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.leftMargin: appWin.padding
                     Layout.fillWidth: true
                 }
 
@@ -308,7 +307,6 @@ DialogPage {
                     text: qsTr("Edit")
                     icon.name: "edit-entry-symbolic"
                     display: voicePromptDelegate.compact ? Button.IconOnly : Button.TextBesideIcon
-                    //Layout.alignment: Qt.AlignHCenter
                     onClicked: voicePromptDelegate.openEdit()
 
                     ToolTip.visible: hovered
@@ -320,7 +318,6 @@ DialogPage {
                     text: qsTr("Clone")
                     icon.name: "entry-clone-symbolic"
                     display: voicePromptDelegate.compact ? Button.IconOnly : Button.TextBesideIcon
-                    //Layout.alignment: Qt.AlignHCenter
                     onClicked: app.clone_voice_prompt(voicePromptDelegate.voiceName)
 
                     ToolTip.visible: hovered
@@ -334,7 +331,6 @@ DialogPage {
                     icon.name: "edit-delete-symbolic"
                     display: voicePromptDelegate.compact ? Button.IconOnly : Button.TextBesideIcon
                     text: qsTr("Delete")
-                    //Layout.alignment: Qt.AlignHCenter
                     onClicked: app.delete_voice_prompt(voicePromptDelegate.voiceName)
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -358,12 +354,12 @@ DialogPage {
             property bool editActive: false
 
             text: voiceName
-            width: ListView.view.width
             onClicked: openEdit()
             Accessible.name: voiceName
-            leftPadding: root._leftMargin
+            width: ListView.view.width - root._rightMargin
             bottomInset: 0
             topInset: 0
+            leftPadding: root._leftMargin
 
             Component.onCompleted: {
                 if (background && background.color) {
@@ -387,7 +383,6 @@ DialogPage {
                     text: voiceDelegate.voiceName
                     elide: Text.ElideRight
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.leftMargin: appWin.padding
                     Layout.fillWidth: true
                     color: voiceDelegate.invalid ? palette.text : "red"
                 }
@@ -461,9 +456,9 @@ DialogPage {
 
             Keys.onUpPressed: listViewScrollBar.decrease()
             Keys.onDownPressed: listViewScrollBar.increase()
-
             ScrollBar.vertical: ScrollBar {
                 id: listViewScrollBar
+                policy: listView.contentHeight > listView.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
             }
 
             model: app.available_tts_ref_voices
@@ -483,9 +478,9 @@ DialogPage {
 
             Keys.onUpPressed: listViewScrollBar.decrease()
             Keys.onDownPressed: listViewScrollBar.increase()
-
             ScrollBar.vertical: ScrollBar {
                 id: listViewScrollBar
+                policy: listView.contentHeight > listView.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
             }
 
             model: _settings.tts_voice_prompts

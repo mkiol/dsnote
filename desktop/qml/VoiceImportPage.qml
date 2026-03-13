@@ -167,13 +167,13 @@ DialogPage {
             rangeSlider.first.value = 0
             rangeSlider.second.value = app.player_duration
         }
-        function onRecorder_new_stream_name() {
+        function onRecorder_new_stream_name(name) {
             _nameForm.textField.text = name
         }
-        function onRecorder_new_probs() {
+        function onRecorder_new_probs(probs) {
             root.update_probs(probs)
         }
-        function onText_decoded_internal() {
+        function onText_decoded_internal(text) {
             var new_text = text.trim()
             if (new_text.length > 0) {
                 _textForm.text = new_text
@@ -411,12 +411,12 @@ DialogPage {
             qsTr("Audio files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac)",
             qsTr("Video files") + " (*.mp4 *.mkv *.ogv *.webm)",
             qsTr("All files") + " (*)"]
-        currentFolder: _settings.file_audio_open_dir_url
+        currentFolder: _settings.file_open_dir_url
         fileMode: Dialogs.FileDialog.OpenFile
         onAccepted: {
             _nameForm.textField.text = ""
             app.player_import_from_url(selectedFile);
-            _settings.file_audio_open_dir_url = selectedFile
+            _settings.file_open_dir_url = selectedFile
         }
     }
 }

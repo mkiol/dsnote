@@ -231,48 +231,43 @@ ColumnLayout {
         }
     }
 
-    ColumnLayout {
-        Layout.fillWidth: true
-        spacing: 0
+    SectionLabel {
+        text: qsTranslate("SettingsPage", "Inline timestamp settings")
+    }
 
-        SectionLabel {
-            text: qsTranslate("SettingsPage", "Inline timestamp settings")
+    TextFieldForm {
+        label.text: qsTranslate("SettingsPage", "Template")
+        compact: true
+        textField {
+            text: _settings.inline_timestamp_template
+            readOnly: true
+            // color: palette.text
+            // background: Rectangle {
+            //     color: palette.base
+            //     border.color: palette.mid
+            //     border.width: 1
+            //     radius: 2
+            // }
         }
-
-        TextFieldForm {
-            label.text: qsTranslate("SettingsPage", "Template")
-            compact: true
-            textField {
-                text: _settings.inline_timestamp_template
-                readOnly: true
-                color: palette.text
-                background: Rectangle {
-                    color: palette.base
-                    border.color: palette.mid
-                    border.width: 1
-                    radius: 2
-                }
-            }
-            button {
-                text: qsTranslate("SettingsPage", "Edit")
-                onClicked: inlineTimestampDialog.open()
-            }
+        button {
+            text: qsTranslate("SettingsPage", "Edit")
+            onClicked: inlineTimestampDialog.open()
         }
+    }
 
-        SpinBoxForm {
-            label.text: qsTranslate("SettingsPage", "Timestamp interval")
-            toolTip: qsTranslate("SettingsPage", "Minimum seconds between timestamps.")
-            spinBox {
-                from: 5
-                to: 3600
-                stepSize: 5
-                value: _settings.inline_timestamp_min_interval
-                editable: true
-                textFromValue: function(value) { return value + " s" }
-                valueFromText: function(text) { return parseInt(text) }
-                onValueModified: {
-                    _settings.inline_timestamp_min_interval = value
-                }
+    SpinBoxForm {
+        label.text: qsTranslate("SettingsPage", "Timestamp interval")
+        toolTip: qsTranslate("SettingsPage", "Minimum seconds between timestamps.")
+        spinBox {
+            from: 5
+            to: 3600
+            stepSize: 5
+            value: _settings.inline_timestamp_min_interval
+            editable: true
+            textFromValue: function(value) { return value + " s" }
+            valueFromText: function(text) { return parseInt(text) }
+            onValueModified: {
+                _settings.inline_timestamp_min_interval = value
             }
         }
     }

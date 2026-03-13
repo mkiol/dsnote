@@ -16,8 +16,8 @@ DialogPage {
 
     readonly property bool verticalMode: width < appWin.height
     readonly property real _rightMargin: (!root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
-                                             appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
-                                             appWin.padding
+                                             listViewStackItem.currentItem.ScrollBar.vertical.width :
+                                             0
     readonly property real _leftMargin: (root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
                                              appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
                                              appWin.padding
@@ -143,12 +143,12 @@ DialogPage {
                                                                          defaultRuleName(modelData[1], modelData[3], modelData[4])
 
             text: ruleName
-            width: ListView.view.width
             onClicked: openEdit()
             Accessible.name: ruleName
-            leftPadding: root._leftMargin
+            width: ListView.view.width - root._rightMargin
             bottomInset: 0
             topInset: 0
+            leftPadding: root._leftMargin
 
             Component.onCompleted: {
                 if (background && background.color) {
@@ -301,9 +301,9 @@ DialogPage {
 
             Keys.onUpPressed: listViewScrollBar.decrease()
             Keys.onDownPressed: listViewScrollBar.increase()
-
             ScrollBar.vertical: ScrollBar {
                 id: listViewScrollBar
+                policy: listView.contentHeight > listView.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
             }
 
             model: _settings.trans_rules

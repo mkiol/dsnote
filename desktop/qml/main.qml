@@ -34,6 +34,9 @@ ApplicationWindow {
     readonly property alias toast: _toast
     property var features: app.features_availability()
 
+    LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
+    LayoutMirroring.childrenInherit: true
+
     property var _dialogPage
 
     function openFile(path) {
@@ -487,11 +490,11 @@ ApplicationWindow {
     DropArea {
         anchors.fill: parent
 
-        onDropped: {
+        onDropped: (drop) => {
             if (!drop.hasUrls) return
-
             if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
                 var urls = drop.urls
+                console.log("drop:", urls)
                 addTextDialog.addHandler = function(){app.import_files_url(urls, false)}
                 addTextDialog.replaceHandler = function(){app.import_files_url(urls, true)}
                 addTextDialog.open()
@@ -591,7 +594,7 @@ ApplicationWindow {
             appWin.features = app.features_availability()
         }
 
-        onError: {
+        onError: (type) => {
             switch (type) {
             case DsnoteApp.ErrorFileSource:
                 toast.show(qsTr("Error: Audio file processing has failed."))
