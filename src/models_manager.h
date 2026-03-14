@@ -62,6 +62,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         tts_parler,
         tts_f5,
         tts_kokoro,
+        tts_qwen3,
         mnt_bergamot
     };
     friend QDebug operator<<(QDebug d, model_engine_t engine);
@@ -91,6 +92,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         engine_tts_parler = 1U << 18U,
         engine_tts_f5 = 1U << 19U,
         engine_tts_kokoro = 1U << 20U,
+        engine_tts_qwen3 = 1U << 21U,
         engine_mnt = 1U << 23U,
         engine_other = 1U << 24U,
         generic_end = engine_other,
@@ -189,6 +191,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool tts_kokoro = false;
         bool tts_kokoro_ja = false;
         bool tts_kokoro_zh = false;
+        bool tts_qwen3 = false;
         bool stt_fasterwhisper = false;
         bool stt_ds = false;
         bool stt_vosk = false;

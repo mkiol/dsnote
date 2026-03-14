@@ -32,6 +32,7 @@ struct libs_availability_t {
     bool parler_tts = false;
     bool f5_tts = false;
     bool kokoro_tts = false;
+    bool qwen3_tts = false;
     bool transformers = false;
     bool unikud = false;
     bool gruut_de = false;

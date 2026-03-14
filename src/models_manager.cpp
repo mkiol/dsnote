@@ -146,6 +146,7 @@ QDebug operator<<(QDebug d, models_manager::feature_flags flags) {
     if (flags & models_manager::engine_tts_parler) d << "engine-tts-parler, ";
     if (flags & models_manager::engine_tts_f5) d << "engine-tts-f5, ";
     if (flags & models_manager::engine_tts_kokoro) d << "engine-tts-kokoro, ";
+    if (flags & models_manager::engine_tts_qwen3) d << "engine-tts-qwen3, ";
     if (flags & models_manager::engine_other) d << "engine-other, ";
     if (flags & models_manager::hw_openvino) d << "hw-openvino, ";
     if (flags & models_manager::stt_intermediate_results)
@@ -212,6 +213,9 @@ QDebug operator<<(QDebug d, models_manager::model_engine_t engine) {
         case models_manager::model_engine_t::tts_kokoro:
             d << "tts-kokoro";
             break;
+        case models_manager::model_engine_t::tts_qwen3:
+            d << "tts-qwen3";
+            break;
         case models_manager::model_engine_t::mnt_bergamot:
             d << "mnt-bergamot";
             break;
@@ -261,6 +265,7 @@ QDebug operator<<(QDebug d,
     if (models_availability.tts_kokoro) d << "tts_kokoro,";
     if (models_availability.tts_kokoro_ja) d << "tts_kokoro_ja,";
     if (models_availability.tts_kokoro_zh) d << "tts_kokoro_zh,";
+    if (models_availability.tts_qwen3) d << "tts_qwen3,";
     if (models_availability.stt_fasterwhisper) d << "stt_fasterwhisper,";
     if (models_availability.stt_ds) d << "stt_ds,";
     if (models_availability.stt_vosk) d << "stt_vosk,";
@@ -1575,6 +1580,7 @@ bool models_manager::is_modelless_engine(model_engine_t engine) {
     switch (engine) {
         case model_engine_t::tts_espeak:
         case model_engine_t::tts_sam:
+        case model_engine_t::tts_qwen3:
             return true;
         case model_engine_t::stt_ds:
         case model_engine_t::stt_vosk:
@@ -1611,6 +1617,7 @@ bool models_manager::is_ignore_on_sfos(model_engine_t engine,
         case model_engine_t::tts_parler:
         case model_engine_t::tts_f5:
         case model_engine_t::tts_kokoro:
+        case model_engine_t::tts_qwen3:
         case model_engine_t::tts_coqui:
             return true;
         case model_engine_t::stt_april:
@@ -1719,6 +1726,7 @@ models_manager::model_role_t models_manager::role_of_engine(
         case model_engine_t::tts_parler:
         case model_engine_t::tts_f5:
         case model_engine_t::tts_kokoro:
+        case model_engine_t::tts_qwen3:
             return model_role_t::tts;
         case model_engine_t::mnt_bergamot:
             return model_role_t::mnt;
@@ -1752,6 +1760,7 @@ models_manager::model_engine_t models_manager::engine_from_name(
     if (name == QStringLiteral("tts_parler")) return model_engine_t::tts_parler;
     if (name == QStringLiteral("tts_f5")) return model_engine_t::tts_f5;
     if (name == QStringLiteral("tts_kokoro")) return model_engine_t::tts_kokoro;
+    if (name == QStringLiteral("tts_qwen3")) return model_engine_t::tts_qwen3;
     if (name == QStringLiteral("mnt_bergamot"))
         return model_engine_t::mnt_bergamot;
 
@@ -1894,6 +1903,7 @@ models_manager::feature_flags models_manager::add_new_feature(
         case feature_flags::engine_tts_parler:
         case feature_flags::engine_tts_f5:
         case feature_flags::engine_tts_kokoro:
+        case feature_flags::engine_tts_qwen3:
         case feature_flags::engine_mnt:
         case feature_flags::engine_other:
             if (existing_features & feature_flags::engine_stt_ds ||
@@ -2081,6 +2091,16 @@ models_manager::feature_flags models_manager::add_implicit_feature_flags(
             existing_features =
                 add_new_feature(existing_features,
                                 feature_flags::engine_tts_kokoro) |
+                add_new_feature(existing_features,
+                                feature_flags::medium_processing);
+            existing_features = add_new_feature(
+                existing_features, score == 0 ? feature_flags::low_quality
+                                              : feature_flags::high_quality);
+            break;
+        case model_engine_t::tts_qwen3:
+            existing_features =
+                add_new_feature(existing_features,
+                                feature_flags::engine_tts_qwen3) |
                 add_new_feature(existing_features,
                                 feature_flags::medium_processing);
             existing_features = add_new_feature(
@@ -2385,6 +2405,11 @@ auto models_manager::extract_models(
             if (!models_availability->tts_kokoro &&
                 engine == model_engine_t::tts_kokoro) {
                 qDebug() << "ignoring kokoro model:" << model_id;
+                continue;
+            }
+            if (!models_availability->tts_qwen3 &&
+                engine == model_engine_t::tts_qwen3) {
+                qDebug() << "ignoring qwen3 model:" << model_id;
                 continue;
             }
             if (!models_availability->tts_rhvoice &&
@@ -2793,6 +2818,7 @@ QString models_manager::file_name_from_id(const QString& id,
         case model_engine_t::tts_parler:
         case model_engine_t::tts_f5:
         case model_engine_t::tts_kokoro:
+        case model_engine_t::tts_qwen3:
         case model_engine_t::mnt_bergamot:
             return id;
     }
@@ -2989,6 +3015,11 @@ void models_manager::update_models_using_availability_internal() {
                 pair.second.disabled = true;
                 return;
             }
+        }
+        if (!m_models_availability->tts_qwen3 &&
+            pair.second.engine == model_engine_t::tts_qwen3) {
+            pair.second.disabled = true;
+            return;
         }
         if (pair.second.engine == model_engine_t::tts_mimic3) {
             if (!m_models_availability->tts_mimic3 ||
