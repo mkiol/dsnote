@@ -74,7 +74,8 @@
     X(whisperspeech, true)  \
     X(parler, true)         \
     X(f5, true)             \
-    X(kokoro, true)
+    X(kokoro, true)         \
+    X(qwen3, true)
 
 // id, action-name, description, default-key-combination, trigger-on-deactivate
 #define HOTKEY_TABLE                                                           \
@@ -601,6 +602,8 @@ class settings : public QSettings, public singleton<settings> {
         hw_feature_tts_f5_hip = 1U << 14U,
         hw_feature_tts_kokoro_cuda = 1U << 15U,
         hw_feature_tts_kokoro_hip = 1U << 16U,
+        hw_feature_tts_qwen3_cuda = 1U << 17U,
+        hw_feature_tts_qwen3_hip = 1U << 18U,
         hw_feature_all =
             hw_feature_stt_whispercpp_cuda | hw_feature_stt_whispercpp_hip |
             hw_feature_stt_whispercpp_openvino |
@@ -612,7 +615,8 @@ class settings : public QSettings, public singleton<settings> {
             hw_feature_tts_whisperspeech_hip | hw_feature_tts_parler_cuda |
             hw_feature_tts_parler_hip | hw_feature_tts_f5_cuda |
             hw_feature_tts_f5_hip | hw_feature_tts_kokoro_cuda |
-            hw_feature_tts_kokoro_hip
+            hw_feature_tts_kokoro_hip | hw_feature_tts_qwen3_cuda |
+            hw_feature_tts_qwen3_hip
     };
     friend QDebug operator<<(QDebug d, hw_feature_flags_t hw_feature_flags);
 

@@ -4729,6 +4729,15 @@ bool dsnote_app::feature_kokoro_gpu() const {
            feature_available("kokoro-tts-hip", false);
 }
 
+bool dsnote_app::feature_qwen3_tts() const {
+    return feature_available("qwen3-tts", false);
+}
+
+bool dsnote_app::feature_qwen3_gpu() const {
+    return feature_available("qwen3-tts-cuda", false) ||
+           feature_available("qwen3-tts-hip", false);
+}
+
 bool dsnote_app::feature_punctuator() const {
     return feature_available("punctuator", false);
 }
@@ -4902,6 +4911,8 @@ QVariantList dsnote_app::features_availability() {
                  feature_available("kokoro-tts-ja", false),
                  /*tts_kokoro_zh=*/
                  feature_available("kokoro-tts-zh", false),
+                 /*tts_qwen3=*/
+                 feature_available("qwen3-tts", false),
                  /*stt_fasterwhisper=*/
                  feature_available("faster-whisper-stt", false),
                  /*stt_ds=*/feature_available("coqui-stt", false),

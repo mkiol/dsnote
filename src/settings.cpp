@@ -1547,6 +1547,11 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
         0;
     bool disable_kokoro_hip =
         (hw_feature_flags & hw_feature_flags_t::hw_feature_tts_kokoro_hip) == 0;
+    bool disable_qwen3_cuda =
+        (hw_feature_flags & hw_feature_flags_t::hw_feature_tts_qwen3_cuda) ==
+        0;
+    bool disable_qwen3_hip =
+        (hw_feature_flags & hw_feature_flags_t::hw_feature_tts_qwen3_hip) == 0;
 
     auto result = gpu_tools::available_devices(
         /*cuda=*/hw_scan_cuda(),
@@ -1577,7 +1582,7 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
                     if (disable_fasterwhisper_cuda && disable_whispercpp_cuda &&
                         disable_coqui_cuda && disable_whisperspeech_cuda &&
                         disable_parler_cuda && disable_f5_cuda &&
-                        disable_kokoro_cuda)
+                        disable_kokoro_cuda && disable_qwen3_cuda)
                         return;
                     auto item =
                         QStringLiteral("%1, %2, %3")
@@ -1596,13 +1601,15 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
                     if (!disable_f5_cuda) m_f5_gpu_devices.push_back(item);
                     if (!disable_kokoro_cuda)
                         m_kokoro_gpu_devices.push_back(item);
+                    if (!disable_qwen3_cuda)
+                        m_qwen3_gpu_devices.push_back(item);
                     break;
                 }
                 case gpu_tools::api_t::rocm: {
                     if (disable_fasterwhisper_hip && disable_whispercpp_hip &&
                         disable_coqui_hip && disable_whisperspeech_hip &&
                         disable_parler_hip && disable_f5_hip &&
-                        disable_kokoro_hip)
+                        disable_kokoro_hip && disable_qwen3_hip)
                         return;
                     auto item =
                         QStringLiteral("%1, %2, %3")
@@ -1620,6 +1627,8 @@ void settings::scan_hw_devices(unsigned int hw_feature_flags) {
                     if (!disable_f5_hip) m_f5_gpu_devices.push_back(item);
                     if (!disable_kokoro_hip)
                         m_kokoro_gpu_devices.push_back(item);
+                    if (!disable_qwen3_hip)
+                        m_qwen3_gpu_devices.push_back(item);
                     m_rocm_gpu_versions.push_back(
                         QString::fromStdString(device.platform_name));
                     break;

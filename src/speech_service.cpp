@@ -30,6 +30,7 @@
 #include "gpu_tools.hpp"
 #include "kokoro_engine.hpp"
 #include "media_compressor.hpp"
+#include "qwen3tts_engine.hpp"
 #include "mic_source.h"
 #include "mimic3_engine.hpp"
 #include "module_tools.hpp"
@@ -1733,6 +1734,10 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                     models_manager::model_engine_t::tts_kokoro &&
                 type != typeid(kokoro_engine))
                 return true;
+            if (model_config->tts->engine ==
+                    models_manager::model_engine_t::tts_qwen3 &&
+                type != typeid(qwen3tts_engine))
+                return true;
 
             if (m_tts_engine->model_files() != config.model_files) return true;
 
@@ -1863,6 +1868,10 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                         break;
                     case models_manager::model_engine_t::tts_kokoro:
                         m_tts_engine = std::make_unique<kokoro_engine>(
+                            std::move(config), std::move(call_backs));
+                        break;
+                    case models_manager::model_engine_t::tts_qwen3:
+                        m_tts_engine = std::make_unique<qwen3tts_engine>(
                             std::move(config), std::move(call_backs));
                         break;
                     case models_manager::model_engine_t::ttt_hftc:
@@ -3035,6 +3044,9 @@ QVariantMap speech_service::features_availability() {
                 "kokoro-tts-zh", QVariantList{py_availability->kokoro_tts &&
                                                   py_availability->kokoro_zh,
                                               "Kokoro TTS " + tr("Chinese")});
+            m_features_availability.insert(
+                "qwen3-tts",
+                QVariantList{py_availability->qwen3_tts, "Qwen3 TTS"});
 #ifdef ARCH_X86_64
             auto has_cuda = gpu_tools::has_cuda_runtime();
             auto has_cudnn = gpu_tools::has_cudnn();
@@ -3135,6 +3147,25 @@ QVariantMap speech_service::features_availability() {
             if (tts_kokoro_hip)
                 hw_feature_flags |=
                     settings::hw_feature_flags_t::hw_feature_tts_kokoro_hip;
+
+            bool tts_qwen3_cuda =
+                py_availability->qwen3_tts && py_availability->torch_cuda;
+            bool tts_qwen3_hip =
+                py_availability->qwen3_tts && py_availability->torch_hip;
+            m_features_availability.insert(
+                "qwen3-tts-cuda",
+                QVariantList{tts_qwen3_cuda,
+                             "Qwen3 TTS CUDA " + tr("HW acceleration")});
+            m_features_availability.insert(
+                "qwen3-tts-hip",
+                QVariantList{tts_qwen3_hip,
+                             "Qwen3 TTS ROCm " + tr("HW acceleration")});
+            if (tts_qwen3_cuda)
+                hw_feature_flags |=
+                    settings::hw_feature_flags_t::hw_feature_tts_qwen3_cuda;
+            if (tts_qwen3_hip)
+                hw_feature_flags |=
+                    settings::hw_feature_flags_t::hw_feature_tts_qwen3_hip;
 #endif
             m_features_availability.insert(
                 "coqui-tts-ja", QVariantList{py_availability->coqui_tts &&
@@ -3311,6 +3342,7 @@ QVariantMap speech_service::features_availability() {
                  /*tts_kokoro=*/py_availability->kokoro_tts,
                  /*tts_kokoro_ja=*/py_availability->kokoro_ja,
                  /*tts_kokoro_zh=*/py_availability->kokoro_zh,
+                 /*tts_qwen3=*/py_availability->qwen3_tts,
                  /*stt_fasterwhisper=*/py_availability->faster_whisper,
                  /*stt_ds=*/stt_ds,
                  /*stt_vosk=*/stt_vosk,
@@ -3348,6 +3380,10 @@ QVariantMap speech_service::features_availability() {
                 "kokoro-gpu-devices",
                 variant_list_from_list(
                     settings::instance()->kokoro_gpu_devices()));
+            m_features_availability.insert(
+                "qwen3-gpu-devices",
+                variant_list_from_list(
+                    settings::instance()->qwen3_gpu_devices()));
 
             m_features_availability.insert(
                 "addon-flags",

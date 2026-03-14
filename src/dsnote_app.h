@@ -71,6 +71,8 @@
     X(f5_gpu)            \
     X(kokoro_tts)        \
     X(kokoro_gpu)        \
+    X(qwen3_tts)         \
+    X(qwen3_gpu)         \
     X(punctuator)        \
     X(diacritizer_he)    \
     X(translator)        \

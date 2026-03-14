@@ -41,7 +41,8 @@ std::ostream& operator<<(std::ostream& os,
        << ", whisperspeech-tts=" << availability.whisperspeech_tts
        << ", parler-tts=" << availability.parler_tts
        << ", f5-tts=" << availability.f5_tts
-       << ", kokoro-tts=" << availability.f5_tts
+       << ", kokoro-tts=" << availability.kokoro_tts
+       << ", qwen3-tts=" << availability.qwen3_tts
        << ", transformers=" << availability.transformers
        << ", unikud=" << availability.unikud
        << ", gruut_de=" << availability.gruut_de
@@ -81,6 +82,7 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type,
                 availability.kokoro_tts = true;
                 availability.kokoro_ja = true;
                 availability.kokoro_zh = true;
+                availability.qwen3_tts = true;
             }
             availability.faster_whisper = true;
             availability.mimic3_tts = true;
@@ -224,6 +226,14 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type,
             }
         } catch (const std::exception& err) {
             LOGD("kokoro tts check py error: " << err.what());
+        }
+
+        try {
+            LOGD("checking: qwen3 tts");
+            py::module_::import("qwen_tts");
+            availability.qwen3_tts = true;
+        } catch (const std::exception& err) {
+            LOGD("qwen3 tts check py error: " << err.what());
         }
 
         try {

@@ -36175,6 +36175,55 @@
             "lang_id": "zh"
         },
         {
+            "name": "Français (Qwen3-TTS Chelsie Female)",
+            "id": "fr_qwen3_chelsie",
+            "engine": "tts_qwen3",
+            "lang_id": "fr",
+            "speaker": "Chelsie"
+        },
+        {
+            "name": "Français (Qwen3-TTS Serena Female)",
+            "id": "fr_qwen3_serena",
+            "engine": "tts_qwen3",
+            "lang_id": "fr",
+            "speaker": "Serena"
+        },
+        {
+            "name": "Français (Qwen3-TTS Aria Female)",
+            "id": "fr_qwen3_aria",
+            "engine": "tts_qwen3",
+            "lang_id": "fr",
+            "speaker": "Aria"
+        },
+        {
+            "name": "Français (Qwen3-TTS Ethan Male)",
+            "id": "fr_qwen3_ethan",
+            "engine": "tts_qwen3",
+            "lang_id": "fr",
+            "speaker": "Ethan"
+        },
+        {
+            "name": "Français (Qwen3-TTS Aidan Male)",
+            "id": "fr_qwen3_aidan",
+            "engine": "tts_qwen3",
+            "lang_id": "fr",
+            "speaker": "Aidan"
+        },
+        {
+            "name": "English (Qwen3-TTS Chelsie Female)",
+            "id": "en_qwen3_chelsie",
+            "engine": "tts_qwen3",
+            "lang_id": "en",
+            "speaker": "Chelsie"
+        },
+        {
+            "name": "English (Qwen3-TTS Ethan Male)",
+            "id": "en_qwen3_ethan",
+            "engine": "tts_qwen3",
+            "lang_id": "en",
+            "speaker": "Ethan"
+        },
+        {
             "name": "English (Parler-TTS)",
             "id": "en_parler",
             "engine": "tts_parler",
