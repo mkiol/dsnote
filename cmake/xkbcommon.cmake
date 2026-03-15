@@ -13,6 +13,7 @@ ExternalProject_Add(xkbcommon
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL ${xkbcommon_source_url}
     URL_HASH SHA256=${xkbcommon_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CONFIGURE_COMMAND ${meson_bin} setup --prefix=<INSTALL_DIR> --buildtype=release --libdir=lib
         -Denable-wayland=true
         -Denable-tools=false

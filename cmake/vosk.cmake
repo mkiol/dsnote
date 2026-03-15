@@ -22,6 +22,7 @@ if(BUILD_VOSK)
         INSTALL_DIR ${PROJECT_BINARY_DIR}/external
         URL "${openfst_source_url}"
         URL_HASH SHA256=${openfst_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                     -i ${patches_dir}/openfst.patch ||
                         echo "patch cmd failed, likely already patched"
@@ -44,6 +45,7 @@ if(BUILD_VOSK)
         INSTALL_DIR ${PROJECT_BINARY_DIR}/external
         URL "${kaldi_source_url}"
         URL_MD5 "${kaldi_checksum}"
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
         PATCH_COMMAND patch --batch --forward --unified <SOURCE_DIR>/CMakeLists.txt
             -i ${patches_dir}/kaldi.patch ||
                 echo "patch cmd failed, likely already patched"
@@ -64,6 +66,7 @@ if(BUILD_VOSK)
         INSTALL_DIR ${PROJECT_BINARY_DIR}/external
         URL "${vosk_source_url}"
         URL_MD5 "${vosk_checksum}"
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
         PATCH_COMMAND patch --batch --forward --unified <SOURCE_DIR>/CMakeLists.txt
             -i ${patches_dir}/vosk.patch ||
                 echo "patch cmd failed, likely already patched"

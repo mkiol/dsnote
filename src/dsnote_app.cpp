@@ -7,6 +7,7 @@
 
 #include "dsnote_app.h"
 
+#include <QAudioOutput>
 #include <QClipboard>
 #include <QDBusConnection>
 #include <QDebug>
@@ -14,7 +15,7 @@
 #include <QFile>
 #include <QGuiApplication>
 #include <QKeySequence>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QTextStream>
 #include <QTimer>
 #include <algorithm>
@@ -478,10 +479,10 @@ dsnote_app::dsnote_app(QObject *parent)
 }
 
 void dsnote_app::create_player() {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_player = std::make_unique<QMediaPlayer>(QObject::parent(),
                                               QMediaPlayer::LowLatency);
     m_player->setNotifyInterval(100);
-
     connect(
         m_player.get(), &QMediaPlayer::stateChanged, this,
         [this](QMediaPlayer::State state) {
@@ -489,6 +490,19 @@ void dsnote_app::create_player() {
             emit player_playing_changed();
         },
         Qt::QueuedConnection);
+#else
+    m_player = std::make_unique<QMediaPlayer>(QObject::parent());
+    m_player->setAudioOutput(new QAudioOutput(this));
+
+    connect(
+        m_player.get(), &QMediaPlayer::playbackStateChanged, this,
+        [this](QMediaPlayer::PlaybackState state) {
+            qDebug() << "player state changed:" << state;
+            emit player_playing_changed();
+        },
+        Qt::QueuedConnection);
+#endif
+
     connect(
         m_player.get(), &QMediaPlayer::mediaStatusChanged, this,
         [this](QMediaPlayer::MediaStatus status) {
@@ -739,11 +753,14 @@ settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
                     ? rule.flags
                     : trans_rule_flags_t::TransRuleNone;
             break;
-        case trans_rule_type_t::TransRuleTypeMatchRe:
-            rule_matches = text.contains(
-                QRegExp{rule.pattern,
-                        case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive});
+        case trans_rule_type_t::TransRuleTypeMatchRe: {
+            QRegularExpression rx{
+                rule.pattern, case_sens
+                                  ? QRegularExpression::NoPatternOption
+                                  : QRegularExpression::CaseInsensitiveOption};
+            rule_matches = text.contains(rx);
             break;
+        }
         case trans_rule_type_t::TransRuleTypeReplaceSimple: {
             rule_matches =
                 text.contains(rule.pattern, case_sens ? Qt::CaseSensitive
@@ -758,29 +775,33 @@ settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
             auto replace = rule.replace;
             replace.replace("\\n", "\n");
 
-            QRegExp rx{rule.pattern,
-                       case_sens ? Qt::CaseSensitive : Qt::CaseInsensitive};
+            QRegularExpression rx{
+                rule.pattern, case_sens
+                                  ? QRegularExpression::NoPatternOption
+                                  : QRegularExpression::CaseInsensitiveOption};
 
             rule_matches = text.contains(rx);
             if (rule_matches) {
                 if (!rule.replace.contains("\\U") && !replace.contains("\\u")) {
                     text.replace(rx, replace);
                 } else {
-                    int pos = 0;
-                    while (pos < text.size() &&
-                           (pos = rx.indexIn(text, pos)) != -1 &&
-                           rx.matchedLength() > 0) {
+                    QRegularExpressionMatchIterator it = rx.globalMatch(text);
+                    int offset = 0;
+                    while (it.hasNext()) {
+                        QRegularExpressionMatch match = it.next();
+                        int pos = match.capturedStart() + offset;
+                        int len = match.capturedLength();
                         QString after = replace;
-                        for (int i = 1; i < rx.captureCount() + 1; ++i) {
+                        for (int i = 1; i <= match.lastCapturedIndex(); ++i) {
                             after.replace(QStringLiteral("\\U\\%1").arg(i),
-                                          rx.cap(i).toUpper());
+                                          match.captured(i).toUpper());
                             after.replace(QStringLiteral("\\u\\%1").arg(i),
-                                          rx.cap(i).toLower());
+                                          match.captured(i).toLower());
                             after.replace(QStringLiteral("\\%1").arg(i),
-                                          rx.cap(i));
+                                          match.captured(i));
                         }
-                        text.replace(pos, rx.matchedLength(), after);
-                        pos += after.size();
+                        text.replace(pos, len, after);
+                        offset += after.size() - len;
                     }
                 }
             }
@@ -869,7 +890,7 @@ QVariantList dsnote_app::test_trans_rule(unsigned int flags,
 }
 
 bool dsnote_app::trans_rule_re_pattern_valid(const QString &pattern) {
-    return QRegExp{pattern}.isValid();
+    return QRegularExpression{pattern}.isValid();
 }
 
 void dsnote_app::update_trans_rule(int index, unsigned int flags,
@@ -1950,7 +1971,7 @@ void dsnote_app::update_available_tts_ref_voices() {
     QVariantMap new_available_tts_ref_voices_map{};
 
     const auto ref_voices_dir =
-        QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+        QDir{QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)}
             .filePath(s_ref_voices_dir_name);
 
     auto scan_ref_voices = [&] {
@@ -2597,8 +2618,7 @@ void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
         s->stt_use_note_as_prompt()) {
         options.insert("initial_prompt", note_as_prompt());
     }
-    options.insert("inline_timestamp_template",
-                   s->inline_timestamp_template());
+    options.insert("inline_timestamp_template", s->inline_timestamp_template());
     options.insert("inline_timestamp_min_interval",
                    s->inline_timestamp_min_interval());
 
@@ -2736,8 +2756,7 @@ void dsnote_app::listen_internal(stt_translate_req_t translate_req) {
         s->stt_use_note_as_prompt()) {
         options.insert("initial_prompt", note_as_prompt());
     }
-    options.insert("inline_timestamp_template",
-                   s->inline_timestamp_template());
+    options.insert("inline_timestamp_template", s->inline_timestamp_template());
     options.insert("inline_timestamp_min_interval",
                    s->inline_timestamp_min_interval());
 
@@ -2910,8 +2929,11 @@ void dsnote_app::play_speech_selected(int start, int end) {
 
     if (size == 0) return;
 
-    start = std::clamp(start, 0, size);
-    end = end < 0 ? size : std::clamp(end, start, size);
+    start = std::clamp(static_cast<decltype(size)>(start),
+                       static_cast<decltype(size)>(0), size);
+    end = end < 0 ? size
+                  : std::clamp(static_cast<decltype(size)>(end),
+                               static_cast<decltype(size)>(start), size);
 
     if (start == end) return;
 
@@ -2930,8 +2952,11 @@ void dsnote_app::play_speech_translator_selected(int start, int end,
 
     if (size == 0) return;
 
-    start = std::clamp(start, 0, size);
-    end = end < 0 ? size : std::clamp(end, start, size);
+    start = std::clamp(static_cast<decltype(size)>(start),
+                       static_cast<decltype(size)>(0), size);
+    end = end < 0 ? size
+                  : std::clamp(static_cast<decltype(size)>(end),
+                               static_cast<decltype(size)>(start), size);
 
     if (start == end) return;
 
@@ -3064,8 +3089,11 @@ void dsnote_app::translate_selected(int start, int end) {
 
     if (size == 0) return;
 
-    start = std::clamp(start, 0, size);
-    end = end < 0 ? size : std::clamp(end, start, size);
+    start = std::clamp(static_cast<decltype(size)>(start),
+                       static_cast<decltype(size)>(0), size);
+    end = end < 0 ? size
+                  : std::clamp(static_cast<decltype(size)>(end),
+                               static_cast<decltype(size)>(start), size);
 
     if (start == end) return;
 
@@ -4864,8 +4892,16 @@ QVariantList dsnote_app::features_availability() {
     auto it = m_features_availability.cbegin();
     while (it != m_features_availability.cend()) {
         auto val = it.value().toList();
-        if (val.size() > 1 && val.at(0).type() == QVariant::Bool &&
-            val.at(1).type() == QVariant::String) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        bool is_feature = val.size() > 1 &&
+                          val.at(0).type() == QVariant::Bool &&
+                          val.at(1).type() == QVariant::String;
+#else
+        bool is_feature = val.size() > 1 &&
+                          val.at(0).typeId() == QMetaType::Bool &&
+                          val.at(1).typeId() == QMetaType::QString;
+#endif
+        if (is_feature) {
             list.push_back(QVariantList{val.at(0), val.at(1)});
         }
         ++it;
@@ -5258,6 +5294,7 @@ void dsnote_app::play_speech_selected_in_active_window(
         qWarning() << "fake-keyboard error:" << err.what();
     }
 #else
+    std::ignore = model_id;
     qWarning() << "not supported";
 #endif
 }
@@ -5345,8 +5382,11 @@ QString dsnote_app::import_ref_voice_file_path() {
 
 void dsnote_app::player_stop_voice_ref() {
     if (!m_player) return;
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_player->setMedia({});
+#else
+    m_player->setSource(QUrl{});
+#endif
 
     m_player_current_voice_ref_idx = -1;
     emit player_current_voice_ref_idx_changed();
@@ -5419,12 +5459,12 @@ void dsnote_app::player_import_rec() {
 }
 
 void dsnote_app::player_set_path(const QString &wav_file_path) {
-    if (!m_player) create_player();
-
-    m_player->setMedia(
-        QUrl{QStringLiteral("gst-pipeline: filesrc location=%1 ! wavparse ! "
-                            "audioconvert ! alsasink")
-                 .arg(wav_file_path)});
+    create_player();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    m_player->setMedia(QUrl::fromLocalFile(wav_file_path));
+#else
+    m_player->setSource(QUrl::fromLocalFile(wav_file_path));
+#endif
 }
 
 QString dsnote_app::tts_ref_voice_auto_name() const {
@@ -5443,13 +5483,14 @@ QString dsnote_app::tts_ref_voice_unique_name(QString name,
     if (!add_number && !names.contains(name)) return name;
 
     int i = 1;
-    QRegExp rx{"\\d+$"};
-    if (auto idx = rx.indexIn(name); idx >= 0) {
+    QRegularExpression rx{"\\d+$"};
+    QRegularExpressionMatch match = rx.match(name);
+    if (match.hasMatch()) {
         bool ok = false;
-        auto ii = name.midRef(idx).toInt(&ok);
+        auto ii = match.captured(0).toInt(&ok);
         if (ok && ii < 99999) {
             i = ii;
-            name = name.mid(0, idx) + "%1";
+            name = name.mid(0, match.capturedStart()) + "%1";
         } else {
             name += " %1";
         }
@@ -5473,7 +5514,7 @@ void dsnote_app::player_export_ref_voice(long long start, long long stop,
                                          const QString &name,
                                          const QString &text) {
     QDir ref_voices_dir{
-        QDir{QStandardPaths::writableLocation(QStandardPaths::DataLocation)}
+        QDir{QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)}
             .filePath(s_ref_voices_dir_name)};
 
     QString out_file_path;
@@ -5520,7 +5561,11 @@ void dsnote_app::player_reset() {
     if (!m_player) return;
 
     QFile{import_ref_voice_file_path()}.remove();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_player->setMedia({});
+#else
+    m_player->setSource({});
+#endif
 }
 
 bool dsnote_app::player_ready() const {
@@ -5579,7 +5624,12 @@ void dsnote_app::recorder_stop() {
 void dsnote_app::recorder_reset() { m_recorder.reset(); }
 
 bool dsnote_app::player_playing() const {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return m_player && m_player->state() == QMediaPlayer::State::PlayingState;
+#else
+    return m_player && m_player->playbackState() ==
+                           QMediaPlayer::PlaybackState::PlayingState;
+#endif
 }
 
 void dsnote_app::player_set_position(long long position) {

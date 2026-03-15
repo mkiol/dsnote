@@ -13,7 +13,7 @@ set(openblas_opts
     -DDYNAMIC_ARCH=ON
     -DBUILD_STATIC_LIBS=OFF
     -DBUILD_SHARED_LIBS=ON
-    -DCMAKE_C_FLAGS=-Wno-error=incompatible-pointer-types
+    -DCMAKE_C_FLAGS=-Wno-error=incompatible-pointer-types -Wno-unused-variable -Wno-unused-but-set-variable
 )
 
 if(arch_x8664)
@@ -32,6 +32,7 @@ ExternalProject_Add(openblas
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL ${openblas_source_url}
     URL_HASH SHA256=${openblas_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CMAKE_ARGS ${openblas_opts}
     BUILD_ALWAYS False
 )

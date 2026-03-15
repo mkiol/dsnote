@@ -5,9 +5,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 Dialog {
     id: root
@@ -17,7 +17,6 @@ Dialog {
     property alias flickItem: flick
     property alias placeholderLabel: _placeholderLabel
     property alias footerLabel: _footerLabel
-    property alias frame: _frame
     readonly property bool listViewExists: !listViewStackItem.empty
     readonly property real _rightMargin: (!root.mirrored && scrollBar.visible) ? appWin.padding + scrollBar.width : appWin.padding
     readonly property real _leftMargin: (root.mirrored && scrollBar.visible) ? appWin.padding + scrollBar.width : appWin.padding
@@ -30,6 +29,7 @@ Dialog {
     verticalPadding: appWin.padding
     horizontalPadding: 1
     modal: true
+    spacing: 0
 
     header: Item {
         visible: root.title.length !== 0
@@ -85,75 +85,62 @@ Dialog {
         }
     }
 
-    Frame {
-        id: _frame
+    PlaceholderLabel {
+        id: _placeholderLabel
+
+        enabled: false
+    }
+
+    StackViewQuick {
+        id: listViewStack
 
         anchors.fill: parent
-        topPadding: 1
-        bottomPadding: 1
-        leftPadding: 0
-        rightPadding: 0
-        leftInset: -1
-        rightInset: -1
-        clip: true
+    }
 
-        PlaceholderLabel {
-            id: _placeholderLabel
+    Component {
+        id: listViewComp
 
-            enabled: false
-        }
-
-        StackView {
-            id: listViewStack
+        ListView {
+            id: listView
 
             anchors.fill: parent
-        }
-
-        Component {
-            id: listViewComp
-
-            ListView {
-                id: listView
-
-                anchors.fill: parent
-                topMargin: appWin.padding
-                bottomMargin: appWin.padding
-
-                focus: true
-                clip: true
-                spacing: appWin.padding
-
-                Keys.onUpPressed: listViewScrollBar.decrease()
-                Keys.onDownPressed: listViewScrollBar.increase()
-
-                ScrollBar.vertical: ScrollBar {
-                    id: listViewScrollBar
-                }
-            }
-        }
-
-        Flickable {
-            id: flick
-
-            anchors.fill: root.listViewExists ? null : parent
-            visible: !root.listViewExists
-            contentWidth: width
-            contentHeight: column.height + 2 * appWin.padding
             topMargin: appWin.padding
             bottomMargin: appWin.padding
+
+            focus: true
             clip: true
+            spacing: 0
 
-            Keys.onUpPressed: scrollBar.decrease()
-            Keys.onDownPressed: scrollBar.increase()
+            Keys.onUpPressed: listViewScrollBar.decrease()
+            Keys.onDownPressed: listViewScrollBar.increase()
 
-            ScrollBar.vertical: ScrollBar { id: scrollBar }
-
-            ColumnLayout {
-                id: column
-                x: root._leftMargin
-                width: flick.width - x - root._rightMargin
-                spacing: appWin.padding
+            ScrollBar.vertical: ScrollBar {
+                id: listViewScrollBar
             }
+        }
+    }
+
+    Flickable {
+        id: flick
+
+        anchors.fill: root.listViewExists ? null : parent
+        visible: !root.listViewExists
+        contentWidth: width
+        contentHeight: column.height + 2 * appWin.padding
+        topMargin: appWin.padding
+        bottomMargin: appWin.padding
+        clip: true
+
+        Keys.onUpPressed: scrollBar.decrease()
+        Keys.onDownPressed: scrollBar.increase()
+
+        ScrollBar.vertical: ScrollBar { id: scrollBar }
+
+        ColumnLayout {
+            id: column
+            x: root._leftMargin
+            width: flick.width - x - root._rightMargin
+            spacing: appWin.padding
         }
     }
 }

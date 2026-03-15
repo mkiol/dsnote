@@ -5,10 +5,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2 as Dialogs
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs as Dialogs
+import QtQuick.Layouts
 
 import org.mkiol.dsnote.Settings 1.0
 
@@ -231,48 +231,43 @@ ColumnLayout {
         }
     }
 
-    ColumnLayout {
-        Layout.fillWidth: true
-        spacing: 0
+    SectionLabel {
+        text: qsTranslate("SettingsPage", "Inline timestamp settings")
+    }
 
-        SectionLabel {
-            text: qsTranslate("SettingsPage", "Inline timestamp settings")
+    TextFieldForm {
+        label.text: qsTranslate("SettingsPage", "Template")
+        compact: true
+        textField {
+            text: _settings.inline_timestamp_template
+            readOnly: true
+            // color: palette.text
+            // background: Rectangle {
+            //     color: palette.base
+            //     border.color: palette.mid
+            //     border.width: 1
+            //     radius: 2
+            // }
         }
-
-        TextFieldForm {
-            label.text: qsTranslate("SettingsPage", "Template")
-            compact: true
-            textField {
-                text: _settings.inline_timestamp_template
-                readOnly: true
-                color: palette.text
-                background: Rectangle {
-                    color: palette.base
-                    border.color: palette.mid
-                    border.width: 1
-                    radius: 2
-                }
-            }
-            button {
-                text: qsTranslate("SettingsPage", "Edit")
-                onClicked: inlineTimestampDialog.open()
-            }
+        button {
+            text: qsTranslate("SettingsPage", "Edit")
+            onClicked: inlineTimestampDialog.open()
         }
+    }
 
-        SpinBoxForm {
-            label.text: qsTranslate("SettingsPage", "Timestamp interval")
-            toolTip: qsTranslate("SettingsPage", "Minimum seconds between timestamps.")
-            spinBox {
-                from: 5
-                to: 3600
-                stepSize: 5
-                value: _settings.inline_timestamp_min_interval
-                editable: true
-                textFromValue: function(value) { return value + " s" }
-                valueFromText: function(text) { return parseInt(text) }
-                onValueModified: {
-                    _settings.inline_timestamp_min_interval = value
-                }
+    SpinBoxForm {
+        label.text: qsTranslate("SettingsPage", "Timestamp interval")
+        toolTip: qsTranslate("SettingsPage", "Minimum seconds between timestamps.")
+        spinBox {
+            from: 5
+            to: 3600
+            stepSize: 5
+            value: _settings.inline_timestamp_min_interval
+            editable: true
+            textFromValue: function(value) { return value + " s" }
+            valueFromText: function(text) { return parseInt(text) }
+            onValueModified: {
+                _settings.inline_timestamp_min_interval = value
             }
         }
     }
@@ -364,6 +359,8 @@ ColumnLayout {
         id: sttEnginesBar
 
         Layout.fillWidth: true
+        Layout.leftMargin: 1
+        Layout.rightMargin: 1
         currentIndex: !app.feature_whispercpp_stt ? 1 :
                       !app.feature_fasterwhisper_stt ? 0 :
                       _settings.settings_stt_engine_idx

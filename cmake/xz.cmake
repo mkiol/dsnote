@@ -7,6 +7,7 @@ ExternalProject_Add(xz
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${xz_source_url}"
     URL_MD5 "${xz_checksum}"
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --libdir=<INSTALL_DIR>/lib
         --enable-xz --disable-xzdec --disable-lzmadec --disable-lzmainfo
         --disable-lzma-links --disable-scripts --disable-doc --disable-shared --enable-static

@@ -1,14 +1,14 @@
-/* Copyright (C) 2024-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2 as Dialogs
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs as Dialogs
+import QtQuick.Layouts
 
 import org.mkiol.dsnote.Settings 1.0
 
@@ -17,8 +17,8 @@ DialogPage {
 
     readonly property bool verticalMode: width < appWin.height
     readonly property real _rightMargin: (!root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
-                                             appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
-                                             appWin.padding
+                                             listViewStackItem.currentItem.ScrollBar.vertical.width :
+                                             0
     readonly property real _leftMargin: (root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
                                              appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
                                              appWin.padding
@@ -58,7 +58,9 @@ DialogPage {
 
     Connections {
         target: _settings
-        onActive_voice_profile_type_changed: root.updateTypeView()
+        function onActive_voice_profile_type_changed() {
+            root.updateTypeView()
+        }
     }
 
     Component.onCompleted: {
@@ -173,8 +175,8 @@ DialogPage {
                 }
             }
             visible: !root.verticalMode
-            Layout.leftMargin: root.leftPadding + appWin.padding
-            Layout.rightMargin: root.rightPadding + appWin.padding
+            Layout.leftMargin: 1
+            Layout.rightMargin: 1
 
             TabButton {
                 id: audioTabButton
@@ -202,10 +204,7 @@ DialogPage {
         }
     }
 
-
     footer: RowLayout {
-        height: closeButton.height + appWin.padding
-
         Button {
             id: createNewButton
 
@@ -240,6 +239,8 @@ DialogPage {
         }
 
         Item {
+            width: 1
+            height: 1
             Layout.fillWidth: true
         }
 
@@ -264,125 +265,126 @@ DialogPage {
     }
 
     Component {
-        id: voicePromptDelegate
+        id: voicePromptDelegateComp
 
-        Control {
-            id: control
+        ItemDelegate {
+            id: voicePromptDelegate
 
             readonly property bool compact: root.verticalMode
             readonly property string voiceName: modelData[0]
             readonly property string voiceDesc: modelData[1]
 
-            background: Rectangle {
-                id: bg
-
-                anchors.fill: parent
-                color: palette.text
-                opacity: control.hovered ? 0.1 : 0.0
-            }
-
-            width: root.listViewStackItem.currentItem.width
-            height: deleteButton.height
+            text: voiceName
+            onClicked: openEdit()
+            Accessible.name: voiceName
+            width: ListView.view.width - root._rightMargin
+            bottomInset: 0
+            topInset: 0
             leftPadding: root._leftMargin
 
-            RowLayout {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                anchors.rightMargin: root._rightMargin
-                anchors.left: parent.left
-                anchors.leftMargin: root._leftMargin
+            Component.onCompleted: {
+                if (background && background.color) {
+                    background.color = "transparent"
+                }
+            }
+
+            function openEdit() {
+                appWin.openDialog("VoicePromptEditPage.qml", {data: modelData})
+            }
+
+            contentItem: RowLayout {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
 
                 Label {
-                    text: control.voiceName
+                    text: voicePromptDelegate.voiceName
                     elide: Text.ElideRight
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.leftMargin: appWin.padding
                     Layout.fillWidth: true
                 }
 
                 Button {
                     text: qsTr("Edit")
                     icon.name: "edit-entry-symbolic"
-                    display: control.compact ? Button.IconOnly : Button.TextBesideIcon
-                    Layout.alignment: Qt.AlignHCenter
-                    onClicked: appWin.openDialog("VoicePromptEditPage.qml", {data: modelData})
+                    display: voicePromptDelegate.compact ? Button.IconOnly : Button.TextBesideIcon
+                    onClicked: voicePromptDelegate.openEdit()
 
                     ToolTip.visible: hovered
                     ToolTip.text: text
-                    hoverEnabled: control.compact
+                    hoverEnabled: voicePromptDelegate.compact
                 }
 
                 Button {
                     text: qsTr("Clone")
                     icon.name: "entry-clone-symbolic"
-                    display: control.compact ? Button.IconOnly : Button.TextBesideIcon
-                    Layout.alignment: Qt.AlignHCenter
-                    onClicked: app.clone_voice_prompt(control.voiceName)
+                    display: voicePromptDelegate.compact ? Button.IconOnly : Button.TextBesideIcon
+                    onClicked: app.clone_voice_prompt(voicePromptDelegate.voiceName)
 
                     ToolTip.visible: hovered
                     ToolTip.text: text
-                    hoverEnabled: control.compact
+                    hoverEnabled: voicePromptDelegate.compact
                 }
 
                 Button {
                     id: deleteButton
 
                     icon.name: "edit-delete-symbolic"
-                    display: control.compact ? Button.IconOnly : Button.TextBesideIcon
+                    display: voicePromptDelegate.compact ? Button.IconOnly : Button.TextBesideIcon
                     text: qsTr("Delete")
-                    Layout.alignment: Qt.AlignHCenter
-                    onClicked: app.delete_voice_prompt(control.voiceName)
+                    onClicked: app.delete_voice_prompt(voicePromptDelegate.voiceName)
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: text
-                    hoverEnabled: control.compact
+                    hoverEnabled: voicePromptDelegate.compact
                 }
             }
         }
     }
 
     Component {
-        id: voiceDelegate
+        id: voiceDelegateComp
 
-        Control {
-            id: control
+        ItemDelegate {
+            id: voiceDelegate
 
             readonly property bool compact: root.verticalMode
             readonly property string voiceName: modelData[0]
             readonly property bool invalid: modelData[2].length > 0
             property bool editActive: false
 
-            background: Rectangle {
-                id: bg
+            text: voiceName
+            onClicked: openEdit()
+            Accessible.name: voiceName
+            width: ListView.view.width - root._rightMargin
+            bottomInset: 0
+            topInset: 0
+            leftPadding: root._leftMargin
 
-                anchors.fill: parent
-                color: palette.text
-                opacity: control.hovered ? 0.1 : 0.0
+            Component.onCompleted: {
+                if (background && background.color) {
+                    background.color = "transparent"
+                }
             }
 
-            width: root.listViewStackItem.currentItem.width
-            height: deleteButton.height
-            leftPadding: root._leftMargin
+            function openEdit() {
+                appWin.openDialog("VoiceAudioSampleEditPage.qml", {data: modelData, index: index})
+            }
 
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: !invalid && hovered
             ToolTip.text: qsTr("Edit the audio sample and set the missing text.")
 
-            RowLayout {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                anchors.rightMargin: root._rightMargin
-                anchors.left: parent.left
-                anchors.leftMargin: root._leftMargin
+            contentItem: RowLayout {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
 
                 Label {
-                    text: control.voiceName
+                    text: voiceDelegate.voiceName
                     elide: Text.ElideRight
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.leftMargin: appWin.padding
                     Layout.fillWidth: true
-                    color: control.invalid ? palette.text : "red"
+                    color: voiceDelegate.invalid ? palette.text : "red"
                 }
 
                 Button {
@@ -390,7 +392,7 @@ DialogPage {
 
                     icon.name: playing ? "media-playback-stop-symbolic" : "media-playback-start-symbolic"
                     text: playing ? qsTr("Stop") : qsTr("Play")
-                    display: control.compact ? Button.IconOnly : Button.TextBesideIcon
+                    display: voiceDelegate.compact ? Button.IconOnly : Button.TextBesideIcon
                     onClicked: {
                         if (playing)
                             app.player_stop_voice_ref()
@@ -400,26 +402,26 @@ DialogPage {
 
                     ToolTip.visible: hovered
                     ToolTip.text: text
-                    hoverEnabled: control.compact
+                    hoverEnabled: voiceDelegate.compact
                 }
 
                 Button {
                     text: qsTr("Edit")
                     icon.name: "edit-entry-symbolic"
-                    display: control.compact ? Button.IconOnly : Button.TextBesideIcon
+                    display: voiceDelegate.compact ? Button.IconOnly : Button.TextBesideIcon
                     Layout.alignment: Qt.AlignHCenter
-                    onClicked: appWin.openDialog("VoiceAudioSampleEditPage.qml", {data: modelData, index: index})
+                    onClicked: voiceDelegate.openEdit()
 
                     ToolTip.visible: hovered
                     ToolTip.text: text
-                    hoverEnabled: control.compact
+                    hoverEnabled: voiceDelegate.compact
                 }
 
                 Button {
                     id: deleteButton
 
                     icon.name: "edit-delete-symbolic"
-                    display: control.compact ? Button.IconOnly : Button.TextBesideIcon
+                    display: voiceDelegate.compact ? Button.IconOnly : Button.TextBesideIcon
                     text: qsTr("Delete")
                     Layout.alignment: Qt.AlignHCenter
                     onClicked: {
@@ -430,7 +432,7 @@ DialogPage {
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.visible: hovered
                     ToolTip.text: text
-                    hoverEnabled: control.compact
+                    hoverEnabled: voiceDelegate.compact
                 }
             }
         }
@@ -450,20 +452,17 @@ DialogPage {
 
             focus: true
             clip: true
-            spacing: appWin.padding
+            spacing: 0
 
             Keys.onUpPressed: listViewScrollBar.decrease()
             Keys.onDownPressed: listViewScrollBar.increase()
-
             ScrollBar.vertical: ScrollBar {
                 id: listViewScrollBar
+                policy: listView.contentHeight > listView.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
             }
 
             model: app.available_tts_ref_voices
-            delegate: voiceDelegate
-            header: Item {
-                height: appWin.padding
-            }
+            delegate: voiceDelegateComp
         }
     }
 
@@ -475,20 +474,17 @@ DialogPage {
 
             focus: true
             clip: true
-            spacing: appWin.padding
+            spacing: 0
 
             Keys.onUpPressed: listViewScrollBar.decrease()
             Keys.onDownPressed: listViewScrollBar.increase()
-
             ScrollBar.vertical: ScrollBar {
                 id: listViewScrollBar
+                policy: listView.contentHeight > listView.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
             }
 
             model: _settings.tts_voice_prompts
-            delegate: voicePromptDelegate
-            header: Item {
-                height: appWin.padding
-            }
+            delegate: voicePromptDelegateComp
         }
     }
 }

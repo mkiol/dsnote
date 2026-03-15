@@ -13,7 +13,7 @@
 
 #include <fmt/format.h>
 #include <linux/uinput.h>
-#include <qpa/qplatformnativeinterface.h>
+#include <QGuiApplication>
 #include <sys/epoll.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
@@ -37,6 +37,10 @@
 #include <string>
 #include <tuple>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <qpa/qplatformnativeinterface.h>
+#endif
+
 #include "dbus_klipper_inf.h"
 #include "logger.hpp"
 #include "qtlogger.hpp"
@@ -51,6 +55,9 @@ using namespace std::chrono_literals;
 #include <X11/keysym.h>
 #include <xdo.h>
 #include <xkbcommon/xkbcommon-x11.h>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QX11Info>
+#endif
 
 static XKeyEvent create_key_event(Display *display, Window &win,
                                   Window &win_root,
@@ -647,7 +654,14 @@ void fake_keyboard::init_ydo() {
     if (!m_xkb_ctx) throw std::runtime_error{"no xkb context"};
 
 #ifdef USE_X11_FEATURES
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    // Qt6: Use QNativeInterface
+    auto *native = qApp->nativeInterface<QNativeInterface::QX11Application>();
+    auto *xcb_conn = native ? native->connection() : nullptr;
+#else
+    // Qt5: Use QX11Info
     auto *xcb_conn = QX11Info::connection();
+#endif
     if (xcb_conn) {
         auto device_id = xkb_x11_get_core_keyboard_device_id(xcb_conn);
         if (device_id == -1) throw std::runtime_error{"no xkb keyboard"};
@@ -836,11 +850,24 @@ void fake_keyboard::send_text_xdo(const QString &text) {
 void fake_keyboard::init_legacy() {
     LOGD("using legacy fake-keyboard");
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    // Qt6: Use QNativeInterface
+    auto *native = qApp->nativeInterface<QNativeInterface::QX11Application>();
+    if (!native) throw std::runtime_error{"no x11 native interface"};
+
+    m_x11_display = native->display();
+    if (!m_x11_display) throw std::runtime_error{"no x11 display"};
+
+    m_xcb_conn = native->connection();
+    if (!m_xcb_conn) throw std::runtime_error{"no xcb connection"};
+#else
+    // Qt5: Use QX11Info
     m_x11_display = QX11Info::display();
     if (!m_x11_display) throw std::runtime_error{"no x11 display"};
 
     m_xcb_conn = QX11Info::connection();
     if (!m_xcb_conn) throw std::runtime_error{"no xcb connection"};
+#endif
 
     auto device_id = xkb_x11_get_core_keyboard_device_id(m_xcb_conn);
     if (device_id == -1) throw std::runtime_error{"no xkb keyboard"};
@@ -898,11 +925,20 @@ void fake_keyboard::init_legacy() {
 void fake_keyboard::init_xdo() {
     LOGD("using xdo fake-keyboard");
 
-    if (!QX11Info::display()) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    // Qt6: Use QNativeInterface
+    auto *native = qApp->nativeInterface<QNativeInterface::QX11Application>();
+    auto *display = native ? native->display() : nullptr;
+#else
+    // Qt5: Use QX11Info
+    auto *display = QX11Info::display();
+#endif
+
+    if (!display) {
         LOGF("no x11 display");
     }
 
-    m_xdo = xdo_new_with_opened_display(QX11Info::display(), nullptr, 0);
+    m_xdo = xdo_new_with_opened_display(display, nullptr, 0);
     if (!m_xdo) {
         LOGF("can't create xdo");
     }
@@ -1027,18 +1063,30 @@ void fake_keyboard::connect_wayland() {
 
     std::lock_guard lock{m_wl_mtx};
 
-    auto *native = QGuiApplication::platformNativeInterface();
-    if (!native) {
-        LOGW("can't get native interface");
-        return;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    // Qt6: Try to get Wayland display through QNativeInterface
+    auto *native = qApp->nativeInterface<QNativeInterface::QWaylandApplication>();
+    if (native) {
+        m_wl_display = native->display();
     }
-
-    m_wl_display = static_cast<wl_display *>(
-        native->nativeResourceForIntegration("display"));
+    
     if (!m_wl_display) {
-        LOGW("can't get wl display interface");
+        LOGW("can't get Wayland display in Qt6");
         return;
     }
+#else
+    // Qt5: Get Wayland display through QPlatformNativeInterface
+    auto *platform_native = QGuiApplication::platformNativeInterface();
+    if (platform_native) {
+        m_wl_display = static_cast<wl_display*>(
+            platform_native->nativeResourceForIntegration("wl_display"));
+    }
+    
+    if (!m_wl_display) {
+        LOGW("can't get Wayland display in Qt5");
+        return;
+    }
+#endif
 
     m_wl_registry = wl_display_get_registry(m_wl_display);
     wl_registry_add_listener(m_wl_registry, &wly_global_listener, this);

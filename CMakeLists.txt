@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+# Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -6,8 +6,11 @@
 
 cmake_minimum_required(VERSION 3.19)
 
-option(WITH_DESKTOP "enable desktop ui" OFF)
+option(WITH_DESKTOP "enable desktop ui" ON) # default
 option(WITH_SFOS "enable sfos ui" OFF)
+if(WITH_SFOS)
+    set(WITH_DESKTOP OFF)
+endif()
 
 option(WITH_FLATPAK "enable flatpak build" OFF)
 option(WITH_TESTS "enable tests" OFF)
@@ -56,7 +59,6 @@ option(BUILD_XDO "download sources of xdo lib and link statically" ON)
 option(BUILD_SAM "download sources of sam and link statically" ON)
 option(BUILD_WL_CLIPBOARD "download sources of wl-clipboard, build and install" OFF)
 option(BUILD_XKBCOMMON "download sources of xkbcommon build and link statically" OFF)
-option(BUILD_QQC2_BREEZE_STYLE "download sources of QQC2 Breeze Style, build and install" OFF)
 
 # options used only for testing
 option(DEV_USE_PYTHON311 OFF)
@@ -78,7 +80,6 @@ endif()
 if(WITH_DESKTOP)
     if(WITH_FLATPAK)
         set(BUILD_PYTHON_MODULE OFF)
-        set(BUILD_QQC2_BREEZE_STYLE OFF)
     endif()
 endif()
 
@@ -94,10 +95,6 @@ if(WITH_SFOS)
     if(BUILD_XDO)
         set(BUILD_XDO OFF)
         message(WARNING "disabling BUILD_XDO on sfos")
-    endif()
-    if(BUILD_QQC2_BREEZE_STYLE)
-        set(BUILD_QQC2_BREEZE_STYLE OFF)
-        message(WARNING "disabling BUILD_QQC2_BREEZE_STYLE on sfos")
     endif()
 endif()
 
@@ -268,7 +265,11 @@ set(deps_libs "") # libs to link to dsnote_lib and dsnote
 set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_SKIP_RPATH ON)
+set(CMAKE_SKIP_BUILD_RPATH OFF)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH OFF)
+set(CMAKE_INSTALL_RPATH ${rpath_install_dir})
+set(CMAKE_BUILD_RPATH ${external_lib_dir})
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 set(ENV{PKG_CONFIG_PATH} $ENV{PKG_CONFIG_PATH}:${PROJECT_BINARY_DIR})
 message(STATUS "PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -423,6 +424,19 @@ endif()
 
 configure_file(config.h.in config.h)
 
+# qt version selection
+if(WITH_SFOS)
+    # on sfos use qt5
+    find_package(Qt5 COMPONENTS Core REQUIRED)
+    set(QT_VERSION_MAJOR 5)
+    message(STATUS "Using Qt5")
+else()
+    # on everything else use qt6
+    find_package(Qt6 COMPONENTS Core REQUIRED)
+    set(QT_VERSION_MAJOR 6)
+    message(STATUS "Using Qt6")
+endif()
+
 include(${cmake_path}/dbus_api.cmake)
 
 add_library(dsnote_lib STATIC ${dsnote_lib_sources})
@@ -436,15 +450,16 @@ list(APPEND resources
 
 # executable
 
-add_executable(${info_binary_id} ${resources} "${sources_dir}/main.cpp")
+add_executable(${info_binary_id} "${sources_dir}/main.cpp" ${resources})
 set_property(TARGET ${info_binary_id} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-set_property(TARGET ${info_binary_id} PROPERTY AUTORCC TRUE)
+set_property(TARGET ${info_binary_id} PROPERTY AUTORCC ON)
+set_property(TARGET ${info_binary_id} PROPERTY AUTOUIC ON)
 
 target_link_libraries(${info_binary_id} dsnote_lib)
 
 add_custom_command(TARGET ${info_binary_id} POST_BUILD
     COMMAND $<$<CONFIG:Release>:${CMAKE_STRIP}>
-    ARGS --strip-all $<TARGET_FILE:${info_binary_id}>
+    ARGS --strip-debug $<TARGET_FILE:${info_binary_id}>
 )
 
 # tests
@@ -483,7 +498,7 @@ else()
     target_link_options(compiler_flags INTERFACE "-pie;-flto;-fno-fat-lto-objects")
 endif()
 
-set(link_opts "-Wl,--enable-new-dtags;-Wl,-pie;-Wl,-rpath,${rpath_install_dir}")
+set(link_opts "-Wl,--enable-new-dtags;-Wl,-pie")
 target_link_options(compiler_flags INTERFACE ${link_opts})
 
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${WITH_TRACE_LOGS}>:USE_TRACE_LOGS>")
@@ -499,10 +514,6 @@ target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_x8664}>:ARC
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_arm32}>:ARCH_ARM_32>")
 target_compile_definitions(compiler_flags INTERFACE "$<$<BOOL:${arch_arm64}>:ARCH_ARM_64>")
 target_compile_definitions(compiler_flags INTERFACE "INSTALL_PREFIX=\"${CMAKE_INSTALL_PREFIX}\"")
-
-# translations
-
-include(${cmake_path}/translations.cmake)
 
 # dependencies
 
@@ -535,17 +546,22 @@ pkg_search_module(pulse REQUIRED libpulse)
 list(APPEND deps_libs ${pulse_LIBRARIES})
 list(APPEND includes ${pulse_INCLUDE_DIRS})
 
-find_package(Qt5 COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick DBus LinguistTools REQUIRED)
-list(APPEND deps_libs Qt5::Core Qt5::Network Qt5::Multimedia Qt5::Gui Qt5::Quick Qt5::DBus Qt5::Xml)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick DBus LinguistTools REQUIRED)
+list(APPEND deps_libs Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Multimedia 
+    Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Quick
+    Qt${QT_VERSION_MAJOR}::DBus Qt${QT_VERSION_MAJOR}::Xml Qt${QT_VERSION_MAJOR}::Sql)
+
+# translations (requires QT_VERSION_MAJOR to be set)
+include(${cmake_path}/translations.cmake)
 
 if(WITH_DESKTOP)
-    find_package(Qt5 COMPONENTS QuickControls2 Widgets REQUIRED)
-    list(APPEND deps_libs Qt5::QuickControls2 Qt5::Widgets)
+    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS QuickControls2 Widgets REQUIRED)
+    list(APPEND deps_libs Qt${QT_VERSION_MAJOR}::QuickControls2 Qt${QT_VERSION_MAJOR}::Widgets)
 
     pkg_search_module(wayland REQUIRED wayland-client)
     list(APPEND deps_libs ${wayland_LIBRARIES})
     list(APPEND includes ${wayland_INCLUDE_DIRS})
-    include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+    include_directories(${Qt${QT_VERSION_MAJOR}Gui_PRIVATE_INCLUDE_DIRS})
 
     if(BUILD_XKBCOMMON)
         include(${cmake_path}/xkbcommon.cmake)
@@ -567,12 +583,16 @@ if(WITH_DESKTOP)
         find_package(X11 REQUIRED)
         list(APPEND deps_libs X11)
 
-        find_package(Qt5 COMPONENTS X11Extras REQUIRED)
-        list(APPEND deps_libs Qt5::X11Extras)
+        # Qt6 removed X11Extras - functionality moved to Qt6::Gui
+        # Qt5 needs X11Extras
+        if(QT_VERSION_MAJOR EQUAL 5)
+            find_package(Qt5 COMPONENTS X11Extras REQUIRED)
+            list(APPEND deps_libs Qt5::X11Extras)
+        endif()
 
         if(BUILD_QHOTKEY)
             include(${cmake_path}/qhotkey.cmake)
-        else()
+        else() 
             find_library(qhotkey_path qhotkey REQUIRED)
             list(APPEND deps_libs ${qhotkey_path})
         endif()
@@ -826,10 +846,6 @@ if(WITH_SFOS)
     list(APPEND includes ${mlite5_INCLUDE_DIRS})
 endif()
 
-if(BUILD_QQC2_BREEZE_STYLE)
-    include(${cmake_path}/qqc2-breeze-style.cmake)
-endif()
-
 target_include_directories(${info_binary_id} PRIVATE ${includes})
 target_link_libraries(${info_binary_id} ${deps_libs})
 if(deps)
@@ -855,9 +871,7 @@ endif()
 
 if(WITH_SFOS)
     include(${cmake_path}/install_sfos.cmake)
-endif()
-
-if(WITH_DESKTOP)
+else()
     include(${cmake_path}/install_desktop.cmake)
 endif()
 

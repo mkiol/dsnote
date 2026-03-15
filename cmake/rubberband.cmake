@@ -11,6 +11,7 @@ ExternalProject_Add(rubberband
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL ${rubberband_source_url}
     URL_HASH SHA256=${rubberband_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CONFIGURE_COMMAND PKG_CONFIG_PATH="${external_lib_dir}/pkgconfig"
         ${meson_bin} setup --prefix=<INSTALL_DIR> --buildtype=release --libdir=lib
         -Dauto_features=disabled

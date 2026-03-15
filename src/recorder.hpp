@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,20 +9,30 @@
 #define RECORDER_H
 
 #include <QAudioFormat>
-#include <QAudioInput>
 #include <QFile>
 #include <QIODevice>
 #include <QObject>
 #include <QString>
+#include <QTimer>
 #include <cstdint>
 #include <memory>
 #include <optional>
 #include <thread>
 #include <vector>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QAudioInput>
+#else
+#include <QAudioSource>
+#endif
 
 class recorder final : public QObject {
     Q_OBJECT
    public:
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    using AudioSourceType = QAudioInput;
+#else
+    using AudioSourceType = QAudioSource;
+#endif
     explicit recorder(QString wav_file_path, QObject* parent = nullptr);
     explicit recorder(QString input_file_path, QString wav_file_path,
                       QObject* parent = nullptr);
@@ -61,10 +71,11 @@ class recorder final : public QObject {
         uint32_t data_size = 0;
     };
 
-    std::unique_ptr<QAudioInput> m_audio_input;
+    std::unique_ptr<AudioSourceType> m_audio_source;
     QString m_input_file_path;
     QString m_wav_file_path;
     QFile m_audio_device;
+    QTimer m_timer;
     long long m_duration = 0;
     std::thread m_processing_thread;
     bool m_processing = false;

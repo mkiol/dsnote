@@ -10,6 +10,7 @@ ExternalProject_Add(pcre2
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL ${pcre2_source_url}
     URL_HASH SHA256=${pcre2_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
         -DCMAKE_INSTALL_LIBDIR=<INSTALL_DIR>/lib
         -DCMAKE_LIBRARY_PATH=${external_lib_dir}
@@ -24,6 +25,7 @@ ExternalProject_Add(ssplitcpp
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${ssplitcpp_source_url}"
     URL_MD5 "${ssplitcpp_checksum}"
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/ssplitcpp.patch ||
                     echo "patch cmd failed, likely already patched"

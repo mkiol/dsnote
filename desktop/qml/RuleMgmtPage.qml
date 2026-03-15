@@ -1,13 +1,13 @@
-/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import org.mkiol.dsnote.Settings 1.0
 
@@ -16,8 +16,8 @@ DialogPage {
 
     readonly property bool verticalMode: width < appWin.height
     readonly property real _rightMargin: (!root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
-                                             appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
-                                             appWin.padding
+                                             listViewStackItem.currentItem.ScrollBar.vertical.width :
+                                             0
     readonly property real _leftMargin: (root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
                                              appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
                                              appWin.padding
@@ -134,32 +134,35 @@ DialogPage {
     Component {
         id: ruleDelegate
 
-        Control {
-            id: control
+        ItemDelegate {
+            id: itemDelegate
 
             readonly property bool ruleTargetStt: (modelData[0] & Settings.TransRuleTargetStt) != 0
             readonly property bool ruleTargetTts: (modelData[0] & Settings.TransRuleTargetTts) != 0
             readonly property string ruleName: modelData[2].length > 0 ? modelData[2] :
                                                                          defaultRuleName(modelData[1], modelData[3], modelData[4])
 
-            background: Rectangle {
-                id: bg
-
-                anchors.fill: parent
-                color: palette.text
-                opacity: control.hovered ? 0.1 : 0.0
-            }
-
-            width: root.listViewStackItem.currentItem.width
-            height: deleteButton.height
+            text: ruleName
+            onClicked: openEdit()
+            Accessible.name: ruleName
+            width: ListView.view.width - root._rightMargin
+            bottomInset: 0
+            topInset: 0
             leftPadding: root._leftMargin
 
-            RowLayout {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                anchors.rightMargin: root._rightMargin
-                anchors.left: parent.left
-                anchors.leftMargin: root._leftMargin
+            Component.onCompleted: {
+                if (background && background.color) {
+                    background.color = "transparent"
+                }
+            }
+
+            function openEdit() {
+                appWin.openDialog("RuleEditPage.qml", {rule: modelData, ruleIndex: index})
+            }
+
+            contentItem: RowLayout {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
 
                 Label {
                     text: "" + (index + 1) + " "
@@ -178,6 +181,7 @@ DialogPage {
                     ToolTip.text: text
                     hoverEnabled: true
                 }
+                
                 Button {
                     icon.name: "arrow-down-symbolic"
                     display: Button.IconOnly
@@ -194,7 +198,7 @@ DialogPage {
                 Label {
                     id: nameField
 
-                    text: control.ruleName
+                    text: itemDelegate.ruleName
                     elide: Text.ElideRight
                     Layout.alignment: Qt.AlignHCenter
                     Layout.leftMargin: appWin.padding
@@ -204,7 +208,7 @@ DialogPage {
                 Switch {
                     id: sttSwitch
 
-                    checked: control.ruleTargetStt
+                    checked: itemDelegate.ruleTargetStt
                     Layout.alignment: Qt.AlignHCenter
                     onCheckedChanged: {
                         _settings.trans_rule_set_target_stt(index, checked)
@@ -220,7 +224,7 @@ DialogPage {
                 Switch {
                     id: ttsSwitch
 
-                    checked: control.ruleTargetTts
+                    checked: itemDelegate.ruleTargetTts
                     Layout.alignment: Qt.AlignHCenter
                     onCheckedChanged: {
                         _settings.trans_rule_set_target_tts(index, checked)
@@ -240,7 +244,7 @@ DialogPage {
                     icon.name: "edit-entry-symbolic"
                     display: Button.IconOnly
                     Layout.alignment: Qt.AlignHCenter
-                    onClicked: appWin.openDialog("RuleEditPage.qml", {rule: modelData, ruleIndex: index})
+                    onClicked: itemDelegate.openEdit()
 
                     ToolTip.visible: hovered
                     ToolTip.text: text
@@ -293,21 +297,17 @@ DialogPage {
 
             focus: true
             clip: true
-            spacing: appWin.padding
+            spacing: 0
 
             Keys.onUpPressed: listViewScrollBar.decrease()
             Keys.onDownPressed: listViewScrollBar.increase()
-
             ScrollBar.vertical: ScrollBar {
                 id: listViewScrollBar
+                policy: listView.contentHeight > listView.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
             }
 
             model: _settings.trans_rules
             delegate: ruleDelegate
-
-            header: Item {
-                height: appWin.padding
-            }
         }
     }
 }

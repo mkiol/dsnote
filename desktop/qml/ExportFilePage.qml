@@ -1,14 +1,14 @@
-/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2 as Dialogs
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs as Dialogs
+import QtQuick.Layouts
 
 import org.mkiol.dsnote.Settings 1.0
 
@@ -77,55 +77,91 @@ DialogPage {
         }
     }
 
-    TabBar {
-        id: bar
+    header: ColumnLayout {
+        visible: root.title.length !== 0
+        spacing: appWin.padding
 
-        visible: !root.verticalMode
-        Layout.fillWidth: true
-        onCurrentIndexChanged: {
-            _settings.default_export_tab = currentIndex === 0 ? Settings.DefaultExportTabText : 1
-            modeCombo.currentIndex = currentIndex
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.leftMargin: root.leftPadding
+            Layout.rightMargin: root.rightPadding
+            Layout.topMargin: root.topPadding
+
+            Label {
+                id: titleLabel
+
+                text: root.title
+                font.pixelSize: Qt.application.font.pixelSize * 1.2
+                elide: Label.ElideRight
+                horizontalAlignment: Qt.AlignLeft
+                verticalAlignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+                Layout.leftMargin: appWin.padding
+                Layout.alignment: Qt.AlignVCenter
+            }
         }
-        currentIndex: _settings.default_export_tab === Settings.DefaultExportTabText ? 0 : 1
 
-        TabButton {
-            text: qsTr("Export to text or subtitle file")
-            width: implicitWidth
+        ColumnLayout {
+            visible: root.verticalMode
+            Layout.fillWidth: true
+            Layout.leftMargin: root.leftPadding + appWin.padding
+            Layout.rightMargin: root.rightPadding + appWin.padding
+
+            ComboBox {
+                id: modeCombo
+
+                Layout.fillWidth: true
+                onCurrentIndexChanged: {
+                    _settings.default_export_tab = currentIndex === 0 ? Settings.DefaultExportTabText : 1
+                    bar.currentIndex = currentIndex
+                }
+                currentIndex: _settings.default_export_tab === Settings.DefaultExportTabText ? 0 : 1
+                model: [
+                    qsTr("Export to text or subtitle file"),
+                    qsTr("Export to audio file")
+                ]
+            }
         }
 
-        TabButton {
-            text: qsTr("Export to audio file")
-            width: implicitWidth
-        }
-    }
-
-    ColumnLayout {
-        Layout.fillWidth: true
-        visible: root.verticalMode
-
-        ComboBox {
-            id: modeCombo
+        TabBar {
+            id: bar
 
             Layout.fillWidth: true
             onCurrentIndexChanged: {
                 _settings.default_export_tab = currentIndex === 0 ? Settings.DefaultExportTabText : 1
-                bar.currentIndex = currentIndex
+                modeCombo.currentIndex = currentIndex
             }
             currentIndex: _settings.default_export_tab === Settings.DefaultExportTabText ? 0 : 1
-            model: [
-                qsTr("Export to text or subtitle file"),
-                qsTr("Export to audio file")
-            ]
-        }
 
-        HorizontalLine{}
+            visible: !root.verticalMode
+            Layout.leftMargin: 1
+            Layout.rightMargin: 1
+
+            TabButton {
+                width: implicitWidth
+                action: Action {
+                    text: qsTr("Export to text or subtitle file")
+                    onTriggered: {
+                        checked = true
+                    }
+                }
+            }
+
+            TabButton {
+                width: implicitWidth
+                action: Action {
+                    text: qsTr("Export to audio file")
+                    onTriggered: {
+                        checked = true
+                    }
+                }
+            }
+        }
     }
 
     StackLayout {
         property alias verticalMode: root.verticalMode
 
-        Layout.fillWidth: true
-        Layout.topMargin: appWin.padding
         currentIndex: root.mode
 
         ColumnLayout {
@@ -161,13 +197,14 @@ DialogPage {
 
             Connections {
                 target: _settings
-                onText_file_format_changed: {
+                function onText_file_format_changed() {
                     if (root.disable_manual_file_path) return
-
                     pathField0.text =
                             _settings.add_ext_to_text_file_path(pathField0.text)
                 }
-                onText_file_save_dir_changed: root0.check_filename()
+                function onText_file_save_dir_changed() {
+                    root0.check_filename()
+                }
             }
 
             TextFieldForm {
@@ -222,7 +259,7 @@ DialogPage {
                         ListElement { text: qsTr("ASS Subtitles")}
                         ListElement { text: qsTr("WebVTT Subtitles")}
                     }
-                    onActivated: {
+                    onActivated: (index) => {
                         switch (index) {
                         case 1: _settings.text_file_format = Settings.TextFileFormatRaw; break
                         case 2: _settings.text_file_format = Settings.TextFileFormatSrt; break
@@ -241,12 +278,11 @@ DialogPage {
                 nameFilters: [
                     qsTr("All supported files") + " (*.txt *.srt *.ass *.ssa *.sub *.vtt)",
                     qsTr("All files") + " (*)"]
-                folder: _settings.text_file_save_dir_url
-                selectExisting: false
-                selectMultiple: false
+                currentFolder: _settings.text_file_save_dir_url
+                fileMode: Dialogs.FileDialog.SaveFile
                 onAccepted: {
                     pathField0.text =
-                            _settings.file_path_from_url(fileWriteDialog0.fileUrl)
+                            _settings.file_path_from_url(fileWriteDialog0.selectedFile)
                     _settings.update_text_file_save_path(pathField0.text)
                 }
             }
@@ -358,13 +394,15 @@ DialogPage {
 
                 Connections {
                     target: _settings
-                    onAudio_format_changed: {
+                    function onAudio_format_changed() {
                         if (root.disable_manual_file_path) return
 
                         pathField1.text =
                                 _settings.add_ext_to_audio_file_path(pathField1.text)
                     }
-                    onAudio_file_save_dir_changed: root1.check_filename()
+                    function onAudio_file_save_dir_changed() {
+                        root1.check_filename()
+                    }
                 }
 
                 TextFieldForm {
@@ -588,12 +626,11 @@ DialogPage {
                     nameFilters: [
                         qsTr("All supported files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac *.mp4 *.mkv *.ogv *.webm)",
                         qsTr("All files") + " (*)"]
-                    folder: _settings.file_open_dir_url
-                    selectExisting: true
-                    selectMultiple: false
+                    currentFolder: _settings.file_open_dir_url
+                    fileMode: Dialogs.FileDialog.OpenFile
                     onAccepted: {
                         pathFieldIn1.text =
-                                _settings.file_path_from_url(fileReadDialog1.fileUrl)
+                                _settings.file_path_from_url(fileReadDialog1.selectedFile)
                         _settings.file_open_dir = pathFieldIn1.text
                     }
                 }
@@ -605,12 +642,11 @@ DialogPage {
                     nameFilters: [
                         qsTr("All supported files") + " (*.mp3 *.ogg *.oga *.opus *.wav)",
                         qsTr("All files") + " (*)"]
-                    folder: _settings.audio_file_save_dir_url
-                    selectExisting: false
-                    selectMultiple: false
+                    currentFolder: _settings.audio_file_save_dir_url
+                    fileMode: Dialogs.FileDialog.SaveFile
                     onAccepted: {
                         var dont_add_extension = root.disable_manual_file_path
-                        var file_path = _settings.file_path_from_url(fileWriteDialog1.fileUrl)
+                        var file_path = _settings.file_path_from_url(fileWriteDialog1.selectedFile)
                         pathField1.text = dont_add_extension ?
                                     file_path.trim() : _settings.add_ext_to_audio_file_path(file_path.trim())
                         _settings.update_audio_file_save_path(pathField1.text)

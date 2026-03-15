@@ -44,6 +44,7 @@ if(BUILD_WHISPERCPP_CLBLAST)
         INSTALL_DIR ${PROJECT_BINARY_DIR}/external
         URL "${clblast_source_url}"
         URL_HASH SHA256=${clblast_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
         UPDATE_COMMAND ""
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_POSITION_INDEPENDENT_CODE=ON
@@ -59,6 +60,7 @@ if(BUILD_WHISPERCPP_CLBLAST)
         INSTALL_DIR ${PROJECT_BINARY_DIR}/external
         URL "${whispercpp_clblast_source_url}"
         URL_HASH SHA256=${whispercpp_clblast_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                     -i ${patches_dir}/whispercpp-clblast.patch ||
                         echo "patch cmd failed, likely already patched"
@@ -100,6 +102,7 @@ if(BUILD_WHISPERCPP_CUBLAS)
         INSTALL_DIR ${PROJECT_BINARY_DIR}/external
         URL "${whispercpp_source_url}"
         URL_HASH SHA256=${whispercpp_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                     -i ${whispercpp_patch_file} ||
                         echo "patch cmd failed, likely already patched"
@@ -150,6 +153,7 @@ if(BUILD_WHISPERCPP_HIPBLAS)
         INSTALL_DIR ${PROJECT_BINARY_DIR}/external
         URL "${whispercpp_source_url}"
         URL_HASH SHA256=${whispercpp_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                     -i ${whispercpp_patch_file} ||
                         echo "patch cmd failed, likely already patched"
@@ -194,6 +198,7 @@ if(BUILD_WHISPERCPP_OPENVINO)
         INSTALL_DIR ${PROJECT_BINARY_DIR}/external
         URL "${whispercpp_source_url}"
         URL_HASH SHA256=${whispercpp_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                     -i ${whispercpp_patch_file} ||
                         echo "patch cmd failed, likely already patched"
@@ -250,6 +255,7 @@ if(BUILD_WHISPERCPP_VULKAN)
         INSTALL_DIR ${PROJECT_BINARY_DIR}/external
         URL "${whispercpp_source_url}"
         URL_HASH SHA256=${whispercpp_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
         PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                     -i ${whispercpp_patch_file} ||
                         echo "patch cmd failed, likely already patched"
@@ -282,6 +288,7 @@ ExternalProject_Add(whispercppfallback1
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${whispercpp_source_url}"
     URL_HASH SHA256=${whispercpp_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${whispercpp_patch_file} ||
                     echo "patch cmd failed, likely already patched"
@@ -309,6 +316,7 @@ ExternalProject_Add(whispercppfallback
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${whispercpp_source_url}"
     URL_HASH SHA256=${whispercpp_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${whispercpp_patch_file} ||
                     echo "patch cmd failed, likely already patched"
@@ -336,6 +344,7 @@ ExternalProject_Add(whispercppopenblas
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL "${whispercpp_source_url}"
     URL_HASH SHA256=${whispercpp_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${whispercpp_patch_file} ||
                     echo "patch cmd failed, likely already patched"

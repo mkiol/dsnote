@@ -5,10 +5,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2 as Dialogs
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs as Dialogs
+import QtQuick.Layouts
 
 import org.mkiol.dsnote.Dsnote 1.0
 
@@ -161,17 +161,19 @@ DialogPage {
 
     Connections {
         target: app
-        onPlayer_duration_changed: {
+        function onPlayer_duration_changed() {
             rangeSlider.from = 0
             rangeSlider.to = app.player_duration
             rangeSlider.first.value = 0
             rangeSlider.second.value = app.player_duration
         }
-        onRecorder_new_stream_name: {
+        function onRecorder_new_stream_name(name) {
             _nameForm.textField.text = name
         }
-        onRecorder_new_probs: root.update_probs(probs)
-        onText_decoded_internal: {
+        function onRecorder_new_probs(probs) {
+            root.update_probs(probs)
+        }
+        function onText_decoded_internal(text) {
             var new_text = text.trim()
             if (new_text.length > 0) {
                 _textForm.text = new_text
@@ -382,7 +384,6 @@ DialogPage {
         valid: !root.nameTaken
         toolTip: valid ? "" : qsTr("This name is already taken")
         textField {
-            text: root.dataName
             placeholderText: _nameForm.label.text
         }
     }
@@ -410,13 +411,12 @@ DialogPage {
             qsTr("Audio files") + " (*.wav *.mp3 *.ogg *.oga *.ogx *.opus *.spx *.flac *.m4a *.aac)",
             qsTr("Video files") + " (*.mp4 *.mkv *.ogv *.webm)",
             qsTr("All files") + " (*)"]
-        folder: _settings.file_audio_open_dir_url
-        selectExisting: true
-        selectMultiple: false
+        currentFolder: _settings.file_open_dir_url
+        fileMode: Dialogs.FileDialog.OpenFile
         onAccepted: {
             _nameForm.textField.text = ""
-            app.player_import_from_url(fileUrl);
-            _settings.file_audio_open_dir_url = fileUrl
+            app.player_import_from_url(selectedFile);
+            _settings.file_open_dir_url = selectedFile
         }
     }
 }

@@ -21,14 +21,15 @@
 #include <thread>
 
 #ifdef USE_X11_FEATURES
-#include <QX11Info>
+#include <QGuiApplication>
 
 struct xcb_connection_t;
+struct xdo;
+#endif
+
 struct xkb_context;
 struct xkb_keymap;
 struct xkb_compose_table;
-struct xdo;
-#endif
 
 class fake_keyboard : public QObject {
     Q_OBJECT

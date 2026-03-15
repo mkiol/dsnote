@@ -2,10 +2,10 @@
 
 set -e
 
-VERSION="4.8.3"
+VERSION="4.9.0"
 REV="1"
 ARCH="amd64"
-DIST="plucky"
+DIST="questing"
 
 LDIR="$(
     cd "$(dirname "$0")"
@@ -14,33 +14,15 @@ LDIR="$(
 DS_DIR="dsnote_${VERSION}-${REV}+${DIST}_${ARCH}"
 DS_DEB="${DS_DIR}/DEBIAN"
 DS_DOC="${DS_DIR}/usr/share/doc/dsnote"
-SOURCEDIR="dsnote-${VERSION}"
-SOURCEFILE="v${VERSION}.tar.gz"
-SOURCEURL="https://github.com/mkiol/dsnote/archive/refs/tags/${SOURCEFILE}"
-SHA256SUM="da96b7f95a85d14e0e96d4f2ba5c00cde4c54b74d165bd50b7ebefb7bcbf814d"
+SOURCEDIR="$(cd "$(dirname "$0")/.." && pwd)"
+BUILDDIR="$(cd "$(dirname "$0")" && pwd)/build"
 
-[ -f "$SOURCEFILE" ] || wget -c -q --show-progress "$SOURCEURL"
-echo "${SHA256SUM}  ${SOURCEFILE}" | sha256sum --check
-
-[ -d "$SOURCEDIR" ] || tar xf "$SOURCEFILE"
-cd "$SOURCEDIR"
-
-mkdir -p build && cd build
+mkdir -p "$BUILDDIR" && cd "$BUILDDIR"
 
 CMAKE="-DCMAKE_BUILD_TYPE=Release -DWITH_DESKTOP=ON \
-        -DWITH_PY=ON \
-        -DBUILD_LIBARCHIVE=OFF \
-        -DBUILD_FMT=OFF \
-        -DBUILD_CATCH2=OFF \
         -DBUILD_OPENBLAS=OFF \
-        -DBUILD_XZ=OFF \
-        -DBUILD_PYBIND11=OFF \
-        -DBUILD_RUBBERBAND=OFF \
-        -DBUILD_FFMPEG=ON \
-        -DBUILD_TAGLIB=OFF \
         -DBUILD_VOSK=OFF \
         -DBUILD_WHISPERCPP_VULKAN=ON \
-        -DBUILD_QQC2_BREEZE_STYLE=ON \
         -DDOWNLOAD_VOSK=ON \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -Wno-dev"
@@ -58,7 +40,7 @@ TEST_BUILD=false
 # Disable bergamot and RHVoice (shorter build time - for test only)
 $TEST_BUILD && CMAKE+=" -DBUILD_BERGAMOT=OFF -DBUILD_RHVOICE=OFF -DBUILD_RHVOICE_MODULE=OFF"
 
-cmake ../ $CMAKE
+cmake "$SOURCEDIR" $CMAKE
 
 test $(nproc) -gt 2 && make -j$(($(nproc)-2)) || make
 
@@ -78,4 +60,4 @@ cp -av "${LDIR}/debian/copyright" "$DS_DOC"
 
 dpkg-deb --root-owner-group --build "$DS_DIR"
 
-mv "${DS_DIR}.deb" ../../
+mv "${DS_DIR}.deb" "${LDIR}/"

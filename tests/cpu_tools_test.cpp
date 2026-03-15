@@ -36,7 +36,9 @@ bogomips	: 7189.52)";
             2u, cpu_tools::feature_flags_t::avx |
                     cpu_tools::feature_flags_t::avx2 |
                     cpu_tools::feature_flags_t::fma |
-                    cpu_tools::feature_flags_t::f16c};
+                    cpu_tools::feature_flags_t::f16c |
+                    cpu_tools::feature_flags_t::sse4_1 |
+                    cpu_tools::feature_flags_t::bmi2};
 
         REQUIRE(cpuinfo == expected_cpuinfo);
     }

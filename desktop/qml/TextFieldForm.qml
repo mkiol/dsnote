@@ -5,9 +5,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 GridLayout {
     id: root
@@ -60,7 +60,7 @@ GridLayout {
     Button {
         id: _button
 
-        visible: text.length !== 0
+        visible: _button.text.length !== 0
         Layout.leftMargin: root.verticalMode ? (root.indends + 1) * appWin.padding : 0
 
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval

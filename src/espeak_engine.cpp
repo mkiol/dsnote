@@ -11,9 +11,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include <algorithm>
 #include <cstdlib>
 #include <fstream>
-#include <algorithm>
 
 #include "logger.hpp"
 
@@ -36,8 +36,9 @@ void espeak_engine::create_model() {
         return;
     }
 
-    auto mb_voice = m_config.speaker_id.size() > 3 && m_config.speaker_id[0] == 'm' &&
-                    m_config.speaker_id[1] == 'b' && m_config.speaker_id[2] == '-';
+    auto mb_voice =
+        m_config.speaker_id.size() > 3 && m_config.speaker_id[0] == 'm' &&
+        m_config.speaker_id[1] == 'b' && m_config.speaker_id[2] == '-';
 
     if (mb_voice && !m_config.model_files.model_path.empty()) {
         mkdir(fmt::format("{}/mbrola", m_config.data_dir).c_str(), 0777);
@@ -46,8 +47,11 @@ void espeak_engine::create_model() {
                                        &m_config.speaker_id[3]);
         remove(link_target.c_str());
 
-        (void)symlink(m_config.model_files.model_path.c_str(),
-                      link_target.c_str());
+        if (symlink(m_config.model_files.model_path.c_str(),
+                    link_target.c_str())) {
+            LOGE("failed to create symlink: " << m_config.model_files.model_path
+                                              << " => " << link_target);
+        }
     }
 
     m_sample_rate = espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS, 0,

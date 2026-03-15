@@ -19,7 +19,7 @@ class QByteArray;
 template<class T> class QList;
 template<class Key, class Value> class QMap;
 class QString;
-class QStringList;
+// HAND-EDIT: removed QStringList;
 class QVariant;
 QT_END_NAMESPACE
 

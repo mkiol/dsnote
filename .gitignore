@@ -1,0 +1,19 @@
+# gitignore for dsnote
+*.code-workspace
+*.user*
+*.rpm
+*.deb
+*.bak
+compile_commands.json
+build/
+build-*/
+external/
+appimage/
+misc/
+bak/
+flatpak/flatpak-builder-tools
+flatpak/.flatpak-builder
+flatpak/
+deb/noble/
+deb/plucky/
+arch/local/

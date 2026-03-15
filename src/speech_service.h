@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,6 +15,9 @@
 #include <QString>
 #include <QTimer>
 #include <QVariantList>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QAudioOutput>
+#endif
 #include <map>
 #include <memory>
 #include <optional>
@@ -73,6 +76,11 @@ class speech_service : public QObject, public singleton<speech_service> {
     Q_PROPERTY(QVariantMap Translations READ translations CONSTANT)
 
    public:
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    using MediaPlayerPlaybackStateType = QMediaPlayer::State;
+#else
+    using MediaPlayerPlaybackStateType = QMediaPlayer::PlaybackState;
+#endif
     enum class state_t {
         unknown = 0,
         not_configured = 1,
@@ -404,11 +412,15 @@ class speech_service : public QObject, public singleton<speech_service> {
     std::optional<task_t> m_current_task;
     QMediaPlayer m_player;
     QMediaPlayer m_beep_player;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    QAudioOutput m_player_audio_output;
+    QAudioOutput m_beep_player_audio_output;
+#endif
     int m_task_state = 0;
     std::queue<tts_partial_result_t> m_tts_queue;
     QVariantMap m_features_availability;
     bool m_models_changed_handled = false;
-    inline bool feature_discovery_done() const {
+    bool feature_discovery_done() const {
         return !m_features_availability.isEmpty();
     }
     void handle_models_changed();
@@ -446,7 +458,7 @@ class speech_service : public QObject, public singleton<speech_service> {
                                    double progress, bool last);
     void handle_tts_speech_encoded(tts_partial_result_t result);
     void handle_speech_to_file(const tts_partial_result_t &result);
-    void handle_player_state_changed(QMediaPlayer::State new_state);
+    void handle_player_state_changed(MediaPlayerPlaybackStateType new_state);
     void handle_audio_available();
     void handle_stt_engine_state_changed(
         stt_engine::speech_detection_status_t status, int task_id);

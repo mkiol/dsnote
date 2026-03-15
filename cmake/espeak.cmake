@@ -20,6 +20,7 @@ ExternalProject_Add(mbrola
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL ${mbrola_source_url}
     URL_HASH SHA256=${mbrola_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR>
     BUILD_COMMAND ${MAKE}
     BUILD_ALWAYS False
@@ -32,6 +33,7 @@ ExternalProject_Add(espeak
     INSTALL_DIR ${PROJECT_BINARY_DIR}/external
     URL ${espeak_source_url}
     URL_HASH SHA256=${espeak_checksum}
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR> &&
         <BINARY_DIR>/autogen.sh &&
         <BINARY_DIR>/configure --prefix=<INSTALL_DIR> --libdir=<INSTALL_DIR>/lib --with-pic
