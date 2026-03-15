@@ -18,7 +18,6 @@ Linux desktop and Sailfish OS app for note taking, reading and translating with 
 - [How to support](#how-to-support)
 - [Reviews and demos](#reviews-and-demos)
 - [License](#license)
-- [Changelog](CHANGELOG.md)
 
 ## Description
 
