@@ -46,16 +46,14 @@ Page {
                         }
 
                         ComboBox {
-                            label: qsTranslate("Language")
-                            comboBox {
-                                currentIndex: _settings.translate_ui ? 0 : 1
-                                menu: ContextMenu {
-                                    MenuItem { text: qsTr("Auto") }
-                                    MenuItem { text: qsTr("English") }
-                                }
-                                onCurrentIndexChanged: {
-                                    _settings.translate_ui = (currentIndex === 0 ? true : false)
-                                }
+                            label: qsTr("Language")
+                            currentIndex: _settings.translate_ui ? 0 : 1
+                            menu: ContextMenu {
+                                MenuItem { text: qsTr("Auto") }
+                                MenuItem { text: qsTr("English") }
+                            }
+                            onCurrentIndexChanged: {
+                                _settings.translate_ui = (currentIndex === 0 ? true : false)
                             }
                         }
 

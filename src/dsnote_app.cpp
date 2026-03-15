@@ -479,6 +479,18 @@ dsnote_app::dsnote_app(QObject *parent)
 }
 
 void dsnote_app::create_player() {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    m_player = std::make_unique<QMediaPlayer>(QObject::parent(),
+                                              QMediaPlayer::LowLatency);
+    m_player->setNotifyInterval(100);
+    connect(
+        m_player.get(), &QMediaPlayer::stateChanged, this,
+        [this](QMediaPlayer::State state) {
+            qDebug() << "player state changed:" << state;
+            emit player_playing_changed();
+        },
+        Qt::QueuedConnection);
+#else
     m_player = std::make_unique<QMediaPlayer>(QObject::parent());
     m_player->setAudioOutput(new QAudioOutput(this));
 
@@ -489,6 +501,8 @@ void dsnote_app::create_player() {
             emit player_playing_changed();
         },
         Qt::QueuedConnection);
+#endif
+
     connect(
         m_player.get(), &QMediaPlayer::mediaStatusChanged, this,
         [this](QMediaPlayer::MediaStatus status) {
@@ -740,7 +754,10 @@ settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
                     : trans_rule_flags_t::TransRuleNone;
             break;
         case trans_rule_type_t::TransRuleTypeMatchRe: {
-            QRegularExpression rx{rule.pattern, case_sens ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption};
+            QRegularExpression rx{
+                rule.pattern, case_sens
+                                  ? QRegularExpression::NoPatternOption
+                                  : QRegularExpression::CaseInsensitiveOption};
             rule_matches = text.contains(rx);
             break;
         }
@@ -758,7 +775,10 @@ settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
             auto replace = rule.replace;
             replace.replace("\\n", "\n");
 
-            QRegularExpression rx{rule.pattern, case_sens ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption};
+            QRegularExpression rx{
+                rule.pattern, case_sens
+                                  ? QRegularExpression::NoPatternOption
+                                  : QRegularExpression::CaseInsensitiveOption};
 
             rule_matches = text.contains(rx);
             if (rule_matches) {
@@ -2598,8 +2618,7 @@ void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
         s->stt_use_note_as_prompt()) {
         options.insert("initial_prompt", note_as_prompt());
     }
-    options.insert("inline_timestamp_template",
-                   s->inline_timestamp_template());
+    options.insert("inline_timestamp_template", s->inline_timestamp_template());
     options.insert("inline_timestamp_min_interval",
                    s->inline_timestamp_min_interval());
 
@@ -2737,8 +2756,7 @@ void dsnote_app::listen_internal(stt_translate_req_t translate_req) {
         s->stt_use_note_as_prompt()) {
         options.insert("initial_prompt", note_as_prompt());
     }
-    options.insert("inline_timestamp_template",
-                   s->inline_timestamp_template());
+    options.insert("inline_timestamp_template", s->inline_timestamp_template());
     options.insert("inline_timestamp_min_interval",
                    s->inline_timestamp_min_interval());
 
@@ -2911,8 +2929,11 @@ void dsnote_app::play_speech_selected(int start, int end) {
 
     if (size == 0) return;
 
-    start = std::clamp(static_cast<long long>(start), 0LL, size);
-    end = end < 0 ? size : std::clamp(static_cast<long long>(end), static_cast<long long>(start), size);
+    start = std::clamp(static_cast<decltype(size)>(start),
+                       static_cast<decltype(size)>(0), size);
+    end = end < 0 ? size
+                  : std::clamp(static_cast<decltype(size)>(end),
+                               static_cast<decltype(size)>(start), size);
 
     if (start == end) return;
 
@@ -2931,8 +2952,11 @@ void dsnote_app::play_speech_translator_selected(int start, int end,
 
     if (size == 0) return;
 
-    start = std::clamp(static_cast<long long>(start), 0LL, size);
-    end = end < 0 ? size : std::clamp(static_cast<long long>(end), static_cast<long long>(start), size);
+    start = std::clamp(static_cast<decltype(size)>(start),
+                       static_cast<decltype(size)>(0), size);
+    end = end < 0 ? size
+                  : std::clamp(static_cast<decltype(size)>(end),
+                               static_cast<decltype(size)>(start), size);
 
     if (start == end) return;
 
@@ -3065,8 +3089,11 @@ void dsnote_app::translate_selected(int start, int end) {
 
     if (size == 0) return;
 
-    start = std::clamp(static_cast<long long>(start), 0LL, size);
-    end = end < 0 ? size : std::clamp(static_cast<long long>(end), static_cast<long long>(start), size);
+    start = std::clamp(static_cast<decltype(size)>(start),
+                       static_cast<decltype(size)>(0), size);
+    end = end < 0 ? size
+                  : std::clamp(static_cast<decltype(size)>(end),
+                               static_cast<decltype(size)>(start), size);
 
     if (start == end) return;
 
@@ -4865,8 +4892,16 @@ QVariantList dsnote_app::features_availability() {
     auto it = m_features_availability.cbegin();
     while (it != m_features_availability.cend()) {
         auto val = it.value().toList();
-        if (val.size() > 1 && val.at(0).typeId() == QMetaType::Bool &&
-            val.at(1).typeId() == QMetaType::QString) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        bool is_feature = val.size() > 1 &&
+                          val.at(0).type() == QVariant::Bool &&
+                          val.at(1).type() == QVariant::String;
+#else
+        bool is_feature = val.size() > 1 &&
+                          val.at(0).typeId() == QMetaType::Bool &&
+                          val.at(1).typeId() == QMetaType::QString;
+#endif
+        if (is_feature) {
             list.push_back(QVariantList{val.at(0), val.at(1)});
         }
         ++it;
@@ -5259,6 +5294,7 @@ void dsnote_app::play_speech_selected_in_active_window(
         qWarning() << "fake-keyboard error:" << err.what();
     }
 #else
+    std::ignore = model_id;
     qWarning() << "not supported";
 #endif
 }
@@ -5346,8 +5382,11 @@ QString dsnote_app::import_ref_voice_file_path() {
 
 void dsnote_app::player_stop_voice_ref() {
     if (!m_player) return;
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    m_player->setMedia({});
+#else
     m_player->setSource(QUrl{});
+#endif
 
     m_player_current_voice_ref_idx = -1;
     emit player_current_voice_ref_idx_changed();
@@ -5421,7 +5460,11 @@ void dsnote_app::player_import_rec() {
 
 void dsnote_app::player_set_path(const QString &wav_file_path) {
     create_player();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    m_player->setMedia(QUrl::fromLocalFile(wav_file_path));
+#else
     m_player->setSource(QUrl::fromLocalFile(wav_file_path));
+#endif
 }
 
 QString dsnote_app::tts_ref_voice_auto_name() const {
@@ -5518,7 +5561,11 @@ void dsnote_app::player_reset() {
     if (!m_player) return;
 
     QFile{import_ref_voice_file_path()}.remove();
-    m_player->setSource(QUrl{});
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    m_player->setMedia({});
+#else
+    m_player->setSource({});
+#endif
 }
 
 bool dsnote_app::player_ready() const {
@@ -5577,7 +5624,12 @@ void dsnote_app::recorder_stop() {
 void dsnote_app::recorder_reset() { m_recorder.reset(); }
 
 bool dsnote_app::player_playing() const {
-    return m_player && m_player->playbackState() == QMediaPlayer::PlaybackState::PlayingState;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    return m_player && m_player->state() == QMediaPlayer::State::PlayingState;
+#else
+    return m_player && m_player->playbackState() ==
+                           QMediaPlayer::PlaybackState::PlayingState;
+#endif
 }
 
 void dsnote_app::player_set_position(long long position) {

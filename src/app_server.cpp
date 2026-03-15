@@ -120,7 +120,6 @@ int app_server::request_another_instance(const cmd::options &options) {
     if (options.models_to_print_roles != cmd::role_none ||
         options.active_model_to_print_role != cmd::role_none ||
         options.state_scope_to_print_flag != cmd::scope_none) {
-
         if (options.state_scope_to_print_flag & cmd::scope_general) {
             fmt::print("General state:\n\t{}\n", iface.state());
         }
@@ -130,17 +129,19 @@ int app_server::request_another_instance(const cmd::options &options) {
 
         auto max_id_size = [](const QVariantList &models) {
             return std::accumulate(
-                models.cbegin(), models.cend(), qsizetype{0}, [](qsizetype size, const auto &m) {
+                models.cbegin(), models.cend(), static_cast<size_t>(0),
+                [](size_t size, const auto &m) {
                     auto model = qdbus_cast<QVariantMap>(
                         m.template value<QDBusArgument>());
-                    return std::max(model.contains("id")
-                                        ? model.value("id").toString().size()
-                                        : size,
-                                    size);
+                    return std::max<decltype(size)>(
+                        model.contains("id")
+                            ? model.value("id").toString().size()
+                            : size,
+                        size);
                 });
         };
 
-        auto print_models = [](const char *name, qsizetype max_id_size,
+        auto print_models = [](const char *name, size_t max_id_size,
                                const QVariantList &models) {
             fmt::print("Available {} models: {}\n", name, models.size());
 
@@ -154,7 +155,7 @@ int app_server::request_another_instance(const cmd::options &options) {
             }
         };
 
-        auto print_active_model = [](const char *name, qsizetype max_id_size,
+        auto print_active_model = [](const char *name, size_t max_id_size,
                                      const QVariantMap &model) {
             fmt::print("Active {} model:\n", name);
             fmt::print(fmt::format("\t{{:{}}} \"{{}}\"\n",
@@ -167,7 +168,7 @@ int app_server::request_another_instance(const cmd::options &options) {
                            : "-");
         };
 
-        qsizetype g_max_size = 1;
+        size_t g_max_size = 1;
 
         if ((options.models_to_print_roles & cmd::role_stt) &&
             (options.models_to_print_roles & cmd::role_tts)) {
@@ -201,29 +202,29 @@ int app_server::request_another_instance(const cmd::options &options) {
             (options.active_model_to_print_role & cmd::role_tts)) {
             auto modelStt = iface.activeSttModel();
             auto modelTts = iface.activeTtsModel();
-            g_max_size =
-                std::max(g_max_size,
-                         std::max(modelStt.contains("id")
-                                      ? modelStt.value("id").toString().size()
-                                      : 1,
-                                  modelTts.contains("id")
-                                      ? modelTts.value("id").toString().size()
-                                      : 1));
+            g_max_size = std::max<decltype(g_max_size)>(
+                g_max_size,
+                std::max(modelStt.contains("id")
+                             ? modelStt.value("id").toString().size()
+                             : 1,
+                         modelTts.contains("id")
+                             ? modelTts.value("id").toString().size()
+                             : 1));
             print_active_model("STT", g_max_size, modelStt);
             print_active_model("TTS", g_max_size, modelTts);
         } else if (options.active_model_to_print_role & cmd::role_stt) {
             auto modelStt = iface.activeSttModel();
-            g_max_size = std::max(g_max_size,
-                                  modelStt.contains("id")
-                                      ? modelStt.value("id").toString().size()
-                                      : 1);
+            g_max_size = std::max<decltype(g_max_size)>(
+                g_max_size, modelStt.contains("id")
+                                ? modelStt.value("id").toString().size()
+                                : 1);
             print_active_model("STT", g_max_size, modelStt);
         } else if (options.active_model_to_print_role & cmd::role_tts) {
             auto modelTts = iface.activeTtsModel();
-            g_max_size = std::max(g_max_size,
-                                  modelTts.contains("id")
-                                      ? modelTts.value("id").toString().size()
-                                      : 1);
+            g_max_size = std::max<decltype(g_max_size)>(
+                g_max_size, modelTts.contains("id")
+                                ? modelTts.value("id").toString().size()
+                                : 1);
             print_active_model("TTS", g_max_size, modelTts);
         }
     }

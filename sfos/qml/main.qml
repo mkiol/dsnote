@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -28,18 +28,6 @@ ApplicationWindow {
         id: app
 
         Component.onCompleted: {
-            if (_files_to_open.length > 0) {
-                appWin.activate()
-
-                if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
-                    var list_of_files = _files_to_open
-                    addTextDialog.addHandler = function(){app.import_files(list_of_files, false)}
-                    addTextDialog.replaceHandler = function(){app.import_files(list_of_files, true)}
-                    addTextDialog.show()
-                } else {
-                    app.import_files(_files_to_open, _settings.file_import_action === Settings.FileImportActionReplace)
-                }
-            }
             app.execute_action_name(_requested_action, _requested_extra)
             app.import_files(_files_to_open, false)
         }

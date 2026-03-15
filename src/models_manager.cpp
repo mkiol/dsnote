@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
+﻿/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -282,7 +282,9 @@ static void remove_file_or_dir(const QString& path) {
 }
 
 models_manager::models_manager(QObject* parent) : QObject{parent} {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 9, 0)
     m_nam.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
+#endif
 
     connect(settings::instance(), &settings::models_dir_changed, this,
             static_cast<bool (models_manager::*)()>(
@@ -589,11 +591,11 @@ std::vector<models_manager::sup_model_file_t> models_manager::sup_model_files(
 
     QDir dir{settings::instance()->models_dir()};
 
-    std::transform(
-        sub_models.cbegin(), sub_models.cend(), std::back_inserter(files),
-        [&dir](const auto& model) {
-            return sup_model_file_t{model.role, dir.filePath(model.file_name)};
-        });
+    std::transform(sub_models.cbegin(), sub_models.cend(),
+                   std::back_inserter(files), [&dir](const auto& model) {
+                       return sup_model_file_t{model.role,
+                                               dir.filePath(model.file_name)};
+                   });
 
     return files;
 }
@@ -807,8 +809,12 @@ void models_manager::download(const QString& id, download_type type, int part,
                     : model.size;
 
     QNetworkRequest request{url};
+#if QT_VERSION < QT_VERSION_CHECK(5, 9, 0)
+    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+#else
     request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
                          QNetworkRequest::NoLessSafeRedirectPolicy);
+#endif
 
     if (type == download_type::all || type == download_type::model_sup) {
         path = model_path(model.file_name);

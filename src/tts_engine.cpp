@@ -280,7 +280,8 @@ std::string tts_engine::first_file_with_ext(std::string dir_path,
 
         std::string fn{dirent->d_name};
 
-        if (!fn.empty() && fn.front() != '.' && fn.substr(fn.find_last_of('.') + 1) == ext)
+        if (!fn.empty() && fn.front() != '.' &&
+            fn.substr(fn.find_last_of('.') + 1) == ext)
             return dir_path.append("/").append(fn);
     }
 
@@ -425,7 +426,7 @@ std::string tts_engine::path_to_output_silence_file(
 }
 
 bool tts_engine::file_exists(const std::string& file_path) {
-    struct stat buffer {};
+    struct stat buffer{};
     return stat(file_path.c_str(), &buffer) == 0;
 }
 
@@ -616,7 +617,8 @@ std::vector<tts_engine::task_t> tts_engine::make_tasks(std::string text,
                                  split_type, speed, 0, type, tasks);
                 break;
             case tag_mode_t::support:
-                for (const auto& part : text_tools::split_by_control_tags(text)) {
+                for (const auto& part :
+                     text_tools::split_by_control_tags(text)) {
                     auto silent_duration = 0U;
 
                     for (const auto& tag : part.tags) {
@@ -1250,5 +1252,7 @@ void tts_engine::make_hf_link(const char* model_name,
 
     remove(ln_target.c_str());
     LOGD("ln: " << model_path << " => " << ln_target);
-    (void)symlink(model_path.c_str(), ln_target.c_str());
+    if (symlink(model_path.c_str(), ln_target.c_str())) {
+        LOGE("failed to create symlink: " << model_path << " => " << ln_target);
+    }
 }

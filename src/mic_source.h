@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,18 +8,29 @@
 #ifndef MIC_SOURCE_H
 #define MIC_SOURCE_H
 
-#include <QAudioSource>
+#include <QAudio>
 #include <QIODevice>
 #include <QObject>
 #include <QStringList>
 #include <QTimer>
 #include <memory>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QAudioInput>
+#else
+#include <QAudioSource>
+#endif
+
 #include "audio_source.h"
 
 class mic_source : public audio_source {
     Q_OBJECT
    public:
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    using AudioSourceType = QAudioInput;
+#else
+    using AudioSourceType = QAudioSource;
+#endif
     explicit mic_source(const QString& preferred_audio_input,
                         QObject* parent = nullptr);
     ~mic_source() override;
@@ -33,7 +44,7 @@ class mic_source : public audio_source {
     static QStringList audio_inputs();
 
    private:
-    std::unique_ptr<QAudioSource> m_audio_source;
+    std::unique_ptr<AudioSourceType> m_audio_source;
     QTimer m_timer;
     QIODevice* m_audio_device = nullptr;
     bool m_eof = false;

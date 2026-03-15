@@ -474,11 +474,12 @@ static void configure_icon_theme() {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && defined(USE_DESKTOP)
     // Set icon theme search paths to common system locations
     QStringList searchPaths = QIcon::themeSearchPaths();
-    searchPaths << "/usr/share/icons"
-                << "/usr/local/share/icons"
-                << "/app/share/icons"  // Flatpak and other sandboxed environments
-                << QDir::homePath() + "/.local/share/icons"
-                << QDir::homePath() + "/.icons";
+    searchPaths
+        << "/usr/share/icons"
+        << "/usr/local/share/icons"
+        << "/app/share/icons"  // Flatpak and other sandboxed environments
+        << QDir::homePath() + "/.local/share/icons"
+        << QDir::homePath() + "/.icons";
     QIcon::setThemeSearchPaths(searchPaths);
 
     LOGD("icon theme search paths: " << QIcon::themeSearchPaths().join(", "));
@@ -491,7 +492,8 @@ static void configure_icon_theme() {
     }
 
     // Try to find and set an available icon theme
-    // Priority: current theme (if set), breeze, breeze-dark, Adwaita, hicolor (fallback)
+    // Priority: current theme (if set), breeze, breeze-dark, Adwaita, hicolor
+    // (fallback)
     QStringList iconThemes;
     if (!currentTheme.isEmpty() && currentTheme != "hicolor") {
         iconThemes << currentTheme;
@@ -538,6 +540,8 @@ static void start_service(const cmd::options& options) {
         s->disable_py_scan();
     }
 
+    speech_service::instance();
+
     if (options.gen_cheksums) {
         models_manager::instance()->generate_checksums();
     }
@@ -561,7 +565,8 @@ static void start_app(const cmd::options& options,
         s->disable_py_scan();
     }
 
-    if (settings::launch_mode == settings::launch_mode_t::app_stanalone && options.gen_cheksums) {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone &&
+        options.gen_cheksums) {
         models_manager::instance()->generate_checksums();
     }
 

@@ -8,6 +8,9 @@ cmake_minimum_required(VERSION 3.19)
 
 option(WITH_DESKTOP "enable desktop ui" ON) # default
 option(WITH_SFOS "enable sfos ui" OFF)
+if(WITH_SFOS)
+    set(WITH_DESKTOP OFF)
+endif()
 
 option(WITH_FLATPAK "enable flatpak build" OFF)
 option(WITH_TESTS "enable tests" OFF)
@@ -422,7 +425,7 @@ endif()
 configure_file(config.h.in config.h)
 
 # qt version selection
-if(SFOS)
+if(WITH_SFOS)
     # on sfos use qt5
     find_package(Qt5 COMPONENTS Core REQUIRED)
     set(QT_VERSION_MAJOR 5)
@@ -543,17 +546,17 @@ pkg_search_module(pulse REQUIRED libpulse)
 list(APPEND deps_libs ${pulse_LIBRARIES})
 list(APPEND includes ${pulse_INCLUDE_DIRS})
 
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick QuickControls2 DBus LinguistTools REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick DBus LinguistTools REQUIRED)
 list(APPEND deps_libs Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Multimedia 
-    Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::QuickControls2 
+    Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Quick
     Qt${QT_VERSION_MAJOR}::DBus Qt${QT_VERSION_MAJOR}::Xml Qt${QT_VERSION_MAJOR}::Sql)
 
 # translations (requires QT_VERSION_MAJOR to be set)
 include(${cmake_path}/translations.cmake)
 
 if(WITH_DESKTOP)
-    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
-    list(APPEND deps_libs Qt${QT_VERSION_MAJOR}::Widgets)
+    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS QuickControls2 Widgets REQUIRED)
+    list(APPEND deps_libs Qt${QT_VERSION_MAJOR}::QuickControls2 Qt${QT_VERSION_MAJOR}::Widgets)
 
     pkg_search_module(wayland REQUIRED wayland-client)
     list(APPEND deps_libs ${wayland_LIBRARIES})

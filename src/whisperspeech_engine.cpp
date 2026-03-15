@@ -22,7 +22,8 @@
 
 using namespace pybind11::literals;
 
-whisperspeech_engine::whisperspeech_engine(config_t config, callbacks_t call_backs)
+whisperspeech_engine::whisperspeech_engine(config_t config,
+                                           callbacks_t call_backs)
     : tts_engine{std::move(config), std::move(call_backs)} {
     if ((cpu_tools::cpuinfo().feature_flags &
          cpu_tools::feature_flags_t::avx) == 0) {
@@ -72,7 +73,9 @@ static void make_torch_link(const char* model_name, const std::string& hub_path,
     auto ln_target = fmt::format("{}/checkpoints", cache_dir);
     remove(ln_target.c_str());
     LOGD("ln: " << model_path << " => " << ln_target);
-    (void)symlink(model_path.c_str(), ln_target.c_str());
+    if (symlink(model_path.c_str(), ln_target.c_str())) {
+        LOGE("failed to make symlink: " << model_path << " => " << ln_target);
+    }
 }
 
 void whisperspeech_engine::create_model() {
@@ -138,7 +141,9 @@ void whisperspeech_engine::create_model() {
         LOGD("whisperspeech model created");
 }
 
-bool whisperspeech_engine::model_created() const { return static_cast<bool>(m_model); }
+bool whisperspeech_engine::model_created() const {
+    return static_cast<bool>(m_model);
+}
 
 void whisperspeech_engine::reset_ref_voice() {
     auto task = py_executor::instance()->execute([&]() {

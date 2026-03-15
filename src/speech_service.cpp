@@ -262,7 +262,11 @@ speech_service::speech_service(QObject *parent)
     connect(
         this, &speech_service::requet_update_task_state, this,
         [this] { update_task_state(); }, Qt::QueuedConnection);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    connect(&m_player, &QMediaPlayer::stateChanged, this,
+#else
     connect(&m_player, &QMediaPlayer::playbackStateChanged, this,
+#endif
             &speech_service::handle_player_state_changed, Qt::QueuedConnection);
     connect(
         settings::instance(), &settings::default_stt_model_changed, this,
@@ -488,7 +492,7 @@ speech_service::speech_service(QObject *parent)
             emit TttLangsPropertyChanged(langs_list);
 
             // mnt
-            
+
             langs_list = available_mnt_langs();
             qDebug() << "[service => dbus] signal MntLangsPropertyChanged";
             emit MntLangsPropertyChanged(langs_list);
@@ -567,8 +571,10 @@ speech_service::speech_service(QObject *parent)
         }
     });
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     m_player.setAudioOutput(&m_player_audio_output);
     m_beep_player.setAudioOutput(&m_beep_player_audio_output);
+#endif
 
     if (settings::launch_mode == settings::launch_mode_t::service) {
         m_keepalive_timer.start();
@@ -715,14 +721,17 @@ void speech_service::fill_available_models_map(
     m_available_mnt_lang_to_model_id_map = std::move(lang_to_model_map.mnt);
 }
 
-bool speech_service::matched_engine_type(engine_t engine_type,
-                                         models_manager::model_engine_t engine) {
+bool speech_service::matched_engine_type(
+    engine_t engine_type, models_manager::model_engine_t engine) {
     auto role = models_manager::role_of_engine(engine);
-    if (engine_type == engine_t::stt && role == models_manager::model_role_t::stt)
+    if (engine_type == engine_t::stt &&
+        role == models_manager::model_role_t::stt)
         return true;
-    if (engine_type == engine_t::tts && role == models_manager::model_role_t::tts)
+    if (engine_type == engine_t::tts &&
+        role == models_manager::model_role_t::tts)
         return true;
-    if (engine_type == engine_t::mnt && role == models_manager::model_role_t::mnt)
+    if (engine_type == engine_t::mnt &&
+        role == models_manager::model_role_t::mnt)
         return true;
     return false;
 }
@@ -1071,6 +1080,7 @@ speech_service::choose_model_config(engine_t engine_type,
                     break;
                 case engine_t::tts:
                     model_id = active_config->tts->model_id;
+                    break;
                 case engine_t::text_repair:
                 case engine_t::mnt:
                     break;
@@ -1291,11 +1301,10 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         config.sub_config = stt_sub_config_from_options(options);
         config.inline_timestamp_template =
             get_string_value_from_options("inline_timestamp_template", {},
-                                         options)
+                                          options)
                 .toStdString();
-        config.inline_timestamp_min_interval =
-            get_int_value_from_options("inline_timestamp_min_interval", 30,
-                                      options);
+        config.inline_timestamp_min_interval = get_int_value_from_options(
+            "inline_timestamp_min_interval", 30, options);
         config.cache_dir = settings::instance()->cache_dir().toStdString();
         config.insert_stats =
             get_bool_value_from_options("insert_stats", false, options);
@@ -1512,8 +1521,10 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             m_stt_engine->set_sub_config(config.sub_config);
             m_stt_engine->set_insert_stats(config.insert_stats);
             m_stt_engine->set_initial_prompt(std::move(config.initial_prompt));
-            m_stt_engine->set_inline_timestamp_template(config.inline_timestamp_template);
-            m_stt_engine->set_inline_timestamp_min_interval(config.inline_timestamp_min_interval);
+            m_stt_engine->set_inline_timestamp_template(
+                config.inline_timestamp_template);
+            m_stt_engine->set_inline_timestamp_min_interval(
+                config.inline_timestamp_min_interval);
         }
 
         return model_config->stt->model_id;
@@ -1697,19 +1708,19 @@ QString speech_service::restart_tts_engine(const QString &model_id,
 
             const auto &type = typeid(*m_tts_engine);
             if (model_config->tts->engine ==
-                models_manager::model_engine_t::tts_coqui &&
+                    models_manager::model_engine_t::tts_coqui &&
                 type != typeid(coqui_engine))
                 return true;
             if (model_config->tts->engine ==
-                models_manager::model_engine_t::tts_piper &&
+                    models_manager::model_engine_t::tts_piper &&
                 type != typeid(piper_engine))
                 return true;
             if (model_config->tts->engine ==
-                models_manager::model_engine_t::tts_rhvoice &&
+                    models_manager::model_engine_t::tts_rhvoice &&
                 type != typeid(rhvoice_engine))
                 return true;
             if (model_config->tts->engine ==
-                models_manager::model_engine_t::tts_mimic3 &&
+                    models_manager::model_engine_t::tts_mimic3 &&
                 type != typeid(mimic3_engine))
                 return true;
             if (model_config->tts->engine ==
@@ -2468,9 +2479,9 @@ void speech_service::handle_tts_speech_encoded(tts_partial_result_t result) {
 void speech_service::play_beep(beep_role_t beep_role) {
     auto get_beep_file = [](const QString &name) {
         // get from user data dir
-        auto file_user =
-            QDir{QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)}
-                .filePath(name);
+        auto file_user = QDir{QStandardPaths::writableLocation(
+                                  QStandardPaths::AppDataLocation)}
+                             .filePath(name);
         qDebug() << "file user:" << file_user;
         if (QFileInfo::exists(file_user)) {
             return file_user;
@@ -2503,19 +2514,28 @@ void speech_service::play_beep(beep_role_t beep_role) {
         qWarning() << "can't find beep file";
         return;
     }
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    m_beep_player.setMedia(QMediaContent{QUrl::fromLocalFile(beep_file)});
+#else
     m_beep_player.setSource(QUrl::fromLocalFile(beep_file));
+#endif
     m_beep_player.play();
 }
 
 void speech_service::handle_tts_queue() {
     if (m_tts_queue.empty()) return;
-
-    if (m_player.playbackState() == QMediaPlayer::PlaybackState::PlayingState ||
-        m_player.playbackState() == QMediaPlayer::PlaybackState::PausedState)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    bool playing_or_paused =
+        m_player.state() == QMediaPlayer::State::PlayingState ||
+        m_player.state() == QMediaPlayer::State::PausedState;
+#else
+    bool playing_or_paused =
+        m_player.playbackState() == QMediaPlayer::PlaybackState::PlayingState ||
+        m_player.playbackState() == QMediaPlayer::PlaybackState::PausedState;
+#endif
+    if (playing_or_paused || (m_current_task && m_current_task->paused)) {
         return;
-
-    if (m_current_task && m_current_task->paused) return;
+    }
 
     auto &result = m_tts_queue.front();
 
@@ -2529,9 +2549,12 @@ void speech_service::handle_tts_queue() {
             result.audio_format = tts_engine::audio_format_t::wav;
             result.remove_audio_file = true;
         }
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        m_player.setMedia(
+            QMediaContent{QUrl::fromLocalFile(result.audio_file_path)});
+#else
         m_player.setSource(QUrl::fromLocalFile(result.audio_file_path));
-
+#endif
         m_player.play();
 
         emit tts_partial_speech_playing(result.text, result.task_id);
@@ -2639,14 +2662,14 @@ void speech_service::handle_ttt_text_repaired(const QString &text,
 }
 
 void speech_service::handle_player_state_changed(
-    QMediaPlayer::PlaybackState new_state) {
+    MediaPlayerPlaybackStateType new_state) {
     qDebug() << "player new state:" << new_state;
 
     update_task_state();
 
-    if (new_state == QMediaPlayer::PlaybackState::StoppedState && m_current_task &&
-        m_current_task->engine == engine_t::tts && !m_current_task->paused &&
-        !m_tts_queue.empty()) {
+    if (new_state == MediaPlayerPlaybackStateType::StoppedState &&
+        m_current_task && m_current_task->engine == engine_t::tts &&
+        !m_current_task->paused && !m_tts_queue.empty()) {
         const auto &result = m_tts_queue.front();
 
         auto task = result.task_id;
@@ -3715,14 +3738,14 @@ int speech_service::tts_play_speech(const QString &text, QString lang,
     auto text_format = static_cast<settings::text_format_t>(
         options.value("text_format").toInt());
     if (text_format == settings::text_format_t::TextFormatInlineTimestamp) {
-        auto tmpl = get_string_value_from_options(
-            "inline_timestamp_template", {}, options);
+        auto tmpl = get_string_value_from_options("inline_timestamp_template",
+                                                  {}, options);
         if (!tmpl.isEmpty()) {
-            auto regex = text_tools::compile_inline_timestamp_regex(
-                tmpl.toStdString());
+            auto regex =
+                text_tools::compile_inline_timestamp_regex(tmpl.toStdString());
             if (regex) {
-                text_to_speak = QString::fromStdString(
-                    text_tools::strip_inline_timestamps(
+                text_to_speak =
+                    QString::fromStdString(text_tools::strip_inline_timestamps(
                         text_to_speak.toStdString(), *regex));
             }
         }
@@ -3787,14 +3810,14 @@ int speech_service::tts_speech_to_file(const QString &text, QString lang,
     auto text_format = static_cast<settings::text_format_t>(
         options.value("text_format").toInt());
     if (text_format == settings::text_format_t::TextFormatInlineTimestamp) {
-        auto tmpl = get_string_value_from_options(
-            "inline_timestamp_template", {}, options);
+        auto tmpl = get_string_value_from_options("inline_timestamp_template",
+                                                  {}, options);
         if (!tmpl.isEmpty()) {
-            auto regex = text_tools::compile_inline_timestamp_regex(
-                tmpl.toStdString());
+            auto regex =
+                text_tools::compile_inline_timestamp_regex(tmpl.toStdString());
             if (regex) {
-                text_to_speak = QString::fromStdString(
-                    text_tools::strip_inline_timestamps(
+                text_to_speak =
+                    QString::fromStdString(text_tools::strip_inline_timestamps(
                         text_to_speak.toStdString(), *regex));
             }
         }
@@ -3921,7 +3944,14 @@ int speech_service::tts_pause_speech(int task) {
 
     m_current_task->paused = true;
 
-    if (m_player.playbackState() == QMediaPlayer::PlayingState) m_player.pause();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto player_state = m_player.state();
+#else
+    auto player_state = m_player.playbackState();
+#endif
+    if (player_state == QMediaPlayer::PlayingState) {
+        m_player.pause();
+    }
 
     update_task_state();
 
@@ -3954,7 +3984,14 @@ int speech_service::tts_resume_speech(int task) {
 
     m_current_task->paused = false;
 
-    if (m_player.playbackState() == QMediaPlayer::PausedState) m_player.play();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto state = m_player.state();
+#else
+    auto state = m_player.playbackState();
+#endif
+    if (state == QMediaPlayer::PausedState) {
+        m_player.play();
+    }
 
     handle_tts_queue();
 
@@ -4164,7 +4201,12 @@ void speech_service::update_task_state() {
     // 6 = Canceling
 
     auto new_task_state = [&] {
-        if (m_player.playbackState() == QMediaPlayer::PlaybackState::PlayingState &&
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        auto player_state = m_player.state();
+#else
+        auto player_state = m_player.playbackState();
+#endif
+        if (player_state == QMediaPlayer::PlayingState &&
             m_state == state_t::playing_speech) {
             return 4;
         } else if (m_stt_engine && m_stt_engine->started()) {
@@ -4178,8 +4220,8 @@ void speech_service::update_task_state() {
                 case stt_engine::speech_detection_status_t::no_speech:
                     break;
             }
-        } else if (m_player.playbackState() == QMediaPlayer::PlaybackState::PausedState ||
-                   (m_player.playbackState() == QMediaPlayer::PlaybackState::StoppedState &&
+        } else if (player_state == QMediaPlayer::PausedState ||
+                   (player_state == QMediaPlayer::StoppedState &&
                     m_state == state_t::playing_speech && m_current_task &&
                     m_current_task->paused)) {
             return 5;
