@@ -99,7 +99,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.9.0" date="2026-02-22">
+    <release version="4.9.0" date="2026-04-12">
       <description>
       <p>Accessibility:</p>
       <ul>
@@ -120,6 +120,12 @@
       <li>Inline timestamps in text output.
         A new output format is now available, displaying timestamps that show when
         each segment of text was recognized in the audio.</li>
+      </ul>
+      <p>Translator:</p>
+      <ul>
+      <li>Updated models for: Catalan, Czech, German, Danish, Spanish, Persian, French,
+        Icelandic, Italian, Korean, Dutch, Polish, Portuguese, Tamil, Ukrainian</li>
+      <li>Fix: Translation models cannot be downloaded.</li>
       </ul>
       <p>User Interface</p>
       <ul>
