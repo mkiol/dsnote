@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sl" sourcelanguage="en_US">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sl" sourcelanguage="en_US">
 <context>
     <name>AboutPage</name>
     <message>
@@ -101,38 +99,38 @@
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="17"/>
         <source>Install Flatpak add-on</source>
-        <translation type="unfinished"></translation>
+        <translation>Namesti Flatpak dodatek</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="33"/>
         <source>To install Flatpak add-on, which provides GPU acceleration support for %1 graphics card, follow one of the steps below.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za namestitev Flatpak dodatka, ki omogoči GPU pospeševanje za %1 grafično kartico, sledite spodnjim korakom.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="43"/>
         <source>Use the software manager application on your system and install %1, or</source>
-        <translation type="unfinished"></translation>
+        <translation>Uporabite upravljalnik programja na vašem sistemu in namestite %1 ali</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="52"/>
         <source>Run the following command in the terminal:</source>
-        <translation type="unfinished"></translation>
+        <translation>V terminalu zaženite naslednji ukaz:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="70"/>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="85"/>
         <source>The add-on enables faster processing when using the following Speech to Text and Text to Speech engines:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodatek omogoča hitrejše obdelave, kadar uporablja naslednje stroje za pretvorbo govora v besedilo in besedila v govor:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="97"/>
         <source>If you&apos;re interested in fast and accurate Speech to Text processing, consider using %1 with Vulkan hardware acceleration, which works without installing an add-on.</source>
-        <translation type="unfinished"></translation>
+        <translation>Če ste zainteresirani za hitro in natančno obdelavo govora v besedilo, razmislite o uporabi %1 z Vulkan strojni pospeševanjem, ki deluje brez nameščanja dodatkov.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/AddonInstallDialog.qml" line="106"/>
         <source>Note that installing the add-on requires a significant amount of disk space.</source>
-        <translation type="unfinished"></translation>
+        <translation>Upoštevajte, da namestitev dodatka zahteva znatne količine diskovnega prostora.</translation>
     </message>
 </context>
 <context>
@@ -211,7 +209,7 @@
         <location filename="../desktop/qml/ChangelogPage.qml" line="116"/>
         <location filename="../desktop/qml/ChangelogPage.qml" line="132"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Splošno</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ChangelogPage.qml" line="86"/>
@@ -664,20 +662,12 @@
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="79"/>
         <source>Tip: %1 acceleration is most effective when processing long sentences with large models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nasvet: %1 pospeševanje je najbolj učinkovito pri procesiranju dolgih stavkov z velikimi modeli.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="80"/>
         <source>For short sentences, better results can be obtained with %1 or without hardware acceleration enabled.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tip: OpenVINO acceleration is most effective when processing long sentences with large models.</source>
-        <translation type="vanished">Nasvet: Pospeševanje OpenVINO je najučinkovitejše pri obdelavi dolgih stavkov z velikimi modeli.</translation>
-    </message>
-    <message>
-        <source>For short sentences, better results can be obtained without hardware acceleration enabled.</source>
-        <translation type="vanished">Za kratke stavke je mogoče doseči boljše rezultate brez omogočenega strojnega pospeševanja.</translation>
+        <translation>Za kratke stavke je mogoče doseči boljše rezultate z %1 ali brez omogočenega strojnega pospeševanja.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="86"/>
@@ -726,11 +716,7 @@
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="28"/>
         <source>Languages and Models</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Languages</source>
-        <translation type="vanished">Jeziki</translation>
+        <translation>Jeziki in modeli</translation>
     </message>
     <message>
         <location filename="../desktop/qml/HelloPage.qml" line="30"/>
@@ -854,27 +840,17 @@
     <message numerus="yes">
         <location filename="../desktop/qml/LangsPage.qml" line="473"/>
         <source>%n voice(s)</source>
-        <translation>
-            <numerusform>%n glas</numerusform>
-            <numerusform>%n glasovi</numerusform>
-            <numerusform>%n glasov</numerusform>
-            <numerusform>%n glasov</numerusform>
-        </translation>
+        <translation><numerusform>%n glas</numerusform><numerusform>%n glasovi</numerusform><numerusform>%n glasov</numerusform><numerusform>%n glasov</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../desktop/qml/LangsPage.qml" line="474"/>
         <source>%n model(s)</source>
-        <translation>
-            <numerusform>%n model</numerusform>
-            <numerusform>%n modela</numerusform>
-            <numerusform>%n modelov</numerusform>
-            <numerusform>%n modelov</numerusform>
-        </translation>
+        <translation><numerusform>%n model</numerusform><numerusform>%n modela</numerusform><numerusform>%n modelov</numerusform><numerusform>%n modelov</numerusform></translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="546"/>
         <source>Experimental</source>
-        <translation type="unfinished"></translation>
+        <translation>Poskusno</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="589"/>
@@ -904,12 +880,12 @@
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="333"/>
         <source>Go back</source>
-        <translation type="unfinished"></translation>
+        <translation>Pojdi nazaj</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="550"/>
         <source>This model is experimental and may not work well.</source>
-        <translation type="unfinished"></translation>
+        <translation>To je poskusni model in morda ne bo deloval v skladu s pričakovanji</translation>
     </message>
     <message>
         <location filename="../desktop/qml/LangsPage.qml" line="613"/>
@@ -934,12 +910,12 @@
     <message>
         <location filename="../desktop/qml/MainTipMessage.qml" line="24"/>
         <source>Warning message</source>
-        <translation type="unfinished"></translation>
+        <translation>Opozorilno sporočilo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainTipMessage.qml" line="24"/>
         <source>Information message</source>
-        <translation type="unfinished"></translation>
+        <translation>Informativno sporočilo</translation>
     </message>
 </context>
 <context>
@@ -949,7 +925,7 @@
         <location filename="../desktop/qml/MainToolBar.qml" line="169"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="176"/>
         <source>Languages and Models</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeziki in modeli</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="38"/>
@@ -1013,22 +989,14 @@
         <translation>Datoteka</translation>
     </message>
     <message>
-        <source>Languages</source>
-        <translation type="vanished">Jeziki</translation>
-    </message>
-    <message>
-        <source>Set languages and download models.</source>
-        <translation type="vanished">Nastavite jezike in prenesite modele.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="40"/>
         <source>Open Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Odpri meni</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="45"/>
         <source>Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Meni</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="125"/>
@@ -1080,21 +1048,13 @@
         <location filename="../desktop/qml/MainToolBar.qml" line="236"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="243"/>
         <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Voice samples</source>
-        <translation type="vanished">Glasovni vzorci</translation>
+        <translation>Glasovni profili</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="251"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="258"/>
         <source>Rules</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Voice samples are used in speech synthesis with voice cloning.</source>
-        <translation type="vanished">Glasovni vzorci se uporabljajo pri sintezi govora s kloniranjem glasu.</translation>
+        <translation>Pravila</translation>
     </message>
     <message>
         <location filename="../desktop/qml/MainToolBar.qml" line="340"/>
@@ -1144,7 +1104,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="161"/>
         <source>Filter options for models</source>
-        <translation type="unfinished"></translation>
+        <translation>Možnosti filtrov za modele</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="167"/>
@@ -1155,12 +1115,12 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="212"/>
         <source>Filtering by model type</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtriranje po zvrsti modela</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="237"/>
         <source>Model types</source>
-        <translation type="unfinished"></translation>
+        <translation>Zvrsti modela</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="248"/>
@@ -1170,7 +1130,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="272"/>
         <source>Filtering by engine type</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtriranje po vrsti stroja</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="276"/>
@@ -1180,7 +1140,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="310"/>
         <source>Engine types</source>
-        <translation type="unfinished"></translation>
+        <translation>Zvrsti stroja</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="321"/>
@@ -1190,7 +1150,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="345"/>
         <source>Filtering by speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtriranje po hitrosti</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="349"/>
@@ -1216,7 +1176,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="369"/>
         <source>Speed levels</source>
-        <translation type="unfinished"></translation>
+        <translation>Ravni hitrosti</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="380"/>
@@ -1236,7 +1196,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="406"/>
         <source>Filtering by quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtriranje po kakovosti</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="410"/>
@@ -1256,7 +1216,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="430"/>
         <source>Quality levels</source>
-        <translation type="unfinished"></translation>
+        <translation>Ravni kakovosti</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="441"/>
@@ -1276,7 +1236,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="467"/>
         <source>Filtering by additional capabilities</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtriranje po dodatnih zmožnostih</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="471"/>
@@ -1302,7 +1262,7 @@
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="487"/>
         <source>Voice Text Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Opis govora v besedilo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelFilteringWidget.qml" line="504"/>
@@ -1438,12 +1398,12 @@
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="255"/>
         <source>Voice Text Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Opis govora v besedilo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="269"/>
         <source>Model card</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartica modela</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="295"/>
@@ -1463,7 +1423,7 @@
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="322"/>
         <source>This model is experimental and may not work well.</source>
-        <translation type="unfinished"></translation>
+        <translation>To je poskusni model in morda ne bo deloval v skladu s pričakovanji</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ModelInfoPage.qml" line="332"/>
@@ -1562,14 +1522,10 @@
         <translation>Pojdite na %1, da prenesete modele za jezike, ki jih nameravate uporabljati.</translation>
     </message>
     <message>
-        <source>Languages</source>
-        <translation type="vanished">Jeziki</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/Notepad.qml" line="109"/>
         <location filename="../desktop/qml/Notepad.qml" line="22"/>
         <source>Languages and Models</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeziki in modeli</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Notepad.qml" line="123"/>
@@ -1615,7 +1571,7 @@
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="72"/>
         <source>Notepad</source>
-        <translation type="unfinished">Beležnica</translation>
+        <translation>Beležnica</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="135"/>
@@ -1630,26 +1586,22 @@
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="181"/>
         <source>This model requires a voice profile.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta model zahteva glasovni profil.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="182"/>
         <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Glasovni profili</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="183"/>
         <source>Voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Glasovni profil</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="186"/>
         <source>No voice profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This model requires a voice sample.</source>
-        <translation type="vanished">Ta model zahteva glasovni vzorec.</translation>
+        <translation>Ni glasovnega profila</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Notepad.qml" line="182"/>
@@ -1657,26 +1609,14 @@
         <translation>Model besedila v govor</translation>
     </message>
     <message>
-        <source>Voice samples</source>
-        <translation type="vanished">Glasovni vzorci</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/Notepad.qml" line="182"/>
         <source>Create one in %1.</source>
         <translation>Ustvarite ga v %1.</translation>
     </message>
     <message>
-        <source>Voice sample</source>
-        <translation type="vanished">Glasovni vzorec</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/Notepad.qml" line="184"/>
         <source>Speech speed</source>
         <translation>Hitrost govora</translation>
-    </message>
-    <message>
-        <source>No voice sample</source>
-        <translation type="vanished">Ni glasovnega vzorca</translation>
     </message>
 </context>
 <context>
@@ -1730,264 +1670,258 @@
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="33"/>
         <source>Edit rule</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="33"/>
-        <source>Create a new rule</source>
-        <translation type="unfinished"></translation>
+        <translation>Pravilo urejanja</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="42"/>
         <source>Replace: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Zamenjaj: %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="109"/>
         <location filename="../desktop/qml/RuleEditPage.qml" line="299"/>
         <source>Pattern</source>
-        <translation type="unfinished"></translation>
+        <translation>Vzorec</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="114"/>
         <source>A pattern is used to find a match in the text and replace it with another text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vzorec se uporablja za iskanje vzorca v besedilu in zamenjavo za drugo besedilo.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="116"/>
         <source>To define a more advanced pattern, you can use a regular expression.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za določanje bolj naprednega vzorca lahko uporabite regularni izraz.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="123"/>
         <source>When defining a regular expression pattern, you can use tags for the following character classes:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="125"/>
-        <source>Matches any character (including newline).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="126"/>
-        <source>Matches a newline.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="127"/>
-        <source>Matches a non-digit.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="128"/>
-        <source>Matches a whitespace character.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="129"/>
-        <source>Matches a non-whitespace character.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="130"/>
-        <source>Matches a word character.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="131"/>
-        <source>Matches a non-word character.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="141"/>
-        <source>Matches %1, %2 and %3.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="142"/>
-        <source>Matches any text put in square brackets.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="143"/>
-        <source>Captures any word ending in a period.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kadar določate vzorec regularnega izraza, lahko uporabite značke za naslednje razrede znakov:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="153"/>
         <location filename="../desktop/qml/RuleEditPage.qml" line="313"/>
         <source>Replacement text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="158"/>
-        <source>A replacement text is inserted instead of the text matched by the pattern.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="272"/>
-        <source>Pattern type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="274"/>
-        <source>Type of a pattern.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="115"/>
-        <source>A simple pattern is just plain text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="139"/>
-        <source>Here are some examples of regular expression patterns:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="159"/>
-        <source>Simple replacement text is just plain text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="160"/>
-        <source>To define more advanced replacement, you can use a regular expression pattern that contains capturing groups.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="167"/>
-        <source>To pass the captured text from the pattern as a replacement, use the following tags:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="169"/>
-        <source>Resolves to the text captured in the first capture group.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="170"/>
-        <source>Resolves to the text captured in the second capture group.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="171"/>
-        <source>Makes all characters in the first capture group be capitalized.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="172"/>
-        <source>Causes all characters in the first capture group to be lowercase.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="196"/>
-        <source>Save</source>
-        <translation type="unfinished">Shrani</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="206"/>
-        <source>Cancel</source>
-        <translation type="unfinished">Prekliči</translation>
+        <translation>Besedilo zamenjave</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="223"/>
         <location filename="../desktop/qml/RuleEditPage.qml" line="225"/>
         <source>Type here to see how the rule changes the text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vtipkajte sem, da vidite, kako je pravilo zamenjalo besedilo.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="233"/>
         <location filename="../desktop/qml/RuleEditPage.qml" line="235"/>
         <source>Text after applying the rule.</source>
-        <translation type="unfinished"></translation>
+        <translation>Besedilo po uporabi pravila.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="233"/>
         <source>Red color means that pattern doesn&apos;t match the text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rdeča barva označuje, da vzorec ne ustreza besedilu.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="253"/>
-        <source>Case sensitive</source>
-        <translation type="unfinished"></translation>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="272"/>
+        <source>Pattern type</source>
+        <translation>Zvrst vzorca</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="275"/>
-        <source>You can simply replace the found text or replace the text with a regular expression.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="288"/>
-        <source>Replace (Regular expression)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="324"/>
-        <source>Name</source>
-        <translation type="unfinished">Ime</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="325"/>
-        <source>Optional name of the rule. If the name is not specified, the default name will be used.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="335"/>
-        <source>Languages</source>
-        <translation type="unfinished">Jeziki</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="341"/>
-        <source>All languages</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="350"/>
-        <source>List of language codes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="353"/>
-        <source>A comma separated list of language codes for which the rule should be enabled.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="354"/>
-        <source>Example: %1 means that the rule applies only to Czech, Slovak and Polish languages.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="362"/>
-        <source>Types of usage</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleEditPage.qml" line="388"/>
-        <source>Read the text</source>
-        <translation type="unfinished"></translation>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="274"/>
+        <source>Type of a pattern.</source>
+        <translation>Zvrst vzorca.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="287"/>
         <source>Replace</source>
-        <translation type="unfinished">Zamenjaj</translation>
+        <translation>Zamenjaj</translation>
     </message>
     <message>
-        <source>Add text to the current note or replace it?</source>
-        <translation type="obsolete">Dodati besedilo v trenutni zapisek ali ga zamenjaj?</translation>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="33"/>
+        <source>Create a new rule</source>
+        <translation>Ustvari novo pravilo</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="125"/>
+        <source>Matches any character (including newline).</source>
+        <translation>Ustreza kakršnemkoli znaku
+(vključno novi vrstici).</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="126"/>
+        <source>Matches a newline.</source>
+        <translation>Ustreza novi vrstici.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="127"/>
+        <source>Matches a non-digit.</source>
+        <translation>Ustreza ne-števki.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="128"/>
+        <source>Matches a whitespace character.</source>
+        <translation>Ustreza znaku presledka.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="129"/>
+        <source>Matches a non-whitespace character.</source>
+        <translation>Ustreza znaku ne-presledka.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="130"/>
+        <source>Matches a word character.</source>
+        <translation>Ustreza znaku besede.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="131"/>
+        <source>Matches a non-word character.</source>
+        <translation>Ustreza znaku ne-besede.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="141"/>
+        <source>Matches %1, %2 and %3.</source>
+        <translation>Ustreza %1, %2 in %3.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="142"/>
+        <source>Matches any text put in square brackets.</source>
+        <translation>Ustreza kateremkoli besedilu postavljenim v oglate oklepaje.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="143"/>
+        <source>Captures any word ending in a period.</source>
+        <translation>Zajame katero koli besedo, ki se konča s piko.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="158"/>
+        <source>A replacement text is inserted instead of the text matched by the pattern.</source>
+        <translation>Besedilo zamenjave je vstavljeno namesto ujemajočega besedila z vzorcem.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="115"/>
+        <source>A simple pattern is just plain text.</source>
+        <translation>Enostavni vzorec je kar enostavno besedilo.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="139"/>
+        <source>Here are some examples of regular expression patterns:</source>
+        <translation>Tu je nekaj primerov vzorcev regularnih izrazov:</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="159"/>
+        <source>Simple replacement text is just plain text.</source>
+        <translation>Preprosto besedilo zamenjave je kar preprosto besedilo.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="160"/>
+        <source>To define more advanced replacement, you can use a regular expression pattern that contains capturing groups.</source>
+        <translation>Za določanje naprednejših zamenjav lahko uporabljate regularne izraze, ki vsebujejo zajemajoče grupe.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="167"/>
+        <source>To pass the captured text from the pattern as a replacement, use the following tags:</source>
+        <translation>Za prenos zajetega besedila iz vzorca kot nadomestila, uporabite naslednje oznake:</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="169"/>
+        <source>Resolves to the text captured in the first capture group.</source>
+        <translation>Se razreši v besedilo zajeto v prvi grupi zajetja.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="170"/>
+        <source>Resolves to the text captured in the second capture group.</source>
+        <translation>Se razreši v besedilo zajeto v drugi grupi zajetja.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="171"/>
+        <source>Makes all characters in the first capture group be capitalized.</source>
+        <translation>Postavi vse znake v prvi grupi zajetja v velike črke.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="172"/>
+        <source>Causes all characters in the first capture group to be lowercase.</source>
+        <translation>Povzroči, da so vsi znake v prvi grupi zajetja v malih črkah.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="196"/>
+        <source>Save</source>
+        <translation>Shrani</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="206"/>
+        <source>Cancel</source>
+        <translation>Prekliči</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="253"/>
+        <source>Case sensitive</source>
+        <translation>Občutljivo na male/velike črke.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="275"/>
+        <source>You can simply replace the found text or replace the text with a regular expression.</source>
+        <translation>Lahko enostavno zamenjate najdeno besedilo ali zamenjate besedilo z regularnim izrazom.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="288"/>
+        <source>Replace (Regular expression)</source>
+        <translation>Zamenjaj (Regularni
+izraz)</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="324"/>
+        <source>Name</source>
+        <translation>Ime</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="325"/>
+        <source>Optional name of the rule. If the name is not specified, the default name will be used.</source>
+        <translation>Neobvezno ime pravila. Če ime ni določeno, bo uporabljeno privzeto ime.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="335"/>
+        <source>Languages</source>
+        <translation>Jeziki</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="341"/>
+        <source>All languages</source>
+        <translation>Vsi jeziki</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="350"/>
+        <source>List of language codes</source>
+        <translation>Seznam kod jezikov</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="353"/>
+        <source>A comma separated list of language codes for which the rule should be enabled.</source>
+        <translation>Seznam kod jezikov ločen z vejicami za katere naj bi bilo pravilo omogočeno.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="354"/>
+        <source>Example: %1 means that the rule applies only to Czech, Slovak and Polish languages.</source>
+        <translation>Primer: %1 pomeni, da se pravilo uveljavlja samo za češki, slovaški in poljski jezik.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="362"/>
+        <source>Types of usage</source>
+        <translation>Zvrsti uporabe</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="368"/>
         <source>Speech to Text</source>
-        <translation type="unfinished">Govor v besedilo</translation>
+        <translation>Govor v besedilo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleEditPage.qml" line="378"/>
         <source>Text to Speech</source>
-        <translation type="unfinished">Besedilo v govor</translation>
+        <translation>Besedilo v govor</translation>
     </message>
     <message>
-        <source>Stop</source>
-        <translation type="obsolete">Stop</translation>
+        <location filename="../desktop/qml/RuleEditPage.qml" line="388"/>
+        <source>Read the text</source>
+        <translation>Beri besedilo</translation>
     </message>
 </context>
 <context>
@@ -1998,137 +1932,129 @@
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="61"/>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="62"/>
         <source>Rules</source>
-        <translation type="unfinished"></translation>
+        <translation>Pravila</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="34"/>
         <source>Replace: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Zamenjaj: %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="61"/>
         <source>%1 allows you to create text transformations that can be applied after Speech to Text or before Text to Speech.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 dovoljuje ustvarjanje transformacij besedil, ki so lahko uveljavljene po govori v besedilo ali pred besedilom v govor.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="62"/>
         <source>With %1, you can easily and flexibly correct errors in decoded text or correct mispronounced words.</source>
-        <translation type="unfinished"></translation>
+        <translation>Z %1 lahko enostavno in prilagodljivo popravljate napake v dekodiranem besedilu ali popravljate nepravilno izgovorjene besede.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="69"/>
         <source>Rules are applied to text sequentially, starting from the rule at the top to the bottom.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="71"/>
-        <source>Listening</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="71"/>
-        <source>Reading</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="78"/>
-        <source>Here are examples of typical use of the rules:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="80"/>
-        <source>Converting a word (e.g., &quot;period&quot;, &quot;comma&quot;) into a punctuation mark in Speech to Text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="81"/>
-        <source>Inserting a new line into a note while dictating</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="82"/>
-        <source>Changing the spelling of foreign language names (e.g., first or last names) to make the pronunciation correct</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="83"/>
-        <source>Removing special characters from text that cause mispronunciation by Text to Speech engine</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="98"/>
-        <source>Create a new rule</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="107"/>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/RuleMgmtPage.qml" line="127"/>
-        <source>Close</source>
-        <translation type="unfinished">Zapri</translation>
-    </message>
-    <message>
-        <source>Disable</source>
-        <translation type="obsolete">Onemogoči</translation>
-    </message>
-    <message>
-        <source>Enable</source>
-        <translation type="obsolete">Omogoči</translation>
+        <translation>Pravila so uveljavljena zaporedno na besedilo z začetnim pravilom na vrhu in proti dnu.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="70"/>
         <source>Text transformation is performed automatically in the background when text is received from the Speech to Text engine (%1) or before text is sent to the Text to Speech engine (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation>Transformacija besedila se izvaja samodejno v ozadju, ko je besedilo sprejeto iz stroja za govor v besedilo (%1) ali pred pošiljanjem besedila v stroj za besedilo v govor (%2).</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="71"/>
+        <source>Listening</source>
+        <translation>Poslušanje</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="71"/>
+        <source>Reading</source>
+        <translation>Branje</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="78"/>
+        <source>Here are examples of typical use of the rules:</source>
+        <translation>Tu so primeri tipične uporabe pravil:</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="80"/>
+        <source>Converting a word (e.g., &quot;period&quot;, &quot;comma&quot;) into a punctuation mark in Speech to Text</source>
+        <translation>Pretvorba besede (npr. &quot;pika&quot;, &quot;vejica&quot;) v ločilo v govoru v besedilo</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="81"/>
+        <source>Inserting a new line into a note while dictating</source>
+        <translation>Vstavljanje nove vrstice v zabeležko med narekovanjem</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="82"/>
+        <source>Changing the spelling of foreign language names (e.g., first or last names) to make the pronunciation correct</source>
+        <translation>Sprememba črkovanja imen v tujih jezikih (npr. imen ali priimkov), da je izgovorjava pravilna</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="83"/>
+        <source>Removing special characters from text that cause mispronunciation by Text to Speech engine</source>
+        <translation>Odstranjevanje posebnih znakov iz besedila, ki povzročajo nepravilno izgovorjavo v stroju za besedilo v govor</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="98"/>
+        <source>Create a new rule</source>
+        <translation>Ustvari novo pravilo</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="107"/>
+        <source>Help</source>
+        <translation>Pomoč</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/RuleMgmtPage.qml" line="127"/>
+        <source>Close</source>
+        <translation>Zapri</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="172"/>
         <source>Move up</source>
-        <translation type="unfinished"></translation>
+        <translation>Premakni navzgor</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="184"/>
         <source>Move down</source>
-        <translation type="unfinished"></translation>
+        <translation>Premakni navzdol</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="214"/>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="217"/>
         <source>Speech to Text</source>
-        <translation type="unfinished">Govor v besedilo</translation>
+        <translation>Govor v besedilo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="230"/>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="233"/>
         <source>Text to Speech</source>
-        <translation type="unfinished">Besedilo v govor</translation>
+        <translation>Besedilo v govor</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="239"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Uredi</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="253"/>
         <source>Clone</source>
-        <translation type="unfinished"></translation>
+        <translation>Kloniraj</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="269"/>
         <source>Delete</source>
-        <translation type="unfinished">Izbriši</translation>
+        <translation>Izbriši</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="283"/>
         <source>You haven&apos;t created any rules yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Niste še ustvarili nobenega pravila.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/RuleMgmtPage.qml" line="284"/>
         <source>Use %1 to make a new one.</source>
-        <translation type="unfinished">Uporabi %1, da ustvarite novo.</translation>
+        <translation>Uporabi %1, da ustvarite novo.</translation>
     </message>
 </context>
 <context>
@@ -2191,7 +2117,7 @@
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="262"/>
         <source>Text formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Formati besedila</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ScrollTextArea.qml" line="274"/>
@@ -2222,2340 +2148,6 @@
         <location filename="../desktop/qml/ScrollTextArea.qml" line="346"/>
         <source>Redo</source>
         <translation>Uveljavi</translation>
-    </message>
-</context>
-<context>
-    <name>Settings</name>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Začni poslušati</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsAccessebilityPage</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Nastavitve</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="obsolete">Uporabniški vmesnik</translation>
-    </message>
-    <message>
-        <source>Speech to Text</source>
-        <translation type="obsolete">Govor v besedilo</translation>
-    </message>
-    <message>
-        <source>Text to Speech</source>
-        <translation type="obsolete">Besedilo v govor</translation>
-    </message>
-    <message>
-        <source>Accessibility</source>
-        <translation type="obsolete">Dostopnost</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Drugo</translation>
-    </message>
-    <message>
-        <source>Remember the last note</source>
-        <translation type="obsolete">Zapomni si zadnjo opombo</translation>
-    </message>
-    <message>
-        <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="obsolete">Opomba bo samodejno shranjena, tako da bo ob ponovnem zagonu aplikacije vaša zadnja opomba vedno na voljo.</translation>
-    </message>
-    <message>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="obsolete">Ko je omogočeno, se v glavni orodni vrstici prikaže meni z možnostmi popravka besedila.</translation>
-    </message>
-    <message>
-        <source>File import action</source>
-        <translation type="obsolete">Dejanje uvoza datoteke</translation>
-    </message>
-    <message>
-        <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="obsolete">Dejanje pri uvozu opombe iz datoteke. Uvoženo besedilo lahko dodate obstoječi opombi ali zamenjate obstoječo opombo.</translation>
-    </message>
-    <message>
-        <source>Ask whether to add or replace</source>
-        <translation type="obsolete">Vprašaj, ali želite dodati ali zamenjati</translation>
-    </message>
-    <message>
-        <source>Add to an existing note</source>
-        <translation type="obsolete">Dodaj k obstoječi opombi</translation>
-    </message>
-    <message>
-        <source>Replace an existing note</source>
-        <translation type="obsolete">Zamenjaj obstoječo opombo</translation>
-    </message>
-    <message>
-        <source>Font in text editor</source>
-        <translation type="obsolete">Pisava v urejevalniku besedila</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Privzeto</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="obsolete">Spremeni</translation>
-    </message>
-    <message>
-        <source>Please choose a font</source>
-        <translation type="obsolete">Izberite pisavo</translation>
-    </message>
-    <message>
-        <source>Show desktop notification</source>
-        <translation type="obsolete">Prikaži namizno obvestilo</translation>
-    </message>
-    <message>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation type="obsolete">Prikaži obvestilo o namizju med branjem ali poslušanjem.</translation>
-    </message>
-    <message>
-        <source>Never</source>
-        <translation type="obsolete">Nikoli</translation>
-    </message>
-    <message>
-        <source>When in background</source>
-        <translation type="obsolete">Ko je v ozadju</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Vedno</translation>
-    </message>
-    <message>
-        <source>Include recognized or read text in notifications</source>
-        <translation type="obsolete">Vključi prepoznana ali prebrana besedila v obvestila</translation>
-    </message>
-    <message>
-        <source>Use system tray icon</source>
-        <translation type="obsolete">Uporabi ikono sistemskega pladnja</translation>
-    </message>
-    <message>
-        <source>Start minimized to the system tray</source>
-        <translation type="obsolete">Začni strnjeno v sistemskem pladnju</translation>
-    </message>
-    <message>
-        <source>Use custom graphical style</source>
-        <translation type="obsolete">Uporabi grafični slog po meri</translation>
-    </message>
-    <message>
-        <source>Graphical style</source>
-        <translation type="obsolete">Grafični slog</translation>
-    </message>
-    <message>
-        <source>Application graphical interface style.</source>
-        <translation type="obsolete">Grafični slog vmesnika aplikacije.</translation>
-    </message>
-    <message>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="obsolete">Spremenite, če opazite težave z napačnimi barvami pod temno temo.</translation>
-    </message>
-    <message>
-        <source>Audio input device</source>
-        <translation type="obsolete">Avdio vhodna naprava</translation>
-    </message>
-    <message>
-        <source>Select preferred audio input device.</source>
-        <translation type="obsolete">Izberite želeno avdio vhodno napravo.</translation>
-    </message>
-    <message>
-        <source>Listening mode</source>
-        <translation type="obsolete">Način poslušanja</translation>
-    </message>
-    <message>
-        <source>One sentence</source>
-        <translation type="obsolete">En stavek</translation>
-    </message>
-    <message>
-        <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="obsolete">S klikom na gumb %1 se začne poslušanje, ki se konča, ko je prepoznan prvi stavek.</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="obsolete">Poslušaj</translation>
-    </message>
-    <message>
-        <source>Press and hold</source>
-        <translation type="obsolete">Pritisnite in zadržite</translation>
-    </message>
-    <message>
-        <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="obsolete">Če pritisnete in držite gumb %1, omogočite poslušanje. Ko nehate držati, se poslušanje izklopi.</translation>
-    </message>
-    <message>
-        <source>Always on</source>
-        <translation type="obsolete">Vedno vklopljeno</translation>
-    </message>
-    <message>
-        <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="obsolete">Po kliku na gumb %1 je poslušanje vedno vklopljeno.</translation>
-    </message>
-    <message>
-        <source>Restore punctuation</source>
-        <translation type="obsolete">Obnovi ločila</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="obsolete">Omogoči napredno obnovitev ločil po razpoznavanju govora. Če želite, da deluje, se prepričajte, da ste omogočili model %1 za vaš jezik.</translation>
-    </message>
-    <message>
-        <source>Punctuation</source>
-        <translation type="obsolete">Ločila</translation>
-    </message>
-    <message>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="obsolete">Ko je ta možnost omogočena, inicializacija modela traja veliko dlje in poraba pomnilnika je veliko višja.</translation>
-    </message>
-    <message>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="obsolete">Ta možnost deluje samo z modeli, ki ne podpirajo ločil.</translation>
-    </message>
-    <message>
-        <source>To make %1 work, download %2 model.</source>
-        <translation type="obsolete">Da bi %1 deloval, prenesite model %2.</translation>
-    </message>
-    <message>
-        <source>Insert statistics</source>
-        <translation type="obsolete">Vstavi statistiko</translation>
-    </message>
-    <message>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="obsolete">V besedilo vstavi informacije, povezane z obdelavo, kot sta čas obdelave in dolžina zvoka.</translation>
-    </message>
-    <message>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna za primerjavo delovanja različnih modelov, strojev in njihovih parametrov.</translation>
-    </message>
-    <message>
-        <source>This option does not work with all engines.</source>
-        <translation type="obsolete">Ta možnost ne deluje pri vseh strojih.</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation type="obsolete">Podnapisi</translation>
-    </message>
-    <message>
-        <source>Minimum segment duration</source>
-        <translation type="obsolete">Najmanjše trajanje segmenta</translation>
-    </message>
-    <message>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="obsolete">Nastavi minimalno trajanje (v sekundah) segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation type="obsolete">Ta možnost deluje samo z modeli %1 in %2.</translation>
-    </message>
-    <message>
-        <source>Break text lines</source>
-        <translation type="obsolete">Prelomi vrstice besedila</translation>
-    </message>
-    <message>
-        <source>Minimum line length</source>
-        <translation type="obsolete">Najmanjša dolžina vrstice</translation>
-    </message>
-    <message>
-        <source>Maximum line length</source>
-        <translation type="obsolete">Največja dolžina vrstice</translation>
-    </message>
-    <message>
-        <source>Engine options</source>
-        <translation type="obsolete">Možnosti stroja</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">Po meri</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Število sočasnih niti</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Nastavi največje število hkratnih niti CPE.</translation>
-    </message>
-    <message>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="obsolete">Ni nujno, da višja vrednost pospeši dekodiranje.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Ponastavi</translation>
-    </message>
-    <message>
-        <source>Beam search width</source>
-        <translation type="obsolete">Širina iskanja snopa</translation>
-    </message>
-    <message>
-        <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="obsolete">Višja vrednost lahko izboljša kakovost, vendar se lahko podaljša tudi čas dekodiranja.</translation>
-    </message>
-    <message>
-        <source>Audio context size</source>
-        <translation type="obsolete">Velikost zvočnega konteksta</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="obsolete">Ko je nastavljen %1, se velikost dinamično prilagaja za vsak zvočni del.</translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamično</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="obsolete">Ko je nastavljen %1, se uporablja privzeta fiksna velikost.</translation>
-    </message>
-    <message>
-        <source>To define a custom size, use the %1 option.</source>
-        <translation type="obsolete">Če želite določiti velikost po meri, uporabite možnost %1.</translation>
-    </message>
-    <message>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="obsolete">Manjša vrednost pospeši dekodiranje, vendar lahko negativno vpliva na natančnost.</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation type="obsolete">Velikost</translation>
-    </message>
-    <message>
-        <source>Use Flash Attention</source>
-        <translation type="obsolete">Uporabite Flash Attention</translation>
-    </message>
-    <message>
-        <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="obsolete">Flash Attention lahko skrajša čas dekodiranja pri uporabi pospeševanja GPU.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems.</source>
-        <translation type="obsolete">Onemogočite to možnost, če opazite težave.</translation>
-    </message>
-    <message>
-        <source>Use %1 model for automatic language detection</source>
-        <translation type="obsolete">Za samodejno zaznavanje jezika uporabite model %1</translation>
-    </message>
-    <message>
-        <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="obsolete">Pri samodejnem zaznavanju jezika se namesto izbranega modela uporabi model %1.</translation>
-    </message>
-    <message>
-        <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="obsolete">To skrajša čas obdelave, vendar je lahko samodejno zaznan jezik napačen.</translation>
-    </message>
-    <message>
-        <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="obsolete">Obnovite diakritične znake pred sintezo govora</translation>
-    </message>
-    <message>
-        <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="obsolete">To deluje samo za arabski in hebrejski jezik.</translation>
-    </message>
-    <message>
-        <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="obsolete">Obnovitev diakritičnih znakov za hebrejski jezik ni na voljo.</translation>
-    </message>
-    <message>
-        <source>Split text into sentences</source>
-        <translation type="obsolete">Razdeli besedilo na stavke</translation>
-    </message>
-    <message>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="obsolete">Besedilo bo razdeljeno na stavke in vzporedno bo izvedena sinteza govora za vsak stavek.</translation>
-    </message>
-    <message>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">To pospeši branje, vendar je pri nekaterih modelih lahko zmanjšana naravnost govora.</translation>
-    </message>
-    <message>
-        <source>Use engine speed control</source>
-        <translation type="obsolete">Uporabite nadzor hitrosti stroja</translation>
-    </message>
-    <message>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="obsolete">Če stroj TTS podpira nadzor hitrosti, bo uporabljen.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="obsolete">Ko je ta možnost onemogočena, se hitrost spreminja med naknadno obdelavo zvoka.</translation>
-    </message>
-    <message>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">Dejanska hitrost po naknadni obdelavi zvoka je veliko bolj predvidljiva, vendar se lahko zmanjša naravnost govora.</translation>
-    </message>
-    <message>
-        <source>Use control tags</source>
-        <translation type="obsolete">Uporabi kontrolne oznake</translation>
-    </message>
-    <message>
-        <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="obsolete">Kontrolne oznake vam omogočajo dinamično spreminjanje hitrosti sintetiziranega besedila ali dodajanje tišine med stavki.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation type="obsolete">Ko je ta možnost onemogočena, so oznake prezrte.</translation>
-    </message>
-    <message>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation type="obsolete">Če želite uporabiti kontrolne oznake, v besedilo vstavite %1.</translation>
-    </message>
-    <message>
-        <source>The following control tags are currently supported:</source>
-        <translation type="obsolete">Trenutno so podprte naslednje kontrolne oznake:</translation>
-    </message>
-    <message>
-        <source>Changes speed.</source>
-        <translation type="obsolete">Spremeni hitrost.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="obsolete">%1 je število s plavajočo vejico v območju od 0,1 do 2,0.</translation>
-    </message>
-    <message>
-        <source>Inserts silence.</source>
-        <translation type="obsolete">Vstavi tišino.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="obsolete">%1 je število s plavajočo vejico in %2 je ime enote (%3).</translation>
-    </message>
-    <message>
-        <source>Sync speech with timestamps</source>
-        <translation type="obsolete">Sinhronizacija govora s časovnimi žigi</translation>
-    </message>
-    <message>
-        <source>Don&apos;t sync</source>
-        <translation type="obsolete">Ne sinhroniziraj</translation>
-    </message>
-    <message>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="obsolete">Časovne žige s podnapisi se ne upoštevajo pri branju ali izvozu v datoteko.</translation>
-    </message>
-    <message>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="obsolete">Sinhroniziraj, a ne prilagajaj hitrosti</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige.</translation>
-    </message>
-    <message>
-        <source>Sync and increase speed to fit</source>
-        <translation type="obsolete">Sinhroniziraj in povečaj hitrost, da se uskladi</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige. Hitrost se samodejno prilagodi tako, da trajanje govora ni nikoli daljše od trajanja segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="obsolete">Sinhroniziraj in povečaj ali zmanjšaj hitrost do prileganja</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige. Hitrost se samodejno prilagaja tako, da je trajanje govora popolnoma enako kot trajanje segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="obsolete">Ko je nastavljen format besedila podnapisov SRT, je spreminjanje hitrosti govora onemogočeno, ker bo hitrost samodejno prilagojena.</translation>
-    </message>
-    <message>
-        <source>Use global keyboard shortcuts</source>
-        <translation type="obsolete">Uporabi globalne bližnjice na tipkovnici</translation>
-    </message>
-    <message>
-        <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="obsolete">Bližnjice vam omogočajo, da zaganjate ali ustavljate poslušanje in branje s tipkovnico.</translation>
-    </message>
-    <message>
-        <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="obsolete">Rezultat govora v besedilo je mogoče dodati trenutni opombi, vstaviti v katero koli aktivno okno (trenutno v fokusu) ali kopirati v odložišče.</translation>
-    </message>
-    <message>
-        <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="obsolete">Branje besedila v govor je lahko iz trenutne opombe ali iz besedila v odložišču.</translation>
-    </message>
-    <message>
-        <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="obsolete">Bližnjice na tipkovnici delujejo tudi, ko aplikacija ni aktivna (npr. strnjena ali v ozadju).</translation>
-    </message>
-    <message>
-        <source>This feature only works under X11.</source>
-        <translation type="obsolete">Ta zmožnost deluje samo pod X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="obsolete">Preklopi vedenje</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="obsolete">Bližnjice za začetek poslušanja/branja prav tako ustavijo poslušanje/branje, če se sprožijo, ko je poslušanje/branje aktivno.</translation>
-    </message>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Začni poslušati</translation>
-    </message>
-    <message>
-        <source>Start listening, text to clipboard</source>
-        <translation type="obsolete">Začni poslušati, besedilo na odložišče</translation>
-    </message>
-    <message>
-        <source>Stop listening</source>
-        <translation type="obsolete">Nehaj poslušati</translation>
-    </message>
-    <message>
-        <source>Start reading</source>
-        <translation type="obsolete">Začni brati</translation>
-    </message>
-    <message>
-        <source>Start reading text from clipboard</source>
-        <translation type="obsolete">Začni brati besedilo iz odložišča</translation>
-    </message>
-    <message>
-        <source>Pause/Resume reading</source>
-        <translation type="obsolete">Premor/nadaljuj branje</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Prekliči</translation>
-    </message>
-    <message>
-        <source>Switch to next STT model</source>
-        <translation type="obsolete">Preklopi na naslednji model STT</translation>
-    </message>
-    <message>
-        <source>Switch to previous STT model</source>
-        <translation type="obsolete">Preklopi na prejšnji model STT</translation>
-    </message>
-    <message>
-        <source>Switch to next TTS model</source>
-        <translation type="obsolete">Preklopi na naslednji model TTS</translation>
-    </message>
-    <message>
-        <source>Switch to previous TTS model</source>
-        <translation type="obsolete">Preklopi na prejšnji model TTS</translation>
-    </message>
-    <message>
-        <source>Allow external applications to invoke actions</source>
-        <translation type="obsolete">Dovoli zunanjim aplikacijam, da prikličejo dejanja</translation>
-    </message>
-    <message>
-        <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Dejanje omogoča zunanji aplikaciji, da prikliče določeno operacijo, ko se %1 izvaja.</translation>
-    </message>
-    <message>
-        <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Dejanje omogoča zunanji aplikaciji, da pokliče določeno operacijo, ko se %1 izvaja.</translation>
-    </message>
-    <message>
-        <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="obsolete">Dejanje je mogoče sprožiti prek klica DBus ali z možnostjo ukazne vrstice.</translation>
-    </message>
-    <message>
-        <source>The following actions are currently supported:</source>
-        <translation type="obsolete">Trenutno so podprta naslednja dejanja:</translation>
-    </message>
-    <message>
-        <source>Starts listening.</source>
-        <translation type="obsolete">Začne poslušati.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="obsolete">Začne poslušati. Dekodirano besedilo se vstavi v aktivno okno.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="obsolete">Začne poslušati. Dekodirano besedilo se kopira v odložišče.</translation>
-    </message>
-    <message>
-        <source>Stops listening. The already captured voice is decoded into text.</source>
-        <translation type="obsolete">Neha poslušati. Že zajeti glas se dekodira v besedilo.</translation>
-    </message>
-    <message>
-        <source>Starts reading.</source>
-        <translation type="obsolete">Začne brati.</translation>
-    </message>
-    <message>
-        <source>Starts reading text from the clipboard.</source>
-        <translation type="obsolete">Začne brati besedilo iz odložišča.</translation>
-    </message>
-    <message>
-        <source>Pauses or resumes reading.</source>
-        <translation type="obsolete">Začasno ustavi ali nadaljuje branje.</translation>
-    </message>
-    <message>
-        <source>Cancels any of the above operations.</source>
-        <translation type="obsolete">Prekliče katero koli od zgornjih operacij.</translation>
-    </message>
-    <message>
-        <source>Switches to next STT model.</source>
-        <translation type="obsolete">Preklopi na naslednji model STT.</translation>
-    </message>
-    <message>
-        <source>Switches to previous STT model.</source>
-        <translation type="obsolete">Preklopi na prejšnji model STT.</translation>
-    </message>
-    <message>
-        <source>Switches to next TTS model.</source>
-        <translation type="obsolete">Preklopi na naslednji model TTS.</translation>
-    </message>
-    <message>
-        <source>Switches to previous TTS model.</source>
-        <translation type="obsolete">Preklopi na prejšnji model TTS.</translation>
-    </message>
-    <message>
-        <source>Sets STT model.</source>
-        <translation type="obsolete">Nastavi model STT.</translation>
-    </message>
-    <message>
-        <source>Sets TTS model.</source>
-        <translation type="obsolete">Nastavi model TTS.</translation>
-    </message>
-    <message>
-        <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="obsolete">Če želite na primer sprožiti dejanje %1, izvedite naslednji ukaz: %2.</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="obsolete">Shranjevanje</translation>
-    </message>
-    <message>
-        <source>Location of language files</source>
-        <translation type="obsolete">Lokacije jezikovnih datotek</translation>
-    </message>
-    <message>
-        <source>Directory where language files are downloaded to and stored.</source>
-        <translation type="obsolete">Imenik, kamor so prenesene jezikovne datoteke in shranjene.</translation>
-    </message>
-    <message>
-        <source>Clear cache on close</source>
-        <translation type="obsolete">Počisti predpomnilnik ob zaprtju</translation>
-    </message>
-    <message>
-        <source>When closing, delete all cached audio files.</source>
-        <translation type="obsolete">Ob zapiranju izbriši vse predpomnjene zvočne datoteke.</translation>
-    </message>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Razpoložljivost izbirnih funkcij</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="obsolete">Skrij napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="obsolete">Prikaži napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Možnosti procesorja</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Avto</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Možnosti strojnega pospeševanja</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uporabi %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Onemogoči to možnost, če opazite težave pri zagonu aplikacije.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Preglasi različico GPE</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Preglasi različico AMD GPU.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Omogoči to možnost, če opazite težave pri uporabi pospeševanja GPE z grafično kartico AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Različica</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Vrednost ima enak učinek kot spremenljivka okolja %1.</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Sestavi datoteko</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">Datoteka za sestavljanje X11, uporabljena v %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Vstavi v aktivno okno</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Knjižnice</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Uporabite knjižnice Pythona</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Preverite prisotnost zahtevanih knjižnic Pythona.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Lokacija knjižnic Pythona</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Imenik knjižnic Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Če želite uporabiti privzeto vrednost, pustite prazno.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna, če za upravljanje knjižnic Python uporabljate modul %1.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Shrani</translation>
-    </message>
-    <message>
-        <source>Select Directory</source>
-        <translation type="obsolete">Izberi Imenik</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsAdvanced</name>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Razpoložljivost izbirnih funkcij</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Možnosti procesorja</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Število sočasnih niti</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Nastavi največje število hkratnih niti CPE.</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Avto</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Možnosti strojnega pospeševanja</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uporabi %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Onemogoči to možnost, če opazite težave pri zagonu aplikacije.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Preglasi različico GPE</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Preglasi različico AMD GPU.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Omogoči to možnost, če opazite težave pri uporabi pospeševanja GPE z grafično kartico AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Različica</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Vrednost ima enak učinek kot spremenljivka okolja %1.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Ponastavi</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Sestavi datoteko</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">Datoteka za sestavljanje X11, uporabljena v %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Vstavi v aktivno okno</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Knjižnice</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Uporabite knjižnice Pythona</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Preverite prisotnost zahtevanih knjižnic Pythona.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Lokacija knjižnic Pythona</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Imenik knjižnic Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Če želite uporabiti privzeto vrednost, pustite prazno.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna, če za upravljanje knjižnic Python uporabljate modul %1.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Shrani</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsAdvancedPage</name>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Razpoložljivost izbirnih funkcij</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Možnosti procesorja</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Število sočasnih niti</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Nastavi največje število hkratnih niti CPE.</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Avto</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Možnosti strojnega pospeševanja</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uporabi %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Onemogoči to možnost, če opazite težave pri zagonu aplikacije.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Preglasi različico GPE</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Preglasi različico AMD GPU.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Omogoči to možnost, če opazite težave pri uporabi pospeševanja GPE z grafično kartico AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Različica</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Vrednost ima enak učinek kot spremenljivka okolja %1.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Ponastavi</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Sestavi datoteko</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">Datoteka za sestavljanje X11, uporabljena v %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Vstavi v aktivno okno</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Knjižnice</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Uporabite knjižnice Pythona</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Preverite prisotnost zahtevanih knjižnic Pythona.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Lokacija knjižnic Pythona</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Imenik knjižnic Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Če želite uporabiti privzeto vrednost, pustite prazno.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna, če za upravljanje knjižnic Python uporabljate modul %1.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Shrani</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsGeneralPage</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Nastavitve</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="obsolete">Uporabniški vmesnik</translation>
-    </message>
-    <message>
-        <source>Speech to Text</source>
-        <translation type="obsolete">Govor v besedilo</translation>
-    </message>
-    <message>
-        <source>Text to Speech</source>
-        <translation type="obsolete">Besedilo v govor</translation>
-    </message>
-    <message>
-        <source>Accessibility</source>
-        <translation type="obsolete">Dostopnost</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Drugo</translation>
-    </message>
-    <message>
-        <source>Remember the last note</source>
-        <translation type="obsolete">Zapomni si zadnjo opombo</translation>
-    </message>
-    <message>
-        <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="obsolete">Opomba bo samodejno shranjena, tako da bo ob ponovnem zagonu aplikacije vaša zadnja opomba vedno na voljo.</translation>
-    </message>
-    <message>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="obsolete">Ko je omogočeno, se v glavni orodni vrstici prikaže meni z možnostmi popravka besedila.</translation>
-    </message>
-    <message>
-        <source>File import action</source>
-        <translation type="obsolete">Dejanje uvoza datoteke</translation>
-    </message>
-    <message>
-        <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="obsolete">Dejanje pri uvozu opombe iz datoteke. Uvoženo besedilo lahko dodate obstoječi opombi ali zamenjate obstoječo opombo.</translation>
-    </message>
-    <message>
-        <source>Ask whether to add or replace</source>
-        <translation type="obsolete">Vprašaj, ali želite dodati ali zamenjati</translation>
-    </message>
-    <message>
-        <source>Add to an existing note</source>
-        <translation type="obsolete">Dodaj k obstoječi opombi</translation>
-    </message>
-    <message>
-        <source>Replace an existing note</source>
-        <translation type="obsolete">Zamenjaj obstoječo opombo</translation>
-    </message>
-    <message>
-        <source>Font in text editor</source>
-        <translation type="obsolete">Pisava v urejevalniku besedila</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Privzeto</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="obsolete">Spremeni</translation>
-    </message>
-    <message>
-        <source>Please choose a font</source>
-        <translation type="obsolete">Izberite pisavo</translation>
-    </message>
-    <message>
-        <source>Show desktop notification</source>
-        <translation type="obsolete">Prikaži namizno obvestilo</translation>
-    </message>
-    <message>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation type="obsolete">Prikaži obvestilo o namizju med branjem ali poslušanjem.</translation>
-    </message>
-    <message>
-        <source>Never</source>
-        <translation type="obsolete">Nikoli</translation>
-    </message>
-    <message>
-        <source>When in background</source>
-        <translation type="obsolete">Ko je v ozadju</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Vedno</translation>
-    </message>
-    <message>
-        <source>Include recognized or read text in notifications</source>
-        <translation type="obsolete">Vključi prepoznana ali prebrana besedila v obvestila</translation>
-    </message>
-    <message>
-        <source>Use system tray icon</source>
-        <translation type="obsolete">Uporabi ikono sistemskega pladnja</translation>
-    </message>
-    <message>
-        <source>Start minimized to the system tray</source>
-        <translation type="obsolete">Začni strnjeno v sistemskem pladnju</translation>
-    </message>
-    <message>
-        <source>Use custom graphical style</source>
-        <translation type="obsolete">Uporabi grafični slog po meri</translation>
-    </message>
-    <message>
-        <source>Graphical style</source>
-        <translation type="obsolete">Grafični slog</translation>
-    </message>
-    <message>
-        <source>Application graphical interface style.</source>
-        <translation type="obsolete">Grafični slog vmesnika aplikacije.</translation>
-    </message>
-    <message>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="obsolete">Spremenite, če opazite težave z napačnimi barvami pod temno temo.</translation>
-    </message>
-    <message>
-        <source>Audio input device</source>
-        <translation type="obsolete">Avdio vhodna naprava</translation>
-    </message>
-    <message>
-        <source>Select preferred audio input device.</source>
-        <translation type="obsolete">Izberite želeno avdio vhodno napravo.</translation>
-    </message>
-    <message>
-        <source>Listening mode</source>
-        <translation type="obsolete">Način poslušanja</translation>
-    </message>
-    <message>
-        <source>One sentence</source>
-        <translation type="obsolete">En stavek</translation>
-    </message>
-    <message>
-        <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="obsolete">S klikom na gumb %1 se začne poslušanje, ki se konča, ko je prepoznan prvi stavek.</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="obsolete">Poslušaj</translation>
-    </message>
-    <message>
-        <source>Press and hold</source>
-        <translation type="obsolete">Pritisnite in zadržite</translation>
-    </message>
-    <message>
-        <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="obsolete">Če pritisnete in držite gumb %1, omogočite poslušanje. Ko nehate držati, se poslušanje izklopi.</translation>
-    </message>
-    <message>
-        <source>Always on</source>
-        <translation type="obsolete">Vedno vklopljeno</translation>
-    </message>
-    <message>
-        <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="obsolete">Po kliku na gumb %1 je poslušanje vedno vklopljeno.</translation>
-    </message>
-    <message>
-        <source>Restore punctuation</source>
-        <translation type="obsolete">Obnovi ločila</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="obsolete">Omogoči napredno obnovitev ločil po razpoznavanju govora. Če želite, da deluje, se prepričajte, da ste omogočili model %1 za vaš jezik.</translation>
-    </message>
-    <message>
-        <source>Punctuation</source>
-        <translation type="obsolete">Ločila</translation>
-    </message>
-    <message>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="obsolete">Ko je ta možnost omogočena, inicializacija modela traja veliko dlje in poraba pomnilnika je veliko višja.</translation>
-    </message>
-    <message>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="obsolete">Ta možnost deluje samo z modeli, ki ne podpirajo ločil.</translation>
-    </message>
-    <message>
-        <source>To make %1 work, download %2 model.</source>
-        <translation type="obsolete">Da bi %1 deloval, prenesite model %2.</translation>
-    </message>
-    <message>
-        <source>Insert statistics</source>
-        <translation type="obsolete">Vstavi statistiko</translation>
-    </message>
-    <message>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="obsolete">V besedilo vstavi informacije, povezane z obdelavo, kot sta čas obdelave in dolžina zvoka.</translation>
-    </message>
-    <message>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna za primerjavo delovanja različnih modelov, strojev in njihovih parametrov.</translation>
-    </message>
-    <message>
-        <source>This option does not work with all engines.</source>
-        <translation type="obsolete">Ta možnost ne deluje pri vseh strojih.</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation type="obsolete">Podnapisi</translation>
-    </message>
-    <message>
-        <source>Minimum segment duration</source>
-        <translation type="obsolete">Najmanjše trajanje segmenta</translation>
-    </message>
-    <message>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="obsolete">Nastavi minimalno trajanje (v sekundah) segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation type="obsolete">Ta možnost deluje samo z modeli %1 in %2.</translation>
-    </message>
-    <message>
-        <source>Break text lines</source>
-        <translation type="obsolete">Prelomi vrstice besedila</translation>
-    </message>
-    <message>
-        <source>Minimum line length</source>
-        <translation type="obsolete">Najmanjša dolžina vrstice</translation>
-    </message>
-    <message>
-        <source>Maximum line length</source>
-        <translation type="obsolete">Največja dolžina vrstice</translation>
-    </message>
-    <message>
-        <source>Engine options</source>
-        <translation type="obsolete">Možnosti stroja</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">Po meri</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Število sočasnih niti</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Nastavi največje število hkratnih niti CPE.</translation>
-    </message>
-    <message>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="obsolete">Ni nujno, da višja vrednost pospeši dekodiranje.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Ponastavi</translation>
-    </message>
-    <message>
-        <source>Beam search width</source>
-        <translation type="obsolete">Širina iskanja snopa</translation>
-    </message>
-    <message>
-        <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="obsolete">Višja vrednost lahko izboljša kakovost, vendar se lahko podaljša tudi čas dekodiranja.</translation>
-    </message>
-    <message>
-        <source>Audio context size</source>
-        <translation type="obsolete">Velikost zvočnega konteksta</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="obsolete">Ko je nastavljen %1, se velikost dinamično prilagaja za vsak zvočni del.</translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamično</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="obsolete">Ko je nastavljen %1, se uporablja privzeta fiksna velikost.</translation>
-    </message>
-    <message>
-        <source>To define a custom size, use the %1 option.</source>
-        <translation type="obsolete">Če želite določiti velikost po meri, uporabite možnost %1.</translation>
-    </message>
-    <message>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="obsolete">Manjša vrednost pospeši dekodiranje, vendar lahko negativno vpliva na natančnost.</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation type="obsolete">Velikost</translation>
-    </message>
-    <message>
-        <source>Use Flash Attention</source>
-        <translation type="obsolete">Uporabite Flash Attention</translation>
-    </message>
-    <message>
-        <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="obsolete">Flash Attention lahko skrajša čas dekodiranja pri uporabi pospeševanja GPU.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems.</source>
-        <translation type="obsolete">Onemogočite to možnost, če opazite težave.</translation>
-    </message>
-    <message>
-        <source>Use %1 model for automatic language detection</source>
-        <translation type="obsolete">Za samodejno zaznavanje jezika uporabite model %1</translation>
-    </message>
-    <message>
-        <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="obsolete">Pri samodejnem zaznavanju jezika se namesto izbranega modela uporabi model %1.</translation>
-    </message>
-    <message>
-        <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="obsolete">To skrajša čas obdelave, vendar je lahko samodejno zaznan jezik napačen.</translation>
-    </message>
-    <message>
-        <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="obsolete">Obnovite diakritične znake pred sintezo govora</translation>
-    </message>
-    <message>
-        <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="obsolete">To deluje samo za arabski in hebrejski jezik.</translation>
-    </message>
-    <message>
-        <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="obsolete">Obnovitev diakritičnih znakov za hebrejski jezik ni na voljo.</translation>
-    </message>
-    <message>
-        <source>Split text into sentences</source>
-        <translation type="obsolete">Razdeli besedilo na stavke</translation>
-    </message>
-    <message>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="obsolete">Besedilo bo razdeljeno na stavke in vzporedno bo izvedena sinteza govora za vsak stavek.</translation>
-    </message>
-    <message>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">To pospeši branje, vendar je pri nekaterih modelih lahko zmanjšana naravnost govora.</translation>
-    </message>
-    <message>
-        <source>Use engine speed control</source>
-        <translation type="obsolete">Uporabite nadzor hitrosti stroja</translation>
-    </message>
-    <message>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="obsolete">Če stroj TTS podpira nadzor hitrosti, bo uporabljen.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="obsolete">Ko je ta možnost onemogočena, se hitrost spreminja med naknadno obdelavo zvoka.</translation>
-    </message>
-    <message>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">Dejanska hitrost po naknadni obdelavi zvoka je veliko bolj predvidljiva, vendar se lahko zmanjša naravnost govora.</translation>
-    </message>
-    <message>
-        <source>Use control tags</source>
-        <translation type="obsolete">Uporabi kontrolne oznake</translation>
-    </message>
-    <message>
-        <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="obsolete">Kontrolne oznake vam omogočajo dinamično spreminjanje hitrosti sintetiziranega besedila ali dodajanje tišine med stavki.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation type="obsolete">Ko je ta možnost onemogočena, so oznake prezrte.</translation>
-    </message>
-    <message>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation type="obsolete">Če želite uporabiti kontrolne oznake, v besedilo vstavite %1.</translation>
-    </message>
-    <message>
-        <source>The following control tags are currently supported:</source>
-        <translation type="obsolete">Trenutno so podprte naslednje kontrolne oznake:</translation>
-    </message>
-    <message>
-        <source>Changes speed.</source>
-        <translation type="obsolete">Spremeni hitrost.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="obsolete">%1 je število s plavajočo vejico v območju od 0,1 do 2,0.</translation>
-    </message>
-    <message>
-        <source>Inserts silence.</source>
-        <translation type="obsolete">Vstavi tišino.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="obsolete">%1 je število s plavajočo vejico in %2 je ime enote (%3).</translation>
-    </message>
-    <message>
-        <source>Sync speech with timestamps</source>
-        <translation type="obsolete">Sinhronizacija govora s časovnimi žigi</translation>
-    </message>
-    <message>
-        <source>Don&apos;t sync</source>
-        <translation type="obsolete">Ne sinhroniziraj</translation>
-    </message>
-    <message>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="obsolete">Časovne žige s podnapisi se ne upoštevajo pri branju ali izvozu v datoteko.</translation>
-    </message>
-    <message>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="obsolete">Sinhroniziraj, a ne prilagajaj hitrosti</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige.</translation>
-    </message>
-    <message>
-        <source>Sync and increase speed to fit</source>
-        <translation type="obsolete">Sinhroniziraj in povečaj hitrost, da se uskladi</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige. Hitrost se samodejno prilagodi tako, da trajanje govora ni nikoli daljše od trajanja segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="obsolete">Sinhroniziraj in povečaj ali zmanjšaj hitrost do prileganja</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige. Hitrost se samodejno prilagaja tako, da je trajanje govora popolnoma enako kot trajanje segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="obsolete">Ko je nastavljen format besedila podnapisov SRT, je spreminjanje hitrosti govora onemogočeno, ker bo hitrost samodejno prilagojena.</translation>
-    </message>
-    <message>
-        <source>Use global keyboard shortcuts</source>
-        <translation type="obsolete">Uporabi globalne bližnjice na tipkovnici</translation>
-    </message>
-    <message>
-        <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="obsolete">Bližnjice vam omogočajo, da zaganjate ali ustavljate poslušanje in branje s tipkovnico.</translation>
-    </message>
-    <message>
-        <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="obsolete">Rezultat govora v besedilo je mogoče dodati trenutni opombi, vstaviti v katero koli aktivno okno (trenutno v fokusu) ali kopirati v odložišče.</translation>
-    </message>
-    <message>
-        <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="obsolete">Branje besedila v govor je lahko iz trenutne opombe ali iz besedila v odložišču.</translation>
-    </message>
-    <message>
-        <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="obsolete">Bližnjice na tipkovnici delujejo tudi, ko aplikacija ni aktivna (npr. strnjena ali v ozadju).</translation>
-    </message>
-    <message>
-        <source>This feature only works under X11.</source>
-        <translation type="obsolete">Ta zmožnost deluje samo pod X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="obsolete">Preklopi vedenje</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="obsolete">Bližnjice za začetek poslušanja/branja prav tako ustavijo poslušanje/branje, če se sprožijo, ko je poslušanje/branje aktivno.</translation>
-    </message>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Začni poslušati</translation>
-    </message>
-    <message>
-        <source>Start listening, text to clipboard</source>
-        <translation type="obsolete">Začni poslušati, besedilo na odložišče</translation>
-    </message>
-    <message>
-        <source>Stop listening</source>
-        <translation type="obsolete">Nehaj poslušati</translation>
-    </message>
-    <message>
-        <source>Start reading</source>
-        <translation type="obsolete">Začni brati</translation>
-    </message>
-    <message>
-        <source>Start reading text from clipboard</source>
-        <translation type="obsolete">Začni brati besedilo iz odložišča</translation>
-    </message>
-    <message>
-        <source>Pause/Resume reading</source>
-        <translation type="obsolete">Premor/nadaljuj branje</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Prekliči</translation>
-    </message>
-    <message>
-        <source>Switch to next STT model</source>
-        <translation type="obsolete">Preklopi na naslednji model STT</translation>
-    </message>
-    <message>
-        <source>Switch to previous STT model</source>
-        <translation type="obsolete">Preklopi na prejšnji model STT</translation>
-    </message>
-    <message>
-        <source>Switch to next TTS model</source>
-        <translation type="obsolete">Preklopi na naslednji model TTS</translation>
-    </message>
-    <message>
-        <source>Switch to previous TTS model</source>
-        <translation type="obsolete">Preklopi na prejšnji model TTS</translation>
-    </message>
-    <message>
-        <source>Allow external applications to invoke actions</source>
-        <translation type="obsolete">Dovoli zunanjim aplikacijam, da prikličejo dejanja</translation>
-    </message>
-    <message>
-        <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Dejanje omogoča zunanji aplikaciji, da prikliče določeno operacijo, ko se %1 izvaja.</translation>
-    </message>
-    <message>
-        <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Dejanje omogoča zunanji aplikaciji, da pokliče določeno operacijo, ko se %1 izvaja.</translation>
-    </message>
-    <message>
-        <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="obsolete">Dejanje je mogoče sprožiti prek klica DBus ali z možnostjo ukazne vrstice.</translation>
-    </message>
-    <message>
-        <source>The following actions are currently supported:</source>
-        <translation type="obsolete">Trenutno so podprta naslednja dejanja:</translation>
-    </message>
-    <message>
-        <source>Starts listening.</source>
-        <translation type="obsolete">Začne poslušati.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="obsolete">Začne poslušati. Dekodirano besedilo se vstavi v aktivno okno.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="obsolete">Začne poslušati. Dekodirano besedilo se kopira v odložišče.</translation>
-    </message>
-    <message>
-        <source>Stops listening. The already captured voice is decoded into text.</source>
-        <translation type="obsolete">Neha poslušati. Že zajeti glas se dekodira v besedilo.</translation>
-    </message>
-    <message>
-        <source>Starts reading.</source>
-        <translation type="obsolete">Začne brati.</translation>
-    </message>
-    <message>
-        <source>Starts reading text from the clipboard.</source>
-        <translation type="obsolete">Začne brati besedilo iz odložišča.</translation>
-    </message>
-    <message>
-        <source>Pauses or resumes reading.</source>
-        <translation type="obsolete">Začasno ustavi ali nadaljuje branje.</translation>
-    </message>
-    <message>
-        <source>Cancels any of the above operations.</source>
-        <translation type="obsolete">Prekliče katero koli od zgornjih operacij.</translation>
-    </message>
-    <message>
-        <source>Switches to next STT model.</source>
-        <translation type="obsolete">Preklopi na naslednji model STT.</translation>
-    </message>
-    <message>
-        <source>Switches to previous STT model.</source>
-        <translation type="obsolete">Preklopi na prejšnji model STT.</translation>
-    </message>
-    <message>
-        <source>Switches to next TTS model.</source>
-        <translation type="obsolete">Preklopi na naslednji model TTS.</translation>
-    </message>
-    <message>
-        <source>Switches to previous TTS model.</source>
-        <translation type="obsolete">Preklopi na prejšnji model TTS.</translation>
-    </message>
-    <message>
-        <source>Sets STT model.</source>
-        <translation type="obsolete">Nastavi model STT.</translation>
-    </message>
-    <message>
-        <source>Sets TTS model.</source>
-        <translation type="obsolete">Nastavi model TTS.</translation>
-    </message>
-    <message>
-        <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="obsolete">Če želite na primer sprožiti dejanje %1, izvedite naslednji ukaz: %2.</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="obsolete">Shranjevanje</translation>
-    </message>
-    <message>
-        <source>Location of language files</source>
-        <translation type="obsolete">Lokacije jezikovnih datotek</translation>
-    </message>
-    <message>
-        <source>Directory where language files are downloaded to and stored.</source>
-        <translation type="obsolete">Imenik, kamor so prenesene jezikovne datoteke in shranjene.</translation>
-    </message>
-    <message>
-        <source>Clear cache on close</source>
-        <translation type="obsolete">Počisti predpomnilnik ob zaprtju</translation>
-    </message>
-    <message>
-        <source>When closing, delete all cached audio files.</source>
-        <translation type="obsolete">Ob zapiranju izbriši vse predpomnjene zvočne datoteke.</translation>
-    </message>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Razpoložljivost izbirnih funkcij</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="obsolete">Skrij napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="obsolete">Prikaži napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Možnosti procesorja</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Avto</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Možnosti strojnega pospeševanja</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uporabi %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Onemogoči to možnost, če opazite težave pri zagonu aplikacije.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Preglasi različico GPE</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Preglasi različico AMD GPU.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Omogoči to možnost, če opazite težave pri uporabi pospeševanja GPE z grafično kartico AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Različica</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Vrednost ima enak učinek kot spremenljivka okolja %1.</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Sestavi datoteko</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">Datoteka za sestavljanje X11, uporabljena v %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Vstavi v aktivno okno</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Knjižnice</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Uporabite knjižnice Pythona</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Preverite prisotnost zahtevanih knjižnic Pythona.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Lokacija knjižnic Pythona</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Imenik knjižnic Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Če želite uporabiti privzeto vrednost, pustite prazno.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna, če za upravljanje knjižnic Python uporabljate modul %1.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Shrani</translation>
-    </message>
-    <message>
-        <source>Select Directory</source>
-        <translation type="obsolete">Izberi Imenik</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsOtherPage</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Nastavitve</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="obsolete">Uporabniški vmesnik</translation>
-    </message>
-    <message>
-        <source>Speech to Text</source>
-        <translation type="obsolete">Govor v besedilo</translation>
-    </message>
-    <message>
-        <source>Text to Speech</source>
-        <translation type="obsolete">Besedilo v govor</translation>
-    </message>
-    <message>
-        <source>Accessibility</source>
-        <translation type="obsolete">Dostopnost</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Drugo</translation>
-    </message>
-    <message>
-        <source>Remember the last note</source>
-        <translation type="obsolete">Zapomni si zadnjo opombo</translation>
-    </message>
-    <message>
-        <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="obsolete">Opomba bo samodejno shranjena, tako da bo ob ponovnem zagonu aplikacije vaša zadnja opomba vedno na voljo.</translation>
-    </message>
-    <message>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="obsolete">Ko je omogočeno, se v glavni orodni vrstici prikaže meni z možnostmi popravka besedila.</translation>
-    </message>
-    <message>
-        <source>File import action</source>
-        <translation type="obsolete">Dejanje uvoza datoteke</translation>
-    </message>
-    <message>
-        <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="obsolete">Dejanje pri uvozu opombe iz datoteke. Uvoženo besedilo lahko dodate obstoječi opombi ali zamenjate obstoječo opombo.</translation>
-    </message>
-    <message>
-        <source>Ask whether to add or replace</source>
-        <translation type="obsolete">Vprašaj, ali želite dodati ali zamenjati</translation>
-    </message>
-    <message>
-        <source>Add to an existing note</source>
-        <translation type="obsolete">Dodaj k obstoječi opombi</translation>
-    </message>
-    <message>
-        <source>Replace an existing note</source>
-        <translation type="obsolete">Zamenjaj obstoječo opombo</translation>
-    </message>
-    <message>
-        <source>Font in text editor</source>
-        <translation type="obsolete">Pisava v urejevalniku besedila</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Privzeto</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="obsolete">Spremeni</translation>
-    </message>
-    <message>
-        <source>Please choose a font</source>
-        <translation type="obsolete">Izberite pisavo</translation>
-    </message>
-    <message>
-        <source>Show desktop notification</source>
-        <translation type="obsolete">Prikaži namizno obvestilo</translation>
-    </message>
-    <message>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation type="obsolete">Prikaži obvestilo o namizju med branjem ali poslušanjem.</translation>
-    </message>
-    <message>
-        <source>Never</source>
-        <translation type="obsolete">Nikoli</translation>
-    </message>
-    <message>
-        <source>When in background</source>
-        <translation type="obsolete">Ko je v ozadju</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Vedno</translation>
-    </message>
-    <message>
-        <source>Include recognized or read text in notifications</source>
-        <translation type="obsolete">Vključi prepoznana ali prebrana besedila v obvestila</translation>
-    </message>
-    <message>
-        <source>Use system tray icon</source>
-        <translation type="obsolete">Uporabi ikono sistemskega pladnja</translation>
-    </message>
-    <message>
-        <source>Start minimized to the system tray</source>
-        <translation type="obsolete">Začni strnjeno v sistemskem pladnju</translation>
-    </message>
-    <message>
-        <source>Use custom graphical style</source>
-        <translation type="obsolete">Uporabi grafični slog po meri</translation>
-    </message>
-    <message>
-        <source>Graphical style</source>
-        <translation type="obsolete">Grafični slog</translation>
-    </message>
-    <message>
-        <source>Application graphical interface style.</source>
-        <translation type="obsolete">Grafični slog vmesnika aplikacije.</translation>
-    </message>
-    <message>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="obsolete">Spremenite, če opazite težave z napačnimi barvami pod temno temo.</translation>
-    </message>
-    <message>
-        <source>Audio input device</source>
-        <translation type="obsolete">Avdio vhodna naprava</translation>
-    </message>
-    <message>
-        <source>Select preferred audio input device.</source>
-        <translation type="obsolete">Izberite želeno avdio vhodno napravo.</translation>
-    </message>
-    <message>
-        <source>Listening mode</source>
-        <translation type="obsolete">Način poslušanja</translation>
-    </message>
-    <message>
-        <source>One sentence</source>
-        <translation type="obsolete">En stavek</translation>
-    </message>
-    <message>
-        <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="obsolete">S klikom na gumb %1 se začne poslušanje, ki se konča, ko je prepoznan prvi stavek.</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="obsolete">Poslušaj</translation>
-    </message>
-    <message>
-        <source>Press and hold</source>
-        <translation type="obsolete">Pritisnite in zadržite</translation>
-    </message>
-    <message>
-        <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="obsolete">Če pritisnete in držite gumb %1, omogočite poslušanje. Ko nehate držati, se poslušanje izklopi.</translation>
-    </message>
-    <message>
-        <source>Always on</source>
-        <translation type="obsolete">Vedno vklopljeno</translation>
-    </message>
-    <message>
-        <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="obsolete">Po kliku na gumb %1 je poslušanje vedno vklopljeno.</translation>
-    </message>
-    <message>
-        <source>Restore punctuation</source>
-        <translation type="obsolete">Obnovi ločila</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="obsolete">Omogoči napredno obnovitev ločil po razpoznavanju govora. Če želite, da deluje, se prepričajte, da ste omogočili model %1 za vaš jezik.</translation>
-    </message>
-    <message>
-        <source>Punctuation</source>
-        <translation type="obsolete">Ločila</translation>
-    </message>
-    <message>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="obsolete">Ko je ta možnost omogočena, inicializacija modela traja veliko dlje in poraba pomnilnika je veliko višja.</translation>
-    </message>
-    <message>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="obsolete">Ta možnost deluje samo z modeli, ki ne podpirajo ločil.</translation>
-    </message>
-    <message>
-        <source>To make %1 work, download %2 model.</source>
-        <translation type="obsolete">Da bi %1 deloval, prenesite model %2.</translation>
-    </message>
-    <message>
-        <source>Insert statistics</source>
-        <translation type="obsolete">Vstavi statistiko</translation>
-    </message>
-    <message>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="obsolete">V besedilo vstavi informacije, povezane z obdelavo, kot sta čas obdelave in dolžina zvoka.</translation>
-    </message>
-    <message>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna za primerjavo delovanja različnih modelov, strojev in njihovih parametrov.</translation>
-    </message>
-    <message>
-        <source>This option does not work with all engines.</source>
-        <translation type="obsolete">Ta možnost ne deluje pri vseh strojih.</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation type="obsolete">Podnapisi</translation>
-    </message>
-    <message>
-        <source>Minimum segment duration</source>
-        <translation type="obsolete">Najmanjše trajanje segmenta</translation>
-    </message>
-    <message>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="obsolete">Nastavi minimalno trajanje (v sekundah) segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation type="obsolete">Ta možnost deluje samo z modeli %1 in %2.</translation>
-    </message>
-    <message>
-        <source>Break text lines</source>
-        <translation type="obsolete">Prelomi vrstice besedila</translation>
-    </message>
-    <message>
-        <source>Minimum line length</source>
-        <translation type="obsolete">Najmanjša dolžina vrstice</translation>
-    </message>
-    <message>
-        <source>Maximum line length</source>
-        <translation type="obsolete">Največja dolžina vrstice</translation>
-    </message>
-    <message>
-        <source>Engine options</source>
-        <translation type="obsolete">Možnosti stroja</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">Po meri</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Število sočasnih niti</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Nastavi največje število hkratnih niti CPE.</translation>
-    </message>
-    <message>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="obsolete">Ni nujno, da višja vrednost pospeši dekodiranje.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Ponastavi</translation>
-    </message>
-    <message>
-        <source>Beam search width</source>
-        <translation type="obsolete">Širina iskanja snopa</translation>
-    </message>
-    <message>
-        <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="obsolete">Višja vrednost lahko izboljša kakovost, vendar se lahko podaljša tudi čas dekodiranja.</translation>
-    </message>
-    <message>
-        <source>Audio context size</source>
-        <translation type="obsolete">Velikost zvočnega konteksta</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="obsolete">Ko je nastavljen %1, se velikost dinamično prilagaja za vsak zvočni del.</translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamično</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="obsolete">Ko je nastavljen %1, se uporablja privzeta fiksna velikost.</translation>
-    </message>
-    <message>
-        <source>To define a custom size, use the %1 option.</source>
-        <translation type="obsolete">Če želite določiti velikost po meri, uporabite možnost %1.</translation>
-    </message>
-    <message>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="obsolete">Manjša vrednost pospeši dekodiranje, vendar lahko negativno vpliva na natančnost.</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation type="obsolete">Velikost</translation>
-    </message>
-    <message>
-        <source>Use Flash Attention</source>
-        <translation type="obsolete">Uporabite Flash Attention</translation>
-    </message>
-    <message>
-        <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="obsolete">Flash Attention lahko skrajša čas dekodiranja pri uporabi pospeševanja GPU.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems.</source>
-        <translation type="obsolete">Onemogočite to možnost, če opazite težave.</translation>
-    </message>
-    <message>
-        <source>Use %1 model for automatic language detection</source>
-        <translation type="obsolete">Za samodejno zaznavanje jezika uporabite model %1</translation>
-    </message>
-    <message>
-        <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="obsolete">Pri samodejnem zaznavanju jezika se namesto izbranega modela uporabi model %1.</translation>
-    </message>
-    <message>
-        <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="obsolete">To skrajša čas obdelave, vendar je lahko samodejno zaznan jezik napačen.</translation>
-    </message>
-    <message>
-        <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="obsolete">Obnovite diakritične znake pred sintezo govora</translation>
-    </message>
-    <message>
-        <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="obsolete">To deluje samo za arabski in hebrejski jezik.</translation>
-    </message>
-    <message>
-        <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="obsolete">Obnovitev diakritičnih znakov za hebrejski jezik ni na voljo.</translation>
-    </message>
-    <message>
-        <source>Split text into sentences</source>
-        <translation type="obsolete">Razdeli besedilo na stavke</translation>
-    </message>
-    <message>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="obsolete">Besedilo bo razdeljeno na stavke in vzporedno bo izvedena sinteza govora za vsak stavek.</translation>
-    </message>
-    <message>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">To pospeši branje, vendar je pri nekaterih modelih lahko zmanjšana naravnost govora.</translation>
-    </message>
-    <message>
-        <source>Use engine speed control</source>
-        <translation type="obsolete">Uporabite nadzor hitrosti stroja</translation>
-    </message>
-    <message>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="obsolete">Če stroj TTS podpira nadzor hitrosti, bo uporabljen.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="obsolete">Ko je ta možnost onemogočena, se hitrost spreminja med naknadno obdelavo zvoka.</translation>
-    </message>
-    <message>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">Dejanska hitrost po naknadni obdelavi zvoka je veliko bolj predvidljiva, vendar se lahko zmanjša naravnost govora.</translation>
-    </message>
-    <message>
-        <source>Use control tags</source>
-        <translation type="obsolete">Uporabi kontrolne oznake</translation>
-    </message>
-    <message>
-        <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="obsolete">Kontrolne oznake vam omogočajo dinamično spreminjanje hitrosti sintetiziranega besedila ali dodajanje tišine med stavki.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation type="obsolete">Ko je ta možnost onemogočena, so oznake prezrte.</translation>
-    </message>
-    <message>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation type="obsolete">Če želite uporabiti kontrolne oznake, v besedilo vstavite %1.</translation>
-    </message>
-    <message>
-        <source>The following control tags are currently supported:</source>
-        <translation type="obsolete">Trenutno so podprte naslednje kontrolne oznake:</translation>
-    </message>
-    <message>
-        <source>Changes speed.</source>
-        <translation type="obsolete">Spremeni hitrost.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="obsolete">%1 je število s plavajočo vejico v območju od 0,1 do 2,0.</translation>
-    </message>
-    <message>
-        <source>Inserts silence.</source>
-        <translation type="obsolete">Vstavi tišino.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="obsolete">%1 je število s plavajočo vejico in %2 je ime enote (%3).</translation>
-    </message>
-    <message>
-        <source>Sync speech with timestamps</source>
-        <translation type="obsolete">Sinhronizacija govora s časovnimi žigi</translation>
-    </message>
-    <message>
-        <source>Don&apos;t sync</source>
-        <translation type="obsolete">Ne sinhroniziraj</translation>
-    </message>
-    <message>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="obsolete">Časovne žige s podnapisi se ne upoštevajo pri branju ali izvozu v datoteko.</translation>
-    </message>
-    <message>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="obsolete">Sinhroniziraj, a ne prilagajaj hitrosti</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige.</translation>
-    </message>
-    <message>
-        <source>Sync and increase speed to fit</source>
-        <translation type="obsolete">Sinhroniziraj in povečaj hitrost, da se uskladi</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige. Hitrost se samodejno prilagodi tako, da trajanje govora ni nikoli daljše od trajanja segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="obsolete">Sinhroniziraj in povečaj ali zmanjšaj hitrost do prileganja</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige. Hitrost se samodejno prilagaja tako, da je trajanje govora popolnoma enako kot trajanje segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="obsolete">Ko je nastavljen format besedila podnapisov SRT, je spreminjanje hitrosti govora onemogočeno, ker bo hitrost samodejno prilagojena.</translation>
-    </message>
-    <message>
-        <source>Use global keyboard shortcuts</source>
-        <translation type="obsolete">Uporabi globalne bližnjice na tipkovnici</translation>
-    </message>
-    <message>
-        <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="obsolete">Bližnjice vam omogočajo, da zaganjate ali ustavljate poslušanje in branje s tipkovnico.</translation>
-    </message>
-    <message>
-        <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="obsolete">Rezultat govora v besedilo je mogoče dodati trenutni opombi, vstaviti v katero koli aktivno okno (trenutno v fokusu) ali kopirati v odložišče.</translation>
-    </message>
-    <message>
-        <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="obsolete">Branje besedila v govor je lahko iz trenutne opombe ali iz besedila v odložišču.</translation>
-    </message>
-    <message>
-        <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="obsolete">Bližnjice na tipkovnici delujejo tudi, ko aplikacija ni aktivna (npr. strnjena ali v ozadju).</translation>
-    </message>
-    <message>
-        <source>This feature only works under X11.</source>
-        <translation type="obsolete">Ta zmožnost deluje samo pod X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="obsolete">Preklopi vedenje</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="obsolete">Bližnjice za začetek poslušanja/branja prav tako ustavijo poslušanje/branje, če se sprožijo, ko je poslušanje/branje aktivno.</translation>
-    </message>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Začni poslušati</translation>
-    </message>
-    <message>
-        <source>Start listening, text to clipboard</source>
-        <translation type="obsolete">Začni poslušati, besedilo na odložišče</translation>
-    </message>
-    <message>
-        <source>Stop listening</source>
-        <translation type="obsolete">Nehaj poslušati</translation>
-    </message>
-    <message>
-        <source>Start reading</source>
-        <translation type="obsolete">Začni brati</translation>
-    </message>
-    <message>
-        <source>Start reading text from clipboard</source>
-        <translation type="obsolete">Začni brati besedilo iz odložišča</translation>
-    </message>
-    <message>
-        <source>Pause/Resume reading</source>
-        <translation type="obsolete">Premor/nadaljuj branje</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Prekliči</translation>
-    </message>
-    <message>
-        <source>Switch to next STT model</source>
-        <translation type="obsolete">Preklopi na naslednji model STT</translation>
-    </message>
-    <message>
-        <source>Switch to previous STT model</source>
-        <translation type="obsolete">Preklopi na prejšnji model STT</translation>
-    </message>
-    <message>
-        <source>Switch to next TTS model</source>
-        <translation type="obsolete">Preklopi na naslednji model TTS</translation>
-    </message>
-    <message>
-        <source>Switch to previous TTS model</source>
-        <translation type="obsolete">Preklopi na prejšnji model TTS</translation>
-    </message>
-    <message>
-        <source>Allow external applications to invoke actions</source>
-        <translation type="obsolete">Dovoli zunanjim aplikacijam, da prikličejo dejanja</translation>
-    </message>
-    <message>
-        <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Dejanje omogoča zunanji aplikaciji, da prikliče določeno operacijo, ko se %1 izvaja.</translation>
-    </message>
-    <message>
-        <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Dejanje omogoča zunanji aplikaciji, da pokliče določeno operacijo, ko se %1 izvaja.</translation>
-    </message>
-    <message>
-        <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="obsolete">Dejanje je mogoče sprožiti prek klica DBus ali z možnostjo ukazne vrstice.</translation>
-    </message>
-    <message>
-        <source>The following actions are currently supported:</source>
-        <translation type="obsolete">Trenutno so podprta naslednja dejanja:</translation>
-    </message>
-    <message>
-        <source>Starts listening.</source>
-        <translation type="obsolete">Začne poslušati.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="obsolete">Začne poslušati. Dekodirano besedilo se vstavi v aktivno okno.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="obsolete">Začne poslušati. Dekodirano besedilo se kopira v odložišče.</translation>
-    </message>
-    <message>
-        <source>Stops listening. The already captured voice is decoded into text.</source>
-        <translation type="obsolete">Neha poslušati. Že zajeti glas se dekodira v besedilo.</translation>
-    </message>
-    <message>
-        <source>Starts reading.</source>
-        <translation type="obsolete">Začne brati.</translation>
-    </message>
-    <message>
-        <source>Starts reading text from the clipboard.</source>
-        <translation type="obsolete">Začne brati besedilo iz odložišča.</translation>
-    </message>
-    <message>
-        <source>Pauses or resumes reading.</source>
-        <translation type="obsolete">Začasno ustavi ali nadaljuje branje.</translation>
-    </message>
-    <message>
-        <source>Cancels any of the above operations.</source>
-        <translation type="obsolete">Prekliče katero koli od zgornjih operacij.</translation>
-    </message>
-    <message>
-        <source>Switches to next STT model.</source>
-        <translation type="obsolete">Preklopi na naslednji model STT.</translation>
-    </message>
-    <message>
-        <source>Switches to previous STT model.</source>
-        <translation type="obsolete">Preklopi na prejšnji model STT.</translation>
-    </message>
-    <message>
-        <source>Switches to next TTS model.</source>
-        <translation type="obsolete">Preklopi na naslednji model TTS.</translation>
-    </message>
-    <message>
-        <source>Switches to previous TTS model.</source>
-        <translation type="obsolete">Preklopi na prejšnji model TTS.</translation>
-    </message>
-    <message>
-        <source>Sets STT model.</source>
-        <translation type="obsolete">Nastavi model STT.</translation>
-    </message>
-    <message>
-        <source>Sets TTS model.</source>
-        <translation type="obsolete">Nastavi model TTS.</translation>
-    </message>
-    <message>
-        <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="obsolete">Če želite na primer sprožiti dejanje %1, izvedite naslednji ukaz: %2.</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="obsolete">Shranjevanje</translation>
-    </message>
-    <message>
-        <source>Location of language files</source>
-        <translation type="obsolete">Lokacije jezikovnih datotek</translation>
-    </message>
-    <message>
-        <source>Directory where language files are downloaded to and stored.</source>
-        <translation type="obsolete">Imenik, kamor so prenesene jezikovne datoteke in shranjene.</translation>
-    </message>
-    <message>
-        <source>Clear cache on close</source>
-        <translation type="obsolete">Počisti predpomnilnik ob zaprtju</translation>
-    </message>
-    <message>
-        <source>When closing, delete all cached audio files.</source>
-        <translation type="obsolete">Ob zapiranju izbriši vse predpomnjene zvočne datoteke.</translation>
-    </message>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Razpoložljivost izbirnih funkcij</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="obsolete">Skrij napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="obsolete">Prikaži napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Možnosti procesorja</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Avto</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Možnosti strojnega pospeševanja</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uporabi %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Onemogoči to možnost, če opazite težave pri zagonu aplikacije.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Preglasi različico GPE</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Preglasi različico AMD GPU.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Omogoči to možnost, če opazite težave pri uporabi pospeševanja GPE z grafično kartico AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Različica</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Vrednost ima enak učinek kot spremenljivka okolja %1.</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Sestavi datoteko</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">Datoteka za sestavljanje X11, uporabljena v %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Vstavi v aktivno okno</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Knjižnice</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Uporabite knjižnice Pythona</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Preverite prisotnost zahtevanih knjižnic Pythona.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Lokacija knjižnic Pythona</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Imenik knjižnic Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Če želite uporabiti privzeto vrednost, pustite prazno.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna, če za upravljanje knjižnic Python uporabljate modul %1.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Shrani</translation>
-    </message>
-    <message>
-        <source>Select Directory</source>
-        <translation type="obsolete">Izberi Imenik</translation>
     </message>
 </context>
 <context>
@@ -4614,31 +2206,31 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="74"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="89"/>
         <source>Text appending mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Način dodajanja besedila</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="83"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="102"/>
         <source>Add to last line</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj k zadnji vrstici</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="84"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="103"/>
         <source>Add after line break</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj po prelomu vrstice</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="85"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="104"/>
         <source>Add after empty line</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj po prazni vrstici</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="101"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="90"/>
         <source>Specifies where to add new text to a note.</source>
-        <translation type="unfinished"></translation>
+        <translation>Določa, kam dodati novo besedilo k z zaznamku.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="107"/>
@@ -4747,46 +2339,27 @@
         <translation>Po kliku na gumb %1 je poslušanje vedno vklopljeno.</translation>
     </message>
     <message>
-        <source>Text appending style</source>
-        <translation type="vanished">Slog dodajanja besedila</translation>
+        <location filename="../sfos/qml/SettingsPage.qml" line="203"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="117"/>
+        <source>Use note as context</source>
+        <translation>Uporabi zaznamek kot kontekst</translation>
     </message>
     <message>
-        <source>In line</source>
-        <translation type="vanished">V vrstici</translation>
+        <location filename="../sfos/qml/SettingsPage.qml" line="207"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="124"/>
+        <source>Use an existing note as the initial context in decoding.</source>
+        <translation>Uporabi obstoječ zaznamek kot začetni kontekst v dekodiranju.</translation>
     </message>
     <message>
-        <source>After line break</source>
-        <translation type="vanished">Po prelomu vrstice</translation>
-    </message>
-    <message>
-        <source>Text is appended to the note in the same line or after line break.</source>
-        <translation type="vanished">Besedilo je priloženo k opombi v isti vrstici ali po prelomu vrstice.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="85"/>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation>Omogoči napredno obnovitev ločil po razpoznavanju govora. Če želite, da deluje, se prepričajte, da ste omogočili model %1 za vaš jezik.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="87"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="99"/>
-        <source>Punctuation</source>
-        <translation>Ločila</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="98"/>
-        <source>To make %1 work, download %2 model.</source>
-        <translation>Da bi %1 deloval, prenesite model %2.</translation>
+        <location filename="../sfos/qml/SettingsPage.qml" line="218"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="138"/>
+        <source>Temporarily pause listening for the duration of audio processing.</source>
+        <translation>Začasni premor poslušanja za trajanje obdelave glasu.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="516"/>
         <source>Other</source>
         <translation>Drugo</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="88"/>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation>Ko je ta možnost omogočena, inicializacija modela traja veliko dlje in poraba pomnilnika je veliko višja.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="532"/>
@@ -4813,12 +2386,6 @@
         <translation>Nastavi privzeto</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="78"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="99"/>
-        <source>Restore punctuation</source>
-        <translation>Obnovi ločila</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="397"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="61"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="93"/>
@@ -4839,7 +2406,7 @@
         <location filename="../desktop/qml/SettingsPage.qml" line="71"/>
         <location filename="../desktop/qml/SettingsPage.qml" line="95"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Napredno</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="35"/>
@@ -4853,146 +2420,6 @@
         <location filename="../desktop/qml/SettingsPage.qml" line="94"/>
         <source>Accessibility</source>
         <translation>Dostopnost</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="72"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="75"/>
-        <source>Auto</source>
-        <translation>Avto</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="116"/>
-        <source>Graphical style</source>
-        <translation>Grafični slog</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="117"/>
-        <source>Application graphical interface style.</source>
-        <translation>Grafični slog vmesnika aplikacije.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="118"/>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation>Spremenite, če opazite težave z napačnimi barvami pod temno temo.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="49"/>
-        <source>Show desktop notification</source>
-        <translation>Prikaži namizno obvestilo</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="61"/>
-        <source>Never</source>
-        <translation>Nikoli</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="62"/>
-        <source>When in background</source>
-        <translation>Ko je v ozadju</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="63"/>
-        <source>Always</source>
-        <translation>Vedno</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="50"/>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation>Prikaži obvestilo o namizju med branjem ali poslušanjem.</translation>
-    </message>
-    <message>
-        <source>After empty line</source>
-        <translation type="vanished">Po prazni vrstici</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="21"/>
-        <source>Font in text editor</source>
-        <translation>Pisava v urejevalniku besedila</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="375"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="389"/>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="27"/>
-        <source>Default</source>
-        <translation>Privzeto</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="41"/>
-        <source>Please choose a font</source>
-        <translation>Izberite pisavo</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="81"/>
-        <source>Include recognized or read text in notifications</source>
-        <translation>Vključi prepoznana ali prebrana besedila v obvestila</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="89"/>
-        <source>Use system tray icon</source>
-        <translation>Uporabi ikono sistemskega pladnja</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="99"/>
-        <source>Start minimized to the system tray</source>
-        <translation>Začni strnjeno v sistemskem pladnju</translation>
-    </message>
-    <message>
-        <source>Show %1 options</source>
-        <translation type="vanished">Prikaži %1 možnosti</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="35"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="50"/>
-        <source>Show %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="35"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="42"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="43"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="44"/>
-        <source>Rules</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="42"/>
-        <source>%1 allows you to create text transformations that can be applied after Speech to Text or before Text to Speech.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="43"/>
-        <source>With %1, you can easily and flexibly correct errors in decoded text or correct mispronounced words.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="44"/>
-        <source>To configure the rules you need, go to %1 on the main toolbar.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="50"/>
-        <source>Repair text</source>
-        <translation>Popravilo besedilo</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="57"/>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation>Ko je omogočeno, se v glavni orodni vrstici prikaže meni z možnostmi popravka besedila.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="101"/>
-        <source>Add at the cursor position</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsUiPage.qml" line="107"/>
-        <source>Use custom graphical style</source>
-        <translation>Uporabi grafični slog po meri</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="89"/>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation>Ta možnost deluje samo z modeli, ki ne podpirajo ločil.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="425"/>
@@ -5026,24 +2453,6 @@
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="136"/>
         <source>Sync but don&apos;t adjust speed</source>
         <translation>Sinhroniziraj, a ne prilagajaj hitrosti</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="203"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="117"/>
-        <source>Use note as context</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="207"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="124"/>
-        <source>Use an existing note as the initial context in decoding.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="218"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="138"/>
-        <source>Temporarily pause listening for the duration of audio processing.</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="500"/>
@@ -5086,6 +2495,171 @@
         <translation>Ko je nastavljen format besedila podnapisov SRT, je spreminjanje hitrosti govora onemogočeno, ker bo hitrost samodejno prilagojena.</translation>
     </message>
     <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="523"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="160"/>
+        <source>When closing, delete all cached audio files.</source>
+        <translation>Ob zapiranju izbriši vse predpomnjene zvočne datoteke.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="237"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="160"/>
+        <source>Insert statistics</source>
+        <translation>Vstavi statistiko</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="241"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="167"/>
+        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
+        <translation>V besedilo vstavi informacije, povezane z obdelavo, kot sta čas obdelave in dolžina zvoka.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="242"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="168"/>
+        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
+        <translation>Ta možnost je lahko uporabna za primerjavo delovanja različnih modelov, strojev in njihovih parametrov.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="243"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="169"/>
+        <source>This option does not work with all engines.</source>
+        <translation>Ta možnost ne deluje pri vseh strojih.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="193"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="104"/>
+        <source>Echo mode</source>
+        <translation>Način odmeva</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="197"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="111"/>
+        <source>After processing, the decoded text will be immediately read out using the currently set Text to Speech model.</source>
+        <translation>Po obdelavi bo dekodirano besedilo nemudoma prebrano s trenutnimi nastavitvami modela besedila v govor.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsPage.qml" line="46"/>
+        <location filename="../desktop/qml/SettingsPage.qml" line="90"/>
+        <source>General</source>
+        <translation>Splošno</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="297"/>
+        <location filename="../sfos/qml/SettingsPage.qml" line="469"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="174"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="117"/>
+        <source>Subtitles</source>
+        <translation>Podnapisi</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="304"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="178"/>
+        <source>Minimum segment duration</source>
+        <translation>Najmanjše trajanje segmenta</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="328"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="179"/>
+        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
+        <translation>Nastavi minimalno trajanje (v sekundah) segmenta podnapisov.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="329"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="125"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="180"/>
+        <source>This option only works with %1 and %2 models.</source>
+        <translation>Ta možnost deluje samo z modeli %1 in %2.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="336"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="194"/>
+        <source>Break text lines</source>
+        <translation>Prelomi vrstice besedila</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="346"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="203"/>
+        <source>Minimum line length</source>
+        <translation>Najmanjša dolžina vrstice</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="372"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="220"/>
+        <source>Maximum line length</source>
+        <translation>Največja dolžina vrstice</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="435"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="43"/>
+        <source>Split text into sentences</source>
+        <translation>Razdeli besedilo na stavke</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="436"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="50"/>
+        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
+        <translation>Besedilo bo razdeljeno na stavke in vzporedno bo izvedena sinteza govora za vsak stavek.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="437"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="51"/>
+        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
+        <translation>To pospeši branje, vendar je pri nekaterih modelih lahko zmanjšana naravnost govora.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="446"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="57"/>
+        <source>Use engine speed control</source>
+        <translation>Uporabite nadzor hitrosti stroja</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="447"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="64"/>
+        <source>If the TTS engine supports speed control, it will be used.</source>
+        <translation>Če stroj TTS podpira nadzor hitrosti, bo uporabljen.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="448"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="65"/>
+        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
+        <translation>Ko je ta možnost onemogočena, se hitrost spreminja med naknadno obdelavo zvoka.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="449"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="66"/>
+        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
+        <translation>Dejanska hitrost po naknadni obdelavi zvoka je veliko bolj predvidljiva, vendar se lahko zmanjša naravnost govora.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="458"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="72"/>
+        <source>Normalize audio</source>
+        <translation>Normaliziraj zvok</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="459"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="79"/>
+        <source>The volume of the audio will be normalized.</source>
+        <translation>Glasnost zvoka bo normalizirana.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="460"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="80"/>
+        <source>The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.</source>
+        <translation>Glasnost je normalizirana neodvisno za vsak stavek, kar lahko vodi v nestabilne ravni zvoka v različnih stavkih.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="461"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="81"/>
+        <source>Disable this option if you observe this problem.</source>
+        <translation>Onemogoči to možnost, če zaznate ta problem.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="522"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="153"/>
+        <source>Clear cache on close</source>
+        <translation>Počisti predpomnilnik ob zaprtju</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="32"/>
         <source>Use global keyboard shortcuts</source>
         <translation>Uporabi globalne bližnjice na tipkovnici</translation>
@@ -5111,36 +2685,24 @@
         <translation>Bližnjice na tipkovnici delujejo tudi, ko aplikacija ni aktivna (npr. strnjena ali v ozadju).</translation>
     </message>
     <message>
-        <source>This feature only works under X11.</source>
-        <translation type="vanished">Ta zmožnost deluje samo pod X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="vanished">Preklopi vedenje</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="vanished">Bližnjice za začetek poslušanja/branja prav tako ustavijo poslušanje/branje, če se sprožijo, ko je poslušanje/branje aktivno.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="50"/>
         <source>Configure global keyboard shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfiguriraj globalne bližnjice na tipkovnici</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="68"/>
         <source>Global keyboard shortcuts are managed through the %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Globalne bližnjice na tipkovnici upravlja %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="69"/>
         <source>Use your desktop environment configuration tool to change key bindings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uporabite orodje konfiguracije vašega namizja z spremembo povezav tipk.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="76"/>
         <source>Global keyboard shortcuts</source>
-        <translation type="unfinished">Globalne bližnjice na tipkovnici</translation>
+        <translation>Globalne bližnjice na tipkovnici</translation>
     </message>
     <message>
         <location filename="../src/settings.h" line="76"/>
@@ -5150,7 +2712,7 @@
     <message>
         <location filename="../src/settings.h" line="79"/>
         <source>Start listening, always translate</source>
-        <translation type="unfinished"></translation>
+        <translation>Začni poslušanje, vedno prevajaj</translation>
     </message>
     <message>
         <location filename="../src/settings.h" line="83"/>
@@ -5160,7 +2722,7 @@
     <message>
         <location filename="../src/settings.h" line="88"/>
         <source>Start listening, always translate, text to active window</source>
-        <translation type="unfinished"></translation>
+        <translation>Začni poslušanje, vedno prevajaj, besedilo v dejavno okno</translation>
     </message>
     <message>
         <location filename="../src/settings.h" line="93"/>
@@ -5170,7 +2732,7 @@
     <message>
         <location filename="../src/settings.h" line="98"/>
         <source>Start listening, always translate, text to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Začni poslušanje, vedno prevajaj, besedilo na odložišče</translation>
     </message>
     <message>
         <location filename="../src/settings.h" line="103"/>
@@ -5250,7 +2812,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="118"/>
         <source>Starts listening and always translate decoded text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Začni poslušanje in vedno prevajaj dekodirano besedilo.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="119"/>
@@ -5260,17 +2822,17 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="120"/>
         <source>Starts listening. The decoded text is translated and inserted into the active window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Začni poslušanje. Dekodirano besedilo je prevedeno in vstavljeno v dejavno okno.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="121"/>
         <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation>Začne poslušati. Dekodirano besedilo se kopira v odložišče.</translation>
+        <translation>Začne poslušanje. Dekodirano besedilo je skopirano na odložišče.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="122"/>
         <source>Starts listening. The decoded text is translated and copied to the clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Začne poslušanje. Dekodirano besedilo je prevedeno skopirano na odložišče.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="123"/>
@@ -5290,7 +2852,7 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="126"/>
         <source>Starts reading text from command-line option --text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Začne branje besedila iz možnosti ukazne vrstice --text.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="127"/>
@@ -5341,41 +2903,34 @@
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="147"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="396"/>
         <source>Unable to connect to %1 daemon.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ni mogoče vzpostaviti povezave z demonom %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="149"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="398"/>
         <source>For %1 action to work, %2 daemon must be installed and running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Da bi dejanje %1 delovalo, mora biti nameščen in zagnan demon %2.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="152"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="401"/>
         <source>Also make sure that the Flatpak application has permission to access %1 daemon socket file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prav tako se prepričajte, da ima aplikacija Flatpak dovoljenje za dostop do datoteke vtičnice demona %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="158"/>
         <source>Toggle behavior for actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Preklopi vedenje za dejanja</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="165"/>
         <source>Start listening/reading shortcuts or actions will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bližnjice ali dejanja za začetek poslušanja/branja bodo prav tako ustavila poslušanje/branje, če se sprožijo med aktivnim poslušanjem/branjem.</translation>
     </message>
     <message>
-        <source>Storage</source>
-        <translation type="vanished">Shranjevanje</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="vanished">Skrij napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="vanished">Prikaži napredne nastavitve</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="25"/>
+        <source>Availability of optional features</source>
+        <translation>Razpoložljivost izbirnih funkcij</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="60"/>
@@ -5390,12 +2945,6 @@
         <translation>Število sočasnih niti</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsPage.qml" line="46"/>
-        <location filename="../desktop/qml/SettingsPage.qml" line="90"/>
-        <source>General</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="65"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="323"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="529"/>
@@ -5403,29 +2952,15 @@
         <translation>Nastavi največje število hkratnih niti CPE.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="97"/>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation>Ko je ta možnost onemogočena, so oznake prezrte.</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="72"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="75"/>
+        <source>Auto</source>
+        <translation>Avto</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="106"/>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation>Če želite uporabiti kontrolne oznake, v besedilo vstavite %1.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="108"/>
-        <source>The following control tags are currently supported:</source>
-        <translation>Trenutno so podprte naslednje kontrolne oznake:</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="110"/>
-        <source>Changes speed.</source>
-        <translation>Spremeni hitrost.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="111"/>
-        <source>Inserts silence.</source>
-        <translation>Vstavi tišino.</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="86"/>
+        <source>Hardware acceleration options</source>
+        <translation>Možnosti strojnega pospeševanja</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="92"/>
@@ -5439,14 +2974,13 @@
         <translation>Uporabi %1</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="523"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="160"/>
-        <source>When closing, delete all cached audio files.</source>
-        <translation>Ob zapiranju izbriši vse predpomnjene zvočne datoteke.</translation>
-    </message>
-    <message>
-        <source>Try to find NVIDIA CUDA compatible graphic cards in the system.</source>
-        <translation type="vanished">Poskusi najti grafične kartice združljive z NVIDIA CUDA v sistemu.</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="99"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="114"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="129"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="206"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="221"/>
+        <source>Try to find %1 compatible graphic cards in the system.</source>
+        <translation>Poskusi v sistemu najti %1 združljivih grafičnih kartic.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="100"/>
@@ -5460,12 +2994,24 @@
         <translation>Onemogoči to možnost, če opazite težave pri zagonu aplikacije.</translation>
     </message>
     <message>
-        <source>Try to find AMD ROCm compatible graphic cards in the system.</source>
-        <translation type="vanished">Poskusite v sistemu najti grafične kartice, združljive z AMD ROCm.</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="130"/>
+        <source>Only dedicated graphics cards are included. To search for integrated graphics cards, also enable %1.</source>
+        <translation>Vključene so samo namenske grafične kartice. Če želite iskati integrirane grafične kartice, omogočite tudi %1.</translation>
     </message>
     <message>
-        <source>Try to find OpenCL compatible graphic cards in the system.</source>
-        <translation type="vanished">Poskusite v sistemu najti grafične kartice združljive z OpenCL.</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="131"/>
+        <source>Use %1 (Integrated GPU)</source>
+        <translation>Uporabi %1 (integriran GPE)</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="146"/>
+        <source>Try to find %1 compatible integrated graphic cards in the system.</source>
+        <translation>Poskusite v sistemu najti %1 združljivih integriranih grafičnih kartic.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="176"/>
+        <source>Try to find %1 compatible hardware in the system.</source>
+        <translation>Poskusite najti %1 združljivo strojno opremo v sistemu.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="229"/>
@@ -5493,15 +3039,249 @@
         <translation>Vrednost ima enak učinek kot spremenljivka okolja %1.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="25"/>
-        <source>Availability of optional features</source>
-        <translation>Razpoložljivost izbirnih funkcij</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="251"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="339"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="364"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="405"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="432"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="545"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="570"/>
+        <source>Reset</source>
+        <translation>Ponastavi</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="324"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="530"/>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation>Ni nujno, da višja vrednost pospeši dekodiranje.</translation>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="257"/>
+        <source>Libraries</source>
+        <translation>Knjižnice</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="263"/>
+        <source>Detection of Python libraries</source>
+        <translation>Zaznavanje knjižnic Python</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="264"/>
+        <source>Determine how and whether Python libraries are detected when the application is launched.</source>
+        <translation>Določi, kako in ali so knjižnice Python zaznane ob zagonu aplikacije.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="273"/>
+        <source>On</source>
+        <translation>Vklopljeno</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="274"/>
+        <source>Off (Assume all are available)</source>
+        <translation>Izklopljeno (predpostavljeno, da so vsi na voljo)</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="275"/>
+        <source>Off (Assume none are available)</source>
+        <translation>Izklopljeno (predpostavljeno, da ni nobenega na voljo)</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="296"/>
+        <source>Location of Python libraries (version: %1)</source>
+        <translation>Lokacija knjižnic Python (različica: %1)</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="297"/>
+        <source>Python libraries directory (%1).</source>
+        <translation>Imenik knjižnic Python (%1).</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="298"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="305"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="366"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="373"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="381"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="385"/>
+        <source>Leave blank to use the default value.</source>
+        <translation>Če želite uporabiti privzeto vrednost, pustite prazno.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="300"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="368"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="168"/>
+        <source>Make sure that the Flatpak application has permissions to access the directory.</source>
+        <translation>Prepričajte se, da ima aplikacija Flatpak dovoljenja za dostop do imenika.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="301"/>
+        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
+        <translation>Ta možnost je lahko uporabna, če za upravljanje knjižnic Python uporabljate modul %1.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="318"/>
+        <source>Keystroke sending method</source>
+        <translation>Način pošiljanja pritiskov tipk</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="319"/>
+        <source>Simulated keystroke sending method used in %1.</source>
+        <translation>Simulirana metoda pošiljanja pritiskov tipk uporabljena v %1.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="329"/>
+        <source>Legacy</source>
+        <translation>Zapuščina</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="349"/>
+        <source>Keystroke delay</source>
+        <translation>Zakasnitev pritiska tipke</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="350"/>
+        <source>The delay between simulated keystrokes used in %1.</source>
+        <translation>Zakasnitev med simuliranimi pritiski tipk uporabljena v %1.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="364"/>
+        <source>Compose file</source>
+        <translation>Sestavi datoteko</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="365"/>
+        <source>X11 compose file used in %1.</source>
+        <translation>Datoteka za sestavljanje X11, uporabljena v %1.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="379"/>
+        <source>Keyboard layout</source>
+        <translation>Razporeditev tipkovnice</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="380"/>
+        <source>Keyboard layout used in %1.</source>
+        <translation>Razporeditev tipkovnice uporabljena v %1.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="407"/>
+        <source>Other options</source>
+        <translation>Druge možnosti</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="414"/>
+        <source>Global keyboard shortcuts method</source>
+        <translation>Metoda globalnih bližnjic na tipkovnici</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="415"/>
+        <source>Method used to set global keyboard shortcuts.</source>
+        <translation>Metoda uporabljena za nastavitev globalnih bližnjic na tipkovnici.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="311"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="320"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="350"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="365"/>
+        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="380"/>
+        <source>Insert into active window</source>
+        <translation>Vstavi v aktivno okno</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="35"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="50"/>
+        <source>Show %1</source>
+        <translation>Prikaži %1</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="35"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="42"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="43"/>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="44"/>
+        <source>Rules</source>
+        <translation>Pravila</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="42"/>
+        <source>%1 allows you to create text transformations that can be applied after Speech to Text or before Text to Speech.</source>
+        <translation>%1 vam omogoča ustvarjanje pretvorb besedila, ki jih je mogoče uporabiti po pretvorbi govora v besedilo ali pred pretvorbo besedila v govor.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="43"/>
+        <source>With %1, you can easily and flexibly correct errors in decoded text or correct mispronounced words.</source>
+        <translation>Z %1 lahko preprosto in prilagodljivo popravite napake v dekodiranem besedilu ali popravite napačno izgovorjene besede.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="44"/>
+        <source>To configure the rules you need, go to %1 on the main toolbar.</source>
+        <translation>Če želite konfigurirati potrebna pravila, pojdite na %1 v glavni orodni vrstici.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="50"/>
+        <source>Repair text</source>
+        <translation>Popravilo besedilo</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="57"/>
+        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
+        <translation>Ko je omogočeno, se v glavni orodni vrstici prikaže meni z možnostmi popravka besedila.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="101"/>
+        <source>Add at the cursor position</source>
+        <translation>Dodaj na položaj kazalca</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="130"/>
+        <source>Select Directory</source>
+        <translation>Izberi Imenik</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="23"/>
+        <source>Audio input device</source>
+        <translation>Avdio vhodna naprava</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="24"/>
+        <source>Select preferred audio input device.</source>
+        <translation>Izberite želeno avdio vhodno napravo.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="78"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="99"/>
+        <source>Restore punctuation</source>
+        <translation>Obnovi ločila</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="85"/>
+        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
+        <translation>Omogoči napredno obnovitev ločil po razpoznavanju govora. Če želite, da deluje, se prepričajte, da ste omogočili model %1 za vaš jezik.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="87"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="99"/>
+        <source>Punctuation</source>
+        <translation>Ločila</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="88"/>
+        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
+        <translation>Ko je ta možnost omogočena, inicializacija modela traja veliko dlje in poraba pomnilnika je veliko višja.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="89"/>
+        <source>This option only works with models that do not natively support punctuation.</source>
+        <translation>Ta možnost deluje samo z modeli, ki ne podpirajo ločil.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="98"/>
+        <source>To make %1 work, download %2 model.</source>
+        <translation>Da bi %1 deloval, prenesite model %2.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="214"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="131"/>
+        <source>Pause listening while processing</source>
+        <translation>Začasno ustavi poslušanje med obdelavo</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="219"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="139"/>
+        <source>This option can be useful when %1 is %2.</source>
+        <translation>Ta možnost je lahko uporabna, kadar je %1 enak %2.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="240"/>
@@ -5516,21 +3296,21 @@
         <location filename="../desktop/qml/SettingsSttPage.qml" line="283"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="489"/>
         <source>Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="172"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="284"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="490"/>
         <source>Profiles allow you to change the processing parameters in the engine.</source>
-        <translation type="unfinished"></translation>
+        <translation>Profili vam omogočajo spreminjanje parametrov obdelave v stroju.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="173"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="285"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="491"/>
         <source>You can set the parameters to get the fastest processing (%1) or the highest accuracy (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation>Parametre lahko nastavite tako, da dosežete najhitrejšo obdelavo (%1) ali najvišjo natančnost (%2).</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="160"/>
@@ -5540,7 +3320,7 @@
         <location filename="../desktop/qml/SettingsSttPage.qml" line="492"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="506"/>
         <source>Best performance</source>
-        <translation type="unfinished"></translation>
+        <translation>Najboljša zmogljivost</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="161"/>
@@ -5550,13 +3330,41 @@
         <location filename="../desktop/qml/SettingsSttPage.qml" line="493"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="507"/>
         <source>Best quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Najboljša kakovost</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="227"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="147"/>
+        <source>Play tone when starting and stopping listening</source>
+        <translation>Predvajaj ton ob začetku in koncu poslušanja</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/SettingsPage.qml" line="231"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="154"/>
+        <source>Play an audible tone when starting and stopping listening.</source>
+        <translation>Predvajaj zvočni signal ob začetku in koncu poslušanja.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="288"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="494"/>
         <source>If you want to manually set individual engine parameters, select %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Če želite ročno nastaviti posamezne parametre stroja, izberite %1.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="289"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="302"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="376"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="390"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="495"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="508"/>
+        <source>Custom</source>
+        <translation>Po meri</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="324"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="530"/>
+        <source>A higher value does not necessarily speed up decoding.</source>
+        <translation>Ni nujno, da višja vrednost pospeši dekodiranje.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="348"/>
@@ -5576,39 +3384,9 @@
         <translation>Velikost zvočnega konteksta</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="377"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="435"/>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation>Manjša vrednost pospeši dekodiranje, vendar lahko negativno vpliva na natančnost.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="374"/>
         <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
         <translation>Ko je nastavljen %1, se velikost dinamično prilagaja za vsak zvočni del.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="237"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="160"/>
-        <source>Insert statistics</source>
-        <translation>Vstavi statistiko</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="241"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="167"/>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation>V besedilo vstavi informacije, povezane z obdelavo, kot sta čas obdelave in dolžina zvoka.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="242"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="168"/>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation>Ta možnost je lahko uporabna za primerjavo delovanja različnih modelov, strojev in njihovih parametrov.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="243"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="169"/>
-        <source>This option does not work with all engines.</source>
-        <translation>Ta možnost ne deluje pri vseh strojih.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="374"/>
@@ -5622,55 +3400,22 @@
         <translation>Ko je nastavljen %1, se uporablja privzeta fiksna velikost.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="375"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="389"/>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="27"/>
+        <source>Default</source>
+        <translation>Privzeto</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="376"/>
         <source>To define a custom size, use the %1 option.</source>
         <translation>Če želite določiti velikost po meri, uporabite možnost %1.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="289"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="302"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="376"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="390"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="495"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="508"/>
-        <source>Custom</source>
-        <translation>Po meri</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="193"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="104"/>
-        <source>Echo mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="197"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="111"/>
-        <source>After processing, the decoded text will be immediately read out using the currently set Text to Speech model.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="214"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="131"/>
-        <source>Pause listening while processing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="219"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="139"/>
-        <source>This option can be useful when %1 is %2.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="227"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="147"/>
-        <source>Play tone when starting and stopping listening</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="231"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="154"/>
-        <source>Play an audible tone when starting and stopping listening.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="377"/>
+        <location filename="../desktop/qml/SettingsSttPage.qml" line="435"/>
+        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
+        <translation>Manjša vrednost pospeši dekodiranje, vendar lahko negativno vpliva na natančnost.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="419"/>
@@ -5711,250 +3456,6 @@
         <translation>To skrajša čas obdelave, vendar je lahko samodejno zaznan jezik napačen.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="87"/>
-        <source>Use control tags</source>
-        <translation>Uporabi kontrolne oznake</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="96"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="105"/>
-        <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation>Kontrolne oznake vam omogočajo dinamično spreminjanje hitrosti sintetiziranega besedila ali dodajanje tišine med stavki.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="110"/>
-        <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation>%1 je število s plavajočo vejico v območju od 0,1 do 2,0.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="111"/>
-        <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation>%1 je število s plavajočo vejico in %2 je ime enote (%3).</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="86"/>
-        <source>Hardware acceleration options</source>
-        <translation>Možnosti strojnega pospeševanja</translation>
-    </message>
-    <message>
-        <source>Try to find OpenVINO compatible hardware in the system.</source>
-        <translation type="vanished">Poskusite najti strojno opremo združljivo z OpenVINO v sistemu.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="251"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="339"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="364"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="405"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="432"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="545"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="570"/>
-        <source>Reset</source>
-        <translation>Ponastavi</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="274"/>
-        <source>Off (Assume all are available)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="275"/>
-        <source>Off (Assume none are available)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="296"/>
-        <source>Location of Python libraries (version: %1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="318"/>
-        <source>Keystroke sending method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="329"/>
-        <source>Legacy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="349"/>
-        <source>Keystroke delay</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="350"/>
-        <source>The delay between simulated keystrokes used in %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="364"/>
-        <source>Compose file</source>
-        <translation>Sestavi datoteko</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="365"/>
-        <source>X11 compose file used in %1.</source>
-        <translation>Datoteka za sestavljanje X11, uporabljena v %1.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="311"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="320"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="350"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="365"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="380"/>
-        <source>Insert into active window</source>
-        <translation>Vstavi v aktivno okno</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="257"/>
-        <source>Libraries</source>
-        <translation>Knjižnice</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="99"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="114"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="129"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="206"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="221"/>
-        <source>Try to find %1 compatible graphic cards in the system.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="130"/>
-        <source>Only dedicated graphics cards are included. To search for integrated graphics cards, also enable %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="131"/>
-        <source>Use %1 (Integrated GPU)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="146"/>
-        <source>Try to find %1 compatible integrated graphic cards in the system.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="176"/>
-        <source>Try to find %1 compatible hardware in the system.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="vanished">Uporabite knjižnice Pythona</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="vanished">Preverite prisotnost zahtevanih knjižnic Pythona.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="263"/>
-        <source>Detection of Python libraries</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="264"/>
-        <source>Determine how and whether Python libraries are detected when the application is launched.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="273"/>
-        <source>On</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="300"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="368"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="168"/>
-        <source>Make sure that the Flatpak application has permissions to access the directory.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="319"/>
-        <source>Simulated keystroke sending method used in %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="379"/>
-        <source>Keyboard layout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="380"/>
-        <source>Keyboard layout used in %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="407"/>
-        <source>Other options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="414"/>
-        <source>Global keyboard shortcuts method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="415"/>
-        <source>Method used to set global keyboard shortcuts.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="23"/>
-        <source>Audio input device</source>
-        <translation>Avdio vhodna naprava</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="24"/>
-        <source>Select preferred audio input device.</source>
-        <translation>Izberite želeno avdio vhodno napravo.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="297"/>
-        <location filename="../sfos/qml/SettingsPage.qml" line="469"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="174"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="117"/>
-        <source>Subtitles</source>
-        <translation>Podnapisi</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="304"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="178"/>
-        <source>Minimum segment duration</source>
-        <translation>Najmanjše trajanje segmenta</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="328"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="179"/>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation>Nastavi minimalno trajanje (v sekundah) segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="329"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="125"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="180"/>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation>Ta možnost deluje samo z modeli %1 in %2.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="336"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="194"/>
-        <source>Break text lines</source>
-        <translation>Prelomi vrstice besedila</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="346"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="203"/>
-        <source>Minimum line length</source>
-        <translation>Najmanjša dolžina vrstice</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="372"/>
-        <location filename="../desktop/qml/SettingsSttPage.qml" line="220"/>
-        <source>Maximum line length</source>
-        <translation>Največja dolžina vrstice</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/SettingsTtsPage.qml" line="22"/>
         <source>Restore diacritical marks before speech synthesis</source>
         <translation>Obnovite diakritične znake pred sintezo govora</translation>
@@ -5970,2937 +3471,120 @@
         <translation>Obnovitev diakritičnih znakov za hebrejski jezik ni na voljo.</translation>
     </message>
     <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="435"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="43"/>
-        <source>Split text into sentences</source>
-        <translation>Razdeli besedilo na stavke</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="436"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="50"/>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation>Besedilo bo razdeljeno na stavke in vzporedno bo izvedena sinteza govora za vsak stavek.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="437"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="51"/>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation>To pospeši branje, vendar je pri nekaterih modelih lahko zmanjšana naravnost govora.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="446"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="57"/>
-        <source>Use engine speed control</source>
-        <translation>Uporabite nadzor hitrosti stroja</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="447"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="64"/>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation>Če stroj TTS podpira nadzor hitrosti, bo uporabljen.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="448"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="65"/>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation>Ko je ta možnost onemogočena, se hitrost spreminja med naknadno obdelavo zvoka.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="449"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="66"/>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation>Dejanska hitrost po naknadni obdelavi zvoka je veliko bolj predvidljiva, vendar se lahko zmanjša naravnost govora.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="458"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="72"/>
-        <source>Normalize audio</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="459"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="79"/>
-        <source>The volume of the audio will be normalized.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="460"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="80"/>
-        <source>The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="461"/>
-        <location filename="../desktop/qml/SettingsTtsPage.qml" line="81"/>
-        <source>Disable this option if you observe this problem.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/SettingsPage.qml" line="522"/>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="153"/>
-        <source>Clear cache on close</source>
-        <translation>Počisti predpomnilnik ob zaprtju</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="vanished">Lokacija knjižnic Pythona</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="298"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="305"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="366"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="373"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="381"/>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="385"/>
-        <source>Leave blank to use the default value.</source>
-        <translation>Če želite uporabiti privzeto vrednost, pustite prazno.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="297"/>
-        <source>Python libraries directory (%1).</source>
-        <translation>Imenik knjižnic Python (%1).</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="301"/>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation>Ta možnost je lahko uporabna, če za upravljanje knjižnic Python uporabljate modul %1.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">Shrani</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/SettingsGeneralPage.qml" line="130"/>
-        <source>Select Directory</source>
-        <translation>Izberi Imenik</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsPage-bak</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Nastavitve</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="obsolete">Uporabniški vmesnik</translation>
-    </message>
-    <message>
-        <source>Speech to Text</source>
-        <translation type="obsolete">Govor v besedilo</translation>
-    </message>
-    <message>
-        <source>Text to Speech</source>
-        <translation type="obsolete">Besedilo v govor</translation>
-    </message>
-    <message>
-        <source>Accessibility</source>
-        <translation type="obsolete">Dostopnost</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Drugo</translation>
-    </message>
-    <message>
-        <source>Remember the last note</source>
-        <translation type="obsolete">Zapomni si zadnjo opombo</translation>
-    </message>
-    <message>
-        <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="obsolete">Opomba bo samodejno shranjena, tako da bo ob ponovnem zagonu aplikacije vaša zadnja opomba vedno na voljo.</translation>
-    </message>
-    <message>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="obsolete">Ko je omogočeno, se v glavni orodni vrstici prikaže meni z možnostmi popravka besedila.</translation>
-    </message>
-    <message>
-        <source>File import action</source>
-        <translation type="obsolete">Dejanje uvoza datoteke</translation>
-    </message>
-    <message>
-        <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="obsolete">Dejanje pri uvozu opombe iz datoteke. Uvoženo besedilo lahko dodate obstoječi opombi ali zamenjate obstoječo opombo.</translation>
-    </message>
-    <message>
-        <source>Ask whether to add or replace</source>
-        <translation type="obsolete">Vprašaj, ali želite dodati ali zamenjati</translation>
-    </message>
-    <message>
-        <source>Add to an existing note</source>
-        <translation type="obsolete">Dodaj k obstoječi opombi</translation>
-    </message>
-    <message>
-        <source>Replace an existing note</source>
-        <translation type="obsolete">Zamenjaj obstoječo opombo</translation>
-    </message>
-    <message>
-        <source>Font in text editor</source>
-        <translation type="obsolete">Pisava v urejevalniku besedila</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Privzeto</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="obsolete">Spremeni</translation>
-    </message>
-    <message>
-        <source>Please choose a font</source>
-        <translation type="obsolete">Izberite pisavo</translation>
-    </message>
-    <message>
-        <source>Show desktop notification</source>
-        <translation type="obsolete">Prikaži namizno obvestilo</translation>
-    </message>
-    <message>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation type="obsolete">Prikaži obvestilo o namizju med branjem ali poslušanjem.</translation>
-    </message>
-    <message>
-        <source>Never</source>
-        <translation type="obsolete">Nikoli</translation>
-    </message>
-    <message>
-        <source>When in background</source>
-        <translation type="obsolete">Ko je v ozadju</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Vedno</translation>
-    </message>
-    <message>
-        <source>Include recognized or read text in notifications</source>
-        <translation type="obsolete">Vključi prepoznana ali prebrana besedila v obvestila</translation>
-    </message>
-    <message>
-        <source>Use system tray icon</source>
-        <translation type="obsolete">Uporabi ikono sistemskega pladnja</translation>
-    </message>
-    <message>
-        <source>Start minimized to the system tray</source>
-        <translation type="obsolete">Začni strnjeno v sistemskem pladnju</translation>
-    </message>
-    <message>
-        <source>Use custom graphical style</source>
-        <translation type="obsolete">Uporabi grafični slog po meri</translation>
-    </message>
-    <message>
-        <source>Graphical style</source>
-        <translation type="obsolete">Grafični slog</translation>
-    </message>
-    <message>
-        <source>Application graphical interface style.</source>
-        <translation type="obsolete">Grafični slog vmesnika aplikacije.</translation>
-    </message>
-    <message>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="obsolete">Spremenite, če opazite težave z napačnimi barvami pod temno temo.</translation>
-    </message>
-    <message>
-        <source>Audio input device</source>
-        <translation type="obsolete">Avdio vhodna naprava</translation>
-    </message>
-    <message>
-        <source>Select preferred audio input device.</source>
-        <translation type="obsolete">Izberite želeno avdio vhodno napravo.</translation>
-    </message>
-    <message>
-        <source>Listening mode</source>
-        <translation type="obsolete">Način poslušanja</translation>
-    </message>
-    <message>
-        <source>One sentence</source>
-        <translation type="obsolete">En stavek</translation>
-    </message>
-    <message>
-        <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="obsolete">S klikom na gumb %1 se začne poslušanje, ki se konča, ko je prepoznan prvi stavek.</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="obsolete">Poslušaj</translation>
-    </message>
-    <message>
-        <source>Press and hold</source>
-        <translation type="obsolete">Pritisnite in zadržite</translation>
-    </message>
-    <message>
-        <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="obsolete">Če pritisnete in držite gumb %1, omogočite poslušanje. Ko nehate držati, se poslušanje izklopi.</translation>
-    </message>
-    <message>
-        <source>Always on</source>
-        <translation type="obsolete">Vedno vklopljeno</translation>
-    </message>
-    <message>
-        <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="obsolete">Po kliku na gumb %1 je poslušanje vedno vklopljeno.</translation>
-    </message>
-    <message>
-        <source>Restore punctuation</source>
-        <translation type="obsolete">Obnovi ločila</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="obsolete">Omogoči napredno obnovitev ločil po razpoznavanju govora. Če želite, da deluje, se prepričajte, da ste omogočili model %1 za vaš jezik.</translation>
-    </message>
-    <message>
-        <source>Punctuation</source>
-        <translation type="obsolete">Ločila</translation>
-    </message>
-    <message>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="obsolete">Ko je ta možnost omogočena, inicializacija modela traja veliko dlje in poraba pomnilnika je veliko višja.</translation>
-    </message>
-    <message>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="obsolete">Ta možnost deluje samo z modeli, ki ne podpirajo ločil.</translation>
-    </message>
-    <message>
-        <source>To make %1 work, download %2 model.</source>
-        <translation type="obsolete">Da bi %1 deloval, prenesite model %2.</translation>
-    </message>
-    <message>
-        <source>Insert statistics</source>
-        <translation type="obsolete">Vstavi statistiko</translation>
-    </message>
-    <message>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="obsolete">V besedilo vstavi informacije, povezane z obdelavo, kot sta čas obdelave in dolžina zvoka.</translation>
-    </message>
-    <message>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna za primerjavo delovanja različnih modelov, strojev in njihovih parametrov.</translation>
-    </message>
-    <message>
-        <source>This option does not work with all engines.</source>
-        <translation type="obsolete">Ta možnost ne deluje pri vseh strojih.</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation type="obsolete">Podnapisi</translation>
-    </message>
-    <message>
-        <source>Minimum segment duration</source>
-        <translation type="obsolete">Najmanjše trajanje segmenta</translation>
-    </message>
-    <message>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="obsolete">Nastavi minimalno trajanje (v sekundah) segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation type="obsolete">Ta možnost deluje samo z modeli %1 in %2.</translation>
-    </message>
-    <message>
-        <source>Break text lines</source>
-        <translation type="obsolete">Prelomi vrstice besedila</translation>
-    </message>
-    <message>
-        <source>Minimum line length</source>
-        <translation type="obsolete">Najmanjša dolžina vrstice</translation>
-    </message>
-    <message>
-        <source>Maximum line length</source>
-        <translation type="obsolete">Največja dolžina vrstice</translation>
-    </message>
-    <message>
-        <source>Engine options</source>
-        <translation type="obsolete">Možnosti stroja</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">Po meri</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Število sočasnih niti</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Nastavi največje število hkratnih niti CPE.</translation>
-    </message>
-    <message>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="obsolete">Ni nujno, da višja vrednost pospeši dekodiranje.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Ponastavi</translation>
-    </message>
-    <message>
-        <source>Beam search width</source>
-        <translation type="obsolete">Širina iskanja snopa</translation>
-    </message>
-    <message>
-        <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="obsolete">Višja vrednost lahko izboljša kakovost, vendar se lahko podaljša tudi čas dekodiranja.</translation>
-    </message>
-    <message>
-        <source>Audio context size</source>
-        <translation type="obsolete">Velikost zvočnega konteksta</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="obsolete">Ko je nastavljen %1, se velikost dinamično prilagaja za vsak zvočni del.</translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamično</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="obsolete">Ko je nastavljen %1, se uporablja privzeta fiksna velikost.</translation>
-    </message>
-    <message>
-        <source>To define a custom size, use the %1 option.</source>
-        <translation type="obsolete">Če želite določiti velikost po meri, uporabite možnost %1.</translation>
-    </message>
-    <message>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="obsolete">Manjša vrednost pospeši dekodiranje, vendar lahko negativno vpliva na natančnost.</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation type="obsolete">Velikost</translation>
-    </message>
-    <message>
-        <source>Use Flash Attention</source>
-        <translation type="obsolete">Uporabite Flash Attention</translation>
-    </message>
-    <message>
-        <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="obsolete">Flash Attention lahko skrajša čas dekodiranja pri uporabi pospeševanja GPU.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems.</source>
-        <translation type="obsolete">Onemogočite to možnost, če opazite težave.</translation>
-    </message>
-    <message>
-        <source>Use %1 model for automatic language detection</source>
-        <translation type="obsolete">Za samodejno zaznavanje jezika uporabite model %1</translation>
-    </message>
-    <message>
-        <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="obsolete">Pri samodejnem zaznavanju jezika se namesto izbranega modela uporabi model %1.</translation>
-    </message>
-    <message>
-        <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="obsolete">To skrajša čas obdelave, vendar je lahko samodejno zaznan jezik napačen.</translation>
-    </message>
-    <message>
-        <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="obsolete">Obnovite diakritične znake pred sintezo govora</translation>
-    </message>
-    <message>
-        <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="obsolete">To deluje samo za arabski in hebrejski jezik.</translation>
-    </message>
-    <message>
-        <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="obsolete">Obnovitev diakritičnih znakov za hebrejski jezik ni na voljo.</translation>
-    </message>
-    <message>
-        <source>Split text into sentences</source>
-        <translation type="obsolete">Razdeli besedilo na stavke</translation>
-    </message>
-    <message>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="obsolete">Besedilo bo razdeljeno na stavke in vzporedno bo izvedena sinteza govora za vsak stavek.</translation>
-    </message>
-    <message>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">To pospeši branje, vendar je pri nekaterih modelih lahko zmanjšana naravnost govora.</translation>
-    </message>
-    <message>
-        <source>Use engine speed control</source>
-        <translation type="obsolete">Uporabite nadzor hitrosti stroja</translation>
-    </message>
-    <message>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="obsolete">Če stroj TTS podpira nadzor hitrosti, bo uporabljen.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="obsolete">Ko je ta možnost onemogočena, se hitrost spreminja med naknadno obdelavo zvoka.</translation>
-    </message>
-    <message>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">Dejanska hitrost po naknadni obdelavi zvoka je veliko bolj predvidljiva, vendar se lahko zmanjša naravnost govora.</translation>
-    </message>
-    <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="87"/>
         <source>Use control tags</source>
-        <translation type="obsolete">Uporabi kontrolne oznake</translation>
+        <translation>Uporabi kontrolne oznake</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="96"/>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="105"/>
         <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="obsolete">Kontrolne oznake vam omogočajo dinamično spreminjanje hitrosti sintetiziranega besedila ali dodajanje tišine med stavki.</translation>
+        <translation>Kontrolne oznake vam omogočajo dinamično spreminjanje hitrosti sintetiziranega besedila ali dodajanje tišine med stavki.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="97"/>
         <source>When this option is disabled, tags are ignored.</source>
-        <translation type="obsolete">Ko je ta možnost onemogočena, so oznake prezrte.</translation>
+        <translation>Ko je ta možnost onemogočena, so oznake prezrte.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="106"/>
         <source>To use control tags, insert %1 into the text.</source>
-        <translation type="obsolete">Če želite uporabiti kontrolne oznake, v besedilo vstavite %1.</translation>
+        <translation>Če želite uporabiti kontrolne oznake, v besedilo vstavite %1.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="108"/>
         <source>The following control tags are currently supported:</source>
-        <translation type="obsolete">Trenutno so podprte naslednje kontrolne oznake:</translation>
+        <translation>Trenutno so podprte naslednje kontrolne oznake:</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="110"/>
         <source>Changes speed.</source>
-        <translation type="obsolete">Spremeni hitrost.</translation>
+        <translation>Spremeni hitrost.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="110"/>
         <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="obsolete">%1 je število s plavajočo vejico v območju od 0,1 do 2,0.</translation>
+        <translation>%1 je število s plavajočo vejico v območju od 0,1 do 2,0.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="111"/>
         <source>Inserts silence.</source>
-        <translation type="obsolete">Vstavi tišino.</translation>
+        <translation>Vstavi tišino.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsTtsPage.qml" line="111"/>
         <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="obsolete">%1 je število s plavajočo vejico in %2 je ime enote (%3).</translation>
+        <translation>%1 je število s plavajočo vejico in %2 je ime enote (%3).</translation>
     </message>
     <message>
-        <source>Sync speech with timestamps</source>
-        <translation type="obsolete">Sinhronizacija govora s časovnimi žigi</translation>
-    </message>
-    <message>
-        <source>Don&apos;t sync</source>
-        <translation type="obsolete">Ne sinhroniziraj</translation>
-    </message>
-    <message>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="obsolete">Časovne žige s podnapisi se ne upoštevajo pri branju ali izvozu v datoteko.</translation>
-    </message>
-    <message>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="obsolete">Sinhroniziraj, a ne prilagajaj hitrosti</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige.</translation>
-    </message>
-    <message>
-        <source>Sync and increase speed to fit</source>
-        <translation type="obsolete">Sinhroniziraj in povečaj hitrost, da se uskladi</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige. Hitrost se samodejno prilagodi tako, da trajanje govora ni nikoli daljše od trajanja segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="obsolete">Sinhroniziraj in povečaj ali zmanjšaj hitrost do prileganja</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige. Hitrost se samodejno prilagaja tako, da je trajanje govora popolnoma enako kot trajanje segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="obsolete">Ko je nastavljen format besedila podnapisov SRT, je spreminjanje hitrosti govora onemogočeno, ker bo hitrost samodejno prilagojena.</translation>
-    </message>
-    <message>
-        <source>Use global keyboard shortcuts</source>
-        <translation type="obsolete">Uporabi globalne bližnjice na tipkovnici</translation>
-    </message>
-    <message>
-        <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="obsolete">Bližnjice vam omogočajo, da zaganjate ali ustavljate poslušanje in branje s tipkovnico.</translation>
-    </message>
-    <message>
-        <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="obsolete">Rezultat govora v besedilo je mogoče dodati trenutni opombi, vstaviti v katero koli aktivno okno (trenutno v fokusu) ali kopirati v odložišče.</translation>
-    </message>
-    <message>
-        <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="obsolete">Branje besedila v govor je lahko iz trenutne opombe ali iz besedila v odložišču.</translation>
-    </message>
-    <message>
-        <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="obsolete">Bližnjice na tipkovnici delujejo tudi, ko aplikacija ni aktivna (npr. strnjena ali v ozadju).</translation>
-    </message>
-    <message>
-        <source>This feature only works under X11.</source>
-        <translation type="obsolete">Ta zmožnost deluje samo pod X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="obsolete">Preklopi vedenje</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="obsolete">Bližnjice za začetek poslušanja/branja prav tako ustavijo poslušanje/branje, če se sprožijo, ko je poslušanje/branje aktivno.</translation>
-    </message>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Začni poslušati</translation>
-    </message>
-    <message>
-        <source>Start listening, text to clipboard</source>
-        <translation type="obsolete">Začni poslušati, besedilo na odložišče</translation>
-    </message>
-    <message>
-        <source>Stop listening</source>
-        <translation type="obsolete">Nehaj poslušati</translation>
-    </message>
-    <message>
-        <source>Start reading</source>
-        <translation type="obsolete">Začni brati</translation>
-    </message>
-    <message>
-        <source>Start reading text from clipboard</source>
-        <translation type="obsolete">Začni brati besedilo iz odložišča</translation>
-    </message>
-    <message>
-        <source>Pause/Resume reading</source>
-        <translation type="obsolete">Premor/nadaljuj branje</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Prekliči</translation>
-    </message>
-    <message>
-        <source>Switch to next STT model</source>
-        <translation type="obsolete">Preklopi na naslednji model STT</translation>
-    </message>
-    <message>
-        <source>Switch to previous STT model</source>
-        <translation type="obsolete">Preklopi na prejšnji model STT</translation>
-    </message>
-    <message>
-        <source>Switch to next TTS model</source>
-        <translation type="obsolete">Preklopi na naslednji model TTS</translation>
-    </message>
-    <message>
-        <source>Switch to previous TTS model</source>
-        <translation type="obsolete">Preklopi na prejšnji model TTS</translation>
-    </message>
-    <message>
-        <source>Allow external applications to invoke actions</source>
-        <translation type="obsolete">Dovoli zunanjim aplikacijam, da prikličejo dejanja</translation>
-    </message>
-    <message>
-        <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Dejanje omogoča zunanji aplikaciji, da prikliče določeno operacijo, ko se %1 izvaja.</translation>
-    </message>
-    <message>
-        <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Dejanje omogoča zunanji aplikaciji, da pokliče določeno operacijo, ko se %1 izvaja.</translation>
-    </message>
-    <message>
-        <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="obsolete">Dejanje je mogoče sprožiti prek klica DBus ali z možnostjo ukazne vrstice.</translation>
-    </message>
-    <message>
-        <source>The following actions are currently supported:</source>
-        <translation type="obsolete">Trenutno so podprta naslednja dejanja:</translation>
-    </message>
-    <message>
-        <source>Starts listening.</source>
-        <translation type="obsolete">Začne poslušati.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="obsolete">Začne poslušati. Dekodirano besedilo se vstavi v aktivno okno.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="obsolete">Začne poslušati. Dekodirano besedilo se kopira v odložišče.</translation>
-    </message>
-    <message>
-        <source>Stops listening. The already captured voice is decoded into text.</source>
-        <translation type="obsolete">Neha poslušati. Že zajeti glas se dekodira v besedilo.</translation>
-    </message>
-    <message>
-        <source>Starts reading.</source>
-        <translation type="obsolete">Začne brati.</translation>
-    </message>
-    <message>
-        <source>Starts reading text from the clipboard.</source>
-        <translation type="obsolete">Začne brati besedilo iz odložišča.</translation>
-    </message>
-    <message>
-        <source>Pauses or resumes reading.</source>
-        <translation type="obsolete">Začasno ustavi ali nadaljuje branje.</translation>
-    </message>
-    <message>
-        <source>Cancels any of the above operations.</source>
-        <translation type="obsolete">Prekliče katero koli od zgornjih operacij.</translation>
-    </message>
-    <message>
-        <source>Switches to next STT model.</source>
-        <translation type="obsolete">Preklopi na naslednji model STT.</translation>
-    </message>
-    <message>
-        <source>Switches to previous STT model.</source>
-        <translation type="obsolete">Preklopi na prejšnji model STT.</translation>
-    </message>
-    <message>
-        <source>Switches to next TTS model.</source>
-        <translation type="obsolete">Preklopi na naslednji model TTS.</translation>
-    </message>
-    <message>
-        <source>Switches to previous TTS model.</source>
-        <translation type="obsolete">Preklopi na prejšnji model TTS.</translation>
-    </message>
-    <message>
-        <source>Sets STT model.</source>
-        <translation type="obsolete">Nastavi model STT.</translation>
-    </message>
-    <message>
-        <source>Sets TTS model.</source>
-        <translation type="obsolete">Nastavi model TTS.</translation>
-    </message>
-    <message>
-        <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="obsolete">Če želite na primer sprožiti dejanje %1, izvedite naslednji ukaz: %2.</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="obsolete">Shranjevanje</translation>
-    </message>
-    <message>
-        <source>Location of language files</source>
-        <translation type="obsolete">Lokacije jezikovnih datotek</translation>
-    </message>
-    <message>
-        <source>Directory where language files are downloaded to and stored.</source>
-        <translation type="obsolete">Imenik, kamor so prenesene jezikovne datoteke in shranjene.</translation>
-    </message>
-    <message>
-        <source>Clear cache on close</source>
-        <translation type="obsolete">Počisti predpomnilnik ob zaprtju</translation>
-    </message>
-    <message>
-        <source>When closing, delete all cached audio files.</source>
-        <translation type="obsolete">Ob zapiranju izbriši vse predpomnjene zvočne datoteke.</translation>
-    </message>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Razpoložljivost izbirnih funkcij</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="obsolete">Skrij napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="obsolete">Prikaži napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Možnosti procesorja</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Avto</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Možnosti strojnega pospeševanja</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uporabi %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Onemogoči to možnost, če opazite težave pri zagonu aplikacije.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Preglasi različico GPE</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Preglasi različico AMD GPU.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Omogoči to možnost, če opazite težave pri uporabi pospeševanja GPE z grafično kartico AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Različica</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Vrednost ima enak učinek kot spremenljivka okolja %1.</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Sestavi datoteko</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">Datoteka za sestavljanje X11, uporabljena v %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Vstavi v aktivno okno</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Knjižnice</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Uporabite knjižnice Pythona</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Preverite prisotnost zahtevanih knjižnic Pythona.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Lokacija knjižnic Pythona</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Imenik knjižnic Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Če želite uporabiti privzeto vrednost, pustite prazno.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna, če za upravljanje knjižnic Python uporabljate modul %1.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Shrani</translation>
-    </message>
-    <message>
-        <source>Select Directory</source>
-        <translation type="obsolete">Izberi Imenik</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsSttPage</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Nastavitve</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="obsolete">Uporabniški vmesnik</translation>
-    </message>
-    <message>
-        <source>Speech to Text</source>
-        <translation type="obsolete">Govor v besedilo</translation>
-    </message>
-    <message>
-        <source>Text to Speech</source>
-        <translation type="obsolete">Besedilo v govor</translation>
-    </message>
-    <message>
-        <source>Accessibility</source>
-        <translation type="obsolete">Dostopnost</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Drugo</translation>
-    </message>
-    <message>
-        <source>Remember the last note</source>
-        <translation type="obsolete">Zapomni si zadnjo opombo</translation>
-    </message>
-    <message>
-        <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="obsolete">Opomba bo samodejno shranjena, tako da bo ob ponovnem zagonu aplikacije vaša zadnja opomba vedno na voljo.</translation>
-    </message>
-    <message>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="obsolete">Ko je omogočeno, se v glavni orodni vrstici prikaže meni z možnostmi popravka besedila.</translation>
-    </message>
-    <message>
-        <source>File import action</source>
-        <translation type="obsolete">Dejanje uvoza datoteke</translation>
-    </message>
-    <message>
-        <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="obsolete">Dejanje pri uvozu opombe iz datoteke. Uvoženo besedilo lahko dodate obstoječi opombi ali zamenjate obstoječo opombo.</translation>
-    </message>
-    <message>
-        <source>Ask whether to add or replace</source>
-        <translation type="obsolete">Vprašaj, ali želite dodati ali zamenjati</translation>
-    </message>
-    <message>
-        <source>Add to an existing note</source>
-        <translation type="obsolete">Dodaj k obstoječi opombi</translation>
-    </message>
-    <message>
-        <source>Replace an existing note</source>
-        <translation type="obsolete">Zamenjaj obstoječo opombo</translation>
-    </message>
-    <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="21"/>
         <source>Font in text editor</source>
-        <translation type="obsolete">Pisava v urejevalniku besedila</translation>
+        <translation>Pisava v urejevalniku besedila</translation>
     </message>
     <message>
-        <source>Default</source>
-        <translation type="obsolete">Privzeto</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="obsolete">Spremeni</translation>
-    </message>
-    <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="41"/>
         <source>Please choose a font</source>
-        <translation type="obsolete">Izberite pisavo</translation>
+        <translation>Izberite pisavo</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="49"/>
         <source>Show desktop notification</source>
-        <translation type="obsolete">Prikaži namizno obvestilo</translation>
+        <translation>Prikaži namizno obvestilo</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="50"/>
         <source>Show desktop notification while reading or listening.</source>
-        <translation type="obsolete">Prikaži obvestilo o namizju med branjem ali poslušanjem.</translation>
+        <translation>Prikaži obvestilo o namizju med branjem ali poslušanjem.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="61"/>
         <source>Never</source>
-        <translation type="obsolete">Nikoli</translation>
+        <translation>Nikoli</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="62"/>
         <source>When in background</source>
-        <translation type="obsolete">Ko je v ozadju</translation>
+        <translation>Ko je v ozadju</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="63"/>
         <source>Always</source>
-        <translation type="obsolete">Vedno</translation>
+        <translation>Vedno</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="81"/>
         <source>Include recognized or read text in notifications</source>
-        <translation type="obsolete">Vključi prepoznana ali prebrana besedila v obvestila</translation>
+        <translation>Vključi prepoznana ali prebrana besedila v obvestila</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="89"/>
         <source>Use system tray icon</source>
-        <translation type="obsolete">Uporabi ikono sistemskega pladnja</translation>
+        <translation>Uporabi ikono sistemskega pladnja</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="99"/>
         <source>Start minimized to the system tray</source>
-        <translation type="obsolete">Začni strnjeno v sistemskem pladnju</translation>
+        <translation>Začni strnjeno v sistemskem pladnju</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="107"/>
         <source>Use custom graphical style</source>
-        <translation type="obsolete">Uporabi grafični slog po meri</translation>
+        <translation>Uporabi grafični slog po meri</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="116"/>
         <source>Graphical style</source>
-        <translation type="obsolete">Grafični slog</translation>
+        <translation>Grafični slog</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="117"/>
         <source>Application graphical interface style.</source>
-        <translation type="obsolete">Grafični slog vmesnika aplikacije.</translation>
+        <translation>Grafični slog vmesnika aplikacije.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/SettingsUiPage.qml" line="118"/>
         <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="obsolete">Spremenite, če opazite težave z napačnimi barvami pod temno temo.</translation>
-    </message>
-    <message>
-        <source>Audio input device</source>
-        <translation type="obsolete">Avdio vhodna naprava</translation>
-    </message>
-    <message>
-        <source>Select preferred audio input device.</source>
-        <translation type="obsolete">Izberite želeno avdio vhodno napravo.</translation>
-    </message>
-    <message>
-        <source>Listening mode</source>
-        <translation type="obsolete">Način poslušanja</translation>
-    </message>
-    <message>
-        <source>One sentence</source>
-        <translation type="obsolete">En stavek</translation>
-    </message>
-    <message>
-        <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="obsolete">S klikom na gumb %1 se začne poslušanje, ki se konča, ko je prepoznan prvi stavek.</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="obsolete">Poslušaj</translation>
-    </message>
-    <message>
-        <source>Press and hold</source>
-        <translation type="obsolete">Pritisnite in zadržite</translation>
-    </message>
-    <message>
-        <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="obsolete">Če pritisnete in držite gumb %1, omogočite poslušanje. Ko nehate držati, se poslušanje izklopi.</translation>
-    </message>
-    <message>
-        <source>Always on</source>
-        <translation type="obsolete">Vedno vklopljeno</translation>
-    </message>
-    <message>
-        <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="obsolete">Po kliku na gumb %1 je poslušanje vedno vklopljeno.</translation>
-    </message>
-    <message>
-        <source>Restore punctuation</source>
-        <translation type="obsolete">Obnovi ločila</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="obsolete">Omogoči napredno obnovitev ločil po razpoznavanju govora. Če želite, da deluje, se prepričajte, da ste omogočili model %1 za vaš jezik.</translation>
-    </message>
-    <message>
-        <source>Punctuation</source>
-        <translation type="obsolete">Ločila</translation>
-    </message>
-    <message>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="obsolete">Ko je ta možnost omogočena, inicializacija modela traja veliko dlje in poraba pomnilnika je veliko višja.</translation>
-    </message>
-    <message>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="obsolete">Ta možnost deluje samo z modeli, ki ne podpirajo ločil.</translation>
-    </message>
-    <message>
-        <source>To make %1 work, download %2 model.</source>
-        <translation type="obsolete">Da bi %1 deloval, prenesite model %2.</translation>
-    </message>
-    <message>
-        <source>Insert statistics</source>
-        <translation type="obsolete">Vstavi statistiko</translation>
-    </message>
-    <message>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="obsolete">V besedilo vstavi informacije, povezane z obdelavo, kot sta čas obdelave in dolžina zvoka.</translation>
-    </message>
-    <message>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna za primerjavo delovanja različnih modelov, strojev in njihovih parametrov.</translation>
-    </message>
-    <message>
-        <source>This option does not work with all engines.</source>
-        <translation type="obsolete">Ta možnost ne deluje pri vseh strojih.</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation type="obsolete">Podnapisi</translation>
-    </message>
-    <message>
-        <source>Minimum segment duration</source>
-        <translation type="obsolete">Najmanjše trajanje segmenta</translation>
-    </message>
-    <message>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="obsolete">Nastavi minimalno trajanje (v sekundah) segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation type="obsolete">Ta možnost deluje samo z modeli %1 in %2.</translation>
-    </message>
-    <message>
-        <source>Break text lines</source>
-        <translation type="obsolete">Prelomi vrstice besedila</translation>
-    </message>
-    <message>
-        <source>Minimum line length</source>
-        <translation type="obsolete">Najmanjša dolžina vrstice</translation>
-    </message>
-    <message>
-        <source>Maximum line length</source>
-        <translation type="obsolete">Največja dolžina vrstice</translation>
-    </message>
-    <message>
-        <source>Engine options</source>
-        <translation type="obsolete">Možnosti stroja</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">Po meri</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Število sočasnih niti</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Nastavi največje število hkratnih niti CPE.</translation>
-    </message>
-    <message>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="obsolete">Ni nujno, da višja vrednost pospeši dekodiranje.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Ponastavi</translation>
-    </message>
-    <message>
-        <source>Beam search width</source>
-        <translation type="obsolete">Širina iskanja snopa</translation>
-    </message>
-    <message>
-        <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="obsolete">Višja vrednost lahko izboljša kakovost, vendar se lahko podaljša tudi čas dekodiranja.</translation>
-    </message>
-    <message>
-        <source>Audio context size</source>
-        <translation type="obsolete">Velikost zvočnega konteksta</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="obsolete">Ko je nastavljen %1, se velikost dinamično prilagaja za vsak zvočni del.</translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamično</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="obsolete">Ko je nastavljen %1, se uporablja privzeta fiksna velikost.</translation>
-    </message>
-    <message>
-        <source>To define a custom size, use the %1 option.</source>
-        <translation type="obsolete">Če želite določiti velikost po meri, uporabite možnost %1.</translation>
-    </message>
-    <message>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="obsolete">Manjša vrednost pospeši dekodiranje, vendar lahko negativno vpliva na natančnost.</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation type="obsolete">Velikost</translation>
-    </message>
-    <message>
-        <source>Use Flash Attention</source>
-        <translation type="obsolete">Uporabite Flash Attention</translation>
-    </message>
-    <message>
-        <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="obsolete">Flash Attention lahko skrajša čas dekodiranja pri uporabi pospeševanja GPU.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems.</source>
-        <translation type="obsolete">Onemogočite to možnost, če opazite težave.</translation>
-    </message>
-    <message>
-        <source>Use %1 model for automatic language detection</source>
-        <translation type="obsolete">Za samodejno zaznavanje jezika uporabite model %1</translation>
-    </message>
-    <message>
-        <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="obsolete">Pri samodejnem zaznavanju jezika se namesto izbranega modela uporabi model %1.</translation>
-    </message>
-    <message>
-        <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="obsolete">To skrajša čas obdelave, vendar je lahko samodejno zaznan jezik napačen.</translation>
-    </message>
-    <message>
-        <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="obsolete">Obnovite diakritične znake pred sintezo govora</translation>
-    </message>
-    <message>
-        <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="obsolete">To deluje samo za arabski in hebrejski jezik.</translation>
-    </message>
-    <message>
-        <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="obsolete">Obnovitev diakritičnih znakov za hebrejski jezik ni na voljo.</translation>
-    </message>
-    <message>
-        <source>Split text into sentences</source>
-        <translation type="obsolete">Razdeli besedilo na stavke</translation>
-    </message>
-    <message>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="obsolete">Besedilo bo razdeljeno na stavke in vzporedno bo izvedena sinteza govora za vsak stavek.</translation>
-    </message>
-    <message>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">To pospeši branje, vendar je pri nekaterih modelih lahko zmanjšana naravnost govora.</translation>
-    </message>
-    <message>
-        <source>Use engine speed control</source>
-        <translation type="obsolete">Uporabite nadzor hitrosti stroja</translation>
-    </message>
-    <message>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="obsolete">Če stroj TTS podpira nadzor hitrosti, bo uporabljen.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="obsolete">Ko je ta možnost onemogočena, se hitrost spreminja med naknadno obdelavo zvoka.</translation>
-    </message>
-    <message>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">Dejanska hitrost po naknadni obdelavi zvoka je veliko bolj predvidljiva, vendar se lahko zmanjša naravnost govora.</translation>
-    </message>
-    <message>
-        <source>Use control tags</source>
-        <translation type="obsolete">Uporabi kontrolne oznake</translation>
-    </message>
-    <message>
-        <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="obsolete">Kontrolne oznake vam omogočajo dinamično spreminjanje hitrosti sintetiziranega besedila ali dodajanje tišine med stavki.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation type="obsolete">Ko je ta možnost onemogočena, so oznake prezrte.</translation>
-    </message>
-    <message>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation type="obsolete">Če želite uporabiti kontrolne oznake, v besedilo vstavite %1.</translation>
-    </message>
-    <message>
-        <source>The following control tags are currently supported:</source>
-        <translation type="obsolete">Trenutno so podprte naslednje kontrolne oznake:</translation>
-    </message>
-    <message>
-        <source>Changes speed.</source>
-        <translation type="obsolete">Spremeni hitrost.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="obsolete">%1 je število s plavajočo vejico v območju od 0,1 do 2,0.</translation>
-    </message>
-    <message>
-        <source>Inserts silence.</source>
-        <translation type="obsolete">Vstavi tišino.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="obsolete">%1 je število s plavajočo vejico in %2 je ime enote (%3).</translation>
-    </message>
-    <message>
-        <source>Sync speech with timestamps</source>
-        <translation type="obsolete">Sinhronizacija govora s časovnimi žigi</translation>
-    </message>
-    <message>
-        <source>Don&apos;t sync</source>
-        <translation type="obsolete">Ne sinhroniziraj</translation>
-    </message>
-    <message>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="obsolete">Časovne žige s podnapisi se ne upoštevajo pri branju ali izvozu v datoteko.</translation>
-    </message>
-    <message>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="obsolete">Sinhroniziraj, a ne prilagajaj hitrosti</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige.</translation>
-    </message>
-    <message>
-        <source>Sync and increase speed to fit</source>
-        <translation type="obsolete">Sinhroniziraj in povečaj hitrost, da se uskladi</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige. Hitrost se samodejno prilagodi tako, da trajanje govora ni nikoli daljše od trajanja segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="obsolete">Sinhroniziraj in povečaj ali zmanjšaj hitrost do prileganja</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige. Hitrost se samodejno prilagaja tako, da je trajanje govora popolnoma enako kot trajanje segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="obsolete">Ko je nastavljen format besedila podnapisov SRT, je spreminjanje hitrosti govora onemogočeno, ker bo hitrost samodejno prilagojena.</translation>
-    </message>
-    <message>
-        <source>Use global keyboard shortcuts</source>
-        <translation type="obsolete">Uporabi globalne bližnjice na tipkovnici</translation>
-    </message>
-    <message>
-        <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="obsolete">Bližnjice vam omogočajo, da zaganjate ali ustavljate poslušanje in branje s tipkovnico.</translation>
-    </message>
-    <message>
-        <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="obsolete">Rezultat govora v besedilo je mogoče dodati trenutni opombi, vstaviti v katero koli aktivno okno (trenutno v fokusu) ali kopirati v odložišče.</translation>
-    </message>
-    <message>
-        <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="obsolete">Branje besedila v govor je lahko iz trenutne opombe ali iz besedila v odložišču.</translation>
-    </message>
-    <message>
-        <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="obsolete">Bližnjice na tipkovnici delujejo tudi, ko aplikacija ni aktivna (npr. strnjena ali v ozadju).</translation>
-    </message>
-    <message>
-        <source>This feature only works under X11.</source>
-        <translation type="obsolete">Ta zmožnost deluje samo pod X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="obsolete">Preklopi vedenje</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="obsolete">Bližnjice za začetek poslušanja/branja prav tako ustavijo poslušanje/branje, če se sprožijo, ko je poslušanje/branje aktivno.</translation>
-    </message>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Začni poslušati</translation>
-    </message>
-    <message>
-        <source>Start listening, text to clipboard</source>
-        <translation type="obsolete">Začni poslušati, besedilo na odložišče</translation>
-    </message>
-    <message>
-        <source>Stop listening</source>
-        <translation type="obsolete">Nehaj poslušati</translation>
-    </message>
-    <message>
-        <source>Start reading</source>
-        <translation type="obsolete">Začni brati</translation>
-    </message>
-    <message>
-        <source>Start reading text from clipboard</source>
-        <translation type="obsolete">Začni brati besedilo iz odložišča</translation>
-    </message>
-    <message>
-        <source>Pause/Resume reading</source>
-        <translation type="obsolete">Premor/nadaljuj branje</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Prekliči</translation>
-    </message>
-    <message>
-        <source>Switch to next STT model</source>
-        <translation type="obsolete">Preklopi na naslednji model STT</translation>
-    </message>
-    <message>
-        <source>Switch to previous STT model</source>
-        <translation type="obsolete">Preklopi na prejšnji model STT</translation>
-    </message>
-    <message>
-        <source>Switch to next TTS model</source>
-        <translation type="obsolete">Preklopi na naslednji model TTS</translation>
-    </message>
-    <message>
-        <source>Switch to previous TTS model</source>
-        <translation type="obsolete">Preklopi na prejšnji model TTS</translation>
-    </message>
-    <message>
-        <source>Allow external applications to invoke actions</source>
-        <translation type="obsolete">Dovoli zunanjim aplikacijam, da prikličejo dejanja</translation>
-    </message>
-    <message>
-        <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Dejanje omogoča zunanji aplikaciji, da prikliče določeno operacijo, ko se %1 izvaja.</translation>
-    </message>
-    <message>
-        <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Dejanje omogoča zunanji aplikaciji, da pokliče določeno operacijo, ko se %1 izvaja.</translation>
-    </message>
-    <message>
-        <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="obsolete">Dejanje je mogoče sprožiti prek klica DBus ali z možnostjo ukazne vrstice.</translation>
-    </message>
-    <message>
-        <source>The following actions are currently supported:</source>
-        <translation type="obsolete">Trenutno so podprta naslednja dejanja:</translation>
-    </message>
-    <message>
-        <source>Starts listening.</source>
-        <translation type="obsolete">Začne poslušati.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="obsolete">Začne poslušati. Dekodirano besedilo se vstavi v aktivno okno.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="obsolete">Začne poslušati. Dekodirano besedilo se kopira v odložišče.</translation>
-    </message>
-    <message>
-        <source>Stops listening. The already captured voice is decoded into text.</source>
-        <translation type="obsolete">Neha poslušati. Že zajeti glas se dekodira v besedilo.</translation>
-    </message>
-    <message>
-        <source>Starts reading.</source>
-        <translation type="obsolete">Začne brati.</translation>
-    </message>
-    <message>
-        <source>Starts reading text from the clipboard.</source>
-        <translation type="obsolete">Začne brati besedilo iz odložišča.</translation>
-    </message>
-    <message>
-        <source>Pauses or resumes reading.</source>
-        <translation type="obsolete">Začasno ustavi ali nadaljuje branje.</translation>
-    </message>
-    <message>
-        <source>Cancels any of the above operations.</source>
-        <translation type="obsolete">Prekliče katero koli od zgornjih operacij.</translation>
-    </message>
-    <message>
-        <source>Switches to next STT model.</source>
-        <translation type="obsolete">Preklopi na naslednji model STT.</translation>
-    </message>
-    <message>
-        <source>Switches to previous STT model.</source>
-        <translation type="obsolete">Preklopi na prejšnji model STT.</translation>
-    </message>
-    <message>
-        <source>Switches to next TTS model.</source>
-        <translation type="obsolete">Preklopi na naslednji model TTS.</translation>
-    </message>
-    <message>
-        <source>Switches to previous TTS model.</source>
-        <translation type="obsolete">Preklopi na prejšnji model TTS.</translation>
-    </message>
-    <message>
-        <source>Sets STT model.</source>
-        <translation type="obsolete">Nastavi model STT.</translation>
-    </message>
-    <message>
-        <source>Sets TTS model.</source>
-        <translation type="obsolete">Nastavi model TTS.</translation>
-    </message>
-    <message>
-        <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="obsolete">Če želite na primer sprožiti dejanje %1, izvedite naslednji ukaz: %2.</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="obsolete">Shranjevanje</translation>
-    </message>
-    <message>
-        <source>Location of language files</source>
-        <translation type="obsolete">Lokacije jezikovnih datotek</translation>
-    </message>
-    <message>
-        <source>Directory where language files are downloaded to and stored.</source>
-        <translation type="obsolete">Imenik, kamor so prenesene jezikovne datoteke in shranjene.</translation>
-    </message>
-    <message>
-        <source>Clear cache on close</source>
-        <translation type="obsolete">Počisti predpomnilnik ob zaprtju</translation>
-    </message>
-    <message>
-        <source>When closing, delete all cached audio files.</source>
-        <translation type="obsolete">Ob zapiranju izbriši vse predpomnjene zvočne datoteke.</translation>
-    </message>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Razpoložljivost izbirnih funkcij</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="obsolete">Skrij napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="obsolete">Prikaži napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Možnosti procesorja</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Avto</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Možnosti strojnega pospeševanja</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uporabi %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Onemogoči to možnost, če opazite težave pri zagonu aplikacije.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Preglasi različico GPE</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Preglasi različico AMD GPU.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Omogoči to možnost, če opazite težave pri uporabi pospeševanja GPE z grafično kartico AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Različica</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Vrednost ima enak učinek kot spremenljivka okolja %1.</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Sestavi datoteko</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">Datoteka za sestavljanje X11, uporabljena v %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Vstavi v aktivno okno</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Knjižnice</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Uporabite knjižnice Pythona</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Preverite prisotnost zahtevanih knjižnic Pythona.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Lokacija knjižnic Pythona</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Imenik knjižnic Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Če želite uporabiti privzeto vrednost, pustite prazno.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna, če za upravljanje knjižnic Python uporabljate modul %1.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Shrani</translation>
-    </message>
-    <message>
-        <source>Select Directory</source>
-        <translation type="obsolete">Izberi Imenik</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsTtsPage</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Nastavitve</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="obsolete">Uporabniški vmesnik</translation>
-    </message>
-    <message>
-        <source>Speech to Text</source>
-        <translation type="obsolete">Govor v besedilo</translation>
-    </message>
-    <message>
-        <source>Text to Speech</source>
-        <translation type="obsolete">Besedilo v govor</translation>
-    </message>
-    <message>
-        <source>Accessibility</source>
-        <translation type="obsolete">Dostopnost</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Drugo</translation>
-    </message>
-    <message>
-        <source>Remember the last note</source>
-        <translation type="obsolete">Zapomni si zadnjo opombo</translation>
-    </message>
-    <message>
-        <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="obsolete">Opomba bo samodejno shranjena, tako da bo ob ponovnem zagonu aplikacije vaša zadnja opomba vedno na voljo.</translation>
-    </message>
-    <message>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="obsolete">Ko je omogočeno, se v glavni orodni vrstici prikaže meni z možnostmi popravka besedila.</translation>
-    </message>
-    <message>
-        <source>File import action</source>
-        <translation type="obsolete">Dejanje uvoza datoteke</translation>
-    </message>
-    <message>
-        <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="obsolete">Dejanje pri uvozu opombe iz datoteke. Uvoženo besedilo lahko dodate obstoječi opombi ali zamenjate obstoječo opombo.</translation>
-    </message>
-    <message>
-        <source>Ask whether to add or replace</source>
-        <translation type="obsolete">Vprašaj, ali želite dodati ali zamenjati</translation>
-    </message>
-    <message>
-        <source>Add to an existing note</source>
-        <translation type="obsolete">Dodaj k obstoječi opombi</translation>
-    </message>
-    <message>
-        <source>Replace an existing note</source>
-        <translation type="obsolete">Zamenjaj obstoječo opombo</translation>
-    </message>
-    <message>
-        <source>Font in text editor</source>
-        <translation type="obsolete">Pisava v urejevalniku besedila</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Privzeto</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="obsolete">Spremeni</translation>
-    </message>
-    <message>
-        <source>Please choose a font</source>
-        <translation type="obsolete">Izberite pisavo</translation>
-    </message>
-    <message>
-        <source>Show desktop notification</source>
-        <translation type="obsolete">Prikaži namizno obvestilo</translation>
-    </message>
-    <message>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation type="obsolete">Prikaži obvestilo o namizju med branjem ali poslušanjem.</translation>
-    </message>
-    <message>
-        <source>Never</source>
-        <translation type="obsolete">Nikoli</translation>
-    </message>
-    <message>
-        <source>When in background</source>
-        <translation type="obsolete">Ko je v ozadju</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Vedno</translation>
-    </message>
-    <message>
-        <source>Include recognized or read text in notifications</source>
-        <translation type="obsolete">Vključi prepoznana ali prebrana besedila v obvestila</translation>
-    </message>
-    <message>
-        <source>Use system tray icon</source>
-        <translation type="obsolete">Uporabi ikono sistemskega pladnja</translation>
-    </message>
-    <message>
-        <source>Start minimized to the system tray</source>
-        <translation type="obsolete">Začni strnjeno v sistemskem pladnju</translation>
-    </message>
-    <message>
-        <source>Use custom graphical style</source>
-        <translation type="obsolete">Uporabi grafični slog po meri</translation>
-    </message>
-    <message>
-        <source>Graphical style</source>
-        <translation type="obsolete">Grafični slog</translation>
-    </message>
-    <message>
-        <source>Application graphical interface style.</source>
-        <translation type="obsolete">Grafični slog vmesnika aplikacije.</translation>
-    </message>
-    <message>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="obsolete">Spremenite, če opazite težave z napačnimi barvami pod temno temo.</translation>
-    </message>
-    <message>
-        <source>Audio input device</source>
-        <translation type="obsolete">Avdio vhodna naprava</translation>
-    </message>
-    <message>
-        <source>Select preferred audio input device.</source>
-        <translation type="obsolete">Izberite želeno avdio vhodno napravo.</translation>
-    </message>
-    <message>
-        <source>Listening mode</source>
-        <translation type="obsolete">Način poslušanja</translation>
-    </message>
-    <message>
-        <source>One sentence</source>
-        <translation type="obsolete">En stavek</translation>
-    </message>
-    <message>
-        <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="obsolete">S klikom na gumb %1 se začne poslušanje, ki se konča, ko je prepoznan prvi stavek.</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="obsolete">Poslušaj</translation>
-    </message>
-    <message>
-        <source>Press and hold</source>
-        <translation type="obsolete">Pritisnite in zadržite</translation>
-    </message>
-    <message>
-        <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="obsolete">Če pritisnete in držite gumb %1, omogočite poslušanje. Ko nehate držati, se poslušanje izklopi.</translation>
-    </message>
-    <message>
-        <source>Always on</source>
-        <translation type="obsolete">Vedno vklopljeno</translation>
-    </message>
-    <message>
-        <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="obsolete">Po kliku na gumb %1 je poslušanje vedno vklopljeno.</translation>
-    </message>
-    <message>
-        <source>Restore punctuation</source>
-        <translation type="obsolete">Obnovi ločila</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="obsolete">Omogoči napredno obnovitev ločil po razpoznavanju govora. Če želite, da deluje, se prepričajte, da ste omogočili model %1 za vaš jezik.</translation>
-    </message>
-    <message>
-        <source>Punctuation</source>
-        <translation type="obsolete">Ločila</translation>
-    </message>
-    <message>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="obsolete">Ko je ta možnost omogočena, inicializacija modela traja veliko dlje in poraba pomnilnika je veliko višja.</translation>
-    </message>
-    <message>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="obsolete">Ta možnost deluje samo z modeli, ki ne podpirajo ločil.</translation>
-    </message>
-    <message>
-        <source>To make %1 work, download %2 model.</source>
-        <translation type="obsolete">Da bi %1 deloval, prenesite model %2.</translation>
-    </message>
-    <message>
-        <source>Insert statistics</source>
-        <translation type="obsolete">Vstavi statistiko</translation>
-    </message>
-    <message>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="obsolete">V besedilo vstavi informacije, povezane z obdelavo, kot sta čas obdelave in dolžina zvoka.</translation>
-    </message>
-    <message>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna za primerjavo delovanja različnih modelov, strojev in njihovih parametrov.</translation>
-    </message>
-    <message>
-        <source>This option does not work with all engines.</source>
-        <translation type="obsolete">Ta možnost ne deluje pri vseh strojih.</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation type="obsolete">Podnapisi</translation>
-    </message>
-    <message>
-        <source>Minimum segment duration</source>
-        <translation type="obsolete">Najmanjše trajanje segmenta</translation>
-    </message>
-    <message>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="obsolete">Nastavi minimalno trajanje (v sekundah) segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation type="obsolete">Ta možnost deluje samo z modeli %1 in %2.</translation>
-    </message>
-    <message>
-        <source>Break text lines</source>
-        <translation type="obsolete">Prelomi vrstice besedila</translation>
-    </message>
-    <message>
-        <source>Minimum line length</source>
-        <translation type="obsolete">Najmanjša dolžina vrstice</translation>
-    </message>
-    <message>
-        <source>Maximum line length</source>
-        <translation type="obsolete">Največja dolžina vrstice</translation>
-    </message>
-    <message>
-        <source>Engine options</source>
-        <translation type="obsolete">Možnosti stroja</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">Po meri</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Število sočasnih niti</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Nastavi največje število hkratnih niti CPE.</translation>
-    </message>
-    <message>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="obsolete">Ni nujno, da višja vrednost pospeši dekodiranje.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Ponastavi</translation>
-    </message>
-    <message>
-        <source>Beam search width</source>
-        <translation type="obsolete">Širina iskanja snopa</translation>
-    </message>
-    <message>
-        <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="obsolete">Višja vrednost lahko izboljša kakovost, vendar se lahko podaljša tudi čas dekodiranja.</translation>
-    </message>
-    <message>
-        <source>Audio context size</source>
-        <translation type="obsolete">Velikost zvočnega konteksta</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="obsolete">Ko je nastavljen %1, se velikost dinamično prilagaja za vsak zvočni del.</translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamično</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="obsolete">Ko je nastavljen %1, se uporablja privzeta fiksna velikost.</translation>
-    </message>
-    <message>
-        <source>To define a custom size, use the %1 option.</source>
-        <translation type="obsolete">Če želite določiti velikost po meri, uporabite možnost %1.</translation>
-    </message>
-    <message>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="obsolete">Manjša vrednost pospeši dekodiranje, vendar lahko negativno vpliva na natančnost.</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation type="obsolete">Velikost</translation>
-    </message>
-    <message>
-        <source>Use Flash Attention</source>
-        <translation type="obsolete">Uporabite Flash Attention</translation>
-    </message>
-    <message>
-        <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="obsolete">Flash Attention lahko skrajša čas dekodiranja pri uporabi pospeševanja GPU.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems.</source>
-        <translation type="obsolete">Onemogočite to možnost, če opazite težave.</translation>
-    </message>
-    <message>
-        <source>Use %1 model for automatic language detection</source>
-        <translation type="obsolete">Za samodejno zaznavanje jezika uporabite model %1</translation>
-    </message>
-    <message>
-        <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="obsolete">Pri samodejnem zaznavanju jezika se namesto izbranega modela uporabi model %1.</translation>
-    </message>
-    <message>
-        <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="obsolete">To skrajša čas obdelave, vendar je lahko samodejno zaznan jezik napačen.</translation>
-    </message>
-    <message>
-        <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="obsolete">Obnovite diakritične znake pred sintezo govora</translation>
-    </message>
-    <message>
-        <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="obsolete">To deluje samo za arabski in hebrejski jezik.</translation>
-    </message>
-    <message>
-        <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="obsolete">Obnovitev diakritičnih znakov za hebrejski jezik ni na voljo.</translation>
-    </message>
-    <message>
-        <source>Split text into sentences</source>
-        <translation type="obsolete">Razdeli besedilo na stavke</translation>
-    </message>
-    <message>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="obsolete">Besedilo bo razdeljeno na stavke in vzporedno bo izvedena sinteza govora za vsak stavek.</translation>
-    </message>
-    <message>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">To pospeši branje, vendar je pri nekaterih modelih lahko zmanjšana naravnost govora.</translation>
-    </message>
-    <message>
-        <source>Use engine speed control</source>
-        <translation type="obsolete">Uporabite nadzor hitrosti stroja</translation>
-    </message>
-    <message>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="obsolete">Če stroj TTS podpira nadzor hitrosti, bo uporabljen.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="obsolete">Ko je ta možnost onemogočena, se hitrost spreminja med naknadno obdelavo zvoka.</translation>
-    </message>
-    <message>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">Dejanska hitrost po naknadni obdelavi zvoka je veliko bolj predvidljiva, vendar se lahko zmanjša naravnost govora.</translation>
-    </message>
-    <message>
-        <source>Use control tags</source>
-        <translation type="obsolete">Uporabi kontrolne oznake</translation>
-    </message>
-    <message>
-        <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="obsolete">Kontrolne oznake vam omogočajo dinamično spreminjanje hitrosti sintetiziranega besedila ali dodajanje tišine med stavki.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation type="obsolete">Ko je ta možnost onemogočena, so oznake prezrte.</translation>
-    </message>
-    <message>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation type="obsolete">Če želite uporabiti kontrolne oznake, v besedilo vstavite %1.</translation>
-    </message>
-    <message>
-        <source>The following control tags are currently supported:</source>
-        <translation type="obsolete">Trenutno so podprte naslednje kontrolne oznake:</translation>
-    </message>
-    <message>
-        <source>Changes speed.</source>
-        <translation type="obsolete">Spremeni hitrost.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="obsolete">%1 je število s plavajočo vejico v območju od 0,1 do 2,0.</translation>
-    </message>
-    <message>
-        <source>Inserts silence.</source>
-        <translation type="obsolete">Vstavi tišino.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="obsolete">%1 je število s plavajočo vejico in %2 je ime enote (%3).</translation>
-    </message>
-    <message>
-        <source>Sync speech with timestamps</source>
-        <translation type="obsolete">Sinhronizacija govora s časovnimi žigi</translation>
-    </message>
-    <message>
-        <source>Don&apos;t sync</source>
-        <translation type="obsolete">Ne sinhroniziraj</translation>
-    </message>
-    <message>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="obsolete">Časovne žige s podnapisi se ne upoštevajo pri branju ali izvozu v datoteko.</translation>
-    </message>
-    <message>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="obsolete">Sinhroniziraj, a ne prilagajaj hitrosti</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige.</translation>
-    </message>
-    <message>
-        <source>Sync and increase speed to fit</source>
-        <translation type="obsolete">Sinhroniziraj in povečaj hitrost, da se uskladi</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige. Hitrost se samodejno prilagodi tako, da trajanje govora ni nikoli daljše od trajanja segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="obsolete">Sinhroniziraj in povečaj ali zmanjšaj hitrost do prileganja</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige. Hitrost se samodejno prilagaja tako, da je trajanje govora popolnoma enako kot trajanje segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="obsolete">Ko je nastavljen format besedila podnapisov SRT, je spreminjanje hitrosti govora onemogočeno, ker bo hitrost samodejno prilagojena.</translation>
-    </message>
-    <message>
-        <source>Use global keyboard shortcuts</source>
-        <translation type="obsolete">Uporabi globalne bližnjice na tipkovnici</translation>
-    </message>
-    <message>
-        <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="obsolete">Bližnjice vam omogočajo, da zaganjate ali ustavljate poslušanje in branje s tipkovnico.</translation>
-    </message>
-    <message>
-        <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="obsolete">Rezultat govora v besedilo je mogoče dodati trenutni opombi, vstaviti v katero koli aktivno okno (trenutno v fokusu) ali kopirati v odložišče.</translation>
-    </message>
-    <message>
-        <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="obsolete">Branje besedila v govor je lahko iz trenutne opombe ali iz besedila v odložišču.</translation>
-    </message>
-    <message>
-        <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="obsolete">Bližnjice na tipkovnici delujejo tudi, ko aplikacija ni aktivna (npr. strnjena ali v ozadju).</translation>
-    </message>
-    <message>
-        <source>This feature only works under X11.</source>
-        <translation type="obsolete">Ta zmožnost deluje samo pod X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="obsolete">Preklopi vedenje</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="obsolete">Bližnjice za začetek poslušanja/branja prav tako ustavijo poslušanje/branje, če se sprožijo, ko je poslušanje/branje aktivno.</translation>
-    </message>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Začni poslušati</translation>
-    </message>
-    <message>
-        <source>Start listening, text to clipboard</source>
-        <translation type="obsolete">Začni poslušati, besedilo na odložišče</translation>
-    </message>
-    <message>
-        <source>Stop listening</source>
-        <translation type="obsolete">Nehaj poslušati</translation>
-    </message>
-    <message>
-        <source>Start reading</source>
-        <translation type="obsolete">Začni brati</translation>
-    </message>
-    <message>
-        <source>Start reading text from clipboard</source>
-        <translation type="obsolete">Začni brati besedilo iz odložišča</translation>
-    </message>
-    <message>
-        <source>Pause/Resume reading</source>
-        <translation type="obsolete">Premor/nadaljuj branje</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Prekliči</translation>
-    </message>
-    <message>
-        <source>Switch to next STT model</source>
-        <translation type="obsolete">Preklopi na naslednji model STT</translation>
-    </message>
-    <message>
-        <source>Switch to previous STT model</source>
-        <translation type="obsolete">Preklopi na prejšnji model STT</translation>
-    </message>
-    <message>
-        <source>Switch to next TTS model</source>
-        <translation type="obsolete">Preklopi na naslednji model TTS</translation>
-    </message>
-    <message>
-        <source>Switch to previous TTS model</source>
-        <translation type="obsolete">Preklopi na prejšnji model TTS</translation>
-    </message>
-    <message>
-        <source>Allow external applications to invoke actions</source>
-        <translation type="obsolete">Dovoli zunanjim aplikacijam, da prikličejo dejanja</translation>
-    </message>
-    <message>
-        <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Dejanje omogoča zunanji aplikaciji, da prikliče določeno operacijo, ko se %1 izvaja.</translation>
-    </message>
-    <message>
-        <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Dejanje omogoča zunanji aplikaciji, da pokliče določeno operacijo, ko se %1 izvaja.</translation>
-    </message>
-    <message>
-        <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="obsolete">Dejanje je mogoče sprožiti prek klica DBus ali z možnostjo ukazne vrstice.</translation>
-    </message>
-    <message>
-        <source>The following actions are currently supported:</source>
-        <translation type="obsolete">Trenutno so podprta naslednja dejanja:</translation>
-    </message>
-    <message>
-        <source>Starts listening.</source>
-        <translation type="obsolete">Začne poslušati.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="obsolete">Začne poslušati. Dekodirano besedilo se vstavi v aktivno okno.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="obsolete">Začne poslušati. Dekodirano besedilo se kopira v odložišče.</translation>
-    </message>
-    <message>
-        <source>Stops listening. The already captured voice is decoded into text.</source>
-        <translation type="obsolete">Neha poslušati. Že zajeti glas se dekodira v besedilo.</translation>
-    </message>
-    <message>
-        <source>Starts reading.</source>
-        <translation type="obsolete">Začne brati.</translation>
-    </message>
-    <message>
-        <source>Starts reading text from the clipboard.</source>
-        <translation type="obsolete">Začne brati besedilo iz odložišča.</translation>
-    </message>
-    <message>
-        <source>Pauses or resumes reading.</source>
-        <translation type="obsolete">Začasno ustavi ali nadaljuje branje.</translation>
-    </message>
-    <message>
-        <source>Cancels any of the above operations.</source>
-        <translation type="obsolete">Prekliče katero koli od zgornjih operacij.</translation>
-    </message>
-    <message>
-        <source>Switches to next STT model.</source>
-        <translation type="obsolete">Preklopi na naslednji model STT.</translation>
-    </message>
-    <message>
-        <source>Switches to previous STT model.</source>
-        <translation type="obsolete">Preklopi na prejšnji model STT.</translation>
-    </message>
-    <message>
-        <source>Switches to next TTS model.</source>
-        <translation type="obsolete">Preklopi na naslednji model TTS.</translation>
-    </message>
-    <message>
-        <source>Switches to previous TTS model.</source>
-        <translation type="obsolete">Preklopi na prejšnji model TTS.</translation>
-    </message>
-    <message>
-        <source>Sets STT model.</source>
-        <translation type="obsolete">Nastavi model STT.</translation>
-    </message>
-    <message>
-        <source>Sets TTS model.</source>
-        <translation type="obsolete">Nastavi model TTS.</translation>
-    </message>
-    <message>
-        <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="obsolete">Če želite na primer sprožiti dejanje %1, izvedite naslednji ukaz: %2.</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="obsolete">Shranjevanje</translation>
-    </message>
-    <message>
-        <source>Location of language files</source>
-        <translation type="obsolete">Lokacije jezikovnih datotek</translation>
-    </message>
-    <message>
-        <source>Directory where language files are downloaded to and stored.</source>
-        <translation type="obsolete">Imenik, kamor so prenesene jezikovne datoteke in shranjene.</translation>
-    </message>
-    <message>
-        <source>Clear cache on close</source>
-        <translation type="obsolete">Počisti predpomnilnik ob zaprtju</translation>
-    </message>
-    <message>
-        <source>When closing, delete all cached audio files.</source>
-        <translation type="obsolete">Ob zapiranju izbriši vse predpomnjene zvočne datoteke.</translation>
-    </message>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Razpoložljivost izbirnih funkcij</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="obsolete">Skrij napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="obsolete">Prikaži napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Možnosti procesorja</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Avto</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Možnosti strojnega pospeševanja</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uporabi %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Onemogoči to možnost, če opazite težave pri zagonu aplikacije.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Preglasi različico GPE</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Preglasi različico AMD GPU.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Omogoči to možnost, če opazite težave pri uporabi pospeševanja GPE z grafično kartico AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Različica</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Vrednost ima enak učinek kot spremenljivka okolja %1.</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Sestavi datoteko</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">Datoteka za sestavljanje X11, uporabljena v %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Vstavi v aktivno okno</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Knjižnice</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Uporabite knjižnice Pythona</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Preverite prisotnost zahtevanih knjižnic Pythona.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Lokacija knjižnic Pythona</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Imenik knjižnic Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Če želite uporabiti privzeto vrednost, pustite prazno.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna, če za upravljanje knjižnic Python uporabljate modul %1.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Shrani</translation>
-    </message>
-    <message>
-        <source>Select Directory</source>
-        <translation type="obsolete">Izberi Imenik</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsUiPage</name>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Nastavitve</translation>
-    </message>
-    <message>
-        <source>User Interface</source>
-        <translation type="obsolete">Uporabniški vmesnik</translation>
-    </message>
-    <message>
-        <source>Speech to Text</source>
-        <translation type="obsolete">Govor v besedilo</translation>
-    </message>
-    <message>
-        <source>Text to Speech</source>
-        <translation type="obsolete">Besedilo v govor</translation>
-    </message>
-    <message>
-        <source>Accessibility</source>
-        <translation type="obsolete">Dostopnost</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Drugo</translation>
-    </message>
-    <message>
-        <source>Remember the last note</source>
-        <translation type="obsolete">Zapomni si zadnjo opombo</translation>
-    </message>
-    <message>
-        <source>The note will be saved automatically, so when you restart the app, your last note will always be available.</source>
-        <translation type="obsolete">Opomba bo samodejno shranjena, tako da bo ob ponovnem zagonu aplikacije vaša zadnja opomba vedno na voljo.</translation>
-    </message>
-    <message>
-        <source>Once enabled, a menu with text correction options appears on the main toolbar.</source>
-        <translation type="obsolete">Ko je omogočeno, se v glavni orodni vrstici prikaže meni z možnostmi popravka besedila.</translation>
-    </message>
-    <message>
-        <source>File import action</source>
-        <translation type="obsolete">Dejanje uvoza datoteke</translation>
-    </message>
-    <message>
-        <source>The action when importing a note from a file. You can add imported text to an existing note or replace an existing note.</source>
-        <translation type="obsolete">Dejanje pri uvozu opombe iz datoteke. Uvoženo besedilo lahko dodate obstoječi opombi ali zamenjate obstoječo opombo.</translation>
-    </message>
-    <message>
-        <source>Ask whether to add or replace</source>
-        <translation type="obsolete">Vprašaj, ali želite dodati ali zamenjati</translation>
-    </message>
-    <message>
-        <source>Add to an existing note</source>
-        <translation type="obsolete">Dodaj k obstoječi opombi</translation>
-    </message>
-    <message>
-        <source>Replace an existing note</source>
-        <translation type="obsolete">Zamenjaj obstoječo opombo</translation>
-    </message>
-    <message>
-        <source>Font in text editor</source>
-        <translation type="obsolete">Pisava v urejevalniku besedila</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Privzeto</translation>
-    </message>
-    <message>
-        <source>Change</source>
-        <translation type="obsolete">Spremeni</translation>
-    </message>
-    <message>
-        <source>Please choose a font</source>
-        <translation type="obsolete">Izberite pisavo</translation>
-    </message>
-    <message>
-        <source>Show desktop notification</source>
-        <translation type="obsolete">Prikaži namizno obvestilo</translation>
-    </message>
-    <message>
-        <source>Show desktop notification while reading or listening.</source>
-        <translation type="obsolete">Prikaži obvestilo o namizju med branjem ali poslušanjem.</translation>
-    </message>
-    <message>
-        <source>Never</source>
-        <translation type="obsolete">Nikoli</translation>
-    </message>
-    <message>
-        <source>When in background</source>
-        <translation type="obsolete">Ko je v ozadju</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Vedno</translation>
-    </message>
-    <message>
-        <source>Include recognized or read text in notifications</source>
-        <translation type="obsolete">Vključi prepoznana ali prebrana besedila v obvestila</translation>
-    </message>
-    <message>
-        <source>Use system tray icon</source>
-        <translation type="obsolete">Uporabi ikono sistemskega pladnja</translation>
-    </message>
-    <message>
-        <source>Start minimized to the system tray</source>
-        <translation type="obsolete">Začni strnjeno v sistemskem pladnju</translation>
-    </message>
-    <message>
-        <source>Use custom graphical style</source>
-        <translation type="obsolete">Uporabi grafični slog po meri</translation>
-    </message>
-    <message>
-        <source>Graphical style</source>
-        <translation type="obsolete">Grafični slog</translation>
-    </message>
-    <message>
-        <source>Application graphical interface style.</source>
-        <translation type="obsolete">Grafični slog vmesnika aplikacije.</translation>
-    </message>
-    <message>
-        <source>Change if you observe problems with incorrect colors under a dark theme.</source>
-        <translation type="obsolete">Spremenite, če opazite težave z napačnimi barvami pod temno temo.</translation>
-    </message>
-    <message>
-        <source>Audio input device</source>
-        <translation type="obsolete">Avdio vhodna naprava</translation>
-    </message>
-    <message>
-        <source>Select preferred audio input device.</source>
-        <translation type="obsolete">Izberite želeno avdio vhodno napravo.</translation>
-    </message>
-    <message>
-        <source>Listening mode</source>
-        <translation type="obsolete">Način poslušanja</translation>
-    </message>
-    <message>
-        <source>One sentence</source>
-        <translation type="obsolete">En stavek</translation>
-    </message>
-    <message>
-        <source>Clicking on the %1 button starts listening, which ends when the first sentence is recognized.</source>
-        <translation type="obsolete">S klikom na gumb %1 se začne poslušanje, ki se konča, ko je prepoznan prvi stavek.</translation>
-    </message>
-    <message>
-        <source>Listen</source>
-        <translation type="obsolete">Poslušaj</translation>
-    </message>
-    <message>
-        <source>Press and hold</source>
-        <translation type="obsolete">Pritisnite in zadržite</translation>
-    </message>
-    <message>
-        <source>Pressing and holding the %1 button enables listening. When you stop holding, listening will turn off.</source>
-        <translation type="obsolete">Če pritisnete in držite gumb %1, omogočite poslušanje. Ko nehate držati, se poslušanje izklopi.</translation>
-    </message>
-    <message>
-        <source>Always on</source>
-        <translation type="obsolete">Vedno vklopljeno</translation>
-    </message>
-    <message>
-        <source>After clicking on the %1 button, listening is always turn on.</source>
-        <translation type="obsolete">Po kliku na gumb %1 je poslušanje vedno vklopljeno.</translation>
-    </message>
-    <message>
-        <source>Restore punctuation</source>
-        <translation type="obsolete">Obnovi ločila</translation>
-    </message>
-    <message>
-        <source>Enable advanced punctuation restoration after speech recognition. To make it work, make sure you have enabled %1 model for your language.</source>
-        <translation type="obsolete">Omogoči napredno obnovitev ločil po razpoznavanju govora. Če želite, da deluje, se prepričajte, da ste omogočili model %1 za vaš jezik.</translation>
-    </message>
-    <message>
-        <source>Punctuation</source>
-        <translation type="obsolete">Ločila</translation>
-    </message>
-    <message>
-        <source>When this option is enabled model initialization takes much longer and memory usage is much higher.</source>
-        <translation type="obsolete">Ko je ta možnost omogočena, inicializacija modela traja veliko dlje in poraba pomnilnika je veliko višja.</translation>
-    </message>
-    <message>
-        <source>This option only works with models that do not natively support punctuation.</source>
-        <translation type="obsolete">Ta možnost deluje samo z modeli, ki ne podpirajo ločil.</translation>
-    </message>
-    <message>
-        <source>To make %1 work, download %2 model.</source>
-        <translation type="obsolete">Da bi %1 deloval, prenesite model %2.</translation>
-    </message>
-    <message>
-        <source>Insert statistics</source>
-        <translation type="obsolete">Vstavi statistiko</translation>
-    </message>
-    <message>
-        <source>Inserts processing related information to the text, such as processing time and audio length.</source>
-        <translation type="obsolete">V besedilo vstavi informacije, povezane z obdelavo, kot sta čas obdelave in dolžina zvoka.</translation>
-    </message>
-    <message>
-        <source>This option can be useful for comparing the performance of different models, engines and their parameters.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna za primerjavo delovanja različnih modelov, strojev in njihovih parametrov.</translation>
-    </message>
-    <message>
-        <source>This option does not work with all engines.</source>
-        <translation type="obsolete">Ta možnost ne deluje pri vseh strojih.</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation type="obsolete">Podnapisi</translation>
-    </message>
-    <message>
-        <source>Minimum segment duration</source>
-        <translation type="obsolete">Najmanjše trajanje segmenta</translation>
-    </message>
-    <message>
-        <source>Set the minimum duration (in seconds) of the subtitle segment.</source>
-        <translation type="obsolete">Nastavi minimalno trajanje (v sekundah) segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>This option only works with %1 and %2 models.</source>
-        <translation type="obsolete">Ta možnost deluje samo z modeli %1 in %2.</translation>
-    </message>
-    <message>
-        <source>Break text lines</source>
-        <translation type="obsolete">Prelomi vrstice besedila</translation>
-    </message>
-    <message>
-        <source>Minimum line length</source>
-        <translation type="obsolete">Najmanjša dolžina vrstice</translation>
-    </message>
-    <message>
-        <source>Maximum line length</source>
-        <translation type="obsolete">Največja dolžina vrstice</translation>
-    </message>
-    <message>
-        <source>Engine options</source>
-        <translation type="obsolete">Možnosti stroja</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">Po meri</translation>
-    </message>
-    <message>
-        <source>Number of simultaneous threads</source>
-        <translation type="obsolete">Število sočasnih niti</translation>
-    </message>
-    <message>
-        <source>Set the maximum number of simultaneous CPU threads.</source>
-        <translation type="obsolete">Nastavi največje število hkratnih niti CPE.</translation>
-    </message>
-    <message>
-        <source>A higher value does not necessarily speed up decoding.</source>
-        <translation type="obsolete">Ni nujno, da višja vrednost pospeši dekodiranje.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Ponastavi</translation>
-    </message>
-    <message>
-        <source>Beam search width</source>
-        <translation type="obsolete">Širina iskanja snopa</translation>
-    </message>
-    <message>
-        <source>A higher value may improve quality, but decoding time may also increase.</source>
-        <translation type="obsolete">Višja vrednost lahko izboljša kakovost, vendar se lahko podaljša tudi čas dekodiranja.</translation>
-    </message>
-    <message>
-        <source>Audio context size</source>
-        <translation type="obsolete">Velikost zvočnega konteksta</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the size is adjusted dynamically for each audio chunk.</source>
-        <translation type="obsolete">Ko je nastavljen %1, se velikost dinamično prilagaja za vsak zvočni del.</translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamično</translation>
-    </message>
-    <message>
-        <source>When %1 is set, the default fixed size is used.</source>
-        <translation type="obsolete">Ko je nastavljen %1, se uporablja privzeta fiksna velikost.</translation>
-    </message>
-    <message>
-        <source>To define a custom size, use the %1 option.</source>
-        <translation type="obsolete">Če želite določiti velikost po meri, uporabite možnost %1.</translation>
-    </message>
-    <message>
-        <source>A smaller value speeds up decoding, but can have a negative impact on accuracy.</source>
-        <translation type="obsolete">Manjša vrednost pospeši dekodiranje, vendar lahko negativno vpliva na natančnost.</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation type="obsolete">Velikost</translation>
-    </message>
-    <message>
-        <source>Use Flash Attention</source>
-        <translation type="obsolete">Uporabite Flash Attention</translation>
-    </message>
-    <message>
-        <source>Flash Attention may reduce the time of decoding when using GPU acceleration.</source>
-        <translation type="obsolete">Flash Attention lahko skrajša čas dekodiranja pri uporabi pospeševanja GPU.</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems.</source>
-        <translation type="obsolete">Onemogočite to možnost, če opazite težave.</translation>
-    </message>
-    <message>
-        <source>Use %1 model for automatic language detection</source>
-        <translation type="obsolete">Za samodejno zaznavanje jezika uporabite model %1</translation>
-    </message>
-    <message>
-        <source>In automatic language detection, the %1 model is used instead of the selected model.</source>
-        <translation type="obsolete">Pri samodejnem zaznavanju jezika se namesto izbranega modela uporabi model %1.</translation>
-    </message>
-    <message>
-        <source>This reduces processing time, but the automatically detected language may be incorrect.</source>
-        <translation type="obsolete">To skrajša čas obdelave, vendar je lahko samodejno zaznan jezik napačen.</translation>
-    </message>
-    <message>
-        <source>Restore diacritical marks before speech synthesis</source>
-        <translation type="obsolete">Obnovite diakritične znake pred sintezo govora</translation>
-    </message>
-    <message>
-        <source>This works only for Arabic and Hebrew languages.</source>
-        <translation type="obsolete">To deluje samo za arabski in hebrejski jezik.</translation>
-    </message>
-    <message>
-        <source>Diacritics restoration for Hebrew language is not available.</source>
-        <translation type="obsolete">Obnovitev diakritičnih znakov za hebrejski jezik ni na voljo.</translation>
-    </message>
-    <message>
-        <source>Split text into sentences</source>
-        <translation type="obsolete">Razdeli besedilo na stavke</translation>
-    </message>
-    <message>
-        <source>The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.</source>
-        <translation type="obsolete">Besedilo bo razdeljeno na stavke in vzporedno bo izvedena sinteza govora za vsak stavek.</translation>
-    </message>
-    <message>
-        <source>This speeds up reading, but in some models the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">To pospeši branje, vendar je pri nekaterih modelih lahko zmanjšana naravnost govora.</translation>
-    </message>
-    <message>
-        <source>Use engine speed control</source>
-        <translation type="obsolete">Uporabite nadzor hitrosti stroja</translation>
-    </message>
-    <message>
-        <source>If the TTS engine supports speed control, it will be used.</source>
-        <translation type="obsolete">Če stroj TTS podpira nadzor hitrosti, bo uporabljen.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, speed manipulation takes place during audio post-processing.</source>
-        <translation type="obsolete">Ko je ta možnost onemogočena, se hitrost spreminja med naknadno obdelavo zvoka.</translation>
-    </message>
-    <message>
-        <source>The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.</source>
-        <translation type="obsolete">Dejanska hitrost po naknadni obdelavi zvoka je veliko bolj predvidljiva, vendar se lahko zmanjša naravnost govora.</translation>
-    </message>
-    <message>
-        <source>Use control tags</source>
-        <translation type="obsolete">Uporabi kontrolne oznake</translation>
-    </message>
-    <message>
-        <source>Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.</source>
-        <translation type="obsolete">Kontrolne oznake vam omogočajo dinamično spreminjanje hitrosti sintetiziranega besedila ali dodajanje tišine med stavki.</translation>
-    </message>
-    <message>
-        <source>When this option is disabled, tags are ignored.</source>
-        <translation type="obsolete">Ko je ta možnost onemogočena, so oznake prezrte.</translation>
-    </message>
-    <message>
-        <source>To use control tags, insert %1 into the text.</source>
-        <translation type="obsolete">Če želite uporabiti kontrolne oznake, v besedilo vstavite %1.</translation>
-    </message>
-    <message>
-        <source>The following control tags are currently supported:</source>
-        <translation type="obsolete">Trenutno so podprte naslednje kontrolne oznake:</translation>
-    </message>
-    <message>
-        <source>Changes speed.</source>
-        <translation type="obsolete">Spremeni hitrost.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number in the range from 0.1 to 2.0.</source>
-        <translation type="obsolete">%1 je število s plavajočo vejico v območju od 0,1 do 2,0.</translation>
-    </message>
-    <message>
-        <source>Inserts silence.</source>
-        <translation type="obsolete">Vstavi tišino.</translation>
-    </message>
-    <message>
-        <source>%1 is a floating-point number and %2 is an unit name (%3).</source>
-        <translation type="obsolete">%1 je število s plavajočo vejico in %2 je ime enote (%3).</translation>
-    </message>
-    <message>
-        <source>Sync speech with timestamps</source>
-        <translation type="obsolete">Sinhronizacija govora s časovnimi žigi</translation>
-    </message>
-    <message>
-        <source>Don&apos;t sync</source>
-        <translation type="obsolete">Ne sinhroniziraj</translation>
-    </message>
-    <message>
-        <source>Subtitle timestamps are ignored when reading or exporting to a file.</source>
-        <translation type="obsolete">Časovne žige s podnapisi se ne upoštevajo pri branju ali izvozu v datoteko.</translation>
-    </message>
-    <message>
-        <source>Sync but don&apos;t adjust speed</source>
-        <translation type="obsolete">Sinhroniziraj, a ne prilagajaj hitrosti</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige.</translation>
-    </message>
-    <message>
-        <source>Sync and increase speed to fit</source>
-        <translation type="obsolete">Sinhroniziraj in povečaj hitrost, da se uskladi</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is never longer than the duration of the subtitle segment.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige. Hitrost se samodejno prilagodi tako, da trajanje govora ni nikoli daljše od trajanja segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>Sync and increase or decrease speed to fit</source>
-        <translation type="obsolete">Sinhroniziraj in povečaj ali zmanjšaj hitrost do prileganja</translation>
-    </message>
-    <message>
-        <source>Speech is synchronized according to timestamps. The speed is adjusted automatically so that the duration of the speech is exactly the same as the duration of the subtitle segment.</source>
-        <translation type="obsolete">Govor je sinhroniziran glede na časovne žige. Hitrost se samodejno prilagaja tako, da je trajanje govora popolnoma enako kot trajanje segmenta podnapisov.</translation>
-    </message>
-    <message>
-        <source>When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.</source>
-        <translation type="obsolete">Ko je nastavljen format besedila podnapisov SRT, je spreminjanje hitrosti govora onemogočeno, ker bo hitrost samodejno prilagojena.</translation>
-    </message>
-    <message>
-        <source>Use global keyboard shortcuts</source>
-        <translation type="obsolete">Uporabi globalne bližnjice na tipkovnici</translation>
-    </message>
-    <message>
-        <source>Shortcuts allow you to start or stop listening and reading using keyboard.</source>
-        <translation type="obsolete">Bližnjice vam omogočajo, da zaganjate ali ustavljate poslušanje in branje s tipkovnico.</translation>
-    </message>
-    <message>
-        <source>Speech to Text result can be appended to the current note, inserted into any active window (currently in focus) or copied to the clipboard.</source>
-        <translation type="obsolete">Rezultat govora v besedilo je mogoče dodati trenutni opombi, vstaviti v katero koli aktivno okno (trenutno v fokusu) ali kopirati v odložišče.</translation>
-    </message>
-    <message>
-        <source>Text to Speech reading can be from current note or from text in the clipboard.</source>
-        <translation type="obsolete">Branje besedila v govor je lahko iz trenutne opombe ali iz besedila v odložišču.</translation>
-    </message>
-    <message>
-        <source>Keyboard shortcuts function even when the application is not active (e.g. minimized or in the background).</source>
-        <translation type="obsolete">Bližnjice na tipkovnici delujejo tudi, ko aplikacija ni aktivna (npr. strnjena ali v ozadju).</translation>
-    </message>
-    <message>
-        <source>This feature only works under X11.</source>
-        <translation type="obsolete">Ta zmožnost deluje samo pod X11.</translation>
-    </message>
-    <message>
-        <source>Toggle behavior</source>
-        <translation type="obsolete">Preklopi vedenje</translation>
-    </message>
-    <message>
-        <source>Start listening/reading shortcuts will also stop listening/reading if they are triggered while listening/reading is active.</source>
-        <translation type="obsolete">Bližnjice za začetek poslušanja/branja prav tako ustavijo poslušanje/branje, če se sprožijo, ko je poslušanje/branje aktivno.</translation>
-    </message>
-    <message>
-        <source>Start listening</source>
-        <translation type="obsolete">Začni poslušati</translation>
-    </message>
-    <message>
-        <source>Start listening, text to clipboard</source>
-        <translation type="obsolete">Začni poslušati, besedilo na odložišče</translation>
-    </message>
-    <message>
-        <source>Stop listening</source>
-        <translation type="obsolete">Nehaj poslušati</translation>
-    </message>
-    <message>
-        <source>Start reading</source>
-        <translation type="obsolete">Začni brati</translation>
-    </message>
-    <message>
-        <source>Start reading text from clipboard</source>
-        <translation type="obsolete">Začni brati besedilo iz odložišča</translation>
-    </message>
-    <message>
-        <source>Pause/Resume reading</source>
-        <translation type="obsolete">Premor/nadaljuj branje</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Prekliči</translation>
-    </message>
-    <message>
-        <source>Switch to next STT model</source>
-        <translation type="obsolete">Preklopi na naslednji model STT</translation>
-    </message>
-    <message>
-        <source>Switch to previous STT model</source>
-        <translation type="obsolete">Preklopi na prejšnji model STT</translation>
-    </message>
-    <message>
-        <source>Switch to next TTS model</source>
-        <translation type="obsolete">Preklopi na naslednji model TTS</translation>
-    </message>
-    <message>
-        <source>Switch to previous TTS model</source>
-        <translation type="obsolete">Preklopi na prejšnji model TTS</translation>
-    </message>
-    <message>
-        <source>Allow external applications to invoke actions</source>
-        <translation type="obsolete">Dovoli zunanjim aplikacijam, da prikličejo dejanja</translation>
-    </message>
-    <message>
-        <source>Action allow external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Dejanje omogoča zunanji aplikaciji, da prikliče določeno operacijo, ko se %1 izvaja.</translation>
-    </message>
-    <message>
-        <source>Action allows external application to invoke certain operation when %1 is running.</source>
-        <translation type="obsolete">Dejanje omogoča zunanji aplikaciji, da pokliče določeno operacijo, ko se %1 izvaja.</translation>
-    </message>
-    <message>
-        <source>An action can be triggered via DBus call or with command-line option.</source>
-        <translation type="obsolete">Dejanje je mogoče sprožiti prek klica DBus ali z možnostjo ukazne vrstice.</translation>
-    </message>
-    <message>
-        <source>The following actions are currently supported:</source>
-        <translation type="obsolete">Trenutno so podprta naslednja dejanja:</translation>
-    </message>
-    <message>
-        <source>Starts listening.</source>
-        <translation type="obsolete">Začne poslušati.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is inserted into the active window.</source>
-        <translation type="obsolete">Začne poslušati. Dekodirano besedilo se vstavi v aktivno okno.</translation>
-    </message>
-    <message>
-        <source>Starts listening. The decoded text is copied to the clipboard.</source>
-        <translation type="obsolete">Začne poslušati. Dekodirano besedilo se kopira v odložišče.</translation>
-    </message>
-    <message>
-        <source>Stops listening. The already captured voice is decoded into text.</source>
-        <translation type="obsolete">Neha poslušati. Že zajeti glas se dekodira v besedilo.</translation>
-    </message>
-    <message>
-        <source>Starts reading.</source>
-        <translation type="obsolete">Začne brati.</translation>
-    </message>
-    <message>
-        <source>Starts reading text from the clipboard.</source>
-        <translation type="obsolete">Začne brati besedilo iz odložišča.</translation>
-    </message>
-    <message>
-        <source>Pauses or resumes reading.</source>
-        <translation type="obsolete">Začasno ustavi ali nadaljuje branje.</translation>
-    </message>
-    <message>
-        <source>Cancels any of the above operations.</source>
-        <translation type="obsolete">Prekliče katero koli od zgornjih operacij.</translation>
-    </message>
-    <message>
-        <source>Switches to next STT model.</source>
-        <translation type="obsolete">Preklopi na naslednji model STT.</translation>
-    </message>
-    <message>
-        <source>Switches to previous STT model.</source>
-        <translation type="obsolete">Preklopi na prejšnji model STT.</translation>
-    </message>
-    <message>
-        <source>Switches to next TTS model.</source>
-        <translation type="obsolete">Preklopi na naslednji model TTS.</translation>
-    </message>
-    <message>
-        <source>Switches to previous TTS model.</source>
-        <translation type="obsolete">Preklopi na prejšnji model TTS.</translation>
-    </message>
-    <message>
-        <source>Sets STT model.</source>
-        <translation type="obsolete">Nastavi model STT.</translation>
-    </message>
-    <message>
-        <source>Sets TTS model.</source>
-        <translation type="obsolete">Nastavi model TTS.</translation>
-    </message>
-    <message>
-        <source>For example, to trigger %1 action, execute the following command: %2.</source>
-        <translation type="obsolete">Če želite na primer sprožiti dejanje %1, izvedite naslednji ukaz: %2.</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="obsolete">Shranjevanje</translation>
-    </message>
-    <message>
-        <source>Location of language files</source>
-        <translation type="obsolete">Lokacije jezikovnih datotek</translation>
-    </message>
-    <message>
-        <source>Directory where language files are downloaded to and stored.</source>
-        <translation type="obsolete">Imenik, kamor so prenesene jezikovne datoteke in shranjene.</translation>
-    </message>
-    <message>
-        <source>Clear cache on close</source>
-        <translation type="obsolete">Počisti predpomnilnik ob zaprtju</translation>
-    </message>
-    <message>
-        <source>When closing, delete all cached audio files.</source>
-        <translation type="obsolete">Ob zapiranju izbriši vse predpomnjene zvočne datoteke.</translation>
-    </message>
-    <message>
-        <source>Availability of optional features</source>
-        <translation type="obsolete">Razpoložljivost izbirnih funkcij</translation>
-    </message>
-    <message>
-        <source>Hide advanced settings</source>
-        <translation type="obsolete">Skrij napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>Show advanced settings</source>
-        <translation type="obsolete">Prikaži napredne nastavitve</translation>
-    </message>
-    <message>
-        <source>CPU options</source>
-        <translation type="obsolete">Možnosti procesorja</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">Avto</translation>
-    </message>
-    <message>
-        <source>Hardware acceleration options</source>
-        <translation type="obsolete">Možnosti strojnega pospeševanja</translation>
-    </message>
-    <message>
-        <source>Use %1</source>
-        <translation type="obsolete">Uporabi %1</translation>
-    </message>
-    <message>
-        <source>Disable this option if you observe problems when launching the application.</source>
-        <translation type="obsolete">Onemogoči to možnost, če opazite težave pri zagonu aplikacije.</translation>
-    </message>
-    <message>
-        <source>Override GPU version</source>
-        <translation type="obsolete">Preglasi različico GPE</translation>
-    </message>
-    <message>
-        <source>Override AMD GPU version.</source>
-        <translation type="obsolete">Preglasi različico AMD GPU.</translation>
-    </message>
-    <message>
-        <source>Enable this option if you observe problems when using GPU acceleration with AMD graphics card.</source>
-        <translation type="obsolete">Omogoči to možnost, če opazite težave pri uporabi pospeševanja GPE z grafično kartico AMD.</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Različica</translation>
-    </message>
-    <message>
-        <source>Value has the same effect as %1 environment variable.</source>
-        <translation type="obsolete">Vrednost ima enak učinek kot spremenljivka okolja %1.</translation>
-    </message>
-    <message>
-        <source>Compose file</source>
-        <translation type="obsolete">Sestavi datoteko</translation>
-    </message>
-    <message>
-        <source>X11 compose file used in %1.</source>
-        <translation type="obsolete">Datoteka za sestavljanje X11, uporabljena v %1.</translation>
-    </message>
-    <message>
-        <source>Insert into active window</source>
-        <translation type="obsolete">Vstavi v aktivno okno</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="obsolete">Knjižnice</translation>
-    </message>
-    <message>
-        <source>Use Python libriaries</source>
-        <translation type="obsolete">Uporabite knjižnice Pythona</translation>
-    </message>
-    <message>
-        <source>Check the presence of the required Python libraries.</source>
-        <translation type="obsolete">Preverite prisotnost zahtevanih knjižnic Pythona.</translation>
-    </message>
-    <message>
-        <source>Location of Python libraries</source>
-        <translation type="obsolete">Lokacija knjižnic Pythona</translation>
-    </message>
-    <message>
-        <source>Python libraries directory (%1).</source>
-        <translation type="obsolete">Imenik knjižnic Python (%1).</translation>
-    </message>
-    <message>
-        <source>Leave blank to use the default value.</source>
-        <translation type="obsolete">Če želite uporabiti privzeto vrednost, pustite prazno.</translation>
-    </message>
-    <message>
-        <source>This option may be useful if you use %1 module to manage Python libraries.</source>
-        <translation type="obsolete">Ta možnost je lahko uporabna, če za upravljanje knjižnic Python uporabljate modul %1.</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Shrani</translation>
-    </message>
-    <message>
-        <source>Select Directory</source>
-        <translation type="obsolete">Izberi Imenik</translation>
+        <translation>Spremenite, če opazite težave z napačnimi barvami pod temno temo.</translation>
     </message>
 </context>
 <context>
@@ -8908,22 +3592,22 @@
     <message>
         <location filename="../desktop/qml/ShortcutForm.qml" line="59"/>
         <source>Press a special key...</source>
-        <translation type="unfinished"></translation>
+        <translation>Pritisnite posebno tipko...</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ShortcutForm.qml" line="59"/>
         <source>Detect special key</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaznaj posebno tipko</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ShortcutForm.qml" line="64"/>
         <source>Detect special key presses (multimedia keys)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaznavaj pritiske posebnih tipk (večpredstavnostnih tipk)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ShortcutForm.qml" line="88"/>
         <source>Reset</source>
-        <translation type="unfinished">Ponastavi</translation>
+        <translation>Ponastavi</translation>
     </message>
 </context>
 <context>
@@ -9117,7 +3801,7 @@
     <message>
         <location filename="../desktop/qml/TextFieldWithHelpForm.qml" line="40"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Pomoč</translation>
     </message>
 </context>
 <context>
@@ -9135,14 +3819,10 @@
         <translation>Pojdite na %1, da prenesete modele za jezike, ki jih nameravate uporabljati.</translation>
     </message>
     <message>
-        <source>Languages</source>
-        <translation type="vanished">Jeziki</translation>
-    </message>
-    <message>
         <location filename="../sfos/qml/Translator.qml" line="77"/>
         <location filename="../desktop/qml/Translator.qml" line="27"/>
         <source>Languages and Models</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeziki in modeli</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="105"/>
@@ -9221,10 +3901,6 @@
         <translation>Izberi jezik, iz katerega želite prevajati.</translation>
     </message>
     <message>
-        <source>This model requires a voice sample.</source>
-        <translation type="vanished">Ta model zahteva glasovni vzorec.</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/Translator.qml" line="283"/>
         <source>Switch languages</source>
         <translation>Preklopi med jeziki</translation>
@@ -9235,19 +3911,15 @@
         <translation>Ustvarite ga v meniju %1</translation>
     </message>
     <message>
-        <source>Voice samples</source>
-        <translation type="vanished">Glasovni vzorci</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/Translator.qml" line="101"/>
         <source>Text to translate from</source>
-        <translation type="unfinished"></translation>
+        <translation>Besedilo za prevajanje</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="193"/>
         <location filename="../desktop/qml/Translator.qml" line="385"/>
         <source>This model requires a voice profile.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta model zahteva glasovni profil.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="194"/>
@@ -9258,7 +3930,7 @@
         <location filename="../desktop/qml/Translator.qml" line="194"/>
         <location filename="../desktop/qml/Translator.qml" line="386"/>
         <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Glasovni profili</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="195"/>
@@ -9266,24 +3938,16 @@
         <translation>Model besedila v govor za jezik, iz katerega se prevaja.</translation>
     </message>
     <message>
-        <source>No voice sample</source>
-        <translation type="vanished">Ni glasovnega vzorca</translation>
-    </message>
-    <message>
-        <source>Voice sample</source>
-        <translation type="vanished">Glasovni vzorec</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/Translator.qml" line="197"/>
         <location filename="../desktop/qml/Translator.qml" line="389"/>
         <source>No voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Ni glasovnega profila</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="198"/>
         <location filename="../desktop/qml/Translator.qml" line="390"/>
         <source>Voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Glasovni profil</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="278"/>
@@ -9303,7 +3967,7 @@
     <message>
         <location filename="../desktop/qml/Translator.qml" line="325"/>
         <source>Translated text</source>
-        <translation type="unfinished"></translation>
+        <translation>Prevedeno besedilo</translation>
     </message>
     <message>
         <location filename="../desktop/qml/Translator.qml" line="366"/>
@@ -9348,65 +4012,61 @@
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="31"/>
         <source>Edit audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Uredi vzorec zvoka</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="75"/>
         <source>Text decoding has completed!</source>
-        <translation type="unfinished"></translation>
+        <translation>Dekodiranje besedila je končano!</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="102"/>
         <source>Stop</source>
-        <translation type="unfinished">Stop</translation>
+        <translation>Stop</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="102"/>
         <source>Play</source>
-        <translation type="unfinished">Igraj</translation>
+        <translation>Igraj</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="119"/>
         <source>Save</source>
-        <translation type="unfinished">Shrani</translation>
+        <translation>Shrani</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="129"/>
         <source>Cancel</source>
-        <translation type="unfinished">Prekliči</translation>
+        <translation>Prekliči</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="171"/>
         <source>Decode text from audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Dekodiraj besedilo iz vzorca zvoka</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="174"/>
         <source>Use the current active Speech to Text model to decode text from an audio sample.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za dekodiranje besedila iz vzorca zvoka uporabite trenutno aktivni model Pretvorbe govora v besedilo.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="183"/>
         <source>Name</source>
-        <translation type="unfinished">Ime</translation>
+        <translation>Ime</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="185"/>
         <source>This name is already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>To ime je že zasedeno</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceAudioSampleEditPage.qml" line="148"/>
         <source>Text spoken in audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Besedilo izgovorjeno v vzorcu zvoka</translation>
     </message>
 </context>
 <context>
     <name>VoiceImportPage</name>
-    <message>
-        <source>Create a new voice sample</source>
-        <translation type="vanished">Ustvarite nov glasovni vzorec</translation>
-    </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="154"/>
         <source>Cancel</source>
@@ -9420,32 +4080,32 @@
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="92"/>
         <source>Tips:</source>
-        <translation type="unfinished"></translation>
+        <translation>Namigi:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="94"/>
         <source>Audio sample should not be very long.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vzorec zvoka ne sme biti predolg.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="96"/>
         <source>If you&apos;re not satisfied with voice cloning quality, try creating a few different audio samples and see which one gives you the best result.</source>
-        <translation type="unfinished"></translation>
+        <translation>Če niste zadovoljni s kakovostjo kloniranja glasu, poskusite ustvariti nekaj različnih vzorcev zvoka in preverite, kateri vam daje najboljši rezultat.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="104"/>
         <source>Currently, voice cloning can be used in the following models:</source>
-        <translation type="unfinished"></translation>
+        <translation>Trenutno se kloniranje glasu lahko uporablja v naslednjih modelih:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="131"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Pomoč</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="178"/>
         <source>Text decoding has completed!</source>
-        <translation type="unfinished"></translation>
+        <translation>Dekodiranje besedila je končano!</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="194"/>
@@ -9480,27 +4140,27 @@
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="345"/>
         <source>Text spoken in audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Besedilo izgovorjeno v vzorcu zvoka</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="368"/>
         <source>Decode text from audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Dekodiraj besedilo iz vzorca zvoka</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="371"/>
         <source>Use the current active Speech to Text model to decode text from an audio sample.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za dekodiranje besedila iz vzorca zvoka uporabite trenutno aktivni model Pretvorbe govora v besedilo.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="381"/>
         <source>Name</source>
-        <translation type="unfinished">Ime</translation>
+        <translation>Ime</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="383"/>
         <source>This name is already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>To ime je že zasedeno</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="95"/>
@@ -9511,32 +4171,22 @@
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="73"/>
         <source>Create a new audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustvari novi vzorec zvoka</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="79"/>
         <source>Audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Vzorec zvoka</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="84"/>
         <source>Audio sample lets you clone someone&apos;s voice.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vzorec zvoka vam omogoča kloniranje glasu nekoga.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="85"/>
         <source>It can be created by recording a audio sample directly from the microphone or by providing an audio file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceImportPage.qml" line="86"/>
-        <source>The text spoken in the audio sample should also be provided.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceImportPage.qml" line="97"/>
-        <source>More detailed instructions on the requirements for the audio sample can be found in the documentation for the specific TTS engine.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustvarite ga lahko s snemanjem vzorca zvoka neposredno iz mikrofona ali z zagotavljanjem zvočne datoteke.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="321"/>
@@ -9546,25 +4196,27 @@
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="312"/>
         <source>Play</source>
-        <translation>Igraj</translation>
+        <translation>Predvajaj</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceImportPage.qml" line="86"/>
+        <source>The text spoken in the audio sample should also be provided.</source>
+        <translation>Navesti je treba tudi besedilo, izgovorjeno v vzorcu zvoka.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="94"/>
         <source>The duration from 10 to 30 seconds is good enough.</source>
-        <translation type="unfinished"></translation>
+        <translation>Trajanje od 10 do 30 sekund je dovolj dobro.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceImportPage.qml" line="97"/>
+        <source>More detailed instructions on the requirements for the audio sample can be found in the documentation for the specific TTS engine.</source>
+        <translation>Podrobnejša navodila o zahtevah za vzorec zvoka najdete v dokumentaciji za določen stroj za pretvorbo besedila v govor.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="331"/>
         <source>Duration: %1 seconds</source>
         <translation>Trajanje: %1 sekund</translation>
-    </message>
-    <message>
-        <source>Voice name</source>
-        <translation type="vanished">Glasovno ime</translation>
-    </message>
-    <message>
-        <source>Tip: If you&apos;re not satisfied with voice cloning quality, try creating a few different voice samples and see which one gives you the best result.</source>
-        <translation type="vanished">Nasvet: če niste zadovoljni s kakovostjo kloniranja glasu, poskusite ustvariti nekaj različnih glasovnih vzorcev in preverite, kateri vam daje najboljši rezultat.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceImportPage.qml" line="407"/>
@@ -9595,82 +4247,74 @@
 <context>
     <name>VoiceMgmtPage</name>
     <message>
-        <source>Voice samples</source>
-        <translation type="vanished">Glasovni vzorci</translation>
-    </message>
-    <message>
-        <source>Create a new voice sample</source>
-        <translation type="vanished">Ustvari nov glasovni vzorec</translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="26"/>
         <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Glasovni profili</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="73"/>
         <source>Voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Glasovni profil</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="78"/>
         <source>Voice profile can be defined with an audio sample or text description.</source>
-        <translation type="unfinished"></translation>
+        <translation>Glasovni profil je mogoče definirati z vzorcem zvoka ali besedilnim opisom.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="87"/>
         <source>Voice Cloning</source>
-        <translation type="unfinished">Kloniranje glasu</translation>
+        <translation>Kloniranje glasu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="96"/>
         <source>Allows you to define different speaker characteristics, such as gender, mood or pace.</source>
-        <translation type="unfinished"></translation>
+        <translation>Omogoča vam, da določite različne značilnosti govorca, kot so spol, razpoloženje ali tempo.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="97"/>
         <source>Voice Text Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Opis glasovnega besedila</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="84"/>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="147"/>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="184"/>
         <source>Audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Vzorec zvoka</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="86"/>
         <source>Allows you to clone someone&apos;s voice.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dovoljuje vam kloniranje glasu osebe.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="87"/>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="97"/>
         <source>Can be used in models that support %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uporablja se lahko v modelih, ki podpirajo %1.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="94"/>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="148"/>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="196"/>
         <source>Text voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil glasovnega sporočila</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="217"/>
         <source>Create a new audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustvari nov vzorec zvoka</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="219"/>
         <source>Create a new text voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustvari nov profil za besedilni glas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="232"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Pomoč</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="252"/>
@@ -9681,48 +4325,12 @@
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="304"/>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="407"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Uredi</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="316"/>
         <source>Clone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="370"/>
-        <source>Edit the audio sample and set the missing text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="440"/>
-        <source>You haven&apos;t created any voice profile yet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">Shrani</translation>
-    </message>
-    <message>
-        <source>Save changes</source>
-        <translation type="vanished">Shrani spremembe</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Prekliči</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="392"/>
-        <source>Stop</source>
-        <translation type="unfinished">Stop</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="392"/>
-        <source>Play</source>
-        <translation type="unfinished">Igraj</translation>
-    </message>
-    <message>
-        <source>Rename</source>
-        <translation type="vanished">Preimenuj</translation>
+        <translation>Kloniraj</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="332"/>
@@ -9731,8 +4339,24 @@
         <translation>Izbriši</translation>
     </message>
     <message>
-        <source>You haven&apos;t created voice samples yet.</source>
-        <translation type="vanished">Še niste ustvarili glasovnih vzorcev.</translation>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="370"/>
+        <source>Edit the audio sample and set the missing text.</source>
+        <translation>Uredi vzorec zvoka in nastavi manjkajoče besedilo.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="392"/>
+        <source>Stop</source>
+        <translation>Stop</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="392"/>
+        <source>Play</source>
+        <translation>Predvajaj</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/VoiceMgmtPage.qml" line="440"/>
+        <source>You haven&apos;t created any voice profile yet.</source>
+        <translation>Niste še ustvarili nobenega glasovnega profila.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoiceMgmtPage.qml" line="441"/>
@@ -9745,87 +4369,87 @@
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="68"/>
         <source>Voice profile can be defined by text description.</source>
-        <translation type="unfinished"></translation>
+        <translation>Glasovni profil je mogoče definirati z besedilnim opisom.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="69"/>
         <source>A simple description could be, for example: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Preprosti opis bi lahko bil na primer: %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="76"/>
         <source>Tips:</source>
-        <translation type="unfinished"></translation>
+        <translation>Namigi:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="80"/>
         <source>Use emotions: %1, %2, %3, %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Uporabite čustvenčke: %1, %2, %3, %4</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="90"/>
         <source>To learn more about how to create a good text description, check out the specific model&apos;s website.</source>
-        <translation type="unfinished"></translation>
+        <translation>Če želite izvedeti več o tem, kako ustvariti dober opis besedila, si oglejte spletno mesto posameznega modela.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="27"/>
         <source>Edit text voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Uredi profil glasovnega sporočila</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="27"/>
         <source>Create a new text voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustvari nov profil za besedilni glas</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="63"/>
         <source>Text voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Besedilni profil glasu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="78"/>
         <source>Include the term %1 to generate the highest quality audio, and %2 for high levels of background noise.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vključite izraz %1 za ustvarjanje zvoka najvišje kakovosti in %2 za visoke ravni šuma v ozadju.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="82"/>
         <source>To ensure speaker consistency across generations, include speaker name.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za zagotovitev doslednosti govorcev med generacijami vključite ime govorca.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="89"/>
         <source>Currently, text voice profiles can be used only in %1 models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Trenutno je mogoče profile za besedilni glas uporabljati samo v %1 modelih.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="118"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Pomoč</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="131"/>
         <source>Save</source>
-        <translation type="unfinished">Shrani</translation>
+        <translation>Shrani</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="141"/>
         <source>Cancel</source>
-        <translation type="unfinished">Prekliči</translation>
+        <translation>Prekliči</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="159"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Opis</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="174"/>
         <source>Name</source>
-        <translation type="unfinished">Ime</translation>
+        <translation>Ime</translation>
     </message>
     <message>
         <location filename="../desktop/qml/VoicePromptEditPage.qml" line="176"/>
         <source>This name is already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>To ime je že zasedeno</translation>
     </message>
 </context>
 <context>
@@ -10510,6 +5134,36 @@
         <translation>Napaka: Prišlo je do neznane težave.</translation>
     </message>
     <message>
+        <location filename="../sfos/qml/main.qml" line="353"/>
+        <location filename="../desktop/qml/main.qml" line="616"/>
+        <source>Error: Not all text has been translated.</source>
+        <translation>Napaka: Vse besedilo ni bilo prevedeno.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="356"/>
+        <location filename="../desktop/qml/main.qml" line="622"/>
+        <source>Error: Couldn&apos;t export to the file.</source>
+        <translation>Napaka: Ni bilo mogoče izvoziti v datoteko.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="359"/>
+        <location filename="../desktop/qml/main.qml" line="625"/>
+        <source>Error: Couldn&apos;t import the file.</source>
+        <translation>Napaka: Datoteke ni bilo mogoče uvoziti.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="362"/>
+        <location filename="../desktop/qml/main.qml" line="628"/>
+        <source>Error: Couldn&apos;t import. The file does not contain audio or subtitles.</source>
+        <translation>Napaka: Ni bilo mogoče uvoziti. Datoteka ne vsebuje zvoka ali podnapisov.</translation>
+    </message>
+    <message>
+        <location filename="../sfos/qml/main.qml" line="374"/>
+        <location filename="../desktop/qml/main.qml" line="640"/>
+        <source>Error: Couldn&apos;t download a licence.</source>
+        <translation>Napaka: Ni bilo mogoče prenesti licence.</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/main.qml" line="141"/>
         <source>Getting ready, please wait...</source>
         <translation>Priprava, počakajte...</translation>
@@ -10530,39 +5184,45 @@
         <translation>Branje je zaustavljeno.</translation>
     </message>
     <message>
+        <location filename="../desktop/qml/main.qml" line="150"/>
+        <location filename="../desktop/qml/main.qml" line="152"/>
+        <source>Say something...</source>
+        <translation>Povejte nekaj...</translation>
+    </message>
+    <message>
         <location filename="../desktop/qml/main.qml" line="198"/>
         <location filename="../desktop/qml/main.qml" line="203"/>
         <location filename="../desktop/qml/main.qml" line="209"/>
         <source>Audio sample</source>
-        <translation type="unfinished"></translation>
+        <translation>Vzorec zvoka</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="203"/>
         <source>The selected model supports voice cloning. Create an %1 to clone someone&apos;s voice.</source>
-        <translation type="unfinished"></translation>
+        <translation>Izbrani model podpira kloniranje glasu. Ustvarite %1 za kloniranje glasu nekoga.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="209"/>
         <location filename="../desktop/qml/main.qml" line="229"/>
         <source>You can make a new %1 in the %2 menu.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nov %1 lahko ustvarite v meniju %2.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="209"/>
         <location filename="../desktop/qml/main.qml" line="229"/>
         <source>Voice profiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Glasovni profili</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="218"/>
         <location filename="../desktop/qml/main.qml" line="229"/>
         <source>Text voice profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Besedilni profil glasu</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="223"/>
         <source>The selected model supports the voice characteristics defined in the text description.</source>
-        <translation type="unfinished"></translation>
+        <translation>Izbrani model podpira glasovne značilnosti, opredeljene v besedilnem opisu.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="251"/>
@@ -10610,25 +5270,46 @@
         <translation>Začetek</translation>
     </message>
     <message>
-        <source>Both NVIDIA and AMD GPU acceleration add-ons are installed, which is not optimal. Uninstall one of them.</source>
-        <translation type="vanished">Nameščeni so dodatki za pospeševanje grafičnega procesorja NVIDIA in AMD, kar ni optimalno. Odstranite enega od njih.</translation>
+        <location filename="../desktop/qml/main.qml" line="297"/>
+        <source>Both %1 and %2 GPU acceleration add-ons are installed, which is not optimal. Uninstall one of them.</source>
+        <translation>Nameščena sta oba dodatka za pospeševanje grafične kartice %1 in %2, kar ni optimalno. Odnamestite enega od njiju.</translation>
     </message>
     <message>
-        <source>The Flatpak add-on for GPU acceleration is not installed.</source>
-        <translation type="vanished">Dodatek Flatpak za pospeševanje GPU ni nameščen.</translation>
+        <location filename="../desktop/qml/main.qml" line="307"/>
+        <location filename="../desktop/qml/main.qml" line="318"/>
+        <source>This version of %1 is not compatible with the installed %2 GPU acceleration add-on.</source>
+        <translation>Ta različica %1 ni združljiva z nameščenim dodatkom za pospeševanje GPE %2.</translation>
     </message>
     <message>
-        <source>To enable GPU acceleration, install either %1 or %2 add-on.</source>
-        <translation type="vanished">Če želite omogočiti pospeševanje GPU, namestite dodatek %1 ali %2.</translation>
+        <location filename="../desktop/qml/main.qml" line="310"/>
+        <location filename="../desktop/qml/main.qml" line="321"/>
+        <source>The required version of the add-on is %1.</source>
+        <translation>Zahtevana različica dodatka je %1.</translation>
     </message>
     <message>
-        <source>Most likely, NVIDIA kernel module has not been fully initialized.</source>
-        <translation type="vanished">Najverjetneje modul jedra NVIDIA ni bil v celoti inicializiran.</translation>
+        <location filename="../desktop/qml/main.qml" line="346"/>
+        <source>Both %1 and %2 graphics cards have been detected.</source>
+        <translation>Zaznani sta bili grafični kartici %1 in %2.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="387"/>
-        <source>Try executing %1 before running Speech Note.</source>
-        <translation>Poskusite izvesti %1, preden zaženete Speech Note.</translation>
+        <location filename="../desktop/qml/main.qml" line="348"/>
+        <source>%1 graphics card has been detected.</source>
+        <translation>Zaznana je bila grafična kartica %1.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/main.qml" line="350"/>
+        <source>To add GPU acceleration support, install the additional Flatpak add-on.</source>
+        <translation>Če želite dodati podporo za pospeševanje GPE-ja, namestite dodatek v Flatpaku.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/main.qml" line="353"/>
+        <source>Click to see instructions for installing the add-on.</source>
+        <translation>Kliknite za ogled navodil za namestitev dodatka.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/main.qml" line="355"/>
+        <source>Install</source>
+        <translation>Namesti</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="375"/>
@@ -10636,51 +5317,14 @@
         <translation>Za pospešitev obdelave omogočite strojno pospeševanje v nastavitvah.</translation>
     </message>
     <message>
-        <location filename="../desktop/qml/main.qml" line="297"/>
-        <source>Both %1 and %2 GPU acceleration add-ons are installed, which is not optimal. Uninstall one of them.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="307"/>
-        <location filename="../desktop/qml/main.qml" line="318"/>
-        <source>This version of %1 is not compatible with the installed %2 GPU acceleration add-on.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="310"/>
-        <location filename="../desktop/qml/main.qml" line="321"/>
-        <source>The required version of the add-on is %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="346"/>
-        <source>Both %1 and %2 graphics cards have been detected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="348"/>
-        <source>%1 graphics card has been detected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="350"/>
-        <source>To add GPU acceleration support, install the additional Flatpak add-on.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="353"/>
-        <source>Click to see instructions for installing the add-on.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="355"/>
-        <source>Install</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../desktop/qml/main.qml" line="386"/>
         <source>Most likely, %1 kernel module has not been fully initialized.</source>
-        <translation type="unfinished"></translation>
+        <translation>Najverjetneje modul jedra %1 ni bil v celoti inicializiran.</translation>
+    </message>
+    <message>
+        <location filename="../desktop/qml/main.qml" line="387"/>
+        <source>Try executing %1 before running Speech Note.</source>
+        <translation>Poskusite izvesti %1, preden zaženete Speech Note.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/main.qml" line="517"/>
@@ -10701,42 +5345,6 @@
         <location filename="../desktop/qml/main.qml" line="619"/>
         <source>Error: Couldn&apos;t repair the text.</source>
         <translation>Napaka: Besedila ni bilo mogoče popraviti.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="353"/>
-        <location filename="../desktop/qml/main.qml" line="616"/>
-        <source>Error: Not all text has been translated.</source>
-        <translation>Napaka: Vse besedilo ni bilo prevedeno.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="356"/>
-        <location filename="../desktop/qml/main.qml" line="622"/>
-        <source>Error: Couldn&apos;t export to the file.</source>
-        <translation>Napaka: Ni bilo mogoče izvoziti v datoteko.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="359"/>
-        <location filename="../desktop/qml/main.qml" line="625"/>
-        <source>Error: Couldn&apos;t import the file.</source>
-        <translation>Napaka: Datoteke ni bilo mogoče uvoziti.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="362"/>
-        <location filename="../desktop/qml/main.qml" line="628"/>
-        <source>Error: Couldn&apos;t import. The file does not contain audio or subtitles.</source>
-        <translation>Napaka: Ni bilo mogoče uvoziti. Datoteka ne vsebuje zvoka ali podnapisov.</translation>
-    </message>
-    <message>
-        <location filename="../sfos/qml/main.qml" line="374"/>
-        <location filename="../desktop/qml/main.qml" line="640"/>
-        <source>Error: Couldn&apos;t download a licence.</source>
-        <translation>Napaka: Ni bilo mogoče prenesti licence.</translation>
-    </message>
-    <message>
-        <location filename="../desktop/qml/main.qml" line="150"/>
-        <location filename="../desktop/qml/main.qml" line="152"/>
-        <source>Say something...</source>
-        <translation>Povejte nekaj...</translation>
     </message>
 </context>
 <context>
@@ -10769,29 +5377,29 @@
     <message>
         <location filename="../src/settings.cpp" line="2456"/>
         <source>Example: Replace &quot;%1&quot; with &quot;%2&quot; and start the next word with a capital letter</source>
-        <translation type="unfinished"></translation>
+        <translation>Primer: Zamenjaj &quot;%1&quot; z &quot;%2&quot; in začni naslednjo besedo z veliko začetnico</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="2470"/>
         <source>Example: Replace &quot;%1&quot; with &quot;%2&quot; and start the next word with a lowercase letter</source>
-        <translation type="unfinished"></translation>
+        <translation>Primer: Zamenjaj &quot;%1&quot; z &quot;%2&quot; in začni naslednjo besedo z malo črko</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="2484"/>
         <source>Example: Insert newline instead of the word &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Primer: Vstavi novo vrstico namesto besede &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="2509"/>
         <source>Example: Correct pronunciation of the Polish name &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Primer: Pravilna izgovorjava poljskega imena &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="2590"/>
         <location filename="../src/settings.cpp" line="2592"/>
         <location filename="../src/settings.cpp" line="2759"/>
         <source>Clone of &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Klon od &quot;%1&quot;</translation>
     </message>
 </context>
 <context>
@@ -10810,7 +5418,7 @@
     <message>
         <location filename="../src/speech_service.cpp" line="3024"/>
         <source>Chinese</source>
-        <translation type="unfinished">kitajščina</translation>
+        <translation>kitajščina</translation>
     </message>
     <message>
         <location filename="../src/speech_service.cpp" line="3037"/>
@@ -10959,7 +5567,7 @@
     <message>
         <location filename="../src/tray_icon.cpp" line="282"/>
         <source>Start listening, always translate</source>
-        <translation type="unfinished"></translation>
+        <translation>Začni poslušanje, vedno prevajaj</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="285"/>
@@ -10970,7 +5578,7 @@
     <message>
         <location filename="../src/tray_icon.cpp" line="293"/>
         <source>Start listening, always translate, text to active window</source>
-        <translation type="unfinished"></translation>
+        <translation>Začni poslušanje, vedno prevajaj besedilo v dejavno okno</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="297"/>
@@ -10981,7 +5589,7 @@
     <message>
         <location filename="../src/tray_icon.cpp" line="304"/>
         <source>Start listening, always translate, text to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Začni poslušanje, vedno prevajaj besedilo na odložišče</translation>
     </message>
     <message>
         <location filename="../src/tray_icon.cpp" line="307"/>
