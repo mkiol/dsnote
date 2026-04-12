@@ -33,6 +33,18 @@ Page {
             }
 
             LogItem {
+                text: "<p>" + qsTr("Translator") + "</p>
+                <ul>
+                <li>Updated models for: Catalan, Czech, German, Danish, Spanish, Persian, French, Icelandic, Italian, Korean, Dutch, Polish, Portuguese, Tamil, Ukrainian</li>
+                <li>Fix: Translation models cannot be downloaded.</li>
+                </ul>"
+            }
+
+            SectionHeader {
+                text: qsTr("Version %1").arg("4.8.3")
+            }
+
+            LogItem {
                 text: "<p>" + qsTr("Text to Speech") + "</p>
                 <ul>
                 <li>New <i>Piper</i> voices for Argentine Spanish, Hindi, Malayalam and Nepali</li>

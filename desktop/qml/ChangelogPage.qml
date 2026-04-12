@@ -18,6 +18,18 @@ DialogPage {
     }
 
     RichLabel {
+        text: "<p>" + qsTr("Translator") + "</p>
+        <ul>
+        <li>Updated models for: Catalan, Czech, German, Danish, Spanish, Persian, French, Icelandic, Italian, Korean, Dutch, Polish, Portuguese, Tamil, Ukrainian</li>
+        <li>Fix: Translation models cannot be downloaded.</li>
+        </ul>"
+    }
+
+    SectionLabel {
+        text: qsTr("Version %1").arg("4.8.3")
+    }
+
+    RichLabel {
         text: "<p>" + qsTr("General") + "</p>
         <ul>
         <li>Fix: The model cannot be activated when the license file cannot be downloaded due to an error.</li>

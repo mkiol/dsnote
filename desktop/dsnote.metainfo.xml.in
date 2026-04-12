@@ -98,6 +98,16 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
+    <release version="4.8.4" date="2026-04-14">
+      <description>
+      <p>Translator:</p>
+      <ul>
+      <li>Updated models for: Catalan, Czech, German, Danish, Spanish, Persian, French,
+        Icelandic, Italian, Korean, Dutch, Polish, Portuguese, Tamil, Ukrainian</li>
+      <li>Fix: Translation models cannot be downloaded.</li>
+      </ul>
+      </description>
+    </release>
     <release version="4.8.3" date="2025-08-14">
       <description>
       <p>General:</p>
