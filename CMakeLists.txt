@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+# Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -145,7 +145,7 @@ if(WITH_FLATPAK)
 endif()
 set(info_author "Michal Kosciesza")
 set(info_author_email "michal@mkiol.net")
-set(info_copyright_year "2021-2025")
+set(info_copyright_year "2021-2026")
 set(info_support_email "${id}@mkiol.net")
 set(info_webpage "https://github.com/mkiol/${id}")
 set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
@@ -172,7 +172,7 @@ if(WITH_DESKTOP)
     endif()
 endif()
 
-project(${id} VERSION 4.8.3)
+project(${id} VERSION 4.8.4)
 
 set(arch_arm32 0)
 set(arch_arm64 0)
