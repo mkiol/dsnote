@@ -1,6 +1,6 @@
-diff -ruN bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_party/marian-dev/CMakeLists.txt
---- bergamot-org/3rd_party/marian-dev/CMakeLists.txt	2023-07-08 17:36:56.190113017 +0200
-+++ bergamot-patched/3rd_party/marian-dev/CMakeLists.txt	2024-07-25 07:56:55.305860788 +0200
+diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_party/marian-dev/CMakeLists.txt
+--- bergamot-org/3rd_party/marian-dev/CMakeLists.txt	2026-02-18 20:12:40.849086522 +0100
++++ bergamot-patched/3rd_party/marian-dev/CMakeLists.txt	2026-04-19 17:20:39.121713912 +0200
 @@ -57,6 +57,17 @@
  option(USE_SIMD_UTILS "Enable simde to target instruction sets" OFF)
  option(COMPILE_WITHOUT_EXCEPTIONS "Compile without exceptions" OFF)
@@ -199,9 +199,9 @@ diff -ruN bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_
      endif(MKL_FOUND)
    endif(USE_ONNX_SGEMM)
  
-diff -ruN bergamot-org/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.cpp bergamot-patched/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.cpp
---- bergamot-org/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.cpp	2023-07-08 17:36:56.220113018 +0200
-+++ bergamot-patched/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.cpp	2024-07-24 20:35:35.469465595 +0200
+diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.cpp bergamot-patched/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.cpp
+--- bergamot-org/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.cpp	2026-02-18 20:12:40.866065232 +0100
++++ bergamot-patched/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.cpp	2026-02-21 19:44:31.448307077 +0100
 @@ -17,6 +17,12 @@
  #include <faiss/utils/random.h>
  #include "common/logging.h"
@@ -215,9 +215,9 @@ diff -ruN bergamot-org/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.
  using namespace faiss;
  
  
-diff -ruN bergamot-org/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.h bergamot-patched/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.h
---- bergamot-org/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.h	2023-07-08 17:36:56.220113018 +0200
-+++ bergamot-patched/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.h	2024-07-24 20:36:54.729260486 +0200
+diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.h bergamot-patched/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.h
+--- bergamot-org/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.h	2026-02-18 20:12:40.866065232 +0100
++++ bergamot-patched/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.h	2026-02-21 19:44:31.448419747 +0100
 @@ -22,6 +22,9 @@
  #include <x86intrin.h>
  #endif
@@ -228,9 +228,9 @@ diff -ruN bergamot-org/3rd_party/marian-dev/src/3rd_party/faiss/VectorTransform.
  
  namespace faiss {
  
-diff -ruN bergamot-org/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt bergamot-patched/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt
---- bergamot-org/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt	2023-07-08 17:37:11.273446808 +0200
-+++ bergamot-patched/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt	2023-07-20 14:56:52.285377752 +0200
+diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt bergamot-patched/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt
+--- bergamot-org/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt	2026-02-18 20:12:52.897134742 +0100
++++ bergamot-patched/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt	2026-02-21 19:44:31.448515107 +0100
 @@ -13,7 +13,7 @@
  if(MSVC)
    add_compile_options(/W4 /WX)
@@ -240,9 +240,9 @@ diff -ruN bergamot-org/3rd_party/marian-dev/src/3rd_party/intgemm/CMakeLists.txt
    if (COMPILE_WASM)
      # Disabling Pthreads + memory growth warning to be an error for WASM
      # Pthreads + memory growth causes JS accessing the wasm memory to be slow
-diff -ruN bergamot-org/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h bergamot-patched/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h
---- bergamot-org/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h	2023-07-08 17:37:23.063447169 +0200
-+++ bergamot-patched/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h	2023-07-30 18:56:02.133335033 +0200
+diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h bergamot-patched/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h
+--- bergamot-org/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h	2026-02-18 20:13:00.649657524 +0100
++++ bergamot-patched/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfun.h	2026-02-21 19:44:31.448616157 +0100
 @@ -257,6 +257,12 @@
  
  #else /* FMA */
@@ -256,9 +256,21 @@ diff -ruN bergamot-org/3rd_party/marian-dev/src/3rd_party/simd_utils/neon_mathfu
  // FMA version
  static inline v4sf log_ps(v4sf x)
  {
-diff -ruN bergamot-org/3rd_party/marian-dev/src/common/binary.cpp bergamot-patched/3rd_party/marian-dev/src/common/binary.cpp
---- bergamot-org/3rd_party/marian-dev/src/common/binary.cpp	2023-07-08 17:36:56.233446352 +0200
-+++ bergamot-patched/3rd_party/marian-dev/src/common/binary.cpp	2023-07-29 19:12:08.582096263 +0200
+diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/src/3rd_party/spdlog/CMakeLists.txt bergamot-patched/3rd_party/marian-dev/src/3rd_party/spdlog/CMakeLists.txt
+--- bergamot-org/3rd_party/marian-dev/src/3rd_party/spdlog/CMakeLists.txt	2026-02-18 20:12:40.868945600 +0100
++++ bergamot-patched/3rd_party/marian-dev/src/3rd_party/spdlog/CMakeLists.txt	2026-04-19 17:24:42.145509188 +0200
+@@ -11,7 +11,7 @@
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+-    set(CMAKE_CXX_FLAGS "-Wall ${CMAKE_CXX_FLAGS}")
++    set(CMAKE_CXX_FLAGS "-Wall -Wno-error=template-id-cdtor ${CMAKE_CXX_FLAGS}")
+ endif()
+ 
+ add_library(spdlog INTERFACE)
+diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/src/common/binary.cpp bergamot-patched/3rd_party/marian-dev/src/common/binary.cpp
+--- bergamot-org/3rd_party/marian-dev/src/common/binary.cpp	2026-02-18 20:12:40.878982981 +0100
++++ bergamot-patched/3rd_party/marian-dev/src/common/binary.cpp	2026-02-21 19:44:31.448744167 +0100
 @@ -19,7 +19,7 @@
    uint64_t dataLength;
  };
@@ -320,9 +332,9 @@ diff -ruN bergamot-org/3rd_party/marian-dev/src/common/binary.cpp bergamot-patch
                                                        // non-aligned models can be read with the same procedure.
                                                        // No version-bump required. Gets 5-8% of speed back when mmapped.
  }
-diff -ruN bergamot-org/3rd_party/marian-dev/src/layers/lsh.cpp bergamot-patched/3rd_party/marian-dev/src/layers/lsh.cpp
---- bergamot-org/3rd_party/marian-dev/src/layers/lsh.cpp	2023-07-08 17:36:56.240113019 +0200
-+++ bergamot-patched/3rd_party/marian-dev/src/layers/lsh.cpp	2023-07-22 12:16:53.558584438 +0200
+diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/src/layers/lsh.cpp bergamot-patched/3rd_party/marian-dev/src/layers/lsh.cpp
+--- bergamot-org/3rd_party/marian-dev/src/layers/lsh.cpp	2026-02-18 20:12:40.884493576 +0100
++++ bergamot-patched/3rd_party/marian-dev/src/layers/lsh.cpp	2026-02-21 19:44:31.448858447 +0100
 @@ -2,9 +2,7 @@
  #include "graph/expression_operators.h"
  #include "tensors/cpu/prod_blas.h"
@@ -419,12 +431,12 @@ diff -ruN bergamot-org/3rd_party/marian-dev/src/layers/lsh.cpp bergamot-patched/
                                   input->value_type());
    return scatter(lowest, -1, idx, aff);
  }
-diff -ruN bergamot-org/3rd_party/marian-dev/src/layers/lsh.h bergamot-patched/3rd_party/marian-dev/src/layers/lsh.h
---- bergamot-org/3rd_party/marian-dev/src/layers/lsh.h	2023-07-22 12:04:17.035228319 +0200
-+++ bergamot-patched/3rd_party/marian-dev/src/layers/lsh.h	2023-07-22 12:04:51.138562678 +0200
+diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/src/layers/lsh.h bergamot-patched/3rd_party/marian-dev/src/layers/lsh.h
+--- bergamot-org/3rd_party/marian-dev/src/layers/lsh.h	2026-02-18 20:12:40.884493576 +0100
++++ bergamot-patched/3rd_party/marian-dev/src/layers/lsh.h	2026-02-21 19:44:31.448947827 +0100
 @@ -9,11 +9,7 @@
  
- class LSH {
+ class LSH {  
  public:
 -  LSH(int k, int nbits) : k_{k}, nbits_{nbits} {
 -#if !BLAS_FOUND
@@ -435,9 +447,9 @@ diff -ruN bergamot-org/3rd_party/marian-dev/src/layers/lsh.h bergamot-patched/3r
  
    Expr apply(Expr query, Expr values, Expr bias);
  
-diff -ruN bergamot-org/3rd_party/marian-dev/src/microsoft/quicksand.h bergamot-patched/3rd_party/marian-dev/src/microsoft/quicksand.h
---- bergamot-org/3rd_party/marian-dev/src/microsoft/quicksand.h	2023-07-08 17:36:56.240113019 +0200
-+++ bergamot-patched/3rd_party/marian-dev/src/microsoft/quicksand.h	2025-05-10 20:20:20.011642719 +0200
+diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/src/microsoft/quicksand.h bergamot-patched/3rd_party/marian-dev/src/microsoft/quicksand.h
+--- bergamot-org/3rd_party/marian-dev/src/microsoft/quicksand.h	2026-02-18 20:12:40.885243753 +0100
++++ bergamot-patched/3rd_party/marian-dev/src/microsoft/quicksand.h	2026-02-21 19:44:31.449031217 +0100
 @@ -5,6 +5,7 @@
  #include <unordered_set>
  #include <vector>
@@ -446,9 +458,9 @@ diff -ruN bergamot-org/3rd_party/marian-dev/src/microsoft/quicksand.h bergamot-p
  
  namespace marian {
  
-diff -ruN bergamot-org/3rd_party/marian-dev/src/tensors/cpu/integer_common.h bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/integer_common.h
---- bergamot-org/3rd_party/marian-dev/src/tensors/cpu/integer_common.h	2023-07-08 17:36:56.243446352 +0200
-+++ bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/integer_common.h	2023-07-31 11:43:04.106649054 +0200
+diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/src/tensors/cpu/integer_common.h bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/integer_common.h
+--- bergamot-org/3rd_party/marian-dev/src/tensors/cpu/integer_common.h	2026-02-18 20:12:40.888164612 +0100
++++ bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/integer_common.h	2026-02-21 19:44:31.449129167 +0100
 @@ -27,6 +27,13 @@
  namespace cpu {
  namespace integer {
@@ -513,9 +525,9 @@ diff -ruN bergamot-org/3rd_party/marian-dev/src/tensors/cpu/integer_common.h ber
      float * output_tensor = reinterpret_cast<float *>(&(*item.bytes.begin()));
      // Explicitly calculate n once beforehand because the compiler does not pick up on its
      // static nature, and will end up calling marian::Shape::dim() a lot.
-diff -ruN bergamot-org/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h
---- bergamot-org/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h	2023-07-08 17:36:56.243446352 +0200
-+++ bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h	2023-07-31 16:19:47.100665027 +0200
+diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h
+--- bergamot-org/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h	2026-02-18 20:12:40.888164612 +0100
++++ bergamot-patched/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h	2026-02-21 19:44:31.449251406 +0100
 @@ -28,6 +28,30 @@
  
  #if RUY_PLATFORM_NEON
@@ -569,9 +581,9 @@ diff -ruN bergamot-org/3rd_party/marian-dev/src/tensors/cpu/ruy_interface.h berg
      vst1q_s8(&dst[ 1*rows + dstRowBegin], vreinterpretq_s8_s32(vcombine_s32( vget_low_s32(x1.val[0]),  vget_low_s32(x5.val[0]))));
      vst1q_s8(&dst[ 2*rows + dstRowBegin], vreinterpretq_s8_s32(vcombine_s32( vget_low_s32(x2.val[0]),  vget_low_s32(x6.val[0]))));
      vst1q_s8(&dst[ 3*rows + dstRowBegin], vreinterpretq_s8_s32(vcombine_s32( vget_low_s32(x3.val[0]),  vget_low_s32(x7.val[0]))));
-diff -ruN bergamot-org/bergamot_api.cpp bergamot-patched/bergamot_api.cpp
+diff -ruN -x '.*' bergamot-org/bergamot_api.cpp bergamot-patched/bergamot_api.cpp
 --- bergamot-org/bergamot_api.cpp	1970-01-01 01:00:00.000000000 +0100
-+++ bergamot-patched/bergamot_api.cpp	2023-12-14 19:30:25.683358065 +0100
++++ bergamot-patched/bergamot_api.cpp	2026-02-21 19:44:31.449371416 +0100
 @@ -0,0 +1,89 @@
 +#include "bergamot_api.h"
 +
@@ -662,9 +674,9 @@ diff -ruN bergamot-org/bergamot_api.cpp bergamot-patched/bergamot_api.cpp
 +void bergamot_api_cancel(void* handle) {
 +  static_cast<bergamot_api*>(handle)->cancel();
 +}
-diff -ruN bergamot-org/bergamot_api.h bergamot-patched/bergamot_api.h
+diff -ruN -x '.*' bergamot-org/bergamot_api.h bergamot-patched/bergamot_api.h
 --- bergamot-org/bergamot_api.h	1970-01-01 01:00:00.000000000 +0100
-+++ bergamot-patched/bergamot_api.h	2023-12-13 15:10:15.516819002 +0100
++++ bergamot-patched/bergamot_api.h	2026-02-21 19:44:31.449432816 +0100
 @@ -0,0 +1,38 @@
 +#ifndef BERGAMOT_API_H
 +#define BERGAMOT_API_H
@@ -704,9 +716,9 @@ diff -ruN bergamot-org/bergamot_api.h bergamot-patched/bergamot_api.h
 +}
 +
 +#endif  // BERGAMOT_API_H
-diff -ruN bergamot-org/CMakeLists.txt bergamot-patched/CMakeLists.txt
---- bergamot-org/CMakeLists.txt	2023-07-08 17:36:50.510112843 +0200
-+++ bergamot-patched/CMakeLists.txt	2023-11-20 11:53:08.937187708 +0100
+diff -ruN -x '.*' bergamot-org/CMakeLists.txt bergamot-patched/CMakeLists.txt
+--- bergamot-org/CMakeLists.txt	2026-02-18 20:12:37.004142695 +0100
++++ bergamot-patched/CMakeLists.txt	2026-02-21 19:44:31.449499416 +0100
 @@ -53,7 +53,7 @@
  if(MSVC)
    add_definitions(-DUSE_SSE2=1) # Supposed to fix something in the sse_mathfun.h but not sure it does
@@ -738,11 +750,9 @@ diff -ruN bergamot-org/CMakeLists.txt bergamot-patched/CMakeLists.txt
  endif(COMPILE_WASM)
  
  option(COMPILE_PYTHON "Compile python bindings. Intended to be activated with setup.py" OFF)
-Binary files bergamot-org/.git/index and bergamot-patched/.git/index differ
-Binary files bergamot-org/.git/modules/3rd_party/marian-dev/index and bergamot-patched/.git/modules/3rd_party/marian-dev/index differ
-diff -ruN bergamot-org/src/translator/logging.h bergamot-patched/src/translator/logging.h
---- bergamot-org/src/translator/logging.h	2023-07-08 17:36:50.513446177 +0200
-+++ bergamot-patched/src/translator/logging.h	2023-07-10 19:45:04.590367854 +0200
+diff -ruN -x '.*' bergamot-org/src/translator/logging.h bergamot-patched/src/translator/logging.h
+--- bergamot-org/src/translator/logging.h	2026-02-18 20:12:37.006388957 +0100
++++ bergamot-patched/src/translator/logging.h	2026-02-21 19:44:31.449606556 +0100
 @@ -16,7 +16,7 @@
      }
    };
