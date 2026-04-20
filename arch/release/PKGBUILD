@@ -2,7 +2,7 @@
 
 _pkgname='dsnote'
 pkgname="${_pkgname}"
-pkgver=4.8.3
+pkgver=4.8.4
 pkgrel=1
 pkgdesc="Note taking, reading and translating with offline Speech to Text, Text to Speech and Machine Translation"
 arch=(
@@ -17,10 +17,8 @@ depends=(
   'glslang'
   'gst-plugins-good'
   'hicolor-icon-theme'
-  'kconfigwidgets5'
-  'kdbusaddons5'
-  'kiconthemes5'
-  'kirigami2'
+  'kconfigwidgets'
+  'kdbusaddons'
   'libarchive'
   'libpulse'
   'libxinerama'
@@ -28,11 +26,11 @@ depends=(
   'ocl-icd'
   'openblas'
   'python>=3.11'
-  'qt5-base'
-  'qt5-declarative'
-  'qt5-multimedia'
-  'qt5-quickcontrols2'
-  'qt5-x11extras'
+  'qqc2-breeze-style'
+  'qqc2-desktop-style'
+  'qt6-base'
+  'qt6-declarative'
+  'qt6-multimedia'
   'rubberband'
   'taglib'
   'vulkan-icd-loader'
@@ -47,7 +45,7 @@ makedepends=(
   'meson'
   'patchelf'
   'pybind11'
-  'qt5-tools'
+  'qt6-tools'
   'vulkan-headers'
 )
 makedepends_x86_64=(
@@ -74,7 +72,7 @@ provides=(${_pkgname})
 conflicts=(${_pkgname}-git)
 install=${_pkgname}.install
 source=(https://github.com/mkiol/dsnote/archive/refs/tags/v${pkgver}.tar.gz)
-sha256sums=('da96b7f95a85d14e0e96d4f2ba5c00cde4c54b74d165bd50b7ebefb7bcbf814d')
+sha256sums=('0b0dad123180b1cd2f6f4b195b157cdd40fea54d767d9db56f67ad781dc16cc2')
 
 build() {
   cd "${srcdir}/${_pkgname}-${pkgver}"
@@ -94,7 +92,6 @@ build() {
         -DBUILD_TAGLIB=OFF \
         -DBUILD_VOSK=OFF \
         -DBUILD_WHISPERCPP_VULKAN=ON \
-        -DBUILD_QQC2_BREEZE_STYLE=ON \
         -DDOWNLOAD_VOSK=ON \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -Wno-dev"
