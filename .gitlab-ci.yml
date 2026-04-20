@@ -22,13 +22,19 @@ build-arch:
   script:
     - echo "Building ${VERSION} for ArchLinux..."
     - cp $PROOT/arch/git/* _build/
-    - chmod 0777 -R _build 
+    - chmod 0777 -R _build
+    # Update to latest packages and install git
+    - pacman-key --init 1> /dev/null
+    - pacman -Sy archlinux-keyring --noconfirm 1> /dev/null
     - pacman -Syu --noconfirm 1> /dev/null
     - pacman -S --noconfirm git 1> /dev/null
+    # Add user that will be used with makepkg 
     - useradd -m archuser && passwd -d archuser 1> /dev/null
     - echo "archuser ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-archuser
     - chmod 0440 /etc/sudoers.d/90-archuser
+    # Avoid git errors due to new user
     - sudo -u archuser git config --global --add safe.directory $PWD
+    # Start actual build
     - cd _build
     - sed -i "s/CI_BUILD=false/CI_BUILD=true/" PKGBUILD # enable CI build
     - sed -i "s/FULL_BUILD=true/FULL_BUILD=false/" PKGBUILD # disable CUDA build
@@ -94,3 +100,4 @@ release:
       links:
         - name: "${ARCH_BINARY}"
           url: "${PACKAGE_REGISTRY_URL}/${ARCH_BINARY}"
+
