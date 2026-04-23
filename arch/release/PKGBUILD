@@ -17,8 +17,10 @@ depends=(
   'glslang'
   'gst-plugins-good'
   'hicolor-icon-theme'
-  'kconfigwidgets'
-  'kdbusaddons'
+  'kconfigwidgets5'
+  'kdbusaddons5'
+  'kiconthemes5'
+  'kirigami2'
   'libarchive'
   'libpulse'
   'libxinerama'
@@ -26,11 +28,11 @@ depends=(
   'ocl-icd'
   'openblas'
   'python>=3.11'
-  'qqc2-breeze-style'
-  'qqc2-desktop-style'
-  'qt6-base'
-  'qt6-declarative'
-  'qt6-multimedia'
+  'qt5-base'
+  'qt5-declarative'
+  'qt5-multimedia'
+  'qt5-quickcontrols2'
+  'qt5-x11extras'
   'rubberband'
   'taglib'
   'vulkan-icd-loader'
@@ -45,7 +47,7 @@ makedepends=(
   'meson'
   'patchelf'
   'pybind11'
-  'qt6-tools'
+  'qt5-tools'
   'vulkan-headers'
 )
 makedepends_x86_64=(
@@ -92,6 +94,7 @@ build() {
         -DBUILD_TAGLIB=OFF \
         -DBUILD_VOSK=OFF \
         -DBUILD_WHISPERCPP_VULKAN=ON \
+        -DBUILD_QQC2_BREEZE_STYLE=ON \
         -DDOWNLOAD_VOSK=ON \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -Wno-dev"
@@ -131,3 +134,4 @@ package() {
   cd build
   make DESTDIR="$pkgdir" install
 }
+
