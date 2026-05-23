@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -177,11 +177,20 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type,
         }
 
         try {
-            LOGD("checking: whisperspeech tts");
-            py::module_::import("whisperspeech");
+            LOGD("checking: whisperspeech2 tts");
+            py::module_::import("whisperspeech2");
             availability.whisperspeech_tts = true;
         } catch (const std::exception& err) {
-            LOGD("whisperspeech tts check py error: " << err.what());
+            LOGD("whisperspeech2 tts check py error: " << err.what());
+
+            // fallback to whisperspeech
+            try {
+                LOGD("checking: whisperspeech tts");
+                py::module_::import("whisperspeech");
+                availability.whisperspeech_tts = true;
+            } catch (const std::exception& err) {
+                LOGD("whisperspeech tts check py error: " << err.what());
+            }
         }
 
         try {

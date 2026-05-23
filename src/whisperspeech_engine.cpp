@@ -1,4 +1,4 @@
-/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -115,11 +115,20 @@ void whisperspeech_engine::create_model() {
             auto hub = py::module_::import("torch.hub");
             hub.attr("set_dir")(m_config.cache_dir);
 
-            auto api = py::module_::import("whisperspeech.pipeline");
+            auto api = [] {
+                try {
+                    // try to load from whisperspeech2
+                    return py::module_::import("whisperspeech2.pipeline");
+                } catch (const std::exception& err) {
+                    LOGD("whisperspeech2 py error: " << err.what());
+                    // fallback to whisperspeech
+                    return py::module_::import("whisperspeech.pipeline");
+                }
+            }();
 
             m_model = api.attr("Pipeline")(
                 "s2a_ref"_a = s2a_file, "t2s_ref"_a = t2s_file,
-                "device"_a = (use_cuda ? "cuda" : "cpu"));
+                "device"_a = (use_cuda ? "cuda:0" : "cpu"));
 
             if (!use_cuda) {
                 auto torch = py::module_::import("torch");
