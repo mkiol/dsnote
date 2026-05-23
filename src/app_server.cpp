@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -148,8 +148,9 @@ int app_server::request_another_instance(const cmd::options &options) {
             for (const auto &m : models) {
                 auto model = qdbus_cast<QVariantMap>(m.value<QDBusArgument>());
                 if (!model.contains("id")) continue;
-                fmt::print(fmt::format("\t{{:{}}} \"{{}}\"\n",
-                                       max_id_size > 0 ? max_id_size : 10),
+                fmt::print(fmt::runtime(
+                               fmt::format("\t{{:{}}} \"{{}}\"\n",
+                                           max_id_size > 0 ? max_id_size : 10)),
                            model.value("id").toString().toStdString(),
                            model.value("name").toString().toStdString());
             }
@@ -158,14 +159,15 @@ int app_server::request_another_instance(const cmd::options &options) {
         auto print_active_model = [](const char *name, size_t max_id_size,
                                      const QVariantMap &model) {
             fmt::print("Active {} model:\n", name);
-            fmt::print(fmt::format("\t{{:{}}} \"{{}}\"\n",
-                                   max_id_size > 0 ? max_id_size : 10),
-                       model.contains("id")
-                           ? model.value("id").toString().toStdString()
-                           : "-",
-                       model.contains("name")
-                           ? model.value("name").toString().toStdString()
-                           : "-");
+            fmt::print(
+                fmt::runtime(fmt::format("\t{{:{}}} \"{{}}\"\n",
+                                         max_id_size > 0 ? max_id_size : 10)),
+                model.contains("id")
+                    ? model.value("id").toString().toStdString()
+                    : "-",
+                model.contains("name")
+                    ? model.value("name").toString().toStdString()
+                    : "-");
         };
 
         size_t g_max_size = 1;

@@ -112,8 +112,8 @@ Logger::Message::~Message() {
         fmt::format("[{{0}}] {{1:%H:%M:%S}}.{{2}} {{3:#10x}} {{4}}{}- {{5}}{}",
                     m_line > 0 ? ":{6} " : " ", str.back() == '\n' ? "" : "\n");
     try {
-        auto line = fmt::format(fmt, typeToChar(m_type), now, msecs,
-                                thrd_current(), m_fun, str, m_line);
+        auto line = fmt::format(fmt::runtime(fmt), typeToChar(m_type), now,
+                                msecs, thrd_current(), m_fun, str, m_line);
         if (Logger::m_file) {
             *Logger::m_file << line;
             Logger::m_file->flush();
