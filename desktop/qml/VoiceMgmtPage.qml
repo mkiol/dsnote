@@ -22,11 +22,17 @@ DialogPage {
     readonly property real _leftMargin: (root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
                                              appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
                                              appWin.padding
+    readonly property bool _promptEnabled: app.feature_parler_tts
 
     title: qsTr("Voice profiles")    
 
     function updateTypeView() {
         stop_playback()
+
+        if (!_promptEnabled) {
+            if (listViewStackItem.depth > 1) listViewStackItem.pop()
+            return
+        }
 
         switch(_settings.active_voice_profile_type) {
         case Settings.VoiceProfileAudioSample:
@@ -45,6 +51,11 @@ DialogPage {
 
     function create_new() {
         stop_playback()
+
+        if (!_promptEnabled) {
+            appWin.openDialog("VoiceImportPage.qml")
+            return
+        }
 
         switch(_settings.active_voice_profile_type) {
         case Settings.VoiceProfileAudioSample:
@@ -91,6 +102,7 @@ DialogPage {
             }
 
             Label {
+                visible: root._promptEnabled
                 Layout.fillWidth: true
                 wrapMode: Text.Wrap
                 text: qsTr("Text voice profile") +
@@ -127,7 +139,7 @@ DialogPage {
         }
 
         ColumnLayout {
-            visible: root.verticalMode
+            visible: root.verticalMode && root._promptEnabled
             Layout.fillWidth: true
             Layout.leftMargin: root.leftPadding + appWin.padding
             Layout.rightMargin: root.rightPadding + appWin.padding
@@ -137,6 +149,10 @@ DialogPage {
 
                 Layout.fillWidth: true
                 onCurrentIndexChanged: {
+                    if (!root._promptEnabled) {
+                        _settings.active_voice_profile_type = Settings.VoiceProfileAudioSample
+                        return
+                    }
                     voiceFeatureTypeComboBar.currentIndex = currentIndex
                     if (currentIndex == 1) {
                         _settings.active_voice_profile_type = Settings.VoiceProfilePrompt
@@ -157,6 +173,9 @@ DialogPage {
 
             Layout.fillWidth: true
             currentIndex: {
+                if (!root._promptEnabled) {
+                    return 0
+                }
                 switch(_settings.active_voice_profile_type) {
                 case Settings.VoiceProfileAudioSample:
                     return 0
@@ -167,6 +186,10 @@ DialogPage {
             }
 
             onCurrentIndexChanged: {
+                if (!root._promptEnabled) {
+                    _settings.active_voice_profile_type = Settings.VoiceProfileAudioSample
+                    return
+                }
                 voiceFeatureTypeComboBar.currentIndex = currentIndex
                 if (currentIndex == 1) {
                     _settings.active_voice_profile_type = Settings.VoiceProfilePrompt
@@ -174,7 +197,7 @@ DialogPage {
                     _settings.active_voice_profile_type = Settings.VoiceProfileAudioSample
                 }
             }
-            visible: !root.verticalMode
+            visible: !root.verticalMode || !root._promptEnabled
             Layout.leftMargin: 1
             Layout.rightMargin: 1
 
@@ -193,6 +216,7 @@ DialogPage {
             TabButton {
                 id: promptTabButton
 
+                visible: root._promptEnabled
                 width: implicitWidth
                 action: Action {
                     text: qsTr("Text voice profile")
@@ -211,6 +235,9 @@ DialogPage {
             Layout.leftMargin: root.leftPadding + appWin.padding
             Layout.bottomMargin: root.bottomPadding
             text: {
+                if (!_promptEnabled) {
+                    return qsTr("Create a new audio sample")
+                }
                 switch(_settings.active_voice_profile_type) {
                 case Settings.VoiceProfileAudioSample:
                     return qsTr("Create a new audio sample")
