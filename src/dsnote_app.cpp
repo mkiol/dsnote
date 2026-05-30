@@ -1119,7 +1119,9 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
             m_pending_stt_request = m_current_stt_request;
         }
 
-        play_speech_from_text(text, active_tts_model());
+        play_speech_from_text_format(
+            text, active_tts_model(),
+            settings::instance()->stt_tts_text_format());
     }
 }
 
@@ -2975,10 +2977,10 @@ void dsnote_app::play_speech_translator_selected(int start, int end,
                      : note().mid(start, end - start),
         transtalated ? m_active_tts_model_for_out_mnt
                      : m_active_tts_model_for_in_mnt,
-        transtalated                        ? tts_for_out_mnt_ref_voice_needed()
-                                                  ? active_tts_for_out_mnt_ref_voice()
-                                                  : QString{}
-                               : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
+        transtalated ? tts_for_out_mnt_ref_voice_needed()
+                           ? active_tts_for_out_mnt_ref_voice()
+                           : QString{}
+        : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
                                             : QString{},
         transtalated
             ? tts_for_out_mnt_ref_prompt_needed()
@@ -3032,6 +3034,13 @@ void dsnote_app::repair_text(text_repair_task_type_t task_type) {
 
 void dsnote_app::play_speech_from_text(const QString &text,
                                        const QString &model_id) {
+    play_speech_from_text_format(text, model_id,
+                                 settings::text_format_t::TextFormatRaw);
+}
+
+void dsnote_app::play_speech_from_text_format(
+    const QString &text, const QString &model_id,
+    settings::text_format_t text_format) {
     play_speech_internal(text, model_id,
                          tts_ref_voice_needed_by_id(model_id)
                              ? active_tts_ref_voice()
@@ -3039,7 +3048,7 @@ void dsnote_app::play_speech_from_text(const QString &text,
                          tts_ref_prompt_needed_by_id(model_id)
                              ? settings::instance()->tts_active_voice_prompt()
                              : QString{},
-                         settings::text_format_t::TextFormatRaw);
+                         text_format);
 }
 
 void dsnote_app::play_speech_translator(bool transtalated) {
@@ -3057,10 +3066,10 @@ void dsnote_app::play_speech_translator(bool transtalated) {
         transtalated ? m_translated_text : note(),
         transtalated ? m_active_tts_model_for_out_mnt
                      : m_active_tts_model_for_in_mnt,
-        transtalated                        ? tts_for_out_mnt_ref_voice_needed()
-                                                  ? active_tts_for_out_mnt_ref_voice()
-                                                  : QString{}
-                               : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
+        transtalated ? tts_for_out_mnt_ref_voice_needed()
+                           ? active_tts_for_out_mnt_ref_voice()
+                           : QString{}
+        : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
                                             : QString{},
         transtalated
             ? tts_for_out_mnt_ref_prompt_needed()
@@ -3173,10 +3182,10 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
         transtalated ? m_active_tts_model_for_out_mnt
                      : m_active_tts_model_for_in_mnt,
         dest_file, title_tag, track_tag,
-        transtalated                        ? tts_for_out_mnt_ref_voice_needed()
-                                                  ? active_tts_for_out_mnt_ref_voice()
-                                                  : QString{}
-                               : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
+        transtalated ? tts_for_out_mnt_ref_voice_needed()
+                           ? active_tts_for_out_mnt_ref_voice()
+                           : QString{}
+        : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
                                             : QString{},
         transtalated
             ? tts_for_out_mnt_ref_prompt_needed()
@@ -3330,7 +3339,7 @@ void dsnote_app::set_service_state(service_state_t new_service_state) {
         }
 
         if (old_connected != connected()) {
-            qDebug() << "app connected:" << old_connected << " = > "
+            qDebug() << "app connected:" << old_connected << "=>"
                      << connected();
             emit connected_changed();
         }
@@ -3869,7 +3878,7 @@ bool dsnote_app::busy() const {
     return m_service_state == service_state_t::StateBusy ||
            another_app_connected() ||
            (settings::launch_mode == settings::launch_mode_t::app &&
-            !m_service_reload_update_done);
+            !m_service_reload_update_done && m_service_reload_called);
 }
 
 bool dsnote_app::stt_configured() const { return m_stt_configured; }
@@ -4087,10 +4096,10 @@ void dsnote_app::export_to_audio_mix_translator(bool transtalated,
         transtalated ? m_active_tts_model_for_out_mnt
                      : m_active_tts_model_for_in_mnt,
         dest_file, title_tag, track_tag,
-        transtalated                        ? tts_for_out_mnt_ref_voice_needed()
-                                                  ? active_tts_for_out_mnt_ref_voice()
-                                                  : QString{}
-                               : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
+        transtalated ? tts_for_out_mnt_ref_voice_needed()
+                           ? active_tts_for_out_mnt_ref_voice()
+                           : QString{}
+        : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
                                             : QString{},
         transtalated
             ? tts_for_out_mnt_ref_prompt_needed()
@@ -4916,21 +4925,33 @@ QVariantList dsnote_app::features_availability() {
         if (settings::launch_mode == settings::launch_mode_t::app) {
             models_manager::models_availability_t ma;
 
-#define X(_name, _role, ...) \
-    ma.ENGINE_TYPE(_name, _role) = feature_available(ENGINE_FEAV_STR(_name, _role), false);
+#define X(_name, _role, ...)       \
+    ma.ENGINE_TYPE(_name, _role) = \
+        feature_available(ENGINE_FEAV_STR(_name, _role), false);
             ENGINE_TABLE
 #undef X
-            ma.ENGINE_TYPE_LANG(mimic3, tts, de) = feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, de), false);
-            ma.ENGINE_TYPE_LANG(mimic3, tts, es) = feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, es), false);
-            ma.ENGINE_TYPE_LANG(mimic3, tts, fr) = feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, fr), false);
-            ma.ENGINE_TYPE_LANG(mimic3, tts, it) = feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, it), false);
-            ma.ENGINE_TYPE_LANG(mimic3, tts, ru) = feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, ru), false);
-            ma.ENGINE_TYPE_LANG(mimic3, tts, sw) = feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, sw), false);
-            ma.ENGINE_TYPE_LANG(mimic3, tts, fa) = feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, fa), false);
-            ma.ENGINE_TYPE_LANG(mimic3, tts, nl) = feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, nl), false);
-            ma.ENGINE_TYPE_LANG(kokoro, tts, ja) = feature_available(ENGINE_FEAV_LANG_STR(kokoro, tts, ja), false);
-            ma.ENGINE_TYPE_LANG(kokoro, tts, zh) = feature_available(ENGINE_FEAV_LANG_STR(kokoro, tts, zh), false);
-            ma.option_r = feature_available(ENGINE_FEAV_LANG_STR(coqui, tts, ko), false);
+            ma.ENGINE_TYPE_LANG(mimic3, tts, de) =
+                feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, de), false);
+            ma.ENGINE_TYPE_LANG(mimic3, tts, es) =
+                feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, es), false);
+            ma.ENGINE_TYPE_LANG(mimic3, tts, fr) =
+                feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, fr), false);
+            ma.ENGINE_TYPE_LANG(mimic3, tts, it) =
+                feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, it), false);
+            ma.ENGINE_TYPE_LANG(mimic3, tts, ru) =
+                feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, ru), false);
+            ma.ENGINE_TYPE_LANG(mimic3, tts, sw) =
+                feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, sw), false);
+            ma.ENGINE_TYPE_LANG(mimic3, tts, fa) =
+                feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, fa), false);
+            ma.ENGINE_TYPE_LANG(mimic3, tts, nl) =
+                feature_available(ENGINE_FEAV_LANG_STR(mimic3, tts, nl), false);
+            ma.ENGINE_TYPE_LANG(kokoro, tts, ja) =
+                feature_available(ENGINE_FEAV_LANG_STR(kokoro, tts, ja), false);
+            ma.ENGINE_TYPE_LANG(kokoro, tts, zh) =
+                feature_available(ENGINE_FEAV_LANG_STR(kokoro, tts, zh), false);
+            ma.option_r =
+                feature_available(ENGINE_FEAV_LANG_STR(coqui, tts, ko), false);
             ma.ENGINE_TYPE(bergamot, mnt) = translator_enabled;
 #ifdef USE_PY
             ma.ENGINE_TYPE(hftc, ttt) = feature_available("punctuator", false);

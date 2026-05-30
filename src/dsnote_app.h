@@ -909,6 +909,9 @@ class dsnote_app : public QObject {
                                  settings::text_format_t text_format,
                                  settings::audio_format_t audio_format,
                                  settings::audio_quality_t audio_quality);
+    void play_speech_from_text_format(const QString &text,
+                                      const QString &model_id,
+                                      settings::text_format_t text_format);
     void play_speech_internal(QString text, const QString &model_id,
                               const QString &ref_voice,
                               const QString &ref_prompt,
