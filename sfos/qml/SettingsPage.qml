@@ -116,9 +116,9 @@ Page {
                         TextSwitch {
                             checked: _settings.subtitles_support
                             automaticCheck: false
-                            text: qsTr("Subtitles support")
-                            description: qsTr("Enable support for subtitles.") + " " +
-                                         qsTr("When this option is enabled, options related to subtitles are visible in the user interface.")
+                            text: qsTr("Subtitles and inline timestamps support")
+                            description: qsTr("Enable support for subtitles and inline timestamps.") + " " +
+                                         qsTr("When this option is enabled, options related to subtitles and inline timestamps are visible in the user interface.")
                             onClicked: {
                                 _settings.subtitles_support = !_settings.subtitles_support
                             }
@@ -399,6 +399,35 @@ Page {
                                 target: _settings
                                 onSub_max_line_lengthChanged: {
                                     subMaxLineSlider.value = _settings.sub_max_line_length
+                                }
+                            }
+                        }
+
+                        SectionHeader {
+                            visible: _settings.subtitles_support
+                            text: qsTr("Inline timestamp")
+                        }
+
+                        Slider {
+                            id: inlineIntervalSlider
+
+                            visible: _settings.subtitles_support
+                            label: qsTr("Timestamp interval")
+                            opacity: enabled ? 1.0 : Theme.opacityLow
+                            width: parent.width
+                            minimumValue: 5
+                            maximumValue: 3600
+                            stepSize: 5
+                            value: _settings.inline_timestamp_min_interval
+                            valueText: value + " s"
+                            onValueChanged: {
+                                _settings.inline_timestamp_min_interval = value
+                            }
+
+                            Connections {
+                                target: _settings
+                                onInline_timestamp_min_intervalChanged: {
+                                    inlineIntervalSlider.value = _settings.inline_timestamp_min_interval
                                 }
                             }
                         }

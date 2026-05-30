@@ -133,6 +133,9 @@ Item {
                             _settings.mnt_text_format = Settings.TextFormatSubRip
                             break;
                         case Settings.TextFormatSubRip:
+                            _settings.mnt_text_format = Settings.TextFormatInlineTimestamp
+                            break;
+                        case Settings.TextFormatInlineTimestamp:
                             _settings.mnt_text_format = Settings.TextFormatRaw
                             break;
                         }
@@ -147,6 +150,8 @@ Item {
                             return "Markdown"
                         case Settings.TextFormatSubRip:
                             return qsTr("SRT Subtitles")
+                        case Settings.TextFormatInlineTimestamp:
+                            return qsTr("Inline timestamps")
                         }
                     }
                 }

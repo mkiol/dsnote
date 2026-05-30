@@ -87,6 +87,9 @@ Column {
                 _settings.stt_tts_text_format = Settings.TextFormatSubRip
                 break;
             case Settings.TextFormatSubRip:
+                _settings.stt_tts_text_format = Settings.TextFormatInlineTimestamp
+                break;
+            case Settings.TextFormatInlineTimestamp:
                 _settings.stt_tts_text_format = Settings.TextFormatRaw
                 break;
             }
@@ -97,6 +100,8 @@ Column {
                 return qsTr("Plain text")
             case Settings.TextFormatSubRip:
                 return qsTr("SRT Subtitles")
+            case Settings.TextFormatInlineTimestamp:
+                return qsTr("Inline timestamps")
             }
         }
 

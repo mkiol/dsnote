@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -127,13 +127,15 @@ ColumnLayout {
                             if (_settings.mnt_text_format === Settings.TextFormatHtml) return 1
                             if (_settings.mnt_text_format === Settings.TextFormatMarkdown) return 2
                             if (_settings.mnt_text_format === Settings.TextFormatSubRip) return 3
+                            if (_settings.mnt_text_format === Settings.TextFormatInlineTimestamp) return 4
                             return 0
                         }
                         model: [
                             qsTr("Plain text"),
                             "HTML",
                             "Markdown",
-                            qsTr("SRT Subtitles")
+                            qsTr("SRT Subtitles"),
+                            qsTr("Inline timestamps")
                         ]
                         onActivated: (index) => {
                             if (index === 0)
@@ -144,6 +146,8 @@ ColumnLayout {
                                 _settings.mnt_text_format = Settings.TextFormatMarkdown
                             else if (index === 3)
                                 _settings.mnt_text_format = Settings.TextFormatSubRip
+                            else if (index === 4)
+                                _settings.mnt_text_format = Settings.TextFormatInlineTimestamp
                         }
                     }
                     onCopyClicked: app.copy_to_clipboard()
