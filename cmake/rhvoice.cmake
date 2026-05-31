@@ -1,5 +1,5 @@
 set(rhvoice_source_url "https://github.com/RHVoice/RHVoice.git")
-set(rhvoice_tag "846293f4f966381802131ea3c94ff12461b6058a")
+set(rhvoice_tag "6ea918afe58c3913fc763da18934c5dd78af1b6d")
 
 find_package(Boost)
 if(NOT ${Boost_FOUND})
@@ -15,12 +15,26 @@ ExternalProject_Add(rhvoice
     GIT_TAG ${rhvoice_tag}
     GIT_SHALLOW OFF
     GIT_SUBMODULES "cmake/thirdParty/sanitizers" "cmake/thirdParty/CCache"
-        "data/languages/Polish" "data/languages/Albanian" "data/languages/Brazilian-Portuguese"
-        "data/languages/English" "data/languages/Esperanto" "data/languages/Georgian"
-        "data/languages/Kyrgyz" "data/languages/Macedonian" "data/languages/Russian"
-        "data/languages/Tatar" "data/languages/Ukrainian" "data/languages/Czech"
-        "data/languages/Uzbek" "data/languages/Slovak" "data/languages/Serbian"
-        "data/languages/Croatian" "data/languages/Spanish"
+        "data/languages/Polish"
+        "data/languages/Albanian"
+        "data/languages/Brazilian-Portuguese"
+        "data/languages/English"
+        "data/languages/Esperanto"
+        "data/languages/Georgian"
+        "data/languages/Kyrgyz"
+        "data/languages/Macedonian"
+        "data/languages/Russian"
+        "data/languages/Tatar"
+        "data/languages/Ukrainian"
+        "data/languages/Czech"
+        "data/languages/Uzbek"
+        "data/languages/Slovak"
+        "data/languages/Serbian"
+        "data/languages/Croatian"
+        "data/languages/Spanish"
+        "data/languages/Luxembourgish"
+        "data/languages/Romanian"
+        "data/languages/Belarusian"
     UPDATE_COMMAND ""
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
                 -i ${patches_dir}/rhvoice.patch ||
@@ -31,7 +45,7 @@ ExternalProject_Add(rhvoice
         -DCMAKE_PREFIX_PATH=<INSTALL_DIR> -DWITH_DATA=OFF -DENABLE_MAGE=OFF -DBUILD_CLIENT=OFF
         -DBUILD_UTILS=OFF -DBUILD_TESTS=OFF -DBUILD_SERVICE=OFF -DBUILD_SPEECHDISPATCHER_MODULE=OFF
         -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-    BUILD_ALWAYS False
+    BUILD_ALWAYS True
 )
 
 list(APPEND deps_libs "${external_lib_dir}/libRHVoice_core.so.1" "${external_lib_dir}/libRHVoice.so.1")
