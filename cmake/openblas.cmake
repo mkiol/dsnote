@@ -1,5 +1,5 @@
-set(openblas_source_url "https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.29/OpenBLAS-0.3.29.tar.gz")
-set(openblas_checksum "38240eee1b29e2bde47ebb5d61160207dc68668a54cac62c076bb5032013b1eb")
+set(openblas_source_url "https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.33/OpenBLAS-0.3.33.tar.gz")
+set(openblas_checksum "6761af1d9f5d353ab4f0b7497be2643313b36c8f31caec0144bfef198e71e6ab")
 
 set(openblas_opts
     -DCMAKE_BUILD_TYPE=Release
