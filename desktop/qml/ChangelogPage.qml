@@ -39,15 +39,27 @@ DialogPage {
         To enable new format set <i>Text format</i> to <i>Inline timestamps</i>. 
         You can also customize the timestamp interval and format in the settings.</li>
         </ul>
-        <p>" + qsTr("Translator") + "</p>
+        <p>" + qsTr("Text to Speech") + "</p>
         <ul>
-        <li>Updated models for: Catalan, Czech, German, Danish, Spanish, Persian, French, Icelandic, Italian, Korean, Dutch, Polish, Portuguese, Tamil, Ukrainian</li>
-        <li>Fix: Translation models cannot be downloaded.</li>
+        <li>New RHVoice models for: Belarusian, Croatian, English, Romanian, Russian.</li>
+        <li>Updated RHVoice models for: Czech, Serbian, Spanish.</li>
         </ul>
         <p>" + qsTr("User Interface") + "</p>
         <ul>
         <li>Setting option to force the English language in the user interface</li>
         <li><i>Speech Note</i> has been translated into Portuguese-Brazilian language.</li>
+        </ul>"
+    }
+
+    SectionLabel {
+        text: qsTr("Version %1").arg("4.8.4")
+    }
+
+    RichLabel {
+        text: "<p>" + qsTr("Translator") + "</p>
+        <ul>
+        <li>Updated models for: Catalan, Czech, German, Danish, Spanish, Persian, French, Icelandic, Italian, Korean, Dutch, Polish, Portuguese, Tamil, Ukrainian</li>
+        <li>Fix: Translation models cannot be downloaded.</li>
         </ul>"
     }
 

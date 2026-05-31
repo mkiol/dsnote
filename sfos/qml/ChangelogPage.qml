@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -33,22 +33,39 @@ Page {
             }
 
             LogItem {
-                text: "<p>" + qsTr("Speech to Text") + "</p>
+                text: "<p>" + qsTr("General") + "</p>
+                <ul>
+                <li>Fix: Python dependency blocked the installation on SFOS 5.1</li>
+                </ul>
+                <p>" + qsTr("Speech to Text") + "</p>
                 <ul>
                 <li>Inline timestamps in text output.
                 A new output format is now available, displaying timestamps that show when each segment of text was recognized in the audio.
                 To enable new format set <i>Text format</i> to <i>Inline timestamps</i>. 
-                You can also customize the timestamp interval and format in the settings.</li>
+                You can also customize the timestamp interval and format in the settings.
+                <i>Inline timestamps</i> option is available only when <i>Subtitles and inline timestamps support</i> is enabled in the settings.</li>
                 </ul>
-                <p>" + qsTr("Translator") + "</p>
+                <p>" + qsTr("Text to Speech") + "</p>
                 <ul>
-                <li>Updated models for: Catalan, Czech, German, Danish, Spanish, Persian, French, Icelandic, Italian, Korean, Dutch, Polish, Portuguese, Tamil, Ukrainian</li>
-                <li>Fix: Translation models cannot be downloaded.</li>
+                <li>New RHVoice models for: Belarusian, Croatian, English, Romanian, Russian.</li>
+                <li>Updated RHVoice models for: Czech, Serbian, Spanish.</li>
                 </ul>
                 <p>" + qsTr("User Interface") + "</p>
                 <ul>
                 <li>Setting option to force the English language in the user interface</li>
                 <li><i>Speech Note</i> has been translated into Portuguese-Brazilian language.</li>
+                </ul>"
+            }
+
+            SectionHeader {
+                text: qsTr("Version %1").arg("4.8.4")
+            }
+
+            LogItem {
+                text: "<p>" + qsTr("Translator") + "</p>
+                <ul>
+                <li>Updated models for: Catalan, Czech, German, Danish, Spanish, Persian, French, Icelandic, Italian, Korean, Dutch, Polish, Portuguese, Tamil, Ukrainian</li>
+                <li>Fix: Translation models cannot be downloaded.</li>
                 </ul>"
             }
 
