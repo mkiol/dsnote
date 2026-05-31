@@ -26586,6 +26586,48 @@
             "size": "11130815"
         },
         {
+            "name": "Русский (RHVoice Seva Male)",
+            "model_id": "ru_rhvoice_seva",
+            "engine": "tts_rhvoice",
+            "lang_id": "ru",
+            "speaker": "seva",
+            "checksum": "d25d9ef4",
+            "checksum_quick": "4f97edff",
+            "size": "6431590",
+            "info": "https://github.com/RHVoice/Seva-rus",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/Seva-rus/releases/download/4.1/RHVoice-voice-Russian-Seva-v4.1.zip"
+            ],
+            "license": {
+                "id": "CC BY-NC-ND 4.0",
+                "name": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0",
+                "url": "https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Русский (RHVoice Ryhor Male)",
+            "model_id": "ru_rhvoice_ryhor",
+            "engine": "tts_rhvoice",
+            "lang_id": "ru",
+            "speaker": "ryhor-rus",
+            "checksum": "67a94ab2",
+            "checksum_quick": "5a41daec",
+            "size": "3754964",
+            "info": "https://github.com/RHVoice/ryhor-rus",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/ryhor-rus/releases/download/4.1/RHVoice-voice-Russian-Ryhor-Rus-v4.1.zip"
+            ],
+            "license": {
+                "id": "CC BY-NC-ND 4.0",
+                "name": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0",
+                "url": "https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
             "name": "Українська (RHVoice Marianna Female)",
             "model_id": "uk_rhvoice_marianna",
             "engine": "tts_rhvoice",
@@ -26642,6 +26684,111 @@
             "size": "10271326"
         },
         {
+            "name": "Беларуская (RHVoice Ryhor Male)",
+            "model_id": "be_rhvoice_ryhor",
+            "engine": "tts_rhvoice",
+            "lang_id": "be",
+            "speaker": "ryhor-blr",
+            "checksum": "52cbdf25",
+            "checksum_quick": "93193f89",
+            "size": "4850322",
+            "info": "https://github.com/RHVoice/ryhor-blr",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/ryhor-blr/releases/download/4.3/RHVoice-voice-Belarusian-Ryhor-Blr-v4.3.zip"
+            ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution Non Commercial 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Беларуская (RHVoice Dasha Female)",
+            "model_id": "be_rhvoice_dasha",
+            "engine": "tts_rhvoice",
+            "lang_id": "be",
+            "speaker": "dasha-blr",
+            "checksum": "4b6256f1",
+            "checksum_quick": "b5509b3a",
+            "size": "2973863",
+            "info": "https://github.com/RHVoice/dasha-blr",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/dasha-blr/releases/download/4.5/RHVoice-voice-Belarusian-Dasha-Blr-v4.5.zip"
+            ],
+            "license": {
+                "id": "CC BY-SA 4.0",
+                "name": "Creative Commons Attribution-ShareAlike 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Беларуская (RHVoice Michal Male)",
+            "model_id": "be_rhvoice_michal",
+            "engine": "tts_rhvoice",
+            "lang_id": "be",
+            "speaker": "michal-blr",
+            "checksum": "783138d4",
+            "checksum_quick": "a411c597",
+            "size": "5557927",
+            "info": "https://github.com/RHVoice/michal-blr",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/michal-blr/releases/download/4.5/RHVoice-voice-Belarusian-Michal-Blr-v4.5.zip"
+            ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution Non Commercial 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Беларуская (RHVoice Lyudmila Female)",
+            "model_id": "be_rhvoice_lyudmila",
+            "engine": "tts_rhvoice",
+            "lang_id": "be",
+            "speaker": "lyudmila-blr",
+            "checksum": "79695a6b",
+            "checksum_quick": "f08ed8ae",
+            "size": "4174187",
+            "info": "https://github.com/RHVoice/lyudmila-blr",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/lyudmila-blr/releases/download/4.8/RHVoice-voice-Belarusian-Lyudmila-blr-v4.8.zip"
+            ],
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution Non Commercial 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Беларуская (RHVoice Alena Female)",
+            "model_id": "be_rhvoice_alena",
+            "engine": "tts_rhvoice",
+            "lang_id": "be",
+            "speaker": "alena",
+            "checksum": "e7a092d1",
+            "checksum_quick": "38ed6a55",
+            "size": "16381169",
+            "info": "https://github.com/RHVoice/alena-blr",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/alena-blr/releases/download/4.2/RHVoice-voice-Belarusian-Alena-v4.2.zip"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
             "name": "Hrvatski (RHVoice Karmela Female)",
             "model_id": "hr_rhvoice_karmela",
             "engine": "tts_rhvoice",
@@ -26662,18 +26809,39 @@
             }
         },
         {
+            "name": "Hrvatski (RHVoice Marija Female)",
+            "model_id": "hr_rhvoice_marija",
+            "engine": "tts_rhvoice",
+            "lang_id": "hr",
+            "speaker": "marija",
+            "checksum": "50fe1bcc",
+            "checksum_quick": "8f721474",
+            "size": "3607871",
+            "info": "https://github.com/RHVoice/marija-hrv",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/marija-hrv/releases/download/4.1/RHVoice-voice-Croatian-Marija-v4.1.zip"
+            ],
+            "license": {
+                "id": "CC BY-SA 4.0",
+                "name": "Creative Commons Attribution-ShareAlike 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
             "name": "Čeština (RHVoice Zděnek Male)",
             "model_id": "cs_rhvoice_zdenek",
             "engine": "tts_rhvoice",
             "lang_id": "cs",
             "speaker": "zdenek",
-            "checksum": "40a6aad7",
-            "checksum_quick": "d0557899",
-            "size": "5321998",
+            "checksum": "7ac0a6b1",
+            "checksum_quick": "35063c63",
+            "size": "5324629",
             "info": "https://github.com/RHVoice/zdenek-cze",
             "comp": "zipall",
             "urls": [
-                "https://github.com/RHVoice/zdenek-cze/releases/download/4.6/RHVoice-voice-Czech-Zdenek-v4.6.zip"
+                "https://github.com/RHVoice/zdenek-cze/releases/download/4.8/RHVoice-voice-Czech-Zdenek-v4.8.zip"
             ],
             "license": {
                 "id": "CC0",
@@ -26688,13 +26856,13 @@
             "engine": "tts_rhvoice",
             "lang_id": "cs",
             "speaker": "radek",
-            "checksum": "6353e675",
-            "checksum_quick": "74298482",
-            "size": "5079163",
+            "checksum": "48c650c8",
+            "checksum_quick": "325366e3",
+            "size": "5388495",
             "info": "https://github.com/RHVoice/radek-cze",
             "comp": "zipall",
             "urls": [
-                "https://github.com/RHVoice/radek-cze/releases/download/4.6/RHVoice-voice-Czech-Radek-v4.6.zip"
+                "https://github.com/RHVoice/radek-cze/releases/download/4.7/RHVoice-voice-Czech-Radek-v4.7.zip"
             ],
             "license": {
                 "id": "CC0",
@@ -26744,6 +26912,27 @@
                 "https://github.com/RHVoice/alan-eng/archive/bb3fdb15b9c64109f396f56f6155965bfcf89977.zip"
             ],
             "size": "4976930"
+        },
+        {
+            "name": "English (RHVoice Dasha Female)",
+            "model_id": "en_rhvoice_dasha",
+            "engine": "tts_rhvoice",
+            "lang_id": "en",
+            "speaker": "dasha-eng",
+            "checksum": "72c867b2",
+            "checksum_quick": "3fcde688",
+            "size": "2504318",
+            "info": "https://github.com/RHVoice/dasha-eng",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/dasha-eng/releases/download/4.2/RHVoice-voice-English-Dasha-Eng-v4.2.zip"
+            ],
+            "license": {
+                "id": "CC BY-SA 4.0",
+                "name": "Creative Commons Attribution-ShareAlike 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Oʻzbekcha (RHVoice Sevinch Female)",
@@ -26821,13 +27010,20 @@
             "engine": "tts_rhvoice",
             "lang_id": "sr",
             "speaker": "dragana",
-            "checksum": "5b0b047",
-            "checksum_quick": "10f117d7",
-            "size": "35618017",
+            "checksum": "35eb36eb",
+            "checksum_quick": "ce1958df",
+            "size": "11787855",
+            "info": "https://github.com/RHVoice/dragana-srp",
             "comp": "zipall",
             "urls": [
-                "https://github.com/RHVoice/dragana-srp/releases/download/4.8/RHVoice-voice-Serbian-Dragana-v4.8.zip"
-            ]
+                "https://github.com/RHVoice/dragana-srp/releases/download/4.9/RHVoice-voice-Serbian-Dragana-v4.9.zip"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Shqip (RHVoice Hana Female)",
@@ -27030,18 +27226,39 @@
             "engine": "tts_rhvoice",
             "lang_id": "es",
             "speaker": "mateo",
-            "checksum": "d7552786",
-            "checksum_quick": "f2f31a1a",
-            "size": "4013359",
+            "checksum": "97a77271",
+            "checksum_quick": "8bec4c84",
+            "size": "3688859",
             "info": "https://github.com/RHVoice/mateo-spa",
             "comp": "zipall",
             "urls": [
-                "https://github.com/RHVoice/mateo-spa/releases/download/4.10/RHVoice-voice-Spanish-Mateo-v4.10.zip"
+                "https://github.com/RHVoice/mateo-spa/releases/download/4.14/RHVoice-voice-Spanish-Mateo-v4.14.zip"
             ],
             "license": {
                 "id": "Unlicense",
                 "name": "The Unlicense",
                 "url": "https://raw.githubusercontent.com/unlicense/unlicense.org/refs/heads/master/public/UNLICENSE",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Română (RHVoice Paul Male)",
+            "model_id": "ro_rhvoice_paul",
+            "engine": "tts_rhvoice",
+            "lang_id": "ro",
+            "speaker": "paul",
+            "checksum": "7a9a2910",
+            "checksum_quick": "440deb33",
+            "size": "1617546",
+            "info": "https://github.com/RHVoice/paul-ron",
+            "comp": "zipall",
+            "urls": [
+                "https://github.com/RHVoice/paul-ron/releases/download/4.2/RHVoice-voice-Romanian-Paul-v4.2.zip"
+            ],
+            "license": {
+                "id": "CC BY-SA 4.0",
+                "name": "Creative Commons Attribution-ShareAlike 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt",
                 "accept_required": false
             }
         },
