@@ -38,12 +38,14 @@ DialogPage {
         A new output format is now available, displaying timestamps that show when each segment of text was recognized in the audio.
         To enable new format set <i>Text format</i> to <i>Inline timestamps</i>. 
         You can also customize the timestamp interval and format in the settings.</li>
+        <li>Whisper Large finetuned "AiLab" model for Latvian</li>
         </ul>
         <p>" + qsTr("Text to Speech") + "</p>
         <ul>
         <li>New RHVoice models for: Belarusian, Croatian, English, Romanian, Russian.</li>
         <li>Updated RHVoice models for: Czech, Serbian, Spanish.</li>
-        <li>New Piper models for: Albanian, Bulgarian, Dutch, Greek, Hindi, Indonesian, Kurdish, Latvian, Polish, Swedish, Telugu, Ukrainian, Urdu.
+        <li>New Piper models for: Albanian, Bulgarian, Dutch, Greek, Hindi, Indonesian, Kurdish, Latvian, Polish, Swedish, Telugu, Ukrainian, Urdu.</li>
+        <li>New F5-TTS model for Latvian.</li>
         </ul>
         <p>" + qsTr("User Interface") + "</p>
         <ul>

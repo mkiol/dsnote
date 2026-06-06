@@ -3408,6 +3408,24 @@
             "lang_id": "lv"
         },
         {
+            "name": "Latviešu (FasterWhisper AiLab Large-v3)",
+            "model_id": "lv_fasterwhisper_ailab_large3",
+            "engine": "stt_fasterwhisper",
+            "lang_id": "lv",
+            "checksum": "2a89f978",
+            "checksum_quick": "1e73c955",
+            "size": "1554894762",
+            "info": "https://huggingface.co/AiLab-IMCS-UL/whisper-large-v3-lv-late-cv19",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/RaivisDejus/whisper-large-v3-lv-ailab-ct2-int8/resolve/09f345d4c975bc5618a243e5599dc6f3a8ea3c1f/model.bin",
+                "https://huggingface.co/RaivisDejus/whisper-large-v3-lv-ailab-ct2-int8/resolve/09f345d4c975bc5618a243e5599dc6f3a8ea3c1f/config.json",
+                "https://huggingface.co/RaivisDejus/whisper-large-v3-lv-ailab-ct2-int8/resolve/09f345d4c975bc5618a243e5599dc6f3a8ea3c1f/tokenizer.json",
+                "https://huggingface.co/RaivisDejus/whisper-large-v3-lv-ailab-ct2-int8/resolve/09f345d4c975bc5618a243e5599dc6f3a8ea3c1f/vocabulary.json",
+                "https://huggingface.co/RaivisDejus/whisper-large-v3-lv-ailab-ct2-int8/resolve/09f345d4c975bc5618a243e5599dc6f3a8ea3c1f/preprocessor_config.json"
+            ]
+        },
+        {
             "name": "Монгол (FasterWhisper Tiny)",
             "model_id": "mn_fasterwhisper_tiny",
             "model_alias_of": "multilang_fasterwhisper_tiny",
@@ -7303,6 +7321,19 @@
             "model_id": "lv_whisper_large2",
             "model_alias_of": "multilang_whisper_large2",
             "lang_id": "lv"
+        },
+        {
+            "name": "Latviešu (WhisperCpp AiLab Large-v3)",
+            "model_id": "lv_whisper_ailab_large3",
+            "engine": "stt_whisper",
+            "lang_id": "lv",
+            "checksum": "5cd69053",
+            "checksum_quick": "68aaf6a9",
+            "size": "1081140203",
+            "info": "https://huggingface.co/AiLab-IMCS-UL/whisper-large-v3-lv-late-cv19",
+            "urls": [
+                "https://huggingface.co/AiLab-IMCS-UL/whisper-large-v3-lv-late-cv19/resolve/94d86513ea085c962af2bd689dd7d1122496e16d/ggml-model-q5_0.bin"
+            ]
         },
         {
             "name": "Монгол (WhisperCpp Tiny)",
@@ -25272,9 +25303,9 @@
             "model_id": "lv_piper_rudolfs_medium",
             "engine": "tts_piper",
             "lang_id": "lv",
-            "checksum": "",
-            "checksum_quick": "",
-            "size": "",
+            "checksum": "2987fc27",
+            "checksum_quick": "316342f9",
+            "size": "63537289",
             "info": "https://huggingface.co/RaivisDejus/Piper-lv_LV-Rudolfs-medium",
             "comp": "dir",
             "urls": [
@@ -35676,6 +35707,39 @@
             "model_alias_of": "multilang_f5_v1_base",
             "lang_id": "zh",
             "options": "an"
+        },
+        {
+            "name": "Latviešu (F5-TTS Base RaivisDejus)",
+            "model_id": "lv_f5_v1_base_raivisdejus",
+            "engine": "tts_f5",
+            "lang_id": "lv",
+            "checksum": "20b4d813",
+            "checksum_quick": "5d34af1",
+            "size": "1348485960",
+            "options": "x",
+            "features": [
+                "tts_voice_cloning"
+            ],
+            "sups": [
+                {
+                    "role": "hub",
+                    "file_name": "hf_charactr--vocos-mel-24khz_hub",
+                    "checksum": "1935f92f",
+                    "checksum_quick": "53d9ea25",
+                    "size": "54374644",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/charactr/vocos-mel-24khz/resolve/0feb3fdd929bcd6649e0e7c5a688cf7dd012ef21/pytorch_model.bin",
+                        "https://huggingface.co/charactr/vocos-mel-24khz/resolve/0feb3fdd929bcd6649e0e7c5a688cf7dd012ef21/config.yaml"
+                    ]
+                }
+            ],
+            "info": "https://huggingface.co/RaivisDejus/F5-TTS-Latvian",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/RaivisDejus/F5-TTS-Latvian/resolve/217daf3a2e28650d5dde1bd851f61755e0186e2b/model.safetensors",
+                "https://huggingface.co/RaivisDejus/F5-TTS-Latvian/resolve/217daf3a2e28650d5dde1bd851f61755e0186e2b/vocab.txt"
+            ]
         },
         {
             "name": "Multilingual (Kokoro 82M)",
