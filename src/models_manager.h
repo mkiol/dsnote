@@ -37,6 +37,26 @@ struct hash<QString> {
 }  // namespace std
 #endif
 
+#define ASTRUNC_LANG_TABLE \
+    X(bn, 0)               \
+    X(bo, 0)               \
+    X(hi, 0)               \
+    X(hy, 0)               \
+    X(ja, 0)               \
+    X(ka, 0)               \
+    X(ko, 0)               \
+    X(kn, 0)               \
+    X(mr, 0)               \
+    X(ml, 0)               \
+    X(ne, 0)               \
+    X(pa, 0)               \
+    X(sa, 0)               \
+    X(ta, 0)               \
+    X(te, 0)               \
+    X(th, 0)               \
+    X(tw, 0)               \
+    X(zh, 0)
+
 class models_manager : public QObject, public singleton<models_manager> {
     Q_OBJECT
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
@@ -423,6 +443,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     static bool is_ignore_on_sfos(model_engine_t engine,
                                   const QString& model_id);
     static void add_implicit_model_options(priv_model_t& model);
+    static void add_astrunc_model_options(priv_model_t& model);
 };
 
 #endif  // MODELS_MANAGER_H

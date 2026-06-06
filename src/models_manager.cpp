@@ -1621,8 +1621,9 @@ bool models_manager::sup_models_exist(const std::vector<sup_model_t>& models) {
 
 models_manager::model_role_t models_manager::role_of_engine(
     model_engine_t engine) {
-#define X(_name, _role, ...) \
-    if (engine == model_engine_t::ENGINE_TYPE(_name, _role)) return model_role_t::_role;
+#define X(_name, _role, ...)                                 \
+    if (engine == model_engine_t::ENGINE_TYPE(_name, _role)) \
+        return model_role_t::_role;
     ENGINE_TABLE
 #undef X
 
@@ -1798,9 +1799,8 @@ models_manager::feature_flags models_manager::add_implicit_feature_flags(
         case model_engine_t::stt_ds:
         case model_engine_t::stt_vosk:
         case model_engine_t::stt_april:
-            existing_features =
-                add_new_feature(existing_features,
-                                feature_flags::stt_intermediate_results);
+            existing_features = add_new_feature(
+                existing_features, feature_flags::stt_intermediate_results);
             break;
         case model_engine_t::stt_whisper:
 #ifdef USE_PY
@@ -2261,7 +2261,19 @@ auto models_manager::extract_models(
     return models;
 }
 
+void models_manager::add_astrunc_model_options(priv_model_t& model) {
+#define X(lang, ...)                                                        \
+    if (model.lang_id.compare(QLatin1String{#lang}, Qt::CaseInsensitive) == \
+        0) {                                                                \
+        model.options.push_back('a');                                       \
+        return;                                                             \
+    }
+    ASTRUNC_LANG_TABLE
+}
+
 void models_manager::add_implicit_model_options(priv_model_t& model) {
+    add_astrunc_model_options(model);
+
     if (model.engine == model_engine_t::tts_sam) {
         // add split by words option for all sam tts models
         model.options.push_back('w');
