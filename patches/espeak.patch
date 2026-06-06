@@ -1,0 +1,21 @@
+diff -ruN -x '.*' espeak-org/src/libespeak-ng/CMakeLists.txt espeak-patched/src/libespeak-ng/CMakeLists.txt
+--- espeak-org/src/libespeak-ng/CMakeLists.txt	2026-04-27 15:36:42.000000000 +0200
++++ espeak-patched/src/libespeak-ng/CMakeLists.txt	2026-06-06 18:57:50.509751124 +0200
+@@ -134,4 +134,16 @@
+   VERSION ${PROJECT_VERSION}
+ )
+ 
+-install(TARGETS espeak-ng LIBRARY)
++install(TARGETS espeak-ng
++    LIBRARY DESTINATION lib
++    ARCHIVE DESTINATION lib
++    PUBLIC_HEADER DESTINATION include)
++
++if (BUILD_STATIC_LIBS AND BUILD_SHARED_LIBS)
++  add_library(espeak-ng_static STATIC $<TARGET_OBJECTS:espeak-ng>)
++  set_target_properties(espeak-ng_static PROPERTIES OUTPUT_NAME "espeak-ng")
++  install(TARGETS espeak-ng_static ucd
++    LIBRARY DESTINATION lib
++    ARCHIVE DESTINATION lib
++    PUBLIC_HEADER DESTINATION include)
++endif()
