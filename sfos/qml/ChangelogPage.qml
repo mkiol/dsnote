@@ -49,6 +49,7 @@ Page {
                 <ul>
                 <li>New RHVoice models for: Belarusian, Croatian, English, Romanian, Russian.</li>
                 <li>Updated RHVoice models for: Czech, Serbian, Spanish.</li>
+                <li>New Piper models for: Albanian, Bulgarian, Dutch, Greek, Hindi, Indonesian, Kurdish, Latvian, Polish, Swedish, Telugu, Ukrainian, Urdu.
                 </ul>
                 <p>" + qsTr("User Interface") + "</p>
                 <ul>

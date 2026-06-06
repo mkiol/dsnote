@@ -375,6 +375,16 @@
             "name": "தமிழ்",
             "name_en": "Tamil",
             "id": "ta"
+        },
+        {
+            "name": "Kurdî",
+            "name_en": "Kurdish",
+            "id": "ku"
+        },
+        {
+            "name": "اُردُو",
+            "name_en": "Urdu",
+            "id": "ur"
         }
     ],
     "models": [
@@ -23986,12 +23996,40 @@
             "lang_id": "el",
             "checksum": "7aaf29e6",
             "checksum_quick": "ffdb9228",
+            "size": "63118674",
+            "info": "https://www.kaggle.com/datasets/bryanpark/greek-single-speaker-speech-dataset",
             "comp": "dir",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/el/el_GR/rapunzelina/low/el_GR-rapunzelina-low.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/el/el_GR/rapunzelina/low/el_GR-rapunzelina-low.onnx.json"
             ],
-            "size": "63118674"
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Ελληνικά (Piper Rapunzelina Medium Female)",
+            "model_id": "el_piper_rapunzelina_medium",
+            "engine": "tts_piper",
+            "lang_id": "el",
+            "checksum": "bf74020a",
+            "checksum_quick": "d2744f",
+            "size": "62971401",
+            "info": "https://www.kaggle.com/datasets/bryanpark/greek-single-speaker-speech-dataset",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/el/el_GR/rapunzelina/medium/el_GR-rapunzelina-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/el/el_GR/rapunzelina/medium/el_GR-rapunzelina-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Español (Piper Carlfm Low Male)",
@@ -24083,14 +24121,21 @@
             "model_id": "es_piper_mx_ald_medium",
             "engine": "tts_piper",
             "lang_id": "es",
-            "checksum": "20d9d2b6",
-            "checksum_quick": "3d5e7ce0",
+            "checksum": "551aad57",
+            "checksum_quick": "719f5781",
+            "size": "63222556",
+            "info": "https://huggingface.co/datasets/rmcpantoja/Ald_Mexican_Spanish_speech_dataset",
             "comp": "dir",
             "urls": [
-                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/es/es_MX/ald/medium/es_MX-ald-medium.onnx",
-                "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/es/es_MX/ald/medium/es_MX-ald-medium.onnx.json"
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/es/es_MX/ald/medium/es_MX-ald-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/es/es_MX/ald/medium/es_MX-ald-medium.onnx.json"
             ],
-            "size": "63216506"
+            "license": {
+                "id": "Unlicense",
+                "name": "Unlicense",
+                "url": "https://unlicense.org/UNLICENSE",
+                "accept_required": false
+            }
         },
         {
             "name": "Español mexicano (Piper Claude High)",
@@ -24126,6 +24171,48 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/375a0fe641dea077c2a47b4e9a056d6da521eed3/es/es_AR/daniela/high/es_AR-daniela-high.onnx.json"
             ],
             "info": "https://www.openslr.org/61/",
+            "license": {
+                "id": "CC BY-SA 4.0",
+                "name": "Creative Commons Attribution-ShareAlike 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Euskara (Piper Antton Medium Male)",
+            "model_id": "eu_piper_antton_medium",
+            "engine": "tts_piper",
+            "lang_id": "eu",
+            "checksum": "5a1e1c2e",
+            "checksum_quick": "4c500e32",
+            "size": "63552839",
+            "info": "https://huggingface.co/datasets/itzune/antton-dataset",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/eu/eu_ES/antton/medium/eu_ES-antton-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/eu/eu_ES/antton/medium/eu_ES-antton-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC BY-SA 4.0",
+                "name": "Creative Commons Attribution-ShareAlike 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Euskara (Piper Maider Medium Female)",
+            "model_id": "eu_piper_maider_medium",
+            "engine": "tts_piper",
+            "lang_id": "eu",
+            "checksum": "d9d2db18",
+            "checksum_quick": "50168412",
+            "size": "63552839",
+            "info": "https://huggingface.co/datasets/itzune/maider-dataset",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/eu/eu_ES/maider/medium/eu_ES-maider-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/eu/eu_ES/maider/medium/eu_ES-maider-medium.onnx.json"
+            ],
             "license": {
                 "id": "CC BY-SA 4.0",
                 "name": "Creative Commons Attribution-ShareAlike 4.0 International",
@@ -24742,6 +24829,66 @@
             ]
         },
         {
+            "name": "Nederlands (Piper Alex Medium Male)",
+            "model_id": "nl_piper_alex_medium",
+            "engine": "tts_piper",
+            "lang_id": "nl",
+            "checksum": "4d75c439",
+            "checksum_quick": "8c289766",
+            "size": "63552825",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/nl/nl_NL/alex/medium/nl_NL-alex-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/nl/nl_NL/alex/medium/nl_NL-alex-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Nederlands (Piper Pim Medium Male)",
+            "model_id": "nl_piper_pim_medium",
+            "engine": "tts_piper",
+            "lang_id": "nl",
+            "checksum": "ad72bc2f",
+            "checksum_quick": "19b70a13",
+            "size": "63537471",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/nl/nl_NL/pim/medium/nl_NL-pim-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/nl/nl_NL/pim/medium/nl_NL-pim-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Nederlands (Piper Ronnie Medium Male)",
+            "model_id": "nl_piper_ronnie_medium",
+            "engine": "tts_piper",
+            "lang_id": "nl",
+            "checksum": "d74fe809",
+            "checksum_quick": "7ab4c3df",
+            "size": "62971468",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/nl/nl_NL/ronnie/medium/nl_NL-ronnie-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/nl/nl_NL/ronnie/medium/nl_NL-ronnie-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
             "name": "Nederlands Belgisch (Piper Nathalie Low Female)",
             "model_id": "nl_piper_be_nathalie_low",
             "engine": "tts_piper",
@@ -24818,12 +24965,19 @@
             "lang_id": "pt",
             "checksum": "8a6aa7b9",
             "checksum_quick": "47f3e3ac",
+            "size": "63118674",
+            "info": "https://github.com/Edresson/TTS-Portuguese-Corpus",
             "comp": "dir",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pt/pt_BR/edresson/low/pt_BR-edresson-low.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pt/pt_BR/edresson/low/pt_BR-edresson-low.onnx.json"
             ],
-            "size": "63118674"
+            "license": {
+                "id": "CC BY-NC 4.0",
+                "name": "Creative Commons Attribution Non Commercial 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-nc/4.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Português brasileiro (Piper Faber Medium Male)",
@@ -24832,12 +24986,58 @@
             "lang_id": "pt",
             "checksum": "aabc5466",
             "checksum_quick": "e244bd9f",
+            "size": "63216455",
             "comp": "dir",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pt/pt_BR/faber/medium/pt_BR-faber-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pt/pt_BR/faber/medium/pt_BR-faber-medium.onnx.json"
             ],
-            "size": "63216455"
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Português brasileiro (Piper Cadu Medium Male)",
+            "model_id": "pt_piper_br_cadu_medium",
+            "engine": "tts_piper",
+            "lang_id": "pt",
+            "checksum": "6792f090",
+            "checksum_quick": "8efb8c75",
+            "size": "62971468",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/pt/pt_BR/cadu/medium/pt_BR-cadu-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/pt/pt_BR/cadu/medium/pt_BR-cadu-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Português brasileiro (Piper Jeff Medium Male)",
+            "model_id": "pt_piper_br_jeff_medium",
+            "engine": "tts_piper",
+            "lang_id": "pt",
+            "checksum": "6e39172a",
+            "checksum_quick": "187e8631",
+            "size": "62971469",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/pt/pt_BR/jeff/medium/pt_BR-jeff-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/pt/pt_BR/jeff/medium/pt_BR-jeff-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Português (Piper Tugão Medium Male)",
@@ -24846,12 +25046,18 @@
             "lang_id": "pt",
             "checksum": "60b62cc3",
             "checksum_quick": "5ccafdcf",
+            "size": "63222704",
             "comp": "dir",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pt/pt_PT/tug%C3%A3o/medium/pt_PT-tug%C3%A3o-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pt/pt_PT/tug%C3%A3o/medium/pt_PT-tug%C3%A3o-medium.onnx.json"
             ],
-            "size": "63214512"
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Română (Piper Mihai Medium Male)",
@@ -24955,18 +25161,80 @@
             "speaker": "1"
         },
         {
+            "name": "Български (Piper Dimitar Medium Male)",
+            "model_id": "bg_piper_dimitar_medium",
+            "engine": "tts_piper",
+            "lang_id": "bg",
+            "checksum": "ee2a4234",
+            "checksum_quick": "237249ac",
+            "size": "63243491",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/bg/bg_BG/dimitar/medium/bg_BG-dimitar-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/bg/bg_BG/dimitar/medium/bg_BG-dimitar-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
             "name": "Svenska (Piper NST Medium Male)",
             "model_id": "sv_piper_nst_medium",
             "engine": "tts_piper",
             "lang_id": "sv",
             "checksum": "9da573f6",
             "checksum_quick": "9656a7a3",
+            "size": "63118669",
+            "info": "https://www.nb.no/sprakbanken/en/resource-catalogue/oai-nb-no-sbr-17/",
             "comp": "dir",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/sv/sv_SE/nst/medium/sv_SE-nst-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/sv/sv_SE/nst/medium/sv_SE-nst-medium.onnx.json"
             ],
-            "size": "63118669"
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Svenska (Piper Alma Medium Female)",
+            "model_id": "sv_piper_alma_medium",
+            "engine": "tts_piper",
+            "lang_id": "sv",
+            "checksum": "854490fc",
+            "checksum_quick": "1eebce16",
+            "size": "63457054",
+            "info": "https://huggingface.co/yeagersthlm/piper-voice-sv-alma",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/sv/sv_SE/alma/medium/sv_SE-alma-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/sv/sv_SE/alma/medium/sv_SE-alma-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC BY 4.0",
+                "name": "Creative Commons Attribution 4.0 International",
+                "url": "https://creativecommons.org/licenses/by/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Svenska (Piper Lisa Medium Female)",
+            "model_id": "sv_piper_lisa_medium",
+            "engine": "tts_piper",
+            "lang_id": "sv",
+            "checksum": "e3fd103",
+            "checksum_quick": "92111480",
+            "size": "63534661",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/sv/sv_SE/lisa/medium/sv_SE-lisa-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/sv/sv_SE/lisa/medium/sv_SE-lisa-medium.onnx.json"
+            ]
         },
         {
             "name": "Slovenčina (Piper Lili Medium Female)",
@@ -25014,6 +25282,27 @@
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/3d796cc2f2c884b3517c527507e084f7bb245aea/lv/lv_LV/aivars/medium/lv_LV-aivars-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/3d796cc2f2c884b3517c527507e084f7bb245aea/lv/lv_LV/aivars/medium/lv_LV-aivars-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Latviešu (Piper Rudolfs Medium Male)",
+            "model_id": "lv_piper_rudolfs_medium",
+            "engine": "tts_piper",
+            "lang_id": "lv",
+            "checksum": "",
+            "checksum_quick": "",
+            "size": "",
+            "info": "https://huggingface.co/RaivisDejus/Piper-lv_LV-Rudolfs-medium",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/RaivisDejus/Piper-lv_LV-Rudolfs-medium/resolve/976b161e7d267c70719a77fca6ef8f3c59009dab/lv_LV-rudolfs-medium.onnx",
+                "https://huggingface.co/RaivisDejus/Piper-lv_LV-Rudolfs-medium/resolve/976b161e7d267c70719a77fca6ef8f3c59009dab/lv_LV-rudolfs-medium.onnx.json"
             ],
             "license": {
                 "id": "CC0",
@@ -25133,6 +25422,69 @@
             "model_alias_of": "uk_piper_ukrainiantts_medium",
             "lang_id": "uk",
             "speaker": "2"
+        },
+        {
+            "name": "Українська (Piper Mykyta High Male)",
+            "model_id": "uk_piper_mykyta_high",
+            "engine": "tts_piper",
+            "lang_id": "uk",
+            "checksum": "2b015b80",
+            "checksum_quick": "e5352325",
+            "size": "114225312",
+            "info": "https://huggingface.co/RomanStasyshyn/uk_UA-mykyta-high",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/uk/uk_UA/mykyta/high/uk_UA-mykyta-high.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/uk/uk_UA/mykyta/high/uk_UA-mykyta-high.onnx.json"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License Version 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Українська (Piper Oleksa High Male)",
+            "model_id": "uk_piper_oleksa_high",
+            "engine": "tts_piper",
+            "lang_id": "uk",
+            "checksum": "a1d58eab",
+            "checksum_quick": "de85c879",
+            "size": "114225312",
+            "info": "https://huggingface.co/RomanStasyshyn/uk_UA-oleksa-high",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/uk/uk_UA/oleksa/high/uk_UA-oleksa-high.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/uk/uk_UA/oleksa/high/uk_UA-oleksa-high.onnx.json"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License Version 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Українська (Piper Tetiana High Female)",
+            "model_id": "uk_piper_tetiana_high",
+            "engine": "tts_piper",
+            "lang_id": "uk",
+            "checksum": "28065294",
+            "checksum_quick": "851547bb",
+            "size": "114225313",
+            "info": "https://huggingface.co/RomanStasyshyn/uk_UA-tetiana-high",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/uk/uk_UA/tetiana/high/uk_UA-tetiana-high.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/uk/uk_UA/tetiana/high/uk_UA-tetiana-high.onnx.json"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License Version 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Tiếng Việt (Piper 25 Low Female)",
@@ -25637,30 +25989,67 @@
             "model_id": "zh_piper_huayan_low",
             "engine": "tts_piper",
             "lang_id": "zh",
-            "options": "a",
             "checksum": "e830c9d4",
             "checksum_quick": "e8de6db6",
+            "size": "20642959",
+            "info": "https://github.com/PlayVoice/HuaYan_TTS",
             "comp": "dir",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/zh/zh_CN/huayan/x_low/zh_CN-huayan-x_low.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/zh/zh_CN/huayan/x_low/zh_CN-huayan-x_low.onnx.json"
-            ],
-            "size": "20642959"
+            ]
         },
         {
             "name": "中文 (Piper Huayan Medium Female)",
             "model_id": "zh_piper_huayan_medium",
             "engine": "tts_piper",
             "lang_id": "zh",
-            "options": "a",
             "checksum": "6ac9fe75",
             "checksum_quick": "660cbfa8",
+            "size": "63216408",
+            "info": "https://github.com/PlayVoice/HuaYan_TTS",
             "comp": "dir",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json"
+            ]
+        },
+        {
+            "name": "中文 (Piper Chaowen Medium Male)",
+            "model_id": "zh_piper_chaowen_medium",
+            "engine": "tts_piper",
+            "lang_id": "zh",
+            "checksum": "a9bf7fea",
+            "checksum_quick": "33737cfb",
+            "size": "63241295",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/zh/zh_CN/chaowen/medium/zh_CN-chaowen-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/zh/zh_CN/chaowen/medium/zh_CN-chaowen-medium.onnx.json"
             ],
-            "size": "63216408"
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            },
+            "hidden": true
+        },
+        {
+            "name": "中文 (Piper XiaoYa Medium Female)",
+            "model_id": "zh_piper_xiaoya_medium",
+            "engine": "tts_piper",
+            "lang_id": "zh",
+            "checksum": "6ff33ea1",
+            "checksum_quick": "e8ecfd4d",
+            "size": "63241295",
+            "info": "https://huggingface.co/openspeech/BZNSYP",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/zh/zh_CN/xiao_ya/medium/zh_CN-xiao_ya-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/zh/zh_CN/xiao_ya/medium/zh_CN-xiao_ya-medium.onnx.json"
+            ],
+            "hidden": true
         },
         {
             "name": "Polski (Piper MLS 6892 Low Male)",
@@ -25670,12 +26059,19 @@
             "score": 0,
             "checksum": "9eae9439",
             "checksum_quick": "8acaac94",
+            "size": "63118671",
+            "info": "https://www.openslr.org/61/",
             "comp": "dir",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pl/pl_PL/mls_6892/low/pl_PL-mls_6892-low.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pl/pl_PL/mls_6892/low/pl_PL-mls_6892-low.onnx.json"
             ],
-            "size": "63118671",
+            "license": {
+                "id": "CC BY 4.0",
+                "name": "Creative Commons Attribution 4.0 International",
+                "url": "https://creativecommons.org/licenses/by/4.0/legalcode.txt",
+                "accept_required": false
+            },
             "hidden": true
         },
         {
@@ -25685,12 +26081,19 @@
             "lang_id": "pl",
             "checksum": "1828366f",
             "checksum_quick": "9e6f9884",
+            "size": "63214447",
+            "info": "https://www.kaggle.com/datasets/czyzi0/the-mc-speech-dataset",
             "comp": "dir",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/pl/pl_PL/mc_speech/medium/pl_PL-mc_speech-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/2b1eb66029b7a525aa9aaa7532433f00549e95b1/pl/pl_PL/mc_speech/medium/pl_PL-mc_speech-medium.onnx.json"
             ],
-            "size": "63214447"
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Polski (Piper Darkman Medium Male)",
@@ -25699,12 +26102,18 @@
             "lang_id": "pl",
             "checksum": "3ac06794",
             "checksum_quick": "a1b55a1",
+            "size": "63216408",
             "comp": "dir",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pl/pl_PL/darkman/medium/pl_PL-darkman-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pl/pl_PL/darkman/medium/pl_PL-darkman-medium.onnx.json"
             ],
-            "size": "63216408"
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "Polski (Piper Gosia Medium Female)",
@@ -25713,12 +26122,60 @@
             "lang_id": "pl",
             "checksum": "95efba7",
             "checksum_quick": "ba087dd2",
+            "size": "63216406",
             "comp": "dir",
             "urls": [
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pl/pl_PL/gosia/medium/pl_PL-gosia-medium.onnx",
                 "https://huggingface.co/rhasspy/piper-voices/resolve/a5400b9af996fd43eab8da0801c320629828f62a/pl/pl_PL/gosia/medium/pl_PL-gosia-medium.onnx.json"
             ],
-            "size": "63216406"
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Polski (Piper Bass High Male)",
+            "model_id": "pl_piper_bass_high",
+            "engine": "tts_piper",
+            "lang_id": "pl",
+            "checksum": "eed11fc0",
+            "checksum_quick": "e8e3be67",
+            "size": "114225362",
+            "info": "https://huggingface.co/blackbartblues/piper-pl-bass-high",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/pl/pl_PL/bass/high/pl_PL-bass-high.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/pl/pl_PL/bass/high/pl_PL-bass-high.onnx.json"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License Version 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Shqip (Piper Edon Medium Male)",
+            "model_id": "sq_piper_edon_medium",
+            "engine": "tts_piper",
+            "lang_id": "sq",
+            "checksum": "6afc77b8",
+            "checksum_quick": "87db27c1",
+            "size": "63532383",
+            "info": "https://huggingface.co/edonseki/folsh.ai",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/sq/sq_AL/edon/medium/sq_AL-edon-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/sq/sq_AL/edon/medium/sq_AL-edon-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC0",
+                "name": "Creative Commons CC0 1.0 Universal",
+                "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+                "accept_required": false
+            }
         },
         {
             "name": "हिन्दी (Piper Pratham Medium Male)",
@@ -25761,6 +26218,21 @@
             }
         },
         {
+            "name": "हिन्दी (Piper Rohan Medium Male)",
+            "model_id": "hi_piper_rohan_medium",
+            "engine": "tts_piper",
+            "lang_id": "hi",
+            "checksum": "34216981",
+            "checksum_quick": "147f977c",
+            "size": "62971469",
+            "info": "https://www.iitm.ac.in/donlab/indictts",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/hi/hi_IN/rohan/medium/hi_IN-rohan-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/hi/hi_IN/rohan/medium/hi_IN-rohan-medium.onnx.json"
+            ]
+        },
+        {
             "name": "മലയാളം (Piper Arjun Medium Male)",
             "model_id": "ml_piper_arjun_medium",
             "engine": "tts_piper",
@@ -25789,6 +26261,133 @@
                 "https://huggingface.co/rhasspy/piper-voices/resolve/375a0fe641dea077c2a47b4e9a056d6da521eed3/ml/ml_IN/meera/medium/ml_IN-meera-medium.onnx.json"
             ],
             "info": "https://www.kaggle.com/code/mpwolke/indic-tts-malayalam-speech-corpus"
+        },
+        {
+            "name": "తెలుగు (Piper Maya Medium Female)",
+            "model_id": "te_piper_maya_medium",
+            "engine": "tts_piper",
+            "lang_id": "te",
+            "checksum": "f0e58df5",
+            "checksum_quick": "c9c68ff4",
+            "size": "62971468",
+            "info": "https://www.iitm.ac.in/donlab/indictts",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/te/te_IN/maya/medium/te_IN-maya-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/te/te_IN/maya/medium/te_IN-maya-medium.onnx.json"
+            ]
+        },
+        {
+            "name": "తెలుగు (Piper Padmavathi Medium Female)",
+            "model_id": "te_piper_padmavathi_medium",
+            "engine": "tts_piper",
+            "lang_id": "te",
+            "checksum": "13944e86",
+            "checksum_quick": "24b99051",
+            "size": "63537408",
+            "info": "https://huggingface.co/datasets/ai4bharat/indicvoices_r",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/te/te_IN/padmavathi/medium/te_IN-padmavathi-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/te/te_IN/padmavathi/medium/te_IN-padmavathi-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC BY 4.0",
+                "name": "Creative Commons Attribution 4.0 International",
+                "url": "https://creativecommons.org/licenses/by/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "తెలుగు (Piper Venkatesh Medium Male)",
+            "model_id": "te_piper_venkatesh_medium",
+            "engine": "tts_piper",
+            "lang_id": "te",
+            "checksum": "14a3a008",
+            "checksum_quick": "447f167a",
+            "size": "63537407",
+            "info": "https://huggingface.co/datasets/ai4bharat/indicvoices_r",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/te/te_IN/venkatesh/medium/te_IN-venkatesh-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/te/te_IN/venkatesh/medium/te_IN-venkatesh-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC BY 4.0",
+                "name": "Creative Commons Attribution 4.0 International",
+                "url": "https://creativecommons.org/licenses/by/4.0/legalcode.txt",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "اُردُو (Piper Fasih Medium Male)",
+            "model_id": "ur_piper_fasih_medium",
+            "engine": "tts_piper",
+            "lang_id": "ur",
+            "checksum": "6157c613",
+            "checksum_quick": "96a1966c",
+            "size": "63551545",
+            "info": "https://huggingface.co/datasets/mahwizzzz/UAT",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/ur/ur_PK/fasih/medium/ur_PK-fasih-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/ur/ur_PK/fasih/medium/ur_PK-fasih-medium.onnx.json"
+            ],
+            "license": {
+                "id": "MIT",
+                "name": "MIT License",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "Bahasa Indonesia (Piper NewsTTS Medium Female)",
+            "model_id": "id_piper_newstts_medium",
+            "engine": "tts_piper",
+            "lang_id": "id",
+            "checksum": "1fe74d37",
+            "checksum_quick": "7a108d95",
+            "size": "62971478",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/id/id_ID/news_tts/medium/id_ID-news_tts-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/id/id_ID/news_tts/medium/id_ID-news_tts-medium.onnx.json"
+            ]
+        },
+        {
+            "name": "Kurmancî (Piper BerfinRenas Medium)",
+            "model_id": "ku_piper_tr_berfinrenas_medium",
+            "engine": "tts_piper",
+            "lang_id": "ku",
+            "checksum": "ff38edcd",
+            "checksum_quick": "9957c827",
+            "size": "77081822",
+            "info": "https://huggingface.co/rojanu/piper-ku-berfin-renas-medium",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/ku/ku_TR/berfin_renas/medium/ku_TR-berfin_renas-medium.onnx",
+                "https://huggingface.co/rhasspy/piper-voices/resolve/b710b0ba0740da88dc36e1ab8fa6b310d43a3a48/ku/ku_TR/berfin_renas/medium/ku_TR-berfin_renas-medium.onnx.json"
+            ],
+            "license": {
+                "id": "CC BY-NC-SA 4.0",
+                "name": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International",
+                "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.txt",
+                "accept_required": true
+            },
+            "hidden": true
+        },
+        {
+            "name": "Kurmancî (Piper Berfin Medium Female)",
+            "model_id": "ku_piper_tr_berfinrenas_medium_berfin",
+            "model_alias_of": "ku_piper_tr_berfinrenas_medium",
+            "lang_id": "ku",
+            "speaker": "0"
+        },
+        {
+            "name": "Kurmancî (Piper Renas Medium Male)",
+            "model_id": "ku_piper_tr_berfinrenas_medium_renas",
+            "model_alias_of": "ku_piper_tr_berfinrenas_medium",
+            "lang_id": "ku",
+            "speaker": "1"
         },
         {
             "name": "አማርኛ (Espeak Robot)",
