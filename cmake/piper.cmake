@@ -1,8 +1,8 @@
-set(piper_source_url "https://github.com/rhasspy/piper/archive/e268564deb779af984ac8f632c98727447632124.zip")
-set(piper_checksum "213a31c23c862cbcd9de4231c07d32de35f4ee0b5b5dec52e9ae6dd3aa70ac12")
+set(piper_source_url "https://github.com/rhasspy/piper/archive/73c04d81d5590ecc46e522de3601ce7fb29fc2be.zip")
+set(piper_checksum "765086f555a3bc8550ff4700ee074de691a1ab44c12c549035ae17b6a143d27e")
 
-set(piperphonemize_source_url "https://github.com/rhasspy/piper-phonemize/archive/7f7b5bd4de22f7fe24341c5bedda0dc1e33f3666.zip")
-set(piperphonemize_checksum "6bdcb21f6c5ae0deff7c9ae26bf07b994791dc800c1962fd216727e66a409929")
+set(piperphonemize_source_url "https://github.com/rhasspy/piper-phonemize/archive/ba3cc06c5248215928821f1393b2b854a936991a.zip")
+set(piperphonemize_checksum "802ccf0cb234dc848106d5b3682a2ec543f27723734e4352b49fccab8214d740")
 
 set(onnx_arm32_url "https://github.com/mkiol/dsnote/releases/download/v2.0.1/onnxruntime-linux-arm32-1.14.tgz")
 set(onnx_arm32_checksum "4e221f5da63526cd7060a0e21350afc5eb9ba9c050f7ae15d4f34ce1c1d1480f")
@@ -11,8 +11,8 @@ set(onnx_x8664_checksum "53a0f03f71587ed602e99e82773132fc634b74c2d227316fbfd4bf6
 set(onnx_arm64_url "https://github.com/microsoft/onnxruntime/releases/download/v1.16.1/onnxruntime-linux-aarch64-1.16.1.tgz")
 set(onnx_arm64_checksum "f10851b62eb44f9e811134737e7c6edd15733d2c1549cb6ce403808e9c047385")
 
-set(spdlog_source_url "https://github.com/gabime/spdlog/archive/76fb40d95455f249bd70824ecfcae7a8f0930fa3.zip")
-set(spdlog_checksum "9a00dd50318b9467148adc5e822e55221c65d8d8794c6890ba034eed222dcf64")
+set(spdlog_source_url "https://github.com/gabime/spdlog/archive/refs/tags/v1.17.0.tar.gz")
+set(spdlog_checksum "d8862955c6d74e5846b3f580b1605d2428b11d97a410d86e2fb13e857cd3a744")
 
 if(arch_x8664)
     set(onnx_url ${onnx_x8664_url})
@@ -52,8 +52,9 @@ ExternalProject_Add(piperphonemize
                     echo "patch cmd failed, likely already patched"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
-        -DPKG_CONFIG_USE_CMAKE_PREFIX_PATH=ON
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        -DESPEAK_NG_DIR=${PROJECT_BINARY_DIR}/external
+        -DONNXRUNTIME_DIR=${PROJECT_BINARY_DIR}/external
     BUILD_ALWAYS False
 )
 
@@ -85,15 +86,17 @@ ExternalProject_Add(piper
                     echo "patch cmd failed, likely already patched"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
-        -DPKG_CONFIG_USE_CMAKE_PREFIX_PATH=ON
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        -DPIPER_PHONEMIZE_INCLUDE=${external_include_dir}/piper-phonemize
+        -DPIPER_PHONEMIZE_DIR=${PROJECT_BINARY_DIR}/external
+        -DSPDLOG_DIR=${PROJECT_BINARY_DIR}/external
+        -DFMT_DIR=${PROJECT_BINARY_DIR}/external
     BUILD_ALWAYS False
 )
 
 add_library(onnxruntime SHARED IMPORTED)
 set_property(TARGET onnxruntime PROPERTY IMPORTED_LOCATION ${external_lib_dir}/libonnxruntime.so)
 
+ExternalProject_Add_StepDependencies(piperphonemize configure fmt)
 ExternalProject_Add_StepDependencies(piperphonemize configure onnx)
 ExternalProject_Add_StepDependencies(piperphonemize configure espeak)
 ExternalProject_Add_StepDependencies(piper configure espeak)

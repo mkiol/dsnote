@@ -1,48 +1,175 @@
-diff -ruN piper-org/CMakeLists.txt piper-patched/CMakeLists.txt
---- piper-org/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/CMakeLists.txt	2023-08-02 19:38:00.335761422 +0200
-@@ -0,0 +1,38 @@
-+cmake_minimum_required(VERSION 3.5)
-+
-+project(piper_api C CXX)
-+
-+set(CMAKE_CXX_STANDARD 17)
-+set(CMAKE_CXX_STANDARD_REQUIRED ON)
-+
-+set(PIPER_PHONEMIZE_INCLUDE ${CMAKE_INCLUDE_PATH}/piper-phonemize CACHE STRING "")
-+
+diff -ruN -x '.*' piper-org/CMakeLists.txt piper-patched/CMakeLists.txt
+--- piper-org/CMakeLists.txt	2025-08-26 17:01:25.000000000 +0200
++++ piper-patched/CMakeLists.txt	2026-06-05 19:46:33.141723324 +0200
+@@ -17,71 +17,9 @@
+   string(APPEND CMAKE_C_FLAGS " -Wall -Wextra")
+ endif()
+ 
+-add_executable(piper src/cpp/main.cpp src/cpp/piper.cpp)
+-add_executable(test_piper src/cpp/test.cpp src/cpp/piper.cpp)
 +add_library(piper_api STATIC piper_api.cpp src/cpp/piper.cpp)
-+
-+find_package(PkgConfig)
-+pkg_check_modules(ESPEAK_NG REQUIRED espeak-ng<2)
-+
-+find_library(onnxruntime_path onnxruntime REQUIRED)
-+
+ 
+-# NOTE: external project prefix are shortened because of path length restrictions on Windows
+-# NOTE: onnxruntime is pulled from piper-phonemize
+-
+-# ---- fmt ---
+-
+-if(NOT DEFINED FMT_DIR)
+-  set(FMT_VERSION "10.0.0")
+-  set(FMT_DIR "${CMAKE_CURRENT_BINARY_DIR}/fi")
+-
+-  include(ExternalProject)
+-  ExternalProject_Add(
+-    fmt_external
+-    PREFIX "${CMAKE_CURRENT_BINARY_DIR}/f"
+-    URL "https://github.com/fmtlib/fmt/archive/refs/tags/${FMT_VERSION}.zip"
+-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${FMT_DIR}
+-    CMAKE_ARGS -DFMT_TEST:BOOL=OFF  # Don't build all the tests
+-  )
+-  add_dependencies(piper fmt_external)
+-  add_dependencies(test_piper fmt_external)
+-endif()
+-
+-# ---- spdlog ---
+-
+-if(NOT DEFINED SPDLOG_DIR)
+-  set(SPDLOG_DIR "${CMAKE_CURRENT_BINARY_DIR}/si")
+-  set(SPDLOG_VERSION "1.12.0")
+-  ExternalProject_Add(
+-    spdlog_external
+-    PREFIX "${CMAKE_CURRENT_BINARY_DIR}/s"
+-    URL "https://github.com/gabime/spdlog/archive/refs/tags/v${SPDLOG_VERSION}.zip"
+-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${SPDLOG_DIR}
+-  )
+-  add_dependencies(piper spdlog_external)
+-  add_dependencies(test_piper spdlog_external)
+-endif()
+-
+-# ---- piper-phonemize ---
+-
+-if(NOT DEFINED PIPER_PHONEMIZE_DIR)
+-  set(PIPER_PHONEMIZE_DIR "${CMAKE_CURRENT_BINARY_DIR}/pi")
+-  ExternalProject_Add(
+-    piper_phonemize_external
+-    PREFIX "${CMAKE_CURRENT_BINARY_DIR}/p"
+-    URL "https://github.com/rhasspy/piper-phonemize/archive/refs/heads/master.zip"
+-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${PIPER_PHONEMIZE_DIR}
+-  )
+-  add_dependencies(piper piper_phonemize_external)
+-  add_dependencies(test_piper piper_phonemize_external)
+-endif()
+-
+-# ---- Declare executable ----
+-
+-if((NOT MSVC) AND (NOT APPLE))
+-  # Linux flags
+-  string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -Wl,-rpath,'$ORIGIN'")
+-  string(APPEND CMAKE_C_FLAGS " -Wall -Wextra")
+-  target_link_libraries(piper -static-libgcc -static-libstdc++)
+-
+-  set(PIPER_EXTRA_LIBRARIES "pthread")
+-endif()
+-
+-target_link_libraries(piper
 +target_link_libraries(piper_api
-+  ${onnxruntime_path}
-+  pthread
-+  ${ESPEAK_NG_LIBRARIES})
-+
+   fmt
+   spdlog
+   espeak-ng
+@@ -90,83 +28,26 @@
+   ${PIPER_EXTRA_LIBRARIES}
+ )
+ 
+-target_link_directories(piper PUBLIC
 +target_link_directories(piper_api PUBLIC
-+  ${ESPEAK_NG_LIBRARY_DIRS}
-+  ${CMAKE_LIBRARY_PATH})
-+
+   ${FMT_DIR}/lib
+   ${SPDLOG_DIR}/lib
+   ${PIPER_PHONEMIZE_DIR}/lib
+ )
+ 
+-target_include_directories(piper PUBLIC
+-  ${FMT_DIR}/include
+-  ${SPDLOG_DIR}/include
+-  ${PIPER_PHONEMIZE_DIR}/include
+-)
+-
+-target_compile_definitions(piper PUBLIC _PIPER_VERSION=${piper_version})
+-
+-# ---- Declare test ----
+-include(CTest)
+-enable_testing()
+-add_test(
+-  NAME test_piper
+-  COMMAND test_piper "${CMAKE_SOURCE_DIR}/etc/test_voice.onnx" "${PIPER_PHONEMIZE_DIR}/share/espeak-ng-data" "${CMAKE_CURRENT_BINARY_DIR}/test.wav"
+-)
+-
+-target_compile_features(test_piper PUBLIC cxx_std_17)
+-
+-target_include_directories(
+-  test_piper PUBLIC
 +target_include_directories(piper_api PUBLIC
-+  ${ESPEAK_NG_INCLUDE_DIRS}
-+  ${PIPER_PHONEMIZE_INCLUDE})
-+
-+target_compile_options(piper_api PUBLIC
-+  ${ESPEAK_NG_CFLAGS_OTHER})
-+
+   ${FMT_DIR}/include
+   ${SPDLOG_DIR}/include
+   ${PIPER_PHONEMIZE_DIR}/include
+ )
+ 
+-target_link_directories(
+-  test_piper PUBLIC
+-  ${FMT_DIR}/lib
+-  ${SPDLOG_DIR}/lib
+-  ${PIPER_PHONEMIZE_DIR}/lib
+-)
+-
+-target_link_libraries(test_piper PUBLIC
+-  fmt
+-  spdlog
+-  espeak-ng
+-  piper_phonemize
+-  onnxruntime
+-)
++target_compile_definitions(piper_api PUBLIC _PIPER_VERSION=${piper_version})
+ 
+ # ---- Declare install targets ----
+ 
+-install(
+-  TARGETS piper
+-  DESTINATION ${CMAKE_INSTALL_PREFIX})
+-
+-# Dependencies
+-install(
+-  DIRECTORY ${PIPER_PHONEMIZE_DIR}/bin/
+-  DESTINATION ${CMAKE_INSTALL_PREFIX}
+-  USE_SOURCE_PERMISSIONS  # keep +x
+-  FILES_MATCHING
+-  PATTERN "piper_phonemize"
+-  PATTERN "espeak-ng"
+-  PATTERN "*.dll"
+-)
 +set_target_properties(piper_api PROPERTIES PUBLIC_HEADER "piper_api.h")
-+
-+install(TARGETS piper_api
-+    LIBRARY DESTINATION lib
-+    ARCHIVE DESTINATION lib
-+    PUBLIC_HEADER DESTINATION include)
-diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
+ 
+ install(
+-  DIRECTORY ${PIPER_PHONEMIZE_DIR}/lib/
+-  DESTINATION ${CMAKE_INSTALL_PREFIX}
+-  FILES_MATCHING
+-  PATTERN "*.dll"
+-  PATTERN "*.so*"
+-)
+-
+-install(
+-  DIRECTORY ${PIPER_PHONEMIZE_DIR}/share/espeak-ng-data
+-  DESTINATION ${CMAKE_INSTALL_PREFIX}
+-)
+-
+-install(
+-  FILES ${PIPER_PHONEMIZE_DIR}/share/libtashkeel_model.ort
+-  DESTINATION ${CMAKE_INSTALL_PREFIX}
+-)
++  TARGETS piper_api
++  LIBRARY DESTINATION lib
++  ARCHIVE DESTINATION lib
++  PUBLIC_HEADER DESTINATION include)
+diff -ruN -x '.*' piper-org/piper_api.cpp piper-patched/piper_api.cpp
 --- piper-org/piper_api.cpp	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/piper_api.cpp	2023-08-19 17:04:37.381886898 +0200
++++ piper-patched/piper_api.cpp	2026-06-04 20:52:40.121908215 +0200
 @@ -0,0 +1,61 @@
 +#include "piper_api.h"
 +#include "src/cpp/piper.hpp"
@@ -68,7 +195,7 @@ diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 +    std::optional<piper::SpeakerId> speaker;
 +    if (speaker_id > -1) speaker.emplace(speaker_id);
 +
-+    piper::loadVoice(m_ctx->config, std::move(model_path), std::move(model_config_path), m_ctx->voice, speaker);
++    piper::loadVoice(m_ctx->config, std::move(model_path), std::move(model_config_path), m_ctx->voice, speaker, false);
 +}
 +
 +piper_api::~piper_api() {
@@ -105,7 +232,7 @@ diff -ruN piper-org/piper_api.cpp piper-patched/piper_api.cpp
 +
 +    piper::textToWavFile(m_ctx->config, m_ctx->voice, std::move(text), out_file, result);
 +}
-diff -ruN piper-org/piper_api.h piper-patched/piper_api.h
+diff -ruN -x '.*' piper-org/piper_api.h piper-patched/piper_api.h
 --- piper-org/piper_api.h	1970-01-01 01:00:00.000000000 +0100
 +++ piper-patched/piper_api.h	2023-08-19 17:04:26.521886454 +0200
 @@ -0,0 +1,24 @@

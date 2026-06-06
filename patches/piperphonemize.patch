@@ -1,24 +1,8 @@
-diff -ruN piperphonemize-org/CMakeLists.txt piperphonemize-patched/CMakeLists.txt
---- piperphonemize-org/CMakeLists.txt	2023-08-01 00:06:57.000000000 +0200
-+++ piperphonemize-patched/CMakeLists.txt	2023-08-01 10:12:16.409075260 +0200
-@@ -13,19 +13,19 @@
- string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -Wl,-rpath,'$ORIGIN'")
- string(APPEND CMAKE_C_FLAGS " -Wall -Wextra")
- 
--# lib/Linux-x86_64
--# lib/Linux-aarch64
--set(ONNXRUNTIME_ROOTDIR ${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_HOST_SYSTEM_NAME}-${CMAKE_HOST_SYSTEM_PROCESSOR}/onnxruntime)
--
- # ---- espeak-ng ---
- 
- find_package(PkgConfig)
- pkg_check_modules(ESPEAK_NG REQUIRED espeak-ng<2)
- 
-+# ---- onnxruntime ---
-+
-+find_library(onnxruntime_path onnxruntime REQUIRED)
-+
- # ---- Declare library ----
+diff -ruN -x '.*' piperphonemize-org/CMakeLists.txt piperphonemize-patched/CMakeLists.txt
+--- piperphonemize-org/CMakeLists.txt	2025-07-11 00:00:35.000000000 +0200
++++ piperphonemize-patched/CMakeLists.txt	2026-06-04 20:38:44.470334200 +0200
+@@ -22,7 +22,7 @@
+ endif()
  
  add_library(
 -    piper_phonemize SHARED
@@ -26,61 +10,68 @@ diff -ruN piperphonemize-org/CMakeLists.txt piperphonemize-patched/CMakeLists.tx
      src/phonemize.cpp
      src/phoneme_ids.cpp
      src/tashkeel.cpp
-@@ -39,19 +39,18 @@
-     piper_phonemize PUBLIC
-     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>"
-     ${ESPEAK_NG_INCLUDE_DIRS}
--    ${ONNXRUNTIME_ROOTDIR}/include
- )
- 
- target_link_directories(
-     piper_phonemize PUBLIC
-     ${ESPEAK_NG_LIBRARY_DIRS}
--    ${ONNXRUNTIME_ROOTDIR}/lib
-+
- )
- 
- target_link_libraries(
-     piper_phonemize
-     ${ESPEAK_NG_LIBRARIES}
--    onnxruntime
-+    ${onnxruntime_path}
- )
- 
- target_compile_options(
-@@ -61,38 +60,10 @@
+@@ -144,67 +144,14 @@
  
  target_compile_features(piper_phonemize PUBLIC cxx_std_17)
  
 -# ---- Declare executable ----
 -
--add_executable(piper_phonemize_exe src/main.cpp)
--set_property(TARGET piper_phonemize_exe PROPERTY OUTPUT_NAME piper_phonemize)
+-add_executable(piper_phonemize_exe src/main.cpp src/phoneme_ids.cpp)
+-
+-if(NOT WIN32)
+-    set_property(TARGET piper_phonemize_exe PROPERTY OUTPUT_NAME piper_phonemize)
+-endif()
 -
 -target_compile_features(piper_phonemize_exe PUBLIC cxx_std_17)
 -
 -target_include_directories(
 -    piper_phonemize_exe PUBLIC
 -    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>"
--    ${ESPEAK_NG_INCLUDE_DIRS}
+-    ${ESPEAK_NG_DIR}/include
 -)
 -
 -target_link_directories(
 -    piper_phonemize_exe PUBLIC
--    ${ESPEAK_NG_LIBRARY_DIRS}
+-    ${ESPEAK_NG_DIR}/lib
 -)
 -
 -target_link_libraries(piper_phonemize_exe PUBLIC
--                      piper_phonemize
--                      ${ESPEAK_NG_LIBRARIES})
--
--target_compile_options(
--    piper_phonemize_exe PUBLIC
--    ${ESPEAK_NG_CFLAGS_OTHER}
+-    piper_phonemize
+-    espeak-ng
 -)
 -
--# ---- Declare install targets ----
+-# ---- Declare test ----
 -
+-include(CTest)
+-enable_testing()
+-add_executable(test_piper_phonemize src/test.cpp src/phoneme_ids.cpp)
+-add_test(
+-    NAME test_piper_phonemize
+-    COMMAND test_piper_phonemize "${ESPEAK_NG_DIR}/share/espeak-ng-data" "${CMAKE_SOURCE_DIR}/etc/libtashkeel_model.ort"
+-)
+-
+-target_compile_features(test_piper_phonemize PUBLIC cxx_std_17)
+-
+-target_include_directories(
+-    test_piper_phonemize PUBLIC
+-    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>"
+-    ${ESPEAK_NG_DIR}/include
+-)
+-
+-target_link_directories(
+-    test_piper_phonemize PUBLIC
+-    ${ESPEAK_NG_DIR}/lib
+-)
+-
+-target_link_libraries(test_piper_phonemize PUBLIC
+-    piper_phonemize
+-    espeak-ng
+-)
+-
+ # ---- Declare install targets ----
+ 
+ include(GNUInstallDirs)
+ 
  install(
      TARGETS piper_phonemize
 -    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
@@ -89,7 +80,7 @@ diff -ruN piperphonemize-org/CMakeLists.txt piperphonemize-patched/CMakeLists.tx
  
  install(
      DIRECTORY ${CMAKE_SOURCE_DIR}/src/
-@@ -100,7 +71,3 @@
+@@ -212,24 +159,3 @@
      FILES_MATCHING
      PATTERN "*.h"
      PATTERN "*.hpp")
@@ -97,3 +88,34 @@ diff -ruN piperphonemize-org/CMakeLists.txt piperphonemize-patched/CMakeLists.tx
 -install(
 -    TARGETS piper_phonemize_exe
 -    ARCHIVE DESTINATION ${CMAKE_INSTALL_BINDIR})
+-
+-install(
+-    FILES ${CMAKE_SOURCE_DIR}/etc/libtashkeel_model.ort
+-    TYPE DATA)
+-
+-# Dependencies
+-install(
+-    DIRECTORY ${ESPEAK_NG_DIR}/
+-    DESTINATION ${CMAKE_INSTALL_PREFIX})
+-
+-install(
+-    DIRECTORY ${ONNXRUNTIME_DIR}/include/
+-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+-
+-install(
+-    DIRECTORY ${ONNXRUNTIME_DIR}/lib/
+-    DESTINATION ${CMAKE_INSTALL_LIBDIR})
+diff -ruN -x '.*' piperphonemize-org/src/phoneme_ids.hpp piperphonemize-patched/src/phoneme_ids.hpp
+--- piperphonemize-org/src/phoneme_ids.hpp	2025-07-11 00:00:35.000000000 +0200
++++ piperphonemize-patched/src/phoneme_ids.hpp	2026-06-04 21:14:34.649807002 +0200
+@@ -202,6 +202,10 @@
+     // Czech
+     {U'\u031d', {157}},
+     {U'\u030a', {158}},
++    
++    // Latvian
++    {U'\u0361', {159}},
++    {U'\u0060', {160}},
+ };
+ 
+ // language -> phoneme -> [id, ...]
