@@ -9,6 +9,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 import Sailfish.Share 1.0
+import Opal.Tabs 1.0 as Opal
 
 import harbour.dsnote.Settings 1.0
 import harbour.dsnote.Dsnote 1.0
@@ -27,10 +28,10 @@ ApplicationWindow {
     DsnoteApp {
         id: app
 
-        Component.onCompleted: {
-            app.execute_action_name(_requested_action, _requested_extra)
-            app.import_files(_files_to_open, false)
-        }
+//        Component.onCompleted: {
+//            app.execute_action_name(_requested_action, _requested_extra)
+//            app.import_files(_files_to_open, false)
+//        }
     }
 
     Component {
@@ -48,13 +49,19 @@ ApplicationWindow {
             readonly property bool canCancelTts: !app.another_app_connected &&
                                                  (app.state === DsnoteApp.StatePlayingSpeech ||
                                                   app.state === DsnoteApp.StateWritingSpeechToFile)
-            readonly property bool panelAlwaysOpen: notepad.enabled && (app.stt_configured || app.tts_configured)
+            readonly property bool panelAlwaysOpen: notepad && notepad.enabled && (app.stt_configured || app.tts_configured)
+            property var notepad: null
+            property var translator: null
 
             allowedOrientations: Orientation.All
 
+            onNotepadChanged: update()
+            onTranslatorChanged: update()
+
             function update() {
-                notepad.update()
-                translator.update()
+                if (notepad) notepad.update()
+                if (translator) translator.update()
+                tabs.update()
             }
 
             function handleResource(resource) {
@@ -149,8 +156,8 @@ ApplicationWindow {
                 width: parent.width
                 height: parent.height - (addTextDialog.expanded ? addTextDialog.height : 0)
                 contentHeight: Math.max(column.height +
-                                        (translator.visible ? translator.height : 0) +
-                                        (notepad.visible ? notepad.height : 0) +
+                                        (root.translator && root.translator.enabled ? root.translator.height : 0) +
+                                        (root.notepad && root.notepad.enabled ? root.notepad.height : 0) +
                                         (panel.open ? panel.height : 0), height)
                 clip: true
 
@@ -165,32 +172,74 @@ ApplicationWindow {
                     }
                 }
 
-                Translator {
-                    id: translator
+                Opal.TabView {
+                    id: tabs
 
-                    enabled: _settings.translator_mode
-                    visible: opacity > 0.0
-                    opacity: enabled ? root.canCancelStt || root.canCancelTts ? 0.8 : 1.0 : 0.0
-                    Behavior on opacity { FadeAnimator { duration: 100 } }
-                    maxHeight: root.height - (panel.open ? panel.height : 0)
-                    verticalMode: root.verticalMode
                     width: parent.width
-                    readOnly: !app.another_app_connected &&
-                              (app.busy || service.busy || !app.connected)
-                }
+                    height: root.height - (panel.open ? panel.height : 0)
+                    tabBarVisible: root.verticalMode && (
+                                       (!_settings.translator_mode && (!root.notepad || !root.notepad.textHighlighted)) ||
+                                       (_settings.translator_mode && (!root.translator || !root.translator.textHighlighted)))
+                    currentIndex: _settings.translator_mode ? 1 : 0
+                    tabBarPosition: Qt.AlignTop
+                    onCurrentIndexChanged: {
+                        _settings.translator_mode = currentIndex !== 0
+                    }
 
-                Notepad {
-                    id: notepad
+                    function update() {
+                        currentIndex = _settings.translator_mode ? 1 : 0
+                    }
 
-                    enabled: !_settings.translator_mode
-                    visible: opacity > 0.0
-                    opacity: enabled ? root.canCancelStt || root.canCancelTts ? 0.8 : 1.0 : 0.0
-                    Behavior on opacity { FadeAnimator { duration: 100 } }
-                    maxHeight: root.height - (panel.open ? panel.height : 0)
-                    verticalMode: root.verticalMode
-                    width: parent.width
-                    readOnly: !app.another_app_connected &&
-                              (app.busy || service.busy || !app.connected)
+                    Opal.Tab {
+                        title: qsTr("Notepad")
+
+                        Component {
+                            Opal.TabItem {
+                                Notepad {
+                                    id: _notepad
+
+                                    enabled: !_settings.translator_mode
+                                    visible: opacity > 0.0
+                                    opacity: root.canCancelStt || root.canCancelTts ? 0.8 : 1.0
+                                    Behavior on opacity { FadeAnimator { duration: 100 } }
+                                    maxHeight: parent.height
+                                    anchors.fill: parent
+                                    verticalMode: root.verticalMode
+                                    readOnly: !app.another_app_connected &&
+                                              (app.busy || service.busy || !app.connected)
+
+                                    Component.onCompleted: root.notepad = _notepad
+                                    Component.onDestruction: root.notepad = null
+                                }
+                            }
+                        }
+                    }
+
+                    Opal.Tab {
+                        title: qsTr("Translator")
+
+                        Component {
+                            Opal.TabItem {
+                                Translator {
+                                    id: _translator
+
+                                    enabled: _settings.translator_mode
+                                    visible: opacity > 0.0
+                                    opacity: root.canCancelStt || root.canCancelTts ? 0.8 : 1.0
+                                    Behavior on opacity { FadeAnimator { duration: 100 } }
+                                    maxHeight: parent.height
+                                    anchors.fill: parent
+                                    verticalMode: root.verticalMode
+                                    width: parent.width
+                                    readOnly: !app.another_app_connected &&
+                                              (app.busy || service.busy || !app.connected)
+
+                                    Component.onCompleted: root.translator = _translator
+                                    Component.onDestruction: root.translator = null
+                                }
+                            }
+                        }
+                    }
                 }
 
                 SpeechWidget {

@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -11,16 +11,15 @@ import Sailfish.Silica 1.0
 import harbour.dsnote.Settings 1.0
 import harbour.dsnote.Dsnote 1.0
 
-Column {
+Item {
     id: root
 
     property bool verticalMode: true
     property double maxHeight: parent.height
     property alias noteTextArea: _noteTextArea
     property bool readOnly: false
-    readonly property double textAreaHeight: root.maxHeight - listenReadCombos.itemHeight
-
-    width: parent.width
+    readonly property double textAreaHeight: root.maxHeight - listenReadCombos.height
+    readonly property bool textHighlighted: noteTextArea.textArea.highlighted
 
     Connections {
         target: app
@@ -32,8 +31,11 @@ Column {
         onTts_configuredChanged: root.update()
         onActive_stt_model_changed: root.update()
         onActive_tts_model_changed: root.update()
-        onNote_changed: update()
+        onNote_changed: root.update()
     }
+
+    onEnabledChanged: root.update()
+    Component.onCompleted: root.update()
 
     function update() {
         if (!root.enabled || app.busy || service.busy) return;
@@ -51,135 +53,137 @@ Column {
         }
     }
 
-    ScrollTextArea {
-        id: _noteTextArea
+    Column {
+        id: column
 
-        enabled: !root.readOnly
         width: parent.width
-        height: root.textAreaHeight
-        canUndo: app.can_undo_note
-        canRedo: app.can_redo_note
-        canClear: true
-        placeholderLabel: app.stt_configured || app.tts_configured ?
-                             qsTr("Type here or press %1 to make a note...")
-                                .arg("<i>" + qsTr("Listen") + "</i>") : ""
-        textArea {
-            onTextChanged: {
-                app.note = root.noteTextArea.textArea.text
+
+        ScrollTextArea {
+            id: _noteTextArea
+
+            enabled: !root.readOnly
+            width: parent.width
+            height: root.textAreaHeight
+            canUndo: app.can_undo_note
+            canRedo: app.can_redo_note
+            canClear: true
+            placeholderLabel: app.stt_configured || app.tts_configured ?
+                                 qsTr("Type here or press %1 to make a note...")
+                                    .arg("<i>" + qsTr("Listen") + "</i>") : ""
+            textArea {
+                onTextChanged: {
+                    app.note = root.noteTextArea.textArea.text
+                }
             }
-        }
-        onClearClicked: {
-            app.make_undo()
-            root.noteTextArea.textArea.text = ""
-        }
-        onCopyClicked: app.copy_to_clipboard()
-        onUndoClicked: app.undo_or_redu_note()
-        formatInvalid: {
-            if (root.noteTextArea.textArea.text.length == 0) return false
-            if (app.auto_text_format === DsnoteApp.AutoTextFormatSubRip)
-                return _settings.stt_tts_text_format !== Settings.TextFormatSubRip
-            else
-                return _settings.stt_tts_text_format === Settings.TextFormatSubRip
-        }
-        onFormatClicked: {
-            switch(_settings.stt_tts_text_format) {
-            case Settings.TextFormatRaw:
-                _settings.stt_tts_text_format = Settings.TextFormatSubRip
-                break;
-            case Settings.TextFormatSubRip:
-                _settings.stt_tts_text_format = Settings.TextFormatInlineTimestamp
-                break;
-            case Settings.TextFormatInlineTimestamp:
-                _settings.stt_tts_text_format = Settings.TextFormatRaw
-                break;
+            onClearClicked: {
+                app.make_undo()
+                root.noteTextArea.textArea.text = ""
             }
-        }
-        formatName: {
-            switch(_settings.stt_tts_text_format) {
-            case Settings.TextFormatRaw:
-                return qsTr("Plain text")
-            case Settings.TextFormatSubRip:
-                return qsTr("SRT Subtitles")
-            case Settings.TextFormatInlineTimestamp:
-                return qsTr("Inline timestamps")
+            onCopyClicked: app.copy_to_clipboard()
+            onUndoClicked: app.undo_or_redu_note()
+            formatInvalid: {
+                if (root.noteTextArea.textArea.text.length == 0) return false
+                if (app.auto_text_format === DsnoteApp.AutoTextFormatSubRip)
+                    return _settings.stt_tts_text_format !== Settings.TextFormatSubRip
+                else
+                    return _settings.stt_tts_text_format === Settings.TextFormatSubRip
+            }
+            onFormatClicked: {
+                switch(_settings.stt_tts_text_format) {
+                case Settings.TextFormatRaw:
+                    _settings.stt_tts_text_format = Settings.TextFormatSubRip
+                    break;
+                case Settings.TextFormatSubRip:
+                    _settings.stt_tts_text_format = Settings.TextFormatInlineTimestamp
+                    break;
+                case Settings.TextFormatInlineTimestamp:
+                    _settings.stt_tts_text_format = Settings.TextFormatRaw
+                    break;
+                }
+            }
+            formatName: {
+                switch(_settings.stt_tts_text_format) {
+                case Settings.TextFormatRaw:
+                    return qsTr("Plain text")
+                case Settings.TextFormatSubRip:
+                    return qsTr("SRT Subtitles")
+                case Settings.TextFormatInlineTimestamp:
+                    return qsTr("Inline timestamps")
+                }
+            }
+
+            PlaceholderLabel {
+                enabled: !app.busy && !service.busy && app.connected &&
+                         app.note.length === 0 && !app.stt_configured && !app.tts_configured &&
+                         !_noteTextArea.textArea.highlighted
+                text: qsTr("Neither Speech to Text nor Text to Speech model has been set up yet.") + " " +
+                      qsTr("Go to the %1 to download models for the languages you intend to use.")
+                        .arg("<i>" + qsTr("Languages and Models") + "</i>")
             }
         }
 
-        PlaceholderLabel {
-            enabled: !app.busy && !service.busy && app.connected &&
-                     app.note.length === 0 && !app.stt_configured && !app.tts_configured &&
-                     !_noteTextArea.textArea.highlighted
-            text: qsTr("Neither Speech to Text nor Text to Speech model has been set up yet.") + " " +
-                  qsTr("Go to the %1 to download models for the languages you intend to use.")
-                    .arg("<i>" + qsTr("Languages and Models") + "</i>")
-        }
-    }
+        DuoComboButton {
+            id: listenReadCombos
 
-    DuoComboButton {
-        id: listenReadCombos
-
-        visible: !root.noteTextArea.textArea.highlighted
-        verticalMode: root.verticalMode
-        width: parent.width
-        first {
-            enabled: app.stt_configured && (app.state === DsnoteApp.StateIdle ||
-                                            app.state === DsnoteApp.StateListeningManual)
-            comboModel: app.available_stt_models
-            comboPlaceholderText: qsTr("No Speech to Text model")
-            combo {
-                label: qsTr("Speech to Text")
-                enabled: listenReadCombos.first.enabled &&
-                         !listenReadCombos.first.off &&
-                         app.state === DsnoteApp.StateIdle
-                currentIndex: app.active_stt_model_idx
-                onCurrentIndexChanged: {
-                    app.set_active_stt_model_idx(
-                                listenReadCombos.first.combo.currentIndex)
+            visible: !root.textHighlighted
+            verticalMode: root.verticalMode
+            width: parent.width
+            first {
+                enabled: app.stt_configured && (app.state === DsnoteApp.StateIdle ||
+                                                app.state === DsnoteApp.StateListeningManual)
+                comboModel: app.available_stt_models
+                comboPlaceholderText: qsTr("No Speech to Text model")
+                onComboActivated: app.set_active_stt_model_idx(index)
+                onComboUpdated: app.set_active_stt_model_idx(app.active_stt_model_idx, true)
+                combo {
+                    label: qsTr("Speech to Text")
+                    enabled: listenReadCombos.first.enabled &&
+                             !listenReadCombos.first.off &&
+                             app.state === DsnoteApp.StateIdle
+                    currentIndex: app.active_stt_model_idx
                 }
-            }
-            button {
-                text: qsTr("Listen")
-                onClicked: {
-                    if (_settings.speech_mode !== Settings.SpeechManual &&
-                            app.state === DsnoteApp.StateIdle &&
-                            app.task_state === DsnoteApp.TaskStateIdle)
-                        app.listen()
-                }
-                onReleased: {
-                    if (app.state === DsnoteApp.StateListeningManual || _settings.speech_mode === Settings.SpeechManual)
-                        app.stop_listen()
-                }
-                onPressed: {
-                    if (_settings.speech_mode === Settings.SpeechManual &&
-                            app.state === DsnoteApp.StateIdle &&
-                            app.task_state === DsnoteApp.TaskStateIdle) {
-                        app.listen()
+                button {
+                    text: qsTr("Listen")
+                    onClicked: {
+                        if (_settings.speech_mode !== Settings.SpeechManual &&
+                                app.state === DsnoteApp.StateIdle &&
+                                app.task_state === DsnoteApp.TaskStateIdle)
+                            app.listen()
+                    }
+                    onReleased: {
+                        if (app.state === DsnoteApp.StateListeningManual || _settings.speech_mode === Settings.SpeechManual)
+                            app.stop_listen()
+                    }
+                    onPressed: {
+                        if (_settings.speech_mode === Settings.SpeechManual &&
+                                app.state === DsnoteApp.StateIdle &&
+                                app.task_state === DsnoteApp.TaskStateIdle) {
+                            app.listen()
+                        }
                     }
                 }
             }
-        }
-        second {
-            enabled: app.tts_configured && app.state === DsnoteApp.StateIdle
-            comboModel: app.available_tts_models
-            comboPlaceholderText: qsTr("No Text to Speech model")
-            combo {
-                label: qsTr("Text to Speech")
-                enabled: listenReadCombos.second.enabled &&
-                         !listenReadCombos.second.off &&
-                         app.state === DsnoteApp.StateIdle
-                currentIndex: app.active_stt_model_idx
-                onCurrentIndexChanged: {
-                    app.set_active_tts_model_idx(
-                                listenReadCombos.second.combo.currentIndex)
+            second {
+                enabled: app.tts_configured && app.state === DsnoteApp.StateIdle
+                comboModel: app.available_tts_models
+                comboPlaceholderText: qsTr("No Text to Speech model")
+                onComboActivated: app.set_active_tts_model_idx(index)
+                onComboUpdated: app.set_active_tts_model_idx(app.active_tts_model_idx, true)
+                combo {
+                    label: qsTr("Text to Speech")
+                    enabled: listenReadCombos.second.enabled &&
+                             !listenReadCombos.second.off &&
+                             app.state === DsnoteApp.StateIdle
+                    currentIndex: app.active_tts_model_idx
                 }
-            }
-            button {
-                enabled: listenReadCombos.second.enabled &&
-                         !listenReadCombos.second.off &&
-                         app.note.length !== 0
-                text: qsTr("Read")
-                onClicked: {
-                    app.play_speech()
+                button {
+                    enabled: listenReadCombos.second.enabled &&
+                             !listenReadCombos.second.off &&
+                             app.note.length !== 0
+                    text: qsTr("Read")
+                    onClicked: {
+                        app.play_speech()
+                    }
                 }
             }
         }

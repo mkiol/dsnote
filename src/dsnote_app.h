@@ -361,8 +361,8 @@ class dsnote_app : public QObject {
     friend QDebug operator<<(QDebug d, auto_text_format_t format);
 
     dsnote_app(QObject *parent = nullptr);
-    Q_INVOKABLE void set_active_stt_model_idx(int idx);
-    Q_INVOKABLE void set_active_tts_model_idx(int idx);
+    Q_INVOKABLE void set_active_stt_model_idx(int idx, bool force = false);
+    Q_INVOKABLE void set_active_tts_model_idx(int idx, bool force = false);
     Q_INVOKABLE void set_active_next_stt_model();
     Q_INVOKABLE void set_active_next_tts_model();
     Q_INVOKABLE void set_active_prev_stt_model();
@@ -374,10 +374,12 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void update_tts_ref_voice(int idx, const QString &new_name,
                                           const QString &new_text);
     Q_INVOKABLE bool test_tts_ref_voice(int idx, const QString &new_name) const;
-    Q_INVOKABLE void set_active_mnt_lang_idx(int idx);
-    Q_INVOKABLE void set_active_mnt_out_lang_idx(int idx);
-    Q_INVOKABLE void set_active_tts_model_for_in_mnt_idx(int idx);
-    Q_INVOKABLE void set_active_tts_model_for_out_mnt_idx(int idx);
+    Q_INVOKABLE void set_active_mnt_lang_idx(int idx, bool force = false);
+    Q_INVOKABLE void set_active_mnt_out_lang_idx(int idx, bool force = false);
+    Q_INVOKABLE void set_active_tts_model_for_in_mnt_idx(int idx,
+                                                         bool force = false);
+    Q_INVOKABLE void set_active_tts_model_for_out_mnt_idx(int idx,
+                                                          bool force = false);
     Q_INVOKABLE void import_file(const QString &file_path, int stream_index,
                                  bool replace);
     Q_INVOKABLE void cancel();

@@ -2397,7 +2397,7 @@ void speech_service::handle_tts_speech_encoded(tts_partial_result_t result) {
             m_tts_queue.push(std::move(result));
             handle_tts_queue();
         } else {
-            handle_speech_to_file(std::move(result));
+            handle_speech_to_file(result);
         }
     } else {
         qWarning() << "unknown task in tts speech encoded";

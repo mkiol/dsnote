@@ -57,14 +57,14 @@ PullDownMenu {
             pageStack.push(Qt.resolvedUrl("ExportFilePage.qml"), {translated: true})
         }
     }
-
-    MenuItem {
-        text: qsTr("Mode: %1").arg(_settings.translator_mode ? qsTr("Translator") :
-                                                               qsTr("Notepad"))
-        onClicked: {
-            if (!_settings.translator_mode)
-                _settings.hint_translator = false
-            _settings.translator_mode = !_settings.translator_mode
-        }
-    }
+//
+//    MenuItem {
+//        text: qsTr("Mode: %1").arg(_settings.translator_mode ? qsTr("Translator") :
+//                                                               qsTr("Notepad"))
+//        onClicked: {
+//            if (!_settings.translator_mode)
+//                _settings.hint_translator = false
+//            _settings.translator_mode = !_settings.translator_mode
+//        }
+//    }
 }

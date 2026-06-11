@@ -1,0 +1,7 @@
+module Opal.Tabs
+# This file is part of Opal.Tabs.
+# SPDX-FileCopyrightText: 2023-2024 Mirian Margiani
+# SPDX-License-Identifier: GPL-3.0-or-later
+TabItem 1.0 TabItem.qml
+TabView 1.0 TabView.qml
+Tab 1.0 Tab.qml

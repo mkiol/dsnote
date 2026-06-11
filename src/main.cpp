@@ -618,6 +618,10 @@ static void start_app(const cmd::options& options,
                                 &dbus_app_server);
 
 #ifdef USE_SFOS
+    // add module search path so Opal modules can be found
+    view->engine()->addImportPath(
+        SailfishApp::pathTo("qml/modules").toString());
+
     view->setSource(SailfishApp::pathTo("qml/main.qml"));
     view->show();
 #else

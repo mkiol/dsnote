@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23,14 +23,13 @@ Item {
                                          app.task_state !== DsnoteApp.TaskStateCancelling
     readonly property double textAreaHeight: root.verticalMode ?
                                         (root.maxHeight -
-                                         mntInCombo.itemHeight - mntOutCombo.itemHeight -
+                                         mntInCombo.height - mntOutCombo.height -
                                          translatorButton.height) / 2 :
                                         root.maxHeight -
-                                        Math.max(mntInCombo.itemHeight, mntOutCombo.itemHeight) -
+                                        Math.max(mntInCombo.height, mntOutCombo.height) -
                                         translatorButton.height
-
-    width: parent.width
-    height: app.mnt_configured ? column.height : appWin.height
+    readonly property bool textHighlighted: noteTextArea.textArea.highlighted ||
+                                            translatedNoteTextArea.textArea.highlighted
 
     Connections {
         target: app
@@ -47,6 +46,9 @@ Item {
         onNote_changed: root.update()
         onTranslated_text_changed: root.update()
     }
+
+    onEnabledChanged: root.update()
+    Component.onCompleted: root.update()
 
     function update() {
         if (!root.enabled || app.busy || service.busy) return;
@@ -166,13 +168,11 @@ Item {
                         enabled: app.mnt_configured && app.state === DsnoteApp.StateIdle
                         comboModel: app.available_mnt_langs
                         comboPlaceholderText: qsTr("No Translator model")
+                        onComboActivated: app.set_active_mnt_lang_idx(index)
+                        onComboUpdated: app.set_active_mnt_lang_idx(app.active_mnt_lang_idx, true)
                         combo {
                             label: qsTr("Translate from")
                             currentIndex: app.active_mnt_lang_idx
-                            onCurrentIndexChanged: {
-                                app.set_active_mnt_lang_idx(
-                                            mntInCombo.first.combo.currentIndex)
-                            }
                         }
                         expandedHeight: root.verticalMode || !mntOutCombo.first.combo.menu ? 0 : mntOutCombo.first.combo.menu.height
                         height: root.verticalMode ? mntInCombo.first.implicitHeight :
@@ -183,16 +183,14 @@ Item {
                         enabled: app.mnt_configured && app.tts_configured && app.state === DsnoteApp.StateIdle
                         comboModel: app.available_tts_models_for_in_mnt
                         comboPlaceholderText: qsTr("No Text to Speech model")
+                        onComboActivated: app.set_active_tts_model_for_in_mnt_idx(index)
+                        onComboUpdated: app.set_active_tts_model_for_in_mnt_idx(app.active_tts_model_for_in_mnt_idx, true)
                         combo {
                             label: qsTr("Text to Speech")
                             enabled: mntInCombo.second.enabled &&
                                      !mntInCombo.second.off &&
                                      app.state === DsnoteApp.StateIdle
                             currentIndex: app.active_tts_model_for_in_mnt_idx
-                            onCurrentIndexChanged: {
-                                app.set_active_tts_model_for_in_mnt_idx(
-                                            mntInCombo.second.combo.currentIndex)
-                            }
                         }
                         expandedHeight: root.verticalMode || !mntOutCombo.second.combo.menu ? 0 : mntOutCombo.second.combo.menu.height
                         height: root.verticalMode ? mntInCombo.second.implicitHeight :
@@ -255,13 +253,11 @@ Item {
                         enabled: app.mnt_configured && app.state === DsnoteApp.StateIdle
                         comboModel: app.available_mnt_out_langs
                         comboPlaceholderText: qsTr("No Translator model")
+                        onComboActivated: app.set_active_mnt_out_lang_idx(index)
+                        onComboUpdated: app.set_active_mnt_out_lang_idx(app.active_mnt_out_lang_idx, true)
                         combo {
                             label: qsTr("Translate to")
                             currentIndex: app.active_mnt_out_lang_idx
-                            onCurrentIndexChanged: {
-                                app.set_active_mnt_out_lang_idx(
-                                            mntOutCombo.first.combo.currentIndex)
-                            }
                         }
                         expandedHeight: root.verticalMode || !mntInCombo.first.combo.menu ? 0 : mntInCombo.first.combo.menu.height
                         height: root.verticalMode ? mntOutCombo.first.implicitHeight :
@@ -273,16 +269,14 @@ Item {
                                  app.state === DsnoteApp.StateIdle
                         comboModel: app.available_tts_models_for_out_mnt
                         comboPlaceholderText: qsTr("No Text to Speech model")
+                        onComboActivated: app.set_active_tts_model_for_out_mnt_idx(index)
+                        onComboUpdated: app.set_active_tts_model_for_out_mnt_idx(app.active_tts_model_for_out_mnt_idx, true)
                         combo {
                             label: qsTr("Text to Speech")
                             enabled: mntOutCombo.second.enabled &&
                                      !mntOutCombo.second.off &&
                                      app.state === DsnoteApp.StateIdle
                             currentIndex: app.active_tts_model_for_out_mnt_idx
-                            onCurrentIndexChanged: {
-                                app.set_active_tts_model_for_out_mnt_idx(
-                                            mntOutCombo.second.combo.currentIndex)
-                            }
                         }
                         expandedHeight: root.verticalMode || !mntInCombo.second.combo.menu ? 0 : mntInCombo.second.combo.menu.height
                         height: root.verticalMode ? mntOutCombo.second.implicitHeight :

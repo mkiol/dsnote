@@ -2362,7 +2362,7 @@ QVariantList dsnote_app::available_mnt_out_langs() const {
     return list;
 }
 
-void dsnote_app::set_active_stt_model_idx(int idx) {
+void dsnote_app::set_active_stt_model_idx(int idx, bool force) {
     if (active_stt_model_idx() != idx && idx > -1 &&
         idx < m_available_stt_models_map.size()) {
         auto id = std::next(m_available_stt_models_map.cbegin(), idx).key();
@@ -2373,6 +2373,10 @@ void dsnote_app::set_active_stt_model_idx(int idx) {
             qDebug() << "[app => dbus] set DefaultSttModel:" << idx << id;
             m_dbus_service.setDefaultSttModel(id);
         }
+    }
+
+    if (force) {
+        emit active_stt_model_changed();
     }
 }
 
@@ -2412,7 +2416,7 @@ void dsnote_app::set_active_prev_tts_model() {
     set_active_tts_model_idx(idx);
 }
 
-void dsnote_app::set_active_tts_model_idx(int idx) {
+void dsnote_app::set_active_tts_model_idx(int idx, bool force) {
     if (active_tts_model_idx() != idx && idx > -1 &&
         idx < m_available_tts_models_map.size()) {
         auto id = std::next(m_available_tts_models_map.cbegin(), idx).key();
@@ -2423,6 +2427,10 @@ void dsnote_app::set_active_tts_model_idx(int idx) {
             qDebug() << "[app => dbus] set DefaultTtsModel:" << idx << id;
             m_dbus_service.setDefaultTtsModel(id);
         }
+    }
+
+    if (force) {
+        emit active_tts_model_changed();
     }
 }
 
@@ -2456,7 +2464,7 @@ void dsnote_app::set_active_tts_for_out_mnt_ref_voice_idx(int idx) {
     }
 }
 
-void dsnote_app::set_active_tts_model_for_in_mnt_idx(int idx) {
+void dsnote_app::set_active_tts_model_for_in_mnt_idx(int idx, bool force) {
     if (m_active_mnt_lang.isEmpty()) {
         qWarning() << "invalid active mnt lang";
         return;
@@ -2474,9 +2482,13 @@ void dsnote_app::set_active_tts_model_for_in_mnt_idx(int idx) {
 
         update_active_tts_model_for_in_mnt();
     }
+
+    if (force) {
+        emit active_tts_model_for_in_mnt_changed();
+    }
 }
 
-void dsnote_app::set_active_tts_model_for_out_mnt_idx(int idx) {
+void dsnote_app::set_active_tts_model_for_out_mnt_idx(int idx, bool force) {
     if (m_active_mnt_out_lang.isEmpty()) {
         qWarning() << "invalid active mnt out lang";
         return;
@@ -2495,9 +2507,13 @@ void dsnote_app::set_active_tts_model_for_out_mnt_idx(int idx) {
 
         update_active_tts_model_for_out_mnt();
     }
+
+    if (force) {
+        emit active_tts_model_for_out_mnt_changed();
+    }
 }
 
-void dsnote_app::set_active_mnt_lang_idx(int idx) {
+void dsnote_app::set_active_mnt_lang_idx(int idx, bool force) {
     if (active_mnt_lang_idx() != idx && idx > -1 &&
         idx < m_available_mnt_langs_map.size()) {
         auto id = std::next(m_available_mnt_langs_map.cbegin(), idx).key();
@@ -2509,9 +2525,13 @@ void dsnote_app::set_active_mnt_lang_idx(int idx) {
             m_dbus_service.setDefaultMntLang(id);
         }
     }
+
+    if (force) {
+        emit active_mnt_lang_changed();
+    }
 }
 
-void dsnote_app::set_active_mnt_out_lang_idx(int idx) {
+void dsnote_app::set_active_mnt_out_lang_idx(int idx, bool force) {
     if (active_mnt_out_lang_idx() != idx && idx > -1 &&
         idx < m_available_mnt_out_langs_map.size()) {
         auto id = std::next(m_available_mnt_out_langs_map.cbegin(), idx).key();
@@ -2522,6 +2542,10 @@ void dsnote_app::set_active_mnt_out_lang_idx(int idx) {
             qDebug() << "[app => dbus] set DefaultMntOutLang:" << idx << id;
             m_dbus_service.setDefaultMntOutLang(id);
         }
+    }
+
+    if (force) {
+        emit active_mnt_out_lang_changed();
     }
 }
 

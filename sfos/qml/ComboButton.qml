@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -20,9 +20,21 @@ Item {
     readonly property bool off: comboModel.length === 0
     readonly property double comboItemHeight: !off && combo.contentItem ? combo.contentItem.height : Theme.itemSizeSmall
 
+    signal comboActivated(int index)
+    signal comboUpdated()
+
     implicitHeight: off ? Theme.itemSizeSmall : combo.height
     height: implicitHeight
     enabled: !root.off
+
+    Timer {
+        id: comboUpdateTimer
+
+        interval: 10
+        onTriggered: {
+            root.comboUpdated()
+        }
+    }
 
     Item {
         width: parent.width
@@ -46,10 +58,23 @@ Item {
             width: parent.width - (_button.visible ? (_button.width + root.rightMargin) : 0)
             opacity: enabled ? 1.0 : Theme.opacityOverlay
             valueColor: enabled ? Theme.highlightColor : Theme.secondaryHighlightColor
+            _controller.automaticSelection: false
+
             menu: ContextMenu {
                 Repeater {
                     id: _comboRepeater
+
                     MenuItem { text: modelData }
+                    onItemAdded: {
+                        var completed = _comboRepeater.count > 0 &&
+                                _combo.menu._contentColumn.children.length > _comboRepeater.count
+                        if (completed && comboUpdateTimer) {
+                            comboUpdateTimer.restart()
+                        }
+                    }
+                }
+                onActivated: {
+                    root.comboActivated(index)
                 }
             }
         }

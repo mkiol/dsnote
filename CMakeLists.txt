@@ -179,6 +179,9 @@ if(WITH_DESKTOP)
         set(info_libs_str "${info_libs_str} · QHotkey · libxdo")
     endif()
 endif()
+if(WITH_SFOS)
+    set(info_libs_str "${info_libs_str} · Opal")
+endif()
 
 project(${id} VERSION 4.9.0)
 

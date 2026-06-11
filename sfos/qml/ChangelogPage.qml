@@ -54,6 +54,7 @@ Page {
                 <p>" + qsTr("User Interface") + "</p>
                 <ul>
                 <li>Setting option to force the English language in the user interface</li>
+                <li>Switch between Notepad and Translator with a tab interface</li>
                 <li><i>Speech Note</i> has been translated into Portuguese-Brazilian language.</li>
                 </ul>"
             }
