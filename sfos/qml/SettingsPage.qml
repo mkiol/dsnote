@@ -554,6 +554,21 @@ Page {
                 }
 
                 ExpandingSection {
+                    title: qsTr("Translator")
+
+                    content.sourceComponent: Column {
+                        TextSwitch {
+                            checked: _settings.translate_when_typing
+                            automaticCheck: false
+                            text: qsTr("Translate as you type")
+                            onClicked: {
+                                _settings.translate_when_typing = !_settings.translate_when_typing
+                            }
+                        }
+                    }
+                }
+
+                ExpandingSection {
                     title: qsTr("Other")
 
                     content.sourceComponent: Column {

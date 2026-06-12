@@ -299,8 +299,10 @@ Item {
 
         Item {
             id: translatorButton
+
             width: parent.width
-            height: Math.max(_translatorButton.height, translatorTextSwitch.height) + 2 * Theme.paddingMedium
+            height: visible ? _translatorButton.height + 2 * Theme.paddingMedium : 0
+            visible: !_settings.translate_when_typing
 
             Row {
                 anchors.centerIn: parent
@@ -315,27 +317,6 @@ Item {
                         if (app.task_state === DsnoteApp.TaskStateCancelling) return
                         if (root.canCancelMnt) app.cancel()
                         else app.translate()
-                    }
-                    preferredWidth: translatorTextSwitch._label.implicitWidth > root.width - (Theme.buttonWidthSmall + 2 * Theme.horizontalPageMargin) ?
-                                        Theme.buttonWidthExtraSmall : Theme.buttonWidthSmall
-                }
-
-                TextSwitch {
-                    id: translatorTextSwitch
-
-                    _label {
-                        width: Math.min(root.width - _translatorButton.implicitWidthh - 2 * Theme.horizontalPageMargin, translatorTextSwitch._label.implicitWidth)
-                        font.pixelSize: verticalMode ? Theme.fontSizeExtraSmall : Theme.fontSizeSmall
-                    }
-
-                    width: Theme.itemSizeExtraSmall + translatorTextSwitch._label.width
-                    anchors.verticalCenter: parent.verticalCenter
-                    enabled: app.state === DsnoteApp.StateIdle
-                    checked: _settings.translate_when_typing
-                    automaticCheck: false
-                    text: qsTr("Translate as you type")
-                    onClicked: {
-                        _settings.translate_when_typing = !_settings.translate_when_typing
                     }
                 }
             }
