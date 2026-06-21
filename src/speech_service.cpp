@@ -1475,7 +1475,16 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         if (model_config->stt->engine == models_manager::model_engine_t::stt_fasterwhisper) {
             ENGINE_OPTS(fasterwhisper)
         } else if (model_config->stt->engine == models_manager::model_engine_t::stt_canary) {
-            ENGINE_OPTS(canary)
+            if (settings::instance()->canary_use_gpu() &&
+                settings::instance()->has_canary_gpu_device()) {
+                if (auto device = make_gpu_device<stt_engine>(
+                        settings::instance()->canary_gpu_device(),
+                        settings::instance()->canary_auto_gpu_device())) {
+                    config.gpu_device = std::move(*device);
+                    config.gpu_device.flash_attn = false;
+                    config.use_gpu = true;
+                }
+            }
         }
 #endif
 #undef ENGINE_OPTS

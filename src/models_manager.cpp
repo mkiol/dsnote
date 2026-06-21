@@ -2085,6 +2085,7 @@ models_manager::feature_flags models_manager::add_implicit_feature_flags(
         case model_engine_t::stt_whisper:
 #ifdef USE_PY
         case model_engine_t::stt_fasterwhisper:
+        case model_engine_t::stt_canary:
 #endif
             if (model_id.contains("tiny")) {
                 existing_features =
@@ -2549,6 +2550,7 @@ void models_manager::add_astrunc_model_options(priv_model_t& model) {
         return;                                                             \
     }
     ASTRUNC_LANG_TABLE
+#undef X
 }
 
 void models_manager::add_implicit_model_options(priv_model_t& model) {
