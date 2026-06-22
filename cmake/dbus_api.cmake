@@ -4,17 +4,23 @@ configure_file(${dbus_dir}/dsnote.xml.in ${dbus_dsnote_interface_file})
 
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS DBus REQUIRED)
 
-if(NOT DEFINED QT_CMAKE_EXPORT_NAMESPACE)
-    unset(qdbusxml2cpp_bin CACHE)
-    find_program(qdbusxml2cpp_bin qdbusxml2cpp)
-    if(${qdbusxml2cpp_bin} MATCHES "-NOTFOUND$")
-       find_program(qdbusxml2cpp_bin qdbusxml2cpp-qt5)
-       if(${qdbusxml2cpp_bin} MATCHES "-NOTFOUND$")
-          message(FATAL_ERROR "qdbusxml2cpp not found but it is required")
-       endif()
-    endif()
-else()
+set(qdbusxml2cpp_target Qt${QT_VERSION_MAJOR}::qdbusxml2cpp)
+if(TARGET ${qdbusxml2cpp_target})
+    set(qdbusxml2cpp_bin ${qdbusxml2cpp_target})
+elseif(DEFINED QT_CMAKE_EXPORT_NAMESPACE AND
+       TARGET ${QT_CMAKE_EXPORT_NAMESPACE}::qdbusxml2cpp)
     set(qdbusxml2cpp_bin ${QT_CMAKE_EXPORT_NAMESPACE}::qdbusxml2cpp)
+else()
+    unset(qdbusxml2cpp_bin CACHE)
+    find_program(qdbusxml2cpp_bin
+        NAMES qdbusxml2cpp qdbusxml2cpp-qt5
+        HINTS
+            "/usr/lib64/qt${QT_VERSION_MAJOR}/bin"
+            "/usr/lib/qt${QT_VERSION_MAJOR}/bin"
+            "/usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}/qt${QT_VERSION_MAJOR}/bin")
+    if(NOT qdbusxml2cpp_bin)
+       message(FATAL_ERROR "qdbusxml2cpp not found but it is required")
+    endif()
 endif()
 
 add_custom_command(
