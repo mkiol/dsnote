@@ -11,6 +11,8 @@
 #include <QDebug>
 #include <QDir>
 #include <QDirIterator>
+#include <QFile>
+#include <QFileInfo>
 #include <QGuiApplication>
 #include <QIcon>
 #include <QLocale>
@@ -18,6 +20,7 @@
 #include <QQmlContext>
 #include <QString>
 #include <QStringList>
+#include <QTimer>
 #include <QTranslator>
 #include <QUrl>
 #include <csignal>
@@ -129,6 +132,13 @@ static cmd::options check_options(const QCoreApplication& app) {
         QStringLiteral("role")};
     parser.addOption(print_active_model_opt);
 
+    QCommandLineOption transcribe_file_opt{
+        QStringLiteral("transcribe-file"),
+        QStringLiteral("Transcribes an audio or video file and prints decoded "
+                       "text to stdout."),
+        QStringLiteral("file")};
+    parser.addOption(transcribe_file_opt);
+
     QCommandLineOption action_opt{
         QStringLiteral("action"),
         QStringLiteral("Invokes an <action>. Supported actions are: %1.")
@@ -140,6 +150,7 @@ static cmd::options check_options(const QCoreApplication& app) {
         QStringLiteral("id"),
         QStringLiteral(
             "Language or model id. Used together with "
+            "transcribe-file, "
             "start-listening-clipboard, start-reading-text, set-stt-model "
             "or set-tts-model action."),
         QStringLiteral("id")};
@@ -154,8 +165,8 @@ static cmd::options check_options(const QCoreApplication& app) {
 
     QCommandLineOption output_file_opt{
         QStringLiteral("output-file"),
-        QStringLiteral("Save the synthesized speech in an audio file instead "
-                       "of playing it aloud. Used together with "
+        QStringLiteral("Save transcription text or synthesized speech to a "
+                       "file. Used together with transcribe-file, "
                        "start-reading-clipboard or "
                        "start-reading-text action."),
         QStringLiteral("output-file")};
@@ -239,6 +250,8 @@ static cmd::options check_options(const QCoreApplication& app) {
     }
 
     auto action = parser.value(action_opt);
+    auto transcribe_file = parser.value(transcribe_file_opt);
+    auto positional_files = parser.positionalArguments();
     if (!action.isEmpty()) {
         if (true
 #define X(name, str) &&action.compare(str, Qt::CaseInsensitive) != 0
@@ -293,16 +306,56 @@ static cmd::options check_options(const QCoreApplication& app) {
         }
     }
 
+    if (!transcribe_file.isEmpty()) {
+        if (!options.action.isEmpty()) {
+            fmt::print(stderr,
+                       "Option --{} cannot be used together with --{}.\n",
+                       transcribe_file_opt.names().front().toStdString(),
+                       action_opt.names().front().toStdString());
+            options.valid = false;
+        }
+        if (parser.isSet(app_opt) || parser.isSet(sttservice_opt)) {
+            fmt::print(stderr,
+                       "Option --{} runs in standalone mode and cannot be used "
+                       "together with --app or --service.\n",
+                       transcribe_file_opt.names().front().toStdString());
+            options.valid = false;
+        }
+        if (!positional_files.isEmpty()) {
+            fmt::print(stderr,
+                       "Option --{} cannot be used together with positional "
+                       "files.\n",
+                       transcribe_file_opt.names().front().toStdString());
+            options.valid = false;
+        }
+
+        auto id = parser.value(id_opt);
+        if (!id.isEmpty()) {
+            if (!text_tools::valid_model_id(id.toStdString())) {
+                fmt::print(stderr,
+                           "Invalid language or model id (option --{}).\n",
+                           id_opt.valueName().toStdString());
+                options.valid = false;
+            } else {
+                options.model_id = id;
+            }
+        }
+
+        options.transcribe_file = std::move(transcribe_file);
+    }
+
     options.output_file = parser.value(output_file_opt);
     if (!options.output_file.isEmpty()) {
         if (action.compare("start-reading-clipboard", Qt::CaseInsensitive) !=
                 0 &&
-            action.compare("start-reading-text", Qt::CaseInsensitive) != 0) {
+            action.compare("start-reading-text", Qt::CaseInsensitive) != 0 &&
+            options.transcribe_file.isEmpty()) {
             fmt::print(
                 stderr,
-                "Option --{} can be used only with start-reading-clipboard and "
-                "start-reading-text actions.\n",
-                output_file_opt.valueName().toStdString());
+                "Option --{} can be used only with --{} or with "
+                "start-reading-clipboard and start-reading-text actions.\n",
+                output_file_opt.valueName().toStdString(),
+                transcribe_file_opt.names().front().toStdString());
             options.valid = false;
         }
     }
@@ -361,7 +414,7 @@ static cmd::options check_options(const QCoreApplication& app) {
     options.hw_scan_off = parser.isSet(hwscanoff_opt);
     options.py_scan_off = parser.isSet(pyscanoff_opt);
     options.reset_models = parser.isSet(resetmodels_opt);
-    options.files = parser.positionalArguments();
+    options.files = std::move(positional_files);
 #ifdef USE_DESKTOP
     options.start_in_tray = parser.isSet(start_in_tray_opt);
 #endif
@@ -549,6 +602,126 @@ static void start_service(const cmd::options& options) {
     QGuiApplication::exec();
 }
 
+static int run_cli_transcribe(const cmd::options& options) {
+    auto* s = settings::instance();
+
+    if (options.hw_scan_off) {
+        s->disable_hw_scan();
+    }
+    if (options.py_scan_off) {
+        s->disable_py_scan();
+    }
+
+    auto* service = speech_service::instance();
+
+    constexpr int invalid_task = -1;
+    QStringList decoded_chunks;
+    int task_id = invalid_task;
+    bool start_requested = false;
+    bool finished = false;
+
+    auto finish = [&](int exit_code) {
+        if (finished) return;
+        finished = true;
+        QCoreApplication::exit(exit_code);
+    };
+
+    auto write_result = [&]() {
+        const auto text = decoded_chunks.join(QStringLiteral("\n"));
+
+        if (options.output_file.isEmpty()) {
+            if (!text.isEmpty()) {
+                fmt::print("{}\n", text.toStdString());
+            }
+            return true;
+        }
+
+        QFile output_file{QFileInfo{options.output_file}.absoluteFilePath()};
+        if (!output_file.open(QIODevice::WriteOnly | QIODevice::Text |
+                              QIODevice::Truncate)) {
+            fmt::print(stderr, "Failed to write transcription output: {}\n",
+                       output_file.errorString().toStdString());
+            return false;
+        }
+
+        output_file.write(text.toUtf8());
+        if (!text.isEmpty() && !text.endsWith(QLatin1Char('\n')))
+            output_file.write("\n");
+
+        return true;
+    };
+
+    QObject::connect(service, &speech_service::error, QCoreApplication::instance(),
+                     [&](speech_service::error_t error) {
+                         fmt::print(stderr, "Transcription failed: {}\n",
+                                    static_cast<int>(error));
+                         finish(1);
+                     });
+
+    QObject::connect(service, &speech_service::stt_text_decoded,
+                     QCoreApplication::instance(),
+                     [&](const QString& text, const QString&, int task) {
+                         if (task == task_id && !text.isEmpty()) {
+                             decoded_chunks.push_back(text);
+                         }
+                     });
+
+    QObject::connect(service, &speech_service::stt_file_transcribe_finished,
+                     QCoreApplication::instance(), [&](int task) {
+                         if (task == task_id) {
+                             finish(write_result() ? 0 : 1);
+                         }
+                     });
+
+    auto start_transcription = [&, service]() {
+        if (start_requested) return;
+
+        switch (service->state()) {
+            case speech_service::state_t::unknown:
+            case speech_service::state_t::busy:
+                return;
+            case speech_service::state_t::not_configured:
+                fmt::print(stderr, "Cannot transcribe file: service is not "
+                                   "configured.\n");
+                finish(1);
+                return;
+            default:
+                break;
+        }
+
+        QVariantMap transcribe_options;
+        transcribe_options.insert(
+            QStringLiteral("text_format"),
+            static_cast<int>(settings::text_format_t::TextFormatRaw));
+        transcribe_options.insert(QStringLiteral("stream_index"), 0);
+        transcribe_options.insert(QStringLiteral("insert_stats"), false);
+
+        const auto file =
+            QFileInfo::exists(options.transcribe_file)
+                ? QFileInfo{options.transcribe_file}.absoluteFilePath()
+                : options.transcribe_file;
+        start_requested = true;
+        task_id = service->stt_transcribe_file(file, options.model_id, {},
+                                               transcribe_options);
+        if (task_id == invalid_task) {
+            fmt::print(stderr, "Failed to start file transcription.\n");
+            finish(1);
+        }
+    };
+
+    QObject::connect(service, &speech_service::state_changed,
+                     QCoreApplication::instance(), start_transcription);
+    QTimer::singleShot(0, QCoreApplication::instance(), start_transcription);
+    QTimer::singleShot(60000, QCoreApplication::instance(), [&] {
+        if (!start_requested) {
+            fmt::print(stderr, "Timed out waiting for the speech service.\n");
+            finish(1);
+        }
+    });
+
+    return QGuiApplication::exec();
+}
+
 static void start_app(const cmd::options& options,
                       app_server& dbus_app_server) {
     auto* s = settings::instance();
@@ -689,6 +862,13 @@ int main(int argc, char* argv[]) {
     }
 
     settings::launch_mode = cmd_opts.launch_mode;
+
+    if (!cmd_opts.transcribe_file.isEmpty()) {
+        LOGD("starting cli file transcription");
+        auto result = run_cli_transcribe(cmd_opts);
+        speech_service::remove_cached_files();
+        std::quick_exit(result);
+    }
 
     switch (cmd_opts.launch_mode) {
         case settings::launch_mode_t::service:

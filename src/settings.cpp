@@ -738,7 +738,7 @@ void settings::set_mode(mode_t value) {
 settings::speech_mode_t settings::speech_mode() const {
     return static_cast<speech_mode_t>(
         value(QStringLiteral("speech_mode"),
-              static_cast<int>(speech_mode_t::SpeechSingleSentence))
+              static_cast<int>(speech_mode_t::SpeechAutomatic))
             .toInt());
 }
 

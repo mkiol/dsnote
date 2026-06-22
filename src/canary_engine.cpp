@@ -50,6 +50,17 @@ std::string canary_source_lang(const stt_engine::config_t& config) {
     return lang;
 }
 
+std::string canary_result_text(const py::handle& result) {
+    if (py::isinstance<py::str>(result)) return result.cast<std::string>();
+
+    if (py::hasattr(result, "text")) {
+        auto text = result.attr("text");
+        if (!text.is_none()) return text.cast<std::string>();
+    }
+
+    return py::str(result).cast<std::string>();
+}
+
 bool write_canary_wav(QTemporaryFile& file, const std::vector<float>& samples,
                       uint32_t sample_rate) {
     if (!file.open()) return false;
@@ -363,6 +374,7 @@ void canary_engine::decode_speech(const audio_buf_t& buf) {
             std::string source_lang = canary_source_lang(m_config);
             std::string target_lang = m_config.translate ? "en" : source_lang;
             std::string task_type = m_config.translate ? "s2t_translation" : "asr";
+            auto pnc = m_config.has_option('i') ? "yes" : "no";
 
             py::list paths;
             paths.append(tmp_path);
@@ -373,12 +385,12 @@ void canary_engine::decode_speech(const audio_buf_t& buf) {
                 "source_lang"_a = source_lang,
                 "target_lang"_a = target_lang,
                 "task"_a = task_type,
-                "pnc"_a = m_config.has_option('i'),
+                "pnc"_a = pnc,
                 "verbose"_a = false);
 
             std::string text;
             if (py::isinstance<py::list>(result) && py::len(result) > 0) {
-                text = result[py::int_(0)].cast<std::string>();
+                text = canary_result_text(result[py::int_(0)]);
             }
 
             rtrim(text);
