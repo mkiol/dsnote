@@ -36247,6 +36247,41 @@
             "lang_id": "zh",
             "speaker": "zm_yunyang",
             "options": "a"
+        },
+        {
+            "name": "Multilingual (Canary 1B v2)",
+            "model_id": "multilang_canary_1b_v2",
+            "file_name": "canary-1b-v2.nemo",
+            "engine": "stt_canary",
+            "lang_id": "multilang",
+            "info": "NVIDIA Canary 1B v2 - multilingual ASR and speech translation",
+            "options": "ti",
+            "score": 5,
+            "checksum": "sha256:ae5ef1bf06812a95a1594a8f5f0ee9c51f35418e5ba96939fa6b98ab00431094",
+            "checksum_quick": "647d6498",
+            "urls": [
+                "hf://nvidia/canary-1b-v2/canary-1b-v2.nemo?revision=87bc52657add533cd0156b3fc1aef027280754bf"
+            ],
+            "size": "6358958080",
+            "features": [
+                "high_quality",
+                "slow_processing",
+                "stt_punctuation"
+            ],
+            "license": {
+                "id": "CC-BY-4.0",
+                "name": "Creative Commons Attribution 4.0 International",
+                "url": "https://creativecommons.org/licenses/by/4.0/",
+                "accept_required": false
+            }
+        },
+        {
+            "name": "English (Canary 1B v2)",
+            "model_id": "en_canary_1b_v2",
+            "model_alias_of": "multilang_canary_1b_v2",
+            "lang_id": "en",
+            "lang_code": "en",
+            "score": 5
         }
     ],
     "packs": [

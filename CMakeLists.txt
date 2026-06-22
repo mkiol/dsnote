@@ -425,6 +425,8 @@ if(WITH_PY)
         ${sources_dir}/punctuator.cpp
         ${sources_dir}/fasterwhisper_engine.hpp
         ${sources_dir}/fasterwhisper_engine.cpp
+        ${sources_dir}/canary_engine.hpp
+        ${sources_dir}/canary_engine.cpp
         ${sources_dir}/mimic3_engine.hpp
         ${sources_dir}/mimic3_engine.cpp
         ${sources_dir}/parler_engine.cpp
@@ -442,17 +444,23 @@ endif()
 configure_file(config.h.in config.h)
 
 # qt version selection
+set(QT_VERSION_MAJOR "" CACHE STRING "Qt major version to use. Empty selects the platform default.")
+set_property(CACHE QT_VERSION_MAJOR PROPERTY STRINGS "" 5 6)
+
 if(WITH_SFOS)
-    # on sfos use qt5
-    find_package(Qt5 COMPONENTS Core REQUIRED)
-    set(QT_VERSION_MAJOR 5)
-    message(STATUS "Using Qt5")
-else()
-    # on everything else use qt6
-    find_package(Qt6 COMPONENTS Core REQUIRED)
-    set(QT_VERSION_MAJOR 6)
-    message(STATUS "Using Qt6")
+    if(NOT "${QT_VERSION_MAJOR}" STREQUAL "" AND
+       NOT "${QT_VERSION_MAJOR}" STREQUAL "5")
+        message(FATAL_ERROR "Sailfish OS builds require Qt5")
+    endif()
+    set(QT_VERSION_MAJOR 5 CACHE STRING "Qt major version to use" FORCE)
+elseif("${QT_VERSION_MAJOR}" STREQUAL "")
+    set(QT_VERSION_MAJOR 6 CACHE STRING "Qt major version to use" FORCE)
+elseif(NOT "${QT_VERSION_MAJOR}" MATCHES "^[56]$")
+    message(FATAL_ERROR "QT_VERSION_MAJOR must be 5 or 6")
 endif()
+
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
+message(STATUS "Using Qt${QT_VERSION_MAJOR}")
 
 include(${cmake_path}/dbus_api.cmake)
 
@@ -564,7 +572,7 @@ pkg_search_module(pulse REQUIRED libpulse)
 list(APPEND deps_libs ${pulse_LIBRARIES})
 list(APPEND includes ${pulse_INCLUDE_DIRS})
 
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick DBus LinguistTools REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network Multimedia Qml Xml Sql Gui Quick DBus REQUIRED)
 list(APPEND deps_libs Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Multimedia 
     Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Quick
     Qt${QT_VERSION_MAJOR}::DBus Qt${QT_VERSION_MAJOR}::Xml Qt${QT_VERSION_MAJOR}::Sql)
@@ -603,7 +611,7 @@ if(WITH_DESKTOP)
 
         # Qt6 removed X11Extras - functionality moved to Qt6::Gui
         # Qt5 needs X11Extras
-        if(QT_VERSION_MAJOR EQUAL 5)
+        if("${QT_VERSION_MAJOR}" STREQUAL "5")
             find_package(Qt5 COMPONENTS X11Extras REQUIRED)
             list(APPEND deps_libs Qt5::X11Extras)
         endif()

@@ -9,8 +9,10 @@
 
 #include <zlib.h>
 
+#include <QCryptographicHash>
 #include <QDebug>
 #include <QDirIterator>
+#include <QFile>
 #include <QFileInfo>
 #include <cstdint>
 #include <fstream>
@@ -87,8 +89,30 @@ QString make_checksum(const QString& file_or_dir) {
     return make_file_checksum(file_or_dir);
 }
 
+QString make_sha256_checksum(const QString& file_or_dir) {
+    if (QFileInfo{file_or_dir}.isDir()) {
+        qWarning() << "sha256 checksum for directories is not supported:"
+                   << file_or_dir;
+        return {};
+    }
+    return make_file_sha256_checksum(file_or_dir);
+}
+
 QString make_file_checksum(const QString& file) {
     return number_to_hex_str(make_file_checksum_number(file));
+}
+
+QString make_file_sha256_checksum(const QString& file) {
+    QFile input{file};
+    if (!input.open(QIODevice::ReadOnly)) {
+        qWarning() << "failed to open file:" << file;
+        return {};
+    }
+
+    QCryptographicHash hash{QCryptographicHash::Sha256};
+    while (!input.atEnd()) hash.addData(input.read(65536));
+
+    return QString::fromLatin1(hash.result().toHex());
 }
 
 QString make_dir_checksum(const QString& dir) {

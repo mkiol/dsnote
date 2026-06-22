@@ -36,7 +36,9 @@
 #ifdef USE_PY
 #define STT_ENGINE_TABLE_PY                                             \
     X(fasterwhisper, stt, true, false, false, true, 9, slow_processing, \
-      high_quality, "", 0)
+      high_quality, "", 0)                                              \
+    X(canary, stt, true, false, false, true, 21, slow_processing,       \
+      high_quality, ".nemo", 0)
 #else
 #define STT_ENGINE_TABLE_PY
 #endif
@@ -145,7 +147,8 @@
     X(whisperspeech, tts, 9, 0) \
     X(parler, tts, 11, 0)       \
     X(f5, tts, 13, 0)           \
-    X(kokoro, tts, 15, 0)
+    X(kokoro, tts, 15, 0)       \
+    X(canary, stt, 17, 0)
 #else
 #define HW_CUDA_ENGINE_TABLE_PY
 #endif
@@ -162,7 +165,8 @@
     X(whisperspeech, tts, 10, 0) \
     X(parler, tts, 12, 0)        \
     X(f5, tts, 14, 0)            \
-    X(kokoro, tts, 16, 0)
+    X(kokoro, tts, 16, 0)        \
+    X(canary, stt, 18, 0)
 #else
 #define HW_HIP_ENGINE_TABLE_PY
 #endif

@@ -42,6 +42,7 @@ struct options {
     QString action;
     QString text;
     QString model_id;
+    QString transcribe_file;
     QStringList files;
     QString log_file;
     QString output_file;

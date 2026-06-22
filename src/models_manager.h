@@ -367,6 +367,7 @@ class models_manager : public QObject, public singleton<models_manager> {
                   size_t sup_idx);
     void handle_download_progress(qint64 received, qint64 real_total);
     void handle_download_finished();
+    void handle_hf_metadata_finished(QNetworkReply* reply);
     void handle_download_ready_read();
     void handle_ssl_errors(const QList<QSslError>& errors);
     static QString model_path(const QString& file_name);

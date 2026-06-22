@@ -9,11 +9,17 @@
 
 #include <fmt/format.h>
 
+#include <QDir>
+#include <QFileInfo>
+#include <QStringList>
+
 #include <cstdlib>
+#include <optional>
 #include <stdexcept>
 #include <string>
 
 #include "logger.hpp"
+#include "module_tools.hpp"
 #include "settings.h"
 
 py_executor::~py_executor() {
@@ -75,6 +81,41 @@ static std::string add_to_env_path(const std::string& dir) {
     return new_path ? std::string{new_path} : std::string{};
 }
 
+static std::optional<std::string> installed_venv_site_packages() {
+    auto share_dir =
+        module_tools::path_to_share_dir_for_path("venv/pyvenv.cfg");
+    if (share_dir.isEmpty()) return std::nullopt;
+
+    QDir python_libs{QDir{share_dir}.filePath("venv/lib")};
+    if (!python_libs.exists()) return std::nullopt;
+
+    auto site_packages_path = [](const QString& python_dir) {
+        QFileInfo site_packages{
+            QDir{python_dir}.filePath("site-packages")};
+        if (!site_packages.isDir()) return std::optional<std::string>{};
+
+        auto path = site_packages.canonicalFilePath();
+        if (path.isEmpty()) path = site_packages.absoluteFilePath();
+        return std::optional<std::string>{path.toStdString()};
+    };
+
+    if (auto path = site_packages_path(python_libs.filePath(
+            QStringLiteral("python%1.%2").arg(PY_MAJOR_VERSION).arg(PY_MINOR_VERSION)))) {
+        return path;
+    }
+
+    auto python_dirs =
+        python_libs.entryInfoList(QStringList{"python*"},
+                                  QDir::Dirs | QDir::NoDotAndDotDot,
+                                  QDir::Name);
+    for (const auto& python_dir : python_dirs) {
+        if (auto path = site_packages_path(python_dir.absoluteFilePath()))
+            return path;
+    }
+
+    return std::nullopt;
+}
+
 static void set_env(const char* name, const char* value) {
     auto* old_value = getenv(name);
     setenv(name, value, 1);
@@ -95,6 +136,13 @@ void py_executor::loop() {
             settings::instance()->cache_dir().toStdString().c_str());
 
     py_tools::init_module();
+
+    auto default_py_path = installed_venv_site_packages();
+    if (default_py_path) {
+        LOGD("adding installed venv to PYTHONPATH: " << *default_py_path);
+        auto new_path = add_to_env_path(*default_py_path);
+        LOGD("new PYTHONPATH: " << new_path);
+    }
 
     auto py_path = settings::instance()->py_path().toStdString();
     if (!py_path.empty()) {

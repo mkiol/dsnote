@@ -4,7 +4,19 @@ set(enabled_translations ar ca_ES cs de en es fr fr_CA it nl no pt_BR pl ru sv s
 set(enabled_translations ar ca_ES de en es fr fr_CA it nl no pt_BR pl ru sv sl tr_TR uk zh_CN zh_TW)
 
 # QT_VERSION_MAJOR is set in main CMakeLists.txt
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core LinguistTools)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core LinguistTools QUIET)
+if(NOT Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
+    if("${QT_VERSION_MAJOR}" STREQUAL "5")
+        message(FATAL_ERROR
+            "Qt5 LinguistTools is required to build translations. "
+            "Install the Qt5 translation tools package, e.g. "
+            "dev-qt/linguist-tools on Gentoo, qt5-linguist on Fedora, "
+            "or qttools5-dev-tools on Debian/Ubuntu.")
+    else()
+        message(FATAL_ERROR
+            "Qt6 LinguistTools is required to build translations.")
+    endif()
+endif()
 
 set(ts_files "")
 foreach(lang ${enabled_translations})
@@ -25,7 +37,7 @@ function(ADD_TRANSLATIONS_RESOURCE res_file)
     set(${res_file} ${_res_file} PARENT_SCOPE)
 endfunction()
 
-if(QT_VERSION_MAJOR EQUAL 6)
+if("${QT_VERSION_MAJOR}" STREQUAL "6")
     qt6_create_translation(qm_files ${CMAKE_SOURCE_DIR}/src ${desktop_dir}/qml ${sfos_dir}/qml ${ts_files})
 else()
     if(WITH_SFOS)
