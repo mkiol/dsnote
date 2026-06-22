@@ -15,8 +15,11 @@
 #endif
 
 #include <QDebug>
+#include <QDir>
 #include <QStandardPaths>
 #include <QString>
+
+#include <initializer_list>
 
 #include "cpu_tools.hpp"
 #include "logger.hpp"
@@ -61,6 +64,56 @@ std::ostream& operator<<(std::ostream& os,
 
     return os;
 }
+
+#ifdef USE_PY
+namespace {
+bool py_module_spec_exists(const char* module_name) {
+    namespace py = pybind11;
+
+    try {
+        auto importlib_util = py::module_::import("importlib.util");
+        auto spec = importlib_util.attr("find_spec")(module_name);
+        return !spec.is_none();
+    } catch (const std::exception& err) {
+        LOGD("python module spec check failed for "
+             << module_name << ": " << err.what());
+        return false;
+    }
+}
+
+bool py_package_subdirs_exist(const char* module_name,
+                              std::initializer_list<const char*> subdirs) {
+    namespace py = pybind11;
+
+    try {
+        auto importlib_util = py::module_::import("importlib.util");
+        auto spec = importlib_util.attr("find_spec")(module_name);
+        if (spec.is_none()) return false;
+
+        auto locations = spec.attr("submodule_search_locations");
+        if (locations.is_none()) return false;
+
+        for (const auto location : locations) {
+            QDir dir{QString::fromStdString(
+                py::str(location).cast<std::string>())};
+            bool found = true;
+            for (auto* subdir : subdirs) {
+                if (!dir.cd(QString::fromLatin1(subdir))) {
+                    found = false;
+                    break;
+                }
+            }
+            if (found) return true;
+        }
+    } catch (const std::exception& err) {
+        LOGD("python package subdir check failed for "
+             << module_name << ": " << err.what());
+    }
+
+    return false;
+}
+}
+#endif
 
 namespace py_tools {
 libs_availability_t libs_availability(libs_scan_type_t scan_type,
@@ -120,33 +173,9 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type,
 
     if ((scan_flags & settings::ScanFlagNoTorchCuda) > 0) {
         LOGD("checking: torch cuda (skipped)");
-    } else {
-        if (cpu_tools::cpuinfo().feature_flags &
-            cpu_tools::feature_flags_t::avx) {
-            try {
-                LOGD("checking: torch cuda");
-                auto torch_cuda = py::module_::import("torch.cuda");
-                auto torch_ver = py::module_::import("torch.version");
-                if (torch_cuda.attr("is_available")().cast<bool>()) {
-                    try {
-                        auto cuda_ver =
-                            torch_ver.attr("cuda").cast<std::string>();
-                        LOGD("torch cuda version: " << cuda_ver);
-                        availability.torch_cuda = !cuda_ver.empty();
-                    } catch ([[maybe_unused]] const py::cast_error& err) {
-                    }
-                    try {
-                        auto hip_ver =
-                            torch_ver.attr("hip").cast<std::string>();
-                        LOGD("torch hip version: " << hip_ver);
-                        availability.torch_hip = !hip_ver.empty();
-                    } catch ([[maybe_unused]] const py::cast_error& err) {
-                    }
-                }
-            } catch (const std::exception& err) {
-                LOGD("torch cuda check py error: " << err.what());
-            }
-        }
+    } else if (cpu_tools::cpuinfo().feature_flags &
+               cpu_tools::feature_flags_t::avx) {
+        LOGD("checking: torch cuda (deferred)");
     }
 
     if ((scan_flags & settings::ScanFlagNoCt2Cuda) > 0) {
@@ -247,8 +276,10 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type,
 
         try {
             LOGD("checking: nemo-asr");
-            py::module_::import("nemo.collections.asr");
-            availability.nemo_asr = true;
+            auto has_nemo_asr =
+                py_package_subdirs_exist("nemo", {"collections", "asr"});
+            auto has_torch = py_module_spec_exists("torch");
+            availability.nemo_asr = has_nemo_asr && has_torch;
         } catch (const std::exception& err) {
             LOGD("nemo-asr check py error: " << err.what());
         }
@@ -374,12 +405,11 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type,
     LOGD("py libs availability: [" << availability << "]");
 
     try {
-        // release mem
         py::module_::import("gc").attr("collect")();
-        py::module_::import("torch").attr("cuda").attr("empty_cache")();
     } catch (const std::exception& err) {
-        LOGE("py error: " << err.what());
+        LOGD("gc cleanup py error: " << err.what());
     }
+
 #endif
 
     return availability;

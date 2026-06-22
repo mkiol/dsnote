@@ -3173,10 +3173,8 @@ QVariantMap speech_service::features_availability() {
         hw_feature_flags |=
             settings::hw_feature_flags_t::hw_feature_stt_fasterwhisper_hip;
     }
-    bool stt_canary_cuda =
-        py_availability->nemo_asr && py_availability->torch_cuda && has_cuda;
-    bool stt_canary_hip =
-        py_availability->nemo_asr && py_availability->torch_hip && has_hip;
+    bool stt_canary_cuda = py_availability->nemo_asr && has_cuda && has_cudnn;
+    bool stt_canary_hip = py_availability->nemo_asr && has_hip;
     m_features_availability.insert(
         "canary-stt-cuda",
         QVariantList{stt_canary_cuda,

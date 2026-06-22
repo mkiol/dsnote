@@ -36274,6 +36274,14 @@
                 "url": "https://creativecommons.org/licenses/by/4.0/",
                 "accept_required": false
             }
+        },
+        {
+            "name": "English (Canary 1B v2)",
+            "model_id": "en_canary_1b_v2",
+            "model_alias_of": "multilang_canary_1b_v2",
+            "lang_id": "en",
+            "lang_code": "en",
+            "score": 5
         }
     ],
     "packs": [
