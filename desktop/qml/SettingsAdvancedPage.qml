@@ -317,7 +317,7 @@ ColumnLayout {
         id: scanFlagTorchCheckbox
 
         checked: _settings.scan_flags & Settings.ScanFlagNoTorchCuda
-        text: qsTranslate("SettingsPage", "Disable detection of PyTorch")
+        text: qsTranslate("SettingsPage", "Disable detection of %1").arg("<i>PyTorch</i>")
         onCheckedChanged: setScanFlags()
     }
 
@@ -325,7 +325,7 @@ ColumnLayout {
         id: scanFlagCt2Checkbox
 
         checked: _settings.scan_flags & Settings.ScanFlagNoCt2Cuda
-        text: qsTranslate("SettingsPage", "Disable detection of CTranslate2")
+        text: qsTranslate("SettingsPage", "Disable detection of %1").arg("<i>CTranslate2</i>")
         onCheckedChanged: setScanFlags()
     }
 

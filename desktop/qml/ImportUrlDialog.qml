@@ -45,7 +45,7 @@ Dialog {
             Button {
                 Layout.alignment: Qt.AlignRight
                 enabled: root.canAccept
-                text: qsTr("Import URL")
+                text: qsTr("Import from a URL")
                 icon.name: "globe-symbolic"
                 Keys.onReturnPressed: {
                     root.accept()

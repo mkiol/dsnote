@@ -148,11 +148,6 @@ ToolBar {
                                     shortcut: "Ctrl+U"
                                     onTriggered: appWin.openDialog("ImportUrlDialog.qml")
                                 }
-
-                                ToolTip.visible: hovered
-                                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                                ToolTip.text: qsTr("Import a note from a URL.")
-                                hoverEnabled: true
                             }
 
                             MenuSeparator {}
