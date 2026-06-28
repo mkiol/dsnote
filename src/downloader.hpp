@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -20,19 +20,23 @@ class downloader final : public QObject {
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
 
    public:
+    enum class error_t { no_error, aborted, other };
+
     struct data_t {
         QString mime;
         QByteArray bytes;
+        error_t error = error_t::no_error;
     };
 
-    downloader(QObject *parent = nullptr);
-    data_t download_data(const QUrl &url);
+    explicit downloader(QObject *parent = nullptr);
+    data_t download_data(const QUrl &url,
+                         const QString &expected_content_type_pattern = {});
     bool download_to_file(const QUrl &url, const QString &output_path);
     void cancel();
     void reset();
-    inline auto canceled() const { return m_cancel_requested; }
-    inline bool busy() const { return m_reply && m_reply->isRunning(); }
-    inline auto progress() const { return m_progress; }
+    auto canceled() const { return m_cancel_requested; }
+    bool busy() const { return m_reply && m_reply->isRunning(); }
+    auto progress() const { return m_progress; }
 
    signals:
     void busy_changed();

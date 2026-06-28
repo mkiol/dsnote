@@ -114,6 +114,15 @@ Page {
                         }
 
                         TextSwitch {
+                            checked: _settings.import_extract_readable
+                            automaticCheck: false
+                            text: qsTr("When importing an HTML, extract only the readable text")
+                            onClicked: {
+                                _settings.keep_last_note = !_settings.keep_last_note
+                            }
+                        }
+
+                        TextSwitch {
                             checked: _settings.subtitles_support
                             automaticCheck: false
                             text: qsTr("Subtitles and inline timestamps support")

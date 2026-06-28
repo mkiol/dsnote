@@ -22,7 +22,7 @@ Dialog {
     function update_license() {
         busy = true
         textArea.text = ""
-        textArea.text = app.download_content(licenseUrl);
+        textArea.text = app.download_license(licenseUrl);
         busy = false
     }
 

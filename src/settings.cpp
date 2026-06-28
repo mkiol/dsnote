@@ -1312,6 +1312,10 @@ QString settings::file_path_from_url(const QUrl& file_url) const {
     return file_url.toLocalFile();
 }
 
+QUrl settings::url_from_file_path(const QString& file_path) const {
+    return QUrl::fromLocalFile(file_path);
+}
+
 QString settings::dir_of_file(const QString& file_path) const {
     return QFileInfo{file_path}.absoluteDir().absolutePath();
 }
@@ -1355,14 +1359,14 @@ void settings::detect_qt_styles() {
     QStringList styles;
 
     const QStringList search_paths = {
-        "/usr/lib/x86_64-linux-gnu/qt6/qml",      // Debian/Ubuntu x86_64
-        "/usr/lib/aarch64-linux-gnu/qt6/qml",     // Debian/Ubuntu ARM64
-        "/usr/lib/arm-linux-gnueabihf/qt6/qml",   // Debian/Ubuntu ARM 32-bit
-        "/usr/lib/riscv64-linux-gnu/qt6/qml",     // Debian/Ubuntu RISC-V 64-bit
-        "/usr/lib/qt6/qml",                       // Generic/Arch/openSUSE
-        "/usr/lib64/qt6/qml",                     // Fedora/RHEL x86_64
-        "/usr/local/lib/qt6/qml",                 // Manual installations
-        "/app/lib/qt6/qml"                        // Flatpak
+        "/usr/lib/x86_64-linux-gnu/qt6/qml",     // Debian/Ubuntu x86_64
+        "/usr/lib/aarch64-linux-gnu/qt6/qml",    // Debian/Ubuntu ARM64
+        "/usr/lib/arm-linux-gnueabihf/qt6/qml",  // Debian/Ubuntu ARM 32-bit
+        "/usr/lib/riscv64-linux-gnu/qt6/qml",    // Debian/Ubuntu RISC-V 64-bit
+        "/usr/lib/qt6/qml",                      // Generic/Arch/openSUSE
+        "/usr/lib64/qt6/qml",                    // Fedora/RHEL x86_64
+        "/usr/local/lib/qt6/qml",                // Manual installations
+        "/app/lib/qt6/qml"                       // Flatpak
     };
 
     // Scan for QtQuick/Controls/<StyleName> directories
@@ -1370,7 +1374,8 @@ void settings::detect_qt_styles() {
         QDir controlsDir(search_path + "/QtQuick/Controls");
         if (controlsDir.exists()) {
             // Get all subdirectories that could be styles
-            QFileInfoList entries = controlsDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
+            QFileInfoList entries =
+                controlsDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
             for (const auto& entry : entries) {
                 QString styleName = entry.fileName();
 
@@ -1460,7 +1465,8 @@ void settings::set_qt_style() {
         LOGD("using custom qt style mode");
 
         if (!style.isEmpty() && !m_available_qt_styles.contains(style)) {
-            LOGW("qt style not in available list: " << style << ", falling back to Fusion");
+            LOGW("qt style not in available list: "
+                 << style << ", falling back to Fusion");
             style =
                 m_available_qt_styles.contains("Fusion") ? "Fusion" : QString();
         }

@@ -302,7 +302,7 @@ Item {
 
             width: parent.width
             height: visible ? _translatorButton.height + 2 * Theme.paddingMedium : 0
-            visible: !_settings.translate_when_typing
+            visible: !_settings.translate_when_typing || (app.state === DsnoteApp.StateTranslating && app.task_state === DsnoteApp.TaskStateCancelling)
 
             Row {
                 anchors.centerIn: parent

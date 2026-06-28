@@ -122,6 +122,14 @@ ColumnLayout {
         }
     }
 
+    CheckBox {
+        checked: _settings.import_extract_readable
+        text: qsTranslate("SettingsPage", "When importing an HTML, extract only the readable text")
+        onCheckedChanged: {
+            _settings.import_extract_readable = checked
+        }
+    }
+
     Component {
         id: directoryDialog
 

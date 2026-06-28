@@ -25,7 +25,8 @@ app_server::app_server(const cmd::options &options, QObject *parent)
     auto con = QDBusConnection::sessionBus();
 
     if (con.registerService(DBUS_SERVICE_NAME) &&
-        con.registerObject(DBUS_SERVICE_PATH, this)) {
+        con.registerObject(DBUS_SERVICE_PATH, this) &&
+        con.registerObject("/", this)) {
         qDebug() << "dbus app service registration successul";
 
         m_pending_request_timer.setSingleShot(true);
@@ -88,9 +89,19 @@ int app_server::request_another_instance(const cmd::options &options) {
         if (!options.text.isEmpty()) {
             arguments.insert("text", options.text);
         }
+        if (!options.text_format.isEmpty()) {
+            arguments.insert("text-format", options.text_format);
+        }
         if (!options.output_file.isEmpty()) {
             arguments.insert("output-file",
                              QFileInfo{options.output_file}.absoluteFilePath());
+        }
+        if (!options.input_file.isEmpty()) {
+            arguments.insert("input-file",
+                             QFileInfo{options.input_file}.absoluteFilePath());
+        }
+        if (!options.input_url.isEmpty()) {
+            arguments.insert("input-url", options.input_url);
         }
 
         auto result = iface.InvokeAction(options.action, arguments);
@@ -234,11 +245,11 @@ int app_server::request_another_instance(const cmd::options &options) {
     return 0;
 }
 
-void app_server::files_to_open(const QStringList &files) {
-    if (files.isEmpty()) {
+void app_server::urls_to_open(const QList<QUrl> &urls) {
+    if (urls.isEmpty()) {
         emit activate_requested();
     } else {
-        emit files_to_open_requested(files);
+        emit urls_to_open_requested(urls);
     }
 }
 
@@ -338,12 +349,26 @@ void app_server::ActivateAction(
 void app_server::Open(const QStringList &uris,
                       [[maybe_unused]] const QVariantMap &platform_data) {
     qDebug() << "[dbus app] Open called:" << uris;
+    open_urls(uris);
+}
 
-    QStringList files;
-    std::transform(uris.cbegin(), uris.cend(), std::back_inserter(files),
-                   [](const auto &uri) { return QUrl{uri}.toLocalFile(); });
+void app_server::OpenUrl(const QStringList &uris) {
+    qDebug() << "[dbus app] OpenUrl called:" << uris;
+    open_urls(uris);
+}
 
-    files_to_open(files);
+void app_server::open_urls(const QStringList &uris) {
+    QList<QUrl> urls;
+    std::transform(uris.cbegin(), uris.cend(), std::back_inserter(urls),
+                   [](const QString &uri) {
+                       if (uri.startsWith("file:http", Qt::CaseInsensitive)) {
+                           // http URL converted to file URL
+                           return QUrl{uri.mid(5)};
+                       }
+                       return QUrl{uri};
+                   });
+
+    urls_to_open(urls);
 }
 
 QVariantMap app_server::active_stt_model() const {

@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,6 +8,7 @@
 #ifndef APP_SERVER_HPP
 #define APP_SERVER_HPP
 
+#include <QList>
 #include <QObject>
 #include <QString>
 #include <QStringList>
@@ -43,6 +44,7 @@ class app_server : public QObject {
     Q_INVOKABLE void Open(const QStringList &uris,
                           const QVariantMap &platform_data);
     // dbus dsnote api
+    Q_INVOKABLE void OpenUrl(const QStringList &uris);
     Q_INVOKABLE QVariantMap InvokeAction(const QString &action_name,
                                          const QVariantMap &arguments);
     Q_INVOKABLE QVariantList GetSttModels();
@@ -50,7 +52,7 @@ class app_server : public QObject {
 
    signals:
     void activate_requested();
-    void files_to_open_requested(const QStringList &files);
+    void urls_to_open_requested(const QList<QUrl> &urls);
     // dbus dsnote api
     void ActiveSttModelPropertyChanged(const QVariantMap &id);
     void ActiveTtsModelPropertyChanged(const QVariantMap &id);
@@ -72,10 +74,11 @@ class app_server : public QObject {
 
     ApplicationAdaptor m_dbus_application_adaptor;
     DsnoteAdaptor m_dbus_dsnote_adaptor;
-    QObject* m_dsnote_app = nullptr;
+    QObject *m_dsnote_app = nullptr;
     QTimer m_pending_request_timer;
 
-    void files_to_open(const QStringList &files);
+    void open_urls(const QStringList &uris);
+    void urls_to_open(const QList<QUrl> &urls);
     int request_another_instance(const cmd::options &options);
     QVariantMap active_stt_model() const;
     QVariantMap active_tts_model() const;

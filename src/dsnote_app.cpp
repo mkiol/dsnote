@@ -71,6 +71,9 @@ QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
         case dsnote_app::service_state_t::StateExporting:
             d << "exporting";
             break;
+        case dsnote_app::service_state_t::StateDownloading:
+            d << "downloading";
+            break;
         case dsnote_app::service_state_t::StateUnknown:
             d << "unknown";
             break;
@@ -145,6 +148,15 @@ QDebug operator<<(QDebug d, dsnote_app::error_t type) {
         case dsnote_app::error_t::ErrorImportFileNoStreams:
             d << "import-file-no-streams";
             break;
+        case dsnote_app::error_t::ErrorImportUrlGeneral:
+            d << "import-url-general";
+            break;
+        case dsnote_app::error_t::ErrorImportUrlDownload:
+            d << "import-url-download";
+            break;
+        case dsnote_app::error_t::ErrorImportUrlInvalid:
+            d << "import-url-invalid";
+            break;
         case dsnote_app::error_t::ErrorSttNotConfigured:
             d << "import-stt-not-configured";
             break;
@@ -154,43 +166,49 @@ QDebug operator<<(QDebug d, dsnote_app::error_t type) {
         case dsnote_app::error_t::ErrorMntNotConfigured:
             d << "import-mnt-not-configured";
             break;
-        case dsnote_app::error_t::ErrorContentDownload:
-            d << "content-download-error";
+        case dsnote_app::error_t::ErrorLicenseDownload:
+            d << "license-download-error";
             break;
     }
 
     return d;
 }
 
-QDebug operator<<(QDebug d, dsnote_app::file_import_result_t result) {
+QDebug operator<<(QDebug d, dsnote_app::url_import_result_t result) {
     switch (result) {
-        case dsnote_app::file_import_result_t::ok_streams_selection:
+        case dsnote_app::url_import_result_t::ok_streams_selection:
             d << "ok-stream-selection";
             break;
-        case dsnote_app::file_import_result_t::ok_import_audio:
+        case dsnote_app::url_import_result_t::ok_import_audio:
             d << "ok-import-audio";
             break;
-        case dsnote_app::file_import_result_t::ok_import_subtitles:
+        case dsnote_app::url_import_result_t::ok_import_subtitles:
             d << "ok-import-subtitles";
             break;
-        case dsnote_app::file_import_result_t::ok_import_text:
+        case dsnote_app::url_import_result_t::ok_import_text:
             d << "ok-import-text";
             break;
-        case dsnote_app::file_import_result_t::error_no_supported_streams:
+        case dsnote_app::url_import_result_t::error_no_supported_streams:
             d << "error-no-supported-streams";
             break;
-        case dsnote_app::file_import_result_t::error_requested_stream_not_found:
+        case dsnote_app::url_import_result_t::error_requested_stream_not_found:
             d << "error-requested-stream-not-found";
             break;
-        case dsnote_app::file_import_result_t::
+        case dsnote_app::url_import_result_t::
             error_import_audio_stt_not_configured:
             d << "error-import-audio-stt-not_configured";
             break;
-        case dsnote_app::file_import_result_t::error_import_subtitles_error:
+        case dsnote_app::url_import_result_t::error_import_subtitles_error:
             d << "error-import-subtitles-error";
             break;
-        case dsnote_app::file_import_result_t::error_import_text_error:
+        case dsnote_app::url_import_result_t::error_import_text_error:
             d << "error-import-text-error";
+            break;
+        case dsnote_app::url_import_result_t::error_import_url_invalid_error:
+            d << "error-import-url-invalid-error";
+            break;
+        case dsnote_app::url_import_result_t::error_import_url_download_error:
+            d << "error-import-url-download-error";
             break;
     }
 
@@ -385,13 +403,13 @@ dsnote_app::dsnote_app(QObject *parent)
             &dsnote_app::handle_translator_settings_changed);
     connect(this, &dsnote_app::active_mnt_out_lang_changed, this,
             &dsnote_app::handle_translator_settings_changed);
-    connect(this, &dsnote_app::can_open_next_file, this,
-            &dsnote_app::open_next_file, Qt::QueuedConnection);
+    connect(this, &dsnote_app::can_open_next_url, this,
+            &dsnote_app::open_next_url, Qt::QueuedConnection);
     connect(
         this, &dsnote_app::busy_changed, this,
         [this] {
-            if (!m_files_to_open.empty() && !busy())
-                m_open_files_delay_timer.start();
+            if (!m_urls_to_open.empty() && !busy())
+                m_open_urls_delay_timer.start();
         },
         Qt::QueuedConnection);
     connect(
@@ -407,10 +425,10 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(&m_translator_delay_timer, &QTimer::timeout, this,
             &dsnote_app::handle_translate_delayed, Qt::QueuedConnection);
 
-    m_open_files_delay_timer.setSingleShot(true);
-    m_open_files_delay_timer.setInterval(500);
-    connect(&m_open_files_delay_timer, &QTimer::timeout, this,
-            &dsnote_app::open_next_file, Qt::QueuedConnection);
+    m_open_urls_delay_timer.setSingleShot(true);
+    m_open_urls_delay_timer.setInterval(500);
+    connect(&m_open_urls_delay_timer, &QTimer::timeout, this,
+            &dsnote_app::open_next_url, Qt::QueuedConnection);
 
     m_action_delay_timer.setSingleShot(true);
     m_action_delay_timer.setInterval(250);
@@ -434,6 +452,15 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(&m_dbus_notifications,
             &OrgFreedesktopNotificationsInterface::ActionInvoked, this,
             &dsnote_app::handle_desktop_notification_action_invoked);
+
+    connect(&m_downloader, &downloader::progress_changed, this, [this]{
+        auto p = m_downloader.progress();
+        emit download_progress_changed(p.second > 0 && m_downloader.busy() ? p.first / p.second : 0.0);
+    });
+    connect(&m_downloader, &downloader::busy_changed, this, [this]{
+        qDebug() << "downloader busy:" << m_downloader.busy();
+        update_service_state();
+    });
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         connect_service_signals();
@@ -557,7 +584,9 @@ void dsnote_app::request_reload() {
 
 void dsnote_app::update_listen() {
     qDebug() << "update listen";
-    if (m_files_to_open.empty()) cancel();
+    if (m_urls_to_open.empty()) {
+        cancel();
+    }
 }
 
 void dsnote_app::handle_stt_intermediate_text(const QString &text,
@@ -1788,7 +1817,7 @@ void dsnote_app::handle_stt_file_transcribe_finished(int task) {
         emit transcribe_done();
     }
 
-    emit can_open_next_file();
+    emit can_open_next_url();
 }
 
 void dsnote_app::handle_service_error(int code) {
@@ -1812,7 +1841,7 @@ void dsnote_app::handle_service_error(int code) {
     emit intermediate_text_changed();
     emit error(error_code);
 
-    reset_files_queue();
+    reset_urls_queue();
 }
 
 void dsnote_app::update_progress() {
@@ -2578,7 +2607,14 @@ void dsnote_app::cancel() {
     m_current_stt_request.reset();
     m_pending_stt_request.reset();
 
-    if (!m_open_files_delay_timer.isActive()) reset_files_queue();
+    if (!m_open_urls_delay_timer.isActive()) {
+        reset_urls_queue();
+    }
+
+    if (m_downloader.busy()) {
+        m_downloader.cancel();
+        return;
+    }
 
     switch (m_mc.state()) {
         case media_converter::state_t::idle:
@@ -2875,13 +2911,47 @@ QString dsnote_app::lang_from_model_id(const QString &model_id) {
     return l.isEmpty() ? QString{} : l.front().toLower();
 }
 
-void dsnote_app::play_speech_internal(QString text, const QString &model_id,
+void dsnote_app::play_speech_internal(QString text, const QString &input_file,
+                                      const QUrl &input_url,
+                                      const QString &model_id,
                                       const QString &ref_voice,
                                       const QString &ref_prompt,
                                       settings::text_format_t text_format) {
+    if (text.isEmpty() && !input_file.isEmpty()) {
+        QFile file{input_file};
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            qWarning() << "failed to open input-file:" << input_file;
+            return;
+        }
+        // TODO: Do not assume data is always UTF-8
+        text = QString::fromUtf8(file.readAll());
+    }
+
+    if (text.isEmpty() && !input_url.isEmpty()) {
+        auto data = download_content(input_url, QStringLiteral("text"));
+        if (data.error == downloader::error_t::no_error) {
+            // TODO: Do not assume data is always UTF-8
+            text = QString::fromUtf8(data.bytes);
+            if (text_format == settings::text_format_t::TextFormatHtml &&
+                    !data.mime.contains(QLatin1String{"html"}, Qt::CaseInsensitive)) {
+                // html format requested, but server mime is not html => changing format to raw
+                text_format = settings::text_format_t::TextFormatRaw;
+            }
+        }
+    }
+
     if (text.isEmpty()) {
-        qWarning() << "text is empty";
+        qWarning() << "cannot tts, text is empty";
         return;
+    }
+
+    if (text_format == settings::text_format_t::TextFormatHtml) {
+        // TODO: Do not assume data is always UTF-8
+        std::string text_readable = text.toStdString();
+        if (text_tools::extract_readable_content(text_readable)) {
+            text = QString::fromStdString(text_readable);
+        }
+        text_format = settings::text_format_t::TextFormatRaw;
     }
 
     if (settings::instance()->trans_rules_enabled()) {
@@ -2942,7 +3012,7 @@ void dsnote_app::play_speech_internal(QString text, const QString &model_id,
 
 void dsnote_app::play_speech() {
     play_speech_internal(
-        note(), active_tts_model(),
+        note(), QString{}, QUrl{}, active_tts_model(),
         tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
         tts_ref_prompt_needed()
             ? settings::instance()->tts_active_voice_prompt()
@@ -2964,7 +3034,7 @@ void dsnote_app::play_speech_selected(int start, int end) {
     if (start == end) return;
 
     play_speech_internal(
-        note().mid(start, end - start), active_tts_model(),
+        note().mid(start, end - start), QString{}, QUrl{}, active_tts_model(),
         tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
         tts_ref_prompt_needed()
             ? settings::instance()->tts_active_voice_prompt()
@@ -2999,6 +3069,7 @@ void dsnote_app::play_speech_translator_selected(int start, int end,
     play_speech_internal(
         transtalated ? m_translated_text.mid(start, end - start)
                      : note().mid(start, end - start),
+        QString{}, QUrl{},
         transtalated ? m_active_tts_model_for_out_mnt
                      : m_active_tts_model_for_in_mnt,
         transtalated ? tts_for_out_mnt_ref_voice_needed()
@@ -3062,10 +3133,23 @@ void dsnote_app::play_speech_from_text(const QString &text,
                                  settings::text_format_t::TextFormatRaw);
 }
 
+void dsnote_app::play_speech_from_text_format_str(
+    const QString &text, const QString &input_file, const QUrl &input_url,
+    const QString &model_id, const QString &text_format_str) {
+    play_speech_internal(text, input_file, input_url, model_id,
+                         tts_ref_voice_needed_by_id(model_id)
+                             ? active_tts_ref_voice()
+                             : QString{},
+                         tts_ref_prompt_needed_by_id(model_id)
+                             ? settings::instance()->tts_active_voice_prompt()
+                             : QString{},
+                         text_format_from_action_str(text_format_str, !input_url.isEmpty()));
+}
+
 void dsnote_app::play_speech_from_text_format(
     const QString &text, const QString &model_id,
     settings::text_format_t text_format) {
-    play_speech_internal(text, model_id,
+    play_speech_internal(text, QString{}, QUrl{}, model_id,
                          tts_ref_voice_needed_by_id(model_id)
                              ? active_tts_ref_voice()
                              : QString{},
@@ -3087,7 +3171,7 @@ void dsnote_app::play_speech_translator(bool transtalated) {
     }
 
     play_speech_internal(
-        transtalated ? m_translated_text : note(),
+        transtalated ? m_translated_text : note(), QString{}, QUrl{},
         transtalated ? m_active_tts_model_for_out_mnt
                      : m_active_tts_model_for_in_mnt,
         transtalated ? tts_for_out_mnt_ref_voice_needed()
@@ -3175,7 +3259,7 @@ void dsnote_app::speech_to_file(const QString &dest_file,
     m_dest_file_info = dest_file_info_t{};
 
     speech_to_file_internal(
-        note(), active_tts_model(), dest_file, title_tag, track_tag,
+        note(), QString{}, QUrl{}, active_tts_model(), dest_file, title_tag, track_tag,
         tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
         tts_ref_prompt_needed()
             ? settings::instance()->tts_active_voice_prompt()
@@ -3202,7 +3286,7 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
     m_dest_file_info = dest_file_info_t{};
 
     speech_to_file_internal(
-        transtalated ? m_translated_text : note(),
+                transtalated ? m_translated_text : note(), QString{}, QUrl{},
         transtalated ? m_active_tts_model_for_out_mnt
                      : m_active_tts_model_for_in_mnt,
         dest_file, title_tag, track_tag,
@@ -3224,19 +3308,51 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
 }
 
 void dsnote_app::speech_to_file_internal(
-    QString text, const QString &model_id, const QString &dest_file,
+    QString text, const QString &input_file, const QUrl &input_url, const QString &model_id, const QString &dest_file,
     const QString &title_tag, const QString &track_tag,
     const QString &ref_voice, const QString &ref_prompt,
     settings::text_format_t text_format, settings::audio_format_t audio_format,
     settings::audio_quality_t audio_quality) {
-    if (text.isEmpty()) {
-        qWarning() << "text is empty";
-        return;
-    }
-
     if (dest_file.isEmpty()) {
         qWarning() << "dest file is empty";
         return;
+    }
+
+    if (text.isEmpty() && !input_file.isEmpty()) {
+        QFile file{input_file};
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            qWarning() << "failed to open input-file:" << input_file;
+            return;
+        }
+        // TODO: Do not assume data is always UTF-8
+        text = QString::fromUtf8(file.readAll());
+    }
+
+    if (text.isEmpty() && !input_url.isEmpty()) {
+        auto data = download_content(input_url, QStringLiteral("text"));
+        if (data.error == downloader::error_t::no_error) {
+            // TODO: Do not assume data is always UTF-8
+            text = QString::fromUtf8(data.bytes);
+            if (text_format == settings::text_format_t::TextFormatHtml &&
+                    !data.mime.contains(QLatin1String{"html"}, Qt::CaseInsensitive)) {
+                // html format requested, but server mime is not html => changing format to raw
+                text_format = settings::text_format_t::TextFormatRaw;
+            }
+        }
+    }
+
+    if (text.isEmpty()) {
+        qWarning() << "cannot tts, text is empty";
+        return;
+    }
+
+    if (text_format == settings::text_format_t::TextFormatHtml) {
+        // TODO: Do not assume data is always UTF-8
+        std::string text_readable = text.toStdString();
+        if (text_tools::extract_readable_content(text_readable)) {
+            text = QString::fromStdString(text_readable);
+            text_format = settings::text_format_t::TextFormatRaw;
+        }
     }
 
     if (settings::instance()->trans_rules_enabled()) {
@@ -3328,6 +3444,10 @@ void dsnote_app::set_service_state(service_state_t new_service_state) {
         case media_converter::state_t::exporting_to_audio_mix:
             new_service_state = service_state_t::StateExporting;
             break;
+    }
+
+    if (m_downloader.busy()) {
+        new_service_state = service_state_t::StateDownloading;
     }
 
     if (m_service_state != new_service_state) {
@@ -4116,7 +4236,7 @@ void dsnote_app::export_to_audio_mix_translator(bool transtalated,
     m_dest_file_info.input_stream_index = input_stream_index;
 
     speech_to_file_internal(
-        transtalated ? m_translated_text : note(),
+        transtalated ? m_translated_text : note(), QString{}, QUrl{},
         transtalated ? m_active_tts_model_for_out_mnt
                      : m_active_tts_model_for_in_mnt,
         dest_file, title_tag, track_tag,
@@ -4147,7 +4267,7 @@ void dsnote_app::export_to_audio_mix(const QString &input_file,
     m_dest_file_info.input_stream_index = input_stream_index;
 
     speech_to_file_internal(
-        note(), active_tts_model(), dest_file, title_tag, track_tag,
+        note(), QString{}, QUrl{}, active_tts_model(), dest_file, title_tag, track_tag,
         tts_ref_voice_needed() ? active_tts_ref_voice() : QString{},
         tts_ref_prompt_needed()
             ? settings::instance()->tts_active_voice_prompt()
@@ -4292,57 +4412,112 @@ void dsnote_app::export_to_file_internal(const QString &text,
     emit save_note_to_file_done();
 }
 
-bool dsnote_app::import_text_file(const QString &input_file, bool replace) {
+dsnote_app::url_import_result_t dsnote_app::import_text_file(const QString &input_file, bool replace) {
     QFile file{input_file};
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "failed to open file for read:" << input_file;
-        emit error(error_t::ErrorImportFileGeneral);
-        return false;
+        return url_import_result_t::error_import_text_error;
     }
 
     make_undo();
 
+    // TODO: Do not assume that data is always UTF-8
+    auto n = QString::fromUtf8(file.readAll());
+
+    auto ext = QFileInfo{input_file}.suffix();
+    if (settings::instance()->import_extract_readable() &&
+            ext.compare("html", Qt::CaseInsensitive) == 0) {
+        qDebug() << "extracting readable content from html web page";
+        // TODO: Do not assume data is always UTF-8
+        std::string text_readable = n.toStdString();
+        if (text_tools::extract_readable_content(text_readable)) {
+            n = QString::fromStdString(text_readable);
+        }
+    }
+
     if (replace) {
-        auto n = QString::fromUtf8(file.readAll());
         set_note(n);
         set_last_cursor_position(n.size());
     } else {
-        auto n = insert_to_note(settings::instance()->note(), file.readAll(),
+        auto nn = insert_to_note(settings::instance()->note(), std::move(n),
                                 "", settings::instance()->insert_mode(), -1);
-        set_note(n.first);
-        set_last_cursor_position(n.second);
+        set_note(nn.first);
+        set_last_cursor_position(nn.second);
     }
 
-    return true;
+    return url_import_result_t::ok_import_text;
+}
+
+dsnote_app::url_import_result_t dsnote_app::import_text_url(const QUrl &input_url, bool replace) {
+    auto data = download_content(input_url, QStringLiteral("text"));
+    switch (data.error) {
+    case downloader::error_t::no_error:
+        break;
+    case downloader::error_t::aborted:
+        qWarning() << "invalid content type of url:" << input_url << data.mime;
+        return url_import_result_t::error_import_url_invalid_error;
+    case downloader::error_t::other:
+        qWarning() << "can't download:" << input_url;
+        return url_import_result_t::error_import_url_download_error;
+    }
+
+    make_undo();
+
+    // TODO: Do not assume that data is always UTF-8
+    auto n = QString::fromUtf8(data.bytes);
+
+    if (settings::instance()->import_extract_readable() &&
+            data.mime.contains(QLatin1String{"html"}, Qt::CaseInsensitive)) {
+        qDebug() << "extracting readable content from html web page";
+        // TODO: Do not assume data is always UTF-8
+        std::string text_readable = n.toStdString();
+        if (text_tools::extract_readable_content(text_readable)) {
+            n = QString::fromStdString(text_readable);
+        }
+    }
+
+    if (replace) {
+        set_note(n);
+        set_last_cursor_position(n.size());
+    } else {
+        auto nn = insert_to_note(settings::instance()->note(), std::move(n),
+                                "", settings::instance()->insert_mode(), -1);
+        set_note(nn.first);
+        set_last_cursor_position(nn.second);
+    }
+
+    return url_import_result_t::ok_import_text;
 }
 
 void dsnote_app::import_file(const QString &file_path, int stream_index,
                              bool replace) {
-    auto result = import_file_internal(file_path, stream_index, replace);
+    auto result = import_url_internal(QUrl::fromLocalFile(file_path), stream_index, replace);
 
     qDebug() << "import file result:" << result;
 
     switch (result) {
-        case dsnote_app::file_import_result_t::ok_streams_selection:
-        case dsnote_app::file_import_result_t::ok_import_audio:
-        case dsnote_app::file_import_result_t::ok_import_subtitles:
-        case dsnote_app::file_import_result_t::ok_import_text:
+        case dsnote_app::url_import_result_t::ok_streams_selection:
+        case dsnote_app::url_import_result_t::ok_import_audio:
+        case dsnote_app::url_import_result_t::ok_import_subtitles:
+        case dsnote_app::url_import_result_t::ok_import_text:
             break;
-        case dsnote_app::file_import_result_t::error_requested_stream_not_found:
-        case dsnote_app::file_import_result_t::error_no_supported_streams:
-            reset_files_queue();
+        case dsnote_app::url_import_result_t::error_requested_stream_not_found:
+        case dsnote_app::url_import_result_t::error_no_supported_streams:
+            reset_urls_queue();
             emit error(error_t::ErrorImportFileNoStreams);
             break;
-        case dsnote_app::file_import_result_t::
+        case dsnote_app::url_import_result_t::
             error_import_audio_stt_not_configured:
-            reset_files_queue();
+            reset_urls_queue();
             emit error(error_t::ErrorSttNotConfigured);
             break;
-        case dsnote_app::file_import_result_t::error_import_subtitles_error:
-        case dsnote_app::file_import_result_t::error_import_text_error:
-            reset_files_queue();
+        case dsnote_app::url_import_result_t::error_import_subtitles_error:
+        case dsnote_app::url_import_result_t::error_import_text_error:
+        case dsnote_app::url_import_result_t::error_import_url_invalid_error:
+        case dsnote_app::url_import_result_t::error_import_url_download_error:
+            reset_urls_queue();
             emit error(error_t::ErrorImportFileGeneral);
-            break;
+            break;   
     }
 }
 
@@ -4360,7 +4535,7 @@ void dsnote_app::handle_mc_state_changed() {
         switch (m_mc.task()) {
             case media_converter::task_t::import_subtitles_async:
                 if (mc_error) {
-                    reset_files_queue();
+                    reset_urls_queue();
                     emit error(error_t::ErrorImportFileGeneral);
                 } else {
                     update_note(
@@ -4372,7 +4547,7 @@ void dsnote_app::handle_mc_state_changed() {
                     settings::instance()->set_mnt_text_format(
                         settings::text_format_t::TextFormatSubRip);
 
-                    emit can_open_next_file();
+                    emit can_open_next_url();
                 }
                 break;
             case media_converter::task_t::export_to_audio_async:
@@ -4465,102 +4640,112 @@ QStringList dsnote_app::make_streams_names(
     return names;
 }
 
-dsnote_app::file_import_result_t dsnote_app::import_file_internal(
-    const QString &file_path, int stream_index, bool replace) {
-    qDebug() << "opening file:" << file_path << stream_index;
+dsnote_app::url_import_result_t dsnote_app::import_url_internal(
+    const QUrl &url, int stream_index, bool replace) {
+    qDebug() << "opening url:" << url << stream_index;
 
-    auto media_info = media_compressor{}.media_info(file_path.toStdString());
+    if (url.isLocalFile()) { /* local-file-url */
+        auto file_path = url.toLocalFile();
+        auto media_info = media_compressor{}.media_info(file_path.toStdString());
 
-    if (media_info) {
-        qDebug() << QString::fromStdString([&]() {
-            std::ostringstream os;
-            os << *media_info;
-            return os.str();
-        }());
+        if (media_info) {
+            qDebug() << QString::fromStdString([&]() {
+                std::ostringstream os;
+                os << *media_info;
+                return os.str();
+            }());
 
-        if (media_info->audio_streams.empty() &&
-            media_info->subtitles_streams.empty()) {
-            qWarning() << "file does not contain audio or subtitles streams";
-            return file_import_result_t::error_no_supported_streams;
-        }
-
-        if (stream_index < 0) {
-            if ((!media_info->audio_streams.empty() &&
-                 !media_info->subtitles_streams.empty()) ||
-                media_info->audio_streams.size() > 1 ||
-                media_info->subtitles_streams.size() > 1) {
-                qDebug() << "file contains more than one stream";
-
-                QStringList streams_names;
-                streams_names.append(
-                    make_streams_names(media_info->audio_streams));
-                streams_names.append(
-                    make_streams_names(media_info->subtitles_streams));
-
-                emit import_file_multiple_streams(file_path, streams_names,
-                                                  replace);
-
-                return file_import_result_t::ok_streams_selection;
+            if (media_info->audio_streams.empty() &&
+                media_info->subtitles_streams.empty()) {
+                qWarning() << "file does not contain audio or subtitles streams";
+                return url_import_result_t::error_no_supported_streams;
             }
 
-            if (!media_info->audio_streams.empty())
-                stream_index = media_info->audio_streams.front().index;
-            else
-                stream_index = media_info->subtitles_streams.front().index;
-        }
+            if (stream_index < 0) {
+                if ((!media_info->audio_streams.empty() &&
+                     !media_info->subtitles_streams.empty()) ||
+                    media_info->audio_streams.size() > 1 ||
+                    media_info->subtitles_streams.size() > 1) {
+                    qDebug() << "file contains more than one stream";
 
-        auto stream_by_id_it =
-            std::find_if(media_info->audio_streams.cbegin(),
-                         media_info->audio_streams.cend(),
-                         [stream_index](const auto &stream) {
-                             return stream.index == stream_index;
-                         });
-        if (stream_by_id_it == media_info->audio_streams.cend())
-            stream_by_id_it =
-                std::find_if(media_info->subtitles_streams.cbegin(),
-                             media_info->subtitles_streams.cend(),
+                    QStringList streams_names;
+                    streams_names.append(
+                        make_streams_names(media_info->audio_streams));
+                    streams_names.append(
+                        make_streams_names(media_info->subtitles_streams));
+
+                    emit import_file_multiple_streams(file_path, streams_names,
+                                                      replace);
+
+                    return url_import_result_t::ok_streams_selection;
+                }
+
+                if (!media_info->audio_streams.empty())
+                    stream_index = media_info->audio_streams.front().index;
+                else
+                    stream_index = media_info->subtitles_streams.front().index;
+            }
+
+            auto stream_by_id_it =
+                std::find_if(media_info->audio_streams.cbegin(),
+                             media_info->audio_streams.cend(),
                              [stream_index](const auto &stream) {
                                  return stream.index == stream_index;
                              });
+            if (stream_by_id_it == media_info->audio_streams.cend())
+                stream_by_id_it =
+                    std::find_if(media_info->subtitles_streams.cbegin(),
+                                 media_info->subtitles_streams.cend(),
+                                 [stream_index](const auto &stream) {
+                                     return stream.index == stream_index;
+                                 });
 
-        if (stream_by_id_it == media_info->subtitles_streams.cend()) {
-            qDebug() << "requested stream not found:" << stream_index;
-            return file_import_result_t::error_requested_stream_not_found;
+            if (stream_by_id_it == media_info->subtitles_streams.cend()) {
+                qDebug() << "requested stream not found:" << stream_index;
+                return url_import_result_t::error_requested_stream_not_found;
+            }
+
+            switch (stream_by_id_it->media_type) {
+                case media_compressor::media_type_t::audio:
+                    if (!stt_configured()) {
+                        qWarning()
+                            << "can't transcribe because stt is not configured";
+                        return url_import_result_t::
+                            error_import_audio_stt_not_configured;
+                    }
+
+                    transcribe_file(file_path, stream_by_id_it->index, replace);
+                    return url_import_result_t::ok_import_audio;
+                case media_compressor::media_type_t::subtitles:
+                    if (!m_mc.import_subtitles_async(file_path,
+                                                     stream_by_id_it->index)) {
+                        qCritical() << "can't extract subtitles";
+                        return url_import_result_t::error_import_subtitles_error;
+                    }
+
+                    m_text_destination = replace ? text_destination_t::note_replace
+                                                 : text_destination_t::note_add;
+                    return url_import_result_t::ok_import_subtitles;
+                case media_compressor::media_type_t::video:
+                case media_compressor::media_type_t::unknown:
+                    break;
+            }
+
+            qCritical() << "invalid stream type";
+            return url_import_result_t::error_no_supported_streams;
         }
 
-        switch (stream_by_id_it->media_type) {
-            case media_compressor::media_type_t::audio:
-                if (!stt_configured()) {
-                    qWarning()
-                        << "can't transcribe because stt is not configured";
-                    return file_import_result_t::
-                        error_import_audio_stt_not_configured;
-                }
-
-                transcribe_file(file_path, stream_by_id_it->index, replace);
-                return file_import_result_t::ok_import_audio;
-            case media_compressor::media_type_t::subtitles:
-                if (!m_mc.import_subtitles_async(file_path,
-                                                 stream_by_id_it->index)) {
-                    qCritical() << "can't extract subtitles";
-                    return file_import_result_t::error_import_subtitles_error;
-                }
-
-                m_text_destination = replace ? text_destination_t::note_replace
-                                             : text_destination_t::note_add;
-                return file_import_result_t::ok_import_subtitles;
-            case media_compressor::media_type_t::video:
-            case media_compressor::media_type_t::unknown:
-                break;
+        auto ret = import_text_file(file_path, replace);
+        if (ret != url_import_result_t::ok_import_text) {
+            qWarning() << "can't open text file";
+            return ret;
         }
-
-        qCritical() << "invalid stream type";
-        return file_import_result_t::error_no_supported_streams;
-    }
-
-    if (!import_text_file(file_path, replace)) {
-        qWarning() << "can't open text file";
-        return file_import_result_t::error_no_supported_streams;
+    } else { /* web-url */
+        auto ret = import_text_url(url, replace);
+        if (ret != url_import_result_t::ok_import_text) {
+            qWarning() << "can't open text url";
+            return ret;
+        }
     }
 
     settings::instance()->set_stt_tts_text_format(
@@ -4568,84 +4753,94 @@ dsnote_app::file_import_result_t dsnote_app::import_file_internal(
     settings::instance()->set_mnt_text_format(
         settings::text_format_t::TextFormatRaw);
 
-    return file_import_result_t::ok_import_text;
+    return url_import_result_t::ok_import_text;
 }
 
-void dsnote_app::open_next_file() {
-    if (m_files_to_open.empty()) return;
+void dsnote_app::open_next_url() {
+    if (m_urls_to_open.empty()) {
+        return;
+    }
 
     if (busy()) {
-        qDebug() << "delaying opening next file";
-        m_open_files_delay_timer.start();
+        qDebug() << "delaying opening next url";
+        m_open_urls_delay_timer.start();
         return;
     }
 
-    if (m_files_to_open.front().isEmpty()) {
-        reset_files_queue();
+    if (m_urls_to_open.empty() || m_urls_to_open.front().isEmpty()) {
+        reset_urls_queue();
         return;
     }
 
-    auto result = import_file_internal(
-        m_files_to_open.front(), -1,
-        m_text_destination == text_destination_t::note_replace ? true : false);
+    auto result = import_url_internal(
+        m_urls_to_open.front(), -1,
+        m_text_destination == text_destination_t::note_replace);
 
-    qDebug() << "import file result:" << result;
+    qDebug() << "import url result:" << result;
 
     switch (result) {
-        case dsnote_app::file_import_result_t::ok_streams_selection:
-            reset_files_queue();
+        case dsnote_app::url_import_result_t::ok_streams_selection:
+            reset_urls_queue();
             break;
-        case dsnote_app::file_import_result_t::ok_import_audio:
-        case dsnote_app::file_import_result_t::ok_import_subtitles:
-        case dsnote_app::file_import_result_t::ok_import_text:
-            m_files_to_open.pop();
-            emit can_open_next_file();
+        case dsnote_app::url_import_result_t::ok_import_audio:
+        case dsnote_app::url_import_result_t::ok_import_subtitles:
+        case dsnote_app::url_import_result_t::ok_import_text:
+            m_urls_to_open.pop();
+            emit can_open_next_url();
             break;
-        case dsnote_app::file_import_result_t::error_requested_stream_not_found:
-        case dsnote_app::file_import_result_t::error_no_supported_streams:
-            reset_files_queue();
+        case dsnote_app::url_import_result_t::error_requested_stream_not_found:
+        case dsnote_app::url_import_result_t::error_no_supported_streams:
+            reset_urls_queue();
             emit error(error_t::ErrorImportFileNoStreams);
             break;
-        case dsnote_app::file_import_result_t::
+        case dsnote_app::url_import_result_t::
             error_import_audio_stt_not_configured:
-            reset_files_queue();
+            reset_urls_queue();
             emit error(error_t::ErrorSttNotConfigured);
             break;
-        case dsnote_app::file_import_result_t::error_import_subtitles_error:
-        case dsnote_app::file_import_result_t::error_import_text_error:
-            reset_files_queue();
+        case dsnote_app::url_import_result_t::error_import_subtitles_error:
+        case dsnote_app::url_import_result_t::error_import_text_error:
+            reset_urls_queue();
             emit error(error_t::ErrorImportFileGeneral);
+            break;
+        case dsnote_app::url_import_result_t::error_import_url_invalid_error:
+            reset_urls_queue();
+            emit error(error_t::ErrorImportUrlInvalid);
+            break;
+        case dsnote_app::url_import_result_t::error_import_url_download_error:
+            reset_urls_queue();
+            emit error(error_t::ErrorImportUrlDownload);
             break;
     }
 }
 
 void dsnote_app::import_files(const QStringList &input_files, bool replace) {
-    reset_files_queue();
+    QList<QUrl> input_urls;
 
-    for (auto &file : input_files) m_files_to_open.push(file);
+    std::transform(input_files.cbegin(), input_files.cend(),
+                   std::back_inserter(input_urls),
+                   [](const auto &file) { return QUrl::fromLocalFile(file); });
 
-    if (!m_files_to_open.empty()) {
-        if (m_files_to_open.size() == 1) m_files_to_open.push({});
+    import_urls(input_urls, replace);
+}
+
+void dsnote_app::import_urls(const QList<QUrl> &input_urls, bool replace) {
+    reset_urls_queue();
+
+    for (auto &url : input_urls) m_urls_to_open.push(url);
+
+    if (!m_urls_to_open.empty()) {
+        if (m_urls_to_open.size() == 1) m_urls_to_open.push({});
         if (!note().isEmpty()) make_undo();
-        qDebug() << "importing files:" << input_files;
+        qDebug() << "importing urls:" << input_urls;
         m_text_destination = replace ? text_destination_t::note_replace
                                      : text_destination_t::note_add;
-        m_open_files_delay_timer.start();
+        m_open_urls_delay_timer.start();
     }
 }
 
-void dsnote_app::import_files_url(const QList<QUrl> &input_urls, bool replace) {
-    QStringList input_files;
-
-    std::transform(input_urls.cbegin(), input_urls.cend(),
-                   std::back_inserter(input_files),
-                   [](const auto &url) { return url.toLocalFile(); });
-
-    import_files(input_files, replace);
-}
-
-void dsnote_app::reset_files_queue() {
-    if (!m_files_to_open.empty()) m_files_to_open = std::queue<QString>{};
+void dsnote_app::reset_urls_queue() {
+    if (!m_urls_to_open.empty()) m_urls_to_open = std::queue<QUrl>{};
 }
 
 void dsnote_app::close_desktop_notification() {
@@ -5122,7 +5317,9 @@ dsnote_app::action_t dsnote_app::convert_action(action_t action) const {
         case dsnote_app::action_t::start_reading:
         case dsnote_app::action_t::start_reading_clipboard:
         case dsnote_app::action_t::start_reading_active_window:
-        case dsnote_app::action_t::start_reading_text: {
+        case dsnote_app::action_t::start_reading_text:
+        case dsnote_app::action_t::start_reading_file:
+        case dsnote_app::action_t::start_reading_url: {
             if (service_state() == service_state_t::StatePlayingSpeech) {
                 action = action_t::cancel;
             }
@@ -5201,9 +5398,9 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
                 arguments.value("model-id").toString());
             break;
         case dsnote_app::action_t::start_reading_clipboard:
-        case dsnote_app::action_t::start_reading_text: {
-            auto id = arguments.value("model-id").toString();
-
+        case dsnote_app::action_t::start_reading_text:
+        case dsnote_app::action_t::start_reading_file:
+        case dsnote_app::action_t::start_reading_url: {
             QString text;
             if (action == action_t::start_reading_clipboard) {
 #ifdef USE_DESKTOP
@@ -5214,12 +5411,16 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
             } else {
                 text = arguments.value("text").toString();
             }
-
+            auto id = arguments.value("model-id").toString();
+            auto text_format_str = arguments.value("text-format").toString();
             auto output_file = arguments.value("output-file").toString();
+            auto input_file = arguments.value("input-file").toString();
+            auto input_url = QUrl{arguments.value("input-url").toString()};
 
             if (output_file.isEmpty()) {
-                play_speech_from_text(text,
-                                      id.isEmpty() ? active_tts_model() : id);
+                play_speech_from_text_format_str(
+                    text, input_file, input_url,
+                    id.isEmpty() ? active_tts_model() : id, text_format_str);
             } else {
                 if (service_state() != service_state_t::StateIdle) {
                     qDebug() << "state is not idle => enforcing busy-policy";
@@ -5243,13 +5444,13 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
 
                 m_dest_file_info = dest_file_info_t{};
                 speech_to_file_internal(
-                    text, id, output_file, {}, {},
+                    text, input_file, input_url, id, output_file, {}, {},
                     tts_ref_voice_needed_by_id(id) ? active_tts_ref_voice()
                                                    : QString{},
                     tts_ref_prompt_needed_by_id(id)
                         ? settings::instance()->tts_active_voice_prompt()
                         : QString{},
-                    settings::text_format_t::TextFormatRaw,
+                    text_format_from_action_str(text_format_str, action == action_t::start_reading_url),
                     settings::filename_to_audio_format_static(output_file),
                     settings::instance()->audio_quality());
             }
@@ -5333,27 +5534,36 @@ void dsnote_app::play_speech_selected_in_active_window(
 #endif
 }
 
-QString dsnote_app::download_content(const QUrl &url) {
+QString dsnote_app::download_license(const QUrl &url) {
     QString text;
 
-    if (url.isValid() && (url.scheme() == "http" || url.scheme() == "https")) {
-        qDebug() << "downloading content:" << url.toString();
-
-        auto data = downloader{}.download_data(url);
-
-        qDebug() << "downloaded content:" << data.mime << data.bytes.size();
-
-        if (data.mime.contains(QLatin1String{"text"}, Qt::CaseInsensitive)) {
-            text = QString::fromUtf8(data.bytes);
-        }
+    auto data = download_content(url, QStringLiteral("text"));
+    if (data.error == downloader::error_t::no_error) {
+        text = QString::fromUtf8(data.bytes);
     }
 
     if (text.isEmpty()) {
-        emit error(error_t::ErrorContentDownload);
+        emit error(error_t::ErrorLicenseDownload);
         text = " ";
     }
 
     return text;
+}
+
+downloader::data_t dsnote_app::download_content(const QUrl &url, const QString &expected_content_type_pattern) {
+    downloader::data_t data{};
+
+    if (url.isValid() && (url.scheme() == "http" || url.scheme() == "https")) {
+        qDebug() << "downloading content:" << url.toString();
+
+        data = m_downloader.download_data(url, expected_content_type_pattern);
+
+        qDebug() << "downloaded content:" << data.mime << data.bytes.size();
+    } else {
+        qDebug() << "invalid content url to download:" << url;
+    }
+
+    return data;
 }
 
 static bool has_model_options(const QVariantMap &map, const QString &id,
@@ -5517,7 +5727,7 @@ QString dsnote_app::tts_ref_voice_unique_name(QString name,
     if (!add_number && !names.contains(name)) return name;
 
     int i = 1;
-    QRegularExpression rx{"\\d+$"};
+    static QRegularExpression rx{"\\d+$"};
     QRegularExpressionMatch match = rx.match(name);
     if (match.hasMatch()) {
         bool ok = false;
@@ -5703,6 +5913,7 @@ void dsnote_app::update_tray_state() {
         case service_state_t::StateImporting:
         case service_state_t::StateExporting:
         case service_state_t::StateRepairingText:
+        case service_state_t::StateDownloading:
             m_tray.set_state(tray_icon::state_t::busy);
             break;
         case service_state_t::StateIdle:
@@ -6010,4 +6221,39 @@ dsnote_app::action_when_busy_policy_from_str(const QString &policy) {
     }
     // default
     return action_when_busy_policy_t::add_to_queue;
+}
+
+settings::text_format_t dsnote_app::text_format_from_action_str(
+    const QString &action_text_format_str, bool from_url) {
+    if (action_text_format_str.isEmpty() || action_text_format_str.compare("auto", Qt::CaseInsensitive) == 0) {
+        return from_url ? settings::text_format_t::TextFormatHtml : settings::text_format_t::TextFormatRaw;
+    }
+#define X(name, str, type, ...)                                          \
+    if (action_text_format_str.compare(str, Qt::CaseInsensitive) == 0) { \
+        return type;                                                     \
+    }
+    ACTION_TEXT_FORMAT_TABLE
+#undef X
+
+    qWarning() << "failed to map action text format";
+
+    return settings::text_format_t::TextFormatRaw;
+}
+
+QString dsnote_app::clipboard_if_url() const
+{
+    auto url = QUrl{QGuiApplication::clipboard()->text()};
+    if (url.isValid() && (url.scheme().compare("http", Qt::CaseInsensitive) == 0 ||
+                          url.scheme().compare("https", Qt::CaseInsensitive) == 0)) {
+        return url.toString();
+    }
+
+    return {};
+}
+
+bool dsnote_app::is_valid_url(const QString& text) const
+{
+    auto url = QUrl{text};
+    return url.isValid() && (url.scheme().compare("http", Qt::CaseInsensitive) == 0 ||
+                          url.scheme().compare("https", Qt::CaseInsensitive) == 0);
 }

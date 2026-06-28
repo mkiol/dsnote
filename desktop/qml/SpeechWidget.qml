@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -85,7 +85,8 @@ RowLayout {
                                  app.state === DsnoteApp.StateWritingSpeechToFile ||
                                  app.state === DsnoteApp.StateRestoringText ||
                                  app.state === DsnoteApp.StateImporting ||
-                                 app.state === DsnoteApp.StateExporting
+                                 app.state === DsnoteApp.StateExporting ||
+                                 app.state === DsnoteApp.StateDownloading
                         visible: running
                     }
                 }
@@ -117,6 +118,8 @@ RowLayout {
                         property string placeholderText: {
                             if (app.busy || service.busy)
                                 return qsTr("Busy...")
+                            if (app.state === DsnoteApp.StateDownloading)
+                                return qsTr("Downloading content...")
                             if (app.task_state === DsnoteApp.TaskStateCancelling)
                                 return qsTr("Cancelling, please wait...")
                             if (app.task_state === DsnoteApp.TaskStateInitializing)
@@ -296,7 +299,8 @@ RowLayout {
                                  app.state === DsnoteApp.StateWritingSpeechToFile ||
                                  app.state === DsnoteApp.StateTranslating ||
                                  app.state === DsnoteApp.StateExporting ||
-                                 app.state === DsnoteApp.StateImporting)
+                                 app.state === DsnoteApp.StateImporting ||
+                                 app.state === DsnoteApp.StateDownloading)
                         text: qsTr("Cancel")
                         shortcut: "Ctrl+Alt+Shift+C"
                         onTriggered: app.cancel()

@@ -584,6 +584,8 @@ please consider doing one or two of the following:
 - [Parler-TTS](https://github.com/huggingface/parler-tts)
 - [F5-TTS](https://github.com/SWivid/F5-TTS)
 - [S.A.M.](https://discordier.github.io/sam)
+- [rdrview](https://github.com/eafer/rdrview)
+- [Opal for SailfishOS](https://codeberg.org/opal-sfos)
 
 ## Reviews and demos
 
@@ -661,6 +663,8 @@ please consider doing one or two of the following:
 - **Kokoro**, released under the [Apache License 2.0](https://github.com/hexgrad/kokoro/raw/refs/heads/main/LICENSE)
 - **Parler-TTS**, released under the [Apache License 2.0](https://raw.githubusercontent.com/huggingface/parler-tts/refs/heads/main/LICENSE)
 - **F5-TTS**, released under the [MIT License](https://github.com/SWivid/F5-TTS/raw/refs/heads/main/LICENSE)
+- **rdrview**, released under the [Apache License 2.0](https://github.com/eafer/rdrview/raw/refs/heads/master/LICENSE)
+- **Opal for SailfishOS**, released under the [AGPL-3.0 license](https://codeberg.org/opal-sfos/harbour-opal-gallery/raw/branch/main/LICENSES/AGPL-3.0-or-later.txt)
 
 The files in the directory `nonbreaking_prefixes` were copied from
 [mosesdecoder](https://github.com/moses-smt/mosesdecoder) project and distributed under the

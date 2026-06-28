@@ -1,0 +1,670 @@
+diff -ruN -x '.*' rdrview-org/CMakeLists.txt rdrview-patched/CMakeLists.txt
+--- rdrview-org/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ rdrview-patched/CMakeLists.txt	2026-06-27 16:03:54.379967176 +0200
+@@ -0,0 +1,45 @@
++cmake_minimum_required(VERSION 3.13)
++
++project(rdrview C)
++
++set(git_commit "93c3c59e61868f3de76984d59c272b9bc6af0159")
++set(sources_dir "${PROJECT_SOURCE_DIR}/src")
++
++string(APPEND CMAKE_C_FLAGS " -DNDEBUG -O2 -Wall -Wextra -fno-strict-aliasing")
++
++add_library(rdrview_api STATIC 
++  rdrview_api.c
++  ${sources_dir}/content.c
++  ${sources_dir}/iterator.c
++  ${sources_dir}/node.c
++  ${sources_dir}/prep_article.c
++  ${sources_dir}/readability.c
++  ${sources_dir}/readerable.c
++  ${sources_dir}/regex.c
++  ${sources_dir}/rdrview.c)
++  
++include(FindPkgConfig)
++
++pkg_search_module(libxml2 REQUIRED libxml-2.0)
++list(APPEND deps_libs ${libxml2_LIBRARIES})
++list(APPEND includes ${libxml2_INCLUDE_DIRS})
++
++target_link_libraries(rdrview_api
++  ${libxml2_LIBRARIES}
++)
++
++target_include_directories(rdrview_api PUBLIC
++  ${sources_dir}
++  ${PROJECT_BINARY_DIR}
++  ${libxml2_INCLUDE_DIRS}
++)
++
++configure_file(version.h.in version.h)
++
++set_target_properties(rdrview_api PROPERTIES PUBLIC_HEADER "rdrview_api.h")
++
++install(
++  TARGETS rdrview_api
++  LIBRARY DESTINATION lib
++  ARCHIVE DESTINATION lib
++  PUBLIC_HEADER DESTINATION include)
+diff -ruN -x '.*' rdrview-org/rdrview_api.c rdrview-patched/rdrview_api.c
+--- rdrview-org/rdrview_api.c	1970-01-01 01:00:00.000000000 +0100
++++ rdrview-patched/rdrview_api.c	2026-06-26 22:23:59.141740994 +0200
+@@ -0,0 +1,206 @@
++#include "rdrview_api.h"
++
++#include <ctype.h>
++#include <libxml/HTMLparser.h>
++#include <libxml/HTMLtree.h>
++#include <stdio.h>
++#include <string.h>
++
++#include "rdrview.h"
++
++#define RDRVIEW_NODE_STACK_SIZE 1024
++
++#define RDRVIEW_LOG(message) \
++    if (logger_cb) {         \
++        logger_cb(message);  \
++    }
++
++static size_t extract_text(xmlNodePtr root, char* buf, size_t buf_size) {
++    if (buf_size == 0 || buf == NULL || root == NULL) {
++        return 0;
++    }
++
++    xmlNodePtr stack[RDRVIEW_NODE_STACK_SIZE];
++    int top = 0;
++    stack[top++] = root;
++
++    size_t written = 0;
++    int first_text = 1;
++
++    while (top > 0) {
++        if (top >= RDRVIEW_NODE_STACK_SIZE) {
++            break;  // stack is full, abort
++        }
++
++        xmlNodePtr node = stack[--top];
++
++        for (xmlNodePtr child = node->children; child != NULL;
++             child = child->next) {
++            if (child->type == XML_TEXT_NODE && child->content != NULL) {
++                char* content = (char*)child->content;
++                size_t content_len = strlen(content);
++
++                // trim leading whitespace
++                size_t start = 0;
++                while (start < content_len &&
++                       isspace((unsigned char)content[start])) {
++                    start++;
++                }
++                // trim trailing whitespace
++                size_t end = content_len;
++                while (end > start &&
++                       isspace((unsigned char)content[end - 1])) {
++                    end--;
++                }
++                size_t trimmed_len = end - start;
++
++                if (trimmed_len > 0) {
++                    // add a space before the text
++                    if (!first_text) {
++                        if (written + 1 < buf_size) {
++                            buf[written++] = ' ';
++                        } else {
++                            buf[buf_size - 1] = '\0';
++                            return written;
++                        }
++                    } else {
++                        first_text = 0;
++                    }
++
++                    if (written + trimmed_len + 1 <= buf_size) {
++                        memcpy(buf + written, content + start, trimmed_len);
++                        written += trimmed_len;
++                    } else {
++                        buf[buf_size - 1] = '\0';
++                        return written;
++                    }
++                }
++            }
++
++            if (child->name &&
++                xmlStrcmp(child->name, (const xmlChar*)"a") == 0) {
++                continue;
++            }
++
++            if (child->type == XML_ELEMENT_NODE) {
++                if (top < RDRVIEW_NODE_STACK_SIZE) {
++                    stack[top++] = child;
++                } else {
++                    break;  // stack is full, abort
++                }
++            }
++        }
++    }
++
++    if (written < buf_size) {
++        buf[written] = '\0';
++    } else if (buf_size > 0) {
++        buf[buf_size - 1] = '\0';
++    }
++
++    return written;
++}
++
++static char* write_str_to_buf(char* dst, char* src, size_t* max_size) {
++    size_t written = 0;
++    size_t content_len = 0;
++
++    if (src == NULL || dst == NULL || max_size == NULL) {
++        return dst;
++    }
++
++    content_len = strlen(src) + 2;  // \n + \0
++    if (content_len < *max_size) {
++        memcpy(dst, src, content_len - 2);
++        dst[content_len - 2] = '\n';
++        dst[content_len - 1] = '\0';
++        written += (content_len - 1);
++    }
++
++    *max_size = *max_size - written;
++
++    return dst + written;
++}
++
++size_t rdrview_extract(char* input, size_t input_size, char* output,
++                       size_t output_max_size, logger_cb_t logger_cb,
++                       unsigned int opts) {
++    htmlDocPtr doc = NULL;
++    htmlNodePtr article = NULL;
++    size_t written_size = 0;
++    xmlBufferPtr xml_buf = NULL;
++    char* output_orig = NULL;
++
++    output_orig = output;
++
++    // default flags
++    options = (struct options){0};
++    options.flags |= OPT_STRIP_UNLIKELY;
++    options.flags |= OPT_WEIGHT_CLASSES;
++    options.flags |= OPT_CLEAN_CONDITIONALLY;
++    options.enc = "UTF-8";
++
++    LIBXML_TEST_VERSION
++
++    doc = parse_mapped_file(input, input_size);
++    if (!doc) {
++        RDRVIEW_LOG("xml parse failed");
++        goto cleanup;
++    }
++
++    init_regexes();
++
++    article = parse(doc);
++    if (!article) {
++        RDRVIEW_LOG("parse failed");
++
++        if (opts & RDRVIEW_OPT_TEXT_ONLY) {
++            htmlNodePtr root = xmlDocGetRootElement(doc);
++            written_size = extract_text(root, output, output_max_size);
++        }
++
++        goto cleanup;
++    }
++
++    if (opts & RDRVIEW_OPT_TEXT_ONLY) {
++        if (opts & RDRVIEW_OPT_INSERT_METADATA) {
++            output = write_str_to_buf(output, metadata.title, &output_max_size);
++        }
++
++        written_size = extract_text(article, output, output_max_size);
++    } else {
++        xml_buf = xmlBufferCreate();
++        if (!xml_buf) {
++            RDRVIEW_LOG("xmlBufferCreate failed");
++            goto cleanup;
++        }
++        htmlNodeDump(xml_buf, doc, article);
++        if (xmlBufferLength(xml_buf) <= 0) {
++            RDRVIEW_LOG("xmlBufferLength is zero");
++            goto cleanup;
++        }
++
++        size_t size_to_copy = xmlBufferLength(xml_buf);
++        if (size_to_copy > output_max_size) {
++            size_to_copy = output_max_size;
++        }
++
++        memcpy(output, xmlBufferContent(xml_buf), size_to_copy);
++        written_size += size_to_copy;
++    }
++
++cleanup:
++    if (xml_buf) {
++        xmlBufferFree(xml_buf);
++    }
++    if (article) {
++        free_node(article);
++    }
++    if (doc) {
++        free_doc(doc);
++    }
++
++    xmlCleanupParser();
++
++    return written_size + (output - output_orig);
++}
+diff -ruN -x '.*' rdrview-org/rdrview_api.h rdrview-patched/rdrview_api.h
+--- rdrview-org/rdrview_api.h	1970-01-01 01:00:00.000000000 +0100
++++ rdrview-patched/rdrview_api.h	2026-06-21 16:56:23.591917295 +0200
+@@ -0,0 +1,26 @@
++#ifndef RDRVIEW_API_H
++#define RDRVIEW_API_H
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++#include <stdlib.h>
++
++#define RDRVIEW_API_EXPORT __attribute__((visibility("default")))
++
++#define RDRVIEW_OPT_TEXT_ONLY (1 << 0)
++#define RDRVIEW_OPT_INSERT_METADATA (1 << 1)
++
++RDRVIEW_API_EXPORT typedef void (*logger_cb_t)(const char* message);
++
++RDRVIEW_API_EXPORT size_t rdrview_extract(char* input, size_t input_size,
++                                          char* output, size_t output_max_size,
++                                          logger_cb_t logger_cb,
++                                          unsigned int opts);
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif  // RDRVIEW_API_H
+diff -ruN -x '.*' rdrview-org/src/rdrview.c rdrview-patched/src/rdrview.c
+--- rdrview-org/src/rdrview.c	2025-10-04 05:07:55.000000000 +0200
++++ rdrview-patched/src/rdrview.c	2026-06-27 16:03:33.631901135 +0200
+@@ -36,7 +36,7 @@
+ #include <sys/wait.h>
+ #include <sys/stat.h>
+ #include <sys/mman.h>
+-#include <curl/curl.h>
++// #include <curl/curl.h>
+ #include <libxml/tree.h>
+ #include <libxml/HTMLparser.h>
+ #include <libxml/encoding.h>
+@@ -151,43 +151,6 @@
+ 	return mkstring("%s/%s", tmpdir, filename);
+ }
+ 
+-#if 0
+-/**
+- * Get the encoding for the html document from the headers of the HTTP response
+- *
+- * TODO: this is commented out for now because it's dangerous and outside the
+- * sandbox. It doesn't matter much because most websites provide the encoding
+- * inside the html as well.
+- */
+-static void set_encoding_from_response(CURL *curl)
+-{
+-	const char *type = NULL;
+-	const char *charset = NULL;
+-
+-	/* Just ignore failures, we can guess the encoding or get it elsewhere */
+-	if (curl_easy_getinfo(curl, CURLINFO_CONTENT_TYPE, &type) || !type)
+-		return;
+-	charset = strcasestr(type, "charset="); /* TODO: whitespace? */
+-	if (!charset)
+-		return;
+-
+-	if (!options.encoding) {
+-		options.encoding = malloc(MAX_ENC_LEN + 1);
+-		if (!options.encoding)
+-			fatal();
+-		*options.encoding = '\0';
+-	}
+-
+-	/* Even if the user requested an encoding, obey the HTTP headers */
+-	sscanf(charset, "%*[^=]=%" STR(MAX_ENC_LEN) "s", options.encoding);
+-}
+-#else
+-static void set_encoding_from_response(CURL *curl)
+-{
+-	(void)curl;
+-}
+-#endif
+-
+ /**
+  * Copy the content of one file into another
+  */
+@@ -222,61 +185,6 @@
+ }
+ 
+ /**
+- * Fetch the webpage and save it to a temporary file; exit on failure
+- */
+-static void url_to_file(FILE *file)
+-{
+-	CURL *curl;
+-	CURLcode res;
+-	char errbuf[CURL_ERROR_SIZE];
+-	size_t errlen;
+-	long protocols;
+-
+-	curl = curl_easy_init();
+-	if (!curl)
+-		fatal_msg("libcurl could not be initialized");
+-	if (curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf))
+-		fatal();
+-	if (curl_easy_setopt(curl, CURLOPT_URL, options.url))
+-		fatal();
+-	if (curl_easy_setopt(curl, CURLOPT_WRITEDATA, file))
+-		fatal();
+-
+-	/* I don't expect any other protocols, so be safe */
+-	protocols = CURLPROTO_HTTP | CURLPROTO_HTTPS | CURLPROTO_FILE;
+-	if (curl_easy_setopt(curl, CURLOPT_PROTOCOLS, protocols))
+-		fatal();
+-
+-	/* Enable automatic decompression */
+-	if (curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, ""))
+-		fatal();
+-
+-	if (curl_easy_setopt(curl, CURLOPT_USERAGENT, options.agent))
+-		fatal();
+-
+-	/* Follow up to 50 redirections, like the curl cli does by default */
+-	if (curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1))
+-		fatal();
+-	if (curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 50))
+-		fatal();
+-
+-	res = curl_easy_perform(curl);
+-	if (res) {
+-		errlen = strlen(errbuf);
+-		fprintf(stderr, "%s: couldn't fetch the webpage (%s)\n", progname, curl_easy_strerror(res));
+-		if (errlen)
+-			fprintf(stderr, "%s%s", errbuf, (errbuf[errlen - 1] != '\n') ? "\n" : "");
+-		exit(1);
+-	}
+-
+-	if (fflush(file))
+-		fatal_errno();
+-
+-	set_encoding_from_response(curl);
+-	curl_easy_cleanup(curl);
+-}
+-
+-/**
+  * Map a whole file to memory; return the length of the mapping
+  */
+ static size_t map_file(int fd, char **map)
+@@ -341,7 +249,7 @@
+ /**
+  * Parse the html in the mapped file and return its htmlDocPtr; exit on failure
+  */
+-static htmlDocPtr parse_mapped_file(char *map, size_t mapsize)
++htmlDocPtr parse_mapped_file(char *map, size_t mapsize)
+ {
+ 	htmlDocPtr doc;
+ 	int flags = HTML_PARSE_NOERROR | HTML_PARSE_NOWARNING;
+@@ -834,7 +742,7 @@
+ /**
+  * Clean up after init_iconv()
+  */
+-static void clean_iconv(void)
++void clean_iconv(void)
+ {
+ 	iconv_close(gb2312_cd);
+ 	iconv_close(cp1252_cd);
+@@ -900,16 +808,16 @@
+ /**
+  * Save the HTML document to process to a temporary file
+  */
+-static void save_input_to_file(FILE *file)
+-{
+-	/* Prioritize local files over remote urls, like real browsers do */
+-	if (options.localfile)
+-		copy_file(file, options.localfile);
+-	else if (!options.url)
+-		stdin_to_file(file);
+-	else
+-		url_to_file(file);
+-}
++// static void save_input_to_file(FILE *file)
++// {
++// 	/* Prioritize local files over remote urls, like real browsers do */
++// 	if (options.localfile)
++// 		copy_file(file, options.localfile);
++// 	else if (!options.url)
++// 		stdin_to_file(file);
++// 	else
++// 		url_to_file(file);
++// }
+ 
+ /**
+  * If this is a meta node for an html redirect, return the node itself;
+@@ -1014,74 +922,6 @@
+ #define STATUS_HTML_REDIRECT 2
+ 
+ /**
+- * Set up a sandbox and run all dangerous processing of the input HTML file
+- */
+-static int run_dangerous(int input_fd, int output_fd)
+-{
+-	FILE *output_fp;
+-	htmlDocPtr doc;
+-	htmlNodePtr article = NULL;
+-	char *input_map;
+-	size_t input_size;
+-	int ret = 0;
+-
+-	output_fp = fdopen(output_fd, "w");
+-	if (!output_fp)
+-		fatal_errno();
+-
+-	/*
+-	 * Some standard libraries use newfstatat() to implement fstat(). We don't
+-	 * want to allow checking arbitrary paths inside the sandbox, so just map
+-	 * the file ahead of time.
+-	 */
+-	input_size = map_file(input_fd, &input_map);
+-
+-	start_sandbox();
+-	assert_sandbox_works();
+-
+-	doc = parse_mapped_file(input_map, input_size);
+-	munmap(input_map, input_size);
+-
+-	if (check_html_redirect(doc, output_fp)) {
+-		ret = STATUS_HTML_REDIRECT;
+-		goto out;
+-	}
+-	init_regexes();
+-
+-	if (options.flags & OPT_CHECK) {
+-		ret = !is_probably_readerable(doc);
+-		goto out;
+-	}
+-
+-	/*
+-	 * Unicode urls are technically invalid and libxml2 can't handle them, but
+-	 * people are used to modern browsers and expect them to work, so try to
+-	 * escape them before they are needed.
+-	 */
+-	escape_unicode_base_url();
+-
+-	article = parse(doc);
+-	if (!article)
+-		fatal_msg("no content could be extracted");
+-	attach_metadata(article);
+-
+-	if (options.flags & OPT_HTML)
+-		shell_print_node(article);
+-	else if (options.flags & OPT_METADATA)
+-		print_metadata(doc);
+-	else
+-		save_node_to_file(article, output_fp);
+-
+-out:
+-	/* Valgrind complains if I don't run these cleanups */
+-	free_node(article);
+-	free_doc(doc);
+-	xmlCleanupParser();
+-	clean_iconv();
+-	return ret;
+-}
+-
+-/**
+  * Close and nullify a stream but return an open file descriptor for the file
+  */
+ static int fclose_but_keep_fd(FILE **file)
+@@ -1108,52 +948,6 @@
+ }
+ 
+ /**
+- * Fork a subprocess to run html parsing in a sandbox; return its exit status
+- */
+-static int fork_and_run_dangerous(FILE **input_fp, FILE **output_fp)
+-{
+-	pid_t cpid;
+-	int wstatus;
+-	int input_fd, output_fd;
+-
+-	/* The files are shared with the child, which invalidates the streams */
+-	input_fd = fclose_but_keep_fd(input_fp);
+-	output_fd = fclose_but_keep_fd(output_fp);
+-
+-	/* Prepare the file to receive new output from the child */
+-	clear_file(output_fd);
+-
+-	cpid = fork();
+-	if (cpid < 0) {
+-		fatal_errno();
+-	} else if (!cpid) { /* Sandboxed subprocess */
+-		free(tmpdir);
+-		tmpdir = NULL; /* Otherwise the child would remove it on exit */
+-		exit(run_dangerous(input_fd, output_fd));
+-	} else if (wait(&wstatus) < 0) {
+-		fatal_errno();
+-	}
+-
+-	/* Prepare the input file in case we need to download a new document */
+-	clear_file(input_fd);
+-	*input_fp = fdopen(input_fd, "w+");
+-	if (!*input_fp)
+-		fatal_errno();
+-
+-	/* Prepare the output file in case we need to read it */
+-	*output_fp = fdopen(output_fd, "w+");
+-	if (!*output_fp)
+-		fatal_errno();
+-	rewind(*output_fp);
+-
+-	if (WIFEXITED(wstatus))
+-		return WEXITSTATUS(wstatus);
+-	if (WIFSIGNALED(wstatus))
+-		return 128 + WTERMSIG(wstatus);
+-	return 1;
+-}
+-
+-/**
+  * Update the url in the options with the contents of the file
+  */
+ static void update_url_from_file(FILE *file)
+@@ -1186,48 +980,3 @@
+ 	/* TODO: don't ignore the user-supplied base url for html redirects */
+ 	options.base_url = options.url;
+ }
+-
+-int main(int argc, char *argv[])
+-{
+-	FILE *input_fp, *output_fp;
+-	static char *command = NULL; /* Static for the sake of valgrind */
+-	int ret;
+-
+-	LIBXML_TEST_VERSION
+-
+-#ifndef LIBXML2_HAS_NO_XMLMALLOC
+-	/* I made a mess mixing xmlMalloc() and malloc(), so play it safe here */
+-	if (xmlMemSetup(free, malloc, realloc, strdup))
+-		fatal();
+-#endif
+-
+-	set_cleanup_handlers();
+-	parse_arguments(argc, argv);
+-
+-	inputfile = get_temp_filepath("input.html");
+-	outputfile = get_temp_filepath("output.html");
+-	input_fp = fopen(inputfile, "w+");
+-	output_fp = fopen(outputfile, "w+");
+-	if (!input_fp || !output_fp)
+-		fatal_msg("failed to create the temporary files");
+-
+-	/* Do this before the fork to avoid wasting time if there is no browser */
+-	if (options.flags & OPT_BROWSER)
+-		command = get_browser_command(outputfile);
+-
+-	init_iconv();
+-	do {
+-		save_input_to_file(input_fp);
+-		ret = fork_and_run_dangerous(&input_fp, &output_fp);
+-		/*
+-		 * If the child finds an html redirect, it saves the url to the output
+-		 * file and returns STATUS_HTML_REDIRECT.
+-		 */
+-		if (ret == STATUS_HTML_REDIRECT)
+-			update_url_from_file(output_fp);
+-	} while (ret == STATUS_HTML_REDIRECT);
+-
+-	if (!ret && (options.flags & OPT_BROWSER))
+-		ret = run_browser_command(command);
+-	return ret;
+-}
+diff -ruN -x '.*' rdrview-org/src/rdrview.h rdrview-patched/src/rdrview.h
+--- rdrview-org/src/rdrview.h	2025-10-04 05:07:55.000000000 +0200
++++ rdrview-patched/src/rdrview.h	2026-06-27 16:02:15.814230036 +0200
+@@ -171,10 +171,8 @@
+ extern void init_regexes(void);
+ extern bool regex_matches(const regex_t *preg, const xmlChar *string);
+ 
+-/* sandbox.c */
+-extern void start_sandbox(void);
+-
+ /* rdrview.c */
++htmlDocPtr parse_mapped_file(char *map, size_t mapsize);
+ extern __attribute__((noreturn)) void fatal_errno(void);
+ extern __attribute__((noreturn)) void fatal_msg(char *message);
+ extern __attribute__((noreturn)) void fatal_with_loc(const char *fn, int line);
+diff -ruN -x '.*' rdrview-org/src/readability.c rdrview-patched/src/readability.c
+--- rdrview-org/src/readability.c	2025-10-04 05:07:55.000000000 +0200
++++ rdrview-patched/src/readability.c	2026-06-26 21:28:52.031388491 +0200
+@@ -1810,7 +1810,11 @@
+ 	if (!xmlDocGetRootElement(doc))
+ 		return NULL;
+ 
+-	/* Do this early to prevent problems when traversing the tree */
++        /* reset global state */
++        memset(&metadata, 0, sizeof(metadata));
++        memset(attempts, 0, sizeof(attempts));
++
++        /* Do this early to prevent problems when traversing the tree */
+ 	remove_root_siblings(doc);
+ 
+ 	set_base_url_from_doc(doc);
+diff -ruN -x '.*' rdrview-org/version.h.in rdrview-patched/version.h.in
+--- rdrview-org/version.h.in	1970-01-01 01:00:00.000000000 +0100
++++ rdrview-patched/version.h.in	2026-06-18 18:06:50.516786754 +0200
+@@ -0,0 +1,6 @@
++#ifndef VERSION_H
++#define VERSION_H
++
++#define GIT_COMMIT "@git_commit@"
++
++#endif // VERSION_H

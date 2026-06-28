@@ -42,7 +42,7 @@
     X(clean_ref_voice, bool, true, false)                                    \
     X(stt_clear_mic_audio_when_decoding, bool, false, false)                 \
     X(stt_play_beep, bool, false, false)                                     \
-    X(translate_when_typing, bool, false, false)                             \
+    X(translate_when_typing, bool, true, false)                              \
     X(translator_mode, bool, false, false)                                   \
     X(hotkeys_enabled, bool, false, false)                                   \
     X(mtag, bool, false, false)                                              \
@@ -52,7 +52,8 @@
       settings::text_to_window_method_t::TextToWindowMethodTyping, false)    \
     X(text_from_window_method, settings::text_from_window_method_t,          \
       settings::text_from_window_method_t::TextFromWindowMethodCtrlC, false) \
-    X(translate_ui, bool, true, true)
+    X(translate_ui, bool, true, true)                                        \
+    X(import_extract_readable, bool, true, false)
 
 // name, default-value
 #define GPU_SCAN_TABLE                                                 \
@@ -187,9 +188,10 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(QString inline_timestamp_template READ inline_timestamp_template
                    WRITE set_inline_timestamp_template NOTIFY
                        inline_timestamp_template_changed)
-    Q_PROPERTY(int inline_timestamp_min_interval READ inline_timestamp_min_interval
-                   WRITE set_inline_timestamp_min_interval NOTIFY
-                       inline_timestamp_min_interval_changed)
+    Q_PROPERTY(
+        int inline_timestamp_min_interval READ inline_timestamp_min_interval
+            WRITE set_inline_timestamp_min_interval NOTIFY
+                inline_timestamp_min_interval_changed)
     Q_PROPERTY(int qt_style_idx READ qt_style_idx WRITE set_qt_style_idx NOTIFY
                    qt_style_changed)
     Q_PROPERTY(QString qt_style_name READ qt_style_name WRITE set_qt_style_name
@@ -518,7 +520,7 @@ class settings : public QSettings, public singleton<settings> {
         TextFormatHtml = 1,
         TextFormatMarkdown = 2,
         TextFormatSubRip = 3,
-        TextFormatInlineTimestamp = 4
+        TextFormatInlineTimestamp = 4,
     };
     Q_ENUM(text_format_t)
 
@@ -914,6 +916,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE QString
     base_name_from_file_path(const QString &file_path) const;
     Q_INVOKABLE QString file_path_from_url(const QUrl &file_url) const;
+    Q_INVOKABLE QUrl url_from_file_path(const QString &file_path) const;
     Q_INVOKABLE QString dir_of_file(const QString &file_path) const;
     Q_INVOKABLE audio_format_t
     filename_to_audio_format(const QString &filename) const;

@@ -3,6 +3,15 @@
 <node>
 <interface name="@info_dbus_app_interface@">
   <!--
+      Opens URLs
+
+      Supported URL types: file, http, https.
+   -->
+  <method name="OpenUrl">
+    <arg name="arguments" type="as" direction="in"/>
+  </method>
+
+  <!--
       Currently active STT model
 
       A dict of model properties:
@@ -87,6 +96,8 @@
        start-reading *
        start-reading-clipboard *
        start-reading-text *
+       start-reading-file *
+       start-reading-url *
        pause-resume-reading
        cancel
        switch-to-next-stt-model
@@ -99,7 +110,10 @@
       *) Optional @arguments dict used to pass additional options:
         [model-id] => model ID
         [text] => text to read
+        [text-format] => format of the text (auto, plain, html)
         [output-file] => output file path
+        [input-file] => text input file path to read
+        [input-url] => an url to a web page to read
   -->
   <method name="InvokeAction">
     <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>

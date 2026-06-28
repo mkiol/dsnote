@@ -10,6 +10,7 @@
 #include <fmt/format.h>
 #include <html2md/html2md.h>
 #include <maddy/parser.h>
+#include <rdrview_api.h>
 #include <ssplit.h>
 #include <unistd.h>
 
@@ -1357,6 +1358,26 @@ processor::~processor() {
 
     if (task) task->get();
 #endif
+}
+
+bool extract_readable_content(std::string& text) {
+    std::string output(text.size(), '\0');
+
+    auto new_size = rdrview_extract(
+        text.data(), text.size(), output.data(), output.size(),
+        [](const char* message) { LOGD("rdrview: " << message); },
+        /*opts=*/RDRVIEW_OPT_TEXT_ONLY | RDRVIEW_OPT_INSERT_METADATA);
+
+    if (new_size == 0) {
+        LOGE("failed to extract readable content");
+        return false;
+    }
+
+    output.resize(new_size);
+
+    text.assign(std::move(output));
+
+    return true;
 }
 
 }  // namespace text_tools

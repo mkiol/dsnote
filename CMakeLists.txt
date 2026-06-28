@@ -59,6 +59,7 @@ option(BUILD_XDO "download sources of xdo lib and link statically" ON)
 option(BUILD_SAM "download sources of sam and link statically" ON)
 option(BUILD_WL_CLIPBOARD "download sources of wl-clipboard, build and install" OFF)
 option(BUILD_XKBCOMMON "download sources of xkbcommon build and link statically" OFF)
+option(BUILD_RDRVIEW  "download sources of rdrview, build and link statically" ON)
 
 # options used only for testing
 option(DEV_USE_PYTHON311 OFF)
@@ -162,8 +163,8 @@ set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
 set(info_conf_version "116")
 set(info_addon_version "1.4") # if run as a flatpak pkg, the required add-on version
-set(info_version_type "-beta")
-#set(info_version_type "")
+#set(info_version_type "-beta")
+set(info_version_type "")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv · Niklas Halvorsen · \
 Matjaž Jeran · Victor Alonso Barberan · Bruno Veilleux · Abdullah Albaroty · 李 阳 · Erdem Uygun · Armin Maier · \
@@ -171,7 +172,7 @@ Alexandre Cerqueira Leite · Erhan Yükselci · Boštjan Štrumbelj")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · nlohmann JSON · eSpeak NG · Bergamot Translator · \
 Rubber Band Library · simdjson · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
-libnumbertext · april-asr · html2md · maddy · SAM")
+libnumbertext · april-asr · html2md · maddy · SAM · rdrview")
 if(WITH_DESKTOP)
     set(info_libs_str "${info_libs_str} · KDBusAddons")
 
@@ -857,6 +858,13 @@ if(BUILD_SAM)
 else()
     find_library(sam_path sam_api REQUIRED)
     list(APPEND deps_libs ${sam_path})
+endif()
+
+if(BUILD_RDRVIEW)
+    include(${cmake_path}/rdrview.cmake)
+else()
+    find_library(rdrview_path rdrview_api REQUIRED)
+    list(APPEND deps_libs ${rdrview_path})
 endif()
 
 if(WITH_SFOS)

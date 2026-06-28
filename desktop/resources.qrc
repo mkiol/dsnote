@@ -63,6 +63,7 @@
         <file>qml/LayoutFixer.qml</file>
         <file>qml/VoiceAudioSampleEditPage.qml</file>
         <file>qml/StackViewQuick.qml</file>
+        <file>qml/ImportUrlDialog.qml</file>
         <file alias="config/models.json">../config/models.json</file>
         <file alias="nonbreaking_prefixes/ca.txt">../nonbreaking_prefixes/ca.txt</file>
         <file alias="nonbreaking_prefixes/cs.txt">../nonbreaking_prefixes/cs.txt</file>

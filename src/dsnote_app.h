@@ -28,6 +28,7 @@
 #include "config.h"
 #include "dbus_notifications_inf.h"
 #include "dbus_speech_inf.h"
+#include "downloader.hpp"
 #include "media_converter.hpp"
 #include "recorder.hpp"
 #include "settings.h"
@@ -47,6 +48,8 @@
     X(start_reading_clipboard, "start-reading-clipboard")             \
     X(start_reading_text, "start-reading-text")                       \
     X(start_reading_active_window, "start-reading-active-window")     \
+    X(start_reading_file, "start-reading-file")                       \
+    X(start_reading_url, "start-reading-url")                         \
     X(pause_resume_reading, "pause-resume-reading")                   \
     X(cancel, "cancel")                                               \
     X(switch_to_next_stt_model, "switch-to-next-stt-model")           \
@@ -55,6 +58,11 @@
     X(switch_to_prev_tts_model, "switch-to-prev-tts-model")           \
     X(set_stt_model, "set-stt-model")                                 \
     X(set_tts_model, "set-tts-model")
+
+#define ACTION_TEXT_FORMAT_TABLE                                 \
+    X(auto, "auto", settings::text_format_t::TextFormatRaw, 0)   \
+    X(plain, "plain", settings::text_format_t::TextFormatRaw, 0) \
+    X(html, "html", settings::text_format_t::TextFormatHtml, 0)
 
 #define FEATURE_TABLE    \
     X(whispercpp_stt)    \
@@ -301,7 +309,8 @@ class dsnote_app : public QObject {
         StateTranslating = 10,
         StateRepairingText = 11,
         StateImporting = 20,
-        StateExporting = 21
+        StateExporting = 21,
+        StateDownloading = 22
     };
     Q_ENUM(service_state_t)
     friend QDebug operator<<(QDebug d, service_state_t state);
@@ -331,16 +340,19 @@ class dsnote_app : public QObject {
         ErrorExportFileGeneral = 10,
         ErrorImportFileGeneral = 11,
         ErrorImportFileNoStreams = 12,
-        ErrorSttNotConfigured = 13,
-        ErrorTtsNotConfigured = 14,
-        ErrorMntNotConfigured = 15,
-        ErrorContentDownload = 16,
+        ErrorImportUrlGeneral = 13,
+        ErrorImportUrlDownload = 14,
+        ErrorImportUrlInvalid = 15,
+        ErrorSttNotConfigured = 16,
+        ErrorTtsNotConfigured = 17,
+        ErrorMntNotConfigured = 18,
+        ErrorLicenseDownload = 19,
         ErrorNoService = 100
     };
     Q_ENUM(error_t)
     friend QDebug operator<<(QDebug d, error_t type);
 
-    enum class file_import_result_t {
+    enum class url_import_result_t {
         ok_streams_selection,
         ok_import_audio,
         ok_import_subtitles,
@@ -349,9 +361,11 @@ class dsnote_app : public QObject {
         error_requested_stream_not_found,
         error_import_audio_stt_not_configured,
         error_import_subtitles_error,
-        error_import_text_error
+        error_import_text_error,
+        error_import_url_invalid_error,
+        error_import_url_download_error
     };
-    friend QDebug operator<<(QDebug d, file_import_result_t type);
+    friend QDebug operator<<(QDebug d, url_import_result_t type);
 
     enum class auto_text_format_t {
         AutoTextFormatRaw = 0,
@@ -427,8 +441,7 @@ class dsnote_app : public QObject {
                                                     const QString &title_tag,
                                                     const QString &track_tag);
     Q_INVOKABLE void import_files(const QStringList &input_files, bool replace);
-    Q_INVOKABLE void import_files_url(const QList<QUrl> &input_urls,
-                                      bool replace);
+    Q_INVOKABLE void import_urls(const QList<QUrl> &input_urls, bool replace);
     Q_INVOKABLE void stop_play_speech();
     Q_INVOKABLE void copy_to_clipboard();
     Q_INVOKABLE void copy_translation_to_clipboard();
@@ -446,7 +459,7 @@ class dsnote_app : public QObject {
                                               const QVariantMap &arguments,
                                               bool trusted_source);
     Q_INVOKABLE QVariantList features_availability();
-    Q_INVOKABLE QString download_content(const QUrl &url);
+    Q_INVOKABLE QString download_license(const QUrl &url);
     Q_INVOKABLE void player_import_from_url(const QUrl &url);
     Q_INVOKABLE void player_play_voice_ref_idx(int idx);
     Q_INVOKABLE void player_play(long long start, long long stop);
@@ -492,6 +505,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void transcribe_ref_file(const QString &file_path);
     Q_INVOKABLE void transcribe_ref_file_import(long long start,
                                                 long long stop);
+    Q_INVOKABLE QString clipboard_if_url() const;
+    Q_INVOKABLE bool is_valid_url(const QString &text) const;
 
    signals:
     void active_stt_model_changed();
@@ -534,7 +549,7 @@ class dsnote_app : public QObject {
     void translated_text_changed();
     void note_changed();
     void can_undo_or_redu_note_changed();
-    void can_open_next_file();
+    void can_open_next_url();
     void features_availability_updated();
     void features_changed();
     void activate_requested();
@@ -564,6 +579,7 @@ class dsnote_app : public QObject {
     void last_cursor_position_changed();
     void trans_rules_test_text_changed();
     void py_version_changed();
+    void download_progress_changed(double progress);
 
    private:
     enum class action_t : uint8_t {
@@ -708,7 +724,7 @@ class dsnote_app : public QObject {
     QTimer m_keepalive_timer;
     QTimer m_keepalive_current_task_timer;
     QTimer m_translator_delay_timer;
-    QTimer m_open_files_delay_timer;
+    QTimer m_open_urls_delay_timer;
     QTimer m_action_delay_timer;
     QTimer m_desktop_notification_delay_timer;
     QTimer m_auto_format_delay_timer;
@@ -723,7 +739,7 @@ class dsnote_app : public QObject {
     QString m_translated_text;
     QString m_prev_text;
     bool m_undo_flag = false;  // true => undo, false => redu
-    std::queue<QString> m_files_to_open;
+    std::queue<QUrl> m_urls_to_open;
     std::queue<std::pair<action_t, QVariantMap>> m_pending_actions;
     text_destination_t m_text_destination = text_destination_t::note_add;
     std::optional<desktop_notification_t> m_desktop_notification;
@@ -746,6 +762,7 @@ class dsnote_app : public QObject {
     std::optional<stt_request_t> m_pending_stt_request;
     QString m_trans_rules_test_text;
     QString m_py_version;
+    downloader m_downloader;
 #ifdef USE_DESKTOP
     std::optional<fake_keyboard> m_fake_keyboard;
     tray_icon m_tray;
@@ -903,7 +920,8 @@ class dsnote_app : public QObject {
     QString translated_text() const;
     void set_translated_text(const QString text);
     void listen_internal(stt_translate_req_t translate_req);
-    void speech_to_file_internal(QString text, const QString &model_id,
+    void speech_to_file_internal(QString text, const QString &input_file,
+                                 const QUrl &input_url, const QString &model_id,
                                  const QString &dest_file,
                                  const QString &title_tag, const QString &track,
                                  const QString &ref_voice,
@@ -914,7 +932,13 @@ class dsnote_app : public QObject {
     void play_speech_from_text_format(const QString &text,
                                       const QString &model_id,
                                       settings::text_format_t text_format);
-    void play_speech_internal(QString text, const QString &model_id,
+    void play_speech_from_text_format_str(const QString &text,
+                                          const QString &input_file,
+                                          const QUrl &input_url,
+                                          const QString &model_id,
+                                          const QString &text_format_str);
+    void play_speech_internal(QString text, const QString &input_file,
+                              const QUrl &input_url, const QString &model_id,
                               const QString &ref_voice,
                               const QString &ref_prompt,
                               settings::text_format_t text_format);
@@ -923,10 +947,10 @@ class dsnote_app : public QObject {
     void handle_translate_delayed();
     void transcribe_file(const QString &file_path, int stream_index,
                          bool replace);
-    file_import_result_t import_file_internal(const QString &file_path,
-                                              int stream_index, bool replace);
-    void open_next_file();
-    void reset_files_queue();
+    url_import_result_t import_url_internal(const QUrl &url, int stream_index,
+                                            bool replace);
+    void open_next_url();
+    void reset_urls_queue();
     void execute_action(action_t action, const QVariantMap &arguments);
     action_t convert_action(action_t action) const;
     void execute_pending_action();
@@ -966,7 +990,9 @@ class dsnote_app : public QObject {
     void update_auto_text_format_delayed();
     void update_auto_text_format();
     void translate_internal(const QString &text);
-    bool import_text_file(const QString &input_file, bool replace);
+    url_import_result_t import_text_file(const QString &input_file,
+                                         bool replace);
+    url_import_result_t import_text_url(const QUrl &input_url, bool replace);
     void export_to_subtitles(const QString &dest_file,
                              settings::text_file_format_t format,
                              const QString &text);
@@ -1010,6 +1036,10 @@ class dsnote_app : public QObject {
     void add_action_to_queue(action_t action, const QVariantMap &arguments);
     void clear_action_queue();
     void play_speech_selected_in_active_window(const QString &model_id);
+    static settings::text_format_t text_format_from_action_str(
+        const QString &action_text_format_str, bool from_url);
+    downloader::data_t download_content(
+        const QUrl &url, const QString &expected_content_type_pattern = {});
 };
 
 #endif  // DSNOTE_APP_H

@@ -1,6 +1,7 @@
 install(TARGETS ${info_binary_id} RUNTIME DESTINATION bin)
 
 install(FILES "${sfos_dir}/${info_binary_id}.desktop" DESTINATION share/applications)
+install(FILES "${sfos_dir}/${info_binary_id}-open-url.desktop" DESTINATION share/applications)
 install(FILES "${sfos_dir}/icons/86x86/${info_binary_id}.png" DESTINATION share/icons/hicolor/86x86/apps)
 install(FILES "${sfos_dir}/icons/108x108/${info_binary_id}.png" DESTINATION share/icons/hicolor/108x108/apps)
 install(FILES "${sfos_dir}/icons/128x128/${info_binary_id}.png" DESTINATION share/icons/hicolor/128x128/apps)

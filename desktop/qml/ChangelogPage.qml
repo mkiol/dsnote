@@ -31,6 +31,9 @@ DialogPage {
         You can now read selected text from any active window using the new <i>start-reading-active-window</i> action
         or a global keyboard shortcut. This feature automatically copies the selected text (simulating <i>Ctrl+C</i>)
         and reads it aloud using TTS.</li>
+        <li>New action <i>start-reading-url</i>. Use this action to have Speech Note read an HTTP web page.
+        An action can be triggered via DBus call or with command-line option. You can enable <i>Actions</i> in the settings
+        (<i>Accessibility</i> &rarr; <i>Allow external applications to invoke actions</i>).</li>
         </ul>
         <p>" + qsTr("Speech to Text") + "</p>
         <ul>
@@ -38,17 +41,19 @@ DialogPage {
         A new output format is now available, displaying timestamps that show when each segment of text was recognized in the audio.
         To enable new format set <i>Text format</i> to <i>Inline timestamps</i>. 
         You can also customize the timestamp interval and format in the settings.</li>
-        <li>Whisper Large finetuned "AiLab" model for Latvian</li>
+        <li>Whisper Large finetuned 'AiLab' model for Latvian</li>
         </ul>
         <p>" + qsTr("Text to Speech") + "</p>
         <ul>
-        <li>New RHVoice models for: Belarusian, Croatian, English, Romanian, Russian.</li>
-        <li>Updated RHVoice models for: Czech, Serbian, Spanish.</li>
-        <li>New Piper models for: Albanian, Bulgarian, Dutch, Greek, Hindi, Indonesian, Kurdish, Latvian, Polish, Swedish, Telugu, Ukrainian, Urdu.</li>
-        <li>New F5-TTS model for Latvian.</li>
+        <li>New RHVoice models for: Belarusian, Croatian, English, Romanian, Russian</li>
+        <li>Updated RHVoice models for: Czech, Serbian, Spanish</li>
+        <li>New Piper models for: Albanian, Bulgarian, Dutch, Greek, Hindi, Indonesian, Kurdish, Latvian, Polish, Swedish, Telugu, Ukrainian, Urdu</li>
+        <li>New F5-TTS model for Latvian</li>
         </ul>
         <p>" + qsTr("User Interface") + "</p>
         <ul>
+        <li>Import a note from a URL. Use the <i>Import a note from a URL</i> option in the main app toolbar to import text content from a link.
+            The URL must use HTTP or HTTPS. For HTML pages, you can choose to extract only the readable text or import the entire page.</li>
         <li>Setting option to force the English language in the user interface</li>
         <li><i>Speech Note</i> has been translated into Portuguese-Brazilian language.</li>
         </ul>"

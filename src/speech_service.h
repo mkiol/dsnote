@@ -561,6 +561,7 @@ class speech_service : public QObject, public singleton<speech_service> {
                                     const stt_engine::config_t &config) const;
     bool is_new_tts_engine_required(models_manager::model_engine_t engine_type,
                                     const tts_engine::config_t &config) const;
+    void pre_process_text_for_tts(QString &text, const QVariantMap &options);
 
     // DBus
     Q_INVOKABLE int Cancel(int task);

@@ -130,6 +130,7 @@ void break_segment_to_multiline(unsigned int min_line_size,
 void break_segments_to_multiline(unsigned int min_line_size,
                                  unsigned int max_line_size,
                                  std::vector<segment_t>& segments);
+bool extract_readable_content(std::string& text);
 }  // namespace text_tools
 
 #endif  // TEXT_TOOLS_H

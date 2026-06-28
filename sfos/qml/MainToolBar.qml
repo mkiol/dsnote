@@ -42,6 +42,15 @@ PullDownMenu {
     }
 
     MenuItem {
+        visible: !_settings.translator_mode
+        enabled: !app.busy
+        text: qsTr("Import from a URL")
+        onClicked: {
+            pageStack.push(Qt.resolvedUrl("ImportUrlDialog.qml"))
+        }
+    }
+
+    MenuItem {
         enabled: app.note.length !== 0 && !app.busy
         text: qsTr("Export to a file")
         onClicked: {
@@ -55,6 +64,19 @@ PullDownMenu {
         text: qsTr("Export the translation to a file")
         onClicked: {
             pageStack.push(Qt.resolvedUrl("ExportFilePage.qml"), {translated: true})
+        }
+    }
+
+    readonly property bool canCancelMnt: app.state === DsnoteApp.StateTranslating &&
+                                         app.task_state !== DsnoteApp.TaskStateCancelling
+    MenuItem {
+        visible: _settings.translator_mode && app.state === DsnoteApp.StateTranslating
+        enabled: root.canCancelMnt
+        text: app.task_state === DsnoteApp.TaskStateCancelling ? qsTr("Cancelling...") : qsTr("Cancel")
+        onClicked: {
+            if (root.canCancelMnt) {
+                app.cancel()
+            }
         }
     }
 //

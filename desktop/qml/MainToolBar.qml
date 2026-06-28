@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -137,6 +137,21 @@ ToolBar {
                                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                                 ToolTip.text: qsTr("Import a note from a text file, subtitle file, video or audio file.") + " " +
                                               qsTr("If the imported file is an audio or video file, the audio is converted to text.")
+                                hoverEnabled: true
+                            }
+
+                            MenuItem {
+                                enabled: !app.busy && app.state === DsnoteApp.StateIdle
+                                action: Action {
+                                    icon.name: "globe-symbolic"
+                                    text: qsTr("Import from a URL")
+                                    shortcut: "Ctrl+U"
+                                    onTriggered: appWin.openDialog("ImportUrlDialog.qml")
+                                }
+
+                                ToolTip.visible: hovered
+                                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                                ToolTip.text: qsTr("Import a note from a URL.")
                                 hoverEnabled: true
                             }
 

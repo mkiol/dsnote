@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,7 +16,7 @@
 #include <QTime>
 #include <QTimer>
 
-static const QByteArray user_agent = QByteArrayLiteral(
+static const auto user_agent = QByteArrayLiteral(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.15 "
     "(KHTML, like Gecko) Version/12.1.2 Safari/605.1.15");
 
@@ -145,7 +145,8 @@ static QString mime_from_reply(const QNetworkReply *reply) {
     return mime;
 }
 
-downloader::data_t downloader::download_data(const QUrl &url) {
+downloader::data_t downloader::download_data(
+    const QUrl &url, const QString &expected_content_type_pattern) {
     if (busy()) {
         qWarning() << "downloaded is busy";
         return {};
@@ -161,6 +162,13 @@ downloader::data_t downloader::download_data(const QUrl &url) {
     set_request_props(request);
 
     m_reply = m_nam.get(request);
+
+    if (!expected_content_type_pattern.isEmpty()) {
+        m_reply->setProperty("expected_content_type_pattern",
+                             expected_content_type_pattern);
+    }
+
+    emit busy_changed();
 
     QEventLoop loop;
     QTimer timer;
@@ -202,6 +210,24 @@ downloader::data_t downloader::download_data(const QUrl &url) {
             emit progress_changed();
         },
         Qt::QueuedConnection);
+    auto con5 = connect(
+        m_reply, &QNetworkReply::metaDataChanged, this,
+        [this]() {
+            auto *reply = qobject_cast<QNetworkReply *>(sender());
+            auto content_type =
+                reply->header(QNetworkRequest::KnownHeaders::ContentTypeHeader)
+                    .toString();
+            qDebug() << "content type:" << content_type;
+            auto expected_content_type_pattern =
+                reply->property("expected_content_type_pattern").toString();
+            if (!expected_content_type_pattern.isEmpty() &&
+                !content_type.contains(expected_content_type_pattern,
+                                       Qt::CaseInsensitive)) {
+                qDebug() << "unexpected content type => aborting download";
+                reply->abort();
+            }
+        },
+        Qt::QueuedConnection);
 
     timer.start();
     loop.exec();
@@ -210,16 +236,21 @@ downloader::data_t downloader::download_data(const QUrl &url) {
     disconnect(con2);
     disconnect(con3);
     disconnect(con4);
+    disconnect(con5);
 
     QByteArray data;
     QString mime;
+    error_t error = error_t::no_error;
 
     if (auto err = m_reply->error(); err != QNetworkReply::NoError) {
         qWarning() << "downloader error:" << err << m_reply->url();
+        error = err == QNetworkReply::OperationCanceledError ? error_t::aborted
+                                                             : error_t::other;
     } else {
         data = m_reply->readAll();
-        mime = mime_from_reply(m_reply);
     }
+
+    mime = mime_from_reply(m_reply);
 
     m_progress.first = m_progress.second;
     emit progress_changed();
@@ -227,7 +258,9 @@ downloader::data_t downloader::download_data(const QUrl &url) {
     m_reply->deleteLater();
     m_reply = nullptr;
 
-    return {std::move(mime), std::move(data)};
+    emit busy_changed();
+
+    return {std::move(mime), std::move(data), error};
 }
 
 void downloader::cancel() {

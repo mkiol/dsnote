@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -181,6 +181,21 @@ ApplicationWindow {
             appWin.openPopup(refPromptHelpMessage)
             _settings.set_hint_done(Settings.HintDoneRefPromptHelp)
         }
+    }
+
+    function importUrls(urls) {
+        if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
+            var urls_to_import = urls.slice(0) // deep copy
+            addTextDialog.addHandler = function(){
+                app.import_urls(urls_to_import, false)}
+            addTextDialog.replaceHandler = function(){app.import_urls(urls_to_import, true)}
+            addTextDialog.open()
+        } else {
+            app.import_urls(urls, _settings.file_import_action === Settings.FileImportActionReplace)
+        }
+
+        appWin.show()
+        appWin.raise()
     }
 
     Component.onCompleted: {
@@ -492,15 +507,7 @@ ApplicationWindow {
 
         onDropped: (drop) => {
             if (!drop.hasUrls) return
-            if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
-                var urls = drop.urls
-                console.log("drop:", urls)
-                addTextDialog.addHandler = function(){app.import_files_url(urls, false)}
-                addTextDialog.replaceHandler = function(){app.import_files_url(urls, true)}
-                addTextDialog.open()
-            } else {
-                app.import_files_url(drop.urls, _settings.file_import_action === Settings.FileImportActionReplace)
-            }
+            root.importUrls(drop.urls)
         }
     }
 
@@ -523,18 +530,8 @@ ApplicationWindow {
             appWin.show()
             appWin.raise()
         }
-        function onFiles_to_open_requested(files) {
-            if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
-                var list_of_files = files
-                addTextDialog.addHandler = function(){app.import_files(list_of_files, false)}
-                addTextDialog.replaceHandler = function(){app.import_files(list_of_files, true)}
-                addTextDialog.open()
-            } else {
-                app.import_files(files, _settings.file_import_action === Settings.FileImportActionReplace)
-            }
-
-            appWin.show()
-            appWin.raise()
+        function onUrls_to_open_requested(urls) {
+            root.importUrls(urls)
         }
     }
 
@@ -626,6 +623,15 @@ ApplicationWindow {
             case DsnoteApp.ErrorImportFileNoStreams:
                 toast.show(qsTr("Error: Couldn't import. The file does not contain audio or subtitles."))
                 break;
+            case DsnoteApp.ErrorImportUrlDownload:
+                toast.show(qsTr("Error: Couldn't import. Failed to download the URL."))
+                break;
+            case DsnoteApp.ErrorImportUrlInvalid:
+                toast.show(qsTr("Error: Couldn't import. The URL has no text content."))
+                break;
+            case DsnoteApp.ErrorImportUrlGeneral:
+                toast.show(qsTr("Error: Couldn't import the URL."))
+                break;
             case DsnoteApp.ErrorSttNotConfigured:
                 toast.show(qsTr("Error: Speech to Text model has not been set up yet."))
                 break;
@@ -635,9 +641,9 @@ ApplicationWindow {
             case DsnoteApp.ErrorMntNotConfigured:
                 toast.show(qsTr("Error: Translator model has not been set up yet."))
                 break;
-            case DsnoteApp.ErrorContentDownload:
+            case DsnoteApp.ErrorLicenseDownload:
                 toast.show(qsTr("Error: Couldn't download a licence."))
-                break;
+                break;   
             default:
                 toast.show(qsTr("Error: An unknown problem has occurred."))
             }

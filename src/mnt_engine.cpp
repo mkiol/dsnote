@@ -363,10 +363,13 @@ std::string mnt_engine::translate_internal(std::string text) {
 
     std::ostringstream out_ss;
 
-    std::regex r{html ? "</p>|</div>|</h1>|</h2>|</h3>|</h4>" : "\n"};
+    static const std::regex r_htmt{"</p>|</div>|</h1>|</h2>|</h3>|</h4>"};
+    static const std::regex r_raw{
+        "\n|\\. |\\? |! |\\.\t|\\?\t|!\t|\\u3020|\\u06d4|\\u0589|\\u1803"};
+    const std::regex& r = html ? r_htmt : r_raw;
     std::string line;
 
-    const size_t segment_size = 1000;
+    const size_t segment_size = 500;
     const size_t segment_max_size = 10 * segment_size;
 
     for (std::smatch sm;
@@ -387,7 +390,6 @@ std::string mnt_engine::translate_internal(std::string text) {
         if (sm.empty() || line.size() > segment_size) {
             try {
                 if (is_shutdown()) return {};
-
                 line.assign(m_bergamot_api_api.bergamot_api_translate(
                     m_bergamot_ctx_first, line.c_str(), true));
 

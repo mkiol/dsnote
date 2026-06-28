@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+X-Nemo-Application-Type=generic
+Name=Speech Note
+Icon=harbour-dsnote
+NoDisplay=true
+MimeType=x-scheme-handler/http;x-scheme-handler/https;
+X-Maemo-Service=org.mkiol.dsnote
+X-Maemo-Method=org.mkiol.dsnote.OpenUrl
+
+[X-Sailjail]
+Sandboxing=Disabled
+OrganizationName=org.mkiol
+ApplicationName=dsnote
+ExecDBus=harbour-dsnote --app

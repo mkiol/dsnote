@@ -3589,7 +3589,9 @@ int speech_service::tts_play_speech(const QString &text, QString lang,
         return INVALID_TASK;
     }
 
-    if (lang.contains('-')) lang = lang.split('-').first();
+    if (lang.contains('-')) {
+        lang = lang.split('-').first();
+    }
 
     if (m_current_task) {
         if (m_current_task->engine == engine_t::stt) {
@@ -3625,28 +3627,17 @@ int speech_service::tts_play_speech(const QString &text, QString lang,
         return INVALID_TASK;
     }
 
-    if (m_stt_engine) m_stt_engine->stop();
+    if (m_stt_engine) {
+        m_stt_engine->stop();
+    }
     restart_audio_source({});
 
     QString text_to_speak = text;
+    pre_process_text_for_tts(text_to_speak, options);
 
-    auto text_format = static_cast<settings::text_format_t>(
-        options.value("text_format").toInt());
-    if (text_format == settings::text_format_t::TextFormatInlineTimestamp) {
-        auto tmpl = get_string_value_from_options("inline_timestamp_template",
-                                                  {}, options);
-        if (!tmpl.isEmpty()) {
-            auto regex =
-                text_tools::compile_inline_timestamp_regex(tmpl.toStdString());
-            if (regex) {
-                text_to_speak =
-                    QString::fromStdString(text_tools::strip_inline_timestamps(
-                        text_to_speak.toStdString(), *regex));
-            }
-        }
+    if (m_tts_engine) {
+        m_tts_engine->encode_speech(text_to_speak.toStdString());
     }
-
-    if (m_tts_engine) m_tts_engine->encode_speech(text_to_speak.toStdString());
 
     start_keepalive_current_task();
 
@@ -3665,13 +3656,16 @@ int speech_service::tts_speech_to_file(const QString &text, QString lang,
         return INVALID_TASK;
     }
 
-    if (lang.contains('-')) lang = lang.split('-').first();
+    if (lang.contains('-')) {
+        lang = lang.split('-').first();
+    }
 
     if (m_current_task) {
         if (m_current_task->engine == engine_t::stt) {
             stt_stop_listen(m_current_task->id);
-        } else if (m_current_task->engine == engine_t::tts)
+        } else if (m_current_task->engine == engine_t::tts) {
             tts_stop_speech(m_current_task->id);
+        }
     }
 
     qDebug() << "tts speech to file";
@@ -3702,23 +3696,11 @@ int speech_service::tts_speech_to_file(const QString &text, QString lang,
     }
 
     QString text_to_speak = text;
-    auto text_format = static_cast<settings::text_format_t>(
-        options.value("text_format").toInt());
-    if (text_format == settings::text_format_t::TextFormatInlineTimestamp) {
-        auto tmpl = get_string_value_from_options("inline_timestamp_template",
-                                                  {}, options);
-        if (!tmpl.isEmpty()) {
-            auto regex =
-                text_tools::compile_inline_timestamp_regex(tmpl.toStdString());
-            if (regex) {
-                text_to_speak =
-                    QString::fromStdString(text_tools::strip_inline_timestamps(
-                        text_to_speak.toStdString(), *regex));
-            }
-        }
-    }
+    pre_process_text_for_tts(text_to_speak, options);
 
-    if (m_tts_engine) m_tts_engine->encode_speech(text_to_speak.toStdString());
+    if (m_tts_engine) {
+        m_tts_engine->encode_speech(text_to_speak.toStdString());
+    }
 
     start_keepalive_current_task();
 
@@ -4538,6 +4520,50 @@ void speech_service::setup_modules() {
     module_tools::init_module(QStringLiteral("rhvoicedata"));
     module_tools::init_module(QStringLiteral("rhvoiceconfig"));
     module_tools::init_module(QStringLiteral("espeakdata"));
+}
+
+void speech_service::pre_process_text_for_tts(QString &text,
+                                              const QVariantMap &options) {
+    auto text_format = static_cast<settings::text_format_t>(
+        options.value("text_format").toInt());
+    switch (text_format) {
+        case settings::text_format_t::TextFormatInlineTimestamp: {
+            auto tmpl = get_string_value_from_options(
+                "inline_timestamp_template", {}, options);
+            if (!tmpl.isEmpty()) {
+                auto regex = text_tools::compile_inline_timestamp_regex(
+                    tmpl.toStdString());
+                if (regex) {
+                    text = QString::fromStdString(
+                        text_tools::strip_inline_timestamps(text.toStdString(),
+                                                            *regex));
+                    // timestamps were removed, so changing format to raw
+                    if (m_tts_engine) {
+                        m_tts_engine->set_text_format(
+                            tts_engine::text_format_t::raw);
+                    }
+                }
+            }
+            break;
+        }
+        case settings::text_format_t::TextFormatHtml: {
+            // TODO: Do not assume data is always UTF-8
+            std::string text_readable = text.toStdString();
+            if (text_tools::extract_readable_content(text_readable)) {
+                text = QString::fromStdString(text_readable);
+                // html converted to readable text, so changing format to raw
+                if (m_tts_engine) {
+                    m_tts_engine->set_text_format(
+                        tts_engine::text_format_t::raw);
+                }
+            }
+            break;
+        }
+        case settings::text_format_t::TextFormatRaw:
+        case settings::text_format_t::TextFormatMarkdown:
+        case settings::text_format_t::TextFormatSubRip:
+            break;
+    }
 }
 
 // DBus

@@ -21,6 +21,33 @@ ApplicationWindow {
     initialPage: mainPage
     cover: Qt.resolvedUrl("CoverPage.qml")
 
+    function importUrls(urls) {
+        if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
+            var urls_to_import = urls.slice(0) // deep copy
+            addTextDialog.addHandler = function(){
+                app.import_urls(urls_to_import, false)}
+            addTextDialog.replaceHandler = function(){app.import_urls(urls_to_import, true)}
+            addTextDialog.show()
+        } else {
+            app.import_urls(urls, _settings.file_import_action === Settings.FileImportActionReplace)
+        }
+
+        appWin.activate()
+    }
+
+    function importText(text) {
+        if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
+            var text_to_import = text
+            addTextDialog.addHandler = function(){app.update_note(text, false)}
+            addTextDialog.replaceHandler = function(){app.update_note(text, true)}
+            addTextDialog.show()
+        } else {
+            app.update_note(text, _settings.file_import_action === Settings.FileImportActionAsk)
+        }
+
+        appWin.activate()
+    }
+
     SpeechConfig {
         id: service
     }
@@ -28,10 +55,10 @@ ApplicationWindow {
     DsnoteApp {
         id: app
 
-//        Component.onCompleted: {
-//            app.execute_action_name(_requested_action, _requested_extra)
-//            app.import_files(_files_to_open, false)
-//        }
+        Component.onCompleted: {
+            // register app in dbus server
+            _app_server.setDsnoteApp(app)
+        }
     }
 
     Component {
@@ -64,46 +91,19 @@ ApplicationWindow {
                 tabs.update()
             }
 
-            function handleResource(resource) {
-                if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
-                    if (resource.type === ShareResource.FilePathType) {
-                        var paths = resource.filePath
-                        addTextDialog.addHandler = function(){app.import_files(paths, -1, false)}
-                        addTextDialog.replaceHandler = function(){app.import_file(paths, -1, true)}
-                        addTextDialog.show()
-                        appWin.activate()
-                    } else if (resource.type === ShareResource.StringDataType) {
-                        var text = resource.data
-                        addTextDialog.addHandler = function(){app.update_note(text, false)}
-                        addTextDialog.replaceHandler = function(){app.update_note(text, true)}
-                        addTextDialog.show()
-                        appWin.activate()
-                    } else {
-                        console.warn("unknown resource type:", resource.type)
-                    }
-                } else {
-                    if (resource.type === ShareResource.FilePathType) {
-                        app.import_files(resource.filePath, _settings.file_import_action === Settings.FileImportActionAsk)
-                        appWin.activate()
-                    } else if (resource.type === ShareResource.StringDataType) {
-                        app.update_note(resource.data, _settings.file_import_action === Settings.FileImportActionAsk)
-                        appWin.activate()
-                    } else {
-                        console.warn("unknown resource type:", resource.type)
-                    }
-                }
+            function openFile(path) {
+                appWin.importUrls([_settings.url_from_file_path(path)])
+                _settings.file_open_dir = _settings.dir_of_file(path)
             }
 
-            function openFile(path) {
-                if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
-                    addTextDialog.addHandler = function(){app.import_file(path, -1, false)}
-                    addTextDialog.replaceHandler = function(){app.import_file(path, -1, true)}
-                    addTextDialog.show()
+            function handleResource(resource) {
+                if (resource.type === ShareResource.FilePathType) {
+                    appWin.importUrls([_settings.url_from_file_path(resource.filePath)])
+                } else if (resource.type === ShareResource.StringDataType) {
+                    appWin.importText(resource.data)
                 } else {
-                    app.import_file(path, -1, _settings.file_import_action === Settings.FileImportActionReplace)
+                    console.warn("unknown resource type:", resource.type)
                 }
-
-                _settings.file_open_dir = _settings.dir_of_file(path)
             }
 
             ShareProvider {
@@ -132,12 +132,15 @@ ApplicationWindow {
                     "video/webm",
                     "application/x-subrip",
                     "text/vtt",
-                    "text/plain"
+                    "text/plain",
+                    "text/html",
+                    "text/markdown"
                 ]
 
                 onTriggered: {
-                    for(var i = 0; i < resources.length; i++)
+                    for(var i = 0; i < resources.length; i++) {
                         handleResource(resources[i])
+                    }
                 }
             }
 
@@ -264,7 +267,8 @@ ApplicationWindow {
                                  app.state === DsnoteApp.StateWritingSpeechToFile ||
                                  app.state === DsnoteApp.StateTranslating ||
                                  app.state === DsnoteApp.StateExporting ||
-                                 app.state === DsnoteApp.StateImporting)
+                                 app.state === DsnoteApp.StateImporting ||
+                                 app.state === DsnoteApp.StateDownloading)
                     canPause: app.task_state !== DsnoteApp.TaskStateCancelling &&
                               app.state === DsnoteApp.StatePlayingSpeech &&
                               (app.task_state === DsnoteApp.TaskStateProcessing ||
@@ -314,7 +318,7 @@ ApplicationWindow {
                 id: fileReadDialog
 
                 FilePickerPage {
-                    nameFilters: [ '*.txt', '*.srt', '*.ass', '*.ssa', '*.sub', '*.vtt', '*.wav', '*.mp3', '*.ogg', '*.oga', '*.ogx', '*.opus', '*.spx', '*.flac', '*.m4a', '*.aac', '*.mp4', '*.mkv', '*.ogv', '*.webm' ]
+                    nameFilters: [ '*.txt', '*.html', '*.md', '*.srt', '*.ass', '*.ssa', '*.sub', '*.vtt', '*.wav', '*.mp3', '*.ogg', '*.oga', '*.ogx', '*.opus', '*.spx', '*.flac', '*.m4a', '*.aac', '*.mp4', '*.mkv', '*.ogv', '*.webm' ]
                     onSelectedContentPropertiesChanged: {
                         openFile(selectedContentProperties.filePath)
                     }
@@ -330,17 +334,8 @@ ApplicationWindow {
             Connections {
                 target: _app_server
                 onActivate_requested: appWin.activate()
-                onFiles_to_open_requested: {
-                    if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
-                        var list_of_files = files
-                        addTextDialog.addHandler = function(){app.import_files(list_of_files, false)}
-                        addTextDialog.replaceHandler = function(){app.import_files(list_of_files, true)}
-                        addTextDialog.show()
-                    } else {
-                        app.import_files(_files_to_open, _settings.file_import_action === Settings.FileImportActionReplace)
-                    }
-
-                    appWin.activate()
+                onUrls_to_open_requested: {
+                    appWin.importUrls(urls)
                 }
             }
 
@@ -398,6 +393,15 @@ ApplicationWindow {
                     case DsnoteApp.ErrorImportFileNoStreams:
                         toast.show(qsTr("Error: Couldn't import. The file does not contain audio or subtitles."))
                         break;
+                    case DsnoteApp.ErrorImportUrlDownload:
+                        toast.show(qsTr("Error: Couldn't import. Failed to download the URL."))
+                        break;
+                    case DsnoteApp.ErrorImportUrlInvalid:
+                        toast.show(qsTr("Error: Couldn't import. The URL has no text content."))
+                        break;
+                    case DsnoteApp.ErrorImportUrlGeneral:
+                        toast.show(qsTr("Error: Couldn't import the URL."))
+                        break;
                     case DsnoteApp.ErrorSttNotConfigured:
                         toast.show(qsTr("Error: Speech to Text model has not been set up yet."))
                         break;
@@ -407,7 +411,7 @@ ApplicationWindow {
                     case DsnoteApp.ErrorMntNotConfigured:
                         toast.show(qsTr("Error: Translator model has not been set up yet."))
                         break;
-                    case DsnoteApp.ErrorContentDownload:
+                    case DsnoteApp.ErrorLicenseDownload:
                         toast.show(qsTr("Error: Couldn't download a licence."))
                         break;
                     default:

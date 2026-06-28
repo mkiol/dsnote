@@ -124,6 +124,8 @@ ColumnLayout {
               "<li><i>start-reading</i> - " + qsTranslate("SettingsPage", "Starts reading.") + "</li>" +
               "<li><i>start-reading-clipboard</i> (X11) - " + qsTranslate("SettingsPage", "Starts reading text from the clipboard.") + "</li>" +
               "<li><i>start-reading-text</i> - " + qsTranslate("SettingsPage", "Starts reading text from command-line option --text.") + "</li>" +
+              "<li><i>start-reading-file</i> - " + qsTranslate("SettingsPage", "Starts reading text from a file specified by command-line option --input-file.") + "</li>" +
+              "<li><i>start-reading-url</i> - " + qsTranslate("SettingsPage", "Starts reading text of a web page specified by command-line option --input-url.") + "</li>" +
               "<li><i>start-reading-active-window</i> - " + qsTranslate("SettingsPage", "Start reading text selected in the active window.") + "</li>" +
               "<li><i>pause-resume-reading</i> - " + qsTranslate("SettingsPage", "Pauses or resumes reading.") + "</li>" +
               "<li><i>cancel</i> - " + qsTranslate("SettingsPage", "Cancels any of the above operations.") + "</li>" +

@@ -23,6 +23,7 @@ BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(zlib)
 BuildRequires:  pkgconfig(libpulse)
+BuildRequires:  pkgconfig(libxml-2.0)
 BuildRequires:  desktop-file-utils
 BuildRequires:  curl
 BuildRequires:  cmake
@@ -83,6 +84,7 @@ systemctl-user daemon-reload >/dev/null 2>&1 || :
 %{_bindir}
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/applications/%{name}-open-url.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/dbus-1/services/org.mkiol.Speech.service
 %{_datadir}/dbus-1/services/org.mkiol.dsnote.service

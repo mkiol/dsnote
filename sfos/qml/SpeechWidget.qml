@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -39,11 +39,13 @@ SpeechPanel {
           (app.state === DsnoteApp.StateTranscribingFile ||
            app.state === DsnoteApp.StateWritingSpeechToFile ||
            app.state === DsnoteApp.StateImporting ||
-           app.state === DsnoteApp.StateExporting)
+           app.state === DsnoteApp.StateExporting ||
+           app.state === DsnoteApp.StateDownloading)
     text: app.intermediate_text
     textPlaceholder: {
         if (!app.connected) return qsTr("Starting...")
         if (app.busy || service.busy) return qsTr("Busy...")
+        if (app.state === DsnoteApp.StateDownloading) return qsTr("Downloading content...")
         if (!app.stt_configured && !app.tts_configured) return qsTr("No language has been set.")
         if (app.task_state === DsnoteApp.TaskStateCancelling)
             return qsTr("Cancelling, please wait...")

@@ -47,12 +47,14 @@ Page {
                 </ul>
                 <p>" + qsTr("Text to Speech") + "</p>
                 <ul>
-                <li>New RHVoice models for: Belarusian, Croatian, English, Romanian, Russian.</li>
-                <li>Updated RHVoice models for: Czech, Serbian, Spanish.</li>
-                <li>New Piper models for: Albanian, Bulgarian, Dutch, Greek, Hindi, Indonesian, Kurdish, Latvian, Polish, Swedish, Telugu, Ukrainian, Urdu.</li>
+                <li>New RHVoice models for: Belarusian, Croatian, English, Romanian, Russian</li>
+                <li>Updated RHVoice models for: Czech, Serbian, Spanish</li>
+                <li>New Piper models for: Albanian, Bulgarian, Dutch, Greek, Hindi, Indonesian, Kurdish, Latvian, Polish, Swedish, Telugu, Ukrainian, Urdu</li>
                 </ul>
                 <p>" + qsTr("User Interface") + "</p>
                 <ul>
+                <li>Import a note from a URL. Use the <i>Import a note from a URL</i> option in the main app toolbar to import text content from a link.
+                    The URL must use HTTP or HTTPS. For HTML pages, you can choose to extract only the readable text or import the entire page.</li>
                 <li>Setting option to force the English language in the user interface</li>
                 <li>Switch between Notepad and Translator with a tab interface</li>
                 <li><i>Speech Note</i> has been translated into Portuguese-Brazilian language.</li>
