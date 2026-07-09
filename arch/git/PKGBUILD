@@ -113,10 +113,52 @@ build() {
   FULL_BUILD=true
 
   if [[ "${CARCH}" == "x86_64" ]]; then
-    pacman -Qi cuda &> /dev/null && HAS_CUDA=true || HAS_CUDA=false
+    CUDA_ROOT="${CUDAToolkit_ROOT:-${CUDA_PATH:-${CUDA_HOME:-}}}"
+    CUDA_NVCC=
+    if [[ -n "${CUDACXX:-}" ]] && [[ "${CUDACXX}" != *" "* ]]; then
+      if [[ "${CUDACXX}" == */* ]] && [[ -x "${CUDACXX}" ]]; then
+        CUDA_NVCC="${CUDACXX}"
+      elif [[ "${CUDACXX}" != */* ]]; then
+        CUDA_NVCC="$(command -v "${CUDACXX}" || true)"
+      fi
+    fi
+    if [[ -n "${CUDA_ROOT}" ]] && [[ -x "${CUDA_ROOT}/bin/nvcc" ]]; then
+      CUDA_NVCC="${CUDA_ROOT}/bin/nvcc"
+    fi
+    if [[ -z "${CUDA_NVCC}" ]]; then
+      CUDA_NVCC="$(command -v nvcc || true)"
+    fi
+    if [[ -z "${CUDA_ROOT}" ]] && [[ -n "${CUDA_NVCC}" ]]; then
+      CUDA_ROOT="$(dirname "$(dirname "${CUDA_NVCC}")")"
+    fi
+    if [[ -z "${CUDA_NVCC}" ]] && [[ -x /opt/cuda/bin/nvcc ]]; then
+      CUDA_ROOT=/opt/cuda
+      CUDA_NVCC=/opt/cuda/bin/nvcc
+    fi
+
+    pacman -Qi cuda &> /dev/null && [[ -n "${CUDA_NVCC}" ]] && HAS_CUDA=true || HAS_CUDA=false
 
     if [[ $HAS_CUDA = true ]] && [[ $FULL_BUILD = true ]]; then
-      CMAKE+=" -DBUILD_WHISPERCPP_CUBLAS=ON -DCMAKE_CUDA_ARCHITECTURES=native"
+      export CUDA_PATH="${CUDA_ROOT}"
+      export CUDAToolkit_ROOT="${CUDA_ROOT}"
+      export PATH="$(dirname "${CUDA_NVCC}"):$PATH"
+      CUDA_CMAKE="-DBUILD_WHISPERCPP_CUBLAS=ON \
+        -DCMAKE_CUDA_ARCHITECTURES=native \
+        -DCUDAToolkit_ROOT=${CUDA_ROOT}"
+      if [[ -z "${CUDACXX:-}" ]]; then
+        CUDA_CMAKE+=" -DCMAKE_CUDA_COMPILER=${CUDA_NVCC}"
+      fi
+      if [[ -n "${CUDAHOSTCXX:-}" ]] && [[ -x "${CUDAHOSTCXX}" ]]; then
+        CUDA_CMAKE+=" -DCMAKE_CUDA_HOST_COMPILER=${CUDAHOSTCXX}"
+      elif [[ -n "${NVCC_CCBIN:-}" ]] && [[ -x "${NVCC_CCBIN}" ]]; then
+        export CUDAHOSTCXX="${NVCC_CCBIN}"
+        CUDA_CMAKE+=" -DCMAKE_CUDA_HOST_COMPILER=${NVCC_CCBIN}"
+      elif [[ -x /usr/bin/g++-15 ]]; then
+        export NVCC_CCBIN=/usr/bin/g++-15
+        export CUDAHOSTCXX=/usr/bin/g++-15
+        CUDA_CMAKE+=" -DCMAKE_CUDA_HOST_COMPILER=/usr/bin/g++-15"
+      fi
+      CMAKE+=" ${CUDA_CMAKE}"
       export NVCC_APPEND_FLAGS="-std=c++17 --compress-mode=size --split-compile=0 -Wno-deprecated-gpu-targets"
     fi
   fi

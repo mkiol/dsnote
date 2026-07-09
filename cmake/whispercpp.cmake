@@ -95,6 +95,12 @@ if(BUILD_WHISPERCPP_CUBLAS)
     if (NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
         set(CMAKE_CUDA_ARCHITECTURES 50 52 53 60 61 62 70 72 75 80 86 87 89 90 100)
     endif()
+    set(whispercpp_cuda_cmake_args)
+    foreach(cuda_arg CUDAToolkit_ROOT CMAKE_CUDA_COMPILER CMAKE_CUDA_HOST_COMPILER)
+        if(DEFINED ${cuda_arg})
+            list(APPEND whispercpp_cuda_cmake_args -D${cuda_arg}=${${cuda_arg}})
+        endif()
+    endforeach()
     list(JOIN CMAKE_CUDA_ARCHITECTURES "\\\\\\\\\\;" CUDA_ARCHS_STRING)
     ExternalProject_Add(whispercppcublas
         SOURCE_DIR ${external_dir}/whispercppcublas
@@ -113,6 +119,8 @@ if(BUILD_WHISPERCPP_CUBLAS)
             -DCMAKE_INSTALL_LIBDIR=lib
             -DGGML_NATIVE=OFF
             -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES:STRING=${CUDA_ARCHS_STRING}
+            ${whispercpp_cuda_cmake_args}
+            -DCMAKE_CUDA_STANDARD=17 -DCMAKE_CUDA_STANDARD_REQUIRED=ON
             -DGGML_AVX=ON -DGGML_AVX2=OFF -DGGML_FMA=OFF -DGGML_F16C=ON
             -DBUILD_SHARED_LIBS=ON
             -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=OFF
