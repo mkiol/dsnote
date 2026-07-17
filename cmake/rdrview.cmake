@@ -24,7 +24,6 @@ pkg_search_module(libxml2 REQUIRED libxml-2.0)
 list(APPEND deps_libs ${libxml2_LIBRARIES})
 list(APPEND includes ${libxml2_INCLUDE_DIRS})
 
-
 list(APPEND deps_libs 
     "${external_lib_dir}/librdrview_api.a" 
     ${libxml2_LIBRARIES})

@@ -1,5 +1,5 @@
-set(fmt_source_url "https://github.com/fmtlib/fmt/releases/download/11.1.3/fmt-11.1.3.zip")
-set(fmt_checksum "7df2fd3426b18d552840c071c977dc891efe274051d2e7c47e2c83c3918ba6df")
+set(fmt_source_url "https://github.com/fmtlib/fmt/releases/download/11.2.0/fmt-11.2.0.zip")
+set(fmt_checksum "203eb4e8aa0d746c62d8f903df58e0419e3751591bb53ff971096eaa0ebd4ec3")
 
 ExternalProject_Add(fmt
     SOURCE_DIR ${external_dir}/fmt

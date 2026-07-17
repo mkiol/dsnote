@@ -2269,6 +2269,7 @@ void models_manager::add_astrunc_model_options(priv_model_t& model) {
         return;                                                             \
     }
     ASTRUNC_LANG_TABLE
+#undef X
 }
 
 void models_manager::add_implicit_model_options(priv_model_t& model) {

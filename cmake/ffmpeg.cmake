@@ -1,5 +1,5 @@
-set(ffmpeg_source_url "https://ffmpeg.org/releases/ffmpeg-7.1.tar.xz")
-set(ffmpeg_checksum "40973d44970dbc83ef302b0609f2e74982be2d85916dd2ee7472d30678a7abe6")
+set(ffmpeg_source_url "https://ffmpeg.org/releases/ffmpeg-7.1.5.tar.xz")
+set(ffmpeg_checksum "de668509caf9e35e3cd162473441fdb29538c6d96ed080292b3cf9e6fc5d558f")
 
 set(lame_source_url "https://altushost-swe.dl.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz")
 set(lame_checksum "ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e")

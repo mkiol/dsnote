@@ -162,13 +162,19 @@ void fake_keyboard::ydo_uinput_emit(uint16_t type, uint16_t code, int32_t val,
     ie.code = code;
     ie.value = val;
 
-    write(m_ydo_daemon_socket, &ie, sizeof(ie));
+    if (write(m_ydo_daemon_socket, &ie, sizeof(ie)) < 0) {
+        LOGW("failed to write to ydo socket");
+        return;
+    }
 
     if (syn_report) {
         ie.type = EV_SYN;
         ie.code = SYN_REPORT;
         ie.value = 0;
-        write(m_ydo_daemon_socket, &ie, sizeof(ie));
+        if (write(m_ydo_daemon_socket, &ie, sizeof(ie)) < 0) {
+            LOGW("failed to write to ydo socket");
+            return;
+        }
     }
 }
 
@@ -1187,7 +1193,9 @@ void fake_keyboard::wly_keyboard_keymap(
 
         // try read file
         m_keymap = std::string(size, '\0');
-        read(fd, m_keymap.data(), size);
+        if (read(fd, m_keymap.data(), size) < 0) {
+            LOGW("failed to read wl keymap");
+        }
         auto *self = static_cast<fake_keyboard *>(data);
         self->m_xkb_keymap = xkb_keymap_new_from_string(
             self->m_xkb_ctx, m_keymap.c_str(), XKB_KEYMAP_FORMAT_TEXT_V1,
@@ -1197,7 +1205,9 @@ void fake_keyboard::wly_keyboard_keymap(
             self->m_xkb_ctx, map_shm, XKB_KEYMAP_FORMAT_TEXT_V1,
             XKB_KEYMAP_COMPILE_NO_FLAGS);
         m_keymap.assign(map_shm, size);
-        munmap(map_shm, size);
+        if (munmap(map_shm, size) < 0) {
+            LOGW("failed to munmap wl keymap");
+        }
     }
 
     close(fd);

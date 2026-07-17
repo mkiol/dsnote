@@ -1,5 +1,5 @@
-set(aprilasr_source_url "https://github.com/abb128/april-asr/archive/3308e68442664552de593957cad0fa443ea183dd.zip")
-set(aprilasr_checksum "0640fc16a43018afb1db9f17e93f545d7ac1f07e4bc47ba318d2c7311bef2df5")
+set(aprilasr_source_url "https://github.com/abb128/april-asr/archive/8b52f65dd3fbfa58064de85ab78237335b9de911.zip")
+set(aprilasr_checksum "4500dc2231290e899d0e249317819c97cfbde2d9a6f240000d12603ae264b09f")
 
 ExternalProject_Add(aprilasr
     SOURCE_DIR ${external_dir}/aprilasr

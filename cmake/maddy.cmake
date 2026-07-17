@@ -1,5 +1,5 @@
-set(maddy_source_url "https://github.com/progsource/maddy/archive/refs/tags/1.3.0.tar.gz")
-set(maddy_checksum "561681f8c8d2b998c153cda734107a0bc1dea4bb0df69fd813922da63fa9f3e7")
+set(maddy_source_url "https://github.com/progsource/maddy/archive/refs/tags/1.6.0.tar.gz")
+set(maddy_checksum "811b19efbc2fbf1957486ed78aabaf5d164d15f84464f7b4a7033b44591845c5")
 
 ExternalProject_Add(maddy
     SOURCE_DIR ${external_dir}/maddy

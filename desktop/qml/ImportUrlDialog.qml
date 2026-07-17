@@ -9,17 +9,13 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-Dialog {
+DialogPage {
     id: root
 
     property alias selectedUrl: urlField.text
     readonly property bool canAccept: app.is_valid_url(urlField.text.trim())
 
-    modal: true
-    width: Math.min(3*implicitWidth, parent.width - (rightPadding + leftPadding))
-    height: column.implicitHeight + 2 * verticalPadding + footer.height
-    closePolicy: Popup.CloseOnEscape
-    clip: true
+    title: qsTr("Import from a URL")
 
     onOpened: {
         urlField.text = app.clipboard_if_url()
@@ -33,11 +29,11 @@ Dialog {
 
     footer: Item {
         height: closeButton.height + appWin.padding
-        width: root.width
+
         RowLayout {
             anchors {
                 right: parent.right
-                rightMargin: root.rightPadding
+                rightMargin: root.rightPadding + appWin.padding
                 bottom: parent.bottom
                 bottomMargin: root.bottomPadding
             }
@@ -69,11 +65,6 @@ Dialog {
     ColumnLayout {
         id: column
 
-        anchors {
-            right: parent.right
-            left: parent.left
-        }
-
         spacing: appWin.padding * 2
 
         TextField {
@@ -95,7 +86,6 @@ Dialog {
 
         CheckBox {
             checked: _settings.import_extract_readable
-            Layout.preferredWidth: column.width
             text: qsTr("When importing an HTML, extract only the readable text")
             onCheckedChanged: {
                 _settings.import_extract_readable = checked

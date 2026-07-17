@@ -127,6 +127,12 @@ QString path_to_dir_for_path(const QString& dir, const QString& path) {
         return QStringLiteral("/usr/lib/%1/qt5/%2")
             .arg(QSysInfo::buildCpuArchitecture(), dir);
 
+    path_full = QStringLiteral("/usr/lib/%1/qt/%2/%3")
+                    .arg(QSysInfo::buildCpuArchitecture(), dir, path);
+    if (QFileInfo::exists(path_full))
+        return QStringLiteral("/usr/lib/%1/qt/%2")
+            .arg(QSysInfo::buildCpuArchitecture(), dir);
+
     // search in /usr/local
 
     path_full = QStringLiteral("/usr/local/%1/%2").arg(dir, path);

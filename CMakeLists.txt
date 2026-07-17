@@ -865,6 +865,10 @@ if(BUILD_RDRVIEW)
 else()
     find_library(rdrview_path rdrview_api REQUIRED)
     list(APPEND deps_libs ${rdrview_path})
+
+    pkg_search_module(libxml2 REQUIRED libxml-2.0)
+    list(APPEND deps_libs ${libxml2_LIBRARIES})
+    list(APPEND includes ${libxml2_INCLUDE_DIRS})
 endif()
 
 if(WITH_SFOS)

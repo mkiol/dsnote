@@ -1,5 +1,5 @@
-set(html2md_source_url "https://github.com/tim-gromeyer/html2md/archive/refs/tags/v1.6.4.tar.gz")
-set(html2md_checksum "e34c80981d6ee5f4a699985dc4a68b0b280542a5c5e5780fdebc3ba0ca30553d")
+set(html2md_source_url "https://github.com/tim-gromeyer/html2md/archive/refs/tags/v1.7.0.tar.gz")
+set(html2md_checksum "234aa636afa2c6e22c842d8870e93c62a9c20267a2c7367218118a4b4fd1882c")
 
 ExternalProject_Add(html2md
     SOURCE_DIR ${external_dir}/html2md

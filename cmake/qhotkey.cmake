@@ -1,5 +1,5 @@
-set(qhotkey_source_url "https://github.com/Skycoder42/QHotkey/archive/cd72a013275803fce33e028fc8b05ae32248da1f.zip")
-set(qhotkey_checksum "55995114e8b5947cb6a59a19a53840eaf81fddc420fd3d180dcb0db9d8d33e13")
+set(qhotkey_source_url "https://github.com/Skycoder42/QHotkey/archive/4e3a244d87f1f7e741e1395f2ffe825f3a8ada45.zip")
+set(qhotkey_checksum "6055b2b91b955b8e1b24674c4250a9da87fc7e754a8001ef867e7edab934e854")
 
 ExternalProject_Add(qhotkey
     SOURCE_DIR ${external_dir}/qhotkey
@@ -15,7 +15,6 @@ ExternalProject_Add(qhotkey
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
         -DCMAKE_INSTALL_LIBDIR=lib
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
         -DQT_DEFAULT_MAJOR_VERSION=${QT_VERSION_MAJOR}
     BUILD_ALWAYS False
 )

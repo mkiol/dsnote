@@ -1366,7 +1366,8 @@ void settings::detect_qt_styles() {
         "/usr/lib/qt6/qml",                      // Generic/Arch/openSUSE
         "/usr/lib64/qt6/qml",                    // Fedora/RHEL x86_64
         "/usr/local/lib/qt6/qml",                // Manual installations
-        "/app/lib/qt6/qml"                       // Flatpak
+        "/usr/lib/qml",                          // Flatpak runtime
+        "/app/lib/qml"                           // Flatpak app
     };
 
     // Scan for QtQuick/Controls/<StyleName> directories

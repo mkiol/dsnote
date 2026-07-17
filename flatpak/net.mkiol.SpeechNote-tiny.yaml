@@ -1,6 +1,6 @@
 app-id: net.mkiol.SpeechNote
 runtime: org.kde.Platform
-runtime-version: "5.15-24.08"
+runtime-version: "6.10"
 sdk: org.kde.Sdk
 rename-icon: dsnote
 command: dsnote
@@ -58,18 +58,6 @@ add-extensions:
     version: stable
     versions: stable;beta;test;master
 modules:
-  - name: fmt
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DFMT_DOC=OFF
-      - -DFMT_TEST=OFF
-      - -DFMT_FUZZ=OFF
-    sources:
-      - type: archive
-        url: https://github.com/fmtlib/fmt/releases/download/11.1.3/fmt-11.1.3.zip
-        sha256: 7df2fd3426b18d552840c071c977dc891efe274051d2e7c47e2c83c3918ba6df
-
   - name: openblas
     buildsystem: cmake-ninja
     config-opts:
@@ -92,8 +80,8 @@ modules:
             - -DTARGET=ARMV8
     sources:
       - type: archive
-        url: https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.29/OpenBLAS-0.3.29.tar.gz
-        sha256: 38240eee1b29e2bde47ebb5d61160207dc68668a54cac62c076bb5032013b1eb
+        url: https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.33/OpenBLAS-0.3.33.tar.gz
+        sha256: 6761af1d9f5d353ab4f0b7497be2643313b36c8f31caec0144bfef198e71e6ab
 
   - name: mbrola
     buildsystem: simple
@@ -103,37 +91,27 @@ modules:
       - cp Bin/mbrola /app/bin
     sources:
       - type: archive
-        url: https://github.com/numediart/MBROLA/archive/refs/tags/3.3.tar.gz
-        sha256: c01ded2c0a05667e6df2439c1c02b011a5df2bfdf49e24a524630686aea2b558
+        url: https://github.com/numediart/MBROLA/archive/bf17e9e1416a647979ac683657a536e8ca5d880e.zip
+        sha256: 5a7c02a926dc48ab6d1af0e4c8ab53fc191a7e4337de6df57b6706e140fa3087
 
   - name: espeak
-    buildsystem: autotools
+    buildsystem: cmake-ninja
     config-opts:
-      - --with-pic
-      - --enable-static
-      - --with-pcaudiolib=no
-      - --with-sonic=no
-      - --with-speechplayer=no
-      - --with-mbrola=yes
-      - --with-extdict-ru
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DENABLE_TESTS=OFF
+      - -DBUILD_SHARED_LIBS=ON
+      - -DUSE_MBROLA=ON
+      - -DUSE_LIBSONIC=OFF
+      - -DUSE_LIBPCAUDIO=OFF
+      - -DUSE_SPEECHPLAYER=OFF
+      - -DESPEAK_BUILD_MANPAGES=OFF
     sources:
       - type: archive
-        url: https://github.com/rhasspy/espeak-ng/archive/8593723f10cfd9befd50de447f14bf0a9d2a14a4.zip
-        sha256: cc8092f23a28ccd79b1c5e62984a4c4ac1959d2d0b8193ac208d728c620bd5ed
+        url: https://github.com/espeak-ng/espeak-ng/archive/fbe4b3764285c35b1f035cb8d09ad9fc19f71c30.zip
+        sha256: 0879c9daaea2a3777e61a5e2c6c5f2e91b312ab29c562091c99bbfd82d261bee
       - type: patch
         path: ../patches/espeak-flatpak.patch
-
-  - name: boost
-    buildsystem: simple
-    cleanup:
-      - /lib
-    build-commands:
-      - "./bootstrap.sh --prefix=/app --with-libraries=system"
-      - "./b2 -j ${FLATPAK_BUILDER_N_JOBS} install"
-    sources:
-      - type: archive
-        url: https://archives.boost.io/release/1.82.0/source/boost_1_82_0.tar.bz2
-        sha256: a6e1ab9b0860e6a2881dd7b21fe9f737a095e5f33a3a874afc6a345228597ee6
 
   - name: webrtcvad
     buildsystem: cmake-ninja
@@ -213,12 +191,13 @@ modules:
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
-      - -DPKG_CONFIG_USE_CMAKE_PREFIX_PATH=ON
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DESPEAK_NG_DIR=/app
+      - -DONNXRUNTIME_DIR=/app
     sources:
       - type: archive
-        url: https://github.com/rhasspy/piper-phonemize/archive/7f7b5bd4de22f7fe24341c5bedda0dc1e33f3666.zip
-        sha256: 6bdcb21f6c5ae0deff7c9ae26bf07b994791dc800c1962fd216727e66a409929
+        url: https://github.com/rhasspy/piper-phonemize/archive/ba3cc06c5248215928821f1393b2b854a936991a.zip
+        sha256: 802ccf0cb234dc848106d5b3682a2ec543f27723734e4352b49fccab8214d740
       - type: patch
         path: ../patches/piperphonemize.patch
 
@@ -229,20 +208,21 @@ modules:
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
     sources:
       - type: archive
-        url: https://github.com/gabime/spdlog/archive/refs/tags/v1.11.0.tar.gz
-        sha256: ca5cae8d6cac15dae0ec63b21d6ad3530070650f68076f3a4a862ca293a858bb
+        url: https://github.com/gabime/spdlog/archive/refs/tags/v1.17.0.tar.gz
+        sha256: d8862955c6d74e5846b3f580b1605d2428b11d97a410d86e2fb13e857cd3a744
 
   - name: piper
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
-      - -DPKG_CONFIG_USE_CMAKE_PREFIX_PATH=ON
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DPIPER_PHONEMIZE_INCLUDE=/app/include/piper-phonemize
+      - -DPIPER_PHONEMIZE_DIR=/app
+      - -DSPDLOG_DIR=/app
+      - -DFMT_DIR=/app
     sources:
       - type: archive
-        url: https://github.com/rhasspy/piper/archive/e268564deb779af984ac8f632c98727447632124.zip
-        sha256: 213a31c23c862cbcd9de4231c07d32de35f4ee0b5b5dec52e9ae6dd3aa70ac12
+        url: https://github.com/rhasspy/piper/archive/73c04d81d5590ecc46e522de3601ce7fb29fc2be.zip
+        sha256: 765086f555a3bc8550ff4700ee074de691a1ab44c12c549035ae17b6a143d27e
       - type: patch
         path: ../patches/piper.patch
 
@@ -272,8 +252,8 @@ modules:
       - /share
     sources:
       - type: archive
-        url: https://github.com/pybind/pybind11/archive/refs/tags/v2.13.6.tar.gz
-        sha256: e08cb87f4773da97fa7b5f035de8763abc656d87d5773e62f6da0587d1f0ec20
+        url: https://github.com/pybind/pybind11/archive/refs/tags/v3.0.4.tar.gz
+        sha256: 74b6a2c2b4573a400cafb6ecbf60c98df300cd3d0041296b913d02b2cbbb2676
 
   - name: rnnoise
     buildsystem: autotools
@@ -297,6 +277,18 @@ modules:
       - type: archive
         url: https://github.com/GregorR/rnnoise-nu/archive/26269304e120499485438cd93acf5127c6908c68.zip
         sha256: 93a994a3d59cb89c005f0f861fd522fe268780dc0e2e2acea56945305ed0cbf1
+
+  - name: boost
+    buildsystem: simple
+    cleanup:
+      - /lib
+    build-commands:
+      - "./bootstrap.sh --prefix=/app"
+      - "./b2 -j ${FLATPAK_BUILDER_N_JOBS} install"
+    sources:
+      - type: archive
+        url: https://archives.boost.io/release/1.91.0/source/boost_1_91_0.tar.bz2
+        sha256: de5e6b0e4913395c6bdfa90537febd9028ea4c0735d2cdb0cd9b45d5f51264f5
 
   - name: rhvoice
     buildsystem: cmake-ninja
@@ -339,13 +331,15 @@ modules:
       - -DUSE_INTRINSICS_SSE3=ON
       - -DUSE_INTRINSICS_SSE41=ON
       - -DUSE_INTRINSICS_SSE42=OFF
-      - -DUSE_INTRINSICS_FMA=OFF
       - -DUSE_INTRINSICS_AVX=OFF
       - -DUSE_INTRINSICS_AVX2=OFF
       - -DUSE_INTRINSICS_AVX512=OFF
+      - -DUSE_INTRINSICS_FMA=OFF
+      - -DUSE_INTRINSICS_ARMV7_NEONVFPV4=OFF
+      - -DUSE_INTRINSICS_ARMV7_NEON=ON
       - -DBUILD_ARCH=x86-64
-    post-install:
-      - "mv /app/lib/libbergamot_api.so /app/lib/libbergamot_api-fallback.so"
+      - -DBERGAMOTAPI_TARGET_NAME=bergamot_api-fallback
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     sources:
       - type: git
         url: https://github.com/browsermt/bergamot-translator.git
@@ -364,11 +358,13 @@ modules:
       - -DUSE_INTRINSICS_SSE3=ON
       - -DUSE_INTRINSICS_SSE41=ON
       - -DUSE_INTRINSICS_SSE42=ON
-      - -DUSE_INTRINSICS_FMA=OFF
       - -DUSE_INTRINSICS_AVX=ON
       - -DUSE_INTRINSICS_AVX2=OFF
       - -DUSE_INTRINSICS_AVX512=OFF
+      - -DUSE_INTRINSICS_FMA=OFF
+      - -DUSE_INTRINSICS_ARMV7_NEON=OFF
       - -DUSE_INTRINSICS_ARMV7_NEONVFPV4=ON
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     build-options:
       arch:
         x86_64:
@@ -496,8 +492,8 @@ modules:
       - --extra-libs=-lvorbis -logg -lm
     sources:
       - type: archive
-        url: https://ffmpeg.org/releases/ffmpeg-7.1.tar.xz
-        sha256: 40973d44970dbc83ef302b0609f2e74982be2d85916dd2ee7472d30678a7abe6
+        url: https://ffmpeg.org/releases/ffmpeg-7.1.5.tar.xz
+        sha256: de668509caf9e35e3cd162473441fdb29538c6d96ed080292b3cf9e6fc5d558f
       - type: patch
         path: ../patches/ffmpeg.patch
 
@@ -604,6 +600,8 @@ modules:
     only-arches:
       - x86_64
     buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     sources:
       - type: git
         url: https://github.com/KhronosGroup/OpenCL-Headers.git
@@ -619,6 +617,7 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
       - -DTUNERS=OFF
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     sources:
       - type: archive
         url: https://github.com/CNugteren/CLBlast/archive/refs/tags/1.6.3.tar.gz
@@ -682,8 +681,8 @@ modules:
       - /bin
     sources:
       - type: archive
-        url: https://github.com/numactl/numactl/releases/download/v2.0.16/numactl-2.0.16.tar.gz
-        sha256: 1b242f893af977a1d31af6ce9d6b8dafdd2d8ec3dc9207f7c2dc0d3446e7c7c8
+        url: https://github.com/numactl/numactl/releases/download/v2.0.19/numactl-2.0.19.tar.gz
+        sha256: f2672a0381cb59196e9c246bf8bcc43d5568bc457700a697f1a1df762b9af884
 
   - name: qhotkey
     buildsystem: cmake-ninja
@@ -692,10 +691,11 @@ modules:
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DQT_DEFAULT_MAJOR_VERSION=6
     sources:
       - type: archive
-        url: https://github.com/Skycoder42/QHotkey/archive/cd72a013275803fce33e028fc8b05ae32248da1f.zip
-        sha256: 55995114e8b5947cb6a59a19a53840eaf81fddc420fd3d180dcb0db9d8d33e13
+        url: https://github.com/Skycoder42/QHotkey/archive/4e3a244d87f1f7e741e1395f2ffe825f3a8ada45.zip
+        sha256: 6055b2b91b955b8e1b24674c4250a9da87fc7e754a8001ef867e7edab934e854
       - type: patch
         path: ../patches/qhotkey.patch
 
@@ -716,8 +716,8 @@ modules:
       - -DBUILD_EXE=OFF
     sources:
       - type: archive
-        url: https://github.com/tim-gromeyer/html2md/archive/refs/tags/v1.6.4.tar.gz
-        sha256: e34c80981d6ee5f4a699985dc4a68b0b280542a5c5e5780fdebc3ba0ca30553d
+        url: https://github.com/tim-gromeyer/html2md/archive/refs/tags/v1.7.0.tar.gz
+        sha256: 234aa636afa2c6e22c842d8870e93c62a9c20267a2c7367218118a4b4fd1882c
       - type: patch
         path: ../patches/html2md.patch
 
@@ -727,8 +727,8 @@ modules:
       - cp -r include/maddy ${FLATPAK_DEST}/include
     sources:
       - type: archive
-        url: https://github.com/progsource/maddy/archive/refs/tags/1.3.0.tar.gz
-        sha256: 561681f8c8d2b998c153cda734107a0bc1dea4bb0df69fd813922da63fa9f3e7
+        url: https://github.com/progsource/maddy/archive/refs/tags/1.6.0.tar.gz
+        sha256: 811b19efbc2fbf1957486ed78aabaf5d164d15f84464f7b4a7033b44591845c5
 
   - name: xdo
     buildsystem: simple
@@ -762,8 +762,8 @@ modules:
       - -Dzshcompletiondir=no
     sources:
       - type: archive
-        url: https://github.com/bugaevc/wl-clipboard/archive/refs/tags/v2.2.1.tar.gz
-        sha256: 6eb8081207fb5581d1d82c4bcd9587205a31a3d47bea3ebeb7f41aa1143783eb
+        url: https://github.com/bugaevc/wl-clipboard/archive/refs/tags/v2.3.0.tar.gz
+        sha256: b4dc560973f0cd74e02f817ffa2fd44ba645a4f1ea94b7b9614dacc9f895f402
 
   - name: dsnote
     buildsystem: cmake-ninja
@@ -798,6 +798,7 @@ modules:
       - -DBUILD_MADDY=OFF
       - -DBUILD_XDO=OFF
       - -DBUILD_SAM=OFF
+      - -DBUILD_RDRVIEW=OFF
     post-install:
       - install -d ${FLATPAK_DEST}/extensions
     sources:
