@@ -177,6 +177,9 @@ QDebug operator<<(QDebug d, models_manager::sup_model_role_t role) {
         case models_manager::sup_model_role_t::openvino:
             d << "openvino";
             break;
+        case models_manager::sup_model_role_t::pkuseg:
+            d << "pkuseg";
+            break;
     }
 
     return d;
@@ -1674,6 +1677,7 @@ models_manager::sup_model_role_t models_manager::sup_model_role_from_name(
         return sup_model_role_t::diacritizer;
     if (name == QStringLiteral("hub")) return sup_model_role_t::hub;
     if (name == QStringLiteral("openvino")) return sup_model_role_t::openvino;
+    if (name == QStringLiteral("pkuseg")) return sup_model_role_t::pkuseg;
     throw std::runtime_error("unknown sup role: " + name.toStdString());
 }
 
@@ -2526,6 +2530,8 @@ QString models_manager::sup_file_name_from_id(const QString& id,
             return id + "_hub";
         case sup_model_role_t::openvino:
             return id + "_openvino";
+        case sup_model_role_t::pkuseg:
+            return id + "_pkuseg";
     }
 
     throw std::runtime_error("invalid sup role");

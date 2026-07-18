@@ -82,12 +82,13 @@ class tts_engine {
         std::string vocoder_path;
         std::string diacritizer_path;
         std::string hub_path;
+        std::string pkuseg_dir;
 
         bool operator==(const model_files_t& rhs) const {
             return model_path == rhs.model_path &&
                    vocoder_path == rhs.vocoder_path &&
                    diacritizer_path == rhs.diacritizer_path &&
-                   hub_path == rhs.hub_path;
+                   hub_path == rhs.hub_path && pkuseg_dir == rhs.pkuseg_dir;
         };
         bool operator!=(const model_files_t& rhs) const {
             return !(*this == rhs);
@@ -287,6 +288,8 @@ class tts_engine {
     static void make_hf_link(const char* model_name,
                              const std::string& hub_path,
                              const std::string& cache_dir);
+    static void make_pkuseg_link(const std::string& pkuseg_dir,
+                                 const std::string& cache_dir);
 };
 
 #endif // TTS_ENGINE_HPP

@@ -226,6 +226,11 @@ void coqui_engine::create_model() {
         LOGD("using device: " << (use_cuda ? "cuda" : "cpu") << " "
                               << m_config.gpu_device.id);
 
+        if (!m_config.model_files.pkuseg_dir.empty()) {
+            make_pkuseg_link(m_config.model_files.pkuseg_dir,
+                             m_config.cache_dir);
+        }
+
         try {
             if (m_config.has_option('r')) {
                 // uroman is required

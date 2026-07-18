@@ -106,7 +106,14 @@ class models_manager : public QObject, public singleton<models_manager> {
     }
     friend QDebug operator<<(QDebug d, feature_flags flags);
 
-    enum class sup_model_role_t { scorer, vocoder, diacritizer, hub, openvino };
+    enum class sup_model_role_t {
+        scorer,
+        vocoder,
+        diacritizer,
+        hub,
+        openvino,
+        pkuseg
+    };
     friend QDebug operator<<(QDebug d, sup_model_role_t role);
 
     struct lang_t {

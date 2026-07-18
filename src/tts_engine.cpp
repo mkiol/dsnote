@@ -1256,3 +1256,24 @@ void tts_engine::make_hf_link(const char* model_name,
         LOGE("failed to create symlink: " << model_path << " => " << ln_target);
     }
 }
+
+void tts_engine::make_pkuseg_link(const std::string& pkuseg_dir,
+                                  const std::string& cache_dir) {
+    auto last_slash = pkuseg_dir.find_last_of('/');
+    if (last_slash == std::string::npos) {
+        LOGE("invalid pkuseg_dir: " << pkuseg_dir);
+        return;
+    }
+    auto pkuseg_name = pkuseg_dir.substr(last_slash + 1);
+    auto pkuseg_home = fmt::format("{}/pkuseg", cache_dir);
+    auto ln_target = fmt::format("{}/{}", pkuseg_home, pkuseg_name);
+    remove(ln_target.c_str());
+    mkdir(pkuseg_home.c_str(), 0755);
+    LOGD("ln: " << pkuseg_dir << " => " << ln_target);
+    if (symlink(pkuseg_dir.c_str(), ln_target.c_str())) {
+        LOGE("failed to create symlink: " << pkuseg_dir << " => " << ln_target);
+        return;
+    }
+    // create a dummy zip file to skip spacy download
+    std::ofstream output{fmt::format("{}/{}.zip", pkuseg_home, pkuseg_name)};
+}

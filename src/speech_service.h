@@ -320,6 +320,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         QString vocoder_file;
         QString diacritizer_file;
         QString speaker;
+        QString pkuseg_dir;
     };
 
     struct ttt_model_config_t {

@@ -774,13 +774,17 @@ speech_service::choose_model_config_by_id(
                     models_manager::sup_model_role_t::openvino,
                     model.sup_files);
                 config->stt = stt_model_config_t{
-                    model.lang_id, model.lang_code, model.id, model.engine,
+                    model.lang_id,
+                    model.lang_code,
+                    model.id,
+                    model.engine,
                     model.model_file,
                     /*scorer_file=*/
                     scorer_file ? scorer_file->get().file : QString{},
                     /*openvino_file=*/
                     openvino_file ? openvino_file->get().file : QString{},
-                    /*ttt=*/{}};
+                    /*ttt=*/{},
+                };
                 break;
             }
             case engine_t::tts: {
@@ -789,22 +793,32 @@ speech_service::choose_model_config_by_id(
                 auto diacritizer_file = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::diacritizer,
                     model.sup_files);
+                auto pkuseg_dir = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::pkuseg, model.sup_files);
                 config->tts = tts_model_config_t{
-                    model.lang_id, model.lang_code, model.id, model.engine,
+                    model.lang_id,
+                    model.lang_code,
+                    model.id,
+                    model.engine,
                     model.model_file,
                     /*vocoder_file=*/
                     vocoder_file ? vocoder_file->get().file : QString{},
                     /*diacritizer_file=*/
                     diacritizer_file ? diacritizer_file->get().file : QString{},
-                    model.speaker};
+                    model.speaker,
+                    pkuseg_dir ? pkuseg_dir->get().file : QString{},
+                };
                 break;
             }
             case engine_t::mnt:
                 config->mnt = mnt_model_config_t{
-                    model.lang_id,           out_lang_id, model.id,
+                    model.lang_id,
+                    out_lang_id,
+                    model.id,
                     model.model_file,
                     /*model_id_second=*/{},
-                    /*model_file_second=*/{}};
+                    /*model_file_second=*/{},
+                };
                 break;
             case engine_t::text_repair:
                 break;
@@ -842,7 +856,8 @@ speech_service::choose_model_config_by_id(
                 config->mnt = mnt_model_config_t{
                     model_first.lang_id, out_lang_id,
                     model_first.id,      model_first.model_file,
-                    model_second.id,     model_second.model_file};
+                    model_second.id,     model_second.model_file,
+                };
                 config->options = model_first.options;
                 qDebug() << "mnt both models found";
             }
@@ -908,14 +923,22 @@ speech_service::choose_model_config_by_lang(
                 auto diacritizer_file = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::diacritizer,
                     best_model->sup_files);
+                auto pkuseg_dir = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::pkuseg,
+                    best_model->sup_files);
                 config->tts = tts_model_config_t{
-                    best_model->lang_id, best_model->lang_code, best_model->id,
-                    best_model->engine, best_model->model_file,
+                    best_model->lang_id,
+                    best_model->lang_code,
+                    best_model->id,
+                    best_model->engine,
+                    best_model->model_file,
                     /*vocoder_file=*/
                     vocoder_file ? vocoder_file->get().file : QString{},
                     /*diacritizer_file=*/
                     diacritizer_file ? diacritizer_file->get().file : QString{},
-                    best_model->speaker};
+                    best_model->speaker,
+                    pkuseg_dir ? pkuseg_dir->get().file : QString{},
+                };
                 break;
             }
             case engine_t::text_repair:
@@ -952,13 +975,17 @@ speech_service::choose_model_config_by_first(
                     models_manager::sup_model_role_t::openvino,
                     model.sup_files);
                 config->stt = stt_model_config_t{
-                    model.lang_id, model.lang_code, model.id, model.engine,
+                    model.lang_id,
+                    model.lang_code,
+                    model.id,
+                    model.engine,
                     model.model_file,
                     /*scorer_file=*/
                     scorer_file ? scorer_file->get().file : QString{},
                     /*openvino_file=*/
                     openvino_file ? scorer_file->get().file : QString{},
-                    /*ttt=*/{}};
+                    /*ttt=*/{},
+                };
                 break;
             }
             case engine_t::tts: {
@@ -967,14 +994,21 @@ speech_service::choose_model_config_by_first(
                 auto diacritizer_file = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::diacritizer,
                     model.sup_files);
+                auto pkuseg_dir = models_manager::sup_model_file_of_role(
+                    models_manager::sup_model_role_t::pkuseg, model.sup_files);
                 config->tts = tts_model_config_t{
-                    model.lang_id, model.lang_code, model.id, model.engine,
+                    model.lang_id,
+                    model.lang_code,
+                    model.id,
+                    model.engine,
                     model.model_file,
                     /*vocoder_file=*/
                     vocoder_file ? vocoder_file->get().file : QString{},
                     /*diacritizer_file=*/
                     diacritizer_file ? diacritizer_file->get().file : QString{},
-                    model.speaker};
+                    model.speaker,
+                    pkuseg_dir ? pkuseg_dir->get().file : QString{},
+                };
                 break;
             }
             case engine_t::text_repair:
@@ -1655,9 +1689,12 @@ QString speech_service::restart_tts_engine(const QString &model_id,
                                           .dir()
                                           .absolutePath()
                                           .toStdString();
-        if (settings::instance()->diacritizer_enabled())
+        if (settings::instance()->diacritizer_enabled()) {
             config.model_files.diacritizer_path =
                 model_config->tts->diacritizer_file.toStdString();
+        }
+        config.model_files.pkuseg_dir =
+            model_config->tts->pkuseg_dir.toStdString();
         config.lang = model_config->tts->lang_id.toStdString();
         config.cache_dir = settings::instance()->cache_dir().toStdString();
         config.speaker_id = model_config->tts->speaker.toStdString();

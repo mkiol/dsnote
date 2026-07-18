@@ -62,11 +62,12 @@ std::optional<std::future<std::any> > py_executor::execute(task_t task) {
 static std::string add_to_env_path(const std::string& dir) {
     try {
         auto* old_path = getenv("PYTHONPATH");
-        if (old_path)
+        if (old_path) {
             setenv("PYTHONPATH", fmt::format("{}:{}", dir, old_path).c_str(),
                    true);
-        else
+        } else {
             setenv("PYTHONPATH", dir.c_str(), false);
+        }
     } catch (const std::runtime_error& err) {
         qWarning() << "error:" << err.what();
     }
@@ -78,21 +79,24 @@ static std::string add_to_env_path(const std::string& dir) {
 static void set_env(const char* name, const char* value) {
     auto* old_value = getenv(name);
     setenv(name, value, 1);
-    if (old_value)
+    if (old_value) {
         LOGD("set env: " << name << " = " << old_value << " => " << value);
-    else
+    } else {
         LOGD("set env: " << name << " = " << value);
+    }
 }
 
 void py_executor::loop() {
     LOGD("py executor loop started");
 
+    auto cache_dir = settings::instance()->cache_dir().toStdString();
+
     set_env("PYTHONIOENCODING", "utf-8");
     set_env("HF_HUB_DISABLE_TELEMETRY", "1");
     set_env("HF_HUB_OFFLINE", "1");
     set_env("HF_HUB_LOCAL_DIR_AUTO_SYMLINK_THRESHOLD", "100000000000");
-    set_env("HF_HUB_CACHE",
-            settings::instance()->cache_dir().toStdString().c_str());
+    set_env("HF_HUB_CACHE", cache_dir.c_str());
+    set_env("PKUSEG_HOME", fmt::format("{}/pkuseg", cache_dir).c_str());
 
     py_tools::init_module();
 

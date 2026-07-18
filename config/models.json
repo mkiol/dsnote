@@ -28999,6 +28999,19 @@
             "features": [
                 "low_quality"
             ],
+            "sups": [
+                {
+                    "role": "pkuseg",
+                    "file_name": "spacy_ontonotes",
+                    "checksum": "21d4ee7c",
+                    "checksum_quick": "7cd63648",
+                    "size": "34583527",
+                    "comp": "zip",
+                    "urls": [
+                        "https://github.com/explosion/spacy-pkuseg/releases/download/v0.0.26/spacy_ontonotes.zip"
+                    ]
+                }
+            ],
             "comp": "zip",
             "urls": [
                 "https://coqui.gateway.scarf.sh/v0.6.1_models/tts_models--zh-CN--baker--tacotron2-DDC-GST.zip"
