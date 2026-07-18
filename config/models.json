@@ -28993,7 +28993,7 @@
             "model_id": "zh_coqui_tacotron_baker",
             "engine": "tts_coqui",
             "lang_id": "zh",
-            "options": "a",
+            "options": "ao",
             "checksum": "625b3989",
             "checksum_quick": "e50a019a",
             "features": [

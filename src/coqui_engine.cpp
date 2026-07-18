@@ -20,6 +20,7 @@
 #include "cpu_tools.hpp"
 #include "logger.hpp"
 #include "py_executor.hpp"
+#include "pybind11/pybind11.h"
 #include "simdjson.h"
 
 using namespace pybind11::literals;
@@ -232,6 +233,14 @@ void coqui_engine::create_model() {
         }
 
         try {
+            // fix for tacotron model
+            if (m_config.has_option('o')) {
+                auto io = py::module_::import("trainer.io");
+                if (py::hasattr(io, "_WEIGHTS_ONLY")) {
+                    io.attr("_WEIGHTS_ONLY") = false;
+                }
+            }
+
             if (m_config.has_option('r')) {
                 // uroman is required
                 m_uroman = py::module_::import("uroman").attr("Uroman")();

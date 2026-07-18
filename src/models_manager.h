@@ -318,6 +318,7 @@ class models_manager : public QObject, public singleton<models_manager> {
          * w - tts, split by words
          * i - stt, punctuation supported
          * t - stt, translate to english supported
+         * o - tts, fix tacotron model
          */
         QString options;
         license_t license;
