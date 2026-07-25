@@ -395,6 +395,7 @@ set(dsnote_lib_sources
     ${sources_dir}/text_repair_engine.cpp
     ${sources_dir}/audio_device_manager.cpp
     ${sources_dir}/audio_device_manager.hpp
+    ${sources_dir}/cmd_options.cpp
     ${sources_dir}/cmd_options.hpp
     ${sources_dir}/sam_engine.cpp
     ${sources_dir}/sam_engine.hpp

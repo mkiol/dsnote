@@ -1,4 +1,4 @@
-/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,13 +18,17 @@ namespace cmd {
 enum role_flag : uint8_t {
     role_none = 0,
     role_stt = 1 << 0,
-    role_tts = 1 << 1
+    role_tts = 1 << 1,
 };
 enum scope_flag : uint8_t {
     scope_none = 0,
     scope_general = 1 << 0,
-    scope_task = 1 << 1
+    scope_task = 1 << 1,
 };
+
+bool validate_busy_policy_str(const QString& policy_str);
+bool validate_action_str(const QString& action_str);
+bool validate_text_format_str(const QString& text_format_str);
 
 struct options {
     bool valid = true;
@@ -48,6 +52,8 @@ struct options {
     QString output_file;
     QString input_file;
     QString input_url;
+    QString busy_policy;
+    bool replace_text = false;
 };
 }  // namespace cmd
 

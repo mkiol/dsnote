@@ -33,37 +33,6 @@
 #include "recorder.hpp"
 #include "settings.h"
 
-// name, name_str
-#define ACTION_TABLE                                                  \
-    X(start_listening, "start-listening")                             \
-    X(start_listening_translate, "start-listening-translate")         \
-    X(start_listening_active_window, "start-listening-active-window") \
-    X(start_listening_translate_active_window,                        \
-      "start-listening-translate-active-window")                      \
-    X(start_listening_clipboard, "start-listening-clipboard")         \
-    X(start_listening_translate_clipboard,                            \
-      "start-listening-translate-clipboard")                          \
-    X(stop_listening, "stop-listening")                               \
-    X(start_reading, "start-reading")                                 \
-    X(start_reading_clipboard, "start-reading-clipboard")             \
-    X(start_reading_text, "start-reading-text")                       \
-    X(start_reading_active_window, "start-reading-active-window")     \
-    X(start_reading_file, "start-reading-file")                       \
-    X(start_reading_url, "start-reading-url")                         \
-    X(pause_resume_reading, "pause-resume-reading")                   \
-    X(cancel, "cancel")                                               \
-    X(switch_to_next_stt_model, "switch-to-next-stt-model")           \
-    X(switch_to_next_tts_model, "switch-to-next-tts-model")           \
-    X(switch_to_prev_stt_model, "switch-to-prev-stt-model")           \
-    X(switch_to_prev_tts_model, "switch-to-prev-tts-model")           \
-    X(set_stt_model, "set-stt-model")                                 \
-    X(set_tts_model, "set-tts-model")
-
-#define ACTION_TEXT_FORMAT_TABLE                                 \
-    X(auto, "auto", settings::text_format_t::TextFormatRaw, 0)   \
-    X(plain, "plain", settings::text_format_t::TextFormatRaw, 0) \
-    X(html, "html", settings::text_format_t::TextFormatHtml, 0)
-
 #define FEATURE_TABLE    \
     X(whispercpp_stt)    \
     X(whispercpp_gpu)    \
@@ -86,6 +55,16 @@
     X(fake_keyboard_ydo) \
     X(hotkeys)           \
     X(hotkeys_portal)
+
+// name, name_str
+#define TEXT_DESTINATION_TABLE           \
+    X(note_add, "note-add", 0)           \
+    X(note_replace, "note-replace", 0)   \
+    X(file_add, "file-add", 0)           \
+    X(file_replace, "file-replace", 0)   \
+    X(active_window, "active-window", 0) \
+    X(clipboard, "clipboard", 0)         \
+    X(internal, "internal", 0)
 
 class dsnote_app : public QObject {
     Q_OBJECT
@@ -583,7 +562,7 @@ class dsnote_app : public QObject {
 
    private:
     enum class action_t : uint8_t {
-#define X(name, str) name,
+#define X(name, str, ...) name,
         ACTION_TABLE
 #undef X
     };
@@ -637,13 +616,13 @@ class dsnote_app : public QObject {
         bool close_request = false;
     };
 
-    enum class text_destination_t {
-        note_add,
-        note_replace,
-        active_window,
-        clipboard,
-        internal
+    enum class text_destination_t : uint8_t {
+#define X(name, str, ...) name,
+        TEXT_DESTINATION_TABLE
+#undef X
     };
+    friend QDebug operator<<(QDebug d,
+                             dsnote_app::text_destination_t destination);
 
     enum class mc_state_t { idle, extracting_subtitles };
 
@@ -687,11 +666,12 @@ class dsnote_app : public QObject {
     };
 
     enum class action_when_busy_policy_t : uint8_t {
-        ignore,
-        cancel_current_and_process,
-        cancel_current_and_ignore,
-        add_to_queue
+#define X(name, str, ...) name,
+        ACTION_WHEN_BUSY_POLICY_TABLE
+#undef X
     };
+    friend QDebug operator<<(QDebug d,
+                             dsnote_app::action_when_busy_policy_t policy);
 
     QString m_active_stt_model;
     QVariantMap m_available_stt_models_map;
@@ -736,6 +716,7 @@ class dsnote_app : public QObject {
     bool m_ttt_punctuation_configured = false;
     QString m_stt_auto_lang_id;
     dest_file_info_t m_dest_file_info;
+    QString m_stt_dest_file;
     QString m_translated_text;
     QString m_prev_text;
     bool m_undo_flag = false;  // true => undo, false => redu
@@ -945,8 +926,20 @@ class dsnote_app : public QObject {
     void export_to_file_internal(const QString &text, const QString &dest_file);
     void copy_to_clipboard_internal(const QString &text);
     void handle_translate_delayed();
-    void transcribe_file(const QString &file_path, int stream_index,
-                         bool replace);
+    void transcribe_file(const QString &model_id, const QString &file_path,
+                         int stream_index, bool replace,
+                         const QString &text_format_str = {});
+    void transcribe_file_to_file(const QString &model_id,
+                                 const QString &input_file,
+                                 const QString &dest_file, bool replace,
+                                 bool translate,
+                                 const QString &text_format_str);
+    void transcribe_file_internal(const QString &model_id,
+                                  const QString &input_file, int stream_index,
+                                  text_destination_t destination,
+                                  settings::text_format_t text_format,
+                                  bool use_note_as_prompt,
+                                  const QString &dest_file, bool translate);
     url_import_result_t import_url_internal(const QUrl &url, int stream_index,
                                             bool replace);
     void open_next_url();
@@ -1032,12 +1025,14 @@ class dsnote_app : public QObject {
     static QString lang_from_model_id(const QString &model_id);
     QString py_version() const { return m_py_version; }
     static action_when_busy_policy_t action_when_busy_policy_from_str(
-        const QString &policy);
+        const QString &policy_str);
     void add_action_to_queue(action_t action, const QVariantMap &arguments);
+    bool add_action_to_queue_if_needed(action_t action,
+                                       const QVariantMap &arguments);
     void clear_action_queue();
     void play_speech_selected_in_active_window(const QString &model_id);
     static settings::text_format_t text_format_from_action_str(
-        const QString &action_text_format_str, bool from_url);
+        const QString &action_text_format_str, bool from_url, bool for_stt);
     downloader::data_t download_content(
         const QUrl &url, const QString &expected_content_type_pattern = {});
 };

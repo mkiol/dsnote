@@ -34,6 +34,7 @@ DialogPage {
         <li>New action <i>start-reading-url</i>. Use this action to have Speech Note read an HTTP web page.
         An action can be triggered via DBus call or with command-line option. You can enable <i>Actions</i> in the settings
         (<i>Accessibility</i> &rarr; <i>Allow external applications to invoke actions</i>).</li>
+        <li>New action <i>transcribe-file</i>. Use this action to transcribe a file.</li>
         </ul>
         <p>" + qsTr("Speech to Text") + "</p>
         <ul>

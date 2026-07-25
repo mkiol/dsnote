@@ -103,6 +103,12 @@ int app_server::request_another_instance(const cmd::options &options) {
         if (!options.input_url.isEmpty()) {
             arguments.insert("input-url", options.input_url);
         }
+        if (!options.busy_policy.isEmpty()) {
+            arguments.insert("busy-policy", options.busy_policy);
+        }
+        if (options.replace_text) {
+            arguments.insert("replace-text", true);
+        }
 
         auto result = iface.InvokeAction(options.action, arguments);
         result.waitForFinished();

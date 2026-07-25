@@ -77,7 +77,7 @@ static cmd::options check_options(const QCoreApplication& app) {
 
     QString action_list_str = [] {
         QStringList list;
-#define X(name, str) list << (str);
+#define X(name, str, ...) list << (str);
         ACTION_TABLE
 #undef X
         return list.join(", ");
@@ -87,6 +87,14 @@ static cmd::options check_options(const QCoreApplication& app) {
         QStringList list;
 #define X(name, str, ...) list << (str);
         ACTION_TEXT_FORMAT_TABLE
+#undef X
+        return list.join(", ");
+    }();
+
+    QString busy_policy_list_str = [] {
+        QStringList list;
+#define X(name, str, ...) list << (str);
+        ACTION_WHEN_BUSY_POLICY_TABLE
 #undef X
         return list.join(", ");
     }();
@@ -146,10 +154,11 @@ static cmd::options check_options(const QCoreApplication& app) {
 
     QCommandLineOption id_opt{
         QStringLiteral("id"),
-        QStringLiteral("Language or model id. Used together with "
-                       "start-listening-clipboard, start-reading-text, "
-                       "start-reading-file, start-reading-url, set-stt-model "
-                       "or set-tts-model action."),
+        QStringLiteral(
+            "Language or model id. Used together with "
+            "start-listening-clipboard, transcribe-file, start-reading-text, "
+            "start-reading-file, start-reading-url, set-stt-model "
+            "or set-tts-model action."),
         QStringLiteral("id")};
     parser.addOption(id_opt);
 
@@ -162,27 +171,30 @@ static cmd::options check_options(const QCoreApplication& app) {
 
     QCommandLineOption text_format_opt{
         QStringLiteral("text-format"),
-        QStringLiteral("Text format of the text to read. Used together with "
-                       "start-reading-text, start-reading-file or "
-                       "start-reading-url. Supported formats are: %1.")
+        QStringLiteral(
+            "Text format of the text to read. Used together with "
+            "start-reading-text, start-reading-file or "
+            "start-reading-url. Supported formats are: %1. Defaults to auto.")
             .arg(text_format_list_str),
         QStringLiteral("text-format")};
     parser.addOption(text_format_opt);
 
     QCommandLineOption output_file_opt{
         QStringLiteral("output-file"),
-        QStringLiteral("Save the synthesized speech in an audio file instead "
-                       "of playing it aloud. Used together with "
-                       "start-reading-clipboard, start-reading-text, "
-                       "start-reading-file or "
-                       "start-reading-url action."),
+        QStringLiteral(
+            "Save the synthesized speech in an audio file instead "
+            "of playing it aloud. Used together with "
+            "transcribe-file, start-reading-clipboard, start-reading-text, "
+            "start-reading-file or "
+            "start-reading-url action."),
         QStringLiteral("output-file")};
     parser.addOption(output_file_opt);
 
     QCommandLineOption input_file_opt{
         QStringLiteral("input-file"),
-        QStringLiteral("A file containing text to read. Used together with "
-                       "start-reading-file action."),
+        QStringLiteral("A file containing audio to transcribe or text to read. "
+                       "Used together with "
+                       "transcribe-file or start-reading-file action."),
         QStringLiteral("input-file")};
     parser.addOption(input_file_opt);
 
@@ -192,6 +204,24 @@ static cmd::options check_options(const QCoreApplication& app) {
                        "start-reading-url action."),
         QStringLiteral("input-url")};
     parser.addOption(input_url_opt);
+
+    QCommandLineOption replace_opt{
+        QStringLiteral("replace-text"),
+        QStringLiteral("Overwrite existing text instead of adding to it. Used "
+                       "together with transcribe-file action.")};
+    parser.addOption(replace_opt);
+
+    QCommandLineOption busy_policy_opt{
+        QStringLiteral("busy-policy"),
+        QStringLiteral("Determines how to handle a new action when the "
+                       "previous one is still in progress. Used together with "
+                       "transcribe-file, start-reading-clipboard, "
+                       "start-reading-text, start-reading-file or "
+                       "start-reading-url action. Supported formats are: %1. "
+                       "Defaults to add-to-queue.")
+            .arg(busy_policy_list_str),
+        QStringLiteral("busy-policy")};
+    parser.addOption(busy_policy_opt);
 
     QCommandLineOption gen_checksum_opt{
         QStringLiteral("gen-checksums"),
@@ -271,55 +301,61 @@ static cmd::options check_options(const QCoreApplication& app) {
         return options;
     }
 
+    // validate busy-policy
+    options.busy_policy = parser.value(busy_policy_opt);
+    if (!options.busy_policy.isEmpty()) {
+        if (!cmd::validate_busy_policy_str(options.busy_policy)) {
+            fmt::print(stderr,
+                       "Invalid {}. Use one option from the following: {}.\n",
+                       busy_policy_opt.valueName().toStdString(),
+                       busy_policy_list_str.toStdString());
+            options.valid = false;
+            return options;
+        }
+    }
+
     // validate action
     options.action = parser.value(action_opt);
     if (!options.action.isEmpty()) {
-        if (true
-#define X(name, str) &&options.action.compare(str, Qt::CaseInsensitive) != 0
-            ACTION_TABLE
-#undef X
-        ) {
-            fmt::print(
-                stderr,
-                "Invalid action. Use one option from the following: {}.\n",
-                action_list_str.toStdString());
+        if (!cmd::validate_action_str(options.action)) {
+            fmt::print(stderr,
+                       "Invalid {}. Use one option from the following: {}.\n",
+                       action_opt.valueName().toStdString(),
+                       action_list_str.toStdString());
+            options.valid = false;
+            return options;
+        }
+    }
+
+    // validate text-format
+    options.text_format = parser.value(text_format_opt);
+    if (!options.text_format.isEmpty()) {
+        if (!cmd::validate_text_format_str(options.text_format)) {
+            fmt::print(stderr,
+                       "Invalid {}. Use one option from the following: {}.\n",
+                       text_format_opt.valueName().toStdString(),
+                       text_format_list_str.toStdString());
+            options.valid = false;
+            return options;
+        }
+    }
+
+    // validate id
+    options.model_id = parser.value(id_opt);
+    if (!options.model_id.isEmpty()) {
+        if (!text_tools::valid_model_id(options.model_id.toStdString())) {
+            fmt::print(stderr, "Invalid language or model id.\n");
             options.valid = false;
             return options;
         }
     }
 
     if (!options.action.isEmpty()) {
-        options.model_id = parser.value(id_opt);
-        if (!options.model_id.isEmpty()) {
-            if (!text_tools::valid_model_id(options.model_id.toStdString())) {
-                fmt::print(stderr, "Invalid language or model id.\n");
-                options.valid = false;
-                return options;
-            }
-        }
-
         options.text = parser.value(text_opt);
-
-        options.text_format = parser.value(text_format_opt);
-        if (!options.text_format.isEmpty()) {
-            if (true
-#define X(name, str, ...) \
-    &&options.text_format.compare(str, Qt::CaseInsensitive) != 0
-                ACTION_TEXT_FORMAT_TABLE
-#undef X
-            ) {
-                fmt::print(stderr,
-                           "Invalid text format. Use one option from the "
-                           "following: {}.\n",
-                           text_format_list_str.toStdString());
-                options.valid = false;
-                return options;
-            }
-        }
-
         options.input_file = parser.value(input_file_opt);
         options.input_url = parser.value(input_url_opt);
         options.output_file = parser.value(output_file_opt);
+        options.replace_text = parser.isSet(replace_opt);
 
         auto is_action = [&options](const char* action) {
             return action != nullptr &&
@@ -359,9 +395,9 @@ static cmd::options check_options(const QCoreApplication& app) {
         }
 
         // input-file is required
-        if (is_action("start-reading-file")) {
+        if (is_action("start-reading-file") || is_action("transcribe-file")) {
             if (options.input_file.isEmpty()) {
-                fmt::print(stderr, "Missing file to read (use option --{}).\n",
+                fmt::print(stderr, "Missing input file (use option --{}).\n",
                            input_file_opt.valueName().toStdString());
                 options.valid = false;
                 return options;
@@ -400,7 +436,7 @@ static cmd::options check_options(const QCoreApplication& app) {
         if (!is_action("start-reading-clipboard") &&
             !is_action("start-reading-text") &&
             !is_action("start-reading-file") &&
-            !is_action("start-reading-url")) {
+            !is_action("start-reading-url") && !is_action("transcribe-file")) {
             if (!options.output_file.isEmpty()) {
                 fmt::print(stderr,
                            "Option --{} can be used only with "
@@ -408,6 +444,18 @@ static cmd::options check_options(const QCoreApplication& app) {
                            "start-reading-text, start-reading-file and "
                            "start-reading-url actions.\n",
                            output_file_opt.valueName().toStdString());
+                options.valid = false;
+                return options;
+            }
+        }
+
+        // replace-text is forbidden
+        if (!is_action("transcribe-file")) {
+            if (options.replace_text) {
+                fmt::print(stderr,
+                           "Option --{} can be used only with transcribe-file "
+                           "action.\n",
+                           replace_opt.valueName().toStdString());
                 options.valid = false;
                 return options;
             }

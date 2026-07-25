@@ -1,4 +1,4 @@
-/* Copyright (C) 2024-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -121,6 +121,7 @@ ColumnLayout {
               "<li><i>start-listening-clipboard</i> - " + qsTranslate("SettingsPage", "Starts listening. The decoded text is copied to the clipboard.") + "</li>" +
               "<li><i>start-listening-translate-clipboard</i> - " + qsTranslate("SettingsPage", "Starts listening. The decoded text is translated and copied to the clipboard.") + "</li>" +
               "<li><i>stop-listening</i> - " + qsTranslate("SettingsPage", "Stops listening. The already captured voice is decoded into text.") + "</li>" +
+              "<li><i>transcribe-file</i> - " + qsTranslate("SettingsPage", "Transcribe a file specified by command-line %1 option.").arg("<i>--input-file</i>") + "</li>" +
               "<li><i>start-reading</i> - " + qsTranslate("SettingsPage", "Starts reading.") + "</li>" +
               "<li><i>start-reading-clipboard</i> (X11) - " + qsTranslate("SettingsPage", "Starts reading text from the clipboard.") + "</li>" +
               "<li><i>start-reading-text</i> - " + qsTranslate("SettingsPage", "Starts reading text from command-line %1 option.").arg("<i>--text</i>") + "</li>" +

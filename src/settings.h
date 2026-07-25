@@ -131,6 +131,47 @@
                                   "Switch to previous TTS model"),             \
       "Ctrl+Alt+Shift+N", false)
 
+// name, name_str
+#define ACTION_TABLE                                                     \
+    X(start_listening, "start-listening", 0)                             \
+    X(start_listening_translate, "start-listening-translate", 0)         \
+    X(start_listening_active_window, "start-listening-active-window", 0) \
+    X(start_listening_translate_active_window,                           \
+      "start-listening-translate-active-window", 0)                      \
+    X(start_listening_clipboard, "start-listening-clipboard", 0)         \
+    X(start_listening_translate_clipboard,                               \
+      "start-listening-translate-clipboard", 0)                          \
+    X(transcribe_file, "transcribe-file", 0)                             \
+    X(stop_listening, "stop-listening", 0)                               \
+    X(start_reading, "start-reading", 0)                                 \
+    X(start_reading_clipboard, "start-reading-clipboard", 0)             \
+    X(start_reading_text, "start-reading-text", 0)                       \
+    X(start_reading_active_window, "start-reading-active-window", 0)     \
+    X(start_reading_file, "start-reading-file", 0)                       \
+    X(start_reading_url, "start-reading-url", 0)                         \
+    X(pause_resume_reading, "pause-resume-reading", 0)                   \
+    X(cancel, "cancel", 0)                                               \
+    X(switch_to_next_stt_model, "switch-to-next-stt-model", 0)           \
+    X(switch_to_next_tts_model, "switch-to-next-tts-model", 0)           \
+    X(switch_to_prev_stt_model, "switch-to-prev-stt-model", 0)           \
+    X(switch_to_prev_tts_model, "switch-to-prev-tts-model", 0)           \
+    X(set_stt_model, "set-stt-model", 0)                                 \
+    X(set_tts_model, "set-tts-model", 0)
+
+// name, name_str
+#define ACTION_TEXT_FORMAT_TABLE                                 \
+    X(auto, "auto", settings::text_format_t::TextFormatRaw, 0)   \
+    X(plain, "plain", settings::text_format_t::TextFormatRaw, 0) \
+    X(html, "html", settings::text_format_t::TextFormatHtml, 0)  \
+    X(srt, "srt", settings::text_format_t::TextFormatSubRip, 0)
+
+// name, name_str, value
+#define ACTION_WHEN_BUSY_POLICY_TABLE                              \
+    X(ignore, "ignore", 0)                                         \
+    X(cancel_current_and_process, "cancel-current-and-process", 0) \
+    X(cancel_current_and_ignore, "cancel-current-and-ignore", 0)   \
+    X(add_to_queue, "add-to-queue", 0)
+
 class settings : public QSettings, public singleton<settings> {
     Q_OBJECT
 

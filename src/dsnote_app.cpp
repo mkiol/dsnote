@@ -28,6 +28,7 @@
 #include "module_tools.hpp"
 #include "mtag_tools.hpp"
 #include "qtlogger.hpp"
+#include "settings.h"
 #include "speech_service.h"
 
 QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
@@ -78,7 +79,6 @@ QDebug operator<<(QDebug d, dsnote_app::service_state_t state) {
             d << "unknown";
             break;
     }
-
     return d;
 }
 
@@ -106,7 +106,6 @@ QDebug operator<<(QDebug d, dsnote_app::service_task_state_t type) {
             d << "cancelling";
             break;
     }
-
     return d;
 }
 
@@ -170,7 +169,6 @@ QDebug operator<<(QDebug d, dsnote_app::error_t type) {
             d << "license-download-error";
             break;
     }
-
     return d;
 }
 
@@ -211,20 +209,18 @@ QDebug operator<<(QDebug d, dsnote_app::url_import_result_t result) {
             d << "error-import-url-download-error";
             break;
     }
-
     return d;
 }
 
 QDebug operator<<(QDebug d, dsnote_app::action_t action) {
     switch (action) {
-#define X(name, str)                 \
+#define X(name, str, ...)            \
     case dsnote_app::action_t::name: \
-        d << str;                    \
+        d << (str);                  \
         break;
         ACTION_TABLE
 #undef X
     }
-
     return d;
 }
 
@@ -237,7 +233,30 @@ QDebug operator<<(QDebug d, dsnote_app::auto_text_format_t format) {
             d << "subrip";
             break;
     }
+    return d;
+}
 
+QDebug operator<<(QDebug d, dsnote_app::text_destination_t destination) {
+    switch (destination) {
+#define X(name, str, ...)                      \
+    case dsnote_app::text_destination_t::name: \
+        d << (str);                            \
+        break;
+        TEXT_DESTINATION_TABLE
+#undef X
+    }
+    return d;
+}
+
+QDebug operator<<(QDebug d, dsnote_app::action_when_busy_policy_t policy) {
+    switch (policy) {
+#define X(name, str, ...)                             \
+    case dsnote_app::action_when_busy_policy_t::name: \
+        d << str;                                     \
+        break;
+        ACTION_WHEN_BUSY_POLICY_TABLE
+#undef X
+    }
     return d;
 }
 
@@ -265,7 +284,6 @@ QDebug operator<<(QDebug d, dsnote_app::stt_request_t request) {
             d << "transcribe-file";
             break;
     }
-
     return d;
 }
 
@@ -1042,6 +1060,8 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
         transform_text(text, transform_text_target_t::stt, lang);
     }
 
+    qDebug() << "text destination:" << m_text_destination;
+
     switch (m_text_destination) {
         case text_destination_t::note_add: {
             make_undo();
@@ -1069,6 +1089,24 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
             this->m_intermediate_text.clear();
             emit text_changed();
             emit intermediate_text_changed();
+            break;
+        }
+        case text_destination_t::file_replace:
+        case text_destination_t::file_add: {
+            if (text.isEmpty() || m_stt_dest_file.isEmpty()) {
+                break;
+            }
+
+            QFile out_file{m_stt_dest_file};
+            if (!out_file.open(
+                    QIODevice::WriteOnly | QIODevice::Text |
+                    (m_text_destination == text_destination_t::file_add
+                         ? QIODevice::Append
+                         : QIODevice::Truncate))) {
+                qWarning() << "cant open file for write:" << m_stt_dest_file;
+                break;
+            }
+            out_file.write(text.toUtf8());
             break;
         }
         case text_destination_t::active_window:
@@ -2655,19 +2693,39 @@ void dsnote_app::cancel() {
     emit intermediate_text_changed();
 }
 
-void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
-                                 bool replace) {
-    qDebug() << "requested stream index for transcribe:" << stream_index;
+void dsnote_app::transcribe_file_internal(
+    const QString &model_id, const QString &input_file, int stream_index,
+    text_destination_t destination, settings::text_format_t text_format,
+    bool use_note_as_prompt, const QString &dest_file, bool translate) {
+    qDebug() << "transcribe file request: model_id=" << model_id
+             << "input_file=" << input_file << "stream_index=" << stream_index
+             << "destination=" << destination << "dest_file=" << dest_file
+             << "translate=" << translate;
 
-    m_text_destination = replace ? text_destination_t::note_replace
-                                 : text_destination_t::note_add;
+    m_text_destination = destination;
+    m_stt_dest_file = dest_file;
+
+    bool replace = [&] {
+        switch (destination) {
+            case text_destination_t::note_replace:
+            case text_destination_t::file_replace:
+            case text_destination_t::active_window:
+            case text_destination_t::clipboard:
+            case text_destination_t::internal:
+                return true;
+            case text_destination_t::note_add:
+            case text_destination_t::file_add:
+                return false;
+        }
+        return false;
+    }();
 
     auto *s = settings::instance();
 
     int new_task = 0;
 
     QVariantMap options;
-    options.insert("text_format", static_cast<int>(s->stt_tts_text_format()));
+    options.insert("text_format", static_cast<int>(text_format));
     options.insert("sub_min_segment_dur", s->sub_min_segment_dur());
     options.insert("stream_index", stream_index);
     options.insert("insert_stats", s->stt_insert_stats());
@@ -2677,7 +2735,7 @@ void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
     }
     if (!replace &&
         s->stt_tts_text_format() == settings::text_format_t::TextFormatRaw &&
-        s->stt_use_note_as_prompt()) {
+        use_note_as_prompt) {
         options.insert("initial_prompt", note_as_prompt());
     }
     options.insert("inline_timestamp_template", s->inline_timestamp_template());
@@ -2688,17 +2746,47 @@ void dsnote_app::transcribe_file(const QString &file_path, int stream_index,
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->stt_transcribe_file(
-            file_path, {},
-            s->whisper_translate() ? QStringLiteral("en") : QString{}, options);
+            input_file, model_id, translate ? QStringLiteral("en") : QString{},
+            options);
     } else {
         qDebug() << "[app => dbus] call SttTranscribeFile";
 
         new_task = m_dbus_service.SttTranscribeFile(
-            file_path, {},
-            s->whisper_translate() ? QStringLiteral("en") : QString{}, options);
+            input_file, model_id, translate ? QStringLiteral("en") : QString{},
+            options);
     }
 
     m_primary_task.set(new_task);
+}
+
+void dsnote_app::transcribe_file(const QString &model_id,
+                                 const QString &file_path, int stream_index,
+                                 bool replace, const QString &text_format_str) {
+    auto *s = settings::instance();
+    transcribe_file_internal(
+        model_id, file_path, stream_index,
+        replace ? text_destination_t::note_replace
+                : text_destination_t::note_add,
+        text_format_str.isEmpty()
+            ? s->stt_tts_text_format()
+            : text_format_from_action_str(text_format_str, /*from_url=*/false,
+                                          /*for_stt=*/true),
+        s->stt_use_note_as_prompt(), {}, s->whisper_translate());
+}
+
+void dsnote_app::transcribe_file_to_file(const QString &model_id,
+                                         const QString &input_file,
+                                         const QString &dest_file, bool replace,
+                                         bool translate,
+                                         const QString &text_format_str) {
+    auto *s = settings::instance();
+    transcribe_file_internal(
+        model_id, input_file, -1,
+        replace ? text_destination_t::file_replace
+                : text_destination_t::file_add,
+        text_format_from_action_str(text_format_str, /*from_url=*/false,
+                                    /*for_stt=*/true),
+        s->stt_use_note_as_prompt(), dest_file, translate);
 }
 
 void dsnote_app::transcribe_ref_file_import(long long start, long long stop) {
@@ -3136,14 +3224,16 @@ void dsnote_app::play_speech_from_text(const QString &text,
 void dsnote_app::play_speech_from_text_format_str(
     const QString &text, const QString &input_file, const QUrl &input_url,
     const QString &model_id, const QString &text_format_str) {
-    play_speech_internal(text, input_file, input_url, model_id,
-                         tts_ref_voice_needed_by_id(model_id)
-                             ? active_tts_ref_voice()
-                             : QString{},
-                         tts_ref_prompt_needed_by_id(model_id)
-                             ? settings::instance()->tts_active_voice_prompt()
-                             : QString{},
-                         text_format_from_action_str(text_format_str, !input_url.isEmpty()));
+    play_speech_internal(
+        text, input_file, input_url, model_id,
+        tts_ref_voice_needed_by_id(model_id) ? active_tts_ref_voice()
+                                             : QString{},
+        tts_ref_prompt_needed_by_id(model_id)
+            ? settings::instance()->tts_active_voice_prompt()
+            : QString{},
+        text_format_from_action_str(text_format_str,
+                                    /*from_url=*/!input_url.isEmpty(),
+                                    /*for_stt=*/false));
 }
 
 void dsnote_app::play_speech_from_text_format(
@@ -4713,8 +4803,8 @@ dsnote_app::url_import_result_t dsnote_app::import_url_internal(
                         return url_import_result_t::
                             error_import_audio_stt_not_configured;
                     }
-
-                    transcribe_file(file_path, stream_by_id_it->index, replace);
+                    transcribe_file(/*model_id=*/{}, file_path,
+                                    stream_by_id_it->index, replace);
                     return url_import_result_t::ok_import_audio;
                 case media_compressor::media_type_t::subtitles:
                     if (!m_mc.import_subtitles_async(file_path,
@@ -5223,7 +5313,7 @@ QVariantMap dsnote_app::execute_action_id(const QString &action_id,
     }
 
     if (false) {
-#define X(name, str)                                             \
+#define X(name, str, ...)                                        \
     }                                                            \
     else if (action_id.compare(str, Qt::CaseInsensitive) == 0) { \
         execute_action(action_t::name, arguments);
@@ -5325,6 +5415,7 @@ dsnote_app::action_t dsnote_app::convert_action(action_t action) const {
             }
             break;
         }
+        case dsnote_app::action_t::transcribe_file:
         case dsnote_app::action_t::stop_listening:
         case dsnote_app::action_t::pause_resume_reading:
         case dsnote_app::action_t::cancel:
@@ -5350,8 +5441,39 @@ void dsnote_app::add_action_to_queue(action_t action,
 void dsnote_app::clear_action_queue() {
     m_action_delay_timer.stop();
     if (!m_pending_actions.empty()) {
+        qDebug() << "clear action queue";
         m_pending_actions = {};
     }
+}
+
+bool dsnote_app::add_action_to_queue_if_needed(action_t action,
+                                               const QVariantMap &arguments) {
+    /* returns true if action processing should be continued */
+
+    if (service_state() == service_state_t::StateIdle) {
+        return true;
+    }
+
+    auto policy = action_when_busy_policy_from_str(
+        arguments.value("busy-policy").toString());
+
+    qDebug() << "enforcing busy-policy:" << policy;
+
+    switch (policy) {
+        case action_when_busy_policy_t::ignore:
+            qWarning() << "ignoring action request";
+            return false;
+        case action_when_busy_policy_t::cancel_current_and_ignore:
+            cancel();
+            return false;
+        case action_when_busy_policy_t::cancel_current_and_process:
+            return true;
+        case action_when_busy_policy_t::add_to_queue:
+            add_action_to_queue(action, arguments);
+            return false;
+    }
+
+    return false;
 }
 
 void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
@@ -5387,6 +5509,29 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
         case dsnote_app::action_t::start_listening_translate_clipboard:
             listen_translate_to_clipboard();
             break;
+        case dsnote_app::action_t::transcribe_file: {
+            if (!add_action_to_queue_if_needed(action, arguments)) {
+                /* action processing should not be continued */
+                break;
+            }
+
+            auto id = arguments.value("model-id").toString();
+            auto text_format_str = arguments.value("text-format").toString();
+            auto output_file = arguments.value("output-file").toString();
+            auto input_file = arguments.value("input-file").toString();
+            auto replace_text = arguments.value("replace-text").toBool();
+            if (output_file.isEmpty()) {
+                transcribe_file(id, input_file,
+                                /*stream_index=*/-1, replace_text,
+                                text_format_str);
+            } else {
+                /* output to file */
+                transcribe_file_to_file(id, input_file, output_file,
+                                        replace_text,
+                                        /*translate=*/false, text_format_str);
+            }
+            break;
+        }
         case dsnote_app::action_t::stop_listening:
             stop_listen();
             break;
@@ -5401,6 +5546,11 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
         case dsnote_app::action_t::start_reading_text:
         case dsnote_app::action_t::start_reading_file:
         case dsnote_app::action_t::start_reading_url: {
+            if (!add_action_to_queue_if_needed(action, arguments)) {
+                /* action processing should not be continued */
+                break;
+            }
+
             QString text;
             if (action == action_t::start_reading_clipboard) {
 #ifdef USE_DESKTOP
@@ -5422,26 +5572,7 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
                     text, input_file, input_url,
                     id.isEmpty() ? active_tts_model() : id, text_format_str);
             } else {
-                if (service_state() != service_state_t::StateIdle) {
-                    qDebug() << "state is not idle => enforcing busy-policy";
-                    switch (action_when_busy_policy_from_str(
-                        arguments.value("busy-policy").toString())) {
-                        case action_when_busy_policy_t::ignore:
-                            qWarning() << "ignoring action request";
-                            return;
-                        case action_when_busy_policy_t::
-                            cancel_current_and_ignore:
-                            cancel();
-                            return;
-                        case action_when_busy_policy_t::
-                            cancel_current_and_process:
-                            break;
-                        case action_when_busy_policy_t::add_to_queue:
-                            add_action_to_queue(action, arguments);
-                            return;
-                    }
-                }
-
+                /* output to file */
                 m_dest_file_info = dest_file_info_t{};
                 speech_to_file_internal(
                     text, input_file, input_url, id, output_file, {}, {},
@@ -5450,17 +5581,22 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
                     tts_ref_prompt_needed_by_id(id)
                         ? settings::instance()->tts_active_voice_prompt()
                         : QString{},
-                    text_format_from_action_str(text_format_str, action == action_t::start_reading_url),
+                    text_format_from_action_str(
+                        text_format_str,
+                        /*from_url=*/action == action_t::start_reading_url,
+                        /*for_stt=*/false),
                     settings::filename_to_audio_format_static(output_file),
                     settings::instance()->audio_quality());
             }
+
             break;
         }
         case dsnote_app::action_t::pause_resume_reading:
-            if (task_state() == service_task_state_t::TaskStateSpeechPaused)
+            if (task_state() == service_task_state_t::TaskStateSpeechPaused) {
                 resume_speech();
-            else
+            } else {
                 pause_speech();
+            }
             break;
         case dsnote_app::action_t::cancel:
             clear_action_queue();
@@ -6205,39 +6341,41 @@ void dsnote_app::open_hotkeys_editor() {
 }
 
 dsnote_app::action_when_busy_policy_t
-dsnote_app::action_when_busy_policy_from_str(const QString &policy) {
-    if (policy.compare("ignore", Qt::CaseInsensitive) == 0) {
-        return action_when_busy_policy_t::ignore;
+dsnote_app::action_when_busy_policy_from_str(const QString &policy_str) {
+#define X(name, str, ...)                                    \
+    if (policy_str.compare(str, Qt::CaseInsensitive) == 0) { \
+        return action_when_busy_policy_t::name;              \
     }
-    if (policy.compare("cancel-current-and-ignore", Qt::CaseInsensitive) == 0) {
-        return action_when_busy_policy_t::cancel_current_and_ignore;
-    }
-    if (policy.compare("cancel-current-and-process", Qt::CaseInsensitive) ==
-        0) {
-        return action_when_busy_policy_t::cancel_current_and_process;
-    }
-    if (policy.compare("add-to-queue", Qt::CaseInsensitive) == 0) {
-        return action_when_busy_policy_t::add_to_queue;
-    }
+    ACTION_WHEN_BUSY_POLICY_TABLE
+#undef X
     // default
     return action_when_busy_policy_t::add_to_queue;
 }
 
 settings::text_format_t dsnote_app::text_format_from_action_str(
-    const QString &action_text_format_str, bool from_url) {
+    const QString &action_text_format_str, bool from_url, bool for_stt) {
     if (action_text_format_str.isEmpty() || action_text_format_str.compare("auto", Qt::CaseInsensitive) == 0) {
-        return from_url ? settings::text_format_t::TextFormatHtml : settings::text_format_t::TextFormatRaw;
+        return from_url && !for_stt ? settings::text_format_t::TextFormatHtml
+                                    : settings::text_format_t::TextFormatRaw;
     }
+
+    auto format = [&action_text_format_str] {
 #define X(name, str, type, ...)                                          \
     if (action_text_format_str.compare(str, Qt::CaseInsensitive) == 0) { \
         return type;                                                     \
     }
-    ACTION_TEXT_FORMAT_TABLE
+        ACTION_TEXT_FORMAT_TABLE
 #undef X
+        return settings::text_format_t::TextFormatRaw;
+    }();
 
-    qWarning() << "failed to map action text format";
+    // allow only raw and srt for stt
+    if (for_stt && format != settings::text_format_t::TextFormatRaw &&
+        format != settings::text_format_t::TextFormatSubRip) {
+        format = settings::text_format_t::TextFormatRaw;
+    }
 
-    return settings::text_format_t::TextFormatRaw;
+    return format;
 }
 
 QString dsnote_app::clipboard_if_url() const
