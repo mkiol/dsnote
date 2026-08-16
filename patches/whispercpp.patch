@@ -91,9 +91,21 @@ diff -ruN -x '.*' whispercpp-org/ggml/src/ggml-backend-reg.cpp whispercpp-patche
  void ggml_backend_load_all_from_path(const char * dir_path) {
  #ifdef NDEBUG
      bool silent = true;
+diff -ruN -x '.*' whispercpp-org/ggml/src/ggml-blas/ggml-blas.cpp whispercpp-patched/ggml/src/ggml-blas/ggml-blas.cpp
+--- whispercpp-org/ggml/src/ggml-blas/ggml-blas.cpp	2026-06-19 06:12:37.000000000 +0200
++++ whispercpp-patched/ggml/src/ggml-blas/ggml-blas.cpp	2026-08-16 19:57:04.565343972 +0200
+@@ -14,6 +14,8 @@
+ #   include <blis.h>
+ #elif defined(GGML_BLAS_USE_NVPL)
+ #   include <nvpl_blas.h>
++#elif defined(GGML_BLAS_USE_OPENBLAS)
++#   include <openblas/cblas.h>
+ #else
+ #   include <cblas.h>
+ #endif
 diff -ruN -x '.*' whispercpp-org/ggml/src/ggml-cpu/CMakeLists.txt whispercpp-patched/ggml/src/ggml-cpu/CMakeLists.txt
 --- whispercpp-org/ggml/src/ggml-cpu/CMakeLists.txt	2026-06-19 06:12:37.000000000 +0200
-+++ whispercpp-patched/ggml/src/ggml-cpu/CMakeLists.txt	2026-08-16 17:50:01.683295363 +0200
++++ whispercpp-patched/ggml/src/ggml-cpu/CMakeLists.txt	2026-08-16 17:57:13.055874305 +0200
 @@ -169,45 +169,57 @@
                  if (GGML_CPU_ARM_ARCH)
                      list(APPEND ARCH_FLAGS -march=${GGML_CPU_ARM_ARCH})
