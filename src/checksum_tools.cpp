@@ -14,6 +14,7 @@
 #include <QFileInfo>
 #include <cstdint>
 #include <fstream>
+#include <limits>
 #include <sstream>
 
 static uint32_t make_file_checksum_number(const QString& file) {

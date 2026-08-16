@@ -15,6 +15,8 @@
 #include <QAudioDeviceInfo>
 #endif
 
+#include <limits>
+
 mic_source::mic_source(const QString& preferred_audio_input, QObject* parent)
     : audio_source{parent} {
     qDebug() << "mic source created";

@@ -618,6 +618,7 @@ static void install_translator() {
     }
 }
 
+#ifdef USE_DESKTOP
 /**
  * @brief Configures icon theme for Qt6 desktop applications.
  *
@@ -629,59 +630,62 @@ static void install_translator() {
  * @note Only active on Qt6 desktop builds (USE_DESKTOP defined)
  */
 static void configure_icon_theme() {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && defined(USE_DESKTOP)
-    // Set icon theme search paths to common system locations
-    QStringList searchPaths = QIcon::themeSearchPaths();
-    searchPaths
-        << "/usr/share/icons"
-        << "/usr/local/share/icons"
-        << "/app/share/icons"  // Flatpak and other sandboxed environments
-        << QDir::homePath() + "/.local/share/icons"
-        << QDir::homePath() + "/.icons";
-    QIcon::setThemeSearchPaths(searchPaths);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+  // Set icon theme search paths to common system locations
+  QStringList searchPaths = QIcon::themeSearchPaths();
+  searchPaths << "/usr/share/icons"
+              << "/usr/local/share/icons"
+              << "/app/share/icons"  // Flatpak and other sandboxed environments
+              << QDir::homePath() + "/.local/share/icons"
+              << QDir::homePath() + "/.icons";
+  QIcon::setThemeSearchPaths(searchPaths);
 
-    LOGD("icon theme search paths: " << QIcon::themeSearchPaths().join(", "));
+  LOGD("icon theme search paths: " << QIcon::themeSearchPaths().join(", "));
 
-    // Always try to set an icon theme, even if one is already set
-    // This ensures consistency across different desktop environments
-    QString currentTheme = QIcon::themeName();
-    if (!currentTheme.isEmpty()) {
-        LOGD("system icon theme detected: " << currentTheme);
+  // Always try to set an icon theme, even if one is already set
+  // This ensures consistency across different desktop environments
+  QString currentTheme = QIcon::themeName();
+  if (!currentTheme.isEmpty()) {
+    LOGD("system icon theme detected: " << currentTheme);
+  }
+
+  // Try to find and set an available icon theme
+  // Priority: current theme (if set), breeze, breeze-dark, Adwaita, hicolor
+  // (fallback)
+  QStringList iconThemes;
+  if (!currentTheme.isEmpty() && currentTheme != "hicolor") {
+    iconThemes << currentTheme;
+  }
+  iconThemes << "breeze"
+             << "breeze-dark"
+             << "Adwaita"
+             << "hicolor";
+
+  bool themeSet = false;
+  for (const auto& theme : iconThemes) {
+    QIcon::setThemeName(theme);
+    // Test if theme actually provides symbolic icons
+    if (QIcon::hasThemeIcon("document-save-symbolic") ||
+        QIcon::hasThemeIcon("document-save")) {
+      LOGD("using icon theme: " << theme << " (verified working)");
+      themeSet = true;
+      break;
     }
+  }
 
-    // Try to find and set an available icon theme
-    // Priority: current theme (if set), breeze, breeze-dark, Adwaita, hicolor
-    // (fallback)
-    QStringList iconThemes;
-    if (!currentTheme.isEmpty() && currentTheme != "hicolor") {
-        iconThemes << currentTheme;
-    }
-    iconThemes << "breeze" << "breeze-dark" << "Adwaita" << "hicolor";
-
-    bool themeSet = false;
-    for (const auto& theme : iconThemes) {
-        QIcon::setThemeName(theme);
-        // Test if theme actually provides symbolic icons
-        if (QIcon::hasThemeIcon("document-save-symbolic") ||
-            QIcon::hasThemeIcon("document-save")) {
-            LOGD("using icon theme: " << theme << " (verified working)");
-            themeSet = true;
-            break;
-        }
-    }
-
-    if (!themeSet) {
-        // Fallback: set breeze even if not available
-        // Icons may still work if the theme is installed but not detected
-        QIcon::setThemeName("breeze");
-        LOGW("no working icon theme detected, using 'breeze' as fallback");
-        LOGW("if icons don't appear, install an icon theme:");
-        LOGW("  Ubuntu/Debian: sudo apt install breeze-icon-theme");
-        LOGW("  Fedora: sudo dnf install breeze-icon-theme");
-        LOGW("  Arch: sudo pacman -S breeze-icons");
-    }
+  if (!themeSet) {
+    // Fallback: set breeze even if not available
+    // Icons may still work if the theme is installed but not detected
+    QIcon::setThemeName("breeze");
+    LOGW("no working icon theme detected, using 'breeze' as fallback");
+    LOGW("if icons don't appear, install an icon theme:");
+    LOGW("  Ubuntu/Debian: sudo apt install breeze-icon-theme");
+    LOGW("  Fedora: sudo dnf install breeze-icon-theme");
+    LOGW("  Arch: sudo pacman -S breeze-icons");
+  }
 #endif
 }
+#endif  // USE_DESKTOP
 
 static void start_service(const cmd::options& options) {
     auto* s = settings::instance();
