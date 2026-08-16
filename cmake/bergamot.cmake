@@ -76,8 +76,8 @@ ExternalProject_Add(bergamot
     GIT_SHALLOW OFF
     UPDATE_COMMAND ""
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
-                -i ${patches_dir}/bergamot.patch ||
-                    echo "patch cmd failed, likely already patched"
+                  -i ${patches_dir}/bergamot.patch ||
+                  echo "patch cmd failed, likely already patched"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         -DBLAS_LIB_PATH=${blas_lib_path}
