@@ -2,14 +2,14 @@ Name:       harbour-dsnote
 
 # >> macros
 %define __provides_exclude_from ^%{_datadir}/.*$
-%define __requires_exclude ^libstt.*|libkenlm.*|libtensorflowlite.*|libtflitedelegates.*|libopenblas.*|libwhisper*|libbergamota*|libvosk.*|libonnxruntime.*|libRHVoice*|libaprilasr.*$
+%define __requires_exclude ^libstt.*|libkenlm.*|libtensorflowlite.*|libtflitedelegates.*|libopenblas.*|libwhisper*|libggml*|libbergamota*|libvosk.*|libonnxruntime.*|libRHVoice*|libaprilasr.*$
 %define _unpackaged_files_terminate_build 0
 # << macros
 
 %global debug_package %{nil}
 
 Summary:        Speech Note
-Version:        4.9.0
+Version:        4.9.1
 Release:        1
 Group:          Qt/Qt
 License:        LICENSE

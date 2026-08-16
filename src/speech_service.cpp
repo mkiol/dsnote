@@ -1407,6 +1407,20 @@ bool speech_service::is_new_tts_engine_required(
     return false;
 }
 
+static QString find_ggml_backend_dir() {
+    auto path = module_tools::path_to_lib_dir_for_path(
+        QStringLiteral("libggml-blas.so"));
+    if (path.isEmpty()) {
+        path = module_tools::path_to_lib_dir_for_path(
+            QStringLiteral("libggml-cpu-x64.so"));
+        if (path.isEmpty()) {
+            path = module_tools::path_to_lib_dir_for_path(
+                QStringLiteral("libggml-cpu-armv8.0_1.so"));
+        }
+    }
+    return path;
+}
+
 QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                                            const QString &model_id,
                                            const QString &out_lang_id,
@@ -1503,6 +1517,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                 // disable auto-lang with sup model
                 config.model_files.scorer_file.clear();
             }
+            config.lib_dir = find_ggml_backend_dir().toStdString();
         }
 #ifdef USE_PY
         if (model_config->stt->engine == models_manager::model_engine_t::stt_fasterwhisper) {
@@ -3250,7 +3265,7 @@ QVariantMap speech_service::features_availability() {
     bool stt_whispercpp_cuda = whisper_engine::has_cuda();
     m_features_availability.insert(
         "whispercpp-stt-cuda",
-        QVariantList{whisper_engine::has_cuda(),
+        QVariantList{stt_whispercpp_cuda,
                      "WhisperCpp STT CUDA " + tr("HW acceleration")});
     if (stt_whispercpp_cuda)
         hw_feature_flags |=
@@ -3264,15 +3279,6 @@ QVariantMap speech_service::features_availability() {
     if (stt_whispercpp_hip)
         hw_feature_flags |=
             settings::hw_feature_flags_t::HW_FEATURE(hip, whisper, stt);
-
-    bool stt_whispercpp_openvino = whisper_engine::has_openvino();
-    m_features_availability.insert(
-        "whispercpp-stt-openvino",
-        QVariantList{stt_whispercpp_openvino,
-                     "WhisperCpp STT OpenVINO " + tr("HW acceleration")});
-    if (stt_whispercpp_openvino)
-        hw_feature_flags |=
-            settings::hw_feature_flags_t::HW_FEATURE(openvino, whisper, stt);
 
     bool stt_whispercpp_opencl = whisper_engine::has_opencl();
     m_features_availability.insert(

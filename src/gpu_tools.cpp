@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -31,6 +31,7 @@
 #define CL_DEVICE_TYPE 0x1000
 #define CL_DEVICE_NAME 0x102B
 #define CL_DEVICE_VENDOR 0x102C
+#define CL_DEVICE_OPENCL_C_VERSION 0x103D
 #define CL_DEVICE_TYPE_DEFAULT (1 << 0)
 #define CL_DEVICE_TYPE_CPU (1 << 1)
 #define CL_DEVICE_TYPE_GPU (1 << 2)
@@ -868,6 +869,22 @@ void add_hip_devices(std::vector<device>& devices) {
     }
 }
 
+static int get_opencl_c_major_ver(const std::string& cver) {
+    const std::string prefix = "OpenCL C ";
+    auto start = cver.find(prefix);
+
+    if (start == std::string::npos) {
+        return 0;
+    }
+
+    start += prefix.length();
+
+    auto dot_pos = cver.find('.', start);
+    auto major_str = cver.substr(start, dot_pos - start);
+
+    return std::stoi(major_str);
+}
+
 void add_opencl_devices(std::vector<device>& devices, uint8_t flags) {
     LOGD("scanning for opencl devices");
 
@@ -949,9 +966,18 @@ void add_opencl_devices(std::vector<device>& devices, uint8_t flags) {
                     continue;
                 }
 
+                char cver[max_name_size];
+                if (auto ret = api.clGetDeviceInfo(
+                        device_ids[j], CL_DEVICE_OPENCL_C_VERSION,
+                        max_name_size, &cver, nullptr);
+                    ret != CL_SUCCESS) {
+                    LOGW("clGetDeviceInfo for version error: " << ret);
+                    continue;
+                }
+
                 LOGD("opencl device: "
-                     << j << ", platform name=" << pname
-                     << ", device name=" << dname << ", types=["
+                     << j << ", platform name=" << pname << ", device name="
+                     << dname << ", version=" << cver << ", types=["
                      << (type & CL_DEVICE_TYPE_DEFAULT ? "DEFAULT, " : "")
                      << (type & CL_DEVICE_TYPE_GPU ? "GPU, " : "")
                      << (type & CL_DEVICE_TYPE_CPU ? "CPU, " : "")
@@ -960,7 +986,17 @@ void add_opencl_devices(std::vector<device>& devices, uint8_t flags) {
                      << (type & CL_DEVICE_TYPE_CUSTOM ? "CUSTOM, " : "")
                      << "]");
 
-                if ((type & CL_DEVICE_TYPE_GPU) == 0) {
+                bool supported = (type & CL_DEVICE_TYPE_GPU) != 0;
+                if (supported) {
+                    // whisper-cpp supports only adreno and intel
+                    supported = !strstr(dname, "Adreno") &&
+                                !strstr(dname, "Qualcomm") &&
+                                !strstr(dname, "Intel");
+                }
+                if (supported) {
+                    supported = get_opencl_c_major_ver(cver) >= 2;
+                }
+                if (!supported) {
                     LOGD("opencl unsupported device => skipping");
                     continue;
                 }
@@ -1235,7 +1271,7 @@ available_devices_result available_devices(
     [[maybe_unused]] bool openvino_gpu, [[maybe_unused]] bool opencl,
     [[maybe_unused]] bool opencl_clover) {
     available_devices_result result;
-
+#ifndef DEBUG
 #ifdef ARCH_X86_64
     if (cuda) {
         result.error = add_cuda_devices(result.devices);
@@ -1269,6 +1305,7 @@ available_devices_result available_devices(
         add_opencl_devices(result.devices, flags);
     }
 #endif
+#endif  // not DEBUG
     return result;
 }
 

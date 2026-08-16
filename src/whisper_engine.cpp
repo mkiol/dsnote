@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -27,6 +27,7 @@
 
 whisper_engine::whisper_engine(config_t config, callbacks_t call_backs)
     : stt_engine{std::move(config), std::move(call_backs)} {
+    LOGD("whisper ctor");
     open_whisper_lib();
     m_wparams = make_wparams();
     m_speech_buf.reserve(m_speech_max_size);
@@ -42,6 +43,8 @@ whisper_engine::~whisper_engine() {
             m_whisper_api.whisper_free(m_whisper_ctx);
             m_whisper_ctx = nullptr;
         }
+
+        unload_all_backends();
     }
 
     m_whisper_api = {};
@@ -51,11 +54,18 @@ whisper_engine::~whisper_engine() {
         m_whisperlib_handle = nullptr;
     }
 
+    if (m_ggmllib_handle) {
+        dlclose(m_ggmllib_handle);
+        m_ggmllib_handle = nullptr;
+    }
+
     unsetenv("GGML_OPENCL_PLATFORM");
     unsetenv("GGML_OPENCL_DEVICE");
+    unsetenv("GGML_BACKEND_DIR");
 }
 
 static bool try_open_lib(const char* lib) {
+    LOGD("try to open whisper lib: " << lib);
     auto* handle = dlopen(lib, RTLD_LAZY);
     if (!handle) {
         LOGW("failed to open whisper lib: " << dlerror());
@@ -67,41 +77,7 @@ static bool try_open_lib(const char* lib) {
     return true;
 }
 
-bool whisper_engine::available() {
-    bool available = false;
-
-#ifdef ARCH_ARM_32
-    auto cpuinfo = cpu_tools::cpuinfo();
-    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::asimd) {
-        available = try_open_lib("libwhisper-openblas.so");
-    }
-    if (!available) {
-        available = try_open_lib("libwhisper-fallback.so");
-    }
-#elif ARCH_ARM_64
-    available = try_open_lib("libwhisper-openblas.so");
-#else
-    auto cpuinfo = cpu_tools::cpuinfo();
-    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx2) {
-        available = try_open_lib("libwhisper-openblas.so");
-    }
-    if (!available &&
-        (cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx)) {
-        available = try_open_lib("libwhisper-fallback1.so");
-    }
-    if (!available) {
-        available = try_open_lib("libwhisper-fallback.so");
-    }
-    if (!available) {
-        available = try_open_lib("libwhisper.so");
-    }
-#endif
-    if (!available) {
-        available = try_open_lib("libwhisper.so");
-    }
-
-    return available;
-}
+bool whisper_engine::available() { return try_open_lib("libwhisper.so"); }
 
 void whisper_engine::set_visible_devices() {
     if (m_config.use_gpu && m_config.gpu_device.api == gpu_api_t::vulkan &&
@@ -131,76 +107,35 @@ void whisper_engine::set_visible_devices() {
 }
 
 bool whisper_engine::has_cuda() {
-#ifdef ARCH_X86_64
-    auto cpuinfo = cpu_tools::cpuinfo();
-    if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
-        (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
-        LOGD("whisper-cublas is not supported due to lack of avx");
-        return false;
-    }
+#ifdef DEBUG
+    return false;
+#else
+    return try_open_lib("libggml-cuda.so");
 #endif
-    return try_open_lib("libwhisper-cublas.so");
-}
-
-bool whisper_engine::has_openvino() {
-#ifdef ARCH_X86_64
-    auto cpuinfo = cpu_tools::cpuinfo();
-    if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
-        (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
-        LOGD("whisper-openvino is not supported due to lack of avx");
-        return false;
-    }
-#endif
-    return try_open_lib("libwhisper-openvino.so");
 }
 
 bool whisper_engine::has_opencl() {
-#ifdef ARCH_X86_64
-    auto cpuinfo = cpu_tools::cpuinfo();
-    if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
-        (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
-        LOGD("whisper-clblast is not supported due to lack of avx");
-        return false;
-    }
+#ifdef DEBUG
+    return false;
+#else
+    return try_open_lib("libggml-opencl.so");
 #endif
-    return try_open_lib("libwhisper-clblast.so");
 }
 
 bool whisper_engine::has_hip() {
-#ifdef ARCH_X86_64
-    auto cpuinfo = cpu_tools::cpuinfo();
-    if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
-        (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
-        LOGD("whisper-hip is not supported due to lack of avx");
-        return false;
-    }
+#ifdef DEBUG
+    return false;
+#else
+    return try_open_lib("libggml-hip.so");
 #endif
-    return try_open_lib("libwhisper-hipblas.so");
 }
 
 bool whisper_engine::has_vulkan() {
-#ifdef ARCH_X86_64
-    auto cpuinfo = cpu_tools::cpuinfo();
-    if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
-        (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
-        LOGD("whisper-vulkan is not supported due to lack of avx");
-        return false;
-    }
+#ifdef DEBUG
+    return false;
+#else
+    return try_open_lib("libggml-vulkan.so");
 #endif
-    return try_open_lib("libwhisper-vulkan.so");
-}
-
-bool whisper_engine::use_openvino() const {
-#ifdef ARCH_X86_64
-    auto cpuinfo = cpu_tools::cpuinfo();
-    if ((cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) == 0 ||
-        (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) == 0) {
-        LOGD("whisper-openvino is not supported due to lack of avx");
-        return false;
-    }
-#endif
-    return m_config.gpu_device.api == gpu_api_t::openvino &&
-           !m_config.model_files.openvino_model_file.empty();
 }
 
 bool whisper_engine::use_gpu() const {
@@ -208,168 +143,158 @@ bool whisper_engine::use_gpu() const {
                                 m_config.gpu_device.api == gpu_api_t::rocm);
 }
 
-void whisper_engine::open_whisper_lib() {
-    set_visible_devices();
-#ifdef ARCH_ARM_32
-    if (cpu_tools::cpuinfo().feature_flags &
-        cpu_tools::feature_flags_t::asimd) {
-        LOGD("using whisper-openblas");
-        m_whisperlib_handle = dlopen("libwhisper-openblas.so", RTLD_LAZY);
-        if (m_whisperlib_handle == nullptr)
-            LOGE("failed to open libwhisper-openblas.so: " << dlerror());
-    } else {
-        LOGW("using whisper-fallback");
-        m_whisperlib_handle = dlopen("libwhisper-fallback.so", RTLD_LAZY);
-        if (m_whisperlib_handle == nullptr)
-            LOGE("failed to open libwhisper-fallback.so: " << dlerror());
+bool whisper_engine::load_backend(const std::string& name) {
+    LOGD("load whisper backend: " << name);
+    if (m_backend_regs.find(name) != m_backend_regs.end()) {
+        // already loaded
+        return true;
     }
-#elif ARCH_ARM_64
-    if (m_config.use_gpu) {
-        if (m_config.gpu_device.api == gpu_api_t::vulkan) {
-            LOGD("using whisper-vulkan");
 
-            m_whisperlib_handle = dlopen("libwhisper-vulkan.so", RTLD_LAZY);
-            if (m_whisperlib_handle == nullptr)
-                LOGE("failed to open libwhisper-vulkan.so: " << dlerror());
-        }
+    auto* reg = m_whisper_api.ggml_backend_load_best_ex(name.c_str());
+    if (reg == nullptr) {
+        LOGW("failed to load whisper backed: " << name);
+        return false;
     }
+    auto device_count = m_whisper_api.ggml_backend_reg_dev_count(reg);
+    if (device_count == 0) {
+        m_whisper_api.ggml_backend_unload(reg);
+        LOGW("failed to load whisper backed (no devices): " << name);
+        return false;
+    }
+
+    m_backend_regs.insert({name, reg});
+    return true;
+}
+
+void whisper_engine::unload_all_backends() {
+    auto it = m_backend_regs.cbegin();
+    while (it != m_backend_regs.cend()) {
+        m_whisper_api.ggml_backend_unload(it->second);
+        it = m_backend_regs.erase(it);
+    }
+}
+
+void whisper_engine::open_whisper_lib() {
+    // load ggml
+
+    /* patched version of ggml lib uses GGML_BACKEND_DIR env var to set
+     * directory for backend libs */
+    LOGD("using ggml backend dir: " << m_config.lib_dir);
+    setenv("GGML_BACKEND_DIR", m_config.lib_dir.c_str(), 1);
+    setenv("GGML_NO_BACKTRACE", "1", 1);
+
+    m_ggmllib_handle = dlopen("libggml.so", RTLD_LAZY);
+    if (m_ggmllib_handle == nullptr) {
+        LOGF("failed to open libggml.so: " << dlerror());
+    }
+
+    // load whisper
+
+    set_visible_devices();
+
+    m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
     if (m_whisperlib_handle == nullptr) {
-        LOGD("using whisper-openblas");
-        m_whisperlib_handle = dlopen("libwhisper-openblas.so", RTLD_LAZY);
-        if (m_whisperlib_handle == nullptr)
-            LOGE("failed to open libwhisper-openblas.so: " << dlerror());
+        LOGF("failed to open libwhisper.so: " << dlerror());
+    }
+
+#define WHISPER_ENGINE_REGISTER_API(handle, name)                             \
+    m_whisper_api.name =                                                      \
+        reinterpret_cast<decltype(m_whisper_api.name)>(dlsym(handle, #name)); \
+    if (m_whisper_api.name == nullptr) {                                      \
+        LOGF("failed to register whisper api: " #name);                       \
+    }
+
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle,
+                                whisper_init_from_file_with_params)
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_print_system_info)
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_full)
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_full_n_segments)
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_full_n_segments)
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle,
+                                whisper_full_get_segment_text)
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle,
+                                whisper_full_get_segment_t0)
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle,
+                                whisper_full_get_segment_t1)
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_free)
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle,
+                                whisper_full_default_params)
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle,
+                                whisper_context_default_params)
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_full_lang_id)
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_lang_str)
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_version);
+    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_log_set);
+    WHISPER_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_load_all)
+    WHISPER_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_load_best_ex)
+    WHISPER_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_unload)
+    WHISPER_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_log_set)
+    WHISPER_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_reg_dev_count)
+
+#undef WHISPER_ENGINE_REGISTER_API
+
+    // set logger
+
+    m_whisper_api.whisper_log_set(
+        [](ggml_log_level level, const char* text,
+           [[maybe_unused]] void* user_data) {
+            switch (level) {
+                case GGML_LOG_LEVEL_DEBUG:
+                case GGML_LOG_LEVEL_CONT:
+                    LOGD("whispercpp: " << text);
+                    break;
+                case GGML_LOG_LEVEL_INFO:
+                    LOGI("whispercpp: " << text);
+                    break;
+                case GGML_LOG_LEVEL_WARN:
+                    LOGW("whispercpp: " << text);
+                    break;
+                case GGML_LOG_LEVEL_ERROR:
+                    LOGE("whispercpp: " << text);
+                    break;
+                case GGML_LOG_LEVEL_NONE:
+                    break;
+            }
+        },
+        nullptr);
+
+    LOGD("whisper lib version: " << m_whisper_api.whisper_version());
+
+    // load backends
+
+    if (!load_backend("cpu")) {
+        LOGF("failed to load whisper mandatory backend");
+    }
+
+    load_backend("blas");
+
+#if ARCH_ARM_64
+    if (m_config.use_gpu && m_config.gpu_device.api == gpu_api_t::vulkan) {
+        load_backend("vulkan");
     }
 #else
-    if (auto cpuinfo = cpu_tools::cpuinfo();
-        cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx &&
-        cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c) {
-        if (m_config.use_gpu) {
-            if (m_config.gpu_device.api == gpu_api_t::cuda) {
-                LOGD("using whisper-cublas");
-
-                m_whisperlib_handle = dlopen("libwhisper-cublas.so", RTLD_LAZY);
-                if (m_whisperlib_handle == nullptr)
-                    LOGE("failed to open libwhisper-cublas.so: " << dlerror());
-            } else if (m_config.gpu_device.api == gpu_api_t::rocm) {
-                LOGD("using whisper-hipblas");
-
-                m_whisperlib_handle =
-                    dlopen("libwhisper-hipblas.so", RTLD_LAZY);
-                if (m_whisperlib_handle == nullptr)
-                    LOGE("failed to open libwhisper-hipblas.so: " << dlerror());
-            } else if (m_config.gpu_device.api == gpu_api_t::vulkan) {
-                LOGD("using whisper-vulkan");
-
-                m_whisperlib_handle = dlopen("libwhisper-vulkan.so", RTLD_LAZY);
-                if (m_whisperlib_handle == nullptr)
-                    LOGE("failed to open libwhisper-vulkan.so: " << dlerror());
-            } else if (use_openvino()) {
-                LOGD("using whisper-openvino");
-
-                m_whisperlib_handle =
-                    dlopen("libwhisper-openvino.so", RTLD_LAZY);
-                if (m_whisperlib_handle == nullptr)
-                    LOGE(
-                        "failed to open libwhisper-openvino.so: " << dlerror());
-            } else if (m_config.gpu_device.api == gpu_api_t::opencl) {
-                LOGD("using whisper-clblast");
-
-                if (!m_config.gpu_device.platform_name.empty() &&
-                    !m_config.gpu_device.name.empty()) {
-                    setenv("GGML_OPENCL_PLATFORM",
-                           m_config.gpu_device.platform_name.c_str(), 1);
-                    setenv("GGML_OPENCL_DEVICE",
-                           m_config.gpu_device.name.c_str(), 1);
-                } else {
-                    unsetenv("GGML_OPENCL_PLATFORM");
-                    unsetenv("GGML_OPENCL_DEVICE");
-                }
-
-                m_whisperlib_handle =
-                    dlopen("libwhisper-clblast.so", RTLD_LAZY);
-                if (m_whisperlib_handle == nullptr)
-                    LOGE("failed to open libwhisper-clblast.so: " << dlerror());
-            }
-        }
-
-        if (m_whisperlib_handle == nullptr) {
-            if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx2) {
-                LOGD("using whisper-openblas (avx2)");
-                m_whisperlib_handle =
-                    dlopen("libwhisper-openblas.so", RTLD_LAZY);
-                if (m_whisperlib_handle == nullptr)
-                    LOGE(
-                        "failed to open libwhisper-openblas.so: " << dlerror());
+    if (m_config.use_gpu) {
+        if (m_config.gpu_device.api == gpu_api_t::cuda) {
+            load_backend("cuda");
+        } else if (m_config.gpu_device.api == gpu_api_t::rocm) {
+            load_backend("hip");
+        } else if (m_config.gpu_device.api == gpu_api_t::vulkan) {
+            load_backend("vulkan");
+        } else if (m_config.gpu_device.api == gpu_api_t::opencl) {
+            if (!m_config.gpu_device.platform_name.empty() &&
+                !m_config.gpu_device.name.empty()) {
+                setenv("GGML_OPENCL_PLATFORM",
+                       m_config.gpu_device.platform_name.c_str(), 1);
+                setenv("GGML_OPENCL_DEVICE", m_config.gpu_device.name.c_str(),
+                       1);
             } else {
-                LOGD("using whisper-fallback1 (avx)");
-                m_whisperlib_handle =
-                    dlopen("libwhisper-fallback1.so", RTLD_LAZY);
-                if (m_whisperlib_handle == nullptr)
-                    LOGE("failed to open libwhisper-fallback1.so: "
-                         << dlerror());
+                unsetenv("GGML_OPENCL_PLATFORM");
+                unsetenv("GGML_OPENCL_DEVICE");
             }
+            load_backend("opencl");
         }
-    } else {
-        LOGW("using whisper-fallback (no avx)");
-        m_whisperlib_handle = dlopen("libwhisper-fallback.so", RTLD_LAZY);
-        if (m_whisperlib_handle == nullptr)
-            LOGE("failed to open libwhisper-fallback.so: " << dlerror());
     }
 #endif
-
-    if (m_whisperlib_handle == nullptr) {
-        LOGW("using whisper");
-        m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
-        if (m_whisperlib_handle == nullptr) {
-            LOGE("failed to open libwhisper.so: " << dlerror());
-            throw std::runtime_error("failed to open whisper lib");
-        }
-    }
-
-    m_whisper_api.whisper_init_from_file_with_params = reinterpret_cast<
-        decltype(m_whisper_api.whisper_init_from_file_with_params)>(
-        dlsym(m_whisperlib_handle, "whisper_init_from_file_with_params"));
-    m_whisper_api.whisper_print_system_info =
-        reinterpret_cast<decltype(m_whisper_api.whisper_print_system_info)>(
-            dlsym(m_whisperlib_handle, "whisper_print_system_info"));
-    m_whisper_api.whisper_full =
-        reinterpret_cast<decltype(m_whisper_api.whisper_full)>(
-            dlsym(m_whisperlib_handle, "whisper_full"));
-    m_whisper_api.whisper_full_n_segments =
-        reinterpret_cast<decltype(m_whisper_api.whisper_full_n_segments)>(
-            dlsym(m_whisperlib_handle, "whisper_full_n_segments"));
-    m_whisper_api.whisper_full_get_segment_text =
-        reinterpret_cast<decltype(m_whisper_api.whisper_full_get_segment_text)>(
-            dlsym(m_whisperlib_handle, "whisper_full_get_segment_text"));
-    m_whisper_api.whisper_full_get_segment_t0 =
-        reinterpret_cast<decltype(m_whisper_api.whisper_full_get_segment_t0)>(
-            dlsym(m_whisperlib_handle, "whisper_full_get_segment_t0"));
-    m_whisper_api.whisper_full_get_segment_t1 =
-        reinterpret_cast<decltype(m_whisper_api.whisper_full_get_segment_t1)>(
-            dlsym(m_whisperlib_handle, "whisper_full_get_segment_t1"));
-    m_whisper_api.whisper_free =
-        reinterpret_cast<decltype(m_whisper_api.whisper_free)>(
-            dlsym(m_whisperlib_handle, "whisper_free"));
-    m_whisper_api.whisper_full_default_params =
-        reinterpret_cast<decltype(m_whisper_api.whisper_full_default_params)>(
-            dlsym(m_whisperlib_handle, "whisper_full_default_params"));
-    m_whisper_api.whisper_context_default_params = reinterpret_cast<
-        decltype(m_whisper_api.whisper_context_default_params)>(
-        dlsym(m_whisperlib_handle, "whisper_context_default_params"));
-    m_whisper_api.whisper_ctx_init_openvino_encoder = reinterpret_cast<
-        decltype(m_whisper_api.whisper_ctx_init_openvino_encoder)>(
-        dlsym(m_whisperlib_handle, "whisper_ctx_init_openvino_encoder"));
-    m_whisper_api.whisper_full_lang_id =
-        reinterpret_cast<decltype(m_whisper_api.whisper_full_lang_id)>(
-            dlsym(m_whisperlib_handle, "whisper_full_lang_id"));
-    m_whisper_api.whisper_lang_str =
-        reinterpret_cast<decltype(m_whisper_api.whisper_lang_str)>(
-            dlsym(m_whisperlib_handle, "whisper_lang_str"));
-
-    if (!m_whisper_api.ok()) {
-        LOGE("failed to register whisper api");
-        throw std::runtime_error("failed to register whisper api");
-    }
 }
 
 void whisper_engine::push_buf_to_whisper_buf(
@@ -404,24 +329,6 @@ void whisper_engine::stop_processing_impl() {
 
 void whisper_engine::start_processing_impl() { create_model(); }
 
-static std::string first_file_with_ext(std::string dir_path,
-                                       const std::string& ext) {
-    auto* dirp = opendir(dir_path.c_str());
-    if (!dirp) return {};
-
-    while (auto* dirent = readdir(dirp)) {
-        if (dirent->d_type != DT_REG) continue;
-
-        std::string fn{dirent->d_name};
-
-        if (!fn.empty() && fn.front() != '.' &&
-            fn.substr(fn.find_last_of('.') + 1) == ext)
-            return dir_path.append("/").append(fn);
-    }
-
-    return {};
-}
-
 void whisper_engine::create_model() {
     if (m_whisper_ctx) return;
 
@@ -438,28 +345,6 @@ void whisper_engine::create_model() {
     if (m_whisper_ctx == nullptr) {
         LOGE("failed to create whisper model");
         throw std::runtime_error("failed to create whisper model");
-    }
-
-    if (use_openvino()) {
-        auto idx = m_config.model_files.model_file.rfind('/');
-        auto ov_file = first_file_with_ext(
-            m_config.model_files.openvino_model_file, "xml");
-        if (idx != std::string::npos && !ov_file.empty()) {
-            LOGD("using openvino model: " << ov_file);
-            auto cache_dir =
-                fmt::format("{}/{}-encoder-openvino-cache", m_config.cache_dir,
-                            m_config.model_files.model_file.substr(idx));
-
-            if (m_whisper_api.whisper_ctx_init_openvino_encoder(
-                    m_whisper_ctx, ov_file.c_str(),
-                    m_config.gpu_device.name.empty()
-                        ? "CPU"
-                        : m_config.gpu_device.name.c_str(),
-                    cache_dir.c_str()) != 0) {
-                LOGE("failed to init openvino");
-                throw std::runtime_error("failed to init openvino");
-            }
-        }
     }
 
     if (!m_whisper_sup_ctx && !m_config.model_files.scorer_file.empty()) {
@@ -642,7 +527,7 @@ whisper_full_params whisper_engine::make_wparams() {
     wparams.detect_language = false;
     wparams.beam_search = {static_cast<int>(m_config.beam_search), 0.0};
     wparams.suppress_blank = true;
-    wparams.suppress_non_speech_tokens = true;
+    wparams.suppress_nst = true;
     wparams.single_segment = false;
     wparams.translate = m_config.translate && m_config.has_option('t');
     wparams.n_threads = static_cast<int>(
@@ -657,17 +542,7 @@ whisper_full_params whisper_engine::make_wparams() {
     wparams.audio_ctx = 1500;
     wparams.no_context = false;
 
-    if (!m_config.model_files.openvino_model_file.empty()) {
-        // read audio_ctx from config file for openvino
-        auto config_file = first_file_with_ext(
-            m_config.model_files.openvino_model_file, "config");
-        if (!config_file.empty()) {
-            std::ifstream file{config_file};
-            file >> wparams.audio_ctx;
-            LOGD("openvino audio_ctx: " << wparams.audio_ctx);
-        }
-    } else if (m_config.audio_ctx_conf == audio_ctx_conf_t::custom &&
-               !use_gpu()) {
+    if (m_config.audio_ctx_conf == audio_ctx_conf_t::custom && !use_gpu()) {
         wparams.audio_ctx = m_config.audio_ctx_size;
     }
 
@@ -690,10 +565,9 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
     bool subrip = m_config.text_format == text_format_t::subrip;
     bool inline_ts = m_config.text_format == text_format_t::inline_timestamp;
 
-    if (m_config.audio_ctx_conf == audio_ctx_conf_t::dynamic &&
-        !use_openvino() && !use_gpu()) {
+    if (m_config.audio_ctx_conf == audio_ctx_conf_t::dynamic && !use_gpu()) {
         // short audio clips optimization
-        // https://github.com/ggerganov/whisper.cpp/issues/1855
+        // https://github.com/ggml-org/whisper.cpp/issues/1855
         m_wparams.audio_ctx = std::min<int>(
             ((1500 * buf.size()) / (m_sample_rate * 30)) + 128, 1500);
     }

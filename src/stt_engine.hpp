@@ -126,6 +126,7 @@ class stt_engine {
         std::string lang_code;
         model_files_t model_files;
         std::string cache_dir;
+        std::string lib_dir;
         speech_mode_t speech_mode = speech_mode_t::automatic;
         vad_mode_t vad_mode = vad_mode_t::aggressiveness3;
         bool translate = false; /*extra whisper feature*/

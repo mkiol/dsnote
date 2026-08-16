@@ -149,6 +149,14 @@ QString path_to_dir_for_path(const QString& dir, const QString& path) {
     if (QFileInfo::exists(path_full))
         return QStringLiteral("/usr/local/share/%1").arg(APP_BINARY_ID);
 
+    // search in [current]/external
+
+    path_full = QFileInfo{QStringLiteral("external/%1/%2").arg(dir, path)}
+                    .absoluteFilePath();
+    if (QFileInfo::exists(path_full)) {
+        return QFileInfo{path_full}.absolutePath();
+    }
+
     qWarning() << "can't find dir for path:" << dir << path;
 
     return QString{};
@@ -160,6 +168,10 @@ QString path_to_share_dir_for_path(const QString& path) {
 
 QString path_to_bin_dir_for_path(const QString& path) {
     return path_to_dir_for_path(QStringLiteral("bin"), path);
+}
+
+QString path_to_lib_dir_for_path(const QString& path) {
+    return path_to_dir_for_path(QStringLiteral("lib"), path);
 }
 
 QString module_file(const QString& name) {
