@@ -1,3 +1,12 @@
+diff -ruN -x '.*' html2md-org/CMakeLists.txt html2md-patched/CMakeLists.txt
+--- html2md-org/CMakeLists.txt	2025-05-14 09:55:21.000000000 +0200
++++ html2md-patched/CMakeLists.txt	2026-08-07 18:35:52.852408938 +0200
+@@ -138,5 +138,3 @@
+ if (BUILD_EXE)
+     install(TARGETS html2md-exe DESTINATION bin)
+ endif()
+-
+-include(cmake/Packaging.cmake)
 diff -ruN -x '.*' html2md-org/include/html2md.h html2md-patched/include/html2md.h
 --- html2md-org/include/html2md.h	2025-05-14 09:55:21.000000000 +0200
 +++ html2md-patched/include/html2md.h	2026-07-11 19:09:00.879484504 +0200
