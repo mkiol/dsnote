@@ -86,20 +86,35 @@ endif()
 
 if(DOWNLOAD_VOSK)
     set(vosk_x8664_url "https://github.com/alphacep/vosk-api/releases/download/v0.3.45/vosk-linux-x86_64-0.3.45.zip")
+    set(vosk_x8664_checksum "bbdc8ed85c43979f6443142889770ea95cbfbc56cffb5c5dcd73afa875c5fbb2")
     set(vosk_arm64_url "https://github.com/alphacep/vosk-api/releases/download/v0.3.45/vosk-linux-aarch64-0.3.45.zip")
+    set(vosk_arm64_checksum "45e95d37755deb07568e79497d7feba8c03aee5a9e071df29961aa023fd94541")
     set(vosk_arm32_url "https://github.com/alphacep/vosk-api/releases/download/v0.3.45/vosk-linux-armv7l-0.3.45.zip")
+    set(vosk_arm32_checksum "10b795ae478ef1d530fcbfbbea9ccbbbf3b7e7c244bd5fd3176f4a6af32f3c8c")
 
     if(arch_x8664)
         set(vosk_url ${vosk_x8664_url})
+        set(vosk_checksum ${vosk_x8664_checksum})
     elseif(arch_arm32)
         set(vosk_url ${vosk_arm32_url})
+        set(vosk_checksum ${vosk_arm32_checksum})
     elseif(arch_arm64)
         set(vosk_url ${vosk_arm64_url})
+        set(vosk_checksum ${vosk_arm32_checksum})
     endif()
 
     set(vosk_archive "${PROJECT_BINARY_DIR}/vosk.zip")
 
-    file(DOWNLOAD ${vosk_url} ${vosk_archive} STATUS vosk_status)
+    file(DOWNLOAD ${vosk_url} ${vosk_archive}
+        EXPECTED_HASH SHA256=${vosk_checksum}
+        SHOW_PROGRESS
+        STATUS vosk_status)
+    list(GET vosk_status 0 vosk_status_code)
+    list(GET vosk_status 1 vosk_status_message)
+    if(NOT vosk_status_code EQUAL 0)
+        message(FATAL_ERROR "vosk download failed: ${vosk_status_message}")
+    endif()
+    message(STATUS "vosk download status: ${vosk_status_message}")
     file(ARCHIVE_EXTRACT INPUT ${vosk_archive} DESTINATION ${external_dir}/vosk)
     find_file(vosk_lib_path libvosk.so PATHS ${external_dir}/vosk/*/ REQUIRED NO_DEFAULT_PATH)
     find_file(vosk_header_path vosk_api.h PATHS ${external_dir}/vosk/*/ REQUIRED NO_DEFAULT_PATH)
