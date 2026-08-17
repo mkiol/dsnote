@@ -66,6 +66,9 @@ whisper_engine::~whisper_engine() {
 
 static bool try_open_lib(const char* lib) {
     LOGD("try to open whisper lib: " << lib);
+
+    setenv("GGML_NO_BACKTRACE", "1", 1);
+
     auto* handle = dlopen(lib, RTLD_LAZY);
     if (!handle) {
         LOGW("failed to open whisper lib: " << dlerror());
