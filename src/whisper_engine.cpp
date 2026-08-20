@@ -271,7 +271,7 @@ void whisper_engine::open_whisper_lib() {
 
     load_backend("blas");
 
-#if ARCH_ARM_64
+#ifdef ARCH_ARM_64
     if (m_config.use_gpu && m_config.gpu_device.api == gpu_api_t::vulkan) {
         load_backend("vulkan");
     }

@@ -12,8 +12,8 @@ diff -ruN -x '.*' whispercpp-org/ggml/include/ggml-backend.h whispercpp-patched/
      // Load all known backends from dynamic libraries
 diff -ruN -x '.*' whispercpp-org/ggml/src/CMakeLists.txt whispercpp-patched/ggml/src/CMakeLists.txt
 --- whispercpp-org/ggml/src/CMakeLists.txt	2026-06-19 06:12:37.000000000 +0200
-+++ whispercpp-patched/ggml/src/CMakeLists.txt	2026-08-16 17:56:29.790179972 +0200
-@@ -405,14 +405,41 @@
++++ whispercpp-patched/ggml/src/CMakeLists.txt	2026-08-20 11:06:07.394293636 +0200
+@@ -405,14 +405,42 @@
              # Many of these features are optional so we build versions with popular
              # combinations and name the backends based on the version they were
              # first released with
@@ -28,7 +28,8 @@ diff -ruN -x '.*' whispercpp-org/ggml/src/CMakeLists.txt whispercpp-patched/ggml
 +            if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
 +                if (CMAKE_SYSTEM_PROCESSOR MATCHES "armv7")
 +                    ggml_add_cpu_backend_variant(armv7.0_1)
-+                    ggml_add_cpu_backend_variant(armv7.0_2 NEON)
++                    ggml_add_cpu_backend_variant(armv7.0_2 ARM_VFPV4 ARM_NEON)
++                    ggml_add_cpu_backend_variant(armv8.0_1 ARM_VFPV4 ARM_NEON ARM8_NEON)
 +                else()
 +                    ggml_add_cpu_backend_variant(armv8.0_1)
 +                    if(CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL 9)
@@ -103,10 +104,248 @@ diff -ruN -x '.*' whispercpp-org/ggml/src/ggml-blas/ggml-blas.cpp whispercpp-pat
  #else
  #   include <cblas.h>
  #endif
+diff -ruN -x '.*' whispercpp-org/ggml/src/ggml-cpu/arch/arm/cpu-feats.cpp whispercpp-patched/ggml/src/ggml-cpu/arch/arm/cpu-feats.cpp
+--- whispercpp-org/ggml/src/ggml-cpu/arch/arm/cpu-feats.cpp	2026-06-19 06:12:37.000000000 +0200
++++ whispercpp-patched/ggml/src/ggml-cpu/arch/arm/cpu-feats.cpp	2026-08-20 11:09:13.432361517 +0200
+@@ -22,12 +22,12 @@
+ 
+ struct aarch64_features {
+     // has_neon not needed, aarch64 has NEON guaranteed
+-    bool has_dotprod     = false;
+-    bool has_fp16_va     = false;
+-    bool has_sve         = false;
+-    bool has_sve2        = false;
+-    bool has_i8mm        = false;
+-    bool has_sme         = false;
++    bool has_dotprod = false;
++    bool has_fp16_va = false;
++    bool has_sve = false;
++    bool has_sve2 = false;
++    bool has_i8mm = false;
++    bool has_sme = false;
+ 
+     aarch64_features() {
+ #if defined(__linux__)
+@@ -36,23 +36,26 @@
+ 
+         has_dotprod = !!(hwcap & HWCAP_ASIMDDP);
+         has_fp16_va = !!(hwcap & HWCAP_FPHP);
+-        has_sve     = !!(hwcap & HWCAP_SVE);
+-        has_sve2    = !!(hwcap2 & HWCAP2_SVE2);
+-        has_i8mm    = !!(hwcap2 & HWCAP2_I8MM);
+-        has_sme     = !!(hwcap2 & HWCAP2_SME);
++        has_sve = !!(hwcap & HWCAP_SVE);
++        has_sve2 = !!(hwcap2 & HWCAP2_SVE2);
++        has_i8mm = !!(hwcap2 & HWCAP2_I8MM);
++        has_sme = !!(hwcap2 & HWCAP2_SME);
+ #elif defined(__APPLE__)
+         int oldp = 0;
+         size_t size = sizeof(oldp);
+ 
+-        if (sysctlbyname("hw.optional.arm.FEAT_DotProd", &oldp, &size, NULL, 0) == 0) {
++        if (sysctlbyname("hw.optional.arm.FEAT_DotProd", &oldp, &size, NULL,
++                         0) == 0) {
+             has_dotprod = static_cast<bool>(oldp);
+         }
+ 
+-        if (sysctlbyname("hw.optional.arm.FEAT_I8MM", &oldp, &size, NULL, 0) == 0) {
++        if (sysctlbyname("hw.optional.arm.FEAT_I8MM", &oldp, &size, NULL, 0) ==
++            0) {
+             has_i8mm = static_cast<bool>(oldp);
+         }
+ 
+-        if (sysctlbyname("hw.optional.arm.FEAT_SME", &oldp, &size, NULL, 0) == 0) {
++        if (sysctlbyname("hw.optional.arm.FEAT_SME", &oldp, &size, NULL, 0) ==
++            0) {
+             has_sme = static_cast<bool>(oldp);
+         }
+ 
+@@ -66,28 +69,40 @@
+     aarch64_features af;
+ 
+ #ifdef GGML_USE_DOTPROD
+-    if (!af.has_dotprod) { return 0; }
+-    score += 1<<1;
++    if (!af.has_dotprod) {
++        return 0;
++    }
++    score += 1 << 1;
+ #endif
+ #ifdef GGML_USE_FP16_VECTOR_ARITHMETIC
+-    if (!af.has_fp16_va) { return 0; }
+-    score += 1<<2;
++    if (!af.has_fp16_va) {
++        return 0;
++    }
++    score += 1 << 2;
+ #endif
+ #ifdef GGML_USE_SVE
+-    if (!af.has_sve) { return 0; }
+-    score += 1<<3;
++    if (!af.has_sve) {
++        return 0;
++    }
++    score += 1 << 3;
+ #endif
+ #ifdef GGML_USE_MATMUL_INT8
+-    if (!af.has_i8mm) { return 0; }
+-    score += 1<<4;
++    if (!af.has_i8mm) {
++        return 0;
++    }
++    score += 1 << 4;
+ #endif
+ #ifdef GGML_USE_SVE2
+-    if (!af.has_sve2) { return 0; }
+-    score += 1<<5;
++    if (!af.has_sve2) {
++        return 0;
++    }
++    score += 1 << 5;
+ #endif
+ #ifdef GGML_USE_SME
+-    if (!af.has_sme) { return 0; }
+-    score += 1<<6;
++    if (!af.has_sme) {
++        return 0;
++    }
++    score += 1 << 6;
+ #endif
+ 
+     return score;
+@@ -95,4 +110,127 @@
+ 
+ GGML_BACKEND_DL_SCORE_IMPL(ggml_backend_cpu_aarch64_score)
+ 
+-# endif // defined(__aarch64__)
++#endif  // defined(__aarch64__)
++
++#if defined(__arm__)
++#include <fstream>
++#include <regex>
++#include <string>
++
++#include <sys/auxv.h>
++
++#if !defined(HWCAP_NEON)
++#define HWCAP_NEON (1 << 12)
++#endif
++
++#if !defined(HWCAP_FPHP)
++#define HWCAP_FPHP (1 << 22)
++#endif
++
++#if !defined(HWCAP_ASIMDDP)
++#define HWCAP_ASIMDDP (1 << 24)
++#endif
++
++#if !defined(HWCAP_I8MM)
++#define HWCAP_I8MM (1 << 27)
++#endif
++
++static unsigned int get_cpu_arch_from_cpuinfo() {
++    std::ifstream cpuinfo_file{"/proc/cpuinfo"};
++    if (!cpuinfo_file) {
++        throw std::runtime_error{"can't open /proc/cpuinfo"};
++    }
++
++    static const std::regex arm_arch_rx{"CPU\\sarchitecture\\s*:\\s+(.*)"};
++    for (std::string line; std::getline(cpuinfo_file, line);) {
++        if (std::smatch pieces_match;
++            std::regex_match(line, pieces_match, arm_arch_rx)) {
++            if (pieces_match[1].str().find('7') != std::string::npos)
++                return 7;
++            else if (pieces_match[1].str().find('8') != std::string::npos)
++                return 8;
++            else if (pieces_match[1].str().find('9') != std::string::npos)
++                return 9;
++        }
++    }
++
++    throw std::runtime_error{"invalid cpu arch"};
++}
++
++struct arm_features {
++    bool has_neon = false;
++    bool has_vfpv3 = false;
++    bool has_vfpv4 = false;
++    bool has_fp16_va = false;
++    bool has_dotprod = false;
++    bool has_i8mm = false;
++    unsigned int arch = 7; // default
++
++    arm_features() {
++      uint32_t hwcap = getauxval(AT_HWCAP);
++
++      has_neon = !!(hwcap & HWCAP_ARM_NEON);
++      has_vfpv3 = !!(hwcap & HWCAP_ARM_VFPv3);
++      has_vfpv4 = !!(hwcap & HWCAP_ARM_VFPv4);
++      has_fp16_va = !!(hwcap & HWCAP_FPHP);
++      has_dotprod = !!(hwcap & HWCAP_ASIMDDP);
++      has_i8mm = !!(hwcap & HWCAP_I8MM);
++
++      try {
++        arch = get_cpu_arch_from_cpuinfo();
++      } catch (...) {
++      }
++    }
++};
++
++static int ggml_backend_cpu_arm_score() {
++    int score = 1;
++    arm_features af;
++#ifdef GGML_USE_ARM_VFPV3
++    if (!af.has_vfpv3) {
++        return 0;
++    }
++    score += 1 << 1;
++#endif
++#ifdef GGML_USE_ARM_VFPV4
++    if (!af.has_vfpv4) {
++        return 0;
++    }
++    score += 1 << 2;
++#endif
++#ifdef GGML_USE_ARM_NEON
++    if (!af.has_neon) {
++        return 0;
++    }
++    score += 1 << 3;
++#endif
++#ifdef GGML_USE_ARM8_NEON
++    if (!af.has_neon || af.arch < 8) {
++        return 0;
++    }
++    score += 1 << 4;
++#endif
++#ifdef GGML_USE_DOTPROD
++    if (!af.has_dotprod) {
++      return 0;
++    }
++    score += 1 << 5;
++#endif
++#ifdef GGML_USE_FP16_VECTOR_ARITHMETIC
++    if (!af.has_fp16_va) {
++      return 0;
++    }
++    score += 1 << 6;
++#endif
++#ifdef GGML_USE_MATMUL_INT8
++    if (!af.has_i8mm) {
++      return 0;
++    }
++    score += 1 << 7;
++#endif
++    return score;
++}
++
++GGML_BACKEND_DL_SCORE_IMPL(ggml_backend_cpu_arm_score)
++
++#endif  // defined(__arm__)
 diff -ruN -x '.*' whispercpp-org/ggml/src/ggml-cpu/CMakeLists.txt whispercpp-patched/ggml/src/ggml-cpu/CMakeLists.txt
 --- whispercpp-org/ggml/src/ggml-cpu/CMakeLists.txt	2026-06-19 06:12:37.000000000 +0200
-+++ whispercpp-patched/ggml/src/ggml-cpu/CMakeLists.txt	2026-08-16 17:57:13.055874305 +0200
-@@ -169,45 +169,57 @@
++++ whispercpp-patched/ggml/src/ggml-cpu/CMakeLists.txt	2026-08-20 11:04:00.045261769 +0200
+@@ -169,45 +169,68 @@
                  if (GGML_CPU_ARM_ARCH)
                      list(APPEND ARCH_FLAGS -march=${GGML_CPU_ARM_ARCH})
                  elseif(GGML_CPU_ALL_VARIANTS)
@@ -154,9 +393,20 @@ diff -ruN -x '.*' whispercpp-org/ggml/src/ggml-cpu/CMakeLists.txt whispercpp-pat
 -                        set(ARM_MCPU "armv9.2-a")
 -                        set(ARCH_TAGS "${ARCH_TAGS}+sme")
 -                        list(APPEND ARCH_DEFINITIONS GGML_USE_SME)
-+                        if (GGML_INTERNAL_NEON)
++                        if (GGML_INTERNAL_ARM_VFPV4)
 +                            set(ARM_MCPU "armv7-a")
-+                            set(ARCH_TAGS "${ARCH_TAGS}+fp+simd")
++                            set(ARCH_TAGS "${ARCH_TAGS}+vfpv4")
++                            list(APPEND ARCH_DEFINITIONS GGML_USE_ARM_VFPV4)
++                        endif()
++                        if (GGML_INTERNAL_ARM_NEON)
++                            set(ARM_MCPU "armv7-a")
++                            set(ARCH_TAGS "${ARCH_TAGS}+simd")
++                            list(APPEND ARCH_DEFINITIONS GGML_USE_ARM_NEON)
++                        endif()
++                        if (GGML_INTERNAL_ARM8_NEON)
++                            set(ARM_MCPU "armv8-a")
++                            set(ARCH_TAGS "+simd")
++                            list(APPEND ARCH_DEFINITIONS GGML_USE_ARM8_NEON)
 +                        endif()
 +                    else()
 +                        # Begin with the lowest baseline

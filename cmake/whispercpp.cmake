@@ -1,8 +1,6 @@
 set(whispercpp_source_url "https://github.com/ggml-org/whisper.cpp/archive/refs/tags/v1.9.1.tar.gz")
 set(whispercpp_checksum "147267177eef7b22ec3d2476dd514d1b12e160e176230b740e3d1bd600118447")
 
-set(whispercpp_patch_file "${patches_dir}/whispercpp.patch")
-
 set(whispercpp_flags
     -ffast-math
     -fno-finite-math-only 
@@ -173,8 +171,8 @@ ExternalProject_Add(whispercpp
     URL_HASH SHA256=${whispercpp_checksum}
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     PATCH_COMMAND patch --batch --unified -p1 --directory=<SOURCE_DIR>
-                -i ${whispercpp_patch_file} ||
-                    echo "patch cmd failed, likely already patched"
+                -i "${patches_dir}/whispercpp.patch" ||
+                echo "patch cmd failed, likely already patched"
     UPDATE_COMMAND ""
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}
         ${CMAKE_COMMAND} -S <SOURCE_DIR> -B <BINARY_DIR>
