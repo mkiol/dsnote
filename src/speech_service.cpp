@@ -770,9 +770,6 @@ speech_service::choose_model_config_by_id(
             case engine_t::stt: {
                 auto scorer_file = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::scorer, model.sup_files);
-                auto openvino_file = models_manager::sup_model_file_of_role(
-                    models_manager::sup_model_role_t::openvino,
-                    model.sup_files);
                 config->stt = stt_model_config_t{
                     model.lang_id,
                     model.lang_code,
@@ -781,8 +778,6 @@ speech_service::choose_model_config_by_id(
                     model.model_file,
                     /*scorer_file=*/
                     scorer_file ? scorer_file->get().file : QString{},
-                    /*openvino_file=*/
-                    openvino_file ? openvino_file->get().file : QString{},
                     /*ttt=*/{},
                 };
                 break;
@@ -903,17 +898,16 @@ speech_service::choose_model_config_by_lang(
                 auto scorer_file = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::scorer,
                     best_model->sup_files);
-                auto openvino_file = models_manager::sup_model_file_of_role(
-                    models_manager::sup_model_role_t::openvino,
-                    best_model->sup_files);
                 config->stt = stt_model_config_t{
-                    best_model->lang_id, best_model->lang_code, best_model->id,
-                    best_model->engine, best_model->model_file,
+                    best_model->lang_id,
+                    best_model->lang_code,
+                    best_model->id,
+                    best_model->engine,
+                    best_model->model_file,
                     /*scorer_file=*/
                     scorer_file ? scorer_file->get().file : QString{},
-                    /*openvino_file=*/
-                    openvino_file ? openvino_file->get().file : QString{},
-                    /*ttt=*/{}};
+                    /*ttt=*/{},
+                };
                 break;
             }
             case engine_t::tts: {
@@ -971,9 +965,6 @@ speech_service::choose_model_config_by_first(
             case engine_t::stt: {
                 auto scorer_file = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::scorer, model.sup_files);
-                auto openvino_file = models_manager::sup_model_file_of_role(
-                    models_manager::sup_model_role_t::openvino,
-                    model.sup_files);
                 config->stt = stt_model_config_t{
                     model.lang_id,
                     model.lang_code,
@@ -982,8 +973,6 @@ speech_service::choose_model_config_by_first(
                     model.model_file,
                     /*scorer_file=*/
                     scorer_file ? scorer_file->get().file : QString{},
-                    /*openvino_file=*/
-                    openvino_file ? scorer_file->get().file : QString{},
                     /*ttt=*/{},
                 };
                 break;
@@ -1251,13 +1240,6 @@ static std::optional<typename Engine::gpu_device_t> make_gpu_device(
             device.name = l.at(2).trimmed().toStdString();
             return device;
         }
-        if (l.at(0).trimmed() == "OpenVINO") {
-            typename Engine::gpu_device_t device;
-            device.api = Engine::gpu_api_t::openvino;
-            device.id = 0;
-            device.name = l.at(1).trimmed().toStdString();
-            return device;
-        }
         if (l.at(0).trimmed() == "Vulkan") {
             typename Engine::gpu_device_t device;
             device.api = Engine::gpu_api_t::vulkan;
@@ -1433,8 +1415,6 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             model_config->stt->model_file.toStdString();
         config.model_files.scorer_file =
             model_config->stt->scorer_file.toStdString();
-        config.model_files.openvino_model_file =
-            model_config->stt->openvino_file.toStdString();
         if (model_config->stt->ttt)
             config.model_files.ttt_model_file =
                 model_config->stt->ttt->model_file.toStdString();
@@ -4513,14 +4493,6 @@ void speech_service::remove_cached_files() {
 
         for (const auto &file : std::as_const(dir).entryList())
             dir.remove(file);
-
-        // openvino chache
-
-        dir.setNameFilters(QStringList{} << "*-encoder-openvino-cache");
-        dir.setFilter(QDir::Dirs);
-
-        for (const auto &file : std::as_const(dir).entryList())
-            QDir{dir.absoluteFilePath(file)}.removeRecursively();
     }
 }
 

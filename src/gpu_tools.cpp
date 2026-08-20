@@ -106,46 +106,6 @@ struct hipDeviceProp {
     char other_props[1024] = {};
 };
 
-enum ov_status_e {
-    OK = 0,  //!< SUCCESS
-    /*
-     * @brief map exception to C++ interface
-     */
-    GENERAL_ERROR = -1,       //!< GENERAL_ERROR
-    NOT_IMPLEMENTED = -2,     //!< NOT_IMPLEMENTED
-    NETWORK_NOT_LOADED = -3,  //!< NETWORK_NOT_LOADED
-    PARAMETER_MISMATCH = -4,  //!< PARAMETER_MISMATCH
-    NOT_FOUND = -5,           //!< NOT_FOUND
-    OUT_OF_BOUNDS = -6,       //!< OUT_OF_BOUNDS
-    /*
-     * @brief exception not of std::exception derived type was thrown
-     */
-    UNEXPECTED = -7,          //!< UNEXPECTED
-    REQUEST_BUSY = -8,        //!< REQUEST_BUSY
-    RESULT_NOT_READY = -9,    //!< RESULT_NOT_READY
-    NOT_ALLOCATED = -10,      //!< NOT_ALLOCATED
-    INFER_NOT_STARTED = -11,  //!< INFER_NOT_STARTED
-    NETWORK_NOT_READ = -12,   //!< NETWORK_NOT_READ
-    INFER_CANCELLED = -13,    //!< INFER_CANCELLED
-    /*
-     * @brief exception in C wrapper
-     */
-    INVALID_C_PARAM = -14,         //!< INVALID_C_PARAM
-    UNKNOWN_C_ERROR = -15,         //!< UNKNOWN_C_ERROR
-    NOT_IMPLEMENT_C_METHOD = -16,  //!< NOT_IMPLEMENT_C_METHOD
-    UNKNOW_EXCEPTION = -17,        //!< UNKNOW_EXCEPTION
-};
-
-struct ov_version {
-    const char* buildNumber;
-    const char* description;
-};
-
-struct ov_available_devices {
-    char** devices;
-    size_t size;
-};
-
 #define VK_MAKE_API_VERSION(variant, major, minor, patch)            \
     ((((uint32_t)(variant)) << 29U) | (((uint32_t)(major)) << 22U) | \
      (((uint32_t)(minor)) << 12U) | ((uint32_t)(patch)))
@@ -387,95 +347,6 @@ struct cuda_dev_api {
     }
 
     ~cuda_dev_api() {
-        if (handle) {
-            dlclose(handle);
-        }
-    }
-};
-
-struct openvino_api {
-    void* handle = nullptr;
-    ov_status_e (*ov_get_openvino_version)(ov_version* version) = nullptr;
-    void (*ov_version_free)(ov_version* version) = nullptr;
-    ov_status_e (*ov_core_create)(void** core) = nullptr;
-    void (*ov_core_free)(void* core) = nullptr;
-    ov_status_e (*ov_core_get_available_devices)(
-        const void* core, ov_available_devices* devices) = nullptr;
-    void (*ov_available_devices_free)(ov_available_devices* devices) = nullptr;
-    ov_status_e (*ov_core_get_property)(const void* core,
-                                        const char* device_name,
-                                        const char* property_key,
-                                        char** property_value) = nullptr;
-
-    openvino_api() {
-        handle = dlopen("libopenvino_c.so", RTLD_LAZY);
-        if (!handle) {
-            LOGW("failed to open openvino lib: " << dlerror());
-            throw std::runtime_error("failed to open openvino lib");
-        }
-
-        ov_get_openvino_version =
-            reinterpret_cast<decltype(ov_get_openvino_version)>(
-                dlsym(handle, "ov_get_openvino_version"));
-        if (!ov_get_openvino_version) {
-            LOGW("failed to sym ov_get_openvino_version");
-            dlclose(handle);
-            throw std::runtime_error("failed to sym ov_get_openvino_version");
-        }
-
-        ov_version_free = reinterpret_cast<decltype(ov_version_free)>(
-            dlsym(handle, "ov_version_free"));
-        if (!ov_version_free) {
-            LOGW("failed to sym ov_version_free");
-            dlclose(handle);
-            throw std::runtime_error("failed to sym ov_version_free");
-        }
-
-        ov_core_create = reinterpret_cast<decltype(ov_core_create)>(
-            dlsym(handle, "ov_core_create"));
-        if (!ov_core_create) {
-            LOGW("failed to sym ov_core_create");
-            dlclose(handle);
-            throw std::runtime_error("failed to sym ov_core_create");
-        }
-
-        ov_core_free = reinterpret_cast<decltype(ov_core_free)>(
-            dlsym(handle, "ov_core_free"));
-        if (!ov_core_free) {
-            LOGW("failed to sym ov_core_free");
-            dlclose(handle);
-            throw std::runtime_error("failed to sym ov_core_free");
-        }
-
-        ov_core_get_available_devices =
-            reinterpret_cast<decltype(ov_core_get_available_devices)>(
-                dlsym(handle, "ov_core_get_available_devices"));
-        if (!ov_core_get_available_devices) {
-            LOGW("failed to sym ov_core_get_available_devices");
-            dlclose(handle);
-            throw std::runtime_error(
-                "failed to sym ov_core_get_available_devices");
-        }
-
-        ov_available_devices_free =
-            reinterpret_cast<decltype(ov_available_devices_free)>(
-                dlsym(handle, "ov_available_devices_free"));
-        if (!ov_available_devices_free) {
-            LOGW("failed to sym ov_available_devices_free");
-            dlclose(handle);
-            throw std::runtime_error("failed to sym ov_available_devices_free");
-        }
-
-        ov_core_get_property = reinterpret_cast<decltype(ov_core_get_property)>(
-            dlsym(handle, "ov_core_get_property"));
-        if (!ov_core_get_property) {
-            LOGW("failed to sym ov_core_get_property");
-            dlclose(handle);
-            throw std::runtime_error("failed to sym ov_core_get_property");
-        }
-    }
-
-    ~openvino_api() {
         if (handle) {
             dlclose(handle);
         }
@@ -1037,81 +908,6 @@ void add_opencl_devices(std::vector<device>& devices, uint8_t flags) {
     }
 }
 
-void add_openvino_devices(std::vector<device>& devices, uint8_t flags) {
-    LOGD("scanning for openvino devices");
-
-    try {
-        openvino_api api;
-
-        ov_version version{};
-        if (auto ret = api.ov_get_openvino_version(&version);
-            ret != ov_status_e::OK) {
-            LOGE("ov_get_openvino_version error: " << ret);
-            return;
-        }
-
-        LOGD("openvino version: build="
-             << version.buildNumber << ", description=" << version.description);
-
-        api.ov_version_free(&version);
-
-        void* core = nullptr;
-
-        if (auto ret = api.ov_core_create(&core); ret != ov_status_e::OK) {
-            LOGE("ov_core_create error: " << ret);
-            return;
-        }
-
-        if (!core) {
-            LOGE("ov core is nil");
-            return;
-        }
-
-        ov_available_devices available_devices{};
-
-        if (auto ret =
-                api.ov_core_get_available_devices(core, &available_devices);
-            ret != ov_status_e::OK) {
-            LOGE("ov_core_get_available_devices error: " << ret);
-            api.ov_core_free(core);
-            return;
-        }
-
-        LOGD("openvino number of devices: " << available_devices.size);
-
-        for (size_t i = 0; i < available_devices.size; ++i) {
-            char* device_full_name = nullptr;
-            api.ov_core_get_property(core, available_devices.devices[i],
-                                     "FULL_DEVICE_NAME", &device_full_name);
-            LOGD("openvino device: "
-                 << i << ", name=" << available_devices.devices[i]
-                 << ", full-name="
-                 << (device_full_name ? device_full_name : "Unknown"));
-
-            bool is_gpu = std::string_view{available_devices.devices[i]}.find(
-                              "GPU") != std::string_view::npos;
-
-            if (is_gpu && (flags & scan_flags_t::openvino_gpu) == 0) {
-                LOGD("openvino gpu device => skipping");
-                continue;
-            }
-
-            if (!is_gpu && (flags & scan_flags_t::openvino_default) == 0) {
-                LOGD("openvino default device => skipping");
-                continue;
-            }
-
-            devices.push_back({/*id=*/static_cast<uint32_t>(i), api_t::openvino,
-                               /*name=*/available_devices.devices[i],
-                               /*platform_name=*/device_full_name});
-        }
-
-        api.ov_available_devices_free(&available_devices);
-        api.ov_core_free(core);
-    } catch ([[maybe_unused]] const std::runtime_error& err) {
-    }
-}
-
 void add_vulkan_devices(std::vector<device>& devices, uint8_t flags) {
     LOGD("scanning for vulkan devices");
 
@@ -1267,8 +1063,7 @@ void add_vulkan_devices(std::vector<device>& devices, uint8_t flags) {
 available_devices_result available_devices(
     [[maybe_unused]] bool cuda, [[maybe_unused]] bool hip,
     [[maybe_unused]] bool vulkan, [[maybe_unused]] bool vulkan_igpu,
-    [[maybe_unused]] bool vulkan_cpu, [[maybe_unused]] bool openvino,
-    [[maybe_unused]] bool openvino_gpu, [[maybe_unused]] bool opencl,
+    [[maybe_unused]] bool vulkan_cpu, [[maybe_unused]] bool opencl,
     [[maybe_unused]] bool opencl_clover) {
     available_devices_result result;
 #ifndef DEBUG
@@ -1289,13 +1084,6 @@ available_devices_result available_devices(
 #ifdef ARCH_X86_64
     if (hip) {
         add_hip_devices(result.devices);
-    }
-
-    if (openvino || openvino_gpu) {
-        uint8_t flags = scan_flags_t::none;
-        if (openvino) flags |= scan_flags_t::openvino_default;
-        if (openvino_gpu) flags |= scan_flags_t::openvino_gpu;
-        add_openvino_devices(result.devices, flags);
     }
 
     if (opencl || opencl_clover) {
@@ -1341,14 +1129,6 @@ bool has_cudnn() {
 bool has_hip() {
 #ifdef ARCH_X86_64
     return has_lib("libamdhip64.so");
-#else
-    return false;
-#endif
-}
-
-bool has_openvino() {
-#ifdef ARCH_X86_64
-    return has_lib("libopenvino_c.so");
 #else
     return false;
 #endif

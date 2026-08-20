@@ -165,36 +165,6 @@ ColumnLayout {
 
     CheckBox {
         visible: _settings.hw_accel_supported()
-        checked: _settings.hw_scan_openvino
-        text: qsTranslate("SettingsPage", "Use %1").arg("OpenVINO")
-        onCheckedChanged: {
-            _settings.hw_scan_openvino = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "Try to find %1 compatible hardware in the system.").arg("OpenVINO") + " " +
-                      qsTranslate("SettingsPage", "Disable this option if you observe problems when launching the application.")
-        hoverEnabled: true
-    }
-
-    // CheckBox {
-    //     visible: _settings.hw_accel_supported()
-    //     checked: _settings.hw_scan_openvino_gpu
-    //     text: qsTranslate("SettingsPage", "Use %1").arg("OpenVINO GPU")
-    //     onCheckedChanged: {
-    //         _settings.hw_scan_openvino_gpu = checked
-    //     }
-
-    //     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-    //     ToolTip.visible: hovered
-    //     ToolTip.text: qsTranslate("SettingsPage", "Try to find %1 compatible graphic cards in the system.").arg("OpenVINO") + " " +
-    //                   qsTranslate("SettingsPage", "Disable this option if you observe problems when launching the application.")
-    //     hoverEnabled: true
-    // }
-
-    CheckBox {
-        visible: _settings.hw_accel_supported()
         checked: _settings.hw_scan_opencl
         text: qsTranslate("SettingsPage", "Use %1").arg("OpenCL")
         onCheckedChanged: {

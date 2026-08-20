@@ -87,10 +87,10 @@ class models_manager : public QObject, public singleton<models_manager> {
     ENGINE_FEATURE(_name, _role) = 1U << _ffshift##U,
         STT_ENGINE_TABLE TTS_ENGINE_TABLE MNT_ENGINE_TABLE
 #undef X
-            engine_other = 1U << 24U,
+                engine_other = 1U
+            << 24U,
         /* engine end */
         generic_end = engine_other,
-        hw_openvino = 1U << 25U,
         stt_start = 1U << 26U,
         stt_intermediate_results = stt_start,
         stt_punctuation = 1U << 27U,
@@ -106,14 +106,7 @@ class models_manager : public QObject, public singleton<models_manager> {
     }
     friend QDebug operator<<(QDebug d, feature_flags flags);
 
-    enum class sup_model_role_t {
-        scorer,
-        vocoder,
-        diacritizer,
-        hub,
-        openvino,
-        pkuseg
-    };
+    enum class sup_model_role_t { scorer, vocoder, diacritizer, hub, pkuseg };
     friend QDebug operator<<(QDebug d, sup_model_role_t role);
 
     struct lang_t {

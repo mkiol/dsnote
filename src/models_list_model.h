@@ -85,7 +85,6 @@ class ModelsListModel : public SelectableItemModel {
         FeatureEngineMnt = 1U << 23U,
         FeatureEngineOther = 1U << 24U,
         FeatureGenericEnd = FeatureEngineOther,
-        FeatureHwOpenVino = 1U << 25U,
         FeatureSttStart = 1U << 26U,
         FeatureSttIntermediateResults = FeatureSttStart,
         FeatureSttPunctuation = 1U << 27U,
@@ -96,28 +95,23 @@ class ModelsListModel : public SelectableItemModel {
         FeatureTtsEnd = FeatureTtsPrompt,
         FeatureLast = FeatureTtsEnd,
         FeatureAllSttEngines = FeatureEngineSttDs | FeatureEngineSttVosk |
-                               FeatureEngineSttWhisper |
-                               FeatureEngineSttFasterWhisper |
-                               FeatureEngineSttApril,
+            FeatureEngineSttWhisper | FeatureEngineSttFasterWhisper |
+            FeatureEngineSttApril,
         FeatureAllTtsEngines = FeatureEngineTtsEspeak | FeatureEngineTtsPiper |
-                               FeatureEngineTtsRhvoice | FeatureEngineTtsCoqui |
-                               FeatureEngineTtsMimic3 |
-                               FeatureEngineTtsWhisperSpeech |
-                               FeatureEngineTtsSam | FeatureEngineTtsParler |
-                               FeatureEngineTtsF5 | FeatureEngineTtsKokoro,
+            FeatureEngineTtsRhvoice | FeatureEngineTtsCoqui |
+            FeatureEngineTtsMimic3 | FeatureEngineTtsWhisperSpeech |
+            FeatureEngineTtsSam | FeatureEngineTtsParler | FeatureEngineTtsF5 |
+            FeatureEngineTtsKokoro,
         FeatureAll = FeatureFastProcessing | FeatureMediumProcessing |
-                     FeatureSlowProcessing | FeatureQualityHigh |
-                     FeatureQualityMedium | FeatureQualityLow |
-                     FeatureAllSttEngines | FeatureAllTtsEngines |
-                     FeatureSttIntermediateResults | FeatureSttPunctuation |
-                     FeatureTtsVoiceCloning | FeatureTtsPrompt,
+            FeatureSlowProcessing | FeatureQualityHigh | FeatureQualityMedium |
+            FeatureQualityLow | FeatureAllSttEngines | FeatureAllTtsEngines |
+            FeatureSttIntermediateResults | FeatureSttPunctuation |
+            FeatureTtsVoiceCloning | FeatureTtsPrompt,
         FeatureDefault = FeatureFastProcessing | FeatureMediumProcessing |
-                         FeatureSlowProcessing | FeatureQualityHigh |
-                         FeatureQualityMedium | FeatureQualityLow |
-                         FeatureAllSttEngines | FeatureAllTtsEngines,
+            FeatureSlowProcessing | FeatureQualityHigh | FeatureQualityMedium |
+            FeatureQualityLow | FeatureAllSttEngines | FeatureAllTtsEngines,
         FeatureAdditional = FeatureSttIntermediateResults |
-                            FeatureSttPunctuation | FeatureTtsVoiceCloning |
-                            FeatureTtsPrompt
+            FeatureSttPunctuation | FeatureTtsVoiceCloning | FeatureTtsPrompt
 
     };
     Q_ENUM(ModelFeatureFilterFlags)

@@ -180,10 +180,10 @@ set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_conf_version "117")
+set(info_conf_version "118")
 set(info_addon_version "1.4") # if run as a flatpak pkg, the required add-on version
-#set(info_version_type "-beta")
-set(info_version_type "")
+set(info_version_type "-beta")
+#set(info_version_type "")
 set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashinfantry · \
 Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv · Niklas Halvorsen · \
 Matjaž Jeran · Victor Alonso Barberan · Bruno Veilleux · Abdullah Albaroty · 李 阳 · Erdem Uygun · Armin Maier · \
@@ -203,7 +203,7 @@ if(WITH_SFOS)
     set(info_libs_str "${info_libs_str} · Opal")
 endif()
 
-project(${id} VERSION 4.9.0)
+project(${id} VERSION 4.9.1)
 
 set(arch_arm32 0)
 set(arch_arm64 0)

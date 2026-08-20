@@ -101,9 +101,6 @@ QDebug operator<<(QDebug d, ModelsListModel::ModelFeatureFilterFlags flags) {
             case ModelsListModel::ModelFeatureFilterFlags::FeatureEngineOther:
                 d << "engine-other";
                 break;
-            case ModelsListModel::ModelFeatureFilterFlags::FeatureHwOpenVino:
-                d << "hw-openvino";
-                break;
             case ModelsListModel::ModelFeatureFilterFlags::
                 FeatureSttIntermediateResults:
                 d << "stt-intermediate-results";

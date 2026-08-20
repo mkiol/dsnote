@@ -232,11 +232,10 @@ static cmd::options check_options(const QCoreApplication& app) {
 
     QCommandLineOption hwscanoff_opt{
         QStringLiteral("hw-scan-off"),
-        QStringLiteral(
-            "Disables scanning for CUDA, ROCm, Vulkan, OpenVINO and OpenCL "
-            "compatible hardware. "
-            "Use this option when you observing problems in "
-            "starting the app.")};
+        QStringLiteral("Disables scanning for CUDA, ROCm, Vulkan and OpenCL "
+                       "compatible hardware. "
+                       "Use this option when you observing problems in "
+                       "starting the app.")};
     parser.addOption(hwscanoff_opt);
 
     QCommandLineOption pyscanoff_opt{

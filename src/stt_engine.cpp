@@ -148,9 +148,6 @@ std::ostream& operator<<(std::ostream& os, stt_engine::gpu_api_t api) {
         case stt_engine::gpu_api_t::rocm:
             os << "rocm";
             break;
-        case stt_engine::gpu_api_t::openvino:
-            os << "openvino";
-            break;
         case stt_engine::gpu_api_t::vulkan:
             os << "vulkan";
             break;
@@ -196,7 +193,6 @@ std::ostream& operator<<(std::ostream& os,
                          const stt_engine::model_files_t& model_files) {
     os << "model-file=" << model_files.model_file
        << ", scorer-file=" << model_files.scorer_file
-       << ", openvino-file=" << model_files.openvino_model_file
        << ", ttt-model-file=" << model_files.ttt_model_file;
 
     return os;

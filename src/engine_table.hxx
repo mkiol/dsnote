@@ -129,7 +129,6 @@
 #define HW_TABLE   \
     X(cuda, 0)     \
     X(hip, 0)      \
-    X(openvino, 0) \
     X(opencl, 0)   \
     X(vulkan, 0)
 
@@ -173,10 +172,6 @@
 /* Vulkan */
 
 #define HW_VULKAN_ENGINE_TABLE X(whisper, stt, 4, 0)
-
-/* OpenVino */
-
-#define HW_OV_ENGINE_TABLE X(whisper, stt, 2, 0)
 
 /* OpenCL */
 

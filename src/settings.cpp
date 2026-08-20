@@ -1567,13 +1567,6 @@ bool settings::hw_engine_disabled(
         hw_feature_flags_t::HW_FEATURE(hip, _engine, _role)) == 0)
                 HW_HIP_ENGINE_TABLE;
 #undef X
-        case hw_t::openvino:
-            return true
-#define X(_engine, _role, ...) \
-    &&((hw_feature_flags &     \
-        hw_feature_flags_t::HW_FEATURE(openvino, _engine, _role)) == 0)
-                HW_OV_ENGINE_TABLE;
-#undef X
         case hw_t::opencl:
             return true
 #define X(_engine, _role, ...) \
@@ -1620,8 +1613,6 @@ void settings::scan_hw_devices(
         /*vulkan=*/hw_scan_vulkan(),
         /*vulkan_igpu=*/hw_scan_vulkan_igpu(),
         /*vulkan_cpu=*/hw_scan_vulkan_cpu(),
-        /*openvino=*/hw_scan_openvino(),
-        /*openvino_gpu=*/hw_scan_openvino_gpu(),
         /*opencl=*/hw_scan_opencl(),
         /*opencl_clover=*/hw_scan_opencl_legacy());
 
@@ -1670,21 +1661,6 @@ void settings::scan_hw_devices(
 #undef X
                     m_rocm_gpu_versions.push_back(
                         QString::fromStdString(device.platform_name));
-                    break;
-                }
-                case gpu_tools::api_t::openvino: {
-                    auto item =
-                        QStringLiteral("%1, %2, %3")
-                            .arg("OpenVINO",
-                                 QString::fromStdString(device.name).trimmed(),
-                                 QString::fromStdString(device.platform_name)
-                                     .trimmed());
-#define X(_engine, ...)                                          \
-    if (!hw_engine_disabled(hw_t::openvino, hw_feature_flags)) { \
-        m_##_engine##_gpu_devices.push_back(item);               \
-    }
-                    HW_OV_ENGINE_TABLE
-#undef X
                     break;
                 }
                 case gpu_tools::api_t::vulkan: {

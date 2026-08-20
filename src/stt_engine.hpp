@@ -52,7 +52,7 @@ class stt_engine {
     };
     friend std::ostream& operator<<(std::ostream& os, vad_mode_t mode);
 
-    enum class gpu_api_t { opencl, cuda, rocm, openvino, vulkan };
+    enum class gpu_api_t { opencl, cuda, rocm, vulkan };
     friend std::ostream& operator<<(std::ostream& os, gpu_api_t api);
 
     enum class audio_ctx_conf_t { dynamic, no_change, custom };
@@ -66,13 +66,11 @@ class stt_engine {
         std::string model_file;
         std::string scorer_file;
         std::string ttt_model_file;
-        std::string openvino_model_file; /* used only in whisper.cpp */
 
         bool operator==(const model_files_t& rhs) const {
             return model_file == rhs.model_file &&
                    scorer_file == rhs.scorer_file &&
-                   ttt_model_file == rhs.ttt_model_file &&
-                   openvino_model_file == rhs.openvino_model_file;
+                   ttt_model_file == rhs.ttt_model_file;
         };
         bool operator!=(const model_files_t& rhs) const {
             return !(*this == rhs);

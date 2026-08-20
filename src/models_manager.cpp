@@ -138,7 +138,6 @@ QDebug operator<<(QDebug d, models_manager::feature_flags flags) {
     MNT_ENGINE_TABLE
 #undef X
     if (flags & models_manager::engine_other) d << "engine-other, ";
-    if (flags & models_manager::hw_openvino) d << "hw-openvino, ";
     if (flags & models_manager::stt_intermediate_results)
         d << "stt-intermediate-results, ";
     if (flags & models_manager::stt_punctuation) d << "stt-punctuation, ";
@@ -173,9 +172,6 @@ QDebug operator<<(QDebug d, models_manager::sup_model_role_t role) {
             break;
         case models_manager::sup_model_role_t::hub:
             d << "hub";
-            break;
-        case models_manager::sup_model_role_t::openvino:
-            d << "openvino";
             break;
         case models_manager::sup_model_role_t::pkuseg:
             d << "pkuseg";
@@ -1664,8 +1660,6 @@ models_manager::feature_flags models_manager::feature_from_name(
     if (name == QStringLiteral("tts_voice_cloning"))
         return feature_flags::tts_voice_cloning;
     if (name == QStringLiteral("tts_prompt")) return feature_flags::tts_prompt;
-    if (name == QStringLiteral("hw_openvino"))
-        return feature_flags::hw_openvino;
     return feature_flags::no_flags;
 }
 
@@ -1676,7 +1670,6 @@ models_manager::sup_model_role_t models_manager::sup_model_role_from_name(
     if (name == QStringLiteral("diacritizer"))
         return sup_model_role_t::diacritizer;
     if (name == QStringLiteral("hub")) return sup_model_role_t::hub;
-    if (name == QStringLiteral("openvino")) return sup_model_role_t::openvino;
     if (name == QStringLiteral("pkuseg")) return sup_model_role_t::pkuseg;
     throw std::runtime_error("unknown sup role: " + name.toStdString());
 }
@@ -1692,14 +1685,6 @@ void models_manager::extract_sup_models(const QString& model_id,
         sup_model_t sup_model;
         sup_model.role = sup_model_role_from_name(
             sup_obj.value(QLatin1String{"role"}).toString());
-
-#if defined ARCH_ARM_32 || defined ARCH_ARM_64
-        if (sup_model.role == sup_model_role_t::openvino) {
-            // ignoring openvino models on arm
-            continue;
-        }
-#endif
-
         sup_model.file_name =
             sup_obj.value(QLatin1String{"file_name"}).toString();
         if (sup_model.file_name.isEmpty())
@@ -1787,7 +1772,6 @@ models_manager::feature_flags models_manager::add_new_feature(
         case feature_flags::stt_punctuation:
         case feature_flags::tts_voice_cloning:
         case feature_flags::tts_prompt:
-        case feature_flags::hw_openvino:
             break;
     }
 
@@ -2528,8 +2512,6 @@ QString models_manager::sup_file_name_from_id(const QString& id,
             return id + "_diacritizer";
         case sup_model_role_t::hub:
             return id + "_hub";
-        case sup_model_role_t::openvino:
-            return id + "_openvino";
         case sup_model_role_t::pkuseg:
             return id + "_pkuseg";
     }

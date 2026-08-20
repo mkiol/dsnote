@@ -56,16 +56,13 @@
     X(import_extract_readable, bool, true, false)
 
 // name, default-value
-#define GPU_SCAN_TABLE                                                 \
-    X(cuda, true)                                                      \
-    X(hip, true)                                                       \
-    X(opencl, true)                                                    \
-    X(opencl_legacy, false) /* modern GPUs are not supported */        \
-    X(openvino, true)                                                  \
-    X(openvino_gpu,                                                    \
-      false) /* configured models are INT4 and not supported on GPU */ \
-    X(vulkan, true)                                                    \
-    X(vulkan_igpu, true)                                               \
+#define GPU_SCAN_TABLE                                          \
+    X(cuda, true)                                               \
+    X(hip, true)                                                \
+    X(opencl, true)                                             \
+    X(opencl_legacy, false) /* modern GPUs are not supported */ \
+    X(vulkan, true)                                             \
+    X(vulkan_igpu, true)                                        \
     X(vulkan_cpu, false) /* will work but extremely slow */
 
 // id, action-name, description, default-key-combination, trigger-on-deactivate
@@ -636,10 +633,6 @@ class settings : public QSettings, public singleton<settings> {
         HW_VULKAN_ENGINE_TABLE
 #undef X
 #define X(_engine, _role, _ffshift, ...) \
-    HW_FEATURE(openvino, _engine, _role) = 1U << _ffshift##U,
-        HW_OV_ENGINE_TABLE
-#undef X
-#define X(_engine, _role, _ffshift, ...) \
     HW_FEATURE(opencl, _engine, _role) = 1U << _ffshift##U,
         HW_OCL_ENGINE_TABLE
 #undef X
@@ -652,9 +645,6 @@ class settings : public QSettings, public singleton<settings> {
 #undef X
 #define X(_engine, _role, _ffshift, ...) | HW_FEATURE(vulkan, _engine, _role)
         HW_VULKAN_ENGINE_TABLE
-#undef X
-#define X(_engine, _role, _ffshift, ...) | HW_FEATURE(openvino, _engine, _role)
-        HW_OV_ENGINE_TABLE
 #undef X
 #define X(_engine, _role, _ffshift, ...) | HW_FEATURE(opencl, _engine, _role)
         HW_OCL_ENGINE_TABLE

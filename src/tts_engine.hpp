@@ -51,7 +51,7 @@ class tts_engine {
     };
     friend std::ostream& operator<<(std::ostream& os, state_t state);
 
-    enum class gpu_api_t { opencl, cuda, rocm, openvino, vulkan };
+    enum class gpu_api_t { opencl, cuda, rocm, vulkan };
     friend std::ostream& operator<<(std::ostream& os, gpu_api_t api);
 
     enum class audio_format_t { wav, mp3, ogg_vorbis, ogg_opus, flac };

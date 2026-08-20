@@ -336,7 +336,6 @@ class speech_service : public QObject, public singleton<speech_service> {
             models_manager::model_engine_t::stt_ds;
         QString model_file;
         QString scorer_file;
-        QString openvino_file;
         std::optional<ttt_model_config_t> ttt;
     };
 
