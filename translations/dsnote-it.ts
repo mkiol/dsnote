@@ -714,12 +714,12 @@
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="88"/>
         <source>This engine can be slow when using %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo motore può essere lento quando si utilizza %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="89"/>
         <source>Disable hardware acceleration if you observe problems.</source>
-        <translation type="unfinished"></translation>
+        <translation>Disattiva l'accelerazione hardware se riscontri problemi.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/GpuComboBox.qml" line="95"/>
@@ -797,35 +797,35 @@
         <location filename="../sfos/qml/ImportUrlDialog.qml" line="40"/>
         <location filename="../desktop/qml/ImportUrlDialog.qml" line="48"/>
         <source>Import from a URL</source>
-        <translation type="unfinished"></translation>
+        <translation>Importa da un URL</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ImportUrlDialog.qml" line="47"/>
         <location filename="../desktop/qml/ImportUrlDialog.qml" line="84"/>
         <source>Enter URL</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci URL</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ImportUrlDialog.qml" line="48"/>
         <source>URL</source>
-        <translation type="unfinished"></translation>
+        <translation>URL</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ImportUrlDialog.qml" line="51"/>
         <location filename="../desktop/qml/ImportUrlDialog.qml" line="92"/>
         <source>The URL must be of HTTP or HTTPS type and should point to text content.</source>
-        <translation type="unfinished"></translation>
+        <translation>L'URL deve essere di tipo HTTP o HTTPS e deve puntare a un contenuto testuale.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/ImportUrlDialog.qml" line="75"/>
         <location filename="../desktop/qml/ImportUrlDialog.qml" line="99"/>
         <source>When importing an HTML, extract only the readable text</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Quando si importa un file HTML, estrarre solo il testo leggibile.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/ImportUrlDialog.qml" line="61"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Anulla</translation>
     </message>
 </context>
 <context>
@@ -1033,7 +1033,7 @@
         <location filename="../sfos/qml/MainToolBar.qml" line="47"/>
         <location filename="../desktop/qml/MainToolBar.qml" line="147"/>
         <source>Import from a URL</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Importa da un URL</translation>
     </message>
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="55"/>
@@ -1055,7 +1055,7 @@
     <message>
         <location filename="../sfos/qml/MainToolBar.qml" line="75"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Annulla</translation>
     </message>
     <message>
         <source>Mode: %1</source>
@@ -2286,7 +2286,7 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="49"/>
         <location filename="../desktop/qml/SettingsUiPage.qml" line="49"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lingua</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="53"/>
@@ -2435,22 +2435,22 @@
         <location filename="../sfos/qml/SettingsPage.qml" line="119"/>
         <location filename="../desktop/qml/SettingsGeneralPage.qml" line="127"/>
         <source>When importing an HTML, extract only the readable text</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Quando si importa un file HTML, estrarre solo il testo leggibile.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="128"/>
         <source>Subtitles and inline timestamps support</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Supporto per sottotitoli e timestamp in linea</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="129"/>
         <source>Enable support for subtitles and inline timestamps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Abilita il supporto per i sottotitoli e i timestamp in linea.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="130"/>
         <source>When this option is enabled, options related to subtitles and inline timestamps are visible in the user interface.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Quando questa opzione è abilitata, le opzioni relative ai sottotitoli e ai timestamp in linea sono visibili nell'interfaccia utente.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="163"/>
@@ -2732,13 +2732,13 @@
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="417"/>
         <source>Inline timestamp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Timestamp in linea</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="424"/>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="259"/>
         <source>Timestamp interval</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Intervallo di timestamp</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SettingsPage.qml" line="485"/>
@@ -2915,7 +2915,7 @@
     <message>
         <location filename="../src/settings.h" line="111"/>
         <source>Start reading text selected in active window</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avvia lettura del testo selezionato nella finestra attiva</translation>
     </message>
     <message>
         <location filename="../src/settings.h" line="115"/>
@@ -3024,22 +3024,22 @@
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="126"/>
         <source>Starts reading text from command-line %1 option.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avvia la lettura del testo dall'opzione %1 della riga di comando.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="127"/>
         <source>Starts reading text from a file specified by command-line %1 option.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avvia la lettura del testo da un file specificato dall'opzione %1 della riga di comando.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="128"/>
         <source>Starts reading text of a web page specified by command-line %1 option.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avvia la lettura del testo di una pagina web specificata dall'opzione %1 della riga di comando.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="129"/>
         <source>Start reading text selected in the active window.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avvia la lettura del testo selezionato nella finestra attiva.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAccessebilityPage.qml" line="130"/>
@@ -3304,7 +3304,7 @@
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="320"/>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="328"/>
         <source>Disable detection of %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Disabilita il rilevamento di %1</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="341"/>
@@ -3354,47 +3354,47 @@
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="432"/>
         <source>Text to window method</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Metodo testo a finestra</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="433"/>
         <source>Method used to insert recognized text into the active window.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Metodo utilizzato per inserire il testo riconosciuto nella finestra attiva.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="444"/>
         <source>Simulate paste (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Simula incolla (%1)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="445"/>
         <source>Simulate paste in terminal (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Simula incolla nel terminale (%1)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="446"/>
         <source>Simulate typing</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Simula digitazione</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="464"/>
         <source>Text from window method</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Metodo testo da finestra</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="465"/>
         <source>Method used to get selected text from the active window.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Metodo utilizzato per ottenere il testo selezionato dalla finestra attiva.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="475"/>
         <source>Simulate copy (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Simula copia (%1)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="476"/>
         <source>Simulate copy in terminal (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Simula copia nel terminale (%1)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsAdvancedPage.qml" line="490"/>
@@ -3587,12 +3587,12 @@
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="235"/>
         <source>Inline timestamp settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Impostazioni timestamp in linea</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="239"/>
         <source>Template</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Modello</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="253"/>
@@ -3602,32 +3602,32 @@
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="260"/>
         <source>Minimum seconds between timestamps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Minimo di secondi tra i timestamp.</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="279"/>
         <source>Edit Timestamp Template</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Modifica modello di timestamp</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="315"/>
         <source>Available tokens:&lt;br&gt;&lt;b&gt;{hh}&lt;/b&gt; (hours), &lt;b&gt;{mm}&lt;/b&gt; (minutes), &lt;b&gt;{ss}&lt;/b&gt; (seconds), &lt;b&gt;{text}&lt;/b&gt; (transcribed text)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Token disponibili:&lt;br&gt;&lt;b&gt;{hh}&lt;/b&gt; (ore), &lt;b&gt;{mm}&lt;/b&gt; (minuti), &lt;b&gt;{ss}&lt;/b&gt; (secondi), &lt;b&gt;{text}&lt;/b&gt; (testo trascritto)</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="330"/>
         <source>Presets:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Predefiniti:</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="336"/>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="341"/>
         <source>Short</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Breve</translation>
     </message>
     <message>
         <location filename="../desktop/qml/SettingsSttPage.qml" line="405"/>
@@ -3906,7 +3906,7 @@
         <location filename="../sfos/qml/SpeechWidget.qml" line="48"/>
         <location filename="../desktop/qml/SpeechWidget.qml" line="122"/>
         <source>Downloading content...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Download dei contenuti in corso...</translation>
     </message>
     <message>
         <location filename="../sfos/qml/SpeechWidget.qml" line="49"/>
@@ -4016,7 +4016,7 @@
         <location filename="../desktop/qml/SpeechWidget.qml" line="286"/>
         <location filename="../desktop/qml/SpeechWidget.qml" line="304"/>
         <source>Cancel</source>
-        <translation>Cancella</translation>
+        <translation>Annulla</translation>
     </message>
 </context>
 <context>
@@ -4125,7 +4125,7 @@
         <location filename="../sfos/qml/Translator.qml" line="156"/>
         <location filename="../desktop/qml/Translator.qml" line="138"/>
         <source>Inline timestamps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Timestamp in linea</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="170"/>
@@ -4171,7 +4171,7 @@
     <message>
         <location filename="../sfos/qml/Translator.qml" line="315"/>
         <source>Cancel</source>
-        <translation>Cancella</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../sfos/qml/Translator.qml" line="315"/>
@@ -5418,19 +5418,19 @@
         <location filename="../sfos/qml/main.qml" line="397"/>
         <location filename="../desktop/qml/main.qml" line="627"/>
         <source>Error: Couldn&apos;t import. Failed to download the URL.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Errore: impossibile importare. Download dell'URL non riuscito.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="400"/>
         <location filename="../desktop/qml/main.qml" line="630"/>
         <source>Error: Couldn&apos;t import. The URL has no text content.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Errore: Impossibile importare. L'URL non contiene testo.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="403"/>
         <location filename="../desktop/qml/main.qml" line="633"/>
         <source>Error: Couldn&apos;t import the URL.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Impossibile importare l'URL.</translation>
     </message>
     <message>
         <location filename="../sfos/qml/main.qml" line="406"/>
