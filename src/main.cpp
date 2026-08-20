@@ -843,6 +843,7 @@ int main(int argc, char* argv[]) {
 #endif
 
     cpu_tools::cpuinfo();
+    cpu_tools::log_hw_caps();
 
     signal(SIGINT, signal_handler);
 
