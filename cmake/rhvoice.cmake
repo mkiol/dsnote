@@ -45,7 +45,7 @@ ExternalProject_Add(rhvoice
         -DCMAKE_PREFIX_PATH=<INSTALL_DIR> -DWITH_DATA=OFF -DENABLE_MAGE=OFF -DBUILD_CLIENT=OFF
         -DBUILD_UTILS=OFF -DBUILD_TESTS=OFF -DBUILD_SERVICE=OFF -DBUILD_SPEECHDISPATCHER_MODULE=OFF
         -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-    BUILD_ALWAYS True
+    BUILD_ALWAYS False
 )
 
 list(APPEND deps_libs "${external_lib_dir}/libRHVoice_core.so.1" "${external_lib_dir}/libRHVoice.so.1")
