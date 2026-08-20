@@ -1186,7 +1186,7 @@ void break_segment_to_multiline(unsigned int min_line_size,
                                      punct_chars.cbegin(), punct_chars.cend());
         if (it != segment.text.cend()) ++it;
 
-        auto line_size = std::distance(head, it);
+        auto line_size = std::max<unsigned int>(0U, std::distance(head, it));
 
         if (line_size == 0) break;
 
@@ -1202,7 +1202,7 @@ void break_segment_to_multiline(unsigned int min_line_size,
                 head,
                 std::next(head,
                           std::min(static_cast<std::ptrdiff_t>(max_line_size),
-                                   line_size)));
+                                 static_cast<std::ptrdiff_t>(line_size))));
 
             if (!new_segment_text.empty()) new_segment_text.push_back('\n');
             new_segment_text.append(head, it);
