@@ -1,6 +1,6 @@
-diff -ruN openfst-org/src/include/fst/bi-table.h openfst-patched/src/include/fst/bi-table.h
---- openfst-org/src/include/fst/bi-table.h	2021-02-07 09:38:45.000000000 +0100
-+++ openfst-patched/src/include/fst/bi-table.h	2025-05-10 20:35:24.699637425 +0200
+diff -ruN -x '.*' openfst-org/src/include/fst/bi-table.h openfst-patched/src/include/fst/bi-table.h
+--- openfst-org/src/include/fst/bi-table.h	2024-08-23 16:17:27.000000000 +0200
++++ openfst-patched/src/include/fst/bi-table.h	2026-08-20 17:01:54.588245870 +0200
 @@ -34,6 +34,7 @@
  #include <fst/windows_defs.inc>
  #include <unordered_map>
@@ -8,18 +8,4 @@ diff -ruN openfst-org/src/include/fst/bi-table.h openfst-patched/src/include/fst
 +#include <cstdint>
  
  namespace fst {
- 
-diff -ruN openfst-org/src/include/fst/fst.h openfst-patched/src/include/fst/fst.h
---- openfst-org/src/include/fst/fst.h	2021-02-07 09:38:45.000000000 +0100
-+++ openfst-patched/src/include/fst/fst.h	2024-10-06 17:38:03.698500302 +0200
-@@ -701,8 +701,8 @@
-     properties_.store(impl.properties_.load(std::memory_order_relaxed),
-                       std::memory_order_relaxed);
-     type_ = impl.type_;
--    isymbols_ = impl.isymbols_ ? impl.isymbols_->Copy() : nullptr;
--    osymbols_ = impl.osymbols_ ? impl.osymbols_->Copy() : nullptr;
-+    isymbols_ = fst::WrapUnique(impl.isymbols_ ? impl.isymbols_->Copy() : nullptr);
-+    osymbols_ = fst::WrapUnique(impl.osymbols_ ? impl.osymbols_->Copy() : nullptr);
-     return *this;
-   }
  
