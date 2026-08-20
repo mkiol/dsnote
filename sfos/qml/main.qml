@@ -17,17 +17,21 @@ import harbour.dsnote.Dsnote 1.0
 ApplicationWindow {
     id: appWin
 
+    property var addTextDialog: null
+
     allowedOrientations: Orientation.All
     initialPage: mainPage
     cover: Qt.resolvedUrl("CoverPage.qml")
 
     function importUrls(urls) {
         if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
-            var urls_to_import = urls.slice(0) // deep copy
-            addTextDialog.addHandler = function(){
-                app.import_urls(urls_to_import, false)}
-            addTextDialog.replaceHandler = function(){app.import_urls(urls_to_import, true)}
-            addTextDialog.show()
+            if (addTextDialog) {
+                var urls_to_import = urls.slice(0) // deep copy
+                addTextDialog.addHandler = function(){
+                    app.import_urls(urls_to_import, false)}
+                addTextDialog.replaceHandler = function(){app.import_urls(urls_to_import, true)}
+                addTextDialog.show()
+            }
         } else {
             app.import_urls(urls, _settings.file_import_action === Settings.FileImportActionReplace)
         }
@@ -37,10 +41,12 @@ ApplicationWindow {
 
     function importText(text) {
         if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
-            var text_to_import = text
-            addTextDialog.addHandler = function(){app.update_note(text, false)}
-            addTextDialog.replaceHandler = function(){app.update_note(text, true)}
-            addTextDialog.show()
+            if (addTextDialog) {
+                var text_to_import = text
+                addTextDialog.addHandler = function(){app.update_note(text, false)}
+                addTextDialog.replaceHandler = function(){app.update_note(text, true)}
+                addTextDialog.show()
+            }
         } else {
             app.update_note(text, _settings.file_import_action === Settings.FileImportActionAsk)
         }
@@ -157,7 +163,7 @@ ApplicationWindow {
                 id: flick
 
                 width: parent.width
-                height: parent.height - (addTextDialog.expanded ? addTextDialog.height : 0)
+                height: parent.height - (_addTextDialog.expanded ? _addTextDialog.height : 0)
                 contentHeight: Math.max(column.height +
                                         (root.translator && root.translator.enabled ? root.translator.height : 0) +
                                         (root.notepad && root.notepad.enabled ? root.notepad.height : 0) +
@@ -304,7 +310,7 @@ ApplicationWindow {
             }
 
             AddTextDialog {
-                id: addTextDialog
+                id: _addTextDialog
 
                 property var addHandler
                 property var replaceHandler
@@ -312,6 +318,8 @@ ApplicationWindow {
                 open: false
                 onAddClicked: addHandler()
                 onReplaceClicked: replaceHandler()
+                Component.onCompleted: appWin.addTextDialog = _addTextDialog
+                Component.onDestruction: appWin.addTextDialog = null
             }
 
             Component {
