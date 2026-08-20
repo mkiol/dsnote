@@ -1110,6 +1110,11 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
                 qWarning() << "cant open file for write:" << m_stt_dest_file;
                 break;
             }
+            if (out_file.size() > 0 &&
+                m_text_destination == text_destination_t::file_add) {
+                // if file is not empty, write starting from a new line
+                out_file.write("\n");
+            }
             out_file.write(text.toUtf8());
             break;
         }
