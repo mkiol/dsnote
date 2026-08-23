@@ -511,8 +511,8 @@ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif ()
 
 add_library(compiler_flags INTERFACE)
-target_compile_features(compiler_flags INTERFACE cxx_std_17)
-set(warning_flags "-Wall;-Wextra;-Wpedantic;-Wno-attributes;-Werror=switch;-Werror=implicit-fallthrough")
+target_compile_features(compiler_flags INTERFACE cxx_std_20)
+set(warning_flags "-Wall;-Wextra;-Wpedantic;-Wno-attributes;-Werror=switch;-Werror=implicit-fallthrough;-Wno-missing-field-initializers")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     if(WITH_SANITIZERS)
