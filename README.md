@@ -221,7 +221,6 @@ Features comparison between Base, Tiny and Add-ons Flatpak packages:
 | Whisper (whisper.cpp) STT OpenCL NVIDIA | +        | +        |                |                   |
 | Whisper (whisper.cpp) STT ROCm          | -        | -        | +              |                   |
 | Whisper (whisper.cpp) STT CUDA          | -        | -        |                | +                 |
-| Whisper (whisper.cpp) STT OpenVINO      | +        | -        |                |                   |
 | Whisper (whisper.cpp) STT Vulkan        | +        | +        |                |                   |
 | FasterWhisper STT                       | +        | -        |                |                   |
 | FasterWhisper STT CUDA                  | -        | -        |                | +                 |

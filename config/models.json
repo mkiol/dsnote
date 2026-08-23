@@ -4551,22 +4551,6 @@
             ],
             "size": "32152673",
             "options": "t",
-            "sups": [
-                {
-                    "role": "openvino",
-                    "checksum": "5113f463",
-                    "checksum_quick": "72d8d4af",
-                    "size": "7160127",
-                    "comp": "dir",
-                    "urls": [
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/multilang/ggml-tiny-encoder-openvino-int4/ggml-tiny-encoder-openvino.bin",
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/multilang/ggml-tiny-encoder-openvino-int4/ggml-tiny-encoder-openvino.xml"
-                    ]
-                }
-            ],
-            "features": [
-                "hw_openvino"
-            ],
             "hidden": true
         },
         {
@@ -4582,22 +4566,6 @@
             ],
             "size": "59707625",
             "options": "t",
-            "sups": [
-                {
-                    "role": "openvino",
-                    "checksum": "3514d1ba",
-                    "checksum_quick": "f4c61907",
-                    "size": "14812466",
-                    "comp": "dir",
-                    "urls": [
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/multilang/ggml-base-encoder-openvino-int4/ggml-base-encoder-openvino.bin",
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/multilang/ggml-base-encoder-openvino-int4/ggml-base-encoder-openvino.xml"
-                    ]
-                }
-            ],
-            "features": [
-                "hw_openvino"
-            ],
             "hidden": true
         },
         {
@@ -4612,22 +4580,6 @@
             ],
             "size": "190085487",
             "options": "t",
-            "sups": [
-                {
-                    "role": "openvino",
-                    "checksum": "c4c8c394",
-                    "checksum_quick": "8a99a333",
-                    "size": "52778768",
-                    "comp": "dir",
-                    "urls": [
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/multilang/ggml-small-encoder-openvino-int4/ggml-small-encoder-openvino.bin",
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/multilang/ggml-small-encoder-openvino-int4/ggml-small-encoder-openvino.xml"
-                    ]
-                }
-            ],
-            "features": [
-                "hw_openvino"
-            ],
             "hidden": true
         },
         {
@@ -4642,22 +4594,6 @@
             ],
             "size": "586572019",
             "options": "t",
-            "sups": [
-                {
-                    "role": "openvino",
-                    "checksum": "bf06c926",
-                    "checksum_quick": "ac0f01cc",
-                    "size": "170083848",
-                    "comp": "dir",
-                    "urls": [
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/multilang/ggml-medium-encoder-openvino-int4/ggml-medium-encoder-openvino.bin",
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/multilang/ggml-medium-encoder-openvino-int4/ggml-medium-encoder-openvino.xml"
-                    ]
-                }
-            ],
-            "features": [
-                "hw_openvino"
-            ],
             "hidden": true
         },
         {
@@ -4672,22 +4608,6 @@
             ],
             "size": "1080732091",
             "options": "t",
-            "sups": [
-                {
-                    "role": "openvino",
-                    "checksum": "596f6f97",
-                    "checksum_quick": "42cf5dd6",
-                    "size": "344596615",
-                    "comp": "dir",
-                    "urls": [
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/multilang/ggml-large-v2-encoder-openvino-int4/ggml-large-v2-encoder-openvino.bin",
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/multilang/ggml-large-v2-encoder-openvino-int4/ggml-large-v2-encoder-openvino.xml"
-                    ]
-                }
-            ],
-            "features": [
-                "hw_openvino"
-            ],
             "hidden": true
         },
         {
@@ -4702,22 +4622,6 @@
             ],
             "size": "1081140203",
             "options": "t",
-            "sups": [
-                {
-                    "role": "openvino",
-                    "checksum": "3be56a1",
-                    "checksum_quick": "dff5fc4d",
-                    "size": "344780925",
-                    "comp": "dir",
-                    "urls": [
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/multilang/ggml-large-v3-encoder-openvino-int4/ggml-large-v3-encoder-openvino.bin",
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/multilang/ggml-large-v3-encoder-openvino-int4/ggml-large-v3-encoder-openvino.xml"
-                    ]
-                }
-            ],
-            "features": [
-                "hw_openvino"
-            ],
             "hidden": true
         },
         {
@@ -5010,22 +4914,6 @@
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/en/ggml-tiny-en-q5_0.bin"
             ],
             "size": "32166155",
-            "sups": [
-                {
-                    "role": "openvino",
-                    "checksum": "645acb98",
-                    "checksum_quick": "df7e794b",
-                    "size": "7160126",
-                    "comp": "dir",
-                    "urls": [
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/en/ggml-tiny-en-encoder-openvino-int4/ggml-tiny-en-encoder-openvino.bin",
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/en/ggml-tiny-en-encoder-openvino-int4/ggml-tiny-en-encoder-openvino.xml"
-                    ]
-                }
-            ],
-            "features": [
-                "hw_openvino"
-            ],
             "pack_id": "en_whisper"
         },
         {
@@ -5039,22 +4927,6 @@
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/en/ggml-base-en-q5_0.bin"
             ],
             "size": "59721011",
-            "sups": [
-                {
-                    "role": "openvino",
-                    "checksum": "b3b56d59",
-                    "checksum_quick": "66de08c6",
-                    "size": "14812469",
-                    "comp": "dir",
-                    "urls": [
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/en/ggml-base-en-encoder-openvino-int4/ggml-base-en-encoder-openvino.bin",
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/en/ggml-base-en-encoder-openvino-int4/ggml-base-en-encoder-openvino.xml"
-                    ]
-                }
-            ],
-            "features": [
-                "hw_openvino"
-            ],
             "pack_id": "en_whisper"
         },
         {
@@ -5068,22 +4940,6 @@
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/en/ggml-small-en-q5_0.bin"
             ],
             "size": "190098681",
-            "sups": [
-                {
-                    "role": "openvino",
-                    "checksum": "2cd1e2a3",
-                    "checksum_quick": "6e445046",
-                    "size": "52778764",
-                    "comp": "dir",
-                    "urls": [
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/en/ggml-small-en-encoder-openvino-int4/ggml-small-en-encoder-openvino.bin",
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/en/ggml-small-en-encoder-openvino-int4/ggml-small-en-encoder-openvino.xml"
-                    ]
-                }
-            ],
-            "features": [
-                "hw_openvino"
-            ],
             "pack_id": "en_whisper"
         },
         {
@@ -5097,22 +4953,6 @@
                 "https://huggingface.co/mukowaty/ggml-whisper/resolve/2fa88871ca40917bace4f1121760db0aee0763a2/en/ggml-medium-en-q5_0.bin"
             ],
             "size": "586585021",
-            "sups": [
-                {
-                    "role": "openvino",
-                    "checksum": "f55f18a8",
-                    "checksum_quick": "48be6809",
-                    "size": "170083851",
-                    "comp": "dir",
-                    "urls": [
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/en/ggml-medium-en-encoder-openvino-int4/ggml-medium-en-encoder-openvino.bin",
-                        "https://huggingface.co/mukowaty/ggml-whisper/resolve/60e649eb35bd250a01a502eb1f78d5415beabba3/en/ggml-medium-en-encoder-openvino-int4/ggml-medium-en-encoder-openvino.xml"
-                    ]
-                }
-            ],
-            "features": [
-                "hw_openvino"
-            ],
             "pack_id": "en_whisper"
         },
         {
