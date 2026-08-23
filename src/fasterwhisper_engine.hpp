@@ -14,8 +14,6 @@
 #define slots Q_SLOTS
 
 #include <optional>
-#include <sstream>
-#include <string>
 #include <vector>
 
 #include "stt_engine.hpp"

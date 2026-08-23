@@ -437,7 +437,12 @@ class settings : public QSettings, public singleton<settings> {
         int name##_audioctx_size_value READ name##_audioctx_size_value WRITE \
             set_##name##_audioctx_size_value NOTIFY name##_changed)          \
     Q_PROPERTY(engine_profile_t name##_profile READ name##_profile WRITE     \
-                   set_##name##_profile NOTIFY name##_changed)
+                   set_##name##_profile NOTIFY name##_changed)               \
+    Q_PROPERTY(int name##_temperature READ name##_temperature WRITE          \
+                   set_##name##_temperature NOTIFY name##_changed)           \
+    Q_PROPERTY(                                                              \
+        int name##_repetition_penalty READ name##_repetition_penalty WRITE   \
+            set_##name##_repetition_penalty NOTIFY name##_changed)
     WHISPER_ENGINE_TABLE
 #undef X
 
@@ -1061,7 +1066,13 @@ class settings : public QSettings, public singleton<settings> {
     engine_profile_t name##_profile() const;               \
     void set_##name##_profile(engine_profile_t value);     \
     Q_INVOKABLE void reset_##name##_audioctx_size_value(); \
-    Q_INVOKABLE void reset_##name##_options();
+    Q_INVOKABLE void reset_##name##_options();             \
+    int name##_temperature() const;                        \
+    void set_##name##_temperature(int value);              \
+    Q_INVOKABLE void reset_##name##_temperature();         \
+    int name##_repetition_penalty() const;                 \
+    void set_##name##_repetition_penalty(int value);       \
+    Q_INVOKABLE void reset_##name##_repetition_penalty();
     WHISPER_ENGINE_TABLE
 #undef X
 #define X(_name, _2, _gpu, ...) X##_gpu(_name)

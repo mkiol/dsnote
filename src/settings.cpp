@@ -1819,6 +1819,38 @@ X(whisper)
     void settings::reset_##name##_audioctx_size_value() {                      \
         set_##name##_audioctx_size_value(1500);                                \
     }                                                                          \
+    int settings::name##_temperature() const {                                 \
+        return std::clamp<int>(                                                \
+            value(QStringLiteral("service/" #name "_temperature"), 0).toInt(), \
+            0, 10);                                                            \
+    }                                                                          \
+    void settings::set_##name##_temperature(int value) {                       \
+        if (name##_temperature() != value) {                                   \
+            setValue(QStringLiteral("service/" #name "_temperature"), value);  \
+            emit name##_changed();                                             \
+            set_restart_required(true);                                        \
+        }                                                                      \
+    }                                                                          \
+    void settings::reset_##name##_temperature() {                              \
+        set_##name##_temperature(0);                                           \
+    }                                                                          \
+    int settings::name##_repetition_penalty() const {                          \
+        return std::clamp<int>(                                                \
+            value(QStringLiteral("service/" #name "_repetition_penalty"), 12)  \
+                .toInt(),                                                      \
+            0, 20);                                                            \
+    }                                                                          \
+    void settings::set_##name##_repetition_penalty(int value) {                \
+        if (name##_repetition_penalty() != value) {                            \
+            setValue(QStringLiteral("service/" #name "_repetition_penalty"),   \
+                     value);                                                   \
+            emit name##_changed();                                             \
+            set_restart_required(true);                                        \
+        }                                                                      \
+    }                                                                          \
+    void settings::reset_##name##_repetition_penalty() {                       \
+        set_##name##_repetition_penalty(12);                                   \
+    }                                                                          \
     void settings::reset_##name##_options() {                                  \
         reset_##name##_gpu_flash_attn();                                       \
         reset_##name##_cpu_threads();                                          \
@@ -1826,6 +1858,8 @@ X(whisper)
         set_##name##_use_gpu(false);                                           \
         reset_##name##_audioctx_size();                                        \
         reset_##name##_audioctx_size_value();                                  \
+        reset_##name##_temperature();                                          \
+        reset_##name##_repetition_penalty();                                   \
     }
 WHISPER_ENGINE_TABLE
 #undef X

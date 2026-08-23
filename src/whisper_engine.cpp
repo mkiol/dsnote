@@ -16,8 +16,9 @@
 
 #include <algorithm>
 #include <chrono>
+#include <cstddef>
 #include <cstdlib>
-#include <fstream>
+#include <limits>
 #include <sstream>
 #include <string>
 
@@ -528,14 +529,10 @@ whisper_full_params whisper_engine::make_wparams() {
     if (strcmp(wparams.language, "auto") == 0) wparams.language = nullptr;
 
     wparams.detect_language = false;
-    wparams.beam_search = {static_cast<int>(m_config.beam_search), 0.0};
+
     wparams.suppress_blank = true;
     wparams.suppress_nst = true;
     wparams.single_segment = false;
-    wparams.translate = m_config.translate && m_config.has_option('t');
-    wparams.n_threads = static_cast<int>(
-        std::min(m_config.cpu_threads,
-                 std::max(1U, std::thread::hardware_concurrency())));
     wparams.encoder_begin_callback = encoder_begin_callback;
     wparams.encoder_begin_callback_user_data = &m_thread_exit_requested;
     wparams.abort_callback = abort_callback;
@@ -545,8 +542,23 @@ whisper_full_params whisper_engine::make_wparams() {
     wparams.audio_ctx = 1500;
     wparams.no_context = false;
 
-    if (m_config.audio_ctx_conf == audio_ctx_conf_t::custom && !use_gpu()) {
-        wparams.audio_ctx = m_config.audio_ctx_size;
+    if (m_config.whisper_config.has_value()) {
+        wparams.beam_search = {
+            .beam_size = static_cast<int>(m_config.whisper_config->beam_search),
+            .patience = 0.0,
+        };
+        wparams.translate =
+            m_config.whisper_config->translate && m_config.has_option('t');
+        wparams.n_threads = static_cast<int>(
+            std::min(m_config.whisper_config->cpu_threads,
+                     std::max(1U, std::thread::hardware_concurrency())));
+        if (m_config.whisper_config->audio_ctx_conf ==
+                audio_ctx_conf_t::custom &&
+            !use_gpu()) {
+            wparams.audio_ctx = m_config.whisper_config->audio_ctx_size;
+        }
+        wparams.temperature =
+            std::clamp(m_config.whisper_config->temperature, 0.0F, 1.0F);
     }
 
     LOGD("cpu info: arch=" << cpu_tools::arch() << ", cores="
@@ -568,17 +580,7 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
     bool subrip = m_config.text_format == text_format_t::subrip;
     bool inline_ts = m_config.text_format == text_format_t::inline_timestamp;
 
-    if (m_config.audio_ctx_conf == audio_ctx_conf_t::dynamic && !use_gpu()) {
-        // short audio clips optimization
-        // https://github.com/ggml-org/whisper.cpp/issues/1855
-        m_wparams.audio_ctx = std::min<int>(
-            ((1500 * buf.size()) / (m_sample_rate * 30)) + 128, 1500);
-    }
-
-    LOGD("audio_ctx: " << m_wparams.audio_ctx);
-
     bool auto_lang = m_wparams.language == nullptr;
-
     if (m_whisper_sup_ctx && auto_lang) {
         // use sup model to detect language
         m_wparams.detect_language = true;
@@ -604,11 +606,26 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
         m_wparams.detect_language = false;
     }
 
-    std::ostringstream os;
-
-    if (!m_config.initial_prompt.empty()) {
-        m_wparams.initial_prompt = m_config.initial_prompt.c_str();
+    if (m_config.whisper_config.has_value()) {
+        if (m_config.whisper_config->audio_ctx_conf ==
+                audio_ctx_conf_t::dynamic &&
+            !use_gpu()) {
+            // short audio clips optimization
+            // https://github.com/ggml-org/whisper.cpp/issues/1855
+            m_wparams.audio_ctx = std::min<int>(
+                static_cast<int>(std::clamp<size_t>(
+                    ((1500 * buf.size()) / (m_sample_rate * 30)) + 128, 0,
+                    std::numeric_limits<int>::max())),
+                1500);
+        }
+        if (!m_config.whisper_config->initial_prompt.empty()) {
+            m_wparams.initial_prompt =
+                m_config.whisper_config->initial_prompt.c_str();
+        }
     }
+    LOGD("audio_ctx: " << m_wparams.audio_ctx);
+
+    std::ostringstream os;
 
     if (auto ret = m_whisper_api.whisper_full(m_whisper_ctx, m_wparams,
                                               buf.data(), buf.size());
@@ -644,8 +661,12 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
                 t0 += m_segment_time_offset;
                 t1 += m_segment_time_offset;
 
-                text_tools::segment_t segment{i + 1 + m_segment_offset, t0, t1,
-                                              text};
+                text_tools::segment_t segment{
+                    .n = i + 1 + m_segment_offset,
+                    .t0 = t0,
+                    .t1 = t1,
+                    .text = text,
+                };
 
                 if (subrip) {
                     text_tools::break_segment_to_multiline(

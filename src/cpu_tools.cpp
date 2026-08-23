@@ -79,8 +79,8 @@ std::ostream& operator<<(std::ostream& os, cpu_tools::cpuinfo_t cpuinfo) {
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os,
-                         cpu_tools::hw_cap_flags_t hw_cap_info) {
+std::ostream& operator<<(
+    std::ostream& os, [[maybe_unused]] cpu_tools::hw_cap_flags_t hw_cap_info) {
 #define X(enum_id, name_str, ...) \
     if (hw_cap_info & cpu_tools::hw_cap_##enum_id) os << name_str ", ";
     CPUTOOLS_HW_CAP_TABLE

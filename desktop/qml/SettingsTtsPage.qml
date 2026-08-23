@@ -262,6 +262,10 @@ ColumnLayout {
                         onUse_gpuChanged: _settings.coqui_use_gpu = use_gpu
                         onDevice_indexChanged: _settings.coqui_gpu_device_idx = device_index
                     }
+
+                    Item {
+                        Layout.fillHeight: true
+                    }
                 }
             }
         }
@@ -278,6 +282,10 @@ ColumnLayout {
                         use_gpu: _settings.parler_use_gpu
                         onUse_gpuChanged: _settings.parler_use_gpu = use_gpu
                         onDevice_indexChanged: _settings.parler_gpu_device_idx = device_index
+                    }
+
+                    Item {
+                        Layout.fillHeight: true
                     }
                 }
             }
@@ -296,6 +304,10 @@ ColumnLayout {
                         onUse_gpuChanged: _settings.f5_use_gpu = use_gpu
                         onDevice_indexChanged: _settings.f5_gpu_device_idx = device_index
                     }
+
+                    Item {
+                        Layout.fillHeight: true
+                    }
                 }
             }
         }
@@ -313,6 +325,10 @@ ColumnLayout {
                         onUse_gpuChanged: _settings.kokoro_use_gpu = use_gpu
                         onDevice_indexChanged: _settings.kokoro_gpu_device_idx = device_index
                     }
+
+                    Item {
+                        Layout.fillHeight: true
+                    }
                 }
             }
         }
@@ -329,6 +345,10 @@ ColumnLayout {
                         use_gpu: _settings.whisperspeech_use_gpu
                         onUse_gpuChanged: _settings.whisperspeech_use_gpu = use_gpu
                         onDevice_indexChanged: _settings.whisperspeech_gpu_device_idx = device_index
+                    }
+
+                    Item {
+                        Layout.fillHeight: true
                     }
                 }
             }

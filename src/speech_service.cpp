@@ -8,6 +8,7 @@
 #include "speech_service.h"
 
 #include <fmt/format.h>
+#include <qvariant.h>
 
 #include <QCoreApplication>
 #include <QDBusConnection>
@@ -19,6 +20,7 @@
 #include <numeric>
 #include <optional>
 #include <set>
+#include <type_traits>
 
 #include "april_engine.hpp"
 #include "ds_engine.hpp"
@@ -33,6 +35,7 @@
 #include "rhvoice_engine.hpp"
 #include "sam_engine.hpp"
 #include "settings.h"
+#include "stt_engine.hpp"
 #include "text_tools.hpp"
 #include "vosk_engine.hpp"
 #include "whisper_engine.hpp"
@@ -143,14 +146,40 @@ QDebug operator<<(QDebug d, speech_service::beep_role_t beep_role) {
     return d;
 }
 
-static bool tts_not_merge_files_options(const QVariantMap &options) {
+namespace {
+template <typename T>
+T get_value_from_options(const QString &name, T default_value,
+                         const QVariantMap &options) {
+    if (options.contains(name)) {
+        bool ok = false;
+        QVariant vvalue = options.value(name, default_value);
+        T value;
+        if constexpr (std::is_same_v<T, int>) {
+            value = vvalue.toInt(&ok);
+        } else if constexpr (std::is_same_v<T, double>) {
+            value = vvalue.toDouble(&ok);
+        } else if constexpr (std::is_same_v<T, float>) {
+            value = vvalue.toFloat(&ok);
+        } else if constexpr (std::is_same_v<T, bool>) {
+            value = vvalue.toBool();
+            ok = true;
+        } else if constexpr (std::is_same_v<T, QString>) {
+            value = vvalue.toString();
+            ok = true;
+        }
+        if (ok) return value;
+    }
+    return default_value;
+}
+
+bool tts_not_merge_files_options(const QVariantMap &options) {
     if (options.contains(QStringLiteral("not_merge_files"))) {
         return options.value(QStringLiteral("not_merge_files")).toBool();
     }
     return false;
 }
 
-static settings::audio_format_t tts_audio_format_from_options(
+settings::audio_format_t tts_audio_format_from_options(
     const QVariantMap &options) {
     if (options.contains(QStringLiteral("audio_format"))) {
         auto format = options.value(QStringLiteral("audio_format")).toString();
@@ -165,7 +194,7 @@ static settings::audio_format_t tts_audio_format_from_options(
     return settings::audio_format_t::AudioFormatAuto;
 }
 
-static settings::audio_quality_t tts_audio_quality_from_options(
+settings::audio_quality_t tts_audio_quality_from_options(
     const QVariantMap &options) {
     if (options.contains(QStringLiteral("audio_quality"))) {
         auto quality =
@@ -181,7 +210,7 @@ static settings::audio_quality_t tts_audio_quality_from_options(
     return settings::audio_quality_t::AudioQualityVbrMedium;
 }
 
-static QVariantList variant_list_from_list(const QStringList &list) {
+QVariantList variant_list_from_list(const QStringList &list) {
     QVariantList vlist;
 
     vlist.reserve(list.size());
@@ -191,6 +220,7 @@ static QVariantList variant_list_from_list(const QStringList &list) {
 
     return vlist;
 }
+}  // namespace
 
 speech_service::speech_service(QObject *parent)
     : QObject{parent}, m_dbus_service_adaptor{this} {
@@ -635,33 +665,53 @@ void speech_service::fill_available_models_map(
         switch (role) {
             case models_manager::model_role_t::stt:
                 m_available_stt_models_map.emplace(
-                    model.id,
-                    model_data_t{model.id, model.lang_id, model.trg_lang_id,
-                                 model.engine, model.name, model.options});
+                    model.id, model_data_t{
+                                  .model_id = model.id,
+                                  .lang_id = model.lang_id,
+                                  .trg_lang_id = model.trg_lang_id,
+                                  .engine = model.engine,
+                                  .name = model.name,
+                                  .options = model.options,
+                              });
                 lang_to_model_map.stt.emplace(model.lang_id, model.id);
                 if (model.id == default_stt_model)
                     lang_to_model_map.found_default_stt = true;
                 break;
             case models_manager::model_role_t::ttt:
                 m_available_ttt_models_map.emplace(
-                    model.id,
-                    model_data_t{model.id, model.lang_id, model.trg_lang_id,
-                                 model.engine, model.name, model.options});
+                    model.id, model_data_t{
+                                  .model_id = model.id,
+                                  .lang_id = model.lang_id,
+                                  .trg_lang_id = model.trg_lang_id,
+                                  .engine = model.engine,
+                                  .name = model.name,
+                                  .options = model.options,
+                              });
                 break;
             case models_manager::model_role_t::tts:
                 m_available_tts_models_map.emplace(
-                    model.id,
-                    model_data_t{model.id, model.lang_id, model.trg_lang_id,
-                                 model.engine, model.name, model.options});
+                    model.id, model_data_t{
+                                  .model_id = model.id,
+                                  .lang_id = model.lang_id,
+                                  .trg_lang_id = model.trg_lang_id,
+                                  .engine = model.engine,
+                                  .name = model.name,
+                                  .options = model.options,
+                              });
                 lang_to_model_map.tts.emplace(model.lang_id, model.id);
                 if (model.id == default_tts_model)
                     lang_to_model_map.found_default_tts = true;
                 break;
             case models_manager::model_role_t::mnt:
                 m_available_mnt_models_map.emplace(
-                    model.id,
-                    model_data_t{model.id, model.lang_id, model.trg_lang_id,
-                                 model.engine, model.name, model.options});
+                    model.id, model_data_t{
+                                  .model_id = model.id,
+                                  .lang_id = model.lang_id,
+                                  .trg_lang_id = model.trg_lang_id,
+                                  .engine = model.engine,
+                                  .name = model.name,
+                                  .options = model.options,
+                              });
                 lang_to_model_map.mnt.emplace(model.lang_id, model.id);
                 if (model.lang_id == default_mnt_lang)
                     lang_to_model_map.found_default_mnt = true;
@@ -771,14 +821,13 @@ speech_service::choose_model_config_by_id(
                 auto scorer_file = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::scorer, model.sup_files);
                 config->stt = stt_model_config_t{
-                    model.lang_id,
-                    model.lang_code,
-                    model.id,
-                    model.engine,
-                    model.model_file,
-                    /*scorer_file=*/
-                    scorer_file ? scorer_file->get().file : QString{},
-                    /*ttt=*/{},
+                    .lang_id = model.lang_id,
+                    .lang_code = model.lang_code,
+                    .model_id = model.id,
+                    .engine = model.engine,
+                    .model_file = model.model_file,
+                    .scorer_file =
+                        scorer_file ? scorer_file->get().file : QString{},
                 };
                 break;
             }
@@ -791,28 +840,28 @@ speech_service::choose_model_config_by_id(
                 auto pkuseg_dir = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::pkuseg, model.sup_files);
                 config->tts = tts_model_config_t{
-                    model.lang_id,
-                    model.lang_code,
-                    model.id,
-                    model.engine,
-                    model.model_file,
-                    /*vocoder_file=*/
-                    vocoder_file ? vocoder_file->get().file : QString{},
-                    /*diacritizer_file=*/
-                    diacritizer_file ? diacritizer_file->get().file : QString{},
-                    model.speaker,
-                    pkuseg_dir ? pkuseg_dir->get().file : QString{},
+                    .lang_id = model.lang_id,
+                    .lang_code = model.lang_code,
+                    .model_id = model.id,
+                    .engine = model.engine,
+                    .model_file = model.model_file,
+                    .vocoder_file =
+                        vocoder_file ? vocoder_file->get().file : QString{},
+                    .diacritizer_file = diacritizer_file
+                                            ? diacritizer_file->get().file
+                                            : QString{},
+                    .speaker = model.speaker,
+                    .pkuseg_dir =
+                        pkuseg_dir ? pkuseg_dir->get().file : QString{},
                 };
                 break;
             }
             case engine_t::mnt:
                 config->mnt = mnt_model_config_t{
-                    model.lang_id,
-                    out_lang_id,
-                    model.id,
-                    model.model_file,
-                    /*model_id_second=*/{},
-                    /*model_file_second=*/{},
+                    .lang_id = model.lang_id,
+                    .out_lang_id = out_lang_id,
+                    .model_id_first = model.id,
+                    .model_file_first = model.model_file,
                 };
                 break;
             case engine_t::text_repair:
@@ -849,9 +898,12 @@ speech_service::choose_model_config_by_id(
                 const auto model_second = *it_model_from_en;
                 config.emplace();
                 config->mnt = mnt_model_config_t{
-                    model_first.lang_id, out_lang_id,
-                    model_first.id,      model_first.model_file,
-                    model_second.id,     model_second.model_file,
+                    .lang_id = model_first.lang_id,
+                    .out_lang_id = out_lang_id,
+                    .model_id_first = model_first.id,
+                    .model_file_first = model_first.model_file,
+                    .model_id_second = model_second.id,
+                    .model_file_second = model_second.model_file,
                 };
                 config->options = model_first.options;
                 qDebug() << "mnt both models found";
@@ -899,14 +951,13 @@ speech_service::choose_model_config_by_lang(
                     models_manager::sup_model_role_t::scorer,
                     best_model->sup_files);
                 config->stt = stt_model_config_t{
-                    best_model->lang_id,
-                    best_model->lang_code,
-                    best_model->id,
-                    best_model->engine,
-                    best_model->model_file,
-                    /*scorer_file=*/
-                    scorer_file ? scorer_file->get().file : QString{},
-                    /*ttt=*/{},
+                    .lang_id = best_model->lang_id,
+                    .lang_code = best_model->lang_code,
+                    .model_id = best_model->id,
+                    .engine = best_model->engine,
+                    .model_file = best_model->model_file,
+                    .scorer_file =
+                        scorer_file ? scorer_file->get().file : QString{},
                 };
                 break;
             }
@@ -921,17 +972,19 @@ speech_service::choose_model_config_by_lang(
                     models_manager::sup_model_role_t::pkuseg,
                     best_model->sup_files);
                 config->tts = tts_model_config_t{
-                    best_model->lang_id,
-                    best_model->lang_code,
-                    best_model->id,
-                    best_model->engine,
-                    best_model->model_file,
-                    /*vocoder_file=*/
-                    vocoder_file ? vocoder_file->get().file : QString{},
-                    /*diacritizer_file=*/
-                    diacritizer_file ? diacritizer_file->get().file : QString{},
-                    best_model->speaker,
-                    pkuseg_dir ? pkuseg_dir->get().file : QString{},
+                    .lang_id = best_model->lang_id,
+                    .lang_code = best_model->lang_code,
+                    .model_id = best_model->id,
+                    .engine = best_model->engine,
+                    .model_file = best_model->model_file,
+                    .vocoder_file =
+                        vocoder_file ? vocoder_file->get().file : QString{},
+                    .diacritizer_file = diacritizer_file
+                                            ? diacritizer_file->get().file
+                                            : QString{},
+                    .speaker = best_model->speaker,
+                    .pkuseg_dir =
+                        pkuseg_dir ? pkuseg_dir->get().file : QString{},
                 };
                 break;
             }
@@ -966,14 +1019,13 @@ speech_service::choose_model_config_by_first(
                 auto scorer_file = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::scorer, model.sup_files);
                 config->stt = stt_model_config_t{
-                    model.lang_id,
-                    model.lang_code,
-                    model.id,
-                    model.engine,
-                    model.model_file,
-                    /*scorer_file=*/
-                    scorer_file ? scorer_file->get().file : QString{},
-                    /*ttt=*/{},
+                    .lang_id = model.lang_id,
+                    .lang_code = model.lang_code,
+                    .model_id = model.id,
+                    .engine = model.engine,
+                    .model_file = model.model_file,
+                    .scorer_file =
+                        scorer_file ? scorer_file->get().file : QString{},
                 };
                 break;
             }
@@ -986,17 +1038,19 @@ speech_service::choose_model_config_by_first(
                 auto pkuseg_dir = models_manager::sup_model_file_of_role(
                     models_manager::sup_model_role_t::pkuseg, model.sup_files);
                 config->tts = tts_model_config_t{
-                    model.lang_id,
-                    model.lang_code,
-                    model.id,
-                    model.engine,
-                    model.model_file,
-                    /*vocoder_file=*/
-                    vocoder_file ? vocoder_file->get().file : QString{},
-                    /*diacritizer_file=*/
-                    diacritizer_file ? diacritizer_file->get().file : QString{},
-                    model.speaker,
-                    pkuseg_dir ? pkuseg_dir->get().file : QString{},
+                    .lang_id = model.lang_id,
+                    .lang_code = model.lang_code,
+                    .model_id = model.id,
+                    .engine = model.engine,
+                    .model_file = model.model_file,
+                    .vocoder_file =
+                        vocoder_file ? vocoder_file->get().file : QString{},
+                    .diacritizer_file = diacritizer_file
+                                            ? diacritizer_file->get().file
+                                            : QString{},
+                    .speaker = model.speaker,
+                    .pkuseg_dir =
+                        pkuseg_dir ? pkuseg_dir->get().file : QString{},
                 };
                 break;
             }
@@ -1182,33 +1236,6 @@ QString speech_service::lang_from_model_id(const QString &model_id) {
     return l.first();
 }
 
-bool speech_service::get_bool_value_from_options(const QString &name,
-                                                 bool default_value,
-                                                 const QVariantMap &options) {
-    if (options.contains(name))
-        return options.value(name, default_value).toBool();
-    return default_value;
-}
-
-int speech_service::get_int_value_from_options(const QString &name,
-                                               int default_value,
-                                               const QVariantMap &options) {
-    if (options.contains(name)) {
-        bool ok = false;
-        auto value = options.value(name).toInt(&ok);
-        if (ok) return value;
-    }
-    return default_value;
-}
-
-QString speech_service::get_string_value_from_options(
-    const QString &name, const QString &default_value,
-    const QVariantMap &options) {
-    if (options.contains(name))
-        return options.value(name, default_value).toString();
-    return default_value;
-}
-
 template <typename Engine>
 static std::optional<typename Engine::gpu_device_t> make_gpu_device(
     const QString &gpu_str, const QString &auto_device_str) {
@@ -1318,14 +1345,13 @@ bool speech_service::is_new_stt_engine_required(
     if (m_stt_engine->model_files() != config.model_files) return true;
     if (m_stt_engine->model_files() != config.model_files) return true;
     if (m_stt_engine->lang() != config.lang) return true;
-    if (m_stt_engine->translate() != config.translate) return true;
     if (config.use_gpu != m_stt_engine->use_gpu() ||
-        config.gpu_device != m_stt_engine->gpu_device())
+        config.gpu_device != m_stt_engine->gpu_device()) {
         return true;
-    if (m_stt_engine->audio_ctx_conf() != config.audio_ctx_conf) return true;
-    if (m_stt_engine->audio_ctx_size() != config.audio_ctx_size) return true;
-    if (m_stt_engine->cpu_threads() != config.cpu_threads) return true;
-    if (m_stt_engine->beam_search() != config.beam_search) return true;
+    }
+    if (m_stt_engine->whisper_config() != config.whisper_config) {
+        return true;
+    }
 
     return false;
 }
@@ -1422,72 +1448,90 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         config.lang_code = model_config->stt->lang_code.toStdString();
         config.speech_mode =
             static_cast<stt_engine::speech_mode_t>(speech_mode);
-        config.translate = !out_lang_id.isEmpty() && out_lang_id == "en" &&
-                           config.lang != "en";
         config.options = model_config->options.toStdString();
         config.text_format = stt_text_fromat_from_settings_format(
-            static_cast<settings::text_format_t>(get_int_value_from_options(
+            static_cast<settings::text_format_t>(get_value_from_options(
                 "text_format",
                 static_cast<int>(settings::text_format_t::TextFormatRaw),
                 options)));
         config.sub_config = stt_sub_config_from_options(options);
         config.inline_timestamp_template =
-            get_string_value_from_options("inline_timestamp_template", {},
-                                          options)
+            get_value_from_options("inline_timestamp_template", QString{},
+                                   options)
                 .toStdString();
-        config.inline_timestamp_min_interval = get_int_value_from_options(
+        config.inline_timestamp_min_interval = get_value_from_options(
             "inline_timestamp_min_interval", 30, options);
         config.cache_dir = settings::instance()->cache_dir().toStdString();
         config.insert_stats =
-            get_bool_value_from_options("insert_stats", false, options);
-        config.initial_prompt =
-            get_string_value_from_options("initial_prompt", {}, options)
-                .toStdString();
+            get_value_from_options("insert_stats", false, options);
 
-        // clang-format off
-#define ENGINE_OPTS(name_) \
-        switch(settings::instance()->name_##_profile()) {  \
-        case settings::engine_profile_t::EngineProfilePerformance: \
-            config.beam_search = 2; \
-            config.cpu_threads = 4; \
-            config.audio_ctx_conf = stt_engine::audio_ctx_conf_t::dynamic; \
-            config.audio_ctx_size = 1500; \
-            break; \
-        case settings::engine_profile_t::EngineProfileQuality: \
-            config.beam_search = 5; \
-            config.cpu_threads = 4; \
-            config.audio_ctx_conf = stt_engine::audio_ctx_conf_t::no_change; \
-            config.audio_ctx_size = 1500; \
-            break; \
-        case settings::engine_profile_t::EngineProfileCustom: \
-            config.beam_search = settings::instance()->name_##_beam_search(); \
-            config.cpu_threads = settings::instance()->name_##_cpu_threads(); \
-            config.audio_ctx_conf = []{ \
-                switch(settings::instance()->name_##_audioctx_size()) { \
-                case settings::option_t::OptionAuto: return stt_engine::audio_ctx_conf_t::dynamic; \
-                case settings::option_t::OptionDefault: return stt_engine::audio_ctx_conf_t::no_change; \
-                case settings::option_t::OptionCustom: return stt_engine::audio_ctx_conf_t::custom; \
-                } \
-                return stt_engine::audio_ctx_conf_t::dynamic; \
-            }(); \
-            config.audio_ctx_size = settings::instance()->name_##_audioctx_size_value(); \
-            break; \
-        } \
-        if (settings::instance()->name_##_use_gpu() && settings::instance()->has_##name_##_gpu_device()) { \
-            if (auto device = make_gpu_device<stt_engine>(settings::instance()->name_##_gpu_device(), settings::instance()->name_##_auto_gpu_device())) { \
-                config.gpu_device = std::move(*device); \
-                if (settings::instance()->name_##_profile() == settings::engine_profile_t::EngineProfileCustom) { \
-                    config.gpu_device.flash_attn = \
-                        (config.gpu_device.api == stt_engine::gpu_api_t::cuda || config.gpu_device.api == stt_engine::gpu_api_t::rocm) && \
-                        settings::instance()->name_##_gpu_flash_attn() && \
-                        config.gpu_device.name.find("ZLUDA") == std::string::npos; \
-                } else { \
-                    config.gpu_device.flash_attn = false; \
-                } \
-                config.use_gpu = true; \
-            } \
-        }
-        
+#define ENGINE_OPTS(name_)                                                     \
+    stt_engine::whisper_config_t wc{};                                         \
+    wc.translate =                                                             \
+        !out_lang_id.isEmpty() && out_lang_id == "en" && config.lang != "en";  \
+    wc.initial_prompt =                                                        \
+        get_value_from_options("initial_prompt", QString{}, options)           \
+            .toStdString();                                                    \
+    wc.temperature = 0.0F;                                                     \
+    wc.repetition_penalty = 1.2F;                                              \
+    switch (settings::instance()->name_##_profile()) {                         \
+        case settings::engine_profile_t::EngineProfilePerformance:             \
+            wc.beam_search = 2;                                                \
+            wc.cpu_threads = 4;                                                \
+            wc.audio_ctx_conf = stt_engine::audio_ctx_conf_t::dynamic;         \
+            wc.audio_ctx_size = 1500;                                          \
+            break;                                                             \
+        case settings::engine_profile_t::EngineProfileQuality:                 \
+            wc.beam_search = 5;                                                \
+            wc.cpu_threads = 4;                                                \
+            wc.audio_ctx_conf = stt_engine::audio_ctx_conf_t::no_change;       \
+            wc.audio_ctx_size = 1500;                                          \
+            break;                                                             \
+        case settings::engine_profile_t::EngineProfileCustom:                  \
+            wc.beam_search = settings::instance()->name_##_beam_search();      \
+            wc.cpu_threads = settings::instance()->name_##_cpu_threads();      \
+            wc.audio_ctx_conf = [] {                                           \
+                switch (settings::instance()->name_##_audioctx_size()) {       \
+                    case settings::option_t::OptionAuto:                       \
+                        return stt_engine::audio_ctx_conf_t::dynamic;          \
+                    case settings::option_t::OptionDefault:                    \
+                        return stt_engine::audio_ctx_conf_t::no_change;        \
+                    case settings::option_t::OptionCustom:                     \
+                        return stt_engine::audio_ctx_conf_t::custom;           \
+                }                                                              \
+                return stt_engine::audio_ctx_conf_t::dynamic;                  \
+            }();                                                               \
+            wc.audio_ctx_size =                                                \
+                settings::instance()->name_##_audioctx_size_value();           \
+            wc.temperature = std::clamp(                                       \
+                settings::instance()->name_##_temperature() / 10.0F, 0.0F,     \
+                1.0F);                                                         \
+            wc.repetition_penalty = std::clamp(                                \
+                settings::instance()->name_##_repetition_penalty() / 10.0F,    \
+                0.0F, 2.0F);                                                   \
+            break;                                                             \
+    }                                                                          \
+    config.whisper_config.emplace(std::move(wc));                              \
+    if (settings::instance()->name_##_use_gpu() &&                             \
+        settings::instance()->has_##name_##_gpu_device()) {                    \
+        if (auto device = make_gpu_device<stt_engine>(                         \
+                settings::instance()->name_##_gpu_device(),                    \
+                settings::instance()->name_##_auto_gpu_device())) {            \
+            config.gpu_device = std::move(*device);                            \
+            if (settings::instance()->name_##_profile() ==                     \
+                settings::engine_profile_t::EngineProfileCustom) {             \
+                config.gpu_device.flash_attn =                                 \
+                    (config.gpu_device.api == stt_engine::gpu_api_t::cuda ||   \
+                     config.gpu_device.api == stt_engine::gpu_api_t::rocm) &&  \
+                    settings::instance()->name_##_gpu_flash_attn() &&          \
+                    config.gpu_device.name.find("ZLUDA") == std::string::npos; \
+            } else {                                                           \
+                config.gpu_device.flash_attn = false;                          \
+            }                                                                  \
+            config.use_gpu = true;                                             \
+        }                                                                      \
+    }
+
         if (model_config->stt->engine == models_manager::model_engine_t::stt_whisper) {
             ENGINE_OPTS(whisper)
             if (config.gpu_device.api == stt_engine::gpu_api_t::vulkan) {
@@ -1505,7 +1549,6 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         }
 #endif
 #undef ENGINE_OPTS
-        // clang-format on
 
         qDebug() << "restart stt engine config:" << config;
 
@@ -1518,46 +1561,49 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             }
 
             stt_engine::callbacks_t call_backs{
-                /*text_decoded=*/[this](const std::string &text,
-                                        const std::string &lang) {
-                    handle_stt_text_decoded(text, lang);
-                },
-                /*intermediate_text_decoded=*/
-                [this](const std::string &text, const std::string &lang) {
-                    handle_stt_intermediate_text_decoded(text, lang);
-                },
-                /*speech_detection_status_changed=*/
-                [this](stt_engine::speech_detection_status_t status) {
-                    if (m_current_task)
-                        emit stt_engine_state_changed(status,
-                                                      m_current_task->id);
-                },
-                /*sentence_timeout=*/
-                [this]() {
-                    if (m_current_task && m_current_task->speech_mode ==
-                                              speech_mode_t::single_sentence) {
-                        emit sentence_timeout(m_current_task->id);
-                    }
-                },
-                /*eof=*/
-                [this]() {
-                    if (m_current_task) emit stt_engine_eof(m_current_task->id);
-                },
-                /*error=*/
-                [this]() {
-                    if (m_current_task)
-                        emit stt_engine_error(m_current_task->id);
-                },
-                /*stopping=*/
-                [this]() {
-                    if (m_current_task)
-                        emit stt_engine_stopping(m_current_task->id);
-                },
-                /*stopped=*/
-                [this]() {
-                    if (m_current_task)
-                        emit stt_engine_stopped(m_current_task->id);
-                }};
+                .text_decoded =
+                    [this](const std::string &text, const std::string &lang) {
+                        handle_stt_text_decoded(text, lang);
+                    },
+                .intermediate_text_decoded =
+                    [this](const std::string &text, const std::string &lang) {
+                        handle_stt_intermediate_text_decoded(text, lang);
+                    },
+                .speech_detection_status_changed =
+                    [this](stt_engine::speech_detection_status_t status) {
+                        if (m_current_task)
+                            emit stt_engine_state_changed(status,
+                                                          m_current_task->id);
+                    },
+                .sentence_timeout =
+                    [this]() {
+                        if (m_current_task &&
+                            m_current_task->speech_mode ==
+                                speech_mode_t::single_sentence) {
+                            emit sentence_timeout(m_current_task->id);
+                        }
+                    },
+                .eof =
+                    [this]() {
+                        if (m_current_task)
+                            emit stt_engine_eof(m_current_task->id);
+                    },
+                .error =
+                    [this]() {
+                        if (m_current_task)
+                            emit stt_engine_error(m_current_task->id);
+                    },
+                .stopping =
+                    [this]() {
+                        if (m_current_task)
+                            emit stt_engine_stopping(m_current_task->id);
+                    },
+                .stopped =
+                    [this]() {
+                        if (m_current_task)
+                            emit stt_engine_stopped(m_current_task->id);
+                    },
+            };
 
             try {
                 switch (model_config->stt->engine) {
@@ -1592,11 +1638,14 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             m_stt_engine->set_text_format(config.text_format);
             m_stt_engine->set_sub_config(config.sub_config);
             m_stt_engine->set_insert_stats(config.insert_stats);
-            m_stt_engine->set_initial_prompt(std::move(config.initial_prompt));
             m_stt_engine->set_inline_timestamp_template(
                 config.inline_timestamp_template);
             m_stt_engine->set_inline_timestamp_min_interval(
                 config.inline_timestamp_min_interval);
+            if (config.whisper_config.has_value()) {
+                m_stt_engine->set_whisper_config(
+                    std::move(*config.whisper_config));
+            }
         }
 
         return model_config->stt->model_id;
@@ -1695,13 +1744,13 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.speaker_id = model_config->tts->speaker.toStdString();
         config.options = model_config->options.toStdString();
         config.text_format = tts_text_fromat_from_settings_format(
-            static_cast<settings::text_format_t>(get_int_value_from_options(
+            static_cast<settings::text_format_t>(get_value_from_options(
                 "text_format",
                 static_cast<int>(settings::text_format_t::TextFormatRaw),
                 options)));
         config.sync_subs = tts_subtitles_sync_mode_from_settings(
             static_cast<
-                settings::tts_subtitles_sync_mode_t>(get_int_value_from_options(
+                settings::tts_subtitles_sync_mode_t>(get_value_from_options(
                 "sync_subs",
                 static_cast<int>(
                     settings::tts_subtitles_sync_mode_t::TtsSubtitleSyncOff),
@@ -1709,25 +1758,25 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.audio_format = format_from_cache_format(
             settings::instance()->cache_audio_format());
         config.ref_voice_file =
-            get_string_value_from_options("ref_voice_file", {}, options)
+            get_value_from_options("ref_voice_file", QString{}, options)
                 .toStdString();
         config.lang_code = model_config->tts->lang_code.toStdString();
         config.split_into_sentences =
-            get_bool_value_from_options("split_into_sentences", true, options);
-        config.use_engine_speed_control = get_bool_value_from_options(
-            "use_engine_speed_control", true, options);
+            get_value_from_options("split_into_sentences", true, options);
+        config.use_engine_speed_control =
+            get_value_from_options("use_engine_speed_control", true, options);
         config.normalize_audio =
-            get_bool_value_from_options("normalize_audio", true, options);
+            get_value_from_options("normalize_audio", true, options);
         config.speech_speed = std::clamp(
-            get_int_value_from_options("speech_speed", 10, options), 1, 20);
+            get_value_from_options("speech_speed", 10, options), 1, 20);
         config.tag_mode = tts_tag_mode_from_settings_tag_mode(
-            static_cast<settings::tts_tag_mode_t>(get_int_value_from_options(
+            static_cast<settings::tts_tag_mode_t>(get_value_from_options(
                 "tag_mode",
                 static_cast<int>(
                     settings::settings::tts_tag_mode_t::TtsTagModeSupport),
                 options)));
         config.ref_prompt =
-            get_string_value_from_options("ref_prompt", {}, options)
+            get_value_from_options("ref_prompt", QString{}, options)
                 .toStdString();
 
         // clang-format off
@@ -1785,33 +1834,34 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             }
 
             tts_engine::callbacks_t call_backs{
-                /*speech_encoded=*/[this](
-                                       const std::string &text,
-                                       const std::string &audio_file_path,
-                                       tts_engine::audio_format_t audio_format,
-                                       double progress, bool last) {
-                    handle_tts_speech_encoded(text, audio_file_path,
-                                              audio_format, progress, last);
-                },
-                /*text_restored=*/
-                [this](const std::string &text) {
-                    if (m_current_task) {
-                        emit ttt_text_repaired(QString::fromStdString(text),
-                                               m_current_task->id);
-                    }
-                },
-                /*state_changed=*/
-                [this](tts_engine::state_t state) {
-                    if (m_current_task) {
-                        emit tts_engine_state_changed(state,
-                                                      m_current_task->id);
-                    }
-                },
-                /*error=*/
-                [this]() {
-                    if (m_current_task)
-                        emit tts_engine_error(m_current_task->id);
-                }};
+                .speech_encoded =
+                    [this](const std::string &text,
+                           const std::string &audio_file_path,
+                           tts_engine::audio_format_t audio_format,
+                           double progress, bool last) {
+                        handle_tts_speech_encoded(text, audio_file_path,
+                                                  audio_format, progress, last);
+                    },
+                .text_restored =
+                    [this](const std::string &text) {
+                        if (m_current_task) {
+                            emit ttt_text_repaired(QString::fromStdString(text),
+                                                   m_current_task->id);
+                        }
+                    },
+                .state_changed =
+                    [this](tts_engine::state_t state) {
+                        if (m_current_task) {
+                            emit tts_engine_state_changed(state,
+                                                          m_current_task->id);
+                        }
+                    },
+                .error =
+                    [this]() {
+                        if (m_current_task)
+                            emit tts_engine_error(m_current_task->id);
+                    },
+            };
 
             if (model_config->tts->engine ==
                     models_manager::model_engine_t::tts_piper ||
@@ -1916,9 +1966,9 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
         config.out_lang = model_config->mnt->out_lang_id.toStdString();
         config.options = model_config->options.toStdString();
         config.clean_text =
-            get_bool_value_from_options("clean_text", false, options);
+            get_value_from_options("clean_text", false, options);
         config.text_format = mnt_text_fromat_from_settings_format(
-            static_cast<settings::text_format_t>(get_int_value_from_options(
+            static_cast<settings::text_format_t>(get_value_from_options(
                 "text_format",
                 static_cast<int>(settings::text_format_t::TextFormatRaw),
                 options)));
@@ -1953,29 +2003,31 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
             }
 
             mnt_engine::callbacks_t call_backs{
-                /*text_translated=*/
-                [this](const std::string &in_text, const std::string &in_lang,
-                       std::string &&out_text, const std::string &out_lang) {
-                    handle_mnt_translate_finished(
-                        in_text, in_lang, std::move(out_text), out_lang);
-                },
-                /*state_changed=*/
-                [this](mnt_engine::state_t state) {
-                    if (m_current_task) {
-                        emit mnt_engine_state_changed(state,
-                                                      m_current_task->id);
-                    }
-                },
-                /*progress_changed=*/
-                [this]() {
-                    if (m_current_task)
-                        emit mnt_engine_translate_progress_changed(
-                            m_current_task->id);
-                },
-                /*error=*/
-                [this](mnt_engine::error_t error_type) {
-                    handle_mnt_engine_error(error_type);
-                }};
+                .text_translated =
+                    [this](const std::string &in_text,
+                           const std::string &in_lang, std::string &&out_text,
+                           const std::string &out_lang) {
+                        handle_mnt_translate_finished(
+                            in_text, in_lang, std::move(out_text), out_lang);
+                    },
+                .state_changed =
+                    [this](mnt_engine::state_t state) {
+                        if (m_current_task) {
+                            emit mnt_engine_state_changed(state,
+                                                          m_current_task->id);
+                        }
+                    },
+                .progress_changed =
+                    [this]() {
+                        if (m_current_task)
+                            emit mnt_engine_translate_progress_changed(
+                                m_current_task->id);
+                    },
+                .error =
+                    [this](mnt_engine::error_t error_type) {
+                        handle_mnt_engine_error(error_type);
+                    },
+            };
 
             try {
                 m_mnt_engine = std::make_unique<mnt_engine>(
@@ -2035,7 +2087,7 @@ bool speech_service::restart_text_repair_engine(const QVariantMap &options) {
                     .toStdString();
         config.options = model_config->options.toStdString();
         config.text_format = text_repair_text_fromat_from_settings_format(
-            static_cast<settings::text_format_t>(get_int_value_from_options(
+            static_cast<settings::text_format_t>(get_value_from_options(
                 "text_format",
                 static_cast<int>(settings::text_format_t::TextFormatRaw),
                 options)));
@@ -2064,22 +2116,24 @@ bool speech_service::restart_text_repair_engine(const QVariantMap &options) {
             }
 
             text_repair_engine::callbacks_t call_backs{
-                /*text_repaired=*/[this](const std::string &text) {
-                    if (m_current_task)
-                        emit ttt_text_repaired(QString::fromStdString(text),
-                                               m_current_task->id);
-                },
-                /*state_changed=*/
-                [this](text_repair_engine::state_t state) {
-                    if (m_current_task)
-                        emit text_repair_engine_state_changed(
-                            state, m_current_task->id);
-                },
-                /*error=*/
-                [this]() {
-                    if (m_current_task)
-                        emit text_repair_engine_error(m_current_task->id);
-                }};
+                .text_repaired =
+                    [this](const std::string &text) {
+                        if (m_current_task)
+                            emit ttt_text_repaired(QString::fromStdString(text),
+                                                   m_current_task->id);
+                    },
+                .state_changed =
+                    [this](text_repair_engine::state_t state) {
+                        if (m_current_task)
+                            emit text_repair_engine_state_changed(
+                                state, m_current_task->id);
+                    },
+                .error =
+                    [this]() {
+                        if (m_current_task)
+                            emit text_repair_engine_error(m_current_task->id);
+                    },
+            };
 
             try {
                 m_text_repair_engine = std::make_unique<text_repair_engine>(
@@ -2245,14 +2299,15 @@ void speech_service::handle_tts_speech_encoded(
     const std::string &text, const std::string &audio_file_path,
     tts_engine::audio_format_t format, double progress, bool last) {
     if (m_current_task) {
-        emit tts_speech_encoded(
-            {/*text=*/QString::fromStdString(text),
-             /*audio_file_path=*/QString::fromStdString(audio_file_path),
-             /*audio_format=*/format,
-             /*remove_ausio_file=*/false,
-             /*progress=*/progress,
-             /*last=*/last,
-             /*task_id=*/m_current_task->id});
+        emit tts_speech_encoded({
+            .text = QString::fromStdString(text),
+            .audio_file_path = QString::fromStdString(audio_file_path),
+            .audio_format = format,
+            .remove_audio_file = false,
+            .progress = progress,
+            .last = last,
+            .task_id = m_current_task->id,
+        });
     }
 }
 
@@ -2388,11 +2443,8 @@ void speech_service::handle_speech_to_file(const tts_partial_result_t &result) {
                         });
 
                     media_compressor::options_t opts{
-                        media_quality_from_audio_quality(quality),
-                        media_compressor::flags_t::flag_none,
-                        1.0,
-                        {},
-                        {}};
+                        .quality = media_quality_from_audio_quality(quality),
+                    };
 
                     compressor.compress_to_file_async(
                         std::move(input_files), out_file.toStdString(),
@@ -3358,16 +3410,14 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
     m_current_task.reset();
 
     m_current_task = {
-        next_task_id(),
-        engine_t::stt,
-        restart_stt_engine(speech_mode_t::automatic, lang, out_lang, options),
-        speech_mode_t::automatic,
-        out_lang,
-        0.0,
-        {},
-        options,
-        false,
-        task_flags_none};
+        .id = next_task_id(),
+        .engine = engine_t::stt,
+        .model_id = restart_stt_engine(speech_mode_t::automatic, lang, out_lang,
+                                       options),
+        .speech_mode = speech_mode_t::automatic,
+        .out_lang = out_lang,
+        .options = options,
+    };
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -3390,7 +3440,9 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
             restart_audio_source(stt_source_file_props_t{file, stream_index});
         else
             restart_audio_source(stt_source_file_props_t{
-                QUrl{file}.toLocalFile(), stream_index});
+                .file = QUrl{file}.toLocalFile(),
+                .stream_index = stream_index,
+            });
     } catch (const std::runtime_error &err) {
         m_current_task.reset();
         qCritical() << "audio source error:" << err.what();
@@ -3433,16 +3485,14 @@ int speech_service::mnt_translate(const QString &text, QString lang,
 
     m_current_task.reset();
 
-    m_current_task = {next_task_id(),
-                      engine_t::mnt,
-                      restart_mnt_engine(lang, out_lang, options),
-                      speech_mode_t::translate,
-                      out_lang,
-                      0.0,
-                      {},
-                      options,
-                      false,
-                      task_flags_none};
+    m_current_task = {
+        .id = next_task_id(),
+        .engine = engine_t::mnt,
+        .model_id = restart_mnt_engine(lang, out_lang, options),
+        .speech_mode = speech_mode_t::translate,
+        .out_lang = out_lang,
+        .options = options,
+    };
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -3506,9 +3556,11 @@ int speech_service::ttt_repair_text(const QString &text,
     }
 
     m_current_task = {
-        next_task_id(), engine_t::text_repair,
-        /*model=*/{},   speech_mode_t::play_speech, {}, 0.0, {}, options, false,
-        task_flags_none};
+        .id = next_task_id(),
+        .engine = engine_t::text_repair,
+        .speech_mode = speech_mode_t::play_speech,
+        .options = options,
+    };
 
     if (m_text_repair_engine) {
         auto task_type = text_repair_task_type_from_options(options);
@@ -3557,24 +3609,23 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
     m_current_task.reset();
 
     std::underlying_type_t<task_flags_t> flags = task_flags_none;
-    if (get_bool_value_from_options("stt_clear_mic_audio_when_decoding", false,
-                                    options)) {
+    if (get_value_from_options("stt_clear_mic_audio_when_decoding", false,
+                               options)) {
         flags |= task_flags_stt_clear_mic_audio_when_decoding;
     }
-    if (get_bool_value_from_options("stt_play_beep", false, options)) {
+    if (get_value_from_options("stt_play_beep", false, options)) {
         flags |= task_flags_stt_play_beep;
     }
 
-    m_current_task = {next_task_id(),
-                      engine_t::stt,
-                      restart_stt_engine(mode, lang, out_lang, options),
-                      mode,
-                      out_lang,
-                      0.0,
-                      {},
-                      options,
-                      false,
-                      flags};
+    m_current_task = {
+        .id = next_task_id(),
+        .engine = engine_t::stt,
+        .model_id = restart_stt_engine(mode, lang, out_lang, options),
+        .speech_mode = mode,
+        .out_lang = out_lang,
+        .options = options,
+        .flags = flags,
+    };
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -3627,16 +3678,14 @@ int speech_service::tts_play_speech(const QString &text, QString lang,
 
     m_current_task.reset();
 
-    m_current_task = {next_task_id(),
-                      engine_t::tts,
-                      restart_tts_engine(lang, options),
-                      speech_mode_t::play_speech,
-                      lang,
-                      0.0,
-                      {},
-                      options,
-                      false,
-                      task_flags_none};
+    m_current_task = {
+        .id = next_task_id(),
+        .engine = engine_t::tts,
+        .model_id = restart_tts_engine(lang, options),
+        .speech_mode = speech_mode_t::play_speech,
+        .out_lang = lang,
+        .options = options,
+    };
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -3695,16 +3744,14 @@ int speech_service::tts_speech_to_file(const QString &text, QString lang,
 
     m_current_task.reset();
 
-    m_current_task = {next_task_id(),
-                      engine_t::tts,
-                      restart_tts_engine(lang, options),
-                      speech_mode_t::speech_to_file,
-                      lang,
-                      0.0,
-                      {},
-                      options,
-                      false,
-                      task_flags_none};
+    m_current_task = {
+        .id = next_task_id(),
+        .engine = engine_t::tts,
+        .model_id = restart_tts_engine(lang, options),
+        .speech_mode = speech_mode_t::speech_to_file,
+        .out_lang = lang,
+        .options = options,
+    };
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -4543,8 +4590,8 @@ void speech_service::pre_process_text_for_tts(QString &text,
         options.value("text_format").toInt());
     switch (text_format) {
         case settings::text_format_t::TextFormatInlineTimestamp: {
-            auto tmpl = get_string_value_from_options(
-                "inline_timestamp_template", {}, options);
+            auto tmpl = get_value_from_options("inline_timestamp_template",
+                                               QString{}, options);
             if (!tmpl.isEmpty()) {
                 auto regex = text_tools::compile_inline_timestamp_regex(
                     tmpl.toStdString());

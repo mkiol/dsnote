@@ -217,6 +217,18 @@ std::ostream& operator<<(std::ostream& os,
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os,
+                         const stt_engine::whisper_config_t& config) {
+    os << "beam-search=" << config.beam_search
+       << ", audio-ctx-conf=" << config.audio_ctx_conf
+       << ", audio-ctx-conf-size=" << config.audio_ctx_size
+       << ", translate=" << config.translate
+       << ", initial_prompt=" << config.initial_prompt.empty()
+       << ", temperature=" << config.temperature
+       << ", repetition-penalty=" << config.repetition_penalty;
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
     os << "lang=" << config.lang << ", lang_code=" << config.lang_code
        << ", model-files=[" << config.model_files
@@ -225,17 +237,15 @@ std::ostream& operator<<(std::ostream& os, const stt_engine::config_t& config) {
        << ", vad-mode=" << config.vad_mode
        << ", speech-started=" << config.speech_started
        << ", text-format=" << config.text_format
-       << ", cpu-threads=" << config.cpu_threads
-       << ", beam-search=" << config.beam_search
-       << ", audio-ctx-conf=" << config.audio_ctx_conf
-       << ", audio-ctx-conf-size=" << config.audio_ctx_size
        << ", options=" << config.options
        << ", insert-stats=" << config.insert_stats
        << ", use-gpu=" << config.use_gpu << ", gpu-device=["
-       << config.gpu_device << "]"
-       << ", sub-config=[" << config.sub_config << "]"
-       << ", translate=" << config.translate
-       << ", initial_prompt=" << config.initial_prompt.empty();
+       << config.gpu_device << ']' << ", sub-config=[" << config.sub_config
+       << ']';
+    if (config.whisper_config.has_value()) {
+        os << ", whisper-config=[" << config.whisper_config.value() << ']';
+    }
+
     return os;
 }
 

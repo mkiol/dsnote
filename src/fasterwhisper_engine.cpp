@@ -95,8 +95,11 @@ void fasterwhisper_engine::create_model() {
 
     auto task = py_executor::instance()->execute([&]() {
         auto n_threads = static_cast<int>(
-            std::min(m_config.cpu_threads,
+            std::min(m_config.whisper_config.has_value()
+                         ? m_config.whisper_config->cpu_threads
+                         : 4,
                      std::max(1U, std::thread::hardware_concurrency())));
+
         auto use_cuda =
             m_config.use_gpu && ((m_config.gpu_device.api == gpu_api_t::cuda &&
                                   gpu_tools::has_cudnn()) ||
@@ -336,18 +339,38 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
             auto r = array.mutable_unchecked<1>();
             for (py::ssize_t i = 0; i < r.shape(0); ++i) r(i) = buf[i];
 
-            auto seg_tuple = m_model->attr("transcribe")(
-                "audio"_a = array, "beam_size"_a = m_config.beam_search,
-                "language"_a = m_auto_lang ? static_cast<py::object>(py::none())
+            auto seg_tuple = [&] {
+                if (m_config.whisper_config.has_value()) {
+                    return m_model->attr("transcribe")(
+                        "audio"_a = array,
+                        "beam_size"_a = m_config.whisper_config->beam_search,
+                        "language"_a = m_auto_lang
+                                           ? static_cast<py::object>(py::none())
                                            : static_cast<py::object>(
                                                  py::str(m_config.lang)),
-                "task"_a = m_config.translate && m_config.has_option('t')
-                               ? "translate"
-                               : "transcribe",
-                "initial_prompt"_a = m_config.initial_prompt.empty()
-                                         ? static_cast<py::object>(py::none())
-                                         : static_cast<py::object>(py::str(
-                                               m_config.initial_prompt)));
+                        "task"_a = m_config.whisper_config->translate &&
+                                           m_config.has_option('t')
+                                       ? "translate"
+                                       : "transcribe",
+                        "initial_prompt"_a =
+                            m_config.whisper_config->initial_prompt.empty()
+                                ? static_cast<py::object>(py::none())
+                                : static_cast<py::object>(py::str(
+                                      m_config.whisper_config->initial_prompt)),
+                        "temperature"_a = std::clamp(
+                            m_config.whisper_config->temperature, 0.0F, 1.0F),
+                        "repetition_penalty"_a = std::clamp(
+                            m_config.whisper_config->repetition_penalty, 0.0F,
+                            2.0F));
+                }
+                return m_model->attr("transcribe")(
+                    "audio"_a = array,
+                    "language"_a =
+                        m_auto_lang
+                            ? static_cast<py::object>(py::none())
+                            : static_cast<py::object>(py::str(m_config.lang)),
+                    "task"_a = "transcribe");
+            }();
 
             auto segments = *seg_tuple.cast<py::list>().begin();
 
@@ -391,8 +414,12 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
                     t0 += m_segment_time_offset;
                     t1 += m_segment_time_offset;
 
-                    text_tools::segment_t seg{i + 1 + m_segment_offset, t0,
-                                              t1, text};
+                    text_tools::segment_t seg{
+                        .n = i + 1 + m_segment_offset,
+                        .t0 = t0,
+                        .t1 = t1,
+                        .text = text,
+                    };
 
                     if (subrip) {
                         text_tools::break_segment_to_multiline(
@@ -404,7 +431,7 @@ void fasterwhisper_engine::decode_speech(const whisper_buf_t& buf) {
                     }
                 } else {
                     if (i != 0) os << ' ';
-                    os << std::move(text);
+                    os << text;
                 }
 
                 ++i;

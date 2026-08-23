@@ -67,14 +67,7 @@ class stt_engine {
         std::string scorer_file;
         std::string ttt_model_file;
 
-        bool operator==(const model_files_t& rhs) const {
-            return model_file == rhs.model_file &&
-                   scorer_file == rhs.scorer_file &&
-                   ttt_model_file == rhs.ttt_model_file;
-        };
-        bool operator!=(const model_files_t& rhs) const {
-            return !(*this == rhs);
-        };
+        auto operator<=>(const model_files_t&) const = default;
     };
     friend std::ostream& operator<<(std::ostream& os,
                                     const model_files_t& model_files);
@@ -108,16 +101,25 @@ class stt_engine {
         std::string platform_name;
         bool flash_attn = false;
 
-        bool operator==(const gpu_device_t& rhs) const {
-            return platform_name == rhs.platform_name && name == rhs.name &&
-                   id == rhs.id && flash_attn == rhs.flash_attn;
-        }
-        bool operator!=(const gpu_device_t& rhs) const {
-            return !(*this == rhs);
-        }
+        auto operator<=>(const gpu_device_t&) const = default;
     };
     friend std::ostream& operator<<(std::ostream& os,
                                     const gpu_device_t& gpu_device);
+
+    struct whisper_config_t {
+        bool translate = false;
+        unsigned int cpu_threads = 4;
+        unsigned int beam_search = 5;
+        audio_ctx_conf_t audio_ctx_conf = audio_ctx_conf_t::dynamic;
+        int audio_ctx_size = 1500;
+        std::string initial_prompt;
+        float temperature = 0.0;
+        float repetition_penalty = 1.0;
+
+        auto operator<=>(const whisper_config_t&) const = default;
+    };
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const whisper_config_t& config);
 
     struct config_t {
         std::string lang;
@@ -127,17 +129,9 @@ class stt_engine {
         std::string lib_dir;
         speech_mode_t speech_mode = speech_mode_t::automatic;
         vad_mode_t vad_mode = vad_mode_t::aggressiveness3;
-        bool translate = false; /*extra whisper feature*/
         bool speech_started = false;
         bool insert_stats = false;
         bool use_gpu = false;
-        unsigned int cpu_threads = 4;
-        unsigned int beam_search = 5;
-
-        audio_ctx_conf_t audio_ctx_conf =
-            audio_ctx_conf_t::dynamic; /*extra whisper feature*/
-        int audio_ctx_size = 1500;     /*extra whisper feature*/
-        std::string initial_prompt;    /*extra whisper feature*/
         text_format_t text_format = text_format_t::raw;
         std::string inline_timestamp_template;
         int inline_timestamp_min_interval = 30;
@@ -145,6 +139,8 @@ class stt_engine {
         gpu_device_t gpu_device;
         std::vector<int> available_devices;
         sub_config_t sub_config;
+        std::optional<whisper_config_t> whisper_config;
+
         bool has_option(char c) const {
             return options.find(c) != std::string::npos;
         }
@@ -173,7 +169,6 @@ class stt_engine {
     auto speech_status() const { return m_config.speech_started; }
     const model_files_t& model_files() const { return m_config.model_files; }
     const std::string& lang() const { return m_config.lang; }
-    auto translate() const { return m_config.translate; }
     auto use_gpu() const { return m_config.use_gpu; }
     auto gpu_device() const { return m_config.gpu_device; }
     auto text_format() const { return m_config.text_format; }
@@ -183,13 +178,9 @@ class stt_engine {
     void set_insert_stats(bool value) { m_config.insert_stats = value; }
     void set_inline_timestamp_template(std::string value) { m_config.inline_timestamp_template = std::move(value); }
     void set_inline_timestamp_min_interval(int value) { m_config.inline_timestamp_min_interval = value; }
-    auto audio_ctx_conf() const { return m_config.audio_ctx_conf; }
-    auto audio_ctx_size() const { return m_config.audio_ctx_size; }
-    auto cpu_threads() const { return m_config.cpu_threads; }
-    auto beam_search() const { return m_config.beam_search; }
-    auto initial_prompt() const { return m_config.initial_prompt; }
-    void set_initial_prompt(std::string prompt) {
-        m_config.initial_prompt.assign(std::move(prompt));
+    auto whisper_config() const { return m_config.whisper_config; }
+    void set_whisper_config(whisper_config_t whisper_config) {
+        m_config.whisper_config.emplace(std::move(whisper_config));
     }
 
    protected:

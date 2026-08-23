@@ -18,6 +18,10 @@ ColumnLayout {
     property bool verticalMode: parent ? parent.verticalMode : false
     // property bool has_audio_sources: app.audio_sources.length > 1
 
+    function clamp(val, min, max) {
+        return Math.min(Math.max(val, min), max);
+    }
+
     ComboBoxForm {
         // visible: speechToTextTab.has_audio_sources
         label.text: qsTranslate("SettingsPage", "Audio input device")
@@ -396,6 +400,16 @@ ColumnLayout {
                 ColumnLayout {
                     id: whispercppTab
 
+                    Connections {
+                        target: _settings
+                        function onWhisper_changed() { 
+                            whispercppThreadsSpinBox.spinBox.value = _settings.whisper_cpu_threads < 1 ? 1 : _settings.whisper_cpu_threads > 32 ? 32 : _settings.whisper_cpu_threads
+                            whispercppBeamSpinBox.spinBox.value = _settings.whisper_beam_search < 1 ? 1 : _settings.whisper_beam_search > 100 ? 100 : _settings.whisper_beam_search
+                            whispercppContextSizeSpinBox.spinBox.value = _settings.whisper_audioctx_size_value
+                            whispercppTemperatureSpinBox.spinBox.value = _settings.whisper_temperature
+                        }
+                    }
+
                     ComboBoxForm {
                         label.text: qsTranslate("SettingsPage", "Profile")
                         toolTip: qsTranslate("SettingsPage", "Profiles allow you to change the processing parameters in the engine.") + " " +
@@ -445,7 +459,7 @@ ColumnLayout {
                             stepSize: 1
                             value: _settings.whisper_cpu_threads < 1 ? 1 : _settings.whisper_cpu_threads > 32 ? 32 : _settings.whisper_cpu_threads
                             textFromValue: function(value) { return value.toString() }
-                            valueFromText: function(text) { return parseInt(text); }
+                            valueFromText: function(text) { return parseInt(text) }
                             onValueChanged: {
                                 _settings.whisper_cpu_threads = spinBox.value;
                             }
@@ -454,7 +468,7 @@ ColumnLayout {
                             icon.name: "edit-reset-symbolic"
                             display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
                             text: qsTranslate("SettingsPage", "Reset")
-                            onClicked: _settings.reset_whispercpp_cpu_threads()
+                            onClicked: _settings.reset_whisper_cpu_threads()
                         }
                     }
 
@@ -470,7 +484,7 @@ ColumnLayout {
                             stepSize: 1
                             value: _settings.whisper_beam_search < 1 ? 1 : _settings.whisper_beam_search > 100 ? 100 : _settings.whisper_beam_search
                             textFromValue: function(value) { return value.toString() }
-                            valueFromText: function(text) { return parseInt(text); }
+                            valueFromText: function(text) { return parseInt(text) }
                             onValueChanged: {
                                 _settings.whisper_beam_search = spinBox.value;
                             }
@@ -479,7 +493,7 @@ ColumnLayout {
                             icon.name: "edit-reset-symbolic"
                             display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
                             text: qsTranslate("SettingsPage", "Reset")
-                            onClicked: _settings.reset_whispercpp_beam_search()
+                            onClicked: _settings.reset_whisper_beam_search()
                         }
                     }
 
@@ -521,8 +535,8 @@ ColumnLayout {
                             display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
                             text: qsTranslate("SettingsPage", "Reset")
                             onClicked: {
-                                _settings.reset_whispercpp_audioctx_size()
-                                _settings.reset_whispercpp_audioctx_size_value()
+                                _settings.reset_whisper_audioctx_size()
+                                _settings.reset_whisper_audioctx_size_value()
                             }
                         }
                     }
@@ -547,9 +561,34 @@ ColumnLayout {
                             icon.name: "edit-reset-symbolic"
                             display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
                             text: qsTranslate("SettingsPage", "Reset")
-                            onClicked: _settings.reset_whispercpp_audioctx_size_value()
+                            onClicked: _settings.reset_whisper_audioctx_size_value()
                         }
                         toolTip: qsTranslate("SettingsPage", "A smaller value speeds up decoding, but can have a negative impact on accuracy.")
+                    }
+
+                    SpinBoxForm {
+                        id: whispercppTemperatureSpinBox
+
+                        visible: _settings.whisper_profile === Settings.EngineProfileCustom
+                        label.text: qsTranslate("SettingsPage", "Temperature")
+                        spinBox {
+                            from: 0
+                            to: 10
+                            stepSize: 1
+                            value: _settings.whisper_temperature
+                            textFromValue: function(value) { return (value / 10).toFixed(1).toString() }
+                            valueFromText: function(text) { return root.clamp(Math.floor(parseFloat(text) * 10), 0, 10) }
+                            onValueChanged: {
+                                _settings.whisper_temperature = spinBox.value;
+                            }
+                        }
+                        button {
+                            icon.name: "edit-reset-symbolic"
+                            display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                            text: qsTranslate("SettingsPage", "Reset")
+                            onClicked: _settings.reset_whisper_temperature()
+                        }
+                        toolTip: qsTranslate("SettingsPage", "With a higher value the model produces more diverse, creative, and sometimes unpredictable outputs.")
                     }
 
                     CheckBox {
@@ -595,6 +634,10 @@ ColumnLayout {
                         onUse_gpuChanged: _settings.whisper_use_gpu = use_gpu
                         onDevice_indexChanged: _settings.whisper_gpu_device_idx = device_index
                     }
+
+                    Item {
+                        Layout.fillHeight: true
+                    }
                 }
             }
         }
@@ -603,6 +646,17 @@ ColumnLayout {
             sourceComponent: Component {
                 ColumnLayout {
                     id: fasterwhisperTab
+
+                    Connections {
+                        target: _settings
+
+                        function onFasterwhisper_changed() { 
+                            fasterwhisperThreadsSpinBox.spinBox.value = _settings.fasterwhisper_cpu_threads < 1 ? 1 : _settings.fasterwhisper_cpu_threads > 32 ? 32 : _settings.fasterwhisper_cpu_threads
+                            fasterwhisperBeamSpinBox.spinBox.value = _settings.fasterwhisper_beam_search < 1 ? 1 : _settings.fasterwhisper_beam_search > 100 ? 100 : _settings.fasterwhisper_beam_search
+                            fasterwhisperTemperatureSpinBox.spinBox.value = _settings.fasterwhisper_temperature
+                            fasterwhisperRepetitionPenaltySpinBox.spinBox.value = _settings.fasterwhisper_repetition_penalty
+                        }
+                    }
 
                     ComboBoxForm {
                         label.text: qsTranslate("SettingsPage", "Profile")
@@ -653,7 +707,7 @@ ColumnLayout {
                             stepSize: 1
                             value: _settings.fasterwhisper_cpu_threads < 1 ? 1 : _settings.fasterwhisper_cpu_threads > 32 ? 32 : _settings.fasterwhisper_cpu_threads
                             textFromValue: function(value) { return value.toString() }
-                            valueFromText: function(text) { return parseInt(text); }
+                            valueFromText: function(text) { return parseInt(text) }
                             onValueChanged: {
                                 _settings.fasterwhisper_cpu_threads = spinBox.value;
                             }
@@ -678,7 +732,7 @@ ColumnLayout {
                             stepSize: 1
                             value: _settings.fasterwhisper_beam_search < 1 ? 1 : _settings.fasterwhisper_beam_search > 100 ? 100 : _settings.fasterwhisper_beam_search
                             textFromValue: function(value) { return value.toString() }
-                            valueFromText: function(text) { return parseInt(text); }
+                            valueFromText: function(text) { return parseInt(text) }
                             onValueChanged: {
                                 _settings.fasterwhisper_beam_search = spinBox.value;
                             }
@@ -689,6 +743,58 @@ ColumnLayout {
                             text: qsTranslate("SettingsPage", "Reset")
                             onClicked: _settings.reset_fasterwhisper_beam_search()
                         }
+                        
+                    }
+
+                    SpinBoxForm {
+                        id: fasterwhisperTemperatureSpinBox
+
+                        visible: _settings.fasterwhisper_profile === Settings.EngineProfileCustom
+                        label.text: qsTranslate("SettingsPage", "Temperature")
+                        spinBox {
+                            from: 0
+                            to: 10
+                            stepSize: 1
+                            value: _settings.fasterwhisper_temperature
+                            textFromValue: function(value) { return (value / 10).toFixed(1).toString() }
+                            valueFromText: function(text) { return root.clamp(Math.floor(parseFloat(text) * 10), 0, 10) }
+                            onValueChanged: {
+                                _settings.fasterwhisper_temperature = spinBox.value;
+                            }
+                        }
+                        button {
+                            icon.name: "edit-reset-symbolic"
+                            display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                            text: qsTranslate("SettingsPage", "Reset")
+                            onClicked: _settings.reset_fasterwhisper_temperature()
+                        }
+                        toolTip: qsTranslate("SettingsPage", "With a higher value the model produces more diverse, creative, and sometimes unpredictable outputs.")
+                    }
+
+
+                    SpinBoxForm {
+                        id: fasterwhisperRepetitionPenaltySpinBox
+
+                        visible: _settings.fasterwhisper_profile === Settings.EngineProfileCustom
+                        label.text: qsTranslate("SettingsPage", "Repetition Penalty")
+                        spinBox {
+                            from: 0
+                            to: 20
+                            stepSize: 1
+                            value: _settings.fasterwhisper_repetition_penalty
+                            textFromValue: function(value) { return (value / 10).toFixed(1).toString() }
+                            valueFromText: function(text) { return root.clamp(Math.floor(parseFloat(text) * 10), 0, 20) }
+                            onValueChanged: {
+                                _settings.fasterwhisper_repetition_penalty = spinBox.value;
+                            }
+                        }
+                        button {
+                            icon.name: "edit-reset-symbolic"
+                            display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                            text: qsTranslate("SettingsPage", "Reset")
+                            onClicked: _settings.reset_fasterwhisper_repetition_penalty()
+                        }
+                        toolTip: qsTranslate("SettingsPage", "A higher value makes model less likely to repeat the same content.")
                     }
 
                     CheckBox {
@@ -717,6 +823,10 @@ ColumnLayout {
                         use_gpu: _settings.fasterwhisper_use_gpu
                         onUse_gpuChanged: _settings.fasterwhisper_use_gpu = use_gpu
                         onDevice_indexChanged: _settings.fasterwhisper_gpu_device_idx = device_index
+                    }
+
+                    Item {
+                        Layout.fillHeight: true
                     }
                 }
             }
