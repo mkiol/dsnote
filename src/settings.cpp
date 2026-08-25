@@ -8,6 +8,9 @@
 #include "settings.h"
 
 #ifdef USE_DESKTOP
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusVariant>
 #include <QQuickStyle>
 #endif
 #include <QCoreApplication>
@@ -1505,6 +1508,36 @@ void settings::set_qt_style() {
         // This must happen before QApplication creation for Qt Quick Controls
         // to work LOGD("setting QT_QUICK_CONTROLS_STYLE environment variable
         // to: " << style); qputenv("QT_QUICK_CONTROLS_STYLE", style.toUtf8());
+
+        if (!m_kde) {
+            QDBusInterface iface(
+                QStringLiteral("org.freedesktop.portal.Desktop"),
+                QStringLiteral("/org/freedesktop/portal/desktop"),
+                QStringLiteral("org.freedesktop.portal.Settings"),
+                QDBusConnection::sessionBus());
+            if (iface.isValid()) {
+                auto reply =
+                    iface.call(QStringLiteral("Read"),
+                               QStringLiteral("org.freedesktop.appearance"),
+                               QStringLiteral("color-scheme"));
+                if (reply.type() == QDBusMessage::ReplyMessage) {
+                    uint scheme = reply.arguments().at(0)
+                                      .value<QDBusVariant>().variant()
+                                      .value<QDBusVariant>().variant().toUInt();
+                    LOGD("portal color-scheme: " << scheme);
+                    if (scheme == 1) {
+                        const QString path = QStringLiteral(
+                            "/usr/share/color-schemes/BreezeDark.colors");
+                        if (QFile::exists(path)) {
+                            qApp->setProperty("KDE_COLOR_SCHEME_PATH", path);
+                            LOGD("applied KDE_COLOR_SCHEME_PATH: " << path);
+                        } else {
+                            LOGW("BreezeDark.colors not found: " << path);
+                        }
+                    }
+                }
+            }
+        }
 
         LOGD("using qt style: " << style);
         QQuickStyle::setStyle(style);
