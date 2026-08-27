@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2024 Michal Kosciesza -->
+<!-- Copyright 2024-2026 Michal Kosciesza -->
 <component type="addon">
   <id>net.mkiol.SpeechNote.Addon.nvidia</id>
   <metadata_license>CC0-1.0</metadata_license>
@@ -20,6 +20,20 @@
   <url type="bugtracker">https://github.com/mkiol/dsnote/issues</url>
   <update_contact>dsnote_AT_mkiol.net</update_contact>
   <releases>
+    <release version="1.5.0" date="2026-08-27">
+      <description>
+        <ul>
+        <li>Enable support for new NVIDIA cards</li>
+        <li>whisper.cpp update to version 1.9.1</li>
+        <li>CTranslate2 update to version 4.8.1<li>
+        <li>PyTorch update to version: 2.12.1<li>
+        <li>OpenBLAS update to version: 0.3.33<li>
+        <li>CUDA update to version 13.0.3</li>
+        <li>cuDNN update to version 9.20.0</li>
+        <li>Flatpak runtime update to version 6.10</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.4.0" date="2025-05-21">
       <description>
         <ul>

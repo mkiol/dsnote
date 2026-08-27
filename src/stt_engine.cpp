@@ -8,8 +8,10 @@
 #include "stt_engine.hpp"
 
 #include <fmt/format.h>
+#include <sys/stat.h>
 
 #include <algorithm>
+#include <cstdio>
 #include <cstring>
 #include <iterator>
 
@@ -663,4 +665,9 @@ std::string stt_engine::report_stats(size_t nb_samples, size_t sample_rate,
 
     return fmt::format("[audio-length: {}ms, processing-time: {}ms]",
                        static_cast<size_t>(audio_dur), processing_duration_ms);
+}
+
+bool stt_engine::file_exists(const std::string& file_path) {
+    struct stat buffer{};
+    return stat(file_path.c_str(), &buffer) == 0;
 }

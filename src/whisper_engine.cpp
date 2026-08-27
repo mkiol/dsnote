@@ -154,6 +154,22 @@ bool whisper_engine::load_backend(const std::string& name) {
         return true;
     }
 
+    /* patched version of ggml lib uses GGML_BACKEND_DIR env var to set
+     * directory for backend libs */
+#ifdef USE_FLATPAK
+#define NVIDIA_LIB_DIR "/app/extensions/nvidia/lib"
+#define AMD_LIB_DIR "/app/extensions/amd/lib"
+    if (file_exists(NVIDIA_LIB_DIR)) {
+        setenv("GGML_BACKEND_DIR", NVIDIA_LIB_DIR, 1);
+    } else if (file_exists(AMD_LIB_DIR)) {
+        setenv("GGML_BACKEND_DIR", AMD_LIB_DIR, 1);
+    } else {
+        setenv("GGML_BACKEND_DIR", m_config.lib_dir.c_str(), 1);
+    }
+#else
+    setenv("GGML_BACKEND_DIR", m_config.lib_dir.c_str(), 1);
+#endif
+
     auto* reg = m_whisper_api.ggml_backend_load_best_ex(name.c_str());
     if (reg == nullptr) {
         LOGW("failed to load whisper backed: " << name);
@@ -181,10 +197,7 @@ void whisper_engine::unload_all_backends() {
 void whisper_engine::open_whisper_lib() {
     // load ggml
 
-    /* patched version of ggml lib uses GGML_BACKEND_DIR env var to set
-     * directory for backend libs */
     LOGD("using ggml backend dir: " << m_config.lib_dir);
-    setenv("GGML_BACKEND_DIR", m_config.lib_dir.c_str(), 1);
     setenv("GGML_NO_BACKTRACE", "1", 1);
 
     m_ggmllib_handle = dlopen("libggml.so", RTLD_LAZY);

@@ -1097,7 +1097,7 @@ available_devices_result available_devices(
     return result;
 }
 
-static bool has_lib(const char* name) {
+[[maybe_unused]] static bool has_lib(const char* name) {
     auto* handle = dlopen(name, RTLD_LAZY);
     if (!handle) {
         LOGW("failed to open " << name << ": " << dlerror());

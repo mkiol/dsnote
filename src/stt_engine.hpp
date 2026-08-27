@@ -269,6 +269,7 @@ class stt_engine {
     void restart_sentence_timer();
     void create_punctuator();
     void reset_segment_counters();
+    static bool file_exists(const std::string& file_path);
 };
 
 #endif  // STT_ENGINE_H
