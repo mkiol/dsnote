@@ -159,9 +159,9 @@ bool whisper_engine::load_backend(const std::string& name) {
 #ifdef USE_FLATPAK
 #define NVIDIA_LIB_DIR "/app/extensions/nvidia/lib"
 #define AMD_LIB_DIR "/app/extensions/amd/lib"
-    if (file_exists(NVIDIA_LIB_DIR)) {
+    if (name == "cuda" && file_exists(NVIDIA_LIB_DIR)) {
         setenv("GGML_BACKEND_DIR", NVIDIA_LIB_DIR, 1);
-    } else if (file_exists(AMD_LIB_DIR)) {
+    } else if (name == "hip" && file_exists(AMD_LIB_DIR)) {
         setenv("GGML_BACKEND_DIR", AMD_LIB_DIR, 1);
     } else {
         setenv("GGML_BACKEND_DIR", m_config.lib_dir.c_str(), 1);

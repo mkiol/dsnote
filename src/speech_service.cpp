@@ -1476,7 +1476,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
     wc.repetition_penalty = 1.2F;                                              \
     switch (settings::instance()->name_##_profile()) {                         \
         case settings::engine_profile_t::EngineProfilePerformance:             \
-            wc.beam_search = 2;                                                \
+            wc.beam_search = 3;                                                \
             wc.cpu_threads = 4;                                                \
             wc.audio_ctx_conf = stt_engine::audio_ctx_conf_t::dynamic;         \
             wc.audio_ctx_size = 1500;                                          \
@@ -3224,17 +3224,15 @@ QVariantMap speech_service::features_availability() {
                                   py_availability->ctranslate2_cuda &&
                                   has_cuda && has_cudnn;
     bool stt_fasterwhisper_hip = py_availability->faster_whisper &&
-                                 py_availability->ctranslate2_cuda && has_hip;
-    stt_fasterwhisper_hip = false;  // right now, ct2 doesn't support hip
+                                 py_availability->ctranslate2_hip && has_hip;
     m_features_availability.insert(
         "faster-whisper-stt-cuda",
         QVariantList{stt_fasterwhisper_cuda,
                      "FasterWhisper STT CUDA " + tr("HW acceleration")});
-    // consider this: https://github.com/arlo-phoenix/CTranslate2-rocm
-    /*m_features_availability.insert(
+    m_features_availability.insert(
         "faster-whisper-stt-hip",
-        QVariantList{stt_fasterwhisper_hip, "FasterWhisper
-        STT ROCm " + tr("HW acceleration")});*/
+        QVariantList{stt_fasterwhisper_hip,
+                     "FasterWhisper STT ROCm " + tr("HW acceleration")});
     if (stt_fasterwhisper_cuda) {
         hw_feature_flags |=
             settings::hw_feature_flags_t::hw_feature_stt_fasterwhisper_cuda;

@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -33,7 +33,7 @@ fasterwhisper_engine::fasterwhisper_engine(config_t config,
 fasterwhisper_engine::~fasterwhisper_engine() {
     LOGD("fasterwhisper dtor");
 
-    stop();  
+    stop();
 }
 
 void fasterwhisper_engine::stop() {
@@ -105,6 +105,10 @@ void fasterwhisper_engine::create_model() {
                                   gpu_tools::has_cudnn()) ||
                                  (m_config.gpu_device.api == gpu_api_t::rocm &&
                                   gpu_tools::has_hip()));
+        // RDNA2 fix: https://github.com/OpenNMT/CTranslate2/issues/2012
+        if (use_cuda && m_config.gpu_device.api == gpu_api_t::rocm) {
+            set_env("CT2_CUDA_ALLOCATOR", "cub_caching", false);
+        }
 
         auto use_flash_attn = m_config.gpu_device.flash_attn && [] {
             auto ct2_ver_str = py::module_::import("ctranslate2")

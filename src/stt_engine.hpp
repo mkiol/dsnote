@@ -270,6 +270,7 @@ class stt_engine {
     void create_punctuator();
     void reset_segment_counters();
     static bool file_exists(const std::string& file_path);
+    static void set_env(const char* name, const char* value, bool force);
 };
 
 #endif  // STT_ENGINE_H

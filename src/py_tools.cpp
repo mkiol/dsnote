@@ -14,6 +14,8 @@
 #define slots Q_SLOTS
 #endif
 
+#include <dlfcn.h>
+
 #include <QDebug>
 #include <QStandardPaths>
 #include <QString>
@@ -37,6 +39,7 @@ std::ostream& operator<<(std::ostream& os,
        << ", coqui-tts=" << availability.coqui_tts
        << ", faster-whisper=" << availability.faster_whisper
        << ", ctranslate2-cuda=" << availability.ctranslate2_cuda
+       << ", ctranslate2-hip=" << availability.ctranslate2_hip
        << ", mimic3-tts=" << availability.mimic3_tts
        << ", whisperspeech-tts=" << availability.whisperspeech_tts
        << ", parler-tts=" << availability.parler_tts
@@ -61,10 +64,43 @@ std::ostream& operator<<(std::ostream& os,
     return os;
 }
 
+namespace {
+enum class ct2_backend_t { cpu, cuda, hip };
+
+ct2_backend_t detect_ct2_backend(const char* lib_path) {
+    void* handle = dlopen(lib_path, RTLD_LAZY | RTLD_GLOBAL);
+    if (!handle) {
+        LOGF("failed to load library: " << dlerror());
+    }
+
+    dlerror();
+
+    void* hip_sym = dlsym(RTLD_DEFAULT, "hipInit");
+    if (hip_sym != nullptr) {
+        dlclose(handle);
+        LOGD("ct2 supports: hip");
+        return ct2_backend_t::hip;
+    }
+
+    void* cuda_sym = dlsym(RTLD_DEFAULT, "cudaRuntimeGetVersion");
+    if (cuda_sym != nullptr) {
+        dlclose(handle);
+        LOGD("ct2 supports: cuda");
+        return ct2_backend_t::cuda;
+    }
+
+    dlclose(handle);
+    LOGD("ct2 supports: cpu");
+    return ct2_backend_t::cpu;
+}
+}  // namespace
+
 namespace py_tools {
 libs_availability_t libs_availability(libs_scan_type_t scan_type,
                                       unsigned int scan_flags) {
     // run only in py thread
+
+    LOGD("py scan flags: " << static_cast<settings::scan_flags_t>(scan_flags));
 
     libs_availability_t availability{};
 
@@ -76,7 +112,9 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type,
                 cpu_tools::feature_flags_t::avx) {
                 availability.coqui_tts = true;
                 availability.whisperspeech_tts = true;
-                availability.parler_tts = true;
+                availability.parler_tts =
+                    (scan_flags &
+                     settings::ScanFlagParlerTtsEnabledWhenOffAll) > 0;
                 availability.f5_tts = true;
                 availability.kokoro_tts = true;
                 availability.kokoro_ja = true;
@@ -116,13 +154,13 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type,
         LOGD("python version check py error: " << err.what());
     }
 
-    if ((scan_flags & settings::ScanFlagNoTorchCuda) > 0) {
-        LOGD("checking: torch cuda (skipped)");
+    if ((scan_flags & settings::ScanFlagNoTorchCudaHip) > 0) {
+        LOGD("checking: torch cuda-hip (skipped)");
     } else {
         if (cpu_tools::cpuinfo().feature_flags &
             cpu_tools::feature_flags_t::avx) {
             try {
-                LOGD("checking: torch cuda");
+                LOGD("checking: torch cuda-hip");
                 auto torch_cuda = py::module_::import("torch.cuda");
                 auto torch_ver = py::module_::import("torch.version");
                 if (torch_cuda.attr("is_available")().cast<bool>()) {
@@ -147,18 +185,30 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type,
         }
     }
 
-    if ((scan_flags & settings::ScanFlagNoCt2Cuda) > 0) {
-        LOGD("checking: ctranslate2-cuda (skipped)");
+    if ((scan_flags & settings::ScanFlagNoCt2CudaHip) > 0) {
+        LOGD("checking: ctranslate2 cuda-hip (skipped)");
     } else {
         try {
-            LOGD("checking: ctranslate2-cuda");
+            LOGD("checking: ctranslate2 cuda-hip");
             auto ct2 = py::module_::import("ctranslate2");
             LOGD("ctranslate2 version: "
                  << ct2.attr("__version__").cast<std::string>());
-            availability.ctranslate2_cuda =
+
+            auto ct2_lib_path =
+                ct2.attr("_ext").attr("__file__").cast<std::string>();
+            LOGD("ct2 lib path: " << ct2_lib_path);
+
+            auto ct2_backend = detect_ct2_backend(ct2_lib_path.c_str());
+            auto has_cuda_dev =
                 py::len(ct2.attr("get_supported_compute_types")("cuda")) > 0;
+            LOGD("ct2 has cuda dev: " << has_cuda_dev);
+
+            availability.ctranslate2_cuda =
+                has_cuda_dev && ct2_backend == ct2_backend_t::cuda;
+            availability.ctranslate2_hip =
+                has_cuda_dev && ct2_backend == ct2_backend_t::hip;
         } catch (const std::exception& err) {
-            LOGD("ctranslate2-cuda check py error: " << err.what());
+            LOGD("ctranslate2 cuda-hip check py error: " << err.what());
         }
     }
 

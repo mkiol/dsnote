@@ -1,7 +1,7 @@
-diff -ruN '--exclude=.*' CTranslate2-org/CMakeLists.txt CTranslate2-patched/CMakeLists.txt
---- CTranslate2-org/CMakeLists.txt	2023-11-29 14:09:59.890020341 +0100
-+++ CTranslate2-patched/CMakeLists.txt	2023-11-29 17:37:16.457154443 +0100
-@@ -42,6 +42,7 @@
+diff -ruN -x '.*' CTranslate2-org/CMakeLists.txt CTranslate2-patched/CMakeLists.txt
+--- CTranslate2-org/CMakeLists.txt	2026-07-03 13:34:27.000000000 +0200
++++ CTranslate2-patched/CMakeLists.txt	2026-08-29 14:46:57.819809522 +0200
+@@ -54,6 +54,7 @@
  endif()
  set(INTEL_ROOT ${INTEL_ROOT_DEFAULT} CACHE FILEPATH "Path to Intel root directory")
  set(OPENMP_RUNTIME "INTEL" CACHE STRING "OpenMP runtime (INTEL, COMP, NONE)")
@@ -9,7 +9,7 @@ diff -ruN '--exclude=.*' CTranslate2-org/CMakeLists.txt CTranslate2-patched/CMak
  
  # Set Release build type by default to get sane performance.
  if(NOT CMAKE_BUILD_TYPE)
-@@ -291,7 +292,7 @@
+@@ -355,7 +356,7 @@
  if(WITH_MKL)
    find_path(MKL_ROOT include/mkl.h DOC "Path to MKL root directory" PATHS
      $ENV{MKLROOT}
@@ -18,7 +18,7 @@ diff -ruN '--exclude=.*' CTranslate2-org/CMakeLists.txt CTranslate2-patched/CMak
      ${INTEL_ROOT}/oneAPI/mkl/latest
      ${INTEL_ROOT}/oneapi/mkl/latest
      )
-@@ -355,12 +356,7 @@
+@@ -419,12 +420,7 @@
  endif()
  
  if(WITH_DNNL)

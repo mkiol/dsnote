@@ -12,6 +12,7 @@
 
 #include <algorithm>
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <iterator>
 
@@ -670,4 +671,25 @@ std::string stt_engine::report_stats(size_t nb_samples, size_t sample_rate,
 bool stt_engine::file_exists(const std::string& file_path) {
     struct stat buffer{};
     return stat(file_path.c_str(), &buffer) == 0;
+}
+
+void stt_engine::set_env(const char* name, const char* value, bool force) {
+    auto* old_value = getenv(name);
+    if (old_value && std::strcmp(value, old_value) == 0) {
+        // already set
+        return;
+    }
+
+    if (old_value && !force) {
+        LOGD("skip set env: " << name << " = " << old_value << " => " << value);
+        return;
+    }
+
+    if (old_value) {
+        LOGD("set env: " << name << " = " << old_value << " => " << value);
+    } else {
+        LOGD("set env: " << name << " = " << value);
+    }
+
+    setenv(name, value, 1);
 }
