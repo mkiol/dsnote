@@ -169,6 +169,13 @@
     X(cancel_current_and_ignore, "cancel-current-and-ignore", 0)   \
     X(add_to_queue, "add-to-queue", 0)
 
+// name, name_str, value
+#define SCAN_FLAGS_TABLE                                                     \
+    X(ScanFlagNoTorchCudaHip, "none", 1U << 0U, 0)                           \
+    X(ScanFlagNoCt2CudaHip, "no-ct2-cuda-hip", 1U << 1U, 0)                  \
+    X(ScanFlagParlerTtsEnabledWhenOffAll, "parler-tts-enabled-when-off-all", \
+      1U << 2U, 0)
+
 class settings : public QSettings, public singleton<settings> {
     Q_OBJECT
 
@@ -700,20 +707,20 @@ class settings : public QSettings, public singleton<settings> {
     enum class fake_keyboard_type_t {
         FakeKeyboardTypeLegacy = 0,
         FakeKeyboardTypeXdo = 1,
-        FakeKeyboardTypeYdo = 2
+        FakeKeyboardTypeYdo = 2,
     };
     Q_ENUM(fake_keyboard_type_t)
 
     enum class text_to_window_method_t {
         TextToWindowMethodCtrlV = 0,
         TextToWindowMethodCtrlShiftV = 1,
-        TextToWindowMethodTyping = 2
+        TextToWindowMethodTyping = 2,
     };
     Q_ENUM(text_to_window_method_t)
 
     enum class text_from_window_method_t {
         TextFromWindowMethodCtrlC = 0,
-        TextFromWindowMethodCtrlShiftC = 1
+        TextFromWindowMethodCtrlShiftC = 1,
     };
     Q_ENUM(text_from_window_method_t)
 
@@ -722,23 +729,26 @@ class settings : public QSettings, public singleton<settings> {
 
     enum class voice_profile_type_t {
         VoiceProfileAudioSample = 0,
-        VoiceProfilePrompt = 1
+        VoiceProfilePrompt = 1,
     };
     Q_ENUM(voice_profile_type_t)
 
     enum class py_scan_mode_t {
         PyScanOn = 0,
         PyScanOffAllDisabled = 1,
-        PyScanOffAllEnabled = 2
+        PyScanOffAllEnabled = 2,
     };
     Q_ENUM(py_scan_mode_t)
 
     enum scan_flags_t : unsigned int {
         ScanFlagNone = 0U,
-        ScanFlagNoTorchCuda = 1U << 0U,
-        ScanFlagNoCt2Cuda = 1U << 1U
+#define X(name, name_str, value, ...) name = value,
+        SCAN_FLAGS_TABLE
+#undef X
     };
     Q_ENUM(scan_flags_t)
+    friend QDebug operator<<(QDebug d, scan_flags_t flags);
+    friend std::ostream &operator<<(std::ostream &os, scan_flags_t flags);
 
     struct voice_profile_prompt_t {
         QString name;

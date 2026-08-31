@@ -148,6 +148,7 @@ ColumnLayout {
         hoverEnabled: true
     }
 
+    // In whisper.cpp, vulkan on cpu is much slower than direct cpu
     // CheckBox {
     //     visible: _settings.hw_accel_supported()
     //     checked: _settings.hw_scan_vulkan_cpu
@@ -178,20 +179,21 @@ ColumnLayout {
         hoverEnabled: true
     }
 
-    CheckBox {
-        visible: _settings.hw_accel_supported()
-        checked: _settings.hw_scan_opencl_legacy
-        text: qsTranslate("SettingsPage", "Use %1").arg("OpenCL Clover")
-        onCheckedChanged: {
-            _settings.hw_scan_opencl_legacy = checked
-        }
+    // Latest whisper.cpp doesn't support old OpenCL devices
+    // CheckBox {
+    //     visible: _settings.hw_accel_supported()
+    //     checked: _settings.hw_scan_opencl_legacy
+    //     text: qsTranslate("SettingsPage", "Use %1").arg("OpenCL Clover")
+    //     onCheckedChanged: {
+    //         _settings.hw_scan_opencl_legacy = checked
+    //     }
 
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "Try to find %1 compatible graphic cards in the system.").arg("OpenCL Clover") + " " +
-                      qsTranslate("SettingsPage", "Disable this option if you observe problems when launching the application.")
-        hoverEnabled: true
-    }
+    //     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+    //     ToolTip.visible: hovered
+    //     ToolTip.text: qsTranslate("SettingsPage", "Try to find %1 compatible graphic cards in the system.").arg("OpenCL Clover") + " " +
+    //                   qsTranslate("SettingsPage", "Disable this option if you observe problems when launching the application.")
+    //     hoverEnabled: true
+    // }
 
     CheckBox {
         visible: _settings.hw_accel_supported()
@@ -278,15 +280,16 @@ ColumnLayout {
 
     function setScanFlags() {
         var flags = Settings.ScanFlagNone
-        if (scanFlagTorchCheckbox.checked) flags |= Settings.ScanFlagNoTorchCuda
-        if (scanFlagCt2Checkbox.checked) flags |= Settings.ScanFlagNoCt2Cuda
+        if (scanFlagTorchCheckbox.checked) flags |= Settings.ScanFlagNoTorchCudaHip
+        if (scanFlagCt2Checkbox.checked) flags |= Settings.ScanFlagNoCt2CudaHip
+        if (scanFlagParlerTtsCheckbox.checked) flags |= Settings.ScanFlagParlerTtsEnabledWhenOffAll
         _settings.scan_flags = flags
     }
 
     CheckBox {
         id: scanFlagTorchCheckbox
 
-        checked: _settings.scan_flags & Settings.ScanFlagNoTorchCuda
+        checked: _settings.scan_flags & Settings.ScanFlagNoTorchCudaHip
         text: qsTranslate("SettingsPage", "Disable detection of %1").arg("<i>PyTorch</i>")
         onCheckedChanged: setScanFlags()
     }
@@ -294,8 +297,17 @@ ColumnLayout {
     CheckBox {
         id: scanFlagCt2Checkbox
 
-        checked: _settings.scan_flags & Settings.ScanFlagNoCt2Cuda
+        checked: _settings.scan_flags & Settings.ScanFlagNoCt2CudaHip
         text: qsTranslate("SettingsPage", "Disable detection of %1").arg("<i>CTranslate2</i>")
+        onCheckedChanged: setScanFlags()
+    }
+
+    CheckBox {
+        id: scanFlagParlerTtsCheckbox
+        
+        visible: _settings.py_scan_mode === Settings.PyScanOffAllEnabled
+        checked: _settings.scan_flags & Settings.ScanFlagParlerTtsEnabledWhenOffAll
+        text: qsTranslate("SettingsPage", "Assume %1 is available").arg("<i>Parler TTS</i>")
         onCheckedChanged: setScanFlags()
     }
 

@@ -188,6 +188,30 @@ QDebug operator<<(QDebug d, settings::trans_rule_type_t type) {
     return d;
 }
 
+QDebug operator<<(QDebug d, settings::scan_flags_t flags) {
+    if (flags == settings::scan_flags_t::ScanFlagNone) {
+        d << "none";
+        return d;
+    };
+#define X(name, name_str, value, ...) \
+    if (flags & settings::scan_flags_t::name) d << name_str << ", ";
+    SCAN_FLAGS_TABLE
+#undef X
+    return d;
+}
+
+std::ostream& operator<<(std::ostream& os, settings::scan_flags_t flags) {
+    if (flags == settings::scan_flags_t::ScanFlagNone) {
+        os << "none";
+        return os;
+    };
+#define X(name, name_str, value, ...) \
+    if (flags & settings::scan_flags_t::name) os << name_str << ", ";
+    SCAN_FLAGS_TABLE
+#undef X
+    return os;
+}
+
 QDebug operator<<(QDebug d, settings::trans_rule_flags_t flags) {
     if (flags == settings::trans_rule_flags_t::TransRuleNone) {
         d << "none";
@@ -1612,9 +1636,10 @@ void settings::scan_hw_devices(
         /*hip=*/hw_scan_hip(),
         /*vulkan=*/hw_scan_vulkan(),
         /*vulkan_igpu=*/hw_scan_vulkan_igpu(),
-        /*vulkan_cpu=*/hw_scan_vulkan_cpu(),
+        /*vulkan_cpu=*/false /* vulkan on cpu is much slower than direct cpu */,
         /*opencl=*/hw_scan_opencl(),
-        /*opencl_clover=*/hw_scan_opencl_legacy());
+        /*opencl_clover=*/
+        false /* whisper.cpp doesn't support old opencl devices */);
 
     std::for_each(
         result.devices.cbegin(), result.devices.cend(),
@@ -1758,7 +1783,7 @@ X(whisper)
     }                                                                          \
     int settings::name##_beam_search() const {                                 \
         return std::clamp<int>(                                                \
-            value(QStringLiteral("service/" #name "_beam_search"), 1).toInt(), \
+            value(QStringLiteral("service/" #name "_beam_search"), 3).toInt(), \
             1, 100);                                                           \
     }                                                                          \
     void settings::set_##name##_beam_search(int value) {                       \
