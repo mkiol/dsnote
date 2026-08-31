@@ -18,7 +18,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <string_view>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -999,6 +999,7 @@ void add_vulkan_devices(std::vector<device>& devices, uint8_t flags) {
         const size_t max_nb_of_devices =
             16;  // whisper.cpp supports up to 16 vulkan devs
 
+        std::unordered_set<decltype(VkPhysicalDeviceProperties::deviceID)> ids;
         for (size_t i = 0; i < pdevices.size(); ++i) {
             const auto& device = pdevices[i];
 
@@ -1009,6 +1010,13 @@ void add_vulkan_devices(std::vector<device>& devices, uint8_t flags) {
                                    << ", name=" << prop.properties.deviceName
                                    << ", type="
                                    << type_str(prop.properties.deviceType));
+
+            if (ids.contains(prop.properties.deviceID)) {
+                LOGD("device duplicat => skipping");
+                continue;
+            }
+
+            ids.insert(prop.properties.deviceID);
 
             if (prop.properties.deviceType !=
                     VkPhysicalDeviceType::
@@ -1050,9 +1058,12 @@ void add_vulkan_devices(std::vector<device>& devices, uint8_t flags) {
                 continue;
             }
 
-            devices.push_back({/*id=*/static_cast<uint32_t>(i), api_t::vulkan,
-                               /*name=*/prop.properties.deviceName,
-                               /*platform_name=*/{}});
+            devices.push_back({
+                .id = static_cast<uint32_t>(i),
+                .api = api_t::vulkan,
+                .name = prop.properties.deviceName,
+                .platform_name = {},
+            });
         }
 
         api.vkDestroyInstance(instance, nullptr);
