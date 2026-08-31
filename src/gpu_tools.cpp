@@ -584,9 +584,12 @@ static cudaHipError add_cuda_runtime_devices(std::vector<device>& devices) {
             ret != cudaHipSuccess)
             continue;
         LOGD("cuda device: " << i << ", name=" << props.name);
-        devices.push_back({/*id=*/static_cast<uint32_t>(i), api_t::cuda,
-                           /*name=*/props.name,
-                           /*platform_name=*/{}});
+        devices.push_back({
+            .id = static_cast<uint32_t>(i),
+            .api = api_t::cuda,
+            .name = props.name,
+            .platform_name = {},
+        });
     }
 
     return cudaHipSuccess;
@@ -671,9 +674,12 @@ static void add_cuda_dev_devices(std::vector<device>& devices) {
 
         LOGD("cuda device: " << i << ", name=" << name << ", comp-cap="
                              << comp_cap_major << '.' << comp_cap_minor);
-        devices.push_back({/*id=*/static_cast<uint32_t>(i), api_t::cuda,
-                           /*name=*/name,
-                           /*platform_name=*/{}});
+        devices.push_back({
+            .id = static_cast<uint32_t>(i),
+            .api = api_t::cuda,
+            .name = name,
+            .platform_name = {},
+        });
     }
 }
 
@@ -732,9 +738,12 @@ void add_hip_devices(std::vector<device>& devices) {
             LOGD("hip device: " << i << ", name=" << props.name
                                 << ", gcn-arch=" << props.gcnArch
                                 << ", gcn-arch-name=" << props.gcnArchName);
-            devices.push_back({/*id=*/static_cast<uint32_t>(i), api_t::rocm,
-                               /*name=*/props.name,
-                               /*platform_name=*/props.gcnArchName});
+            devices.push_back({
+                .id = static_cast<uint32_t>(i),
+                .api = api_t::rocm,
+                .name = props.name,
+                .platform_name = props.gcnArchName,
+            });
         }
     } catch ([[maybe_unused]] const std::runtime_error& err) {
     }
@@ -860,9 +869,9 @@ void add_opencl_devices(std::vector<device>& devices, uint8_t flags) {
                 bool supported = (type & CL_DEVICE_TYPE_GPU) != 0;
                 if (supported) {
                     // whisper-cpp supports only adreno and intel
-                    supported = !strstr(dname, "Adreno") &&
-                                !strstr(dname, "Qualcomm") &&
-                                !strstr(dname, "Intel");
+                    supported = strstr(dname, "Adreno") ||
+                                strstr(dname, "Qualcomm") ||
+                                strstr(dname, "Intel");
                 }
                 if (supported) {
                     supported = get_opencl_c_major_ver(cver) >= 2;
@@ -884,9 +893,12 @@ void add_opencl_devices(std::vector<device>& devices, uint8_t flags) {
                     continue;
                 }
 
-                devices_in_platform.second.push_back({/*id=*/i, api_t::opencl,
-                                                      /*name=*/dname,
-                                                      /*platform_name=*/pname});
+                devices_in_platform.second.push_back({
+                    .id = i,
+                    .api = api_t::opencl,
+                    .name = dname,
+                    .platform_name = pname,
+                });
             }
 
             platforms_with_devices.push_back(std::move(devices_in_platform));
