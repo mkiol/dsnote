@@ -101,7 +101,6 @@
   <releases>
     <release version="4.9.1" date="2026-08-27">
       <description>
-
       <p>Accessibility:</p>
       <ul>
       <li>Improved 'Insert into active window'.
@@ -140,18 +139,17 @@
       <li>Setting option to force the English language in the user interface</li>
       <li>Speech Note has been translated into Portuguese-Brazilian language.</li>
       </ul>
-      </ul>
       <p>Flatpak:</p>
       <ul>
       <li>whisper.cpp update to version 1.9.1</li>
-      <li>CTranslate2 update to version 4.8.1<li>
-      <li>PyTorch update to version: 2.12.1<li>
-      <li>OpenBLAS update to version: 0.3.33<li>
-      <li>faster-whisper update to version: 1.2.1<li>
-      <li>WhisperSpeech update to version: 1.0.0<li>
-      <li>Kokoro update to version 0.9.4<li>
-      <li>F5-TTS update to version 1.1.20<li>
-      <li>Remove Parler-TTS due to dependency conflicts that cannot be fixed<li>
+      <li>CTranslate2 update to version 4.8.1</li>
+      <li>PyTorch update to version: 2.12.1</li>
+      <li>OpenBLAS update to version: 0.3.33</li>
+      <li>faster-whisper update to version: 1.2.1</li>
+      <li>WhisperSpeech update to version: 1.0.0</li>
+      <li>Kokoro update to version 0.9.4</li>
+      <li>F5-TTS update to version 1.1.20</li>
+      <li>Remove Parler-TTS due to dependency conflicts that cannot be fixed</li>
       <li>Flatpak runtime update to version 6.10</li>
       </ul>
       </description>

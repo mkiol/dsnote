@@ -50,6 +50,7 @@ modules:
         done
       - rm -rf builds
       - rm -rf cuda_13.0.3_580.126.20_linux.run
+      - patch --unified -i "$(realpath .)"/cuda-math-functions.patch /app/extensions/nvidia/cuda/include/crt/math_functions.h
       - ${FLATPAK_DEST}/cuda/bin/nvcc nvcc -arch-ls -code-ls
     build-options:
       strip: true
@@ -82,116 +83,8 @@ modules:
       - type: file
         url: https://developer.download.nvidia.com/compute/cuda/13.0.3/local_installers/cuda_13.0.3_580.126.20_linux.run
         sha256: 79c82c6529d2adfc322336f37b2a7a856655cd739b4803d0af7344db5a69638b
-
-  - name: opencl-headers
-    only-arches:
-      - x86_64
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-    sources:
-      - type: git
-        url: https://github.com/KhronosGroup/OpenCL-Headers.git
-        commit: 4fdcfb0ae675f2f63a9add9552e0af62c2b4ed30
-
-  - name: clblast
-    only-arches:
-      - x86_64
-    buildsystem: cmake-ninja
-    build-options:
-      no-debuginfo: true
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DTUNERS=OFF
-      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-    sources:
-      - type: archive
-        url: https://github.com/CNugteren/CLBlast/archive/refs/tags/1.6.3.tar.gz
-        sha256: c05668c7461e8440fce48c9f7a8966a6f9e0923421acd7c0357ece9b1d83f20e
-
-  - name: spirvheaders
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DSPIRV_HEADERS_ENABLE_TESTS=OFF
-      - -DSPIRV_HEADERS_ENABLE_INSTALL=ON
-    sources:
-      - type: archive
-        url: https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/vulkan-sdk-1.4.350.1.tar.gz
-        sha256: 9e6d5c78878172d2b810e97f3a74ecbbb14b4ad52b07384ce915fbbeb226d610
-
-  - name: openblas
-    cleanup:
-      - /lib
-      - /include
-      - /share
-    only-arches:
-      - x86_64
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DBUILD_TESTING=OFF
-      - -DBUILD_WITHOUT_LAPACK=OFF
-      - -DC_LAPACK=ON
-      - -DDYNAMIC_ARCH=ON
-      - -DBUILD_STATIC_LIBS=OFF
-      - -DBUILD_SHARED_LIBS=ON
-      - -DTARGET=CORE2
-      - -DCMAKE_C_FLAGS=-Wno-unused-function -Wno-unused-variable -Wno-parentheses -Wno-maybe-uninitialized -Wno-unused-but-set-variable
-    build-options:
-      no-debuginfo: true
-    sources:
-      - type: archive
-        url: https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.33/OpenBLAS-0.3.33.tar.gz
-        sha256: 6761af1d9f5d353ab4f0b7497be2643313b36c8f31caec0144bfef198e71e6ab
-
-  - name: cuda-patch
-    only-arches:
-      - x86_64
-    buildsystem: simple
-    build-commands:
-      - patch --unified -i "$(realpath .)"/cuda-math-functions.patch /app/extensions/nvidia/cuda/include/crt/math_functions.h
-    sources:
       - type: file
         path: ../patches/cuda-math-functions.patch
-
-  - name: whispercpp
-    only-arches:
-      - x86_64
-    buildsystem: cmake-ninja
-    build-options:
-      env:
-        NVCC_APPEND_FLAGS: --compress-mode=size --split-compile=0 -Wno-deprecated-gpu-targets
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCUDAToolkit_ROOT=/app/extensions/nvidia/cuda
-      - -DCMAKE_CUDA_COMPILER=/app/extensions/nvidia/cuda/bin/nvcc
-      - -DCMAKE_C_FLAGS=-ffast-math -fno-finite-math-only -I/app/extensions/nvidia/include
-      - -DCMAKE_CXX_FLAGS=-ffast-math -fno-finite-math-only -I/app/extensions/nvidia/include
-      - -DGGML_NATIVE=OFF
-      - -DGGML_CPU=ON
-      - -DGGML_CPU_ALL_VARIANTS=ON
-      - -DGGML_BACKEND_DL=ON
-      - -DGGML_BACKEND_DIR=/app/extensions/nvidia/lib
-      - -DGGML_BLAS=ON
-      - -DGGML_BLAS_VENDOR=OpenBLAS
-      - -DBLAS_INCLUDE_DIRS=/app/extensions/nvidia/include/openblas
-      - -DGGML_CUDA=ON
-      - -DCMAKE_CUDA_ARCHITECTURES=75;80;86;87;88;89;90;100;103;110;120;121
-      - -DGGML_HIP=OFF 
-      - -DGGML_VULKAN=ON
-      - -DGGML_OPENCL=ON
-      - -DBUILD_SHARED_LIBS=ON
-      - -DWHISPER_BUILD_TESTS=OFF
-      - -DWHISPER_BUILD_EXAMPLES=OFF
-    sources:
-      - type: archive
-        url: https://github.com/ggml-org/whisper.cpp/archive/refs/tags/v1.9.1.tar.gz
-        sha256: 147267177eef7b22ec3d2476dd514d1b12e160e176230b740e3d1bd600118447
-      - type: patch
-        path: ../patches/whispercpp.patch
 
   - name: cudnn
     only-arches:
@@ -230,6 +123,44 @@ modules:
       - type: archive
         url: https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-x86_64/cudnn-linux-x86_64-9.20.0.48_cuda13-archive.tar.xz
         sha256: 73f091ee57668dc18e8b1b61811c0ddff2ec0b762efe613e9f27f9ebfd6c20c0
+
+  - name: whispercpp-cuda
+    only-arches:
+      - x86_64
+    cleanup:
+      - /lib/libggml.so*
+      - /lib/libggml-base*
+      - /lib/libparakeet*
+      - /lib/libwhisper*
+    buildsystem: cmake-ninja
+    build-options:
+      env:
+        NVCC_APPEND_FLAGS: --compress-mode=size --split-compile=0 -Wno-deprecated-gpu-targets
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCUDAToolkit_ROOT=/app/extensions/nvidia/cuda
+      - -DCMAKE_CUDA_COMPILER=/app/extensions/nvidia/cuda/bin/nvcc
+      - -DCMAKE_C_FLAGS=-ffast-math -fno-finite-math-only -I/app/extensions/nvidia/include
+      - -DCMAKE_CXX_FLAGS=-ffast-math -fno-finite-math-only -I/app/extensions/nvidia/include
+      - -DGGML_NATIVE=OFF
+      - -DGGML_CPU=OFF
+      - -DGGML_BACKEND_DL=ON
+      - -DGGML_BACKEND_DIR=/app/extensions/nvidia/lib
+      - -DGGML_BLAS=OFF
+      - -DGGML_CUDA=ON
+      - -DCMAKE_CUDA_ARCHITECTURES=75;80;86;87;88;89;90;100;103;110;120;121
+      - -DGGML_HIP=OFF 
+      - -DGGML_VULKAN=OFF
+      - -DGGML_OPENCL=OFF
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+    sources:
+      - type: archive
+        url: https://github.com/ggml-org/whisper.cpp/archive/refs/tags/v1.9.1.tar.gz
+        sha256: 147267177eef7b22ec3d2476dd514d1b12e160e176230b740e3d1bd600118447
+      - type: patch
+        path: ../patches/whispercpp.patch
 
   - name: python3-pybind11
     only-arches:
@@ -316,7 +247,7 @@ modules:
       - -DCUDA_NVCC_FLAGS=-gencode;arch=compute_100,code=sm_100;-gencode;arch=compute_103,code=sm_103;-gencode;arch=compute_110,code=sm_110;-gencode;arch=compute_120,code=sm_120;-gencode;arch=compute_121,code=sm_121
       - -DWITH_MKL=ON
       - -DWITH_DNNL=ON
-      - -DWITH_RUY=ON/oneapi
+      - -DWITH_RUY=ON
       - -DCUDA_TOOLKIT_ROOT_DIR=/app/extensions/nvidia/cuda
       - -DINTEL_ROOT=/app/extensions/nvidia
       - -DCMAKE_CXX_FLAGS=-msse4.1
