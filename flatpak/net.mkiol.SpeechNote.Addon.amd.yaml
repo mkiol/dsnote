@@ -189,8 +189,7 @@ modules:
       - -DBUILD_CLI=OFF
       - -DWITH_HIP=ON
       - -DOPENMP_RUNTIME=COMP
-      #- -DCMAKE_HIP_ARCHITECTURES=gfx900;gfx906;gfx908;gfx1010;gfx1030;gfx1100;gfx1101;gfx1102;gfx1200;gfx1201
-      - -DCMAKE_HIP_ARCHITECTURES=gfx1030
+      - -DCMAKE_HIP_ARCHITECTURES=gfx900;gfx906;gfx908;gfx1010;gfx1030;gfx1100;gfx1101;gfx1102;gfx1200;gfx1201
       - -DCMAKE_HIP_COMPILER=/app/extensions/amd/rocm/llvm/bin/clang
       - -DCMAKE_CXX_COMPILER=/app/extensions/amd/rocm/llvm/bin/clang
       - -DCMAKE_C_COMPILER=/app/extensions/amd/rocm/llvm/bin/clang
