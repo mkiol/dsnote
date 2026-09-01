@@ -99,7 +99,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.9.1" date="2026-08-27">
+    <release version="4.9.1" date="2026-09-01">
       <description>
       <p>Accessibility:</p>
       <ul>
@@ -123,6 +123,12 @@
         A new output format is now available, displaying timestamps that show when
         each segment of text was recognized in the audio.</li>
       <li>Whisper Large finetuned 'AiLab' model for Latvian</li>
+      <li>Improved transcription performance in 'WhisperCpp'.
+        The updated 'WhisperCpp' engine reduces transcription time by 10%.
+        Additionally, 'WhisperCpp' models now support also older ARM32 CPUs.</li>
+      <li>AMD ROCm hardware acceleration support in 'FasterWhisper'.
+        To enable ROCm acceleration with Flatpak, install the AMD add-on.</li>
+      <li>Temperature and Repetition Penalty options in Whisper engine 'Custom' profile</li>
       </ul>
       <p>Text to Speech:</p>
       <ul>
@@ -141,12 +147,14 @@
       </ul>
       <p>Flatpak:</p>
       <ul>
+      <li>Added compatibility with the latest NVIDIA and AMD graphics cards.
+        With the ROCm and CUDA updates, hardware acceleration is now supported for newer GPUs.</li>
       <li>whisper.cpp update to version 1.9.1</li>
       <li>CTranslate2 update to version 4.8.1</li>
-      <li>PyTorch update to version: 2.12.0</li>
-      <li>OpenBLAS update to version: 0.3.33</li>
-      <li>faster-whisper update to version: 1.2.1</li>
-      <li>WhisperSpeech update to version: 1.0.0</li>
+      <li>PyTorch update to version 2.12.0</li>
+      <li>OpenBLAS update to version 0.3.33</li>
+      <li>faster-whisper update to version 1.2.1</li>
+      <li>WhisperSpeech update to version 1.0.0</li>
       <li>Kokoro update to version 0.9.4</li>
       <li>F5-TTS update to version 1.1.20</li>
       <li>Remove Parler-TTS due to dependency conflicts that cannot be fixed</li>

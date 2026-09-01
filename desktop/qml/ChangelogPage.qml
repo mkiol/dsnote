@@ -21,28 +21,35 @@ DialogPage {
         text: "<p>" + qsTr("Accessibility") + "</p>
         <ul>
         <li>Improved <i>Insert into active window</i>.
-        For faster text insertion, adjust the <i>Text to window method</i> in the advanced settings.
-        The new options simulate <i>Ctrl+V</i> keystrokes, allowing text to be pasted immediately
-        after STT recognition. To enable pasting in terminals, you can also select the <i>Ctrl+Shift+V</i> mode.</li>
+            For faster text insertion, adjust the <i>Text to window method</i> in the advanced settings.
+            The new options simulate <i>Ctrl+V</i> keystrokes, allowing text to be pasted immediately
+            after STT recognition. To enable pasting in terminals, you can also select the <i>Ctrl+Shift+V</i> mode.</li>
         <li>Improved clipboard text reading under Wayland.
-        You can now use the <i>start-reading-clipboard</i> action or a global keyboard shortcut to read text from the clipboard,
-        even when the app window is in the background - removing previous Wayland restrictions.</li>
+            You can now use the <i>start-reading-clipboard</i> action or a global keyboard shortcut to read text from the clipboard,
+            even when the app window is in the background - removing previous Wayland restrictions.</li>
         <li>Read selected text from active window.
-        You can now read selected text from any active window using the new <i>start-reading-active-window</i> action
-        or a global keyboard shortcut. This feature automatically copies the selected text (simulating <i>Ctrl+C</i>)
-        and reads it aloud using TTS.</li>
+            You can now read selected text from any active window using the new <i>start-reading-active-window</i> action
+            or a global keyboard shortcut. This feature automatically copies the selected text (simulating <i>Ctrl+C</i>)
+            and reads it aloud using TTS.</li>
         <li>New action <i>start-reading-url</i>. Use this action to have Speech Note read an HTTP web page.
-        An action can be triggered via DBus call or with command-line option. You can enable <i>Actions</i> in the settings
-        (<i>Accessibility</i> &rarr; <i>Allow external applications to invoke actions</i>).</li>
+            An action can be triggered via DBus call or with command-line option. You can enable <i>Actions</i> in the settings
+            (<i>Accessibility</i> &rarr; <i>Allow external applications to invoke actions</i>).</li>
         <li>New action <i>transcribe-file</i>. Use this action to transcribe a file.</li>
         </ul>
         <p>" + qsTr("Speech to Text") + "</p>
         <ul>
         <li>Inline timestamps in text output.
-        A new output format is now available, displaying timestamps that show when each segment of text was recognized in the audio.
-        To enable new format set <i>Text format</i> to <i>Inline timestamps</i>. 
-        You can also customize the timestamp interval and format in the settings.</li>
+            A new output format is now available, displaying timestamps that show when each segment of text was recognized in the audio.
+            To enable new format set <i>Text format</i> to <i>Inline timestamps</i>. 
+            You can also customize the timestamp interval and format in the settings.</li>
         <li>Whisper Large finetuned 'AiLab' model for Latvian</li>
+        <li>Improved transcription performance in <i>WhisperCpp</i>.
+            The updated <i>WhisperCpp</i> engine reduces transcription time by 10%.
+            Additionally, WhisperCpp models now support also older ARM32 CPUs.</li>
+        <li>AMD ROCm hardware acceleration support in <i>FasterWhisper</i>.
+            To enable ROCm acceleration with Flatpak, install the AMD add-on.</li>
+        <li>Temperature and Repetition Penalty options in Whisper engine <li>Custom</li> profile</li>
+        </ul>
         </ul>
         <p>" + qsTr("Text to Speech") + "</p>
         <ul>
@@ -57,6 +64,21 @@ DialogPage {
             The URL must use HTTP or HTTPS. For HTML pages, you can choose to extract only the readable text or import the entire page.</li>
         <li>Setting option to force the English language in the user interface</li>
         <li><i>Speech Note</i> has been translated into Portuguese-Brazilian language.</li>
+        </ul>
+        <p>Flatpak</p>
+        <ul>
+        <li>Added compatibility with the latest NVIDIA and AMD graphics cards.
+            With the ROCm and CUDA updates, hardware acceleration is now supported for newer GPUs.</li>
+        <li>whisper.cpp update to version 1.9.1</li>
+        <li>CTranslate2 update to version 4.8.1</li>
+        <li>PyTorch update to version 2.12.0</li>
+        <li>OpenBLAS update to version 0.3.33</li>
+        <li>faster-whisper update to version 1.2.1</li>
+        <li>WhisperSpeech update to version 1.0.0</li>
+        <li>Kokoro update to version 0.9.4</li>
+        <li>F5-TTS update to version 1.1.20</li>
+        <li>Remove Parler-TTS due to dependency conflicts that cannot be fixed</li>
+        <li>Flatpak runtime update to version 6.10</li>
         </ul>"
     }
 

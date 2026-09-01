@@ -33,6 +33,24 @@ Page {
             }
 
             LogItem {
+                text: "<p>" + qsTr("Speech to Text") + "</p>
+                <ul>
+                <li>Improved transcription performance in <i>WhisperCpp</i>.
+                The updated <i>WhisperCpp</i> engine reduces transcription time by 10%.
+                Additionally, WhisperCpp models now support also older ARM32 CPUs, such as those in the Jolla C1.</li>
+                </ul>
+                <p>" + qsTr("Libraries") + "</p>
+                <ul>
+                <li>whisper.cpp update to version 1.9.1</li>
+                <li>OpenBLAS update to version 0.3.33</li>
+                </ul>"
+            }
+
+            SectionHeader {
+                text: qsTr("Version %1").arg("4.9.0")
+            }
+
+            LogItem {
                 text: "<p>" + qsTr("General") + "</p>
                 <ul>
                 <li>Fix: Python dependency blocked the installation on SFOS 5.1</li>
