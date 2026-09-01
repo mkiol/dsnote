@@ -51,7 +51,6 @@ cleanup:
   - /lib/libSPIRV*
   - /lib/libshaderc*
   - /lib/libparakeet*
-  - /lib/debug/opt
   - /share/bash-completion
   - /share/cmake
   - /share/doc
