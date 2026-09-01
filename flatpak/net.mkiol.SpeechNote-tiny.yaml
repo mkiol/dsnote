@@ -504,30 +504,6 @@ modules:
       - type: patch
         path: ../patches/ffmpeg.patch
 
-  - name: whispercpp-openblas
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DGGML_NATIVE=OFF
-      - -DGGML_BLAS=ON
-      - -DGGML_BLAS_VENDOR=OpenBLAS
-      - -DGGML_AVX=ON
-      - -DGGML_AVX2=ON
-      - -DGGML_FMA=ON
-      - -DGGML_F16C=ON
-      - -DBUILD_SHARED_LIBS=ON
-      - -DWHISPER_BUILD_TESTS=OFF
-      - -DWHISPER_BUILD_EXAMPLES=OFF
-      - -DCMAKE_C_FLAGS=-O3
-      - -DCMAKE_CXX_FLAGS=-O3
-      - -DWHISPER_TARGET_NAME=whisper-openblas
-    sources:
-      - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.7.1.tar.gz
-        sha256: 97f19a32212f2f215e538ee37a16ff547aaebc54817bd8072034e02466ce6d55
-      - type: patch
-        path: ../patches/whispercpp.patch
-
   - name: opencl-headers
     only-arches:
       - x86_64

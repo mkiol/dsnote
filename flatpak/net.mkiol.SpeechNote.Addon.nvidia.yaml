@@ -362,7 +362,7 @@ modules:
         url: https://files.pythonhosted.org/packages/92/de/8ca2b613042550dcf9ef50c596c8b1f602afda92cf9032ac28a73f6ee410/cuda_pathfinder-1.4.2-py3-none-any.whl
         sha256: eb354abc20278f8609dc5b666a24648655bef5613c6dfe78a238a6fd95566754
 
-  # Using cusparselt binary installed pip instead of installing from NVIDIA package
+  # Using cusparselt binary installed by pip instead of installing from NVIDIA package
   # - name: cusparselt
   #   only-arches:
   #     - x86_64
@@ -400,7 +400,7 @@ modules:
   #       url: https://developer.download.nvidia.com/compute/cusparselt/redist/libcusparse_lt/linux-x86_64/libcusparse_lt-linux-x86_64-0.9.1.1_cuda13-archive.tar.xz
   #       sha256: e77c16595ce572fbd5d98c5a4959bb955055b5f8c339f5695430358e177360ff
 
-  # Using precompiled NCCL installed pip package instead of building from source
+  # Using precompiled NCCL installed by pip package instead of building from source
   # - name: nccl
   #   only-arches:
   #     - x86_64

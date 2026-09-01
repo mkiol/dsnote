@@ -1,15 +1,17 @@
 id: net.mkiol.SpeechNote.Addon.amd
 runtime: net.mkiol.SpeechNote
-sdk: org.kde.Sdk//5.15-24.08
+sdk: org.kde.Sdk//6.10
 build-extension: true
 build-options:
   no-debuginfo: true
   prefix: /app/extensions/amd
 cleanup:
   - /bin
+  - /include
   - /lib/cmake
   - /lib/pkgconfig
-  - /include
+  - /share/cmake
+  - /share/pkgconfig
   - "*.a"
 modules:
   - name: rocm
@@ -17,64 +19,128 @@ modules:
       - x86_64
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/rocm
-      - |
-        set -e
-        for f in *.deb; do
-          if [ -f "$f" ]; then
-            ar x "$f"
-            rm control.tar.*
-            rm debian-binary
-            tar -xf data.tar.*
-            rm data.tar.*
-          fi
-        done
-      - mv --no-target-directory opt/rocm* ${FLATPAK_DEST}/rocm
-      - chmod -R 644 ${FLATPAK_DEST}/rocm/lib/llvm/share/gdb/python/ompd/*.so*
+      - bash rocm-installer_1.2.9.70204-62-93~24.04.run untar .
+      - mv rocm-7.2.4 "${FLATPAK_DEST}/rocm"
+      - mkdir -p "${FLATPAK_DEST}/lib"
+      - ln -s /usr/lib/x86_64-linux-gnu/libxml2.so "${FLATPAK_DEST}/lib/libxml2.so.2"
     build-options:
       strip: true
     cleanup:
+      - /rocm/.info
       - /rocm/bin
-      - /rocm/hip*
-      - /rocm/hsa
-      - /rocm/roc*
-      - /rocm/miopen*
-      - /rocm/rccl*
-      - /rocm/oam
+      - /rocm/share/amd*
       - /rocm/share/doc
       - /rocm/share/dec
       - /rocm/share/hip
       - /rocm/share/hipfort
       - /rocm/share/html
-      - /rocm/share/rccl
-      - /rocm/share/rocm
-      - /rocm/share/miopen/perf_models
+      - /rocm/share/info
+      - /rocm/share/man
+      - /rocm/share/mivisionx
+      - /rocm/share/modulefiles
       - /rocm/share/openmp-extras
+      - /rocm/share/pkgconfig
+      - /rocm/share/rccl
+      - /rocm/share/rdhc
+      - /rocm/share/rocdecode
+      - /rocm/share/rocgdb
+      - /rocm/share/rocjpg
+      - /rocm/share/rocm*
+      - /rocm/share/rocprofiler*
       - /rocm/share/rocmcmakebuildtools
       - /rocm/share/rocprofiler*
       - /rocm/share/modulefiles
-      - /rocm/.info
       - /rocm/include
-      - /rocm/opencl
-      - /rocm/lib/libOpenCL.so*
       - /rocm/lib/cmake
       - /rocm/lib/rocmmod
       - /rocm/lib/CMakeFiles
       - /rocm/lib/llvm/lib-debug
       - /rocm/lib/llvm/share
+      - /rocm/lib/llvm/lib/cmake
+      - /rocm/lib/python*
+      - /rocm/lib/rocprofiler*
+      - /rocm/lib/roctracer
+      - /rocm/lib/rocmod
+      - /rocm/lib/.*
+      - /rocm/lib/*.a
       - /rocm/libexec
       - /rocm/llvm
+      - /lib/libxml2*
     sources:
-      - rocm-deb-sources.yaml
+      - type: file
+        url: https://repo.radeon.com/rocm/installer/rocm-runfile-installer/rocm-rel-7.2.4/ubuntu/24.04/rocm-installer_1.2.9.70204-62-93~24.04.run
+        sha256: 866779bfcdc24863c58fe7d8f8cfe21e9e20dc978ce77a153af64e1038f0ab5b
+
+  - name: whispercpp-hip
+    only-arches:
+      - x86_64
+    cleanup:
+      - /lib/libggml.so*
+      - /lib/libggml-base*
+      - /lib/libparakeet*
+      - /lib/libwhisper*
+    buildsystem: cmake-ninja
+    build-options:
+      append-ld-library-path: /app/extensions/amd/lib
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_C_FLAGS=-ffast-math -fno-finite-math-only -I/app/extensions/amd/include
+      - -DCMAKE_CXX_FLAGS=-ffast-math -fno-finite-math-only -I/app/extensions/amd/include
+      - -DGGML_NATIVE=OFF
+      - -DGGML_CPU=OFF
+      - -DGGML_BACKEND_DL=ON
+      - -DGGML_BACKEND_DIR=/app/extensions/amd/lib
+      - -DGGML_BLAS=OFF
+      - -DGGML_HIP=ON
+      - -DCMAKE_HIP_ARCHITECTURES=gfx900;gfx906;gfx908;gfx1010;gfx1030;gfx1100;gfx1101;gfx1102;gfx1200;gfx1201
+      - -DCMAKE_HIP_COMPILER=/app/extensions/amd/rocm/llvm/bin/clang
+      - -DCMAKE_PREFIX_PATH=/app/extensions/amd/rocm
+      - -DCMAKE_HIP_PLATFORM=amd
+      - -DGGML_CUDA=OFF 
+      - -DGGML_VULKAN=OFF
+      - -DGGML_OPENCL=OFF
+      - -DBUILD_SHARED_LIBS=ON
+      - -DWHISPER_BUILD_TESTS=OFF
+      - -DWHISPER_BUILD_EXAMPLES=OFF
+    sources:
+      - type: archive
+        url: https://github.com/ggml-org/whisper.cpp/archive/refs/tags/v1.9.1.tar.gz
+        sha256: 147267177eef7b22ec3d2476dd514d1b12e160e176230b740e3d1bd600118447
+      - type: patch
+        path: ../patches/whispercpp.patch
+
+  - name: python3-pybind11
+    only-arches:
+      - x86_64
+    buildsystem: simple
+    cleanup:
+      - /bin
+      - /lib/python3.13/site-packages/pybind11*
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST} "pybind11" --no-build-isolation
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/b3/06/c3a23c9a0263b136c519f033a58d4641e73065fefc7754e9667ec206d992/pybind11-3.0.4-py3-none-any.whl
+        sha256: 961720ee652da51d531b7b2451a6bd2bc042b0106e6d9baa48ecb7d58034ce63
 
   - name: oneapi
     only-arches:
       - x86_64
     buildsystem: simple
+    build-options:
+      strip: true
     cleanup:
       - /oneapi
     build-commands:
       - sh l_BaseKit_p_2024.0.0.49564_offline.sh --extract-folder ./oneapi -a --eula accept --silent --install-dir ${FLATPAK_DEST}/oneapi
+      - chmod -R +w ${FLATPAK_DEST}/oneapi && echo "done" || echo "done with errors"
+      - |
+        set -e
+        for f in $(find ${FLATPAK_DEST}/oneapi -type f -name "*.so*"); do
+          echo "removing $f"
+          rm -f "$f"
+        done
     sources:
       - type: file
         url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/20f4e6a1-6b0b-4752-b8c1-e5eacba10e01/l_BaseKit_p_2024.0.0.49564_offline.sh
@@ -84,6 +150,8 @@ modules:
     only-arches:
       - x86_64
     buildsystem: cmake-ninja
+    build-options:
+      strip: true
     cleanup:
       - /bin
       - /include
@@ -99,32 +167,19 @@ modules:
       - -DONEDNN_BUILD_GRAPH=OFF
     sources:
       - type: archive
-        url: https://github.com/oneapi-src/oneDNN/archive/refs/tags/v3.3.1.tar.gz
-        sha256: e0b7a9452162e854cf08b4e90bcd1b382b9903ace6a61503a872573880d24c3f
+        url: https://github.com/uxlfoundation/oneDNN/archive/refs/tags/v3.12.2.tar.gz
+        sha256: d16dc7ceb69d5856f3974cab4384f3076f9732f70313b581a351a3a8eef8a642
 
-  - name: python3-pybind11
-    only-arches:
-      - x86_64
-    buildsystem: simple
-    cleanup:
-      - /bin
-      - /lib/python3.12/site-packages/pybind11*
-    build-commands:
-      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} "pybind11" --no-build-isolation
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/06/55/9f73c32dda93fa4f539fafa268f9504e83c489f460c380371d94296126cd/pybind11-2.11.1-py3-none-any.whl
-        sha256: 33cdd02a6453380dd71cc70357ce388ad1ee8d32bd0e38fc22b273d050aa29b3
-
-  - name: ctranslate2-amd
+  - name: ctranslate2-hip
     only-arches:
       - x86_64
     buildsystem: cmake-ninja
     build-options:
+      append-ld-library-path: /app/extensions/amd/lib
       env:
-        PYTHONPATH: /app/extensions/amd/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
+        PYTHONPATH: /app/extensions/amd/lib/python3.13/site-packages:/app/lib/python3.13/site-packages
         CTRANSLATE2_ROOT: /app/extensions/amd
+        ROCM_PATH: /app/extensions/amd/rocm
     cleanup:
       - /bin
       - /include
@@ -132,23 +187,31 @@ modules:
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DBUILD_CLI=OFF
-      - -DCUDA_DYNAMIC_LOADING=ON
+      - -DWITH_HIP=ON
       - -DOPENMP_RUNTIME=COMP
+      #- -DCMAKE_HIP_ARCHITECTURES=gfx900;gfx906;gfx908;gfx1010;gfx1030;gfx1100;gfx1101;gfx1102;gfx1200;gfx1201
+      - -DCMAKE_HIP_ARCHITECTURES=gfx1030
+      - -DCMAKE_HIP_COMPILER=/app/extensions/amd/rocm/llvm/bin/clang
+      - -DCMAKE_CXX_COMPILER=/app/extensions/amd/rocm/llvm/bin/clang
+      - -DCMAKE_C_COMPILER=/app/extensions/amd/rocm/llvm/bin/clang
+      - -DCMAKE_PREFIX_PATH=/app/extensions/amd/rocm
+      - -DCMAKE_HIP_PLATFORM=amd
       - -DWITH_MKL=ON
       - -DWITH_DNNL=ON
       - -DWITH_RUY=ON
-      - -DINTEL_ROOT=/app/extensions/amd/oneapi
-      - -DCMAKE_CXX_FLAGS=-msse4.1
+      - -DINTEL_ROOT=/app/extensions/amd
+      - -DCMAKE_CXX_FLAGS=-msse4.1 -Wno-deprecated-literal-operator
       - -DCMAKE_SHARED_LINKER_FLAGS=-Wl,-z,noexecstack
       - -DCMAKE_SYSTEM_PREFIX_PATH=/app
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     post-install:
       - cd python && python setup.py bdist_wheel
       - pip3 install --verbose --exists-action=i --no-index --prefix=${FLATPAK_DEST} --no-build-isolation python/dist/*.whl
-      - strip ${FLATPAK_DEST}/lib/libctranslate2.so.4.3.1
+      - strip ${FLATPAK_DEST}/lib/libctranslate2.so.4.8.1
     sources:
       - type: git
         url: https://github.com/OpenNMT/CTranslate2.git
-        commit: v4.3.1
+        commit: v4.8.1
       - type: patch
         path: ../patches/ctranslate2.patch
 
@@ -159,129 +222,35 @@ modules:
     cleanup:
       - /bin/convert*
       - /bin/torch*
-      - /lib/python3.12/site-packages/torch/lib/rocblas
-      - /lib/python3.12/site-packages/torch/lib/libamd*
-      - /lib/python3.12/site-packages/torch/lib/libroc*
-      - /lib/python3.12/site-packages/torch/lib/libhip*
-      - /lib/python3.12/site-packages/torch/lib/libhsa*
-      - /lib/python3.12/site-packages/torch/lib/libMIOpen*
-      - /lib/python3.12/site-packages/torch/lib/librccl*
-      - /lib/python3.12/site-packages/torch/lib/libnuma*
-      - /lib/python3.12/site-packages/torch/lib/hipblas*
-      - /lib/python3.12/site-packages/torch/lib/msccl-algorithms
-      - /lib/python3.12/site-packages/torch/include
+      - /lib/python3.13/site-packages/torch/lib/rocblas
+      - /lib/python3.13/site-packages/torch/lib/libamd*
+      - /lib/python3.13/site-packages/torch/lib/libroc*
+      - /lib/python3.13/site-packages/torch/lib/libhip*
+      - /lib/python3.13/site-packages/torch/lib/libhsa*
+      - /lib/python3.13/site-packages/torch/lib/libMIOpen*
+      - /lib/python3.13/site-packages/torch/lib/librccl*
+      - /lib/python3.13/site-packages/torch/lib/libnuma*
+      - /lib/python3.13/site-packages/torch/lib/hipblas*
+      - /lib/python3.13/site-packages/torch/lib/msccl-algorithms
+      - /lib/python3.13/site-packages/torch/include
     build-options:
       env:
-        PYTHONPATH: /app/extensions/amd/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
+        PYTHONPATH: /app/extensions/amd/lib/python3.13/site-packages:/app/lib/python3.13/site-packages
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} torch torchaudio --no-build-isolation
+        --prefix=${FLATPAK_DEST} --no-deps torch torchaudio triton-rocm --no-build-isolation
     sources:
       - type: file
-        url: https://download.pytorch.org/whl/rocm6.2/torch-2.5.1%2Brocm6.2-cp312-cp312-linux_x86_64.whl
-        dest-filename: torch-2.5.1+rocm6.2-cp312-cp312-linux_x86_64.whl
-        sha256: 80c7af931acb3941530a717aaa1d142985ae7f29b7660a72e47f1a890fc191fb
+        url: https://download-r2.pytorch.org/whl/rocm7.2/torch-2.12.0%2Brocm7.2-cp313-cp313-manylinux_2_28_x86_64.whl
+        dest-filename: torch-2.12.0+rocm7.2-cp313-cp313-manylinux_2_28_x86_64.whl
+        sha256: 58c07e4cc60c1c47d96bbffb9222f47c1090fc5dea8d9418146d2508a87b785e
       - type: file
-        url: https://download.pytorch.org/whl/rocm6.2/torchaudio-2.5.1%2Brocm6.2-cp312-cp312-linux_x86_64.whl
-        dest-filename: torchaudio-2.5.1+rocm6.2-cp312-cp312-linux_x86_64.whl
-        sha256: 63d1cfe70d8fb6154d85b5b44dbd055587828fc260c2f86cf924433ca897b917
+        url: https://download-r2.pytorch.org/whl/rocm7.2/torchaudio-2.11.0%2Brocm7.2-cp313-cp313-manylinux_2_28_x86_64.whl
+        dest-filename: torchaudio-2.11.0+rocm7.2-cp313-cp313-manylinux_2_28_x86_64.whl
+        sha256: 9228e1c534d04d80fa7b46205f448da947fd06f5573ba8602f041b504edb3596
       - type: file
-        url: https://download.pytorch.org/whl/pytorch_triton_rocm-3.1.0-cp312-cp312-linux_x86_64.whl
-        sha256: 3b56b87886d03dcf3aeb8f78f372f5da60b29ffdffcba5cd767b4bfdec47175b
-
-  - name: suitesparse
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DBUILD_STATIC_LIBS=OFF
-      - -DBUILD_SHARED_LIBS=ON
-      - -DSUITESPARSE_ENABLE_PROJECTS=cholmod;amd;colamd;cxsparse
-    cleanup:
-      - /bin
-      - /include
-      - /lib/cmake
-      - /lib/debug
-      - /lib/*.a
-      - /lib/*.la
-      - /lib/pkgconfig
-      - /share/man
-    sources:
-      - type: git
-        url: https://github.com/DrTimothyAldenDavis/SuiteSparse.git
-        tag: v7.8.3
-        commit: d3c4926d2c47fd6ae558e898bfc072ade210a2a1
-
-  - name: whispercpp-hipblas
-    only-arches:
-      - x86_64
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DGGML_NATIVE=OFF
-      - -DGGML_HIPBLAS=ON
-      - -DCMAKE_HIP_ARCHITECTURES=gfx900;gfx902;gfx904;gfx906;gfx908;gfx909;gfx90a;gfx90c;gfx940;gfx1010;gfx1011;gfx1012;gfx1013;gfx1030;gfx1031;gfx1032;gfx1033;gfx1034;gfx1035;gfx1036;gfx1100;gfx1101;gfx1102;gfx1103
-      - -DROCM_PATH=/app/extensions/amd/rocm
-      - -Dhip_DIR=/app/extensions/amd/rocm/hip
-      - -Drocblas_DIR=/app/extensions/amd/rocm/rocblas
-      - -DHIP_PLATFORM=amd
-      - -DGGML_OPENMP=OFF
-      - -DGGML_AVX=ON
-      - -DGGML_AVX2=OFF
-      - -DGGML_FMA=OFF
-      - -DGGML_F16C=ON
-      - -DBUILD_SHARED_LIBS=ON
-      - -DWHISPER_BUILD_TESTS=OFF
-      - -DWHISPER_BUILD_EXAMPLES=OFF
-      - -DCMAKE_C_FLAGS=-O3
-      - -DCMAKE_CXX_FLAGS=-O3
-      - -DWHISPER_TARGET_NAME=whisper-hipblas
-    sources:
-      - type: archive
-        url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.7.1.tar.gz
-        sha256: 97f19a32212f2f215e538ee37a16ff547aaebc54817bd8072034e02466ce6d55
-      - type: patch
-        path: ../patches/whispercpp.patch
-
-  - name: python3-ninja
-    only-arches:
-      - x86_64
-    buildsystem: simple
-    build-options:
-      strip: true
-      env:
-        PYTHONPATH: /app/extensions/amd/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
-        BUILD_TARGET: rocm
-        FLASH_ATTENTION_TRITON_AMD_ENABLE: TRUE
-        USE_TRITON_ROCM: TRUE
-        SKIP_CUDA_BUILD: TRUE
-        ROCM_HOME: /app/extensions/amd/rocm
-    build-commands:
-      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} ninja --no-build-isolation
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/eb/7a/455d2877fe6cf99886849c7f9755d897df32eaf3a0fba47b56e615f880f7/ninja-1.11.1.4-py3-none-manylinux_2_12_x86_64.manylinux2010_x86_64.whl
-        sha256: 096487995473320de7f65d622c3f1d16c3ad174797602218ca8c967f51ec38a0
-
-  - name: python3-flash-attn-rocm
-    only-arches:
-      - x86_64
-    buildsystem: simple
-    build-options:
-      strip: true
-      env:
-        PYTHONPATH: /app/extensions/amd/lib/python3.12/site-packages:/app/lib/python3.12/site-packages
-        BUILD_TARGET: rocm
-        FLASH_ATTENTION_TRITON_AMD_ENABLE: TRUE
-        USE_TRITON_ROCM: TRUE
-        SKIP_CUDA_BUILD: TRUE
-        ROCM_HOME: /app/extensions/amd/rocm
-    build-commands:
-      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} flash-attn --no-build-isolation
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/11/34/9bf60e736ed7bbe15055ac2dab48ec67d9dbd088d2b4ae318fd77190ab4e/flash_attn-2.7.4.post1.tar.gz
-        sha256: f03485c9a49a4d68d0733acdcad80ab0e72afa025a777fdc2966ceccf9d51765
+        url: https://download-r2.pytorch.org/whl/triton_rocm-3.6.0-cp313-cp313-linux_x86_64.whl
+        sha256: d43b44f045d7f78d1dfe03b2debce36e0d756041a853633a2677ce5a890a269e
 
   - name: metadata
     buildsystem: simple

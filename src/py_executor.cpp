@@ -76,14 +76,25 @@ static std::string add_to_env_path(const std::string& dir) {
     return new_path ? std::string{new_path} : std::string{};
 }
 
-static void set_env(const char* name, const char* value) {
+static void set_env(const char* name, const char* value, bool force = false) {
     auto* old_value = getenv(name);
-    setenv(name, value, 1);
+    if (old_value && std::strcmp(value, old_value) == 0) {
+        // already set
+        return;
+    }
+
+    if (old_value && !force) {
+        LOGD("skip set env: " << name << " = " << old_value << " => " << value);
+        return;
+    }
+
     if (old_value) {
         LOGD("set env: " << name << " = " << old_value << " => " << value);
     } else {
         LOGD("set env: " << name << " = " << value);
     }
+
+    setenv(name, value, 1);
 }
 
 void py_executor::loop() {
@@ -91,12 +102,16 @@ void py_executor::loop() {
 
     auto cache_dir = settings::instance()->cache_dir().toStdString();
 
-    set_env("PYTHONIOENCODING", "utf-8");
-    set_env("HF_HUB_DISABLE_TELEMETRY", "1");
-    set_env("HF_HUB_OFFLINE", "1");
-    set_env("HF_HUB_LOCAL_DIR_AUTO_SYMLINK_THRESHOLD", "100000000000");
-    set_env("HF_HUB_CACHE", cache_dir.c_str());
-    set_env("PKUSEG_HOME", fmt::format("{}/pkuseg", cache_dir).c_str());
+    set_env("PYTHONIOENCODING", "utf-8", true);
+    set_env("PYTHONWARNINGS", "ignore");
+    set_env("HF_HUB_DISABLE_TELEMETRY", "1", true);
+    set_env("HF_HUB_OFFLINE", "1", true);
+    set_env("HF_HUB_LOCAL_DIR_AUTO_SYMLINK_THRESHOLD", "100000000000", true);
+    set_env("HF_HUB_CACHE", cache_dir.c_str(), true);
+    set_env("PKUSEG_HOME", fmt::format("{}/pkuseg", cache_dir).c_str(), true);
+
+    // https://github.com/coqui-ai/TTS/discussions/4361
+    set_env("MIOPEN_FIND_MODE", "FAST");
 
     py_tools::init_module();
 
