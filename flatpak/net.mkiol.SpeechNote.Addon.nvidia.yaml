@@ -1,6 +1,6 @@
 id: net.mkiol.SpeechNote.Addon.nvidia
 runtime: net.mkiol.SpeechNote
-sdk: org.kde.Sdk//6.10
+sdk: org.kde.Sdk//6.11
 build-extension: true
 build-options:
   no-debuginfo: true

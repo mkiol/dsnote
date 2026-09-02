@@ -45,10 +45,11 @@ DialogPage {
         <li>Whisper Large finetuned 'AiLab' model for Latvian</li>
         <li>Improved transcription performance in <i>WhisperCpp</i>.
             The updated <i>WhisperCpp</i> engine reduces transcription time by 10%.
-            Additionally, WhisperCpp models now support also older ARM32 CPUs.</li>
+            Additionally, <i>WhisperCpp</i> models now support also older ARM32 CPUs.</li>
         <li>AMD ROCm hardware acceleration support in <i>FasterWhisper</i>.
             To enable ROCm acceleration with Flatpak, install the AMD add-on.</li>
-        <li>Temperature and Repetition Penalty options in Whisper engine <li>Custom</li> profile</li>
+        <li>Temperature and Repetition Penalty options in Whisper engine <i>Custom</i> profile</li>
+        <li>OpenVINO hardware acceleration in <i>WhisperCpp</i> was removed as it provided minimal performance improvement.</li>
         </ul>
         </ul>
         <p>" + qsTr("Text to Speech") + "</p>
@@ -78,7 +79,7 @@ DialogPage {
         <li>Kokoro update to version 0.9.4</li>
         <li>F5-TTS update to version 1.1.20</li>
         <li>Remove Parler-TTS due to dependency conflicts that cannot be fixed</li>
-        <li>Flatpak runtime update to version 6.10</li>
+        <li>Flatpak runtime update to version 6.11</li>
         </ul>"
     }
 

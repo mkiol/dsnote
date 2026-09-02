@@ -1,6 +1,6 @@
 app-id: net.mkiol.SpeechNote
 runtime: org.kde.Platform
-runtime-version: "6.10"
+runtime-version: "6.11"
 sdk: org.kde.Sdk
 rename-icon: dsnote
 command: dsnote
@@ -310,6 +310,7 @@ modules:
       - -DBUILD_SERVICE=OFF
       - -DBUILD_SPEECHDISPATCHER_MODULE=OFF
       - -DCMAKE_INSTALL_LIBDIR=/app/lib
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     post-install:
       - "mkdir -p /app/share/rhvoice"
       - "cp -R data /app/share/rhvoice"
@@ -687,6 +688,18 @@ modules:
         url: https://github.com/bugaevc/wl-clipboard/archive/refs/tags/v2.3.0.tar.gz
         sha256: b4dc560973f0cd74e02f817ffa2fd44ba645a4f1ea94b7b9614dacc9f895f402
 
+  - name: rdrview
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    sources:
+      - type: archive
+        url: https://github.com/eafer/rdrview/archive/refs/tags/v0.1.5.tar.gz
+        sha256: e83266cb2e3b16a42f3433101d1f312350ce1442561eaded67efb51c2e8e8aab
+      - type: patch
+        path: ../patches/rdrview.patch
+
   - name: dsnote
     buildsystem: cmake-ninja
     config-opts:
@@ -709,7 +722,6 @@ modules:
       - -DBUILD_SSPLITCPP=OFF
       - -DBUILD_RHVOICE=OFF
       - -DBUILD_BERGAMOT=OFF
-      - -DBUILD_UROMAN=OFF
       - -DBUILD_RUBBERBAND=OFF
       - -DBUILD_FFMPEG=OFF
       - -DBUILD_TAGLIB=OFF
