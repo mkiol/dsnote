@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -136,22 +136,20 @@ void mnt_engine::open_lib() {
     if (auto cpuinfo = cpu_tools::cpuinfo();
         cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx &&
         cpuinfo.feature_flags & cpu_tools::feature_flags_t::bmi2) {
-        m_lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
+        m_lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY | RTLD_DEEPBIND);
     } else if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::sse4_1) {
         LOGW("avx not supported => using bergamot-fallback");
-        m_lib_handle = dlopen("libbergamot_api-fallback.so", RTLD_LAZY);
+        m_lib_handle =
+            dlopen("libbergamot_api-fallback.so", RTLD_LAZY | RTLD_DEEPBIND);
     } else {
-        LOGE("sse4.1 not supported but bergamot needs it");
-        throw std::runtime_error(
-            "failed to open bergamot lib: sse4.1 not supported");
+        LOGF("failed to open bergamot lib: sse4.1 not supported");
     }
 #else
     m_lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
 #endif
 
     if (m_lib_handle == nullptr) {
-        LOGE("failed to open bergamot lib: " << dlerror());
-        throw std::runtime_error("failed to open bergamot lib");
+        LOGF("failed to open bergamot lib: " << dlerror());
     }
 
     m_bergamot_api_api.bergamot_api_make =
@@ -168,8 +166,7 @@ void mnt_engine::open_lib() {
             dlsym(m_lib_handle, "bergamot_api_cancel"));
 
     if (!m_bergamot_api_api.ok()) {
-        LOGE("failed to register bergamon api");
-        throw std::runtime_error("failed to register bergamot api");
+        LOGF("failed to register bergamon api");
     }
 }
 
@@ -179,15 +176,16 @@ bool mnt_engine::available() {
     if (auto cpuinfo = cpu_tools::cpuinfo();
         cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx &&
         cpuinfo.feature_flags & cpu_tools::feature_flags_t::bmi2) {
-        lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
+        lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY | RTLD_DEEPBIND);
     } else if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::sse4_1) {
-        lib_handle = dlopen("libbergamot_api-fallback.so", RTLD_LAZY);
+        lib_handle =
+            dlopen("libbergamot_api-fallback.so", RTLD_LAZY | RTLD_DEEPBIND);
     } else {
         LOGW("mnt not available because cpu doesn't have sse4.1");
         return false;
     }
 #else
-    lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY);
+    lib_handle = dlopen("libbergamot_api.so", RTLD_LAZY | RTLD_DEEPBIND);
 #endif
 
     if (lib_handle == nullptr) {
