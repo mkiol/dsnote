@@ -15,6 +15,7 @@
 #include <QStringList>
 #include <QUrl>
 #include <QVariantList>
+#include <type_traits>
 #ifdef USE_DESKTOP
 #include <QQmlApplicationEngine>
 #endif
@@ -175,6 +176,25 @@
     X(ScanFlagNoCt2CudaHip, "no-ct2-cuda-hip", 1U << 1U, 0)                  \
     X(ScanFlagParlerTtsEnabledWhenOffAll, "parler-tts-enabled-when-off-all", \
       1U << 2U, 0)
+
+// name, name_str, value
+#define SYSTEM_FLAGS_TABLE                        \
+    X(SystemHwAccel, "hw-accel", 1U << 0U, 0)     \
+    X(SystemNvidiaGpu, "nvidia-gpu", 1U << 1U, 0) \
+    X(SystemAmdGpu, "amd-gpu", 1U << 2U, 0)
+
+// name, name_str, value
+#define ADDON_FLAGS_TABLE                 \
+    X(AddonNvidia, "nvidia", 1U << 0U, 0) \
+    X(AddonAmd, "amd", 1U << 1U, 0)
+
+// name, name_str, value
+#define ERROR_FLAGS_TABLE                                                \
+    X(ErrorCudaUnknown, "cuda-unknown", 1U << 0U, 0)                     \
+    X(ErrorMoreThanOneGpuAddons, "more-than-one-gpu-addon", 1U << 1U, 0) \
+    X(ErrorIncompatibleNvidiaGpuAddon, "incompatible-nvidia-gpu-addon",  \
+      1U << 2U, 0)                                                       \
+    X(ErrorIncompatibleAmdGpuAddon, "incompatible-amd-gpu-addon", 1U << 3U, 0)
 
 class settings : public QSettings, public singleton<settings> {
     Q_OBJECT
@@ -596,27 +616,30 @@ class settings : public QSettings, public singleton<settings> {
 
     enum error_flags_t : unsigned int {
         ErrorNoError = 0U,
-        ErrorCudaUnknown = 1U << 0U,
-        ErrorMoreThanOneGpuAddons = 1U << 1U,
-        ErrorIncompatibleNvidiaGpuAddon = 1U << 2U,
-        ErrorIncompatibleAmdGpuAddon = 1U << 3U
+#define X(name, name_str, value, ...) name = value,
+        ERROR_FLAGS_TABLE
+#undef X
     };
     Q_ENUM(error_flags_t)
+    friend std::ostream &operator<<(std::ostream &os, error_flags_t flags);
 
     enum addon_flags_t : unsigned int {
         AddonNone = 0U,
-        AddonNvidia = 1U << 0U,
-        AddonAmd = 1U << 1U
+#define X(name, name_str, value, ...) name = value,
+        ADDON_FLAGS_TABLE
+#undef X
     };
     Q_ENUM(addon_flags_t)
+    friend std::ostream &operator<<(std::ostream &os, addon_flags_t flags);
 
     enum system_flags_t : unsigned int {
         SystemNone = 0U,
-        SystemHwAccel = 1U << 0U,
-        SystemNvidiaGpu = 1U << 1U,
-        SystemAmdGpu = 1U << 2U
+#define X(name, name_str, value, ...) name = value,
+        SYSTEM_FLAGS_TABLE
+#undef X
     };
     Q_ENUM(system_flags_t)
+    friend std::ostream &operator<<(std::ostream &os, system_flags_t flags);
 
     enum hint_done_flags_t : unsigned int {
         HintDoneNone = 0U,
@@ -663,7 +686,9 @@ class settings : public QSettings, public singleton<settings> {
 #undef X
     };
     // clang-format on
-    friend QDebug operator<<(QDebug d, hw_feature_flags_t hw_feature_flags);
+    friend QDebug operator<<(QDebug d, hw_feature_flags_t hw_features);
+    friend std::ostream &operator<<(std::ostream &os,
+                                    hw_feature_flags_t hw_features);
 
     enum class hw_t {
 #define X(_hw, ...) _hw,
@@ -880,9 +905,9 @@ class settings : public QSettings, public singleton<settings> {
     void set_active_tts_for_in_mnt_ref_voice(const QString &value);
     QString active_tts_for_out_mnt_ref_voice() const;
     void set_active_tts_for_out_mnt_ref_voice(const QString &value);
-    unsigned int addon_flags() const;
-    unsigned int system_flags() const;
-    unsigned int error_flags() const;
+    std::underlying_type_t<addon_flags_t> addon_flags() const;
+    std::underlying_type_t<system_flags_t> system_flags() const;
+    std::underlying_type_t<error_flags_t> error_flags() const;
     void set_sub_min_segment_dur(unsigned int value);
     unsigned int sub_min_segment_dur() const;
     void set_sub_min_line_length(unsigned int value);
@@ -952,6 +977,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE bool is_wayland() const;
     Q_INVOKABLE bool is_xcb() const;
     Q_INVOKABLE bool is_flatpak() const;
+    Q_INVOKABLE bool is_flatpak_tiny() const;
     Q_INVOKABLE bool is_kde() const { return m_kde; }
     Q_INVOKABLE QStringList qt_styles() const;
     Q_INVOKABLE bool file_exists(const QString &file_path) const;
@@ -1222,9 +1248,12 @@ class settings : public QSettings, public singleton<settings> {
 #undef Xtrue
 #undef Xfalse
     std::vector<QString> m_rocm_gpu_versions;
-    unsigned int m_addon_flags = addon_flags_t::AddonNone;
-    unsigned int m_error_flags = error_flags_t::ErrorNoError;
-    unsigned int m_system_flags = system_flags_t::SystemNone;
+    std::underlying_type_t<addon_flags_t> m_addon_flags =
+        addon_flags_t::AddonNone;
+    std::underlying_type_t<error_flags_t> m_error_flags =
+        error_flags_t::ErrorNoError;
+    std::underlying_type_t<system_flags_t> m_system_flags =
+        system_flags_t::SystemNone;
     bool m_native_style = false;
     bool m_kde = false;
     QStringList m_available_qt_styles;

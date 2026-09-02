@@ -7,6 +7,8 @@
 
 #include "settings.h"
 
+#include <type_traits>
+
 #ifdef USE_DESKTOP
 #include <QQuickStyle>
 #endif
@@ -155,15 +157,97 @@ static QStringList string_list_from_list(const QVariantList& list) {
     return slist;
 }
 
+std::ostream& operator<<(std::ostream& os, settings::system_flags_t flags) {
+    if (flags == settings::system_flags_t::SystemNone) {
+        os << "none";
+        return os;
+    };
+#define X(name, name_str, value, ...) \
+    if (flags & settings::system_flags_t::name) os << name_str << ", ";
+    SYSTEM_FLAGS_TABLE
+#undef X
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, settings::addon_flags_t flags) {
+    if (flags == settings::addon_flags_t::AddonNone) {
+        os << "none";
+        return os;
+    };
+#define X(name, name_str, value, ...) \
+    if (flags & settings::addon_flags_t::name) os << name_str << ", ";
+    ADDON_FLAGS_TABLE
+#undef X
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, settings::error_flags_t flags) {
+    if (flags == settings::error_flags_t::ErrorNoError) {
+        os << "none";
+        return os;
+    };
+#define X(name, name_str, value, ...) \
+    if (flags & settings::error_flags_t::name) os << name_str << ", ";
+    ERROR_FLAGS_TABLE
+#undef X
+    return os;
+}
+
 QDebug operator<<(QDebug d, settings::hw_feature_flags_t hw_features) {
 #define X(_engine, _role, ...)                                          \
     if (hw_features &                                                   \
         settings::hw_feature_flags_t::HW_FEATURE(cuda, _engine, _role)) \
-        d << HW_FEATURE_STR(cuda, _engine, _role) ",";
+        d << HW_FEATURE_STR(cuda, _engine, _role) ", ";
     HW_CUDA_ENGINE_TABLE
 #undef X
-
+#define X(_engine, _role, ...)                                         \
+    if (hw_features &                                                  \
+        settings::hw_feature_flags_t::HW_FEATURE(hip, _engine, _role)) \
+        d << HW_FEATURE_STR(hip, _engine, _role) ", ";
+    HW_HIP_ENGINE_TABLE
+#undef X
+#define X(_engine, _role, ...)                                            \
+    if (hw_features &                                                     \
+        settings::hw_feature_flags_t::HW_FEATURE(vulkan, _engine, _role)) \
+        d << HW_FEATURE_STR(vulkan, _engine, _role) ", ";
+    HW_VULKAN_ENGINE_TABLE
+#undef X
+#define X(_engine, _role, ...)                                            \
+    if (hw_features &                                                     \
+        settings::hw_feature_flags_t::HW_FEATURE(opencl, _engine, _role)) \
+        d << HW_FEATURE_STR(opencl, _engine, _role) ", ";
+    HW_OCL_ENGINE_TABLE
+#undef X
     return d;
+}
+
+std::ostream& operator<<(std::ostream& os,
+                         settings::hw_feature_flags_t hw_features) {
+#define X(_engine, _role, ...)                                          \
+    if (hw_features &                                                   \
+        settings::hw_feature_flags_t::HW_FEATURE(cuda, _engine, _role)) \
+        os << HW_FEATURE_STR(cuda, _engine, _role) ", ";
+    HW_CUDA_ENGINE_TABLE
+#undef X
+#define X(_engine, _role, ...)                                         \
+    if (hw_features &                                                  \
+        settings::hw_feature_flags_t::HW_FEATURE(hip, _engine, _role)) \
+        os << HW_FEATURE_STR(hip, _engine, _role) ", ";
+    HW_HIP_ENGINE_TABLE
+#undef X
+#define X(_engine, _role, ...)                                            \
+    if (hw_features &                                                     \
+        settings::hw_feature_flags_t::HW_FEATURE(vulkan, _engine, _role)) \
+        os << HW_FEATURE_STR(vulkan, _engine, _role) ", ";
+    HW_VULKAN_ENGINE_TABLE
+#undef X
+#define X(_engine, _role, ...)                                            \
+    if (hw_features &                                                     \
+        settings::hw_feature_flags_t::HW_FEATURE(opencl, _engine, _role)) \
+        os << HW_FEATURE_STR(opencl, _engine, _role) ", ";
+    HW_OCL_ENGINE_TABLE
+#undef X
+    return os;
 }
 
 QDebug operator<<(QDebug d, settings::trans_rule_type_t type) {
@@ -249,13 +333,15 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
          << QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
     LOGD("settings file: " << fileName());
     LOGD("platform: " << QGuiApplication::platformName());
+    LOGD("flatpak: " << is_flatpak()
+                     << (is_flatpak_tiny() ? " (tiny package)" : ""));
 
     if (launch_mode != launch_mode_t::app) {
         // in app mode, flags are updated in fa
         update_addon_flags();
         update_system_flags();
-
         enforce_num_threads();
+        LOGD("error-flags: " << static_cast<error_flags_t>(m_error_flags));
     }
 
     // remove qml cache
@@ -1625,7 +1711,7 @@ void settings::scan_hw_devices(
 
     m_rocm_gpu_versions.clear();
 
-#define X(name, dvalue) LOGD("scan " #name ":" << hw_scan_##name());
+#define X(name, dvalue) LOGD("scan " #name ": " << hw_scan_##name());
     GPU_SCAN_TABLE
 #undef X
     LOGD("hw feature flags: "
@@ -2263,10 +2349,13 @@ void settings::set_tts_tag_mode(tts_tag_mode_t value) {
 }
 
 settings::py_scan_mode_t settings::py_scan_mode() const {
+    // torch detection takes a lot of time, so to speed-up app launch, by
+    // default, scan is disabled for flatpak x86 package
     return static_cast<py_scan_mode_t>(
         value(QStringLiteral("service/py_scan_mode"),
-              static_cast<int>(is_flatpak() && cpu_tools::arch() ==
-                                                   cpu_tools::arch_t::x86_64
+              static_cast<int>(is_flatpak() && !is_flatpak_tiny() &&
+                                       cpu_tools::arch() ==
+                                           cpu_tools::arch_t::x86_64
                                    ? py_scan_mode_t::PyScanOffAllEnabled
                                    : py_scan_mode_t::PyScanOn))
             .toInt());
@@ -2402,6 +2491,26 @@ bool settings::is_flatpak() const {
     return false;
 }
 
+bool settings::is_flatpak_tiny() const {
+#ifdef USE_FLATPAK
+    // tiny package doesn't have /app/lib/python*
+    QDir lib_dir{"/app/lib"};
+    if (!lib_dir.exists()) {
+        return false;
+    }
+    bool is_tiny = true;
+    for (const auto& entry :
+         lib_dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        if (entry.isDir() && entry.fileName().startsWith("python")) {
+            is_tiny = false;
+            break;
+        }
+    }
+    return is_tiny;
+#endif
+    return false;
+}
+
 bool settings::is_debug() const {
 #ifdef DEBUG
     return true;
@@ -2410,10 +2519,12 @@ bool settings::is_debug() const {
 #endif
 }
 
-unsigned int settings::addon_flags() const { return m_addon_flags; }
+std::underlying_type_t<settings::addon_flags_t> settings::addon_flags() const {
+    return m_addon_flags;
+}
 
 void settings::update_addon_flags() {
-    unsigned int new_flags = addon_flags_t::AddonNone;
+    std::underlying_type_t<addon_flags_t> new_flags = addon_flags_t::AddonNone;
 #ifdef USE_FLATPAK
     auto nvidia_metainfo_file = QStringLiteral(
         "/app/extensions/nvidia/share/metainfo/"
@@ -2490,7 +2601,7 @@ void settings::update_addon_flags() {
 
     if (new_flags != m_addon_flags) {
         m_addon_flags = new_flags;
-        LOGD("addon-flags: " << m_addon_flags);
+        LOGD("addon-flags: " << static_cast<addon_flags_t>(m_addon_flags));
         emit addon_flags_changed();
 
         if (m_addon_flags & addon_flags_t::AddonNvidia &&
@@ -2511,25 +2622,28 @@ void settings::update_addon_flags_from_fa(
     if (features_availability.contains("addon-flags")) {
         auto vl = features_availability.value("addon-flags").toList();
         if (!vl.isEmpty()) m_addon_flags = vl.front().toUInt();
-        LOGD("addon-flags from fa: " << m_addon_flags);
+        LOGD("addon-flags from fa: "
+             << static_cast<addon_flags_t>(m_addon_flags));
         emit addon_flags_changed();
     } else {
         LOGD("no addon-flags from fa");
     }
 }
 
-unsigned int settings::system_flags() const { return m_system_flags; }
+std::underlying_type_t<settings::system_flags_t> settings::system_flags()
+    const {
+    return m_system_flags;
+}
 
 void settings::update_system_flags() {
-    unsigned int new_flags = system_flags_t::SystemNone;
+    std::underlying_type_t<system_flags_t> new_flags =
+        system_flags_t::SystemNone;
 
     if (gpu_tools::has_nvidia_gpu()) {
         new_flags |= system_flags_t::SystemNvidiaGpu;
-        LOGD("nvidia gpu detected");
     }
     if (gpu_tools::has_amd_gpu()) {
         new_flags |= system_flags_t::SystemAmdGpu;
-        LOGD("amd gpu detected");
     }
 
     if (false
@@ -2542,12 +2656,11 @@ void settings::update_system_flags() {
 #undef Xfalse
     ) {
         new_flags |= system_flags_t::SystemHwAccel;
-        LOGD("hw accel detected");
     }
 
     if (new_flags != m_system_flags) {
         m_system_flags = new_flags;
-        LOGD("system-flags: " << m_system_flags);
+        LOGD("system-flags: " << static_cast<system_flags_t>(m_system_flags));
         emit system_flags_changed();
     }
 }
@@ -2566,18 +2679,22 @@ void settings::update_system_flags_from_fa(
     if (features_availability.contains("error-flags")) {
         auto vl = features_availability.value("error-flags").toList();
         if (!vl.isEmpty()) m_error_flags = vl.front().toUInt();
-        LOGD("error-flags from fa: " << m_error_flags);
+        LOGD("error-flags from fa: "
+             << static_cast<error_flags_t>(m_error_flags));
         emit error_flags_changed();
     } else {
         LOGD("no error-flags from fa");
     }
 }
 
-unsigned int settings::error_flags() const { return m_error_flags; }
+std::underlying_type_t<settings::error_flags_t> settings::error_flags() const {
+    return m_error_flags;
+}
 
 void settings::add_error_flags(error_flags_t new_flag) {
-    unsigned int new_flags =
-        m_error_flags | static_cast<unsigned int>(new_flag);
+    std::underlying_type_t<error_flags_t> new_flags =
+        m_error_flags |
+        static_cast<std::underlying_type_t<error_flags_t>>(new_flag);
 
     if (new_flags != m_error_flags) {
         m_error_flags = new_flags;
