@@ -20,7 +20,7 @@
   <url type="bugtracker">https://github.com/mkiol/dsnote/issues</url>
   <update_contact>dsnote_AT_mkiol.net</update_contact>
   <releases>
-    <release version="1.5.0" date="2026-09-01">
+    <release version="1.5.0" date="2026-09-04">
       <description>
         <ul>
         <li>Enable support for new AMD cards</li>

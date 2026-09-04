@@ -575,10 +575,17 @@ modules:
       - -DGGML_CUDA=OFF
       - -DGGML_HIP=OFF 
       - -DGGML_VULKAN=ON
-      - -DGGML_OPENCL=ON
       - -DBUILD_SHARED_LIBS=ON
       - -DWHISPER_BUILD_TESTS=OFF
       - -DWHISPER_BUILD_EXAMPLES=OFF
+    build-options:
+      arch:
+        x86_64:
+          config-opts:
+            - -DGGML_OPENCL=ON
+        aarch64:
+          config-opts:
+            - -DGGML_OPENCL=OFF
     sources:
       - type: archive
         url: https://github.com/ggml-org/whisper.cpp/archive/refs/tags/v1.9.1.tar.gz
@@ -656,10 +663,12 @@ modules:
     cleanup:
       - /opt/oneapi
     build-commands:
-      - sh l_BaseKit_p_2024.0.0.49564_offline.sh --extract-folder ./oneapi -a --eula accept --silent --install-dir ${FLATPAK_DEST}/opt/oneapi
+      - sh oneapi-installer.sh --extract-folder ./oneapi -a --eula accept --silent --install-dir ${FLATPAK_DEST}/opt/oneapi
+      - chmod -R +w ${FLATPAK_DEST}/opt/oneapi && echo "chmod done" || echo "chmod done with errors"
     sources:
       - type: file
         url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/20f4e6a1-6b0b-4752-b8c1-e5eacba10e01/l_BaseKit_p_2024.0.0.49564_offline.sh
+        dest-filename: oneapi-installer.sh
         sha256: f6613cb9c79fbf61c2e541144b8d5c70be845e071f29feb5686b64481528276d
 
   - name: onednn
@@ -667,6 +676,7 @@ modules:
       - x86_64
     buildsystem: cmake-ninja
     build-options:
+      strip: true
       no-debuginfo: true
     cleanup:
       - /bin
@@ -680,8 +690,8 @@ modules:
       - -DONEDNN_BUILD_GRAPH=OFF
     sources:
       - type: archive
-        url: https://github.com/uxlfoundation/oneDNN/archive/refs/tags/v3.12.2.tar.gz
-        sha256: d16dc7ceb69d5856f3974cab4384f3076f9732f70313b581a351a3a8eef8a642
+        url: https://github.com/uxlfoundation/oneDNN/archive/refs/tags/v3.12.5.tar.gz
+        sha256: 9aa83c145b37a21919462e602910346f4b96b8afb7e90f60a23f5591b436ac58
 
   - python3-modules-x86-64.yaml
 
@@ -777,8 +787,7 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p ${FLATPAK_DEST}/opt/intel/lib
-      - chmod u+x ./l_tbb_oneapi_p_2021.12.0.499_offline.sh
-      - ./l_tbb_oneapi_p_2021.12.0.499_offline.sh  -a --eula accept --cli --silent --install-dir=./
+      - sh tbb-installer.sh -a --eula accept --cli --silent --install-dir=./
       - |
         set -e
         cd tbb/latest/lib
@@ -793,6 +802,7 @@ modules:
     sources:
       - type: file
         url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/b31f6b79-10aa-4119-a437-48fe2775633b/l_tbb_oneapi_p_2021.12.0.499_offline.sh
+        dest-filename: tbb-installer.sh
         sha256: 13e981cb4d9d3f72058cc136f8cdedf6ba9af225ae317f91b59e2050b0d49e43
 
   - name: xdo

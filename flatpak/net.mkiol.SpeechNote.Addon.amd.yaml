@@ -19,7 +19,7 @@ modules:
       - x86_64
     buildsystem: simple
     build-commands:
-      - bash rocm-installer_1.2.9.70204-62-93~24.04.run untar .
+      - sh rocm-installer.run untar .
       - mv rocm-7.2.4 "${FLATPAK_DEST}/rocm"
       - mkdir -p "${FLATPAK_DEST}/lib"
       - ln -s /usr/lib/x86_64-linux-gnu/libxml2.so "${FLATPAK_DEST}/lib/libxml2.so.2"
@@ -70,6 +70,7 @@ modules:
       - type: file
         url: https://repo.radeon.com/rocm/installer/rocm-runfile-installer/rocm-rel-7.2.4/ubuntu/24.04/rocm-installer_1.2.9.70204-62-93~24.04.run
         sha256: 866779bfcdc24863c58fe7d8f8cfe21e9e20dc978ce77a153af64e1038f0ab5b
+        dest-filename: rocm-installer.run
 
   - name: whispercpp-hip
     only-arches:
@@ -129,12 +130,12 @@ modules:
       - x86_64
     buildsystem: simple
     build-options:
-      strip: true
+      no-debuginfo: true
     cleanup:
       - /oneapi
     build-commands:
-      - sh l_BaseKit_p_2024.0.0.49564_offline.sh --extract-folder ./oneapi -a --eula accept --silent --install-dir ${FLATPAK_DEST}/oneapi
-      - chmod -R +w ${FLATPAK_DEST}/oneapi && echo "done" || echo "done with errors"
+      - sh oneapi-installer.sh --extract-folder ./oneapi -a --eula accept --silent --install-dir ${FLATPAK_DEST}/oneapi
+      - chmod -R +w ${FLATPAK_DEST}/oneapi && echo "chmod done" || echo "chmod done with errors"
       - |
         set -e
         for f in $(find ${FLATPAK_DEST}/oneapi -type f -name "*.so*"); do
@@ -144,6 +145,7 @@ modules:
     sources:
       - type: file
         url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/20f4e6a1-6b0b-4752-b8c1-e5eacba10e01/l_BaseKit_p_2024.0.0.49564_offline.sh
+        dest-filename: oneapi-installer.sh
         sha256: f6613cb9c79fbf61c2e541144b8d5c70be845e071f29feb5686b64481528276d
 
   - name: onednn
@@ -152,6 +154,7 @@ modules:
     buildsystem: cmake-ninja
     build-options:
       strip: true
+      no-debuginfo: true
     cleanup:
       - /bin
       - /include
@@ -167,8 +170,8 @@ modules:
       - -DONEDNN_BUILD_GRAPH=OFF
     sources:
       - type: archive
-        url: https://github.com/uxlfoundation/oneDNN/archive/refs/tags/v3.12.2.tar.gz
-        sha256: d16dc7ceb69d5856f3974cab4384f3076f9732f70313b581a351a3a8eef8a642
+        url: https://github.com/uxlfoundation/oneDNN/archive/refs/tags/v3.12.5.tar.gz
+        sha256: 9aa83c145b37a21919462e602910346f4b96b8afb7e90f60a23f5591b436ac58
 
   - name: ctranslate2-hip
     only-arches:

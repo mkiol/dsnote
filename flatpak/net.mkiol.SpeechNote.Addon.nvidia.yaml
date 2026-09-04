@@ -19,7 +19,7 @@ modules:
       - x86_64
     buildsystem: simple
     build-commands:
-      - sh cuda_13.0.3_580.126.20_linux.run --target ./ --noexec
+      - sh cuda-installer.run --target ./ --noexec
       - rm -rf builds/*.*
       - rm -rf builds/bin builds/cuda_sanitizer_api builds/integration
       - rm -rf builds/nsight_compute builds/nsight_systems builds/cuda_gdb builds/cuda_documentation
@@ -49,7 +49,7 @@ modules:
           cp -P $f ${FLATPAK_DEST}/cuda/lib64/
         done
       - rm -rf builds
-      - rm -rf cuda_13.0.3_580.126.20_linux.run
+      - rm -rf cuda-installer.run
       - patch --unified -i "$(realpath .)"/cuda-math-functions.patch /app/extensions/nvidia/cuda/include/crt/math_functions.h
       - ${FLATPAK_DEST}/cuda/bin/nvcc nvcc -arch-ls -code-ls
     build-options:
@@ -74,7 +74,6 @@ modules:
       - /cuda/targets/x86_64-linux/lib/libcusolver.so*
       - /cuda/targets/x86_64-linux/lib/libnppif.so*
       - /cuda/targets/x86_64-linux/lib/libcusolverMg.so*
-      #- /cuda/targets/x86_64-linux/lib/libcufile*.so*
       - /cuda/targets/x86_64-linux/lib/libcuinj64.so*
       - /cuda/targets/x86_64-linux/lib/libaccinj64.so*
       - /cuda/targets/x86_64-linux/include
@@ -83,6 +82,7 @@ modules:
       - type: file
         url: https://developer.download.nvidia.com/compute/cuda/13.0.3/local_installers/cuda_13.0.3_580.126.20_linux.run
         sha256: 79c82c6529d2adfc322336f37b2a7a856655cd739b4803d0af7344db5a69638b
+        dest-filename: cuda-installer.run
       - type: file
         path: ../patches/cuda-math-functions.patch
 
@@ -182,12 +182,12 @@ modules:
       - x86_64
     buildsystem: simple
     build-options:
-      strip: true
+      no-debuginfo: true
     cleanup:
       - /oneapi
     build-commands:
-      - sh l_BaseKit_p_2024.0.0.49564_offline.sh --extract-folder ./oneapi -a --eula accept --silent --install-dir ${FLATPAK_DEST}/oneapi
-      - chmod -R +w ${FLATPAK_DEST}/oneapi && echo "done" || echo "done with errors"
+      - sh oneapi-installer.sh --extract-folder ./oneapi -a --eula accept --silent --install-dir ${FLATPAK_DEST}/oneapi
+      - chmod -R +w ${FLATPAK_DEST}/oneapi && echo "chmod done" || echo "chmod done with errors"
       - |
         set -e
         for f in $(find ${FLATPAK_DEST}/oneapi -type f -name "*.so*"); do
@@ -197,6 +197,7 @@ modules:
     sources:
       - type: file
         url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/20f4e6a1-6b0b-4752-b8c1-e5eacba10e01/l_BaseKit_p_2024.0.0.49564_offline.sh
+        dest-filename: oneapi-installer.sh
         sha256: f6613cb9c79fbf61c2e541144b8d5c70be845e071f29feb5686b64481528276d
 
   - name: onednn
@@ -205,6 +206,7 @@ modules:
     buildsystem: cmake-ninja
     build-options:
       strip: true
+      no-debuginfo: true
     cleanup:
       - /bin
       - /include
@@ -220,8 +222,8 @@ modules:
       - -DONEDNN_BUILD_GRAPH=OFF
     sources:
       - type: archive
-        url: https://github.com/uxlfoundation/oneDNN/archive/refs/tags/v3.12.2.tar.gz
-        sha256: d16dc7ceb69d5856f3974cab4384f3076f9732f70313b581a351a3a8eef8a642
+        url: https://github.com/uxlfoundation/oneDNN/archive/refs/tags/v3.12.5.tar.gz
+        sha256: 9aa83c145b37a21919462e602910346f4b96b8afb7e90f60a23f5591b436ac58
 
   - name: ctranslate2-cuda
     only-arches:
