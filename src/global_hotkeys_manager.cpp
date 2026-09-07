@@ -8,12 +8,13 @@
 #include "global_hotkeys_manager.hpp"
 
 #include <QDebug>
+#include <QGuiApplication>
 #include <QRandomGenerator>
 
 #include "config.h"
 #include "dbus_portal_request_inf.h"
 #include "logger.hpp"
-#include "qtlogger.hpp"
+#include "qtlogger.hpp"  // don't remove it
 #include "settings.h"
 
 using PortalShortcut = QPair<QString, QVariantMap>;
@@ -139,13 +140,30 @@ void global_hotkeys_manager::handle_portal_deactivated(
     }
 }
 
-void global_hotkeys_manager::create_portal_session(bool force_bind) {
+static void register_app_id_in_portal() {
+    QDBusInterface registry(
+        QStringLiteral("org.freedesktop.portal.Desktop"),
+        QStringLiteral("/org/freedesktop/portal/desktop"),
+        QStringLiteral("org.freedesktop.host.portal.Registry"),
+        QDBusConnection::sessionBus());
+    LOGD("[dbus] call Register");
+    QDBusReply<void> reply =
+        registry.call(QStringLiteral("Register"),
+                      QGuiApplication::desktopFileName(), QVariantMap{});
+    if (!reply.isValid()) {
+        LOGW("portal register failed: " << reply.error().message());
+    }
+}
+
+void global_hotkeys_manager::create_portal_session() {
     LOGD("[dbus] call CreateSession");
+
+    // register app-id explicitly
+    // this is needed only when you start from terminal
+    register_app_id_in_portal();
 
     auto handle_token = QStringLiteral(APP_ID "_%1")
                             .arg(QRandomGenerator::global()->generate());
-    m_force_bind = force_bind;
-
     auto reply = m_portal_inf.CreateSession({
         {QLatin1String("session_handle_token"), handle_token},
         {QLatin1String("handle_token"), handle_token},
@@ -229,7 +247,6 @@ void global_hotkeys_manager::handle_list_shortcuts_response(
 
     if (s.isEmpty()) {
         set_portal_bindings();
-        m_force_bind = false;
         return;
     }
 
@@ -254,13 +271,11 @@ void global_hotkeys_manager::handle_list_shortcuts_response(
         return true;
     }();
 
-    if (all_shortcuts_configured && !m_force_bind) {
+    if (all_shortcuts_configured) {
         LOGD("portal global shortcuts already configured");
-    } else {
-        set_portal_bindings();
     }
 
-    m_force_bind = false;
+    set_portal_bindings();
 }
 
 void global_hotkeys_manager::handle_bind_shortcuts_response(
@@ -396,7 +411,7 @@ void global_hotkeys_manager::reset_portal_connection() {
 
     disable_portal();
 
-    create_portal_session(/*force_bind=*/true);
+    create_portal_session();
 }
 
 #endif  // USE_X11_FEATURES
