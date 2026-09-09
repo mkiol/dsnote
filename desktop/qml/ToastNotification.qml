@@ -10,6 +10,9 @@ import QtQuick.Controls
 
 ToolTip {
     id: root
+
+    property color textColor: appWin.appTextColor
+
     timeout: 3000
     delay: 0
     anchors.centerIn: parent
@@ -21,15 +24,15 @@ ToolTip {
         return Qt.rgba(r, g, b, color.a)
     }
 
-    Component.onCompleted: {
-        if (background && background.color)
-            contentItem.color = invertColor(background.color)
-    }
+    // Component.onCompleted: {
+    //     if (background && background.color) 
+    //         contentItem.color = invertColor(background.color)
+    // }
 
     contentItem: Label {
         text: root.text
         font: root.font
-        color: palette.toolTipText
+        color: root.textColor
         wrapMode: Text.Wrap
         horizontalAlignment: Text.AlignHCenter
     }

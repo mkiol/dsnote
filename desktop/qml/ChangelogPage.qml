@@ -64,6 +64,8 @@ DialogPage {
         <li>Import a note from a URL. Use the <i>Import a note from a URL</i> option in the main app toolbar to import text content from a link.
             The URL must use HTTP or HTTPS. For HTML pages, you can choose to extract only the readable text or import the entire page.</li>
         <li>Setting option to force the English language in the user interface</li>
+        <li>Setting option to force dark or light user interface color appearance (<i>User Interface</i> &rarr; <i>User interface color appearance</i>).
+            Change if you observe problems with incorrect colors under a dark theme.</li>
         <li><i>Speech Note</i> has been translated into Portuguese-Brazilian language.</li>
         </ul>
         <p>Flatpak</p>

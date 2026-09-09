@@ -23,6 +23,7 @@ DialogPage {
                                              appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
                                              appWin.padding
     readonly property bool _promptEnabled: app.feature_parler_tts
+    property color textColor: appWin.appTextColor
 
     title: qsTr("Voice profiles")    
 
@@ -411,7 +412,7 @@ DialogPage {
                     elide: Text.ElideRight
                     Layout.alignment: Qt.AlignHCenter
                     Layout.fillWidth: true
-                    color: voiceDelegate.invalid ? palette.text : "red"
+                    color: voiceDelegate.invalid ? root.textColor : "red"
                 }
 
                 Button {

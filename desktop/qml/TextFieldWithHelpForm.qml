@@ -14,6 +14,7 @@ RowForm {
 
     property alias text: _textField.text
     property alias textField: _textField
+    property color textColor: appWin.appTextColor
     signal helpClicked
 
     TextField {
@@ -24,6 +25,7 @@ RowForm {
         ToolTip.visible: hovered && root.toolTip.length !== 0
         ToolTip.text: root.toolTip
         hoverEnabled: true
+        color: root.root.textColor
 
         Accessible.name: root.label.text
 

@@ -16,7 +16,7 @@ Item {
     property alias textArea: _textArea
     property alias textFormatCombo: _textFormatCombo
     property alias textFormatInvalid: _textFormatComboRedBorder.visible
-    property color textColor: palette.text
+    property color textColor: appWin.appTextColor
     property bool showTranslate: false
     property bool showInsertIndicator: false
     property bool showControlTags: false

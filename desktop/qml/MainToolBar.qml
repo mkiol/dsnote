@@ -17,6 +17,8 @@ ToolBar {
     id: root
 
     property bool verticalMode: (toolsRow.width + tabRow.width + 4 * appWin.padding) > appWin.width
+    property color textColor: appWin.appTextColor
+
     bottomPadding: 1
     bottomInset: 0
     rightPadding: 0

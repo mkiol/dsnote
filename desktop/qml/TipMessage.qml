@@ -15,6 +15,7 @@ InlineMessage {
     property int indends: 0
     property alias text: _label.text
     property alias label: _label
+    property color textColor: appWin.appTextColor
 
     color: "red"
     Layout.fillWidth: true

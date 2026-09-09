@@ -22,8 +22,9 @@ GridLayout {
     property alias textArea1: _textArea1
     property alias textArea2: _textArea2
     property int preferredHeight: preferredHeight
+    property color textColor: appWin.appTextColor
     readonly property color dimColor: {
-        var c = palette.text
+        var c = textColor
         return Qt.rgba(c.r, c.g, c.b, 0.8)
     }
 
@@ -46,7 +47,7 @@ GridLayout {
             selectByMouse: true
             wrapMode: TextEdit.Wrap
             verticalAlignment: TextEdit.AlignTop
-            color: palette.text
+            color: root.textColor
 
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: hovered && root.toolTip1.length !== 0
@@ -72,7 +73,7 @@ GridLayout {
             selectByMouse: true
             wrapMode: TextEdit.Wrap
             verticalAlignment: TextEdit.AlignTop
-            color: palette.text
+            color: root.textColor
 
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.visible: hovered && root.toolTip2.length !== 0

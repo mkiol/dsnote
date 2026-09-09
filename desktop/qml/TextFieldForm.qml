@@ -25,6 +25,7 @@ GridLayout {
     property string toolTipButton: button.text
     property bool compact: true
     property bool valid: true
+    property color textColor: appWin.appTextColor
 
     columns: verticalMode ? 1 : button.visible ? 3 : 2
     columnSpacing: appWin.padding
@@ -45,7 +46,7 @@ GridLayout {
         Layout.fillWidth: root.verticalMode
         Layout.preferredWidth: root.verticalMode ? 0 : ((parent.width / 2) - (_button.visible && root.compact ? _button.width + root.columnSpacing : 0))
         Layout.leftMargin: root.verticalMode ? (root.indends + 1) * appWin.padding : 0
-        color: root.valid ? palette.text : "red"
+        color: root.valid ? root.textColor : "red"
 
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
         ToolTip.visible: hovered && root.toolTip.length !== 0

@@ -116,6 +116,7 @@
         and reads it aloud using TTS.</li>
       <li>New action 'start-reading-url'. Use this action to have Speech Note read an HTTP web page.
         An action can be triggered via DBus call or with command-line option.</li>
+      <li>New action 'transcribe-file'. Use this action to transcribe a file.</li>
       </ul>
       <p>Speech to Text:</p>
       <ul>
@@ -144,6 +145,8 @@
       <li>Import a note from a URL. Use the 'Import a note from a URL' option in the main app toolbar to import text content from a link.
           The URL must use HTTP or HTTPS. For HTML pages, you can choose to extract only the readable text or import the entire page.</li>
       <li>Setting option to force the English language in the user interface</li>
+      <li>Setting option to force dark or light user interface color appearance.
+          Change if you observe problems with incorrect colors under a dark theme.</li>
       <li>Speech Note has been translated into Portuguese-Brazilian language.</li>
       </ul>
       <p>Flatpak:</p>

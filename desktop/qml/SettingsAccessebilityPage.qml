@@ -16,6 +16,7 @@ ColumnLayout {
     id: root
 
     property bool verticalMode: parent ? parent.verticalMode : false
+    property color textColor: appWin.appTextColor
 
     Component.onCompleted: {
         app.update_feature_statuses()
@@ -62,7 +63,7 @@ ColumnLayout {
     }
 
     TipMessage {
-        color: palette.text
+        color: textColor
         indends: 1
         visible: _settings.hotkeys_enabled && app.feature_hotkeys && !gsConfButton.visible
         text: qsTranslate("SettingsPage", "Global keyboard shortcuts are managed through the %1.").arg("<i>XDG Desktop Portal</i>") + " " +
@@ -107,7 +108,7 @@ ColumnLayout {
     }
 
     TipMessage {
-        color: palette.text
+        color: textColor
         indends: 1
         visible: _settings.actions_api_enabled
         text: "<p>" + qsTranslate("SettingsPage", "Action allows external application to invoke certain operation when %1 is running.").arg("<i>Speech Note</i>") + " " +

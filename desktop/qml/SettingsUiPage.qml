@@ -116,6 +116,40 @@ ColumnLayout {
         }
     }
 
+    ComboBoxForm {
+        label.text: qsTranslate("SettingsPage", "User interface color appearance")
+        toolTip: qsTranslate("SettingsPage", "Force dark or light color appearance.") + " " + 
+                 qsTranslate("Change if you observe problems with incorrect colors under a dark theme.")
+        comboBox {
+            currentIndex: {
+                switch(_settings.ui_appearance) {
+                case Settings.UiAppearanceAuto: return 0
+                case Settings.UiAppearanceDontForce: return 1
+                case Settings.UiAppearanceForceDark: return 2
+                case Settings.UiAppearanceForceLight: return 3
+                }
+                return 0
+            }
+            model: [
+                qsTranslate("SettingsPage", "Auto"),
+                qsTranslate("SettingsPage", "Don't force any appearance"),
+                qsTranslate("SettingsPage", "Force dark appearance"),
+                qsTranslate("SettingsPage", "Force light appearance")
+            ]
+            onActivated: (index) => {
+                if (index === 0) {
+                    _settings.ui_appearance = Settings.UiAppearanceAuto
+                } else if (index === 1) {
+                    _settings.ui_appearance = Settings.UiAppearanceDontForce
+                } else if (index === 2) {
+                    _settings.ui_appearance = Settings.UiAppearanceForceDark
+                } else if (index === 3) {
+                    _settings.ui_appearance = Settings.UiAppearanceForceLight
+                }
+            }
+        }
+    }
+
     CheckBox {
         checked: !_settings.qt_style_auto
         text: qsTranslate("SettingsPage", "Use custom graphical style")

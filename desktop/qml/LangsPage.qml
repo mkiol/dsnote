@@ -28,6 +28,7 @@ DialogPage {
                                              appWin.padding
 
     readonly property bool verticalMode: modelTypeTabBar.implicitWidth > (root.width - 2 * appWin.padding)
+    property color textColor: appWin.appTextColor
 
     title: langsView ? qsTr("Languages") : packView ? packName : langName
     spacing: 0
@@ -445,7 +446,7 @@ DialogPage {
                     Text {
                         text: packDelegate.text
                         font: packDelegate.font
-                        color: palette.text
+                        color: root.textColor
                         elide: Text.ElideRight
                         verticalAlignment: Text.AlignVCenter
                         Layout.alignment: Qt.AlignVCenter
@@ -465,14 +466,14 @@ DialogPage {
                         Layout.alignment: Qt.AlignVCenter
                         spacing: 0
                         Label {
-                            color: palette.text
+                            color: root.textColor
                             font.pixelSize: Qt.application.font.pixelSize * 1.5
                             text: "\u2714"
                             font.bold: true
                             anchors.verticalCenter: parent.verticalCenter
                         }
                         Label {
-                            color: palette.text
+                            color: root.textColor
                             text: model.pack_available_count
                             font.bold: true
                             anchors.verticalCenter: parent.verticalCenter
@@ -489,7 +490,7 @@ DialogPage {
                                       qsTr("%n voice(s)", "", model.pack_count) :
                                       qsTr("%n model(s)", "", model.pack_count)
                             elide: Text.ElideRight
-                            color: palette.text
+                            color: root.textColor
                             verticalAlignment: Text.AlignVCenter
                             anchors.right: nextSymbol.left
                             anchors.verticalCenter: parent.verticalCenter

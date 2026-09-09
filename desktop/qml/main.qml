@@ -32,6 +32,8 @@ ApplicationWindow {
     readonly property alias buttonHeight: _dummyButton.height
     readonly property double buttonHeightShort: buttonHeight * 0.8
     readonly property alias toast: _toast
+    property color appTextColor: palette.active.text
+    property color appBaseColor: palette.active.base
     property var features: app.features_availability()
 
     LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
@@ -199,6 +201,23 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
+        try {
+            const colorFetcher = Qt.createQmlObject(`
+                import QtQuick
+                import org.kde.kirigami as Kirigami
+                Item {
+                    function textColor() { return Kirigami.Theme.textColor }
+                    function backgroundColor() { return Kirigami.Theme.backgroundColor }
+                }`, appWin, "colorFetcher");
+            appWin.appTextColor = colorFetcher.textColor();
+            appWin.appBaseColor = colorFetcher.backgroundColor();
+        } catch (error) {
+            console.log("color-fetcher error:", error)
+        }
+
+        console.log("appTextColor:", appTextColor)
+        console.log("appBaseColor:", appBaseColor)
+
         var hidded =  _start_in_tray || (_settings.start_in_tray && _settings.use_tray)
         visible = !hidded;
     }

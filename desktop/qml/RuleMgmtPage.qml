@@ -21,6 +21,7 @@ DialogPage {
     readonly property real _leftMargin: (root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
                                              appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
                                              appWin.padding
+    property color textColor: appWin.appTextColor
 
     title: qsTr("Rules")
 

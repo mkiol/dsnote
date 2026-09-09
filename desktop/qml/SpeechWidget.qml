@@ -73,7 +73,7 @@ RowLayout {
                             }
                             return 0;
                         }
-                        color: palette.text
+                        color: appWin.appTextColor
                     }
 
                     BusyIndicator {
@@ -99,9 +99,10 @@ RowLayout {
                     Layout.fillWidth: true
                     Layout.preferredHeight: Math.max(_combo.height,
                                                      speechText.implicitHeight + topPadding + bottomPadding)
+
                     background: Rectangle {
-                        color: frame.palette.button
-                        border.color: frame.palette.buttonText
+                        color: appWin.appBaseColor
+                        border.color: appWin.appTextColor
                         opacity: 0.3
                         radius: 3
                     }
@@ -113,7 +114,7 @@ RowLayout {
                         wrapMode: TextEdit.Wrap
                         verticalAlignment: Text.AlignVCenter
                         font: _settings.notepad_font
-                        color: palette.text
+                        color: appWin.appTextColor
 
                         property string placeholderText: {
                             if (app.busy || service.busy)

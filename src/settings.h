@@ -54,7 +54,9 @@
     X(text_from_window_method, settings::text_from_window_method_t,          \
       settings::text_from_window_method_t::TextFromWindowMethodCtrlC, false) \
     X(translate_ui, bool, true, true)                                        \
-    X(import_extract_readable, bool, true, false)
+    X(import_extract_readable, bool, true, false)                            \
+    X(ui_appearance, settings::ui_appearance_t,                              \
+      settings::ui_appearance_t::UiAppearanceAuto, true)
 
 // name, default-value
 #define GPU_SCAN_TABLE                                          \
@@ -195,6 +197,13 @@
     X(ErrorIncompatibleNvidiaGpuAddon, "incompatible-nvidia-gpu-addon",  \
       1U << 2U, 0)                                                       \
     X(ErrorIncompatibleAmdGpuAddon, "incompatible-amd-gpu-addon", 1U << 3U, 0)
+
+// name, name_str, value
+#define UI_APPEARANCE_TABLE                      \
+    X(UiAppearanceAuto, "auto", 0, 0)            \
+    X(UiAppearanceDontForce, "dont-force", 1, 0) \
+    X(UiAppearanceForceDark, "force-dark", 2, 0) \
+    X(UiAppearanceForceLight, "force-light", 3, 0)
 
 class settings : public QSettings, public singleton<settings> {
     Q_OBJECT
@@ -774,6 +783,16 @@ class settings : public QSettings, public singleton<settings> {
     Q_ENUM(scan_flags_t)
     friend QDebug operator<<(QDebug d, scan_flags_t flags);
     friend std::ostream &operator<<(std::ostream &os, scan_flags_t flags);
+
+    enum class ui_appearance_t : unsigned int {
+#define X(name, name_str, value, ...) name = value,
+        UI_APPEARANCE_TABLE
+#undef X
+    };
+    Q_ENUM(ui_appearance_t)
+    friend QDebug operator<<(QDebug d, ui_appearance_t appearance);
+    friend std::ostream &operator<<(std::ostream &os,
+                                    ui_appearance_t appearance);
 
     struct voice_profile_prompt_t {
         QString name;

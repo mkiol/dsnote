@@ -24,6 +24,7 @@ GridLayout {
     property alias button: _button
     property string toolTipButton: button.text
     property bool compact: true
+    property color textColor: appWin.appTextColor
 
     columns: verticalMode ? 1 : button.visible ? 3 : 2
     columnSpacing: appWin.padding
@@ -51,7 +52,7 @@ GridLayout {
         hoverEnabled: true
 
         Component.onCompleted: {
-            spinBox.contentItem.color = palette.text
+            spinBox.contentItem.color = root.textColor
         }
 
         Accessible.name: root.label.text

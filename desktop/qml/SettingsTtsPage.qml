@@ -16,6 +16,7 @@ ColumnLayout {
     id: root
 
     property bool verticalMode: parent ? parent.verticalMode : false
+    property color textColor: appWin.appTextColor
 
     CheckBox {
         checked: _settings.diacritizer_enabled
@@ -99,7 +100,7 @@ ColumnLayout {
     }
 
     TipMessage {
-        color: palette.text
+        color: root.textColor
         indends: 1
         visible: _settings.tts_tag_mode === Settings.TtsTagModeSupport
         text: "<p>" + qsTranslate("SettingsPage", "Control tags allow you to dynamically change the speed of synthesized text or add silence between sentences.") + " " +
@@ -153,7 +154,7 @@ ColumnLayout {
 
     TipMessage {
         indends: 1
-        color: palette.text
+        color: root.textColor
         visible: _settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnFitOnlyIfLonger ||
                  _settings.tts_subtitles_sync === Settings.TtsSubtitleSyncOnAlwaysFit
         text: qsTranslate("SettingsPage", "When SRT Subtitles text format is set, changing the speech speed is disabled because the speed will be adjusted automatically.")
