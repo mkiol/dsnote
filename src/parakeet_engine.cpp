@@ -245,8 +245,23 @@ void parakeet_engine::open_parakeet_lib() {
     PARAKEET_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_unload)
     PARAKEET_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_log_set)
     PARAKEET_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_reg_dev_count)
+    PARAKEET_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_version);
 
 #undef PARAKEET_ENGINE_REGISTER_API
+
+    // version check
+
+    const auto* ggmllib_ver = m_parakeet_api.ggml_version();
+    if (strcmp(supported_ggmllib_ver, ggmllib_ver) != 0) {
+        LOGF("unsupported ggml lib version: expected "
+             << supported_ggmllib_ver << ", got " << ggmllib_ver);
+    }
+
+    const auto* parakeetlib_ver = m_parakeet_api.parakeet_version();
+    if (strcmp(supported_parakeetlib_ver, parakeetlib_ver) != 0) {
+        LOGF("unsupported parakeet lib version: expected "
+             << supported_parakeetlib_ver << ", got " << parakeetlib_ver);
+    }
 
     // set logger
 
@@ -272,8 +287,6 @@ void parakeet_engine::open_parakeet_lib() {
             }
         },
         nullptr);
-
-    LOGD("parakeet lib version: " << m_parakeet_api.parakeet_version());
 
     // load backends
 

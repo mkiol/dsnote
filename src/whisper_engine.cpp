@@ -18,6 +18,7 @@
 #include <chrono>
 #include <cstddef>
 #include <cstdlib>
+#include <cstring>
 #include <limits>
 #include <sstream>
 #include <string>
@@ -247,8 +248,23 @@ void whisper_engine::open_whisper_lib() {
     WHISPER_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_unload)
     WHISPER_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_log_set)
     WHISPER_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_reg_dev_count)
+    WHISPER_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_version);
 
 #undef WHISPER_ENGINE_REGISTER_API
+
+    // version check
+
+    const auto* ggmllib_ver = m_whisper_api.ggml_version();
+    if (strcmp(supported_ggmllib_ver, ggmllib_ver) != 0) {
+        LOGF("unsupported ggml lib version: expected "
+             << supported_ggmllib_ver << ", got " << ggmllib_ver);
+    }
+
+    const auto* whisperlib_ver = m_whisper_api.whisper_version();
+    if (strcmp(supported_whisperlib_ver, whisperlib_ver) != 0) {
+        LOGF("unsupported whisper lib version: expected "
+             << supported_whisperlib_ver << ", got " << whisperlib_ver);
+    }
 
     // set logger
 
@@ -274,8 +290,6 @@ void whisper_engine::open_whisper_lib() {
             }
         },
         nullptr);
-
-    LOGD("whisper lib version: " << m_whisper_api.whisper_version());
 
     // load backends
 

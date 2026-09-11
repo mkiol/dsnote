@@ -136,6 +136,9 @@ class parakeet_engine : public stt_engine {
    private:
     using parakeet_buf_t = std::vector<float>;
 
+    inline static const char* supported_parakeetlib_ver = "1.9.1";
+    inline static const char* supported_ggmllib_ver = "0.15.1";
+
     inline static const size_t m_speech_max_size = m_sample_rate * 60;  // 60s
 
     struct parakeet_api {
@@ -164,16 +167,18 @@ class parakeet_engine : public stt_engine {
         void (*ggml_log_set)(ggml_log_callback log_callback,
                              void* user_data) = nullptr;
         size_t (*ggml_backend_reg_dev_count)(void* reg) = nullptr;
+        const char* (*ggml_version)() = nullptr;
         auto ok() const {
             return parakeet_init_from_file_with_params &&
                    parakeet_print_system_info && parakeet_full &&
                    parakeet_full_n_segments && parakeet_full_get_segment_text &&
-                   parakeet_full_get_segment_t0 && parakeet_full_get_segment_t1 &&
-                   parakeet_free && parakeet_full_default_params &&
-                   parakeet_context_default_params && parakeet_version && parakeet_log_set &&
-                   ggml_backend_load_all && ggml_backend_load_best_ex &&
-                   ggml_backend_unload && ggml_log_set &&
-                   ggml_backend_reg_dev_count;
+                   parakeet_full_get_segment_t0 &&
+                   parakeet_full_get_segment_t1 && parakeet_free &&
+                   parakeet_full_default_params &&
+                   parakeet_context_default_params && parakeet_version &&
+                   parakeet_log_set && ggml_backend_load_all &&
+                   ggml_backend_load_best_ex && ggml_backend_unload &&
+                   ggml_log_set && ggml_backend_reg_dev_count && ggml_version;
         }
     };
 

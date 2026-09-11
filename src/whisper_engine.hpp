@@ -296,6 +296,9 @@ class whisper_engine : public stt_engine {
    private:
     using whisper_buf_t = std::vector<float>;
 
+    inline static const char* supported_whisperlib_ver = "1.9.1";
+    inline static const char* supported_ggmllib_ver = "0.15.1";
+
     inline static const size_t m_speech_max_size = m_sample_rate * 60;  // 60s
 
     struct whisper_api {
@@ -326,6 +329,7 @@ class whisper_engine : public stt_engine {
         void (*ggml_log_set)(ggml_log_callback log_callback,
                              void* user_data) = nullptr;
         size_t (*ggml_backend_reg_dev_count)(void* reg) = nullptr;
+        const char* (*ggml_version)() = nullptr;
         auto ok() const {
             return whisper_init_from_file_with_params &&
                    whisper_print_system_info && whisper_full &&
@@ -336,7 +340,7 @@ class whisper_engine : public stt_engine {
                    whisper_lang_str && whisper_version && whisper_log_set &&
                    ggml_backend_load_all && ggml_backend_load_best_ex &&
                    ggml_backend_unload && ggml_log_set &&
-                   ggml_backend_reg_dev_count;
+                   ggml_backend_reg_dev_count && ggml_version;
         }
     };
 
