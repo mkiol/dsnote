@@ -52,12 +52,6 @@ function(install_rhvoice_library lib_name)
 endfunction()
 
 if(BUILD_WHISPERCPP)
-    set(whispercpp_ver "1.9.1")
-    strip_all("${external_lib_dir}/libwhisper.so.${whispercpp_ver}")
-    install(PROGRAMS "${external_lib_dir}/libwhisper.so.${whispercpp_ver}" DESTINATION ${lib_install_dir})
-    install(PROGRAMS "${external_lib_dir}/libwhisper.so.1" DESTINATION ${lib_install_dir})
-    install(PROGRAMS "${external_lib_dir}/libwhisper.so" DESTINATION ${lib_install_dir})
-    
     set(ggml_ver "0.15.1")
     install(PROGRAMS "${external_lib_dir}/libggml.so.${ggml_ver}" DESTINATION ${lib_install_dir})
     install(PROGRAMS "${external_lib_dir}/libggml.so.0" DESTINATION ${lib_install_dir})
@@ -65,16 +59,24 @@ if(BUILD_WHISPERCPP)
     install(PROGRAMS "${external_lib_dir}/libggml-base.so.${ggml_ver}" DESTINATION ${lib_install_dir})
     install(PROGRAMS "${external_lib_dir}/libggml-base.so.0" DESTINATION ${lib_install_dir})
     install(PROGRAMS "${external_lib_dir}/libggml-base.so" DESTINATION ${lib_install_dir})
-
     install(PROGRAMS "${external_lib_dir}/libggml-blas.so" DESTINATION ${lib_install_dir})
     install(CODE "
         file(GLOB ggml_backend_libs \"${external_lib_dir}/libggml-cpu-*.so\")
         file(INSTALL DESTINATION \"\${CMAKE_INSTALL_PREFIX}/${lib_install_dir}\" TYPE PROGRAM FILES \${ggml_backend_libs})
     ")
-
     if(BUILD_WHISPERCPP_VULKAN)
         install(PROGRAMS "${external_lib_dir}/libggml-vulkan.so" DESTINATION ${lib_install_dir})
     endif()
+
+    set(whispercpp_ver "1.9.1")
+    install(PROGRAMS "${external_lib_dir}/libwhisper.so.${whispercpp_ver}" DESTINATION ${lib_install_dir})
+    install(PROGRAMS "${external_lib_dir}/libwhisper.so.1" DESTINATION ${lib_install_dir})
+    install(PROGRAMS "${external_lib_dir}/libwhisper.so" DESTINATION ${lib_install_dir})
+
+    set(parakeetcpp_ver "1.9.1")
+    install(PROGRAMS "${external_lib_dir}/libparakeet.so.${parakeetcpp_ver}" DESTINATION ${lib_install_dir})
+    install(PROGRAMS "${external_lib_dir}/libparakeet.so.1" DESTINATION ${lib_install_dir})
+    install(PROGRAMS "${external_lib_dir}/libparakeet.so" DESTINATION ${lib_install_dir})
 endif()
 
 if(DOWNLOAD_LIBSTT)

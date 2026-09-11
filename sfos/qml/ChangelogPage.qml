@@ -38,6 +38,12 @@ Page {
                 <li>Improved transcription performance in <i>WhisperCpp</i>.
                 The updated <i>WhisperCpp</i> engine reduces transcription time by 10%.
                 Additionally, WhisperCpp models now support also older ARM32 CPUs, such as those in the Jolla C1.</li>
+                <li>Support for <i>Parakeet</i> TDT model. Parakeet TDT is NVIDIA multilingual STT model designed for high-throughput speech to text transcription. 
+                The model automatically detects the language of the audio, therefore is enabled in <i>Auto detected</i> category.
+                The model works well on CPU but also supports Vulkan, CUDA and ROCm GPU acceleration.
+                Parakeet TDT is available for the following languages: 
+                Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian,
+                Maltese, Polish, Portuguese, Romanian, Slovak, Slovenian, Spanish, Swedish, Russian and Ukrainian.</li>
                 </ul>
                 <p>" + qsTr("Libraries") + "</p>
                 <ul>

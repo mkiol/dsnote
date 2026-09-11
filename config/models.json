@@ -8311,6 +8311,182 @@
             "lang_id": "tn"
         },
         {
+            "name": "Multilingual (Parakeet TDT 0.6b-v3)",
+            "model_id": "multilang_parakeet_tdt06bv3_q40",
+            "engine": "stt_parakeet",
+            "lang_id": "en",
+            "checksum": "456f4dcd",
+            "checksum_quick": "865f5b27",
+            "size": "355615679",
+            "info": "https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3",
+            "urls": [
+                "https://huggingface.co/ggml-org/parakeet-GGUF/resolve/35156454d1a39de06863303dd209fd2bed6ee079/ggml-parakeet-tdt-0.6b-v3-q4_0.bin"
+            ],
+            "license": {
+                "id": "CC BY 4.0",
+                "name": "Creative Commons Attribution 4.0 International",
+                "url": "https://creativecommons.org/licenses/by/4.0/legalcode.txt",
+                "accept_required": false
+            },
+            "hidden": true
+        },
+        {
+            "name": "Auto (Parakeet TDT 0.6b-v3)",
+            "model_id": "auto_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "auto"
+        },
+        {
+            "name": "English (Parakeet TDT 0.6b-v3)",
+            "model_id": "en_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "en"
+        },
+        {
+            "name": "Español (Parakeet TDT 0.6b-v3)",
+            "model_id": "es_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "es"
+        },
+        {
+            "name": "Italiano (Parakeet TDT 0.6b-v3)",
+            "model_id": "it_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "it"
+        },
+        {
+            "name": "Português (Parakeet TDT 0.6b-v3)",
+            "model_id": "pt_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "pt"
+        },
+        {
+            "name": "Deutsch (Parakeet TDT 0.6b-v3)",
+            "model_id": "de_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "de"
+        },
+        {
+            "name": "Русский (Parakeet TDT 0.6b-v3)",
+            "model_id": "ru_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "ru"
+        },
+        {
+            "name": "Nederlands (Parakeet TDT 0.6b-v3)",
+            "model_id": "nl_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "nl"
+        },
+        {
+            "name": "Français (Parakeet TDT 0.6b-v3)",
+            "model_id": "fr_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "fr"
+        },
+        {
+            "name": "Svenska (Parakeet TDT 0.6b-v3)",
+            "model_id": "sv_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "sv"
+        },
+        {
+            "name": "Українська (Parakeet TDT 0.6b-v3)",
+            "model_id": "uk_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "uk"
+        },
+        {
+            "name": "Suomi (Parakeet TDT 0.6b-v3)",
+            "model_id": "fi_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "fi"
+        },
+        {
+            "name": "Čeština (Parakeet TDT 0.6b-v3)",
+            "model_id": "cs_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "cs"
+        },
+        {
+            "name": "Slovenčina (Parakeet TDT 0.6b-v3)",
+            "model_id": "sk_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "sk"
+        },
+        {
+            "name": "Ελληνικά (Parakeet TDT 0.6b-v3)",
+            "model_id": "el_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "el"
+        },
+        {
+            "name": "Hrvatski (Parakeet TDT 0.6b-v3)",
+            "model_id": "hr_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "hr"
+        },
+        {
+            "name": "Български (Parakeet TDT 0.6b-v3)",
+            "model_id": "bg_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "bg"
+        },
+        {
+            "name": "Română (Parakeet TDT 0.6b-v3)",
+            "model_id": "ro_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "ro"
+        },
+        {
+            "name": "Slovenščina (Parakeet TDT 0.6b-v3)",
+            "model_id": "sl_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "sl"
+        },
+        {
+            "name": "Magyar (Parakeet TDT 0.6b-v3)",
+            "model_id": "hu_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "hu"
+        },
+        {
+            "name": "Dansk (Parakeet TDT 0.6b-v3)",
+            "model_id": "da_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "da"
+        },
+        {
+            "name": "Eesti (Parakeet TDT 0.6b-v3)",
+            "model_id": "et_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "et"
+        },
+        {
+            "name": "Lietuvių (Parakeet TDT 0.6b-v3)",
+            "model_id": "lt_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "lt"
+        },
+        {
+            "name": "Latviešu (Parakeet TDT 0.6b-v3)",
+            "model_id": "lv_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "lv"
+        },
+        {
+            "name": "Malti (Parakeet TDT 0.6b-v3)",
+            "model_id": "mt_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "mt"
+        },
+        {
+            "name": "Polski (Parakeet TDT 0.6b-v3)",
+            "model_id": "pl_parakeet_tdt06bv3_q40",
+            "model_alias_of": "multilang_parakeet_tdt06bv3_q40",
+            "lang_id": "pl"
+        },
+        {
             "name": "English (Vosk Small)",
             "model_id": "en_vosk_small",
             "engine": "stt_vosk",

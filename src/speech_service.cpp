@@ -31,6 +31,7 @@
 #include "media_compressor.hpp"
 #include "mic_source.h"
 #include "module_tools.hpp"
+#include "parakeet_engine.hpp"
 #include "piper_engine.hpp"
 #include "rhvoice_engine.hpp"
 #include "sam_engine.hpp"
@@ -1312,7 +1313,7 @@ static stt_engine::sub_config_t stt_sub_config_from_options(
     return sub_config;
 }
 
-static std::vector<int> whispercpp_vulkan_devices() {
+static std::vector<int> ggml_vulkan_devices() {
     std::vector<int> devs;
 
     auto dev_strs = settings::instance()->whisper_gpu_devices();
@@ -1532,14 +1533,22 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         }                                                                      \
     }
 
-        if (model_config->stt->engine == models_manager::model_engine_t::stt_whisper) {
+        if (model_config->stt->engine ==
+            models_manager::model_engine_t::stt_whisper) {
             ENGINE_OPTS(whisper)
             if (config.gpu_device.api == stt_engine::gpu_api_t::vulkan) {
-                config.available_devices = whispercpp_vulkan_devices();
+                config.available_devices = ggml_vulkan_devices();
             }
             if (!settings::instance()->whisper_autolang_with_sup()) {
                 // disable auto-lang with sup model
                 config.model_files.scorer_file.clear();
+            }
+            config.lib_dir = find_ggml_backend_dir().toStdString();
+        } else if (model_config->stt->engine ==
+                   models_manager::model_engine_t::stt_parakeet) {
+            ENGINE_OPTS(parakeet)
+            if (config.gpu_device.api == stt_engine::gpu_api_t::vulkan) {
+                config.available_devices = ggml_vulkan_devices();
             }
             config.lib_dir = find_ggml_backend_dir().toStdString();
         }
@@ -3273,9 +3282,12 @@ QVariantMap speech_service::features_availability() {
 #endif  // USE_PY
 
     ma.stt_ds = ds_engine::available();
+    ma.mnt_bergamot = mnt_engine::available();
+
+    // whispercpp
+
     ma.stt_whisper = whisper_engine::available();
     bool stt_whispercpp_vulkan = whisper_engine::has_vulkan();
-    ma.mnt_bergamot = mnt_engine::available();
 
     m_features_availability.insert(
         "coqui-stt", QVariantList{ma.stt_ds, "Coqui/DeepSpeech STT"});
@@ -3285,18 +3297,42 @@ QVariantMap speech_service::features_availability() {
         "whispercpp-stt", QVariantList{ma.stt_whisper, "WhisperCpp STT "});
     m_features_availability.insert(
         "whispercpp-stt-vulkan",
-        QVariantList{stt_whispercpp_vulkan,
-                     "WhisperCpp STT Vulkan " + tr("HW acceleration")});
+        QVariantList{
+            stt_whispercpp_vulkan,
+            "WhisperCpp STT Vulkan " + tr("HW acceleration"),
+        });
     if (stt_whispercpp_vulkan) {
         hw_feature_flags |=
             settings::hw_feature_flags_t::HW_FEATURE(vulkan, whisper, stt);
     }
+
+    // parakeet stt
+
+    ma.stt_parakeet = parakeet_engine::available();
+    bool stt_parakeet_vulkan = parakeet_engine::has_vulkan();
+
+    m_features_availability.insert(
+        "parakeet-stt", QVariantList{ma.stt_parakeet, "Parakeet STT "});
+    m_features_availability.insert(
+        "parakeet-stt-vulkan",
+        QVariantList{
+            stt_parakeet_vulkan,
+            "Parakeet STT Vulkan " + tr("HW acceleration"),
+        });
+    if (stt_parakeet_vulkan) {
+        hw_feature_flags |=
+            settings::hw_feature_flags_t::HW_FEATURE(vulkan, parakeet, stt);
+    }
 #ifdef ARCH_X86_64
+    // whispercpp
+
     bool stt_whispercpp_cuda = whisper_engine::has_cuda();
     m_features_availability.insert(
         "whispercpp-stt-cuda",
-        QVariantList{stt_whispercpp_cuda,
-                     "WhisperCpp STT CUDA " + tr("HW acceleration")});
+        QVariantList{
+            stt_whispercpp_cuda,
+            "WhisperCpp STT CUDA " + tr("HW acceleration"),
+        });
     if (stt_whispercpp_cuda)
         hw_feature_flags |=
             settings::hw_feature_flags_t::HW_FEATURE(cuda, whisper, stt);
@@ -3304,8 +3340,10 @@ QVariantMap speech_service::features_availability() {
     bool stt_whispercpp_hip = whisper_engine::has_hip();
     m_features_availability.insert(
         "whispercpp-stt-hip",
-        QVariantList{stt_whispercpp_hip,
-                     "WhisperCpp STT ROCm " + tr("HW acceleration")});
+        QVariantList{
+            stt_whispercpp_hip,
+            "WhisperCpp STT ROCm " + tr("HW acceleration"),
+        });
     if (stt_whispercpp_hip)
         hw_feature_flags |=
             settings::hw_feature_flags_t::HW_FEATURE(hip, whisper, stt);
@@ -3313,11 +3351,46 @@ QVariantMap speech_service::features_availability() {
     bool stt_whispercpp_opencl = whisper_engine::has_opencl();
     m_features_availability.insert(
         "whispercpp-stt-opencl",
-        QVariantList{stt_whispercpp_opencl,
-                     "WhisperCpp STT OpenCL " + tr("HW acceleration")});
+        QVariantList{
+            stt_whispercpp_opencl,
+            "Parakeet STT OpenCL " + tr("HW acceleration"),
+        });
     if (stt_whispercpp_opencl)
         hw_feature_flags |=
             settings::hw_feature_flags_t::HW_FEATURE(opencl, whisper, stt);
+
+    // parakeet stt
+
+    bool stt_parakeet_cuda = parakeet_engine::has_cuda();
+    m_features_availability.insert(
+        "parakeet-stt-cuda", QVariantList{
+                                 stt_parakeet_cuda,
+                                 "Parakeet STT CUDA " + tr("HW acceleration"),
+                             });
+    if (stt_parakeet_cuda)
+        hw_feature_flags |=
+            settings::hw_feature_flags_t::HW_FEATURE(cuda, parakeet, stt);
+
+    bool stt_parakeet_hip = parakeet_engine::has_hip();
+    m_features_availability.insert(
+        "parakeet-stt-hip", QVariantList{
+                                stt_parakeet_hip,
+                                "Parakeet STT ROCm " + tr("HW acceleration"),
+                            });
+    if (stt_parakeet_hip)
+        hw_feature_flags |=
+            settings::hw_feature_flags_t::HW_FEATURE(hip, parakeet, stt);
+
+    bool stt_parakeet_opencl = parakeet_engine::has_opencl();
+    m_features_availability.insert(
+        "parakeet-stt-opencl",
+        QVariantList{
+            stt_parakeet_opencl,
+            "Parakeet STT OpenCL " + tr("HW acceleration"),
+        });
+    if (stt_parakeet_opencl)
+        hw_feature_flags |=
+            settings::hw_feature_flags_t::HW_FEATURE(opencl, parakeet, stt);
 #endif  // ARCH_X86_64
     ma.tts_rhvoice = rhvoice_engine::available();
     m_features_availability.insert("rhvoice-tts",

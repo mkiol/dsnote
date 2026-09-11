@@ -54,6 +54,10 @@ QDebug operator<<(QDebug d, ModelsListModel::ModelFeatureFilterFlags flags) {
                 d << "engine-stt-faster-whisper";
                 break;
             case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureEngineSttParakeet:
+                d << "engine-stt-parakeet";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
                 FeatureEngineSttApril:
                 d << "engine-stt-april";
                 break;

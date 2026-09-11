@@ -38,6 +38,12 @@ DialogPage {
         </ul>
         <p>" + qsTr("Speech to Text") + "</p>
         <ul>
+        <li>Support for <i>Parakeet</i> TDT model. Parakeet TDT is NVIDIA multilingual STT model designed for high-throughput speech to text transcription. 
+            The model automatically detects the language of the audio, therefore is enabled in <i>Auto detected</i> category.
+            The model works well on CPU but also supports Vulkan, CUDA and ROCm GPU acceleration.
+            Parakeet TDT is available for the following languages: 
+            Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian,
+            Maltese, Polish, Portuguese, Romanian, Slovak, Slovenian, Spanish, Swedish, Russian and Ukrainian.</li>
         <li>Inline timestamps in text output.
             A new output format is now available, displaying timestamps that show when each segment of text was recognized in the audio.
             To enable new format set <i>Text format</i> to <i>Inline timestamps</i>. 

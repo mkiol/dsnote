@@ -128,6 +128,8 @@ Dialog {
                         return "WhisperCpp"
                     else if (f & ModelsListModel.FeatureEngineSttFasterWhisper)
                         return "FasterWhisper"
+                    else if (f & ModelsListModel.FeatureEngineSttParakeet)
+                        return "Parakeet"
                     else if (f & ModelsListModel.FeatureEngineSttApril)
                         return "April-ASR"
                     else if (f & ModelsListModel.FeatureEngineTtsEspeak)
@@ -166,7 +168,8 @@ Dialog {
                 visible: text.length !== 0
                 text: {
                     var f = root.model.features;
-                    if (f & ModelsListModel.FeatureEngineSttWhisper) {
+                    if ((f & ModelsListModel.FeatureEngineSttWhisper) ||
+                             (f & ModelsListModel.FeatureEngineSttParakeet) ) {
                         return "NVIDIA CUDA, AMD ROCm, Vulkan, OpenCL"
                     }
                     if (f & ModelsListModel.FeatureEngineSttFasterWhisper) {

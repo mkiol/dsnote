@@ -38,6 +38,8 @@
     X(whispercpp_gpu)    \
     X(fasterwhisper_stt) \
     X(fasterwhisper_gpu) \
+    X(parakeet_stt)      \
+    X(parakeet_gpu)      \
     X(whisperspeech_tts) \
     X(whisperspeech_gpu) \
     X(coqui_tts)         \

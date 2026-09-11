@@ -12,17 +12,16 @@
 #include <unordered_map>
 #include <vector>
 
+#include "ggml_tools.hpp"
 #include "stt_engine.hpp"
 
 // do not include 'whisper.h' as it contains SIMD-dependent code,
 // which is problematic when compiling for AMR32
 
 // clang-format off
-/*** copied from 'whisper.h' and 'ggml.c' START ***/
+/*** copied from 'whisper.h' START ***/
 
 extern "C" {
-// whisper.h
-
 typedef int32_t whisper_pos;
 typedef int32_t whisper_token;
 typedef int32_t whisper_seq_id;
@@ -170,11 +169,6 @@ typedef void (*whisper_logits_filter_callback)(
                             float * logits,
                             void * user_data);
 
-// Abort callback
-// If not NULL, called before ggml computation
-// If it returns true, the computation is aborted
-typedef bool (*ggml_abort_callback)(void * data);
-
 // Parameters for the whisper_full() function
 // If you change the order or add new parameters, make sure to update the default values in whisper.cpp:
 // whisper_full_default_params()
@@ -283,19 +277,6 @@ struct whisper_full_params {
 
     whisper_vad_params vad_params;
 };
-
-// ggml.h
-
-enum ggml_log_level {
-    GGML_LOG_LEVEL_NONE  = 0,
-    GGML_LOG_LEVEL_DEBUG = 1,
-    GGML_LOG_LEVEL_INFO  = 2,
-    GGML_LOG_LEVEL_WARN  = 3,
-    GGML_LOG_LEVEL_ERROR = 4,
-    GGML_LOG_LEVEL_CONT  = 5, // continue previous log
-};
-
-typedef void (*ggml_log_callback)(enum ggml_log_level level, const char * text, void * user_data);
 }
 
 /*** copied from 'whisper.h' END ***/

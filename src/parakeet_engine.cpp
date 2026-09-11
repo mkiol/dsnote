@@ -1,11 +1,11 @@
-/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "whisper_engine.hpp"
+#include "parakeet_engine.hpp"
 
 #include <dirent.h>
 #include <dlfcn.h>
@@ -26,33 +26,33 @@
 #include "logger.hpp"
 #include "text_tools.hpp"
 
-whisper_engine::whisper_engine(config_t config, callbacks_t call_backs)
+parakeet_engine::parakeet_engine(config_t config, callbacks_t call_backs)
     : stt_engine{std::move(config), std::move(call_backs)} {
-    LOGD("whisper ctor");
-    open_whisper_lib();
+    LOGD("parakeet ctor");
+    open_parakeet_lib();
     m_wparams = make_wparams();
     m_speech_buf.reserve(m_speech_max_size);
 }
 
-whisper_engine::~whisper_engine() {
-    LOGD("whisper dtor");
+parakeet_engine::~parakeet_engine() {
+    LOGD("parakeet dtor");
 
     stop();
 
-    if (m_whisper_api.ok()) {
-        if (m_whisper_ctx) {
-            m_whisper_api.whisper_free(m_whisper_ctx);
-            m_whisper_ctx = nullptr;
+    if (m_parakeet_api.ok()) {
+        if (m_parakeet_ctx) {
+            m_parakeet_api.parakeet_free(m_parakeet_ctx);
+            m_parakeet_ctx = nullptr;
         }
 
         unload_all_backends();
     }
 
-    m_whisper_api = {};
+    m_parakeet_api = {};
 
-    if (m_whisperlib_handle) {
-        dlclose(m_whisperlib_handle);
-        m_whisperlib_handle = nullptr;
+    if (m_parakeetlib_handle) {
+        dlclose(m_parakeetlib_handle);
+        m_parakeetlib_handle = nullptr;
     }
 
     if (m_ggmllib_handle) {
@@ -66,13 +66,13 @@ whisper_engine::~whisper_engine() {
 }
 
 static bool try_open_lib(const char* lib) {
-    LOGD("try to open whisper lib: " << lib);
+    LOGD("try to open parakeet lib: " << lib);
 
     setenv("GGML_NO_BACKTRACE", "1", 1);
 
     auto* handle = dlopen(lib, RTLD_LAZY);
     if (!handle) {
-        LOGW("failed to open whisper lib: " << dlerror());
+        LOGW("failed to open parakeet lib: " << dlerror());
         return false;
     }
 
@@ -81,9 +81,9 @@ static bool try_open_lib(const char* lib) {
     return true;
 }
 
-bool whisper_engine::available() { return try_open_lib("libwhisper.so"); }
+bool parakeet_engine::available() { return try_open_lib("libparakeet.so"); }
 
-void whisper_engine::set_visible_devices() {
+void parakeet_engine::set_visible_devices() {
     if (m_config.use_gpu && m_config.gpu_device.api == gpu_api_t::vulkan &&
         !m_config.available_devices.empty()) {
         auto devs_str =
@@ -110,7 +110,7 @@ void whisper_engine::set_visible_devices() {
     }
 }
 
-bool whisper_engine::has_cuda() {
+bool parakeet_engine::has_cuda() {
 #ifdef DEBUG
     return false;
 #else
@@ -118,7 +118,7 @@ bool whisper_engine::has_cuda() {
 #endif
 }
 
-bool whisper_engine::has_opencl() {
+bool parakeet_engine::has_opencl() {
 #ifdef DEBUG
     return false;
 #else
@@ -126,7 +126,7 @@ bool whisper_engine::has_opencl() {
 #endif
 }
 
-bool whisper_engine::has_hip() {
+bool parakeet_engine::has_hip() {
 #ifdef DEBUG
     return false;
 #else
@@ -134,7 +134,7 @@ bool whisper_engine::has_hip() {
 #endif
 }
 
-bool whisper_engine::has_vulkan() {
+bool parakeet_engine::has_vulkan() {
 #ifdef DEBUG
     return false;
 #else
@@ -142,13 +142,13 @@ bool whisper_engine::has_vulkan() {
 #endif
 }
 
-bool whisper_engine::use_gpu() const {
+bool parakeet_engine::use_gpu() const {
     return m_config.use_gpu && (m_config.gpu_device.api == gpu_api_t::cuda ||
                                 m_config.gpu_device.api == gpu_api_t::rocm);
 }
 
-bool whisper_engine::load_backend(const std::string& name) {
-    LOGD("load whisper backend: " << name);
+bool parakeet_engine::load_backend(const std::string& name) {
+    LOGD("load parakeet backend: " << name);
     if (m_backend_regs.find(name) != m_backend_regs.end()) {
         // already loaded
         return true;
@@ -170,15 +170,15 @@ bool whisper_engine::load_backend(const std::string& name) {
     setenv("GGML_BACKEND_DIR", m_config.lib_dir.c_str(), 1);
 #endif
 
-    auto* reg = m_whisper_api.ggml_backend_load_best_ex(name.c_str());
+    auto* reg = m_parakeet_api.ggml_backend_load_best_ex(name.c_str());
     if (reg == nullptr) {
-        LOGW("failed to load whisper backed: " << name);
+        LOGW("failed to load parakeet backed: " << name);
         return false;
     }
-    auto device_count = m_whisper_api.ggml_backend_reg_dev_count(reg);
+    auto device_count = m_parakeet_api.ggml_backend_reg_dev_count(reg);
     if (device_count == 0) {
-        m_whisper_api.ggml_backend_unload(reg);
-        LOGW("failed to load whisper backed (no devices): " << name);
+        m_parakeet_api.ggml_backend_unload(reg);
+        LOGW("failed to load parakeet backed (no devices): " << name);
         return false;
     }
 
@@ -186,15 +186,15 @@ bool whisper_engine::load_backend(const std::string& name) {
     return true;
 }
 
-void whisper_engine::unload_all_backends() {
+void parakeet_engine::unload_all_backends() {
     auto it = m_backend_regs.cbegin();
     while (it != m_backend_regs.cend()) {
-        m_whisper_api.ggml_backend_unload(it->second);
+        m_parakeet_api.ggml_backend_unload(it->second);
         it = m_backend_regs.erase(it);
     }
 }
 
-void whisper_engine::open_whisper_lib() {
+void parakeet_engine::open_parakeet_lib() {
     // load ggml
 
     LOGD("using ggml backend dir: " << m_config.lib_dir);
@@ -205,69 +205,67 @@ void whisper_engine::open_whisper_lib() {
         LOGF("failed to open libggml.so: " << dlerror());
     }
 
-    // load whisper
+    // load parakeet
 
     set_visible_devices();
 
-    m_whisperlib_handle = dlopen("libwhisper.so", RTLD_LAZY);
-    if (m_whisperlib_handle == nullptr) {
-        LOGF("failed to open libwhisper.so: " << dlerror());
+    m_parakeetlib_handle = dlopen("libparakeet.so", RTLD_LAZY);
+    if (m_parakeetlib_handle == nullptr) {
+        LOGF("failed to open libparakeet.so: " << dlerror());
     }
 
-#define WHISPER_ENGINE_REGISTER_API(handle, name)                             \
-    m_whisper_api.name =                                                      \
-        reinterpret_cast<decltype(m_whisper_api.name)>(dlsym(handle, #name)); \
-    if (m_whisper_api.name == nullptr) {                                      \
-        LOGF("failed to register whisper api: " #name);                       \
+#define PARAKEET_ENGINE_REGISTER_API(handle, name)                             \
+    m_parakeet_api.name =                                                      \
+        reinterpret_cast<decltype(m_parakeet_api.name)>(dlsym(handle, #name)); \
+    if (m_parakeet_api.name == nullptr) {                                      \
+        LOGF("failed to register parakeet api: " #name);                       \
     }
 
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle,
-                                whisper_init_from_file_with_params)
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_print_system_info)
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_full)
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_full_n_segments)
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_full_n_segments)
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle,
-                                whisper_full_get_segment_text)
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle,
-                                whisper_full_get_segment_t0)
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle,
-                                whisper_full_get_segment_t1)
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_free)
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle,
-                                whisper_full_default_params)
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle,
-                                whisper_context_default_params)
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_full_lang_id)
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_lang_str)
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_version);
-    WHISPER_ENGINE_REGISTER_API(m_whisperlib_handle, whisper_log_set);
-    WHISPER_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_load_all)
-    WHISPER_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_load_best_ex)
-    WHISPER_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_unload)
-    WHISPER_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_log_set)
-    WHISPER_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_reg_dev_count)
+    PARAKEET_ENGINE_REGISTER_API(m_parakeetlib_handle,
+                                parakeet_init_from_file_with_params)
+    PARAKEET_ENGINE_REGISTER_API(m_parakeetlib_handle, parakeet_print_system_info)
+    PARAKEET_ENGINE_REGISTER_API(m_parakeetlib_handle, parakeet_full)
+    PARAKEET_ENGINE_REGISTER_API(m_parakeetlib_handle, parakeet_full_n_segments)
+    PARAKEET_ENGINE_REGISTER_API(m_parakeetlib_handle, parakeet_full_n_segments)
+    PARAKEET_ENGINE_REGISTER_API(m_parakeetlib_handle,
+                                parakeet_full_get_segment_text)                         
+    PARAKEET_ENGINE_REGISTER_API(m_parakeetlib_handle,
+                                parakeet_full_get_segment_t0)
+    PARAKEET_ENGINE_REGISTER_API(m_parakeetlib_handle,
+                                parakeet_full_get_segment_t1)
+    PARAKEET_ENGINE_REGISTER_API(m_parakeetlib_handle, parakeet_free)
+    PARAKEET_ENGINE_REGISTER_API(m_parakeetlib_handle,
+                                parakeet_full_default_params)
+    PARAKEET_ENGINE_REGISTER_API(m_parakeetlib_handle,
+                                parakeet_context_default_params)
+    PARAKEET_ENGINE_REGISTER_API(m_parakeetlib_handle, parakeet_version);
+    PARAKEET_ENGINE_REGISTER_API(m_parakeetlib_handle, parakeet_log_set);
+    PARAKEET_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_load_all)
+    PARAKEET_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_load_best_ex)
+    PARAKEET_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_unload)
+    PARAKEET_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_log_set)
+    PARAKEET_ENGINE_REGISTER_API(m_ggmllib_handle, ggml_backend_reg_dev_count)
 
-#undef WHISPER_ENGINE_REGISTER_API
+#undef PARAKEET_ENGINE_REGISTER_API
 
     // set logger
 
-    m_whisper_api.whisper_log_set(
+    m_parakeet_api.parakeet_log_set(
         [](ggml_log_level level, const char* text,
            [[maybe_unused]] void* user_data) {
             switch (level) {
                 case GGML_LOG_LEVEL_DEBUG:
                 case GGML_LOG_LEVEL_CONT:
-                    LOGD("whispercpp: " << text);
+                    LOGD("parakeet: " << text);
                     break;
                 case GGML_LOG_LEVEL_INFO:
-                    LOGI("whispercpp: " << text);
+                    LOGI("parakeet: " << text);
                     break;
                 case GGML_LOG_LEVEL_WARN:
-                    LOGW("whispercpp: " << text);
+                    LOGW("parakeet: " << text);
                     break;
                 case GGML_LOG_LEVEL_ERROR:
-                    LOGE("whispercpp: " << text);
+                    LOGE("parakeet: " << text);
                     break;
                 case GGML_LOG_LEVEL_NONE:
                     break;
@@ -275,12 +273,12 @@ void whisper_engine::open_whisper_lib() {
         },
         nullptr);
 
-    LOGD("whisper lib version: " << m_whisper_api.whisper_version());
+    LOGD("parakeet lib version: " << m_parakeet_api.parakeet_version());
 
     // load backends
 
     if (!load_backend("cpu")) {
-        LOGF("failed to load whisper mandatory backend");
+        LOGF("failed to load parakeet mandatory backend");
     }
 
     load_backend("blas");
@@ -314,69 +312,58 @@ void whisper_engine::open_whisper_lib() {
 #endif
 }
 
-void whisper_engine::push_buf_to_whisper_buf(
+void parakeet_engine::push_buf_to_parakeet_buf(
     const std::vector<in_buf_t::buf_t::value_type>& buf,
-    whisper_buf_t& whisper_buf) {
+    parakeet_buf_t& parakeet_buf) {
     // convert s16 to f32 sample format
-    std::transform(buf.cbegin(), buf.cend(), std::back_inserter(whisper_buf),
+    std::transform(buf.cbegin(), buf.cend(), std::back_inserter(parakeet_buf),
                    [](auto sample) {
-                       return static_cast<whisper_buf_t::value_type>(sample) /
+                       return static_cast<parakeet_buf_t::value_type>(sample) /
                               32768.0F;
                    });
 }
 
-void whisper_engine::push_buf_to_whisper_buf(in_buf_t::buf_t::value_type* data,
+void parakeet_engine::push_buf_to_parakeet_buf(in_buf_t::buf_t::value_type* data,
                                              in_buf_t::buf_t::size_type size,
-                                             whisper_buf_t& whisper_buf) {
+                                             parakeet_buf_t& parakeet_buf) {
     // convert s16 to f32 sample format
-    whisper_buf.reserve(whisper_buf.size() + size);
+    parakeet_buf.reserve(parakeet_buf.size() + size);
     for (size_t i = 0; i < size; ++i) {
-        whisper_buf.push_back(static_cast<whisper_buf_t::value_type>(data[i]) /
+        parakeet_buf.push_back(static_cast<parakeet_buf_t::value_type>(data[i]) /
                               32768.0F);
     }
 }
 
-void whisper_engine::reset_impl() { m_speech_buf.clear(); }
+void parakeet_engine::reset_impl() { m_speech_buf.clear(); }
 
-void whisper_engine::stop_processing_impl() {
-    if (m_whisper_ctx) {
-        LOGD("whisper cancel");
+void parakeet_engine::stop_processing_impl() {
+    if (m_parakeet_ctx) {
+        LOGD("parakeet cancel");
     }
 }
 
-void whisper_engine::start_processing_impl() { create_model(); }
+void parakeet_engine::start_processing_impl() { create_model(); }
 
-void whisper_engine::create_model() {
-    if (m_whisper_ctx) return;
+void parakeet_engine::create_model() {
+    if (m_parakeet_ctx) return;
 
-    LOGD("creating whisper model");
+    LOGD("creating parakeet model");
 
-    auto params = m_whisper_api.whisper_context_default_params();
+    auto params = m_parakeet_api.parakeet_context_default_params();
     params.use_gpu = m_config.use_gpu;
     params.gpu_device = m_config.gpu_device.id;
-    params.flash_attn = m_config.gpu_device.flash_attn;
 
-    m_whisper_ctx = m_whisper_api.whisper_init_from_file_with_params(
+    m_parakeet_ctx = m_parakeet_api.parakeet_init_from_file_with_params(
         m_config.model_files.model_file.c_str(), params);
 
-    if (m_whisper_ctx == nullptr) {
-        LOGF("failed to create whisper model");
+    if (m_parakeet_ctx == nullptr) {
+        LOGF("failed to create parakeet model");
     }
 
-    if (!m_whisper_sup_ctx && !m_config.model_files.scorer_file.empty()) {
-        // sup model
-        m_whisper_sup_ctx = m_whisper_api.whisper_init_from_file_with_params(
-            m_config.model_files.scorer_file.c_str(), params);
-
-        if (m_whisper_sup_ctx == nullptr) {
-            LOGW("failed to create sup whisper model");
-        }
-    }
-
-    LOGD("whisper model created");
+    LOGD("parakeet model created");
 }
 
-stt_engine::samples_process_result_t whisper_engine::process_buff() {
+stt_engine::samples_process_result_t parakeet_engine::process_buff() {
     if (!lock_buff_for_processing())
         return samples_process_result_t::wait_for_samples;
 
@@ -411,9 +398,9 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
                 speech_detection_status_t::speech_detected);
 
         if (m_config.text_format == text_format_t::raw)
-            push_buf_to_whisper_buf(vad_buf, m_speech_buf);
+            push_buf_to_parakeet_buf(vad_buf, m_speech_buf);
         else
-            push_buf_to_whisper_buf(m_in_buf.buf.data(), m_in_buf.size,
+            push_buf_to_parakeet_buf(m_in_buf.buf.data(), m_in_buf.size,
                                     m_speech_buf);
 
         restart_sentence_timer();
@@ -528,61 +515,37 @@ static bool abort_callback(void* user_data) {
     return is_aborted;
 }
 
-whisper_full_params whisper_engine::make_wparams() {
-    whisper_full_params wparams =
-        m_whisper_api.whisper_full_default_params(WHISPER_SAMPLING_BEAM_SEARCH);
+parakeet_full_params parakeet_engine::make_wparams() {
+    parakeet_full_params wparams =
+        m_parakeet_api.parakeet_full_default_params(PARAKEET_SAMPLING_GREEDY);
 
     if (auto pos = m_config.lang.find('-'); pos != std::string::npos) {
         m_config.lang = m_config.lang.substr(0, pos);
     }
 
-    wparams.language = m_config.lang_code.empty() ? m_config.lang.c_str()
-                                                  : m_config.lang_code.c_str();
-    if (strcmp(wparams.language, "auto") == 0) wparams.language = nullptr;
-
-    wparams.detect_language = false;
-
-    wparams.suppress_blank = true;
-    wparams.suppress_nst = true;
-    wparams.single_segment = false;
     wparams.encoder_begin_callback = encoder_begin_callback;
     wparams.encoder_begin_callback_user_data = &m_thread_exit_requested;
     wparams.abort_callback = abort_callback;
     wparams.abort_callback_user_data = &m_thread_exit_requested;
-    wparams.print_progress = false;
-    wparams.print_timestamps = false;
-    wparams.audio_ctx = 1500;
+    wparams.audio_ctx = 0;
     wparams.no_context = false;
 
     if (m_config.whisper_config.has_value()) {
-        wparams.beam_search = {
-            .beam_size = static_cast<int>(m_config.whisper_config->beam_search),
-            .patience = 0.0,
-        };
-        wparams.translate =
-            m_config.whisper_config->translate && m_config.has_option('t');
         wparams.n_threads = static_cast<int>(
             std::min(m_config.whisper_config->cpu_threads,
                      std::max(1U, std::thread::hardware_concurrency())));
-        if (m_config.whisper_config->audio_ctx_conf ==
-                audio_ctx_conf_t::custom &&
-            !use_gpu()) {
-            wparams.audio_ctx = m_config.whisper_config->audio_ctx_size;
-        }
-        wparams.temperature =
-            std::clamp(m_config.whisper_config->temperature, 0.0F, 1.0F);
     }
 
     LOGD("cpu info: arch=" << cpu_tools::arch() << ", cores="
                            << std::thread::hardware_concurrency());
     LOGD("using threads: " << wparams.n_threads << "/"
                            << std::thread::hardware_concurrency());
-    LOGD("system info: " << m_whisper_api.whisper_print_system_info());
+    LOGD("system info: " << m_parakeet_api.parakeet_print_system_info());
 
     return wparams;
 }
 
-void whisper_engine::decode_speech(const whisper_buf_t& buf) {
+void parakeet_engine::decode_speech(const parakeet_buf_t& buf) {
     LOGD("speech decoding started");
 
     create_model();
@@ -592,57 +555,27 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
     bool subrip = m_config.text_format == text_format_t::subrip;
     bool inline_ts = m_config.text_format == text_format_t::inline_timestamp;
 
-    bool auto_lang = m_wparams.language == nullptr;
-    if (m_whisper_sup_ctx && auto_lang) {
-        // use sup model to detect language
-        m_wparams.detect_language = true;
-        m_wparams.initial_prompt = nullptr;
-
-        if (auto ret = m_whisper_api.whisper_full(m_whisper_sup_ctx, m_wparams,
-                                                  buf.data(), buf.size());
-            ret == 0) {
-            auto lang_number =
-                m_whisper_api.whisper_full_lang_id(m_whisper_sup_ctx);
-            if (lang_number >= 0) {
-                const auto* lang_id =
-                    m_whisper_api.whisper_lang_str(lang_number);
-                LOGD("auto lang with sup: " << lang_id);
-                m_wparams.language = lang_id;
-            } else {
-                LOGW("auto lang not detected with sup");
-            }
-        } else {
-            LOGE("whisper error sup" << ret);
-        }
-
-        m_wparams.detect_language = false;
-    }
-
-    if (m_config.whisper_config.has_value()) {
-        if (m_config.whisper_config->audio_ctx_conf ==
-                audio_ctx_conf_t::dynamic &&
-            !use_gpu()) {
-            // short audio clips optimization
-            // https://github.com/ggml-org/whisper.cpp/issues/1855
-            m_wparams.audio_ctx = std::min<int>(
-                static_cast<int>(std::clamp<size_t>(
-                    ((1500 * buf.size()) / (m_sample_rate * 30)) + 128, 0,
-                    std::numeric_limits<int>::max())),
-                1500);
-        }
-        if (!m_config.whisper_config->initial_prompt.empty()) {
-            m_wparams.initial_prompt =
-                m_config.whisper_config->initial_prompt.c_str();
-        }
-    }
+    // if (m_config.whisper_config.has_value()) {
+    //     if (m_config.whisper_config->audio_ctx_conf ==
+    //             audio_ctx_conf_t::dynamic &&
+    //         !use_gpu()) {
+    //         // short audio clips optimization
+    //         // https://github.com/ggml-org/whisper.cpp/issues/1855
+    //         m_wparams.audio_ctx = std::min<int>(
+    //             static_cast<int>(std::clamp<size_t>(
+    //                 ((1500 * buf.size()) / (m_sample_rate * 30)) + 128, 0,
+    //                 std::numeric_limits<int>::max())),
+    //             1500);
+    //     }
+    // }
     LOGD("audio_ctx: " << m_wparams.audio_ctx);
 
     std::ostringstream os;
 
-    if (auto ret = m_whisper_api.whisper_full(m_whisper_ctx, m_wparams,
+    if (auto ret = m_parakeet_api.parakeet_full(m_parakeet_ctx, m_wparams,
                                               buf.data(), buf.size());
         ret == 0) {
-        auto n = m_whisper_api.whisper_full_n_segments(m_whisper_ctx);
+        auto n = m_parakeet_api.parakeet_full_n_segments(m_parakeet_ctx);
         LOGD("decoded segments: " << n);
 
         bool add_spc = false;
@@ -651,7 +584,7 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 
         for (auto i = 0; i < n; ++i) {
             std::string text =
-                m_whisper_api.whisper_full_get_segment_text(m_whisper_ctx, i);
+                m_parakeet_api.parakeet_full_get_segment_text(m_parakeet_ctx, i);
             if (text.empty()) continue;
             if (text.at(0) == '!') text.erase(0, 1);
             rtrim(text);
@@ -662,12 +595,12 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 #endif
             if (subrip || inline_ts) {
                 size_t t0 = std::max<int64_t>(
-                                0, m_whisper_api.whisper_full_get_segment_t0(
-                                       m_whisper_ctx, i)) *
+                                0, m_parakeet_api.parakeet_full_get_segment_t0(
+                                       m_parakeet_ctx, i)) *
                             10;
                 size_t t1 = std::max<int64_t>(
-                                0, m_whisper_api.whisper_full_get_segment_t1(
-                                       m_whisper_ctx, i)) *
+                                0, m_parakeet_api.parakeet_full_get_segment_t1(
+                                       m_parakeet_ctx, i)) *
                             10;
 
                 t0 += m_segment_time_offset;
@@ -720,26 +653,6 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
                         std::chrono::steady_clock::now() - decoding_start)
                         .count()))));
 
-    auto auto_lang_id = [&]() -> std::string {
-        if (!m_wparams.language) {  // auto-detected lang
-            auto lang_number =
-                m_whisper_api.whisper_full_lang_id(m_whisper_ctx);
-            if (lang_number < 0) {
-                LOGW("auto lang not detected");
-                return m_config.lang;
-            }
-
-            const auto* lang_id = m_whisper_api.whisper_lang_str(lang_number);
-            LOGD("auto lang: " << lang_id);
-
-            return lang_id;
-        } else {
-            return m_wparams.language;
-        }
-    }();
-
-    if (auto_lang) m_wparams.language = nullptr;
-
     auto result =
         merge_texts(m_intermediate_text.value_or(std::string{}), os.str());
 
@@ -750,5 +663,5 @@ void whisper_engine::decode_speech(const whisper_buf_t& buf) {
 #endif
 
     if (!m_intermediate_text || m_intermediate_text != result)
-        set_intermediate_text(result, auto_lang_id);
+        set_intermediate_text(result, m_config.lang);
 }

@@ -5035,6 +5035,17 @@ bool dsnote_app::feature_whispercpp_gpu() const {
            feature_available("whispercpp-stt-vulkan", false);
 }
 
+bool dsnote_app::feature_parakeet_stt() const {
+    return feature_available("parakeet-stt", false);
+}
+
+bool dsnote_app::feature_parakeet_gpu() const {
+    return feature_available("parakeet-stt-cuda", false) ||
+           feature_available("parakeet-stt-hip", false) ||
+           feature_available("parakeet-stt-opencl", false) ||
+           feature_available("parakeet-stt-vulkan", false);
+}
+
 bool dsnote_app::feature_fasterwhisper_stt() const {
     return feature_available("faster-whisper-stt", false);
 }

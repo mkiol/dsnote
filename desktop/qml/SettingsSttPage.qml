@@ -365,11 +365,43 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.leftMargin: 1
         Layout.rightMargin: 1
-        currentIndex: !app.feature_whispercpp_stt ? 1 :
-                      !app.feature_fasterwhisper_stt ? 0 :
-                      _settings.settings_stt_engine_idx
+        currentIndex: {
+            var idx = _settings.settings_stt_engine_idx
+            if (idx === 0) {
+                if (app.feature_whispercpp_stt) {
+                    return 0;
+                }
+                if (app.feature_fasterwhisper_stt) {
+                    return 1
+                }
+                if (app.feature_parakeet_stt) {
+                    return 2
+                }
+            } else if (idx === 1) {
+                if (app.feature_fasterwhisper_stt) {
+                    return 1
+                }
+                if (app.feature_whispercpp_stt) {
+                    return 0;
+                }
+                if (app.feature_parakeet_stt) {
+                    return 2
+                }
+            } else if (idx === 2) {
+                if (app.feature_parakeet_stt) {
+                    return 2
+                }
+                if (app.feature_fasterwhisper_stt) {
+                    return 1
+                }
+                if (app.feature_whispercpp_stt) {
+                    return 0;
+                }
+            }
+            return -1
+        }
         onCurrentIndexChanged: _settings.settings_stt_engine_idx = currentIndex
-        visible: app.feature_whispercpp_stt || app.feature_fasterwhisper_stt
+        visible: app.feature_whispercpp_stt || app.feature_fasterwhisper_stt ||  app.feature_parakeet_stt
 
         TabButton {
             enabled: app.feature_whispercpp_stt
@@ -380,6 +412,12 @@ ColumnLayout {
         TabButton {
             enabled: app.feature_fasterwhisper_stt
             text: "FasterWhisper"
+            width: implicitWidth
+        }
+
+        TabButton {
+            enabled: app.feature_parakeet_stt
+            text: "Parakeet"
             width: implicitWidth
         }
 
@@ -823,6 +861,98 @@ ColumnLayout {
                         use_gpu: _settings.fasterwhisper_use_gpu
                         onUse_gpuChanged: _settings.fasterwhisper_use_gpu = use_gpu
                         onDevice_indexChanged: _settings.fasterwhisper_gpu_device_idx = device_index
+                    }
+
+                    Item {
+                        Layout.fillHeight: true
+                    }
+                }
+            }
+        }
+        Loader {
+            active: app.feature_parakeet_stt
+            sourceComponent: Component {
+                ColumnLayout {
+                    id: parakeetTab
+
+                    Connections {
+                        target: _settings
+                        function onParakeet_changed() { 
+                            parakeetThreadsSpinBox.spinBox.value = _settings.parakeet_cpu_threads < 1 ? 1 : _settings.parakeet_cpu_threads > 32 ? 32 : _settings.parakeet_cpu_threads
+                        }
+                    }
+
+                    ComboBoxForm {
+                        label.text: qsTranslate("SettingsPage", "Profile")
+                        toolTip: qsTranslate("SettingsPage", "Profiles allow you to change the processing parameters in the engine.") + " " +
+                                 qsTranslate("SettingsPage", "You can set the parameters to get the fastest processing (%1) or the highest accuracy (%2).")
+                        .arg("<i>" + qsTranslate("SettingsPage", "Best performance") + "</i>")
+                        .arg("<i>" + qsTranslate("SettingsPage", "Best quality") + "</i>") + " " +
+                        qsTranslate("SettingsPage", "If you want to manually set individual engine parameters, select %1.")
+                        .arg("<i>" + qsTranslate("SettingsPage", "Custom") + "</i>")
+                        comboBox {
+                            currentIndex: {
+                                switch(_settings.parakeet_profile) {
+                                case Settings.EngineProfilePerformance: return 0
+                                case Settings.EngineProfileQuality: return 1
+                                case Settings.EngineProfileCustom: return 2
+                                }
+                                return 0
+                            }
+                            model: [
+                                qsTranslate("SettingsPage", "Best performance"),
+                                qsTranslate("SettingsPage", "Best quality"),
+                                qsTranslate("SettingsPage", "Custom")
+                            ]
+                            onActivated: (index) => {
+                                if (index === 0) {
+                                    _settings.parakeet_profile = Settings.EngineProfilePerformance
+                                } else if (index === 1) {
+                                    _settings.parakeet_profile = Settings.EngineProfileQuality
+                                } else if (index === 2) {
+                                    _settings.parakeet_profile = Settings.EngineProfileCustom
+                                } else {
+                                    _settings.parakeet_profile = Settings.EngineProfilePerformance
+                                }
+                            }
+                        }
+                    }
+
+                    SpinBoxForm {
+                        id: parakeetThreadsSpinBox
+
+                        visible: _settings.parakeet_profile === Settings.EngineProfileCustom
+                        label.text: qsTranslate("SettingsPage", "Number of simultaneous threads")
+                        toolTip: qsTranslate("SettingsPage", "Set the maximum number of simultaneous CPU threads.") + " " +
+                                 qsTranslate("SettingsPage", "A higher value does not necessarily speed up decoding.")
+                        spinBox {
+                            from: 0
+                            to: 32
+                            stepSize: 1
+                            value: _settings.parakeet_cpu_threads < 1 ? 1 : _settings.parakeet_cpu_threads > 32 ? 32 : _settings.parakeet_cpu_threads
+                            textFromValue: function(value) { return value.toString() }
+                            valueFromText: function(text) { return parseInt(text) }
+                            onValueChanged: {
+                                _settings.parakeet_cpu_threads = spinBox.value;
+                            }
+                        }
+                        button {
+                            icon.name: "edit-reset-symbolic"
+                            display: root.verticalMode ? AbstractButton.TextBesideIcon : AbstractButton.IconOnly
+                            text: qsTranslate("SettingsPage", "Reset")
+                            onClicked: _settings.reset_parakeet_cpu_threads()
+                        }
+                    }
+
+                    GpuComboBox {
+                        id: parakeetGpuComboBox
+
+                        visible: _settings.hw_accel_supported() && app.feature_parakeet_gpu
+                        devices: _settings.parakeet_gpu_devices
+                        device_index: _settings.parakeet_gpu_device_idx
+                        use_gpu: _settings.parakeet_use_gpu
+                        onUse_gpuChanged: _settings.parakeet_use_gpu = use_gpu
+                        onDevice_indexChanged: _settings.parakeet_gpu_device_idx = device_index
                     }
 
                     Item {

@@ -1794,6 +1794,7 @@ models_manager::feature_flags models_manager::add_implicit_feature_flags(
 #ifdef USE_PY
         case model_engine_t::stt_fasterwhisper:
 #endif
+        case model_engine_t::stt_parakeet:
             if (model_id.contains("tiny")) {
                 existing_features =
                     add_new_feature(existing_features,
@@ -2155,36 +2156,37 @@ auto models_manager::extract_models(
         }
 
         priv_model_t model{
-            /*engine=*/engine,
-            /*lang_id=*/std::move(lang_id),
-            /*lang_code=*/obj.value(QLatin1String{"lang_code"}).toString(),
-            /*name=*/std::move(model_name),
-            /*file_name=*/std::move(file_name),
-            /*checksum=*/std::move(checksum),
-            /*checksum_quick=*/std::move(checksum_quick),
-            /*comp=*/comp,
-            /*urls=*/std::move(urls),
-            /*size=*/size,
-            /*sup_models=*/std::move(sup_models),
-            /*pack_id=*/std::move(pack_id),
-            /*info=*/std::move(info),
-            /*speaker=*/speaker,
-            /*trg_lang_id=*/std::move(trg_lang_id),
-            /*alias_of=*/model_alias_of,
-            /*score=*/score,
-            /*options=*/std::move(options),
-            /*license=*/std::move(license),
-            /*disabled=*/false,
-            /*hidden=*/is_hidden,
-            /*default_for_lang=*/is_default_model_for_lang,
-            /*exists=*/exists,
-            /*available=*/available,
-            /*dl_multi=*/false,
-            /*dl_off=*/false,
-            /*features=*/features,
-            /*urls_hash=*/0,
-            /*recommended_model=*/std::move(recommended_model),
-            /*downloading=*/false};
+            .engine = engine,
+            .lang_id = std::move(lang_id),
+            .lang_code = obj.value(QLatin1String{"lang_code"}).toString(),
+            .name = std::move(model_name),
+            .file_name = std::move(file_name),
+            .checksum = std::move(checksum),
+            .checksum_quick = std::move(checksum_quick),
+            .comp = comp,
+            .urls = std::move(urls),
+            .size = size,
+            .sup_models = std::move(sup_models),
+            .pack_id = std::move(pack_id),
+            .info = std::move(info),
+            .speaker = speaker,
+            .trg_lang_id = std::move(trg_lang_id),
+            .alias_of = model_alias_of,
+            .score = score,
+            .options = std::move(options),
+            .license = std::move(license),
+            .disabled = false,
+            .hidden = is_hidden,
+            .default_for_lang = is_default_model_for_lang,
+            .exists = exists,
+            .available = available,
+            .dl_multi = false,
+            .dl_off = false,
+            .features = features,
+            .urls_hash = 0,
+            .recommended_model = std::move(recommended_model),
+            .downloading = false,
+        };
 
         update_url_hash(model);
 
