@@ -34,7 +34,6 @@ cleanup:
   - /lib/pkgconfig
   - /lib/libSPIRV*
   - /lib/libshaderc*
-  - /lib/libparakeet*
   - /lib/debug/opt
   - /share/bash-completion
   - /share/cmake
@@ -700,6 +699,18 @@ modules:
       - type: patch
         path: ../patches/rdrview.patch
 
+  - name: cld2
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    sources:
+      - type: archive
+        url: https://github.com/CLD2Owners/cld2/archive/b56fa78a2fe44ac2851bae5bf4f4693a0644da7b.zip
+        sha256: 6d8681eadbb64d8fcd3c6c620e81bed16d99ff75627324d66ee2d54bf2b7d749
+      - type: patch
+        path: ../patches/cld2.patch
+
   - name: dsnote
     buildsystem: cmake-ninja
     config-opts:
@@ -733,6 +744,7 @@ modules:
       - -DBUILD_XDO=OFF
       - -DBUILD_SAM=OFF
       - -DBUILD_RDRVIEW=OFF
+      - -DBUILD_CLD2=OFF
     post-install:
       - install -d ${FLATPAK_DEST}/extensions
     sources:

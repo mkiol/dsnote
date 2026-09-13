@@ -7,6 +7,7 @@
 
 #include "parakeet_engine.hpp"
 
+#include <cld2_api.h>
 #include <dirent.h>
 #include <dlfcn.h>
 #include <fmt/format.h>
@@ -675,6 +676,26 @@ void parakeet_engine::decode_speech(const parakeet_buf_t& buf) {
     LOGD("speech decoded: text=" << result);
 #endif
 
-    if (!m_intermediate_text || m_intermediate_text != result)
-        set_intermediate_text(result, m_config.lang);
+    auto auto_lang_id = [&]() -> std::string {
+        if (result.empty()) {
+            return m_config.lang_code;
+        }
+        if (m_config.lang_code.empty() || m_config.lang_code == "auto") {
+            const auto* lang_id = cld2_detect_language(
+                result.c_str(),
+                static_cast<int>(std::clamp<size_t>(
+                    result.size(), 0, std::numeric_limits<int>::max())));
+            if (lang_id == nullptr) {
+                LOGD("cannot detect decoded text language");
+                return m_config.lang_code;
+            }
+            LOGD("detected decoded text language: " << lang_id);
+            return lang_id;
+        }
+        return m_config.lang_code;
+    }();
+
+    if (!m_intermediate_text || m_intermediate_text != result) {
+        set_intermediate_text(result, auto_lang_id);
+    }
 }

@@ -33,7 +33,7 @@ Currently these are used:
 - Speech to Text (STT)
   - [Coqui STT (a fork of Mozilla DeepSpeech)](https://github.com/coqui-ai/STT)
   - [Vosk](https://alphacephei.com/vosk)
-  - [whisper.cpp](https://github.com/ggerganov/whisper.cpp)
+  - [whisper.cpp + Parakeet](https://github.com/ggerganov/whisper.cpp)
   - [Faster Whisper](https://github.com/guillaumekln/faster-whisper)
   - [april-asr](https://github.com/abb128/april-asr)
 - Text to Speech (TTS)
@@ -584,6 +584,7 @@ please consider doing one or two of the following:
 - [F5-TTS](https://github.com/SWivid/F5-TTS)
 - [S.A.M.](https://discordier.github.io/sam)
 - [rdrview](https://github.com/eafer/rdrview)
+- [CLD2](https://github.com/CLD2Owners/cld2)
 - [Opal for SailfishOS](https://codeberg.org/opal-sfos)
 
 ## Reviews and demos
@@ -663,6 +664,7 @@ please consider doing one or two of the following:
 - **Parler-TTS**, released under the [Apache License 2.0](https://raw.githubusercontent.com/huggingface/parler-tts/refs/heads/main/LICENSE)
 - **F5-TTS**, released under the [MIT License](https://github.com/SWivid/F5-TTS/raw/refs/heads/main/LICENSE)
 - **rdrview**, released under the [Apache License 2.0](https://github.com/eafer/rdrview/raw/refs/heads/master/LICENSE)
+- **CLD2**, released under the [Apache License 2.0](https://github.com/CLD2Owners/cld2/blob/master/LICENSE)
 - **Opal for SailfishOS**, released under the [AGPL-3.0 license](https://codeberg.org/opal-sfos/harbour-opal-gallery/raw/branch/main/LICENSES/AGPL-3.0-or-later.txt)
 
 The files in the directory `nonbreaking_prefixes` were copied from

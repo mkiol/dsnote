@@ -59,7 +59,8 @@ option(BUILD_XDO "download sources of xdo lib and link statically" ON)
 option(BUILD_SAM "download sources of sam and link statically" ON)
 option(BUILD_WL_CLIPBOARD "download sources of wl-clipboard, build and install" OFF)
 option(BUILD_XKBCOMMON "download sources of xkbcommon build and link statically" OFF)
-option(BUILD_RDRVIEW  "download sources of rdrview, build and link statically" ON)
+option(BUILD_RDRVIEW "download sources of rdrview, build and link statically" ON)
+option(BUILD_CLD2 "download sources of cld2, build and link statically" ON)
 
 # options used only for testing
 option(DEV_USE_PYTHON311 OFF)
@@ -191,7 +192,7 @@ Alexandre Cerqueira Leite · Erhan Yükselci · Boštjan Štrumbelj")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · nlohmann JSON · eSpeak NG · Bergamot Translator · \
 Rubber Band Library · simdjson · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
-libnumbertext · april-asr · html2md · maddy · SAM · rdrview")
+libnumbertext · april-asr · html2md · maddy · SAM · rdrview · CLD2")
 if(WITH_DESKTOP)
     set(info_libs_str "${info_libs_str} · KDBusAddons")
 
@@ -887,6 +888,13 @@ else()
     pkg_search_module(libxml2 REQUIRED libxml-2.0)
     list(APPEND deps_libs ${libxml2_LIBRARIES})
     list(APPEND includes ${libxml2_INCLUDE_DIRS})
+endif()
+
+if(BUILD_CLD2)
+    include(${cmake_path}/cld2.cmake)
+else()
+    find_library(cld2_path cld2_api REQUIRED)
+    list(APPEND deps_libs ${cld2_path})
 endif()
 
 if(WITH_SFOS)
