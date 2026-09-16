@@ -39,14 +39,9 @@ class mnt_engine {
     struct model_files_t {
         std::string model_path_first;
         std::string model_path_second;
+        std::string pinyin_to_hanzi_dict_path;
 
-        inline bool operator==(const model_files_t& rhs) const {
-            return model_path_first == rhs.model_path_first &&
-                   model_path_second == rhs.model_path_second;
-        };
-        inline bool operator!=(const model_files_t& rhs) const {
-            return !(*this == rhs);
-        };
+        auto operator<=>(const model_files_t&) const = default;
     };
     friend std::ostream& operator<<(std::ostream& os,
                                     const model_files_t& model_files);

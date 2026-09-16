@@ -6,6 +6,7 @@
         <file>qml/SettingsUiPage.qml</file>
         <file>qml/SettingsSttPage.qml</file>
         <file>qml/SettingsTtsPage.qml</file>
+        <file>qml/SettingsMntPage.qml</file>
         <file>qml/SettingsAccessebilityPage.qml</file>
         <file>qml/SettingsAdvancedPage.qml</file>
         <file>qml/LangsPage.qml</file>
@@ -64,6 +65,7 @@
         <file>qml/VoiceAudioSampleEditPage.qml</file>
         <file>qml/StackViewQuick.qml</file>
         <file>qml/ImportUrlDialog.qml</file>
+        <file>qml/CheckBoxSetting.qml</file>
         <file alias="config/models.json">../config/models.json</file>
         <file alias="nonbreaking_prefixes/ca.txt">../nonbreaking_prefixes/ca.txt</file>
         <file alias="nonbreaking_prefixes/cs.txt">../nonbreaking_prefixes/cs.txt</file>

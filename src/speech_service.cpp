@@ -8,12 +8,13 @@
 #include "speech_service.h"
 
 #include <fmt/format.h>
-#include <qvariant.h>
 
 #include <QCoreApplication>
 #include <QDBusConnection>
 #include <QDebug>
 #include <QEventLoop>
+#include <QFile>
+#include <QVariant>
 #include <algorithm>
 #include <cstdlib>
 #include <functional>
@@ -33,6 +34,7 @@
 #include "module_tools.hpp"
 #include "parakeet_engine.hpp"
 #include "piper_engine.hpp"
+#include "qtlogger.hpp"
 #include "rhvoice_engine.hpp"
 #include "sam_engine.hpp"
 #include "settings.h"
@@ -1089,11 +1091,13 @@ speech_service::choose_model_config(engine_t engine_type,
                            models_manager::model_engine_t::ttt_tashkeel;
                 });
             it != models.cend()) {
-            config.text_repair->diacritizer_ar = {it->id, it->model_file};
+            config.text_repair->diacritizer_ar = {
+                .model_id = it->id,
+                .model_file = it->model_file,
+            };
         } else {
             qDebug() << "can't find arabic diacritization model";
         }
-
 #ifdef USE_PY
         if (auto it = std::find_if(
                 models.cbegin(), models.cend(),
@@ -1102,7 +1106,10 @@ speech_service::choose_model_config(engine_t engine_type,
                            models_manager::model_engine_t::ttt_unikud;
                 });
             it != models.cend()) {
-            config.text_repair->diacritizer_he = {it->id, it->model_file};
+            config.text_repair->diacritizer_he = {
+                .model_id = it->id,
+                .model_file = it->model_file,
+            };
         } else {
             qDebug() << "can't find hebrew diacritization model";
         }
@@ -1114,7 +1121,10 @@ speech_service::choose_model_config(engine_t engine_type,
                            models_manager::model_engine_t::ttt_hftc;
                 });
             it != models.cend()) {
-            config.text_repair->punctuation = {it->id, it->model_file};
+            config.text_repair->punctuation = {
+                .model_id = it->id,
+                .model_file = it->model_file,
+            };
         } else {
             qDebug() << "can't find punctuation model";
         }
@@ -1749,6 +1759,22 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.model_files.pkuseg_dir =
             model_config->tts->pkuseg_dir.toStdString();
         config.lang = model_config->tts->lang_id.toStdString();
+
+        // for chinese, check pinyin input
+        if (config.lang == "zh" &&
+            get_value_from_options("pinyin_input", false, options)) {
+            auto pinyin_to_hanzi_dict =
+                module_tools::path_to_share_dir_for_path(
+                    QStringLiteral("/google-pinyinim-data")) +
+                "/google-pinyinim-data/dict_pinyin.dat";
+            if (QFileInfo::exists(pinyin_to_hanzi_dict)) {
+                config.model_files.pinyin_to_hanzi_dict_path =
+                    pinyin_to_hanzi_dict.toStdString();
+            } else {
+                LOGW("pinyin-to-hanzi dict missing: " << pinyin_to_hanzi_dict);
+            }
+        }
+
         config.cache_dir = settings::instance()->cache_dir().toStdString();
         config.speaker_id = model_config->tts->speaker.toStdString();
         config.options = model_config->options.toStdString();
@@ -1982,6 +2008,21 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
                 static_cast<int>(settings::text_format_t::TextFormatRaw),
                 options)));
 
+        // for chinese, check pinyin input
+        if (config.lang == "zh" &&
+            get_value_from_options("pinyin_input", false, options)) {
+            auto pinyin_to_hanzi_dict =
+                module_tools::path_to_share_dir_for_path(
+                    QStringLiteral("/google-pinyinim-data")) +
+                "/google-pinyinim-data/dict_pinyin.dat";
+            if (QFileInfo::exists(pinyin_to_hanzi_dict)) {
+                config.model_files.pinyin_to_hanzi_dict_path =
+                    pinyin_to_hanzi_dict.toStdString();
+            } else {
+                LOGW("pinyin-to-hanzi dict missing: " << pinyin_to_hanzi_dict);
+            }
+        }
+
         QFile nb_file{QStringLiteral(":/nonbreaking_prefixes/%1.txt")
                           .arg(model_config->mnt->lang_id.split('-').first())};
         if (nb_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -2094,6 +2135,16 @@ bool speech_service::restart_text_repair_engine(const QVariantMap &options) {
             config.model_files.punctuator_path =
                 model_config->text_repair->punctuation->model_file
                     .toStdString();
+        if (auto pinyin_to_hanzi_dict =
+                module_tools::path_to_share_dir_for_path(
+                    QStringLiteral("/google-pinyinim-data")) +
+                "/google-pinyinim-data/dict_pinyin.dat";
+            QFileInfo::exists(pinyin_to_hanzi_dict)) {
+            config.model_files.pinyin_to_hanzi_dict_path =
+                pinyin_to_hanzi_dict.toStdString();
+        } else {
+            LOGW("pinyin-to-hanzi dict missing: " << pinyin_to_hanzi_dict);
+        }
         config.options = model_config->options.toStdString();
         config.text_format = text_repair_text_fromat_from_settings_format(
             static_cast<settings::text_format_t>(get_value_from_options(

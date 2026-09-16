@@ -81,18 +81,11 @@ class tts_engine {
         std::string model_path;
         std::string vocoder_path;
         std::string diacritizer_path;
+        std::string pinyin_to_hanzi_dict_path;
         std::string hub_path;
         std::string pkuseg_dir;
 
-        bool operator==(const model_files_t& rhs) const {
-            return model_path == rhs.model_path &&
-                   vocoder_path == rhs.vocoder_path &&
-                   diacritizer_path == rhs.diacritizer_path &&
-                   hub_path == rhs.hub_path && pkuseg_dir == rhs.pkuseg_dir;
-        };
-        bool operator!=(const model_files_t& rhs) const {
-            return !(*this == rhs);
-        };
+        auto operator<=>(const model_files_t&) const = default;
     };
     friend std::ostream& operator<<(std::ostream& os,
                                     const model_files_t& model_files);
@@ -113,13 +106,7 @@ class tts_engine {
         std::string name;
         std::string platform_name;
 
-        bool operator==(const gpu_device_t& rhs) const {
-            return platform_name == rhs.platform_name && name == rhs.name &&
-                   id == rhs.id;
-        }
-        bool operator!=(const gpu_device_t& rhs) const {
-            return !(*this == rhs);
-        }
+        auto operator<=>(const gpu_device_t&) const = default;
     };
     friend std::ostream& operator<<(std::ostream& os,
                                     const gpu_device_t& gpu_device);

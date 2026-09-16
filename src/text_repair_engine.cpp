@@ -52,7 +52,8 @@ std::ostream& operator<<(std::ostream& os,
                          const text_repair_engine::model_files_t& model_files) {
     os << "diacritizer_he=" << model_files.diacritizer_path_he
        << ", diacritizer_ar=" << model_files.diacritizer_path_ar
-       << ", punctuator=" << model_files.punctuator_path;
+       << ", punctuator=" << model_files.punctuator_path
+       << ", pinyin-to-hanzi-dict=" << model_files.pinyin_to_hanzi_dict_path;
 
     return os;
 }
@@ -77,6 +78,9 @@ std::ostream& operator<<(std::ostream& os,
             break;
         case text_repair_engine::task_type_t::restore_punctuation:
             os << "restore-punctuation";
+            break;
+        case text_repair_engine::task_type_t::pinyin_to_hanzi:
+            os << "pinyin-to-hanzi";
             break;
         case text_repair_engine::task_type_t::none:
             os << "none";
@@ -168,7 +172,8 @@ void text_repair_engine::repair_text(const std::string& text,
 
     if (tasks.empty()) {
         LOGW("no task to process");
-        tasks.push_back(task_t{"", task_type, true, true});
+        tasks.push_back(
+            task_t{.text = "", .type = task_type, .first = true, .last = true});
     }
 
     {
@@ -217,13 +222,21 @@ std::vector<text_repair_engine::task_t> text_repair_engine::make_tasks(
             if (!segments.empty()) {
                 tasks.reserve(segments.size());
 
-                tasks.push_back(task_t{std::move(segments.front().text),
-                                       task_type, true, false});
+                tasks.push_back(task_t{
+                    .text = std::move(segments.front().text),
+                    .type = task_type,
+                    .first = true,
+                    .last = false,
+                });
 
                 for (auto it = segments.begin() + 1; it != segments.end();
                      ++it) {
-                    tasks.push_back(
-                        task_t{std::move(it->text), task_type, false, false});
+                    tasks.push_back(task_t{
+                        .text = std::move(it->text),
+                        .type = task_type,
+                        .first = false,
+                        .last = false,
+                    });
                 }
 
                 tasks.back().last = true;
@@ -243,6 +256,8 @@ std::vector<text_repair_engine::task_t> text_repair_engine::make_tasks(
                         return "ar";
                     case task_type_t::restore_diacritics_he:
                         return "he";
+                    case task_type_t::pinyin_to_hanzi:
+                        return "";
                     case task_type_t::restore_punctuation:
                     case task_type_t::none:
                         break;
@@ -251,20 +266,33 @@ std::vector<text_repair_engine::task_t> text_repair_engine::make_tasks(
             }());
         if (!parts.empty()) {
             tasks.reserve(parts.size());
-            tasks.push_back(
-                task_t{std::move(parts.front()), task_type, true, false});
+            tasks.push_back(task_t{
+                .text = std::move(parts.front()),
+                .type = task_type,
+                .first = true,
+                .last = false,
+            });
 
             for (auto it = parts.begin() + 1; it != parts.end(); ++it) {
                 text_tools::trim_line(*it);
                 if (!it->empty())
-                    tasks.push_back(
-                        task_t{std::move(*it), task_type, false, false});
+                    tasks.push_back(task_t{
+                        .text = std::move(*it),
+                        .type = task_type,
+                        .first = false,
+                        .last = false,
+                    });
             }
 
             tasks.back().last = true;
         }
     } else {
-        tasks.push_back(task_t{text, task_type, true, true});
+        tasks.push_back(task_t{
+            .text = text,
+            .type = task_type,
+            .first = true,
+            .last = true,
+        });
     }
 
     return tasks;
@@ -275,6 +303,7 @@ void text_repair_engine::process_task(task_t& task,
     switch (task.type) {
         case task_type_t::restore_diacritics_ar:
         case task_type_t::restore_diacritics_he:
+        case task_type_t::pinyin_to_hanzi:
             if (!m_text_processor)
                 m_text_processor.emplace(
                     m_config.use_gpu ? m_config.gpu_device.id : -1);
@@ -302,6 +331,10 @@ void text_repair_engine::process_task(task_t& task,
         case task_type_t::restore_diacritics_he:
             m_text_processor->hebrew_diacritize(
                 task.text, m_config.model_files.diacritizer_path_he);
+            break;
+        case task_type_t::pinyin_to_hanzi:
+            m_text_processor->pinyin_to_hanzi(
+                task.text, m_config.model_files.pinyin_to_hanzi_dict_path);
             break;
         case task_type_t::restore_punctuation:
 #ifdef USE_PY

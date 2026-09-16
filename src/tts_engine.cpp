@@ -159,6 +159,7 @@ std::ostream& operator<<(std::ostream& os,
     os << "model-path=" << model_files.model_path
        << ", vocoder-path=" << model_files.vocoder_path
        << ", diacritizer=" << model_files.diacritizer_path
+       << ", pinyin-to-hanzi-dict=" << model_files.pinyin_to_hanzi_dict_path
        << ", hub-path=" << model_files.hub_path;
 
     return os;
@@ -317,9 +318,15 @@ void tts_engine::push_tasks(std::string&& text, task_type_t type) {
 
     if (tasks.empty()) {
         LOGW("no task to process");
-        tasks.push_back(
-            task_t{"", 0, 0, 0, 0, type,
-                   task_flags::task_flag_first | task_flags::task_flag_last});
+        tasks.push_back(task_t{
+            .text = "",
+            .t0 = 0,
+            .t1 = 0,
+            .speed = 0,
+            .silence_duration = 0,
+            .type = type,
+            .flags = task_flags::task_flag_first | task_flags::task_flag_last,
+        });
     }
 
     {
@@ -405,6 +412,7 @@ std::string tts_engine::path_to_output_file(const std::string& text,
     auto hash = std::hash<std::string>{}(
         text + m_config.model_files.model_path +
         m_config.model_files.vocoder_path + m_config.ref_voice_file +
+        m_config.model_files.pinyin_to_hanzi_dict_path +
         std::to_string(create_date_sec(m_config.ref_voice_file)) +
         m_config.ref_prompt + m_config.model_files.diacritizer_path +
         m_config.speaker_id + m_config.lang +
@@ -795,7 +803,9 @@ void tts_engine::process_restore_text(const task_t& task,
         /*lang=*/m_config.lang,
         /*lang_code=*/m_config.lang_code,
         /*prefix_path=*/m_config.share_dir,
-        /*diacritizer_path=*/m_config.model_files.diacritizer_path));
+        /*model_path=*/m_config.model_files.diacritizer_path.empty()
+            ? m_config.model_files.pinyin_to_hanzi_dict_path
+            : m_config.model_files.diacritizer_path));
 
     if (m_call_backs.text_restored &&
         (task.flags & task_flags::task_flag_last)) {
@@ -817,11 +827,12 @@ size_t tts_engine::handle_silence(unsigned long duration,
 
         if (m_config.audio_format != audio_format_t::wav) {
             media_compressor::options_t opts{
-                media_compressor::quality_t::vbr_high,
-                media_compressor::flags_t::flag_none,
-                1.0,
-                {},
-                {}};
+                .quality = media_compressor::quality_t::vbr_high,
+                .flags = media_compressor::flags_t::flag_none,
+                .speed = 1.0,
+                .stream = {},
+                .clip_info = {},
+            };
 
             media_compressor{}.compress_to_file(
                 {silence_out_file_wav}, silence_out_file,
@@ -860,7 +871,9 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
             /*lang=*/m_config.lang,
             /*lang_code=*/m_config.lang_code,
             /*prefix_path=*/m_config.share_dir,
-            /*diacritizer_path=*/m_config.model_files.diacritizer_path);
+            /*model_path=*/m_config.model_files.diacritizer_path.empty()
+                ? m_config.model_files.pinyin_to_hanzi_dict_path
+                : m_config.model_files.diacritizer_path);
 
         auto output_file_wav = m_config.audio_format == audio_format_t::wav
                                    ? output_file
@@ -920,11 +933,12 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
 
                 if (m_config.audio_format != audio_format_t::wav) {
                     media_compressor::options_t opts{
-                        media_compressor::quality_t::vbr_high,
-                        media_compressor::flags_t::flag_none,
-                        1.0,
-                        {},
-                        {}};
+                        .quality = media_compressor::quality_t::vbr_high,
+                        .flags = media_compressor::flags_t::flag_none,
+                        .speed = 1.0,
+                        .stream = {},
+                        .clip_info = {},
+                    };
 
                     media_compressor{}.compress_to_file(
                         {output_file_wav}, output_file,
@@ -944,11 +958,12 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
 
                     if (m_config.audio_format != audio_format_t::wav) {
                         media_compressor::options_t opts{
-                            media_compressor::quality_t::vbr_high,
-                            media_compressor::flags_t::flag_none,
-                            1.0,
-                            {},
-                            {}};
+                            .quality = media_compressor::quality_t::vbr_high,
+                            .flags = media_compressor::flags_t::flag_none,
+                            .speed = 1.0,
+                            .stream = {},
+                            .clip_info = {},
+                        };
 
                         media_compressor{}.compress_to_file(
                             {output_file_wav}, output_file_no_speed,
@@ -969,11 +984,12 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
                 }
 
                 media_compressor::options_t opts{
-                    media_compressor::quality_t::vbr_high,
-                    media_compressor::flags_t::flag_none,
-                    1.0,
-                    {},
-                    {}};
+                    .quality = media_compressor::quality_t::vbr_high,
+                    .flags = media_compressor::flags_t::flag_none,
+                    .speed = 1.0,
+                    .stream = {},
+                    .clip_info = {},
+                };
 
                 if (follow_timestamps && fit_into_timestamp &&
                     task.t1 > task.t0) {

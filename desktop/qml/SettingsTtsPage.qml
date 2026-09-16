@@ -18,17 +18,10 @@ ColumnLayout {
     property bool verticalMode: parent ? parent.verticalMode : false
     property color textColor: appWin.appTextColor
 
-    CheckBox {
-        checked: _settings.diacritizer_enabled
+    CheckBoxSetting {
+        optionName: "diacritizer_enabled"
         text: qsTranslate("SettingsPage", "Restore diacritical marks before speech synthesis")
-        onCheckedChanged: {
-            _settings.diacritizer_enabled = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "This works only for Arabic and Hebrew languages.")
-        hoverEnabled: true
+        toolTipText: qsTranslate("SettingsPage", "This works only for Arabic and Hebrew languages.")
     }
 
     TipMessage {
@@ -39,48 +32,32 @@ ColumnLayout {
         text: qsTranslate("SettingsPage", "Diacritics restoration for Hebrew language is not available.")
     }
 
-    CheckBox {
-        checked: _settings.tts_split_into_sentences
+    CheckBoxSetting {
+        optionName: "tts_split_into_sentences"
         text: qsTranslate("SettingsPage", "Split text into sentences")
-        onCheckedChanged: {
-            _settings.tts_split_into_sentences = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.") + " " +
-                      qsTranslate("SettingsPage", "This speeds up reading, but in some models the naturalness of speech may be reduced.")
-        hoverEnabled: true
+        toolTipText: qsTranslate("SettingsPage", "The text will be divided into sentences and speech synthesis for each sentence will be performed in parallel.") + " " +
+                     qsTranslate("SettingsPage", "This speeds up reading, but in some models the naturalness of speech may be reduced.")
     }
 
-    CheckBox {
-        checked: _settings.tts_use_engine_speed_control
+    CheckBoxSetting {
+        optionName: "tts_use_engine_speed_control"
         text: qsTranslate("SettingsPage", "Use engine speed control")
-        onCheckedChanged: {
-            _settings.tts_use_engine_speed_control = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "If the TTS engine supports speed control, it will be used.") + " " +
-                      qsTranslate("SettingsPage", "When this option is disabled, speed manipulation takes place during audio post-processing.") + " " +
-                      qsTranslate("SettingsPage", "The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.")
-        hoverEnabled: true
+        toolTipText: qsTranslate("SettingsPage", "If the TTS engine supports speed control, it will be used.") + " " +
+                     qsTranslate("SettingsPage", "When this option is disabled, speed manipulation takes place during audio post-processing.") + " " +
+                     qsTranslate("SettingsPage", "The actual speed after audio post-processing is much more predictable, but the naturalness of speech may be reduced.")
     }
 
-    CheckBox {
-        checked: _settings.tts_normalize_audio
+    CheckBoxSetting {
+        optionName: "tts_normalize_audio"
         text: qsTranslate("SettingsPage", "Normalize audio")
-        onCheckedChanged: {
-            _settings.tts_normalize_audio = checked
-        }
+        toolTipText: qsTranslate("SettingsPage", "The volume of the audio will be normalized.") + " " +
+                     qsTranslate("SettingsPage", "The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.") + " " +
+                     qsTranslate("SettingsPage", "Disable this option if you observe this problem.")
+    }
 
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "The volume of the audio will be normalized.") + " " +
-                      qsTranslate("SettingsPage", "The volume is normalized independently for each sentence, which can lead to unstable volume levels in different sentences.") + " " +
-                      qsTranslate("SettingsPage", "Disable this option if you observe this problem.")
-        hoverEnabled: true
+    CheckBoxSetting {
+        optionName: "pinyin_input"
+        text: qsTranslate("SettingsPage", "For Chinese, treat the input text as pinyin")
     }
 
     CheckBox {

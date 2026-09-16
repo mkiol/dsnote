@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2021-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -76,6 +76,7 @@ DialogPage {
                     qsTr("User Interface"),
                     qsTr("Speech to Text"),
                     qsTr("Text to Speech"),
+                    qsTr("Translator"),
                     qsTr("Accessibility"),
                     qsTr("Advanced")
                 ]
@@ -115,6 +116,11 @@ DialogPage {
             }
 
             TabButton {
+                text: qsTr("Translator")
+                width: implicitWidth
+            }
+
+            TabButton {
                 text: qsTr("Accessibility")
                 width: implicitWidth
             }
@@ -150,9 +156,12 @@ DialogPage {
                 replace("SettingsTtsPage.qml")
                 break
             case 4:
-                replace("SettingsAccessebilityPage.qml")
+                replace("SettingsMntPage.qml")
                 break
             case 5:
+                replace("SettingsAccessebilityPage.qml")
+                break
+            case 6:
                 replace("SettingsAdvancedPage.qml")
                 break
             }

@@ -356,7 +356,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     enum task_flags_t {
         task_flags_none = 0,
         task_flags_stt_clear_mic_audio_when_decoding = 1 << 1,
-        task_flags_stt_play_beep = 1 << 2
+        task_flags_stt_play_beep = 1 << 2,
     };
 
     struct task_t {

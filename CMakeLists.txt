@@ -61,6 +61,7 @@ option(BUILD_WL_CLIPBOARD "download sources of wl-clipboard, build and install" 
 option(BUILD_XKBCOMMON "download sources of xkbcommon build and link statically" OFF)
 option(BUILD_RDRVIEW "download sources of rdrview, build and link statically" ON)
 option(BUILD_CLD2 "download sources of cld2, build and link statically" ON)
+option(BUILD_GOOGLE_PINYINIM "download sources of google_pinyinim, build and link statically" ON)
 
 # options used only for testing
 option(DEV_USE_PYTHON311 OFF)
@@ -895,6 +896,13 @@ if(BUILD_CLD2)
 else()
     find_library(cld2_path cld2_api REQUIRED)
     list(APPEND deps_libs ${cld2_path})
+endif()
+
+if(BUILD_GOOGLE_PINYINIM)
+    include(${cmake_path}/google_pinyinim.cmake)
+else()
+    find_library(google_pinyinim_path google_pinyinim_api REQUIRED)
+    list(APPEND deps_libs ${google_pinyinim_path})
 endif()
 
 if(WITH_SFOS)

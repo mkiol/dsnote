@@ -355,6 +355,9 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(settings::instance(), &settings::mnt_text_format_changed, this,
             &dsnote_app::handle_translator_settings_changed,
             Qt::QueuedConnection);
+    connect(settings::instance(), &settings::pinyin_input_changed, this,
+            &dsnote_app::handle_translator_settings_changed,
+            Qt::QueuedConnection);
     connect(settings::instance(), &settings::audio_input_device_changed, this,
             [this] { emit audio_source_changed(); });
     connect(settings::instance(), &settings::insert_mode_changed, this,
@@ -2751,6 +2754,12 @@ void dsnote_app::transcribe_file_internal(
     options.insert("inline_timestamp_min_interval",
                    s->inline_timestamp_min_interval());
 
+    // for chinese, add pinyin input option
+    auto lang = lang_from_model_id(model_id);
+    if (lang == "zh") {
+        options.insert("pinyin_input", settings::instance()->pinyin_input());
+    }
+
     m_current_stt_request = stt_request_t::transcribe_file;
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
@@ -3053,9 +3062,10 @@ void dsnote_app::play_speech_internal(QString text, const QString &input_file,
         text_format = settings::text_format_t::TextFormatRaw;
     }
 
+    auto lang = lang_from_model_id(model_id);
+
     if (settings::instance()->trans_rules_enabled()) {
-        transform_text(text, transform_text_target_t::tts,
-                       lang_from_model_id(model_id));
+        transform_text(text, transform_text_target_t::tts, lang);
     }
 
     int new_task = 0;
@@ -3093,6 +3103,11 @@ void dsnote_app::play_speech_internal(QString text, const QString &input_file,
     }
     options.insert("inline_timestamp_template",
                    settings::instance()->inline_timestamp_template());
+
+    // for chinese, add pinyin input option
+    if (lang == "zh") {
+        options.insert("pinyin_input", settings::instance()->pinyin_input());
+    }
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->tts_play_speech(text, model_id,
@@ -3196,6 +3211,10 @@ void dsnote_app::restore_diacritics_he() {
 
 void dsnote_app::restore_punctuation() {
     repair_text(text_repair_task_type_t::restore_punctuation);
+}
+
+void dsnote_app::pinyin_to_hanzi() {
+    repair_text(text_repair_task_type_t::pinyin_to_hanzi);
 }
 
 void dsnote_app::repair_text(text_repair_task_type_t task_type) {
@@ -3336,6 +3355,13 @@ void dsnote_app::translate_internal(const QString &text) {
         options.insert(
             "text_format",
             static_cast<int>(settings::instance()->mnt_text_format()));
+
+        // for chinese, add pinyin input option
+        if (m_active_mnt_lang.startsWith(QLatin1String("zh"),
+                                         Qt::CaseInsensitive)) {
+            options.insert("pinyin_input",
+                           settings::instance()->pinyin_input());
+        }
 
         if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
             new_task = speech_service::instance()->mnt_translate(

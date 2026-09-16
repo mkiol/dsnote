@@ -456,7 +456,7 @@ ColumnLayout {
         leftPadding: appWin.padding
 
         GridLayout {
-            columns: (translateSwitch.implicitWidth + cleanSwitch.implicitWidth + 2 * columnSpacing) > appWin.width ? 1 : 2
+            columns: (translateSwitch.implicitWidth + cleanSwitch.implicitWidth + pinyinSwitch.implicitWidth + 2 * columnSpacing) > appWin.width ? 1 : pinyinSwitch.visible ? 3 : 2
 
             columnSpacing: appWin.padding
             rowSpacing: appWin.padding
@@ -489,6 +489,18 @@ ColumnLayout {
                 ToolTip.text: qsTr("Remove duplicate whitespaces and extra line breaks in the text before translation.") + " " +
                               qsTr("If the input text is incorrectly formatted, this option may improve the translation quality.")
                 hoverEnabled: true
+            }
+
+            Switch {
+                id: pinyinSwitch
+
+                enabled: app.state === DsnoteApp.StateIdle
+                visible: app.active_mnt_lang == "zh"
+                text: qsTr("Treat the input text as pinyin")
+                checked: _settings.pinyin_input
+                onClicked: {
+                    _settings.pinyin_input = !_settings.pinyin_input
+                }
             }
         }
     }

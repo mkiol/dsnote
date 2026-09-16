@@ -1,0 +1,155 @@
+diff -ruN -x '.*' google_pinyinim-org/CMakeLists.txt google_pinyinim-patched/CMakeLists.txt
+--- google_pinyinim-org/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ google_pinyinim-patched/CMakeLists.txt	2026-09-16 09:14:19.003100501 +0200
+@@ -0,0 +1,66 @@
++cmake_minimum_required(VERSION 3.5)
++
++project(google_pinyinim_api LANGUAGES CXX VERSION 1.0.0)
++
++set(BUILD_SHARED_LIBS OFF)
++set(CMAKE_POSITION_INDEPENDENT_CODE ON)
++
++set(google_pinyinim_source_dir "${PROJECT_SOURCE_DIR}/googlelib")
++set(google_pinyinim_sources
++    ${google_pinyinim_source_dir}/dictbuilder.cpp
++    ${google_pinyinim_source_dir}/dictlist.cpp
++    ${google_pinyinim_source_dir}/dicttrie.cpp
++    ${google_pinyinim_source_dir}/lpicache.cpp
++    ${google_pinyinim_source_dir}/matrixsearch.cpp
++    ${google_pinyinim_source_dir}/mystdlib.cpp
++    ${google_pinyinim_source_dir}/ngram.cpp
++    ${google_pinyinim_source_dir}/pinyinime.cpp
++    ${google_pinyinim_source_dir}/searchutility.cpp
++    ${google_pinyinim_source_dir}/spellingtable.cpp
++    ${google_pinyinim_source_dir}/spellingtrie.cpp
++    ${google_pinyinim_source_dir}/splparser.cpp
++    ${google_pinyinim_source_dir}/sync.cpp
++    ${google_pinyinim_source_dir}/userdict.cpp
++    ${google_pinyinim_source_dir}/utf16char.cpp
++    ${google_pinyinim_source_dir}/utf16reader.cpp
++    ${google_pinyinim_source_dir}/atomdictbase.h
++    ${google_pinyinim_source_dir}/dictbuilder.h
++    ${google_pinyinim_source_dir}/dictdef.h
++    ${google_pinyinim_source_dir}/dictlist.h
++    ${google_pinyinim_source_dir}/dicttrie.h
++    ${google_pinyinim_source_dir}/lpicache.h
++    ${google_pinyinim_source_dir}/matrixsearch.h
++    ${google_pinyinim_source_dir}/mystdlib.h
++    ${google_pinyinim_source_dir}/ngram.h
++    ${google_pinyinim_source_dir}/pinyinime.h
++    ${google_pinyinim_source_dir}/pinyinime_global.h
++    ${google_pinyinim_source_dir}/searchutility.h
++    ${google_pinyinim_source_dir}/spellingtable.h
++    ${google_pinyinim_source_dir}/spellingtrie.h
++    ${google_pinyinim_source_dir}/splparser.h
++    ${google_pinyinim_source_dir}/sync.h
++    ${google_pinyinim_source_dir}/userdict.h
++    ${google_pinyinim_source_dir}/utf16char.h
++    ${google_pinyinim_source_dir}/utf16reader.h
++)
++
++add_library(${CMAKE_PROJECT_NAME} STATIC google_pinyinim_api.cpp ${google_pinyinim_sources})
++
++if(NOT DEFINED QT_VERSION_MAJOR)
++    set(QT_VERSION_MAJOR 6)
++endif()
++find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
++target_link_libraries(${CMAKE_PROJECT_NAME} Qt${QT_VERSION_MAJOR}::Core)
++
++target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
++    ${PROJECT_SOURCE_DIR}
++    ${google_pinyinim_source_dir})
++    
++set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES PUBLIC_HEADER "google_pinyinim_api.h")
++
++install(TARGETS ${CMAKE_PROJECT_NAME}
++    LIBRARY DESTINATION lib
++    ARCHIVE DESTINATION lib
++    PUBLIC_HEADER DESTINATION include)
++
++install(FILES "${PROJECT_SOURCE_DIR}/data/dict_pinyin.dat" DESTINATION share/google-pinyinim-data) 
+diff -ruN -x '.*' google_pinyinim-org/google_pinyinim_api.cpp google_pinyinim-patched/google_pinyinim_api.cpp
+--- google_pinyinim-org/google_pinyinim_api.cpp	1970-01-01 01:00:00.000000000 +0100
++++ google_pinyinim-patched/google_pinyinim_api.cpp	2026-09-16 09:05:03.381761852 +0200
+@@ -0,0 +1,53 @@
++#include "google_pinyinim_api.h"
++
++#include <QByteArray>
++#include <QString>
++
++#include "pinyinime.h"
++
++static QByteArray s_output_buffer{};
++
++int pinyinim_init(const char* dict_path) {
++    if (dict_path == nullptr || !ime_pinyin::im_open_decoder(dict_path, "")) {
++        return PINYINIM_ERROR;
++    }
++    return PINYINIM_SUCCESS;
++}
++
++int pinyinim_to_hanzi(const char* input, size_t input_length, const char** output,
++                      size_t* output_size) {
++    if (input == nullptr || output == nullptr || input_length == 0) {
++        return PINYINIM_ERROR;
++    }
++
++    ime_pinyin::im_reset_search();
++
++    size_t total_candidates = ime_pinyin::im_search(input, input_length);
++
++    if (total_candidates == 0) {
++        return PINYINIM_ERROR;
++    }
++
++    ime_pinyin::char16 cand_buf[128] = {0};
++    ime_pinyin::char16* result = ime_pinyin::im_get_candidate(0, cand_buf, 128);
++
++    if (result == nullptr) {
++        return PINYINIM_ERROR;
++    }
++
++    s_output_buffer =
++        QString::fromUtf16(reinterpret_cast<const char16_t*>(cand_buf))
++            .toUtf8();
++
++    *output = s_output_buffer.constData();
++    if (output_size) {
++        *output_size = s_output_buffer.size();
++    }
++
++    return PINYINIM_SUCCESS;
++}
++
++void pinyinim_free() {
++    ime_pinyin::im_close_decoder();
++    s_output_buffer.clear();
++}
+diff -ruN -x '.*' google_pinyinim-org/google_pinyinim_api.h google_pinyinim-patched/google_pinyinim_api.h
+--- google_pinyinim-org/google_pinyinim_api.h	1970-01-01 01:00:00.000000000 +0100
++++ google_pinyinim-patched/google_pinyinim_api.h	2026-09-16 09:04:45.956635024 +0200
+@@ -0,0 +1,24 @@
++#ifndef PINYINIM_API_H
++#define PINYINIM_API_H
++
++#define PINYINIM_API_EXPORT __attribute__((visibility("default")))
++#define PINYINIM_SUCCESS 0
++#define PINYINIM_ERROR 1
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++#include <stddef.h>
++
++PINYINIM_API_EXPORT int pinyinim_init(const char* dict_path);
++PINYINIM_API_EXPORT int pinyinim_to_hanzi(const char* input,
++                                          size_t input_length, const char** output,
++                                          size_t* output_size);
++PINYINIM_API_EXPORT void pinyinim_free();
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif  // PINYINIM_API_H

@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -198,6 +198,14 @@ ColumnLayout {
                 model: app.available_tts_models
                 onActivated: (index) => app.set_active_tts_model_idx(index)
                 currentIndex: app.active_tts_model_idx
+            }
+            checkToolTip: qsTr("Treat the input text as pinyin")
+            check {
+                visible: app.active_tts_model.startsWith("zh")
+                checked: _settings.pinyin_input
+                onClicked: {
+                    _settings.pinyin_input = !_settings.pinyin_input
+                }
             }
             combo2 {
                 visible: listenReadCombos.refVoiceNeeded || listenReadCombos.refPromptNeeded

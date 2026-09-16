@@ -166,3 +166,7 @@ if(WITH_SYSTEMD_SERVICE)
     configure_file("${dbus_dir}/dbus_speech.service.in" "${PROJECT_BINARY_DIR}/dbus_speech.service")
     install(FILES "${PROJECT_BINARY_DIR}/dbus_speech.service" DESTINATION share/dbus-1/services RENAME ${info_dbus_speech_service}.service)
 endif()
+
+if(BUILD_GOOGLE_PINYINIM)
+    install(DIRECTORY "${external_share_dir}/google-pinyinim-data" DESTINATION ${share_install_dir})
+endif()

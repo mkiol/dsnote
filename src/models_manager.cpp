@@ -2265,6 +2265,12 @@ void models_manager::add_astrunc_model_options(priv_model_t& model) {
 void models_manager::add_implicit_model_options(priv_model_t& model) {
     add_astrunc_model_options(model);
 
+    if (model.lang_id.compare(QLatin1String{"zh"}, Qt::CaseInsensitive) == 0 &&
+        !model.options.contains('d')) {
+        // add pinyin to hanzi
+        model.options.push_back('d');
+    }
+
     if (model.engine == model_engine_t::tts_sam) {
         // add split by words option for all sam tts models
         model.options.push_back('w');

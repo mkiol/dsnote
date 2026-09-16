@@ -247,6 +247,14 @@ ToolBar {
                                     onTriggered: app.restore_diacritics_he()
                                 }
                             }
+
+                            MenuItem {
+                                action: Action {
+                                    enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.note.length !== 0
+                                    text: qsTr("Convert pinyin to hanzi (%1)").arg(qsTr("Chinese"))
+                                    onTriggered: app.pinyin_to_hanzi()
+                                }
+                            }
                         }
                     }
 
