@@ -1476,6 +1476,21 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         config.insert_stats =
             get_value_from_options("insert_stats", false, options);
 
+        // for chinese, check pinyin input
+        if (config.lang == "zh" &&
+            get_value_from_options("pinyin_output", false, options)) {
+            auto hanzi_to_pinyin_dict =
+                module_tools::path_to_share_dir_for_path(
+                    QStringLiteral("/cpp-pinyin")) +
+                "/cpp-pinyin/dict";
+            if (QFileInfo::exists(hanzi_to_pinyin_dict)) {
+                config.model_files.hanzi_to_pinyin_dict_path =
+                    hanzi_to_pinyin_dict.toStdString();
+            } else {
+                LOGW("hanzi-to-pinyin dict missing: " << hanzi_to_pinyin_dict);
+            }
+        }
+
 #define ENGINE_OPTS(name_)                                                     \
     stt_engine::whisper_config_t wc{};                                         \
     wc.translate =                                                             \
@@ -2022,6 +2037,19 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
                 LOGW("pinyin-to-hanzi dict missing: " << pinyin_to_hanzi_dict);
             }
         }
+        if (config.out_lang == "zh" &&
+            get_value_from_options("pinyin_output", false, options)) {
+            auto hanzi_to_pinyin_dict =
+                module_tools::path_to_share_dir_for_path(
+                    QStringLiteral("/cpp-pinyin")) +
+                "/cpp-pinyin/dict";
+            if (QFileInfo::exists(hanzi_to_pinyin_dict)) {
+                config.model_files.hanzi_to_pinyin_dict_path =
+                    hanzi_to_pinyin_dict.toStdString();
+            } else {
+                LOGW("hanzi-to-pinyin dict missing: " << hanzi_to_pinyin_dict);
+            }
+        }
 
         QFile nb_file{QStringLiteral(":/nonbreaking_prefixes/%1.txt")
                           .arg(model_config->mnt->lang_id.split('-').first())};
@@ -2144,6 +2172,16 @@ bool speech_service::restart_text_repair_engine(const QVariantMap &options) {
                 pinyin_to_hanzi_dict.toStdString();
         } else {
             LOGW("pinyin-to-hanzi dict missing: " << pinyin_to_hanzi_dict);
+        }
+        if (auto hanzi_to_pinyin_dict =
+                module_tools::path_to_share_dir_for_path(
+                    QStringLiteral("/cpp-pinyin")) +
+                "/cpp-pinyin/dict";
+            QFileInfo::exists(hanzi_to_pinyin_dict)) {
+            config.model_files.hanzi_to_pinyin_dict_path =
+                hanzi_to_pinyin_dict.toStdString();
+        } else {
+            LOGW("hanzi-to-pinyin dict missing: " << hanzi_to_pinyin_dict);
         }
         config.options = model_config->options.toStdString();
         config.text_format = text_repair_text_fromat_from_settings_format(
@@ -3558,13 +3596,17 @@ int speech_service::stt_transcribe_file(const QString &file, QString lang,
     qDebug() << "requested stream index:" << stream_index;
 
     try {
-        if (QFileInfo::exists(file))
-            restart_audio_source(stt_source_file_props_t{file, stream_index});
-        else
+        if (QFileInfo::exists(file)) {
+            restart_audio_source(stt_source_file_props_t{
+                .file = file,
+                .stream_index = stream_index,
+            });
+        } else {
             restart_audio_source(stt_source_file_props_t{
                 .file = QUrl{file}.toLocalFile(),
                 .stream_index = stream_index,
             });
+        }
     } catch (const std::runtime_error &err) {
         m_current_task.reset();
         qCritical() << "audio source error:" << err.what();

@@ -62,6 +62,7 @@ option(BUILD_XKBCOMMON "download sources of xkbcommon build and link statically"
 option(BUILD_RDRVIEW "download sources of rdrview, build and link statically" ON)
 option(BUILD_CLD2 "download sources of cld2, build and link statically" ON)
 option(BUILD_GOOGLE_PINYINIM "download sources of google_pinyinim, build and link statically" ON)
+option(BUILD_CPPPINYIN "download sources of cpp-pinyin, build and link statically" ON)
 
 # options used only for testing
 option(DEV_USE_PYTHON311 OFF)
@@ -193,7 +194,7 @@ Alexandre Cerqueira Leite · Erhan Yükselci · Boštjan Štrumbelj")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · nlohmann JSON · eSpeak NG · Bergamot Translator · \
 Rubber Band Library · simdjson · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
-libnumbertext · april-asr · html2md · maddy · SAM · rdrview · CLD2")
+libnumbertext · april-asr · html2md · maddy · SAM · rdrview · CLD2 · google_pinyinim · cpp-pinyin")
 if(WITH_DESKTOP)
     set(info_libs_str "${info_libs_str} · KDBusAddons")
 
@@ -903,6 +904,14 @@ if(BUILD_GOOGLE_PINYINIM)
 else()
     find_library(google_pinyinim_path google_pinyinim_api REQUIRED)
     list(APPEND deps_libs ${google_pinyinim_path})
+endif()
+
+if(BUILD_CPPPINYIN)
+    include(${cmake_path}/cpppinyin.cmake)
+else()
+    pkg_search_module(libcpppinyin REQUIRED cpp-pinyin)
+    list(APPEND deps_libs ${libcpppinyin_LIBRARIES})
+    list(APPEND includes ${libcpppinyin_INCLUDE_DIRS})
 endif()
 
 if(WITH_SFOS)

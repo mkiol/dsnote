@@ -7,6 +7,8 @@
 
 #include "text_tools.hpp"
 
+#include <cpp-pinyin/G2pglobal.h>
+#include <cpp-pinyin/Pinyin.h>
 #include <fmt/format.h>
 #include <google_pinyinim_api.h>
 #include <html2md/html2md.h>
@@ -19,6 +21,7 @@
 #include <cctype>
 #include <cstdlib>
 #include <cwctype>
+#include <filesystem>
 #include <libnumbertext/Numbertext.hxx>
 #include <memory>
 #include <regex>
@@ -30,6 +33,7 @@
 #include <utility>
 
 #include "astrunc/astrunc.h"
+#include "cpp-pinyin/ChineseG2p.h"
 #include "logger.hpp"
 #ifdef USE_PY
 #include "py_executor.hpp"
@@ -1302,6 +1306,18 @@ void processor::arabic_diacritize(std::string& text,
 
     text.assign(tashkeel::tashkeel_run(text, *m_tashkeel_state));
 }
+void processor::hanzi_to_pinyin(std::string& text,
+                                const std::string& model_path) {
+    Pinyin::setDictionaryPath(model_path);
+
+    const auto g2p_man = std::make_unique<Pinyin::Pinyin>();
+    auto vec = g2p_man->hanziToPinyin(text, Pinyin::ManTone::Style::TONE,
+                                      Pinyin::Error::Default,
+                                      /*candidates=*/false, /*v_to_u=*/false,
+                                      /*neutral_tone_with_five=*/false);
+
+    text.assign(vec.toStdStr());
+}
 
 void processor::pinyin_to_hanzi(std::string& text,
                                 const std::string& model_path) {
@@ -1315,26 +1331,63 @@ void processor::pinyin_to_hanzi(std::string& text,
 
     static const std::unordered_set<std::string> punctuation_marks = {
         // ascii punctuation
-        "!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".",
-        "/", ":", ";", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "_", "`",
-        "{", "|", "}", "~",
+        "!",
+        "\"",
+        "#",
+        "$",
+        "%",
+        "&",
+        "'",
+        "(",
+        ")",
+        "*",
+        "+",
+        ",",
+        "-",
+        ".",
+        "/",
+        ":",
+        ";",
+        "<",
+        "=",
+        ">",
+        "?",
+        "@",
+        "[",
+        "\\",
+        "]",
+        "^",
+        "_",
+        "`",
+        "{",
+        "|",
+        "}",
+        "~",
 
         // chinese punctuation
-        "\u3002",  // 。 (chinese full stop)
-        "\uFF0C",  // ， (chinese comma)
-        "\uFF01",  // ！ (chinese exclamation mark)
-        "\uFF1F",  // ？ (chinese question mark)
-        "\uFF1A",  // ： (chinese colon)
-        "\u3001",  // 、 (chinese comma for enumeration)
-        "\u2014",  // — (em dash)
-        "\u300A",  // 《 (chinese book title left)
-        "\u300B",  // 》 (chinese book title right)
-        "\u3008",  // 〈 (chinese angle bracket left)
-        "\u3009",  // 〉 (chinese angle bracket right)
-        "\u3010",  // 【 (chinese square bracket left)
-        "\u3011",  // 】 (chinese square bracket right)
-        "\uFF08",  // （ (chinese parenthesis left)
-        "\uFF09"   // ） (chinese parenthesis right)
+        "\u3002",  // 。
+        "\uFF0C",  // ，
+        "\uFF01",  // ！
+        "\uFF1F",  // ？
+        "\uFF1A",  // ：
+        "\u3001",  // 、
+        "\u2014",  // —
+        "\u2027",  // ‧
+        "\u22EF",  // ⋯
+        "\u2E3A",  // ⸺
+        "\u3000",  // 　
+        "\u300A",  // 《
+        "\u300B",  // 》
+        "\u3008",  // 〈
+        "\u3009",  // 〉
+        "\u300D",  // 「
+        "\u300C",  // 」
+        "\u300E",  // 『
+        "\u300F",  // 』
+        "\u3010",  // 【
+        "\u3011",  // 】
+        "\uFF08",  // （
+        "\uFF09",  // ）
     };
 
     auto non_word_char = [](const std::string& utf8_char) {
@@ -1411,7 +1464,8 @@ void processor::pinyin_to_hanzi(std::string& text,
             {"é", 'e'}, {"ě", 'e'}, {"è", 'e'}, {"ī", 'i'}, {"í", 'i'},
             {"ǐ", 'i'}, {"ì", 'i'}, {"ō", 'o'}, {"ó", 'o'}, {"ǒ", 'o'},
             {"ò", 'o'}, {"ū", 'u'}, {"ú", 'u'}, {"ǔ", 'u'}, {"ù", 'u'},
-            {"ǖ", 'v'}, {"ǘ", 'v'}, {"ǚ", 'v'}, {"ǜ", 'v'}, {"ü", 'v'}};
+            {"ǖ", 'v'}, {"ǘ", 'v'}, {"ǚ", 'v'}, {"ǜ", 'v'}, {"ü", 'v'},
+        };
 
         std::string result;
 
@@ -1435,6 +1489,7 @@ void processor::pinyin_to_hanzi(std::string& text,
                 i += 1;
             }
         }
+
         return result;
     };
 
@@ -1454,26 +1509,24 @@ void processor::pinyin_to_hanzi(std::string& text,
         if (pinyinim_to_hanzi(cword.c_str(), cword.size(), &out_buf,
                               &out_buf_size) != 0) {
             LOGD("failed to pinyin to hanzi: " << word);
-            return false;
         }
+
         os << std::string_view(out_buf, out_buf_size);
-        return true;
     };
 
     auto tokens = split_into_tokens(text);
 
-    for (const auto& token : tokens) {
+    for (auto& token : tokens) {
         if (token.empty()) {
             continue;
         }
         size_t i = 0;
         if (!non_word_char(next_utf8_char(token, i))) {
-            if (!transform(token)) {
-                pinyinim_free();
-                return;
-            }
+            transform(token);
             continue;
         }
+
+        trim_line(token);
         os << token;
     }
 

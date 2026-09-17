@@ -40,6 +40,7 @@ class mnt_engine {
         std::string model_path_first;
         std::string model_path_second;
         std::string pinyin_to_hanzi_dict_path;
+        std::string hanzi_to_pinyin_dict_path;
 
         auto operator<=>(const model_files_t&) const = default;
     };

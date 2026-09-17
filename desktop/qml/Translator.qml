@@ -495,11 +495,11 @@ ColumnLayout {
                 id: pinyinSwitch
 
                 enabled: app.state === DsnoteApp.StateIdle
-                visible: app.active_mnt_lang == "zh"
-                text: qsTr("Treat the input text as pinyin")
-                checked: _settings.pinyin_input
+                visible: app.active_mnt_lang == "zh" || app.active_mnt_out_lang == "zh"
+                text: qsTr("Use pinyin")
+                checked: _settings.pinyin_text
                 onClicked: {
-                    _settings.pinyin_input = !_settings.pinyin_input
+                    _settings.pinyin_text = !_settings.pinyin_text
                 }
             }
         }

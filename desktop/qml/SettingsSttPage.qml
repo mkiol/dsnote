@@ -74,24 +74,17 @@ ColumnLayout {
         }
     }
 
-    CheckBox {
+    CheckBoxSetting {
         id: puncCheckBox
 
         visible: app.feature_punctuator
-        checked: _settings.restore_punctuation
+        optionName: "restore_punctuation"
         text: qsTranslate("SettingsPage", "Restore punctuation")
-        onCheckedChanged: {
-            _settings.restore_punctuation = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "Enable advanced punctuation restoration after speech recognition. To make it work, " +
+        toolTipText: qsTranslate("SettingsPage", "Enable advanced punctuation restoration after speech recognition. To make it work, " +
                            "make sure you have enabled %1 model for your language.")
                       .arg("<i>" + qsTranslate("SettingsPage", "Punctuation") + "</i>") + " " +
-                      qsTranslate("SettingsPage", "When this option is enabled model initialization takes much longer and memory usage is much higher.") + " " +
-                      qsTranslate("SettingsPage", "This option only works with models that do not natively support punctuation.")
-        hoverEnabled: true
+                     qsTranslate("SettingsPage", "When this option is enabled model initialization takes much longer and memory usage is much higher.") + " " +
+                     qsTranslate("SettingsPage", "This option only works with models that do not natively support punctuation.")
     }
 
     TipMessage {
@@ -103,75 +96,46 @@ ColumnLayout {
               .arg("<i>" + qsTranslate("SettingsPage", "Restore punctuation") + "</i>").arg("<i>" + qsTranslate("SettingsPage", "Punctuation") + "</i>")
     }
 
-    CheckBox {
-        checked: _settings.stt_echo
+    CheckBoxSetting {
+        optionName: "stt_echo"
         text: qsTranslate("SettingsPage", "Echo mode")
-        onCheckedChanged: {
-            _settings.stt_echo = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "After processing, the decoded text will be immediately read out using the currently set Text to Speech model.")
-        hoverEnabled: true
+        toolTipText: qsTranslate("SettingsPage", "After processing, the decoded text will be immediately read out using the currently set Text to Speech model.")
     }
 
-    CheckBox {
-        checked: _settings.stt_use_note_as_prompt
+    CheckBoxSetting {
+        optionName: "stt_use_note_as_prompt"
         text: qsTranslate("SettingsPage", "Use note as context")
-        onCheckedChanged: {
-            _settings.stt_use_note_as_prompt = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "Use an existing note as the initial context in decoding.") + " " +
-                      qsTranslate("SettingsPage", "This option only works with %1 and %2 models.").arg("<i>WhisperCpp</i>").arg("<i>FasterWhisper</i>")
-        hoverEnabled: true
+        toolTipText: qsTranslate("SettingsPage", "Use an existing note as the initial context in decoding.") + " " +
+                     qsTranslate("SettingsPage", "This option only works with %1 and %2 models.").arg("<i>WhisperCpp</i>").arg("<i>FasterWhisper</i>")
     }
 
-    CheckBox {
-        checked: _settings.stt_clear_mic_audio_when_decoding
+    CheckBoxSetting {
+        optionName: "stt_clear_mic_audio_when_decoding"
         text: qsTranslate("SettingsPage", "Pause listening while processing")
-        onCheckedChanged: {
-            _settings.stt_clear_mic_audio_when_decoding = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "Temporarily pause listening for the duration of audio processing.") + " " +
-                      qsTranslate("SettingsPage", "This option can be useful when %1 is %2.")
+        toolTipText: qsTranslate("SettingsPage", "Temporarily pause listening for the duration of audio processing.") + " " +
+                     qsTranslate("SettingsPage", "This option can be useful when %1 is %2.")
                         .arg("<i>" + qsTranslate("SettingsPage", "Listening mode") + "</i>")
                         .arg("<i>" + qsTranslate("SettingsPage", "Always on") + "</i>")
-        hoverEnabled: true
     }
 
-    CheckBox {
-        checked: _settings.stt_play_beep
+    CheckBoxSetting {
+        optionName: "stt_play_beep"
         text: qsTranslate("SettingsPage", "Play tone when starting and stopping listening")
-        onCheckedChanged: {
-            _settings.stt_play_beep = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "Play an audible tone when starting and stopping listening.")
-        hoverEnabled: true
+        toolTipText: qsTranslate("SettingsPage", "Play an audible tone when starting and stopping listening.")
     }
 
-    CheckBox {
-        checked: _settings.stt_insert_stats
+    CheckBoxSetting {
+        optionName: "stt_insert_stats"
         text: qsTranslate("SettingsPage", "Insert statistics")
-        onCheckedChanged: {
-            _settings.stt_insert_stats = checked
-        }
+        toolTipText: qsTranslate("SettingsPage", "Inserts processing related information to the text, such as processing time and audio length.") + " " +
+                     qsTranslate("SettingsPage", "This option can be useful for comparing the performance of different models, engines and their parameters.") + " " +
+                     qsTranslate("SettingsPage", "This option does not work with all engines.")
+    }
 
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "Inserts processing related information to the text, such as processing time and audio length.") + " " +
-                      qsTranslate("SettingsPage", "This option can be useful for comparing the performance of different models, engines and their parameters.") + " " +
-                      qsTranslate("SettingsPage", "This option does not work with all engines.")
-        hoverEnabled: true
+    CheckBoxSetting {
+        optionName: "pinyin_text"
+        text: qsTranslate("SettingsPage", "Use pinyin")
+        toolTipText: qsTranslate("SettingsPage", "For Chinese, use pinyin instead of Chinese characters.")
     }
 
     SectionLabel {

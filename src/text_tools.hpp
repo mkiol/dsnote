@@ -74,6 +74,7 @@ class processor {
     void hebrew_diacritize(std::string& text, const std::string& model_path);
     void arabic_diacritize(std::string& text, const std::string& model_path);
     void pinyin_to_hanzi(std::string& text, const std::string& model_path);
+    void hanzi_to_pinyin(std::string& text, const std::string& model_path);
 
    private:
 #ifdef USE_PY

@@ -355,7 +355,7 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(settings::instance(), &settings::mnt_text_format_changed, this,
             &dsnote_app::handle_translator_settings_changed,
             Qt::QueuedConnection);
-    connect(settings::instance(), &settings::pinyin_input_changed, this,
+    connect(settings::instance(), &settings::pinyin_text_changed, this,
             &dsnote_app::handle_translator_settings_changed,
             Qt::QueuedConnection);
     connect(settings::instance(), &settings::audio_input_device_changed, this,
@@ -2755,9 +2755,10 @@ void dsnote_app::transcribe_file_internal(
                    s->inline_timestamp_min_interval());
 
     // for chinese, add pinyin input option
-    auto lang = lang_from_model_id(model_id);
+    auto lang =
+        lang_from_model_id(model_id.isEmpty() ? active_stt_model() : model_id);
     if (lang == "zh") {
-        options.insert("pinyin_input", settings::instance()->pinyin_input());
+        options.insert("pinyin_output", settings::instance()->pinyin_text());
     }
 
     m_current_stt_request = stt_request_t::transcribe_file;
@@ -2813,13 +2814,18 @@ void dsnote_app::transcribe_ref_file_import(long long start, long long stop) {
 
     try {
         media_compressor::options_t opts{
-            media_compressor::quality_t::vbr_high,
-            media_compressor::flags_t::flag_none,
-            1.0,
-            {},
-            /*clip_info=*/
-            media_compressor::clip_info_t{static_cast<uint64_t>(start),
-                                          static_cast<uint64_t>(stop), 0, 0}};
+            .quality = media_compressor::quality_t::vbr_high,
+            .flags = media_compressor::flags_t::flag_none,
+            .speed = 1.0,
+            .stream = {},
+            .clip_info =
+                media_compressor::clip_info_t{
+                    .start_time_ms = static_cast<uint64_t>(start),
+                    .stop_time_ms = static_cast<uint64_t>(stop),
+                    .start_bytes = 0,
+                    .stop_bytes = 0,
+                },
+        };
 
         media_compressor{}.compress_to_file(
             {wav_file_path.toStdString()}, out_file_path.toStdString(),
@@ -2929,17 +2935,22 @@ void dsnote_app::listen_internal(stt_translate_req_t translate_req) {
                    s->inline_timestamp_min_interval());
 
     auto out_lang = [&]() {
+        auto lang = lang_from_model_id(active_stt_model());
         switch (translate_req) {
             case stt_translate_req_t::conf:
-                return s->whisper_translate() ? QStringLiteral("en")
-                                              : QString{};
+                return s->whisper_translate() ? QStringLiteral("en") : lang;
             case stt_translate_req_t::on:
                 return QStringLiteral("en");
             case stt_translate_req_t::off:
-                return QString{};
+                return lang;
         }
-        return QString{};
+        return lang;
     }();
+
+    // for chinese, add pinyin output option
+    if (out_lang == "zh") {
+        options.insert("pinyin_output", settings::instance()->pinyin_text());
+    }
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->stt_start_listen(
@@ -3062,7 +3073,8 @@ void dsnote_app::play_speech_internal(QString text, const QString &input_file,
         text_format = settings::text_format_t::TextFormatRaw;
     }
 
-    auto lang = lang_from_model_id(model_id);
+    auto lang =
+        lang_from_model_id(model_id.isEmpty() ? active_tts_model() : model_id);
 
     if (settings::instance()->trans_rules_enabled()) {
         transform_text(text, transform_text_target_t::tts, lang);
@@ -3106,7 +3118,7 @@ void dsnote_app::play_speech_internal(QString text, const QString &input_file,
 
     // for chinese, add pinyin input option
     if (lang == "zh") {
-        options.insert("pinyin_input", settings::instance()->pinyin_input());
+        options.insert("pinyin_input", settings::instance()->pinyin_text());
     }
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
@@ -3215,6 +3227,10 @@ void dsnote_app::restore_punctuation() {
 
 void dsnote_app::pinyin_to_hanzi() {
     repair_text(text_repair_task_type_t::pinyin_to_hanzi);
+}
+
+void dsnote_app::hanzi_to_pinyin() {
+    repair_text(text_repair_task_type_t::hanzi_to_pinyin);
 }
 
 void dsnote_app::repair_text(text_repair_task_type_t task_type) {
@@ -3359,8 +3375,12 @@ void dsnote_app::translate_internal(const QString &text) {
         // for chinese, add pinyin input option
         if (m_active_mnt_lang.startsWith(QLatin1String("zh"),
                                          Qt::CaseInsensitive)) {
-            options.insert("pinyin_input",
-                           settings::instance()->pinyin_input());
+            options.insert("pinyin_input", settings::instance()->pinyin_text());
+        }
+        if (m_active_mnt_out_lang.startsWith(QLatin1String("zh"),
+                                             Qt::CaseInsensitive)) {
+            options.insert("pinyin_output",
+                           settings::instance()->pinyin_text());
         }
 
         if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
@@ -3441,117 +3461,128 @@ void dsnote_app::speech_to_file_internal(
     const QString &ref_prompt, settings::text_format_t text_format,
     settings::audio_format_t audio_format,
     settings::audio_quality_t audio_quality) {
-  if (dest_file.isEmpty()) {
-    qWarning() << "dest file is empty";
-    return;
-  }
-
-  if (text.isEmpty() && !input_file.isEmpty()) {
-    QFile file{input_file};
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-      qWarning() << "failed to open input-file:" << input_file;
-      return;
+    if (dest_file.isEmpty()) {
+        qWarning() << "dest file is empty";
+        return;
     }
-    // TODO: Do not assume data is always UTF-8
-    text = QString::fromUtf8(file.readAll());
-  }
 
-  if (text.isEmpty() && !input_url.isEmpty()) {
-    auto data = download_content(input_url, QStringLiteral("text"));
-    if (data.error == downloader::error_t::no_error) {
-      // TODO: Do not assume data is always UTF-8
-      text = QString::fromUtf8(data.bytes);
-      if (text_format == settings::text_format_t::TextFormatHtml &&
-          !data.mime.contains(QLatin1String{"html"}, Qt::CaseInsensitive)) {
-        // html format requested, but server mime is not html =>
-        // changing format to raw
-        text_format = settings::text_format_t::TextFormatRaw;
-      }
+    if (text.isEmpty() && !input_file.isEmpty()) {
+        QFile file{input_file};
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            qWarning() << "failed to open input-file:" << input_file;
+            return;
+        }
+        // TODO: Do not assume data is always UTF-8
+        text = QString::fromUtf8(file.readAll());
     }
-  }
 
-  if (text.isEmpty()) {
-    qWarning() << "cannot tts, text is empty";
-    return;
-  }
-
-  if (text_format == settings::text_format_t::TextFormatHtml) {
-    // TODO: Do not assume data is always UTF-8
-    std::string text_readable = text.toStdString();
-    if (text_tools::extract_readable_content(text_readable)) {
-      text = QString::fromStdString(text_readable);
-      text_format = settings::text_format_t::TextFormatRaw;
+    if (text.isEmpty() && !input_url.isEmpty()) {
+        auto data = download_content(input_url, QStringLiteral("text"));
+        if (data.error == downloader::error_t::no_error) {
+            // TODO: Do not assume data is always UTF-8
+            text = QString::fromUtf8(data.bytes);
+            if (text_format == settings::text_format_t::TextFormatHtml &&
+                !data.mime.contains(QLatin1String{"html"},
+                                    Qt::CaseInsensitive)) {
+                // html format requested, but server mime is not html =>
+                // changing format to raw
+                text_format = settings::text_format_t::TextFormatRaw;
+            }
+        }
     }
-  }
 
-  if (settings::instance()->trans_rules_enabled()) {
-    transform_text(text, transform_text_target_t::tts,
-                   lang_from_model_id(model_id));
-  }
+    if (text.isEmpty()) {
+        qWarning() << "cannot tts, text is empty";
+        return;
+    }
 
-  int new_task = 0;
+    if (text_format == settings::text_format_t::TextFormatHtml) {
+        // TODO: Do not assume data is always UTF-8
+        std::string text_readable = text.toStdString();
+        if (text_tools::extract_readable_content(text_readable)) {
+            text = QString::fromStdString(text_readable);
+            text_format = settings::text_format_t::TextFormatRaw;
+        }
+    }
 
-  QVariantMap options;
-  options.insert(
-      "speech_speed",
-      settings::instance()->stt_tts_text_format() !=
-                  settings::text_format_t::TextFormatSubRip ||
-              settings::instance()->tts_subtitles_sync() ==
-                  settings::tts_subtitles_sync_mode_t::TtsSubtitleSyncOff ||
-              settings::instance()->tts_subtitles_sync() ==
-                  settings::tts_subtitles_sync_mode_t::TtsSubtitleSyncOnDontFit
-          ? settings::instance()->speech_speed()
-          : 10);
-  options.insert("text_format", static_cast<int>(text_format));
-  options.insert("sync_subs",
-                 static_cast<int>(settings::instance()->tts_subtitles_sync()));
-  options.insert("not_merge_files", true);
-  options.insert("split_into_sentences",
-                 settings::instance()->tts_split_into_sentences());
-  options.insert("use_engine_speed_control",
-                 settings::instance()->tts_use_engine_speed_control());
-  options.insert("normalize_audio",
-                 settings::instance()->tts_normalize_audio());
-  options.insert("tag_mode",
-                 static_cast<int>(settings::instance()->tts_tag_mode()));
-  options.insert("ref_prompt",
-                 settings::instance()->tts_desc_of_voice_prompt(ref_prompt));
+    auto lang =
+        lang_from_model_id(model_id.isEmpty() ? active_tts_model() : model_id);
 
-  if (m_available_tts_ref_voices_map.contains(ref_voice)) {
-    auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
-    if (l.size() > 1) options.insert("ref_voice_file", l.at(1));
-  }
-  options.insert("inline_timestamp_template",
-                 settings::instance()->inline_timestamp_template());
+    if (settings::instance()->trans_rules_enabled()) {
+        transform_text(text, transform_text_target_t::tts, lang);
+    }
 
-  auto real_audio_format =
-      settings::audio_format_from_filename(audio_format, dest_file);
-  auto audio_format_str =
-      settings::audio_format_str_from_filename(audio_format, dest_file);
-  auto audio_ext = settings::audio_ext_from_filename(audio_format, dest_file);
+    int new_task = 0;
 
-  options.insert("audio_format", audio_format_str);
-  options.insert("audio_quality", audio_quality_to_str(audio_quality));
+    QVariantMap options;
+    options.insert(
+        "speech_speed",
+        settings::instance()->stt_tts_text_format() !=
+                    settings::text_format_t::TextFormatSubRip ||
+                settings::instance()->tts_subtitles_sync() ==
+                    settings::tts_subtitles_sync_mode_t::TtsSubtitleSyncOff ||
+                settings::instance()->tts_subtitles_sync() ==
+                    settings::tts_subtitles_sync_mode_t::
+                        TtsSubtitleSyncOnDontFit
+            ? settings::instance()->speech_speed()
+            : 10);
+    options.insert("text_format", static_cast<int>(text_format));
+    options.insert(
+        "sync_subs",
+        static_cast<int>(settings::instance()->tts_subtitles_sync()));
+    options.insert("not_merge_files", true);
+    options.insert("split_into_sentences",
+                   settings::instance()->tts_split_into_sentences());
+    options.insert("use_engine_speed_control",
+                   settings::instance()->tts_use_engine_speed_control());
+    options.insert("normalize_audio",
+                   settings::instance()->tts_normalize_audio());
+    options.insert("tag_mode",
+                   static_cast<int>(settings::instance()->tts_tag_mode()));
+    options.insert("ref_prompt",
+                   settings::instance()->tts_desc_of_voice_prompt(ref_prompt));
 
-  if (QFileInfo{dest_file}.suffix().toLower() != audio_ext) {
-    qWarning() << "file name doesn't have proper extension for audio format";
-  }
+    if (m_available_tts_ref_voices_map.contains(ref_voice)) {
+        auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
+        if (l.size() > 1) options.insert("ref_voice_file", l.at(1));
+    }
+    options.insert("inline_timestamp_template",
+                   settings::instance()->inline_timestamp_template());
 
-  m_dest_file_info.output_path = dest_file;
-  m_dest_file_info.title_tag = title_tag;
-  m_dest_file_info.track_tag = track_tag;
-  m_dest_file_info.audio_format = real_audio_format;
+    auto real_audio_format =
+        settings::audio_format_from_filename(audio_format, dest_file);
+    auto audio_format_str =
+        settings::audio_format_str_from_filename(audio_format, dest_file);
+    auto audio_ext = settings::audio_ext_from_filename(audio_format, dest_file);
 
-  if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
-    new_task =
-        speech_service::instance()->tts_speech_to_file(text, model_id, options);
-  } else {
-    qDebug() << "[app => dbus] call TtsSpeechToFile";
+    options.insert("audio_format", audio_format_str);
+    options.insert("audio_quality", audio_quality_to_str(audio_quality));
 
-    new_task = m_dbus_service.TtsSpeechToFile(text, model_id, options);
-  }
+    // for chinese, add pinyin input option
+    if (lang == "zh") {
+        options.insert("pinyin_input", settings::instance()->pinyin_text());
+    }
 
-  m_primary_task.set(new_task);
+    if (QFileInfo{dest_file}.suffix().toLower() != audio_ext) {
+        qWarning()
+            << "file name doesn't have proper extension for audio format";
+    }
+
+    m_dest_file_info.output_path = dest_file;
+    m_dest_file_info.title_tag = title_tag;
+    m_dest_file_info.track_tag = track_tag;
+    m_dest_file_info.audio_format = real_audio_format;
+
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
+        new_task = speech_service::instance()->tts_speech_to_file(
+            text, model_id, options);
+    } else {
+        qDebug() << "[app => dbus] call TtsSpeechToFile";
+
+        new_task = m_dbus_service.TtsSpeechToFile(text, model_id, options);
+    }
+
+    m_primary_task.set(new_task);
 }
 
 void dsnote_app::stop_play_speech() {}

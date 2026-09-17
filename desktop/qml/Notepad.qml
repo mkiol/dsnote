@@ -199,14 +199,6 @@ ColumnLayout {
                 onActivated: (index) => app.set_active_tts_model_idx(index)
                 currentIndex: app.active_tts_model_idx
             }
-            checkToolTip: qsTr("Treat the input text as pinyin")
-            check {
-                visible: app.active_tts_model.startsWith("zh")
-                checked: _settings.pinyin_input
-                onClicked: {
-                    _settings.pinyin_input = !_settings.pinyin_input
-                }
-            }
             combo2 {
                 visible: listenReadCombos.refVoiceNeeded || listenReadCombos.refPromptNeeded
                 enabled: listenReadCombos.second.enabled &&
@@ -270,6 +262,34 @@ ColumnLayout {
                     text: qsTr("Read")
                     shortcut: "Ctrl+Alt+Shift+R"
                     onTriggered: app.play_speech()
+                }
+            }
+        }
+    }
+
+    Frame {
+        visible: app.active_stt_model.startsWith("zh") || app.active_tts_model.startsWith("zh")
+        Layout.alignment: Qt.AlignHCenter
+        background: Item {}
+        bottomPadding: 0
+        topPadding: 0
+        rightPadding: appWin.padding
+        leftPadding: appWin.padding
+
+        GridLayout {
+            columns: 1
+
+            columnSpacing: appWin.padding
+            rowSpacing: appWin.padding
+
+            Switch {
+                id: pinyinSwitch
+
+                enabled: app.state === DsnoteApp.StateIdle
+                text: qsTr("Use pinyin")
+                checked: _settings.pinyin_text
+                onClicked: {
+                    _settings.pinyin_text = !_settings.pinyin_text
                 }
             }
         }

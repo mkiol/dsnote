@@ -585,6 +585,8 @@ please consider doing one or two of the following:
 - [S.A.M.](https://discordier.github.io/sam)
 - [rdrview](https://github.com/eafer/rdrview)
 - [CLD2](https://github.com/CLD2Owners/cld2)
+- [google_pinyinim](https://github.com/aron566/google_pinyinim)
+- [cpp-pinyin](https://github.com/wolfgitpr/cpp-pinyin)
 - [Opal for SailfishOS](https://codeberg.org/opal-sfos)
 
 ## Reviews and demos
@@ -665,6 +667,8 @@ please consider doing one or two of the following:
 - **F5-TTS**, released under the [MIT License](https://github.com/SWivid/F5-TTS/raw/refs/heads/main/LICENSE)
 - **rdrview**, released under the [Apache License 2.0](https://github.com/eafer/rdrview/raw/refs/heads/master/LICENSE)
 - **CLD2**, released under the [Apache License 2.0](https://github.com/CLD2Owners/cld2/blob/master/LICENSE)
+- **google_pinyinim**, released under the [Apache License 2.0](https://github.com/aron566/google_pinyinim/raw/refs/heads/master/LICENSE)
+- **cpp-pinyin**, released under the [Apache License 2.0](https://github.com/wolfgitpr/cpp-pinyin/raw/refs/heads/main/LICENSE)
 - **Opal for SailfishOS**, released under the [AGPL-3.0 license](https://codeberg.org/opal-sfos/harbour-opal-gallery/raw/branch/main/LICENSES/AGPL-3.0-or-later.txt)
 
 The files in the directory `nonbreaking_prefixes` were copied from

@@ -66,6 +66,7 @@ class stt_engine {
         std::string model_file;
         std::string scorer_file;
         std::string ttt_model_file;
+        std::string hanzi_to_pinyin_dict_path;
 
         auto operator<=>(const model_files_t&) const = default;
     };

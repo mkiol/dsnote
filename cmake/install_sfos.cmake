@@ -170,3 +170,7 @@ endif()
 if(BUILD_GOOGLE_PINYINIM)
     install(DIRECTORY "${external_share_dir}/google-pinyinim-data" DESTINATION ${share_install_dir})
 endif()
+
+if(BUILD_CPPPINYIN)
+    install(DIRECTORY "${external_share_dir}/cpp-pinyin" DESTINATION ${share_install_dir})
+endif()

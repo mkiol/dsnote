@@ -53,7 +53,8 @@ std::ostream& operator<<(std::ostream& os,
     os << "diacritizer_he=" << model_files.diacritizer_path_he
        << ", diacritizer_ar=" << model_files.diacritizer_path_ar
        << ", punctuator=" << model_files.punctuator_path
-       << ", pinyin-to-hanzi-dict=" << model_files.pinyin_to_hanzi_dict_path;
+       << ", pinyin-to-hanzi-dict=" << model_files.pinyin_to_hanzi_dict_path
+       << ", hanzi-to-pinyin-dict=" << model_files.hanzi_to_pinyin_dict_path;
 
     return os;
 }
@@ -81,6 +82,9 @@ std::ostream& operator<<(std::ostream& os,
             break;
         case text_repair_engine::task_type_t::pinyin_to_hanzi:
             os << "pinyin-to-hanzi";
+            break;
+        case text_repair_engine::task_type_t::hanzi_to_pinyin:
+            os << "hanzi-to-pinyin";
             break;
         case text_repair_engine::task_type_t::none:
             os << "none";
@@ -257,7 +261,8 @@ std::vector<text_repair_engine::task_t> text_repair_engine::make_tasks(
                     case task_type_t::restore_diacritics_he:
                         return "he";
                     case task_type_t::pinyin_to_hanzi:
-                        return "";
+                    case task_type_t::hanzi_to_pinyin:
+                        return "zh";
                     case task_type_t::restore_punctuation:
                     case task_type_t::none:
                         break;
@@ -304,6 +309,7 @@ void text_repair_engine::process_task(task_t& task,
         case task_type_t::restore_diacritics_ar:
         case task_type_t::restore_diacritics_he:
         case task_type_t::pinyin_to_hanzi:
+        case task_type_t::hanzi_to_pinyin:
             if (!m_text_processor)
                 m_text_processor.emplace(
                     m_config.use_gpu ? m_config.gpu_device.id : -1);
@@ -335,6 +341,10 @@ void text_repair_engine::process_task(task_t& task,
         case task_type_t::pinyin_to_hanzi:
             m_text_processor->pinyin_to_hanzi(
                 task.text, m_config.model_files.pinyin_to_hanzi_dict_path);
+            break;
+        case task_type_t::hanzi_to_pinyin:
+            m_text_processor->hanzi_to_pinyin(
+                task.text, m_config.model_files.hanzi_to_pinyin_dict_path);
             break;
         case task_type_t::restore_punctuation:
 #ifdef USE_PY

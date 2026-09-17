@@ -40,6 +40,7 @@ class text_repair_engine {
         std::string diacritizer_path_ar;
         std::string punctuator_path;
         std::string pinyin_to_hanzi_dict_path;
+        std::string hanzi_to_pinyin_dict_path;
     };
     friend std::ostream& operator<<(std::ostream& os,
                                     const model_files_t& model_files);
@@ -56,13 +57,7 @@ class text_repair_engine {
         std::string name;
         std::string platform_name;
 
-        bool operator==(const gpu_device_t& rhs) const {
-            return platform_name == rhs.platform_name && name == rhs.name &&
-                   id == rhs.id;
-        }
-        bool operator!=(const gpu_device_t& rhs) const {
-            return !(*this == rhs);
-        }
+        auto operator<=>(const gpu_device_t&) const = default;
     };
     friend std::ostream& operator<<(std::ostream& os,
                                     const gpu_device_t& gpu_device);
@@ -72,7 +67,8 @@ class text_repair_engine {
         restore_diacritics_ar = 1,
         restore_diacritics_he = 2,
         restore_punctuation = 3,
-        pinyin_to_hanzi = 4
+        pinyin_to_hanzi = 4,
+        hanzi_to_pinyin = 5,
     };
     friend std::ostream& operator<<(std::ostream& os, task_type_t task_type);
 
