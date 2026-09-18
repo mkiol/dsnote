@@ -119,7 +119,7 @@ ColumnLayout {
     ComboBoxForm {
         label.text: qsTranslate("SettingsPage", "User interface color appearance")
         toolTip: qsTranslate("SettingsPage", "Force dark or light color appearance.") + " " + 
-                 qsTranslate("Change if you observe problems with incorrect colors under a dark theme.")
+                 qsTranslate("SettingsPage", "Change if you observe problems with incorrect colors under a dark theme.")
         comboBox {
             currentIndex: {
                 switch(_settings.ui_appearance) {

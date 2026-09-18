@@ -26,6 +26,19 @@ function(ADD_TRANSLATIONS_RESOURCE res_file)
 endfunction()
 
 if(QT_VERSION_MAJOR EQUAL 6)
+    # workaround: flatpak runtime 6.11 lupdate doesn't support qml, so use own lupdate
+    set(flatpak_lupdate /app/bin/lupdate)
+    if(EXISTS "${flatpak_lupdate}")
+        foreach(__lupdate_imported_location_config
+            IMPORTED_LOCATION
+            IMPORTED_LOCATION_RELEASE
+            IMPORTED_LOCATION_RELWITHDEBINFO
+            IMPORTED_LOCATION_MINSIZEREL
+            IMPORTED_LOCATION_DEBUG)
+            set_target_properties(Qt6::lupdate PROPERTIES ${__lupdate_imported_location_config} ${flatpak_lupdate})
+        endforeach()
+    endif()
+
     qt6_create_translation(qm_files ${CMAKE_SOURCE_DIR}/src ${desktop_dir}/qml ${sfos_dir}/qml ${ts_files})
 else()
     if(WITH_SFOS)

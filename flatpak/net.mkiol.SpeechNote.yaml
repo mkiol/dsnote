@@ -886,6 +886,34 @@ modules:
         url: https://github.com/wolfgitpr/cpp-pinyin/archive/e4dd8310e3bb6b8ac8edc42f2cbd80be92586a8e.zip
         sha256: f831378e4af5e3609557eda84858439ca55441d11e3e9859b52b4420c547ede3
 
+  # workaround: flatpak runtime 6.11 lupdate doesn't support qml, so use own lupdate
+  - name: linguist
+    buildsystem: cmake-ninja
+    cleanup:
+      - /
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DQT_BUILD_TESTS=OFF
+      - -DFEATURE_linguist=ON
+      - -DQT_FEATURE_process=OFF
+      - -DFEATURE_assistant=OFF
+      - -DFEATURE_clang=OFF
+      - -DFEATURE_designer=OFF
+      - -DFEATURE_distancefieldgenerator=OFF
+      - -DFEATURE_kmap2qmap=OFF
+      - -DFEATURE_pixeltool=OFF
+      - -DFEATURE_qdbus=OFF
+      - -DFEATURE_qdoc=OFF
+      - -DFEATURE_qdoc_coverage=OFF
+      - -DFEATURE_qev=OFF
+      - -DFEATURE_qtattributionsscanner=OFF
+      - -DFEATURE_qtdiag=OFF
+      - -DFEATURE_qtplugininfo=OFF
+    sources:
+      - type: archive
+        url: https://download.qt.io/archive/qt/6.11/6.11.2/submodules/qttools-everywhere-src-6.11.2.tar.xz
+        sha256: 9ea75af35c512f7e09e61c8c3af3997f13b4d43bb099cf43fcec470126b4041e
+
   - name: dsnote
     buildsystem: cmake-ninja
     config-opts:
