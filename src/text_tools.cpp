@@ -19,6 +19,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cstddef>
 #include <cstdlib>
 #include <cwctype>
 #include <filesystem>
@@ -45,6 +46,10 @@ std::ostream& operator<<(std::ostream& os,
     os << "n=" << segment.n << ", t0=" << segment.t0 << ", t1=" << segment.t1
        << ", text=" << segment.text;
     return os;
+}
+
+static bool has_option(char c, const std::string& options) {
+    return options.find(c) != std::string::npos;
 }
 
 bool segment_t::operator==(const text_tools::segment_t& rhs) const {
@@ -1257,78 +1262,29 @@ void break_segments_to_multiline(unsigned int min_line_size,
         break_segment_to_multiline(min_line_size, max_line_size, segment);
 }
 
-void processor::hebrew_diacritize(std::string& text,
-                                  const std::string& model_path) {
-#ifdef USE_PY
-    using namespace pybind11::literals;
-
-    auto task = py_executor::instance()->execute(
-        [&, dev = m_device < 0 ? "cpu"
-                               : fmt::format("{}:{}", "cuda", m_device)]() {
-            try {
-                if (!m_unikud) {
-                    LOGD("creating hebrew diacritizer: device="
-                         << dev << ", model-path=" << model_path);
-
-                    auto framework = py::module_::import("unikud.framework");
-                    m_unikud = framework.attr("Unikud")(
-                        "hub_name"_a = model_path, "device"_a = dev);
-                }
-
-                return m_unikud.value()(text).cast<std::string>();
-            } catch (const std::exception& err) {
-                LOGE("py error: " << err.what());
-            }
-
-            return text;
-        });
-
-    if (task) text.assign(std::any_cast<std::string>(task->get()));
-#else
-    (void)text;
-    (void)model_path;
-
-    LOGW("hebrew diacritize is unavailable as py is off");
-#endif
-}
-
-void processor::arabic_diacritize(std::string& text,
-                                  const std::string& model_path) {
-    if (!m_tashkeel_state) {
-        m_tashkeel_state.emplace();
-        try {
-            tashkeel::tashkeel_load(model_path, *m_tashkeel_state);
-        } catch ([[maybe_unused]] const std::exception& error) {
-            m_tashkeel_state.reset();
-            return;
-        }
+std::string next_utf8_char(const std::string& input, size_t& i) {
+    if (i >= input.size()) return "";
+    unsigned char c = input[i];
+    if ((c & 0x80) == 0) {
+        i++;
+        return input.substr(i - 1, 1);
+    } else if ((c & 0xE0) == 0xC0) {
+        if (i + 1 >= input.size()) return "";
+        i += 2;
+        return input.substr(i - 2, 2);
+    } else if ((c & 0xF0) == 0xE0) {
+        if (i + 2 >= input.size()) return "";
+        i += 3;
+        return input.substr(i - 3, 3);
+    } else if ((c & 0xF8) == 0xF0) {
+        if (i + 3 >= input.size()) return "";
+        i += 4;
+        return input.substr(i - 4, 4);
     }
+    return "";
+};
 
-    text.assign(tashkeel::tashkeel_run(text, *m_tashkeel_state));
-}
-void processor::hanzi_to_pinyin(std::string& text,
-                                const std::string& model_path) {
-    Pinyin::setDictionaryPath(model_path);
-
-    const auto g2p_man = std::make_unique<Pinyin::Pinyin>();
-    auto vec = g2p_man->hanziToPinyin(text, Pinyin::ManTone::Style::TONE,
-                                      Pinyin::Error::Default,
-                                      /*candidates=*/false, /*v_to_u=*/false,
-                                      /*neutral_tone_with_five=*/false);
-
-    text.assign(vec.toStdStr());
-}
-
-void processor::pinyin_to_hanzi(std::string& text,
-                                const std::string& model_path) {
-    if (model_path.empty()) {
-        LOGD("pinyin-to-hanzi model path is empty");
-        return;
-    }
-
-    static const std::unordered_set<char> white_cars = {' ',  '\t', '\n',
-                                                        '\r', '\f', '\v'};
-
+bool is_punctuation_mark(const std::string& utf8_char) {
     static const std::unordered_set<std::string> punctuation_marks = {
         // ascii punctuation
         "!",
@@ -1390,39 +1346,99 @@ void processor::pinyin_to_hanzi(std::string& text,
         "\uFF09",  // ）
     };
 
+    return punctuation_marks.contains(utf8_char);
+}
+
+std::string remove_pinyin_tones(const std::string& text, bool remove_punct) {
+    static const std::unordered_map<std::string, char> tone_map = {
+        {"ā", 'a'}, {"á", 'a'}, {"ǎ", 'a'}, {"à", 'a'}, {"Ā", 'a'}, {"Á", 'a'},
+        {"Ǎ", 'a'}, {"À", 'a'}, {"ō", 'o'}, {"ó", 'o'}, {"ǒ", 'o'}, {"ò", 'o'},
+        {"Ō", 'o'}, {"Ó", 'o'}, {"Ǒ", 'o'}, {"Ò", 'o'}, {"ē", 'e'}, {"é", 'e'},
+        {"ě", 'e'}, {"è", 'e'}, {"Ē", 'e'}, {"É", 'e'}, {"Ě", 'e'}, {"È", 'e'},
+        {"ī", 'i'}, {"í", 'i'}, {"ǐ", 'i'}, {"ì", 'i'}, {"Ī", 'i'}, {"Í", 'i'},
+        {"Ǐ", 'i'}, {"Ì", 'i'}, {"ū", 'u'}, {"ú", 'u'}, {"ǔ", 'u'}, {"ù", 'u'},
+        {"Ū", 'u'}, {"Ú", 'u'}, {"Ǔ", 'u'}, {"Ù", 'u'}, {"ü", 'v'}, {"ǘ", 'v'},
+        {"ǚ", 'v'}, {"ǜ", 'v'}, {"ǖ", 'v'}, {"Ü", 'v'}, {"Ǘ", 'v'}, {"Ǚ", 'v'},
+        {"Ǜ", 'v'}, {"Ǖ", 'v'}, {"ê", 'e'}, {"Ê", 'e'},
+    };
+
+    std::string result;
+
+    for (size_t i = 0; i < text.size();) {
+        auto utf8_char = next_utf8_char(text, i);
+        if (utf8_char.empty()) {
+            break;
+        }
+
+        auto it = tone_map.find(utf8_char);
+        if (it != tone_map.end()) {
+            // replace with tone-less character
+            result += it->second;
+            continue;
+        }
+
+        if (remove_punct && is_punctuation_mark(utf8_char)) {
+            // ignore punctuation
+            continue;
+        }
+
+        if (utf8_char.size() == 1) {
+            if (utf8_char[0] >= '0' && utf8_char[0] <= '5') {
+                // ignore number
+                continue;
+            }
+            result += static_cast<char>(
+                std::tolower(static_cast<unsigned char>(utf8_char[0])));
+            continue;
+        }
+
+        result += utf8_char;
+    }
+
+    return result;
+};
+
+void hanzi_to_pinyin(std::string& text, const std::string& model_path) {
+    if (is_pinyin(text)) {
+        LOGD("skip hanzi-to-pinyin because text is already pinyin");
+        return;
+    }
+
+    Pinyin::setDictionaryPath(model_path);
+
+    const auto g2p_man = std::make_unique<Pinyin::Pinyin>();
+    auto vec = g2p_man->hanziToPinyin(text, Pinyin::ManTone::Style::TONE,
+                                      Pinyin::Error::Default,
+                                      /*candidates=*/false, /*v_to_u=*/false,
+                                      /*neutral_tone_with_five=*/false);
+
+    text.assign(vec.toStdStr());
+}
+
+void pinyin_to_hanzi(std::string& text, const std::string& model_path) {
+    if (model_path.empty()) {
+        LOGD("pinyin-to-hanzi model path is empty");
+        return;
+    }
+
+    if (!is_pinyin(text)) {
+        LOGD("skip pinyin-to-hanzi because text is not pinyin");
+        return;
+    }
+
+    static const std::unordered_set<char> white_cars = {
+        ' ', '\t', '\n', '\r', '\f', '\v',
+    };
+
     auto non_word_char = [](const std::string& utf8_char) {
         if (utf8_char.empty()) {
             return true;
         }
         if (utf8_char.size() == 1) {
             auto c = utf8_char[0];
-            return white_cars.contains(c) ||
-                   punctuation_marks.contains(utf8_char);
+            return white_cars.contains(c) || is_punctuation_mark(utf8_char);
         }
-        return punctuation_marks.contains(utf8_char);
-    };
-
-    auto next_utf8_char = [](const std::string& input,
-                             size_t& i) -> std::string {
-        if (i >= input.size()) return "";
-        unsigned char c = input[i];
-        if ((c & 0x80) == 0) {
-            i++;
-            return input.substr(i - 1, 1);
-        } else if ((c & 0xE0) == 0xC0) {
-            if (i + 1 >= input.size()) return "";
-            i += 2;
-            return input.substr(i - 2, 2);
-        } else if ((c & 0xF0) == 0xE0) {
-            if (i + 2 >= input.size()) return "";
-            i += 3;
-            return input.substr(i - 3, 3);
-        } else if ((c & 0xF8) == 0xF0) {
-            if (i + 3 >= input.size()) return "";
-            i += 4;
-            return input.substr(i - 4, 4);
-        }
-        return "";
+        return is_punctuation_mark(utf8_char);
     };
 
     auto split_into_tokens = [&](const std::string& input) {
@@ -1458,41 +1474,6 @@ void processor::pinyin_to_hanzi(std::string& text,
         return tokens;
     };
 
-    auto clean_tones = [](const std::string& input) {
-        static const std::unordered_map<std::string, char> tone_map = {
-            {"ā", 'a'}, {"á", 'a'}, {"ǎ", 'a'}, {"à", 'a'}, {"ē", 'e'},
-            {"é", 'e'}, {"ě", 'e'}, {"è", 'e'}, {"ī", 'i'}, {"í", 'i'},
-            {"ǐ", 'i'}, {"ì", 'i'}, {"ō", 'o'}, {"ó", 'o'}, {"ǒ", 'o'},
-            {"ò", 'o'}, {"ū", 'u'}, {"ú", 'u'}, {"ǔ", 'u'}, {"ù", 'u'},
-            {"ǖ", 'v'}, {"ǘ", 'v'}, {"ǚ", 'v'}, {"ǜ", 'v'}, {"ü", 'v'},
-        };
-
-        std::string result;
-
-        for (size_t i = 0; i < input.size();) {
-            if (input[i] >= '0' && input[i] <= '5') {
-                // skip tones
-                i += 1;
-                continue;
-            }
-            if ((unsigned char)input[i] >= 0xC0 && i + 1 < input.size()) {
-                auto utf8_char = input.substr(i, 2);
-                auto it = tone_map.find(utf8_char);
-                if (it != tone_map.end()) {
-                    result += it->second;
-                } else {
-                    result += utf8_char;
-                }
-                i += 2;
-            } else {
-                result += tolower(input[i]);
-                i += 1;
-            }
-        }
-
-        return result;
-    };
-
     if (pinyinim_init(model_path.c_str()) != 0) {
         LOGW("failed to init pinyinim");
         return;
@@ -1504,7 +1485,7 @@ void processor::pinyin_to_hanzi(std::string& text,
         const char* out_buf = nullptr;
         size_t out_buf_size = 0;
 
-        auto cword = clean_tones(word);
+        auto cword = remove_pinyin_tones(word, false);
 
         if (pinyinim_to_hanzi(cword.c_str(), cword.size(), &out_buf,
                               &out_buf_size) != 0) {
@@ -1535,8 +1516,170 @@ void processor::pinyin_to_hanzi(std::string& text,
     pinyinim_free();
 }
 
-static bool has_option(char c, const std::string& options) {
-    return options.find(c) != std::string::npos;
+bool is_pinyin(const std::string& text) {
+    static const std::unordered_set<std::string> pinyin_dictionary = {
+        "a",     "ai",     "an",    "ang",    "ao",     "ba",    "bai",
+        "ban",   "bang",   "bao",   "bei",    "ben",    "beng",  "bi",
+        "bian",  "biao",   "bie",   "bin",    "bing",   "bo",    "bu",
+        "ca",    "cai",    "can",   "cang",   "cao",    "ce",    "cei",
+        "cen",   "ceng",   "cha",   "chai",   "chan",   "chang", "chao",
+        "che",   "chen",   "cheng", "chi",    "chong",  "chou",  "chu",
+        "chua",  "chuai",  "chuan", "chuang", "chui",   "chun",  "chuo",
+        "ci",    "cong",   "cou",   "cu",     "cuan",   "cui",   "cun",
+        "cuo",   "da",     "dai",   "dan",    "dang",   "dao",   "de",
+        "dei",   "den",    "deng",  "di",     "dian",   "diao",  "die",
+        "ding",  "diu",    "dong",  "dou",    "du",     "duan",  "dui",
+        "dun",   "duo",    "e",     "ei",     "en",     "eng",   "er",
+        "fa",    "fan",    "fang",  "fei",    "fen",    "feng",  "fiao",
+        "fo",    "fou",    "fu",    "ga",     "gai",    "gan",   "gang",
+        "gao",   "ge",     "gei",   "gen",    "geng",   "gong",  "gou",
+        "gu",    "gua",    "guai",  "guan",   "guang",  "gui",   "gun",
+        "guo",   "ha",     "hai",   "han",    "hang",   "hao",   "he",
+        "hei",   "hen",    "heng",  "hong",   "hou",    "hu",    "hua",
+        "huai",  "huan",   "huang", "hui",    "hun",    "huo",   "ji",
+        "jia",   "jian",   "jiang", "jiao",   "jie",    "jin",   "jing",
+        "jiong", "jiu",    "ju",    "juan",   "jue",    "jun",   "ka",
+        "kai",   "kan",    "kang",  "kao",    "ke",     "kei",   "ken",
+        "keng",  "kong",   "kou",   "ku",     "kua",    "kuai",  "kuan",
+        "kuang", "kui",    "kun",   "kuo",    "la",     "lai",   "lan",
+        "lang",  "lao",    "le",    "lei",    "leng",   "li",    "lia",
+        "lian",  "liang",  "liao",  "lie",    "lin",    "ling",  "liu",
+        "lo",    "long",   "lou",   "lu",     "luan",   "lun",   "luo",
+        "lv",    "lve",    "lü",    "lüe",    "ma",     "mai",   "man",
+        "mang",  "mao",    "me",    "mei",    "men",    "meng",  "mi",
+        "mian",  "miao",   "mie",   "min",    "ming",   "miu",   "mo",
+        "mou",   "mu",     "na",    "nai",    "nan",    "nang",  "nao",
+        "ne",    "nei",    "nen",   "neng",   "ng",     "ni",    "nian",
+        "niang", "niao",   "nie",   "nin",    "ning",   "niu",   "nong",
+        "nou",   "nu",     "nuan",  "nun",    "nuo",    "nv",    "nve",
+        "nü",    "nüe",    "o",     "ou",     "pa",     "pai",   "pan",
+        "pang",  "pao",    "pei",   "pen",    "peng",   "pi",    "pian",
+        "piao",  "pie",    "pin",   "ping",   "po",     "pou",   "pu",
+        "qi",    "qia",    "qian",  "qiang",  "qiao",   "qie",   "qin",
+        "qing",  "qiong",  "qiu",   "qu",     "quan",   "que",   "qun",
+        "ran",   "rang",   "rao",   "re",     "ren",    "reng",  "ri",
+        "rong",  "rou",    "ru",    "rua",    "ruan",   "rui",   "run",
+        "ruo",   "sa",     "sai",   "san",    "sang",   "sao",   "se",
+        "sei",   "sen",    "seng",  "sha",    "shai",   "shan",  "shang",
+        "shao",  "she",    "shei",  "shen",   "sheng",  "shi",   "shou",
+        "shu",   "shua",   "shuai", "shuan",  "shuang", "shui",  "shun",
+        "shuo",  "si",     "song",  "sou",    "su",     "suan",  "sui",
+        "sun",   "suo",    "ta",    "tai",    "tan",    "tang",  "tao",
+        "te",    "tei",    "teng",  "ti",     "tian",   "tiao",  "tie",
+        "ting",  "tong",   "tou",   "tu",     "tuan",   "tui",   "tun",
+        "tuo",   "wa",     "wai",   "wan",    "wang",   "wei",   "wen",
+        "weng",  "wo",     "wu",    "xi",     "xia",    "xian",  "xiang",
+        "xiao",  "xie",    "xin",   "xing",   "xiong",  "xiu",   "xu",
+        "xuan",  "xue",    "xun",   "ya",     "yan",    "yang",  "yao",
+        "ye",    "yi",     "yin",   "ying",   "yo",     "yong",  "you",
+        "yu",    "yuan",   "yue",   "yun",    "za",     "zai",   "zan",
+        "zang",  "zao",    "ze",    "zei",    "zen",    "zeng",  "zha",
+        "zhai",  "zhan",   "zhang", "zhao",   "zhe",    "zhei",  "zhen",
+        "zheng", "zhi",    "zhong", "zhou",   "zhu",    "zhua",  "zhuai",
+        "zhuan", "zhuang", "zhui",  "zhun",   "zhuo",   "zi",    "zong",
+        "zou",   "zu",     "zuan",  "zui",    "zun",    "zuo",
+    };
+
+    auto words = [&]() {
+        std::stringstream ss(text);
+        std::string word;
+        std::vector<std::string> words;
+        while (ss >> word) {
+            words.push_back(word);
+        }
+        return words;
+    }();
+
+    size_t total_words = 0;
+    size_t valid_pinyin_words = 0;
+
+    for (const auto& word : words) {
+        auto cword = remove_pinyin_tones(word, true);
+        if (cword.empty()) continue;
+
+        ++total_words;
+
+        if (pinyin_dictionary.contains(cword)) {
+            ++valid_pinyin_words;
+        }
+    }
+
+    if (total_words == 0) {
+        return false;
+    }
+
+    double ratio = static_cast<double>(valid_pinyin_words) / total_words;
+    return ratio >= 0.80;
+}
+
+bool extract_readable_content(std::string& text) {
+    std::string output(text.size(), '\0');
+
+    auto new_size = rdrview_extract(
+        text.data(), text.size(), output.data(), output.size(),
+        [](const char* message) { LOGD("rdrview: " << message); },
+        /*opts=*/RDRVIEW_OPT_TEXT_ONLY | RDRVIEW_OPT_INSERT_METADATA);
+
+    if (new_size == 0) {
+        LOGE("failed to extract readable content");
+        return false;
+    }
+
+    output.resize(new_size);
+
+    text.assign(std::move(output));
+
+    return true;
+}
+
+void processor::hebrew_diacritize(std::string& text,
+                                  const std::string& model_path) {
+#ifdef USE_PY
+    using namespace pybind11::literals;
+
+    auto task = py_executor::instance()->execute(
+        [&, dev = m_device < 0 ? "cpu"
+                               : fmt::format("{}:{}", "cuda", m_device)]() {
+            try {
+                if (!m_unikud) {
+                    LOGD("creating hebrew diacritizer: device="
+                         << dev << ", model-path=" << model_path);
+
+                    auto framework = py::module_::import("unikud.framework");
+                    m_unikud = framework.attr("Unikud")(
+                        "hub_name"_a = model_path, "device"_a = dev);
+                }
+
+                return m_unikud.value()(text).cast<std::string>();
+            } catch (const std::exception& err) {
+                LOGE("py error: " << err.what());
+            }
+
+            return text;
+        });
+
+    if (task) text.assign(std::any_cast<std::string>(task->get()));
+#else
+    (void)text;
+    (void)model_path;
+
+    LOGW("hebrew diacritize is unavailable as py is off");
+#endif
+}
+
+void processor::arabic_diacritize(std::string& text,
+                                  const std::string& model_path) {
+    if (!m_tashkeel_state) {
+        m_tashkeel_state.emplace();
+        try {
+            tashkeel::tashkeel_load(model_path, *m_tashkeel_state);
+        } catch ([[maybe_unused]] const std::exception& error) {
+            m_tashkeel_state.reset();
+            return;
+        }
+    }
+
+    text.assign(tashkeel::tashkeel_run(text, *m_tashkeel_state));
 }
 
 std::string processor::preprocess(const std::string& text,
@@ -1566,7 +1709,11 @@ std::string processor::preprocess(const std::string& text,
             hebrew_diacritize(new_text, model_path);
         } else if (lang == "zh") {
             LOGD("pinyin-to-hanzi pre-processing needed");
-            pinyin_to_hanzi(new_text, model_path);
+            if (is_pinyin(text)) {
+                pinyin_to_hanzi(new_text, model_path);
+            } else {
+                LOGD("skip pinyin-to-hanzi because text is not pinyin");
+            }
         }
     }
 
@@ -1609,26 +1756,6 @@ processor::~processor() {
 
     if (task) task->get();
 #endif
-}
-
-bool extract_readable_content(std::string& text) {
-    std::string output(text.size(), '\0');
-
-    auto new_size = rdrview_extract(
-        text.data(), text.size(), output.data(), output.size(),
-        [](const char* message) { LOGD("rdrview: " << message); },
-        /*opts=*/RDRVIEW_OPT_TEXT_ONLY | RDRVIEW_OPT_INSERT_METADATA);
-
-    if (new_size == 0) {
-        LOGE("failed to extract readable content");
-        return false;
-    }
-
-    output.resize(new_size);
-
-    text.assign(std::move(output));
-
-    return true;
 }
 
 }  // namespace text_tools

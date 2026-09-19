@@ -267,31 +267,31 @@ ColumnLayout {
         }
     }
 
-    Frame {
-        visible: app.active_stt_model.startsWith("zh") || app.active_tts_model.startsWith("zh")
-        Layout.alignment: Qt.AlignHCenter
-        background: Item {}
-        bottomPadding: 0
-        topPadding: 0
-        rightPadding: appWin.padding
-        leftPadding: appWin.padding
+    // Frame {
+    //     visible: app.active_stt_model.startsWith("zh") || app.active_tts_model.startsWith("zh")
+    //     Layout.alignment: Qt.AlignHCenter
+    //     background: Item {}
+    //     bottomPadding: 0
+    //     topPadding: 0
+    //     rightPadding: appWin.padding
+    //     leftPadding: appWin.padding
 
-        GridLayout {
-            columns: 1
+    //     GridLayout {
+    //         columns: 1
 
-            columnSpacing: appWin.padding
-            rowSpacing: appWin.padding
+    //         columnSpacing: appWin.padding
+    //         rowSpacing: appWin.padding
 
-            Switch {
-                id: pinyinSwitch
+    //         Switch {
+    //             id: pinyinSwitch
 
-                enabled: app.state === DsnoteApp.StateIdle
-                text: qsTr("Use pinyin")
-                checked: _settings.pinyin_text
-                onClicked: {
-                    _settings.pinyin_text = !_settings.pinyin_text
-                }
-            }
-        }
-    }
+    //             enabled: app.state === DsnoteApp.StateIdle
+    //             text: qsTr("Use pinyin")
+    //             checked: _settings.pinyin_text
+    //             onClicked: {
+    //                 _settings.pinyin_text = !_settings.pinyin_text
+    //             }
+    //         }
+    //     }
+    // }
 }

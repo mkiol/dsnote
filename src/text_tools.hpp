@@ -73,8 +73,6 @@ class processor {
                            const std::string& model_path);
     void hebrew_diacritize(std::string& text, const std::string& model_path);
     void arabic_diacritize(std::string& text, const std::string& model_path);
-    void pinyin_to_hanzi(std::string& text, const std::string& model_path);
-    void hanzi_to_pinyin(std::string& text, const std::string& model_path);
 
    private:
 #ifdef USE_PY
@@ -133,6 +131,12 @@ void break_segments_to_multiline(unsigned int min_line_size,
                                  unsigned int max_line_size,
                                  std::vector<segment_t>& segments);
 bool extract_readable_content(std::string& text);
+std::string next_utf8_char(const std::string& input, size_t& i);
+bool is_punctuation_mark(const std::string& utf8_char);
+std::string remove_pinyin_tones(const std::string& text, bool remove_punct);
+bool is_pinyin(const std::string& text);
+void pinyin_to_hanzi(std::string& text, const std::string& model_path);
+void hanzi_to_pinyin(std::string& text, const std::string& model_path);
 }  // namespace text_tools
 
 #endif  // TEXT_TOOLS_H

@@ -398,6 +398,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void restore_punctuation();
     Q_INVOKABLE void pinyin_to_hanzi();
     Q_INVOKABLE void hanzi_to_pinyin();
+    Q_INVOKABLE void pinyin_hanzi_toggle();
     Q_INVOKABLE void pause_speech();
     Q_INVOKABLE void resume_speech();
     Q_INVOKABLE void translate();
@@ -586,6 +587,7 @@ class dsnote_app : public QObject {
         restore_punctuation = 3,
         pinyin_to_hanzi = 4,
         hanzi_to_pinyin = 5,
+        pinyin_hanzi_toggle = 6,
     };
 
     inline static const QString DBUS_SERVICE_NAME{

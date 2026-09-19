@@ -99,7 +99,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.9.1" date="2026-09-11">
+    <release version="4.9.1" date="2026-09-19">
       <description>
       <p>Accessibility:</p>
       <ul>
@@ -136,6 +136,7 @@
       <li>AMD ROCm hardware acceleration support in 'FasterWhisper'.
         To enable ROCm acceleration with Flatpak, install the AMD add-on.</li>
       <li>Temperature and Repetition Penalty options in Whisper engine 'Custom' profile</li>
+      <li>Support pinyin output for Chinese language</li>
       <li>OpenVINO hardware acceleration in 'WhisperCpp' was removed as it provided minimal performance improvement.</li>
       </ul>
       <p>Text to Speech:</p>
@@ -144,6 +145,13 @@
       <li>Updated RHVoice models for: Czech, Serbian, Spanish</li>
       <li>New Piper models for: Albanian, Bulgarian, Dutch, Greek, Hindi, Indonesian, Kurdish, Latvian, Polish, Swedish, Telugu, Ukrainian, Urdu</li>
       <li>New F5-TTS model for Latvian</li>
+      <li>Support for pinyin input for Chinese language</li>
+      </ul>
+      <p>Translator:</p>
+      <ul>
+      <p>User Interface:</p>
+      <ul>
+      <li>Support for pinyin for Chinese language</li>
       </ul>
       <p>User Interface:</p>
       <ul>

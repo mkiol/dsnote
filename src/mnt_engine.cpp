@@ -372,7 +372,7 @@ std::string mnt_engine::translate_internal(std::string text) {
     const size_t segment_size = 500;
     const size_t segment_max_size = 10 * segment_size;
 
-    // initialize text processor for pinyin conversion
+    // pinyin conversion
     std::optional<text_tools::processor> text_processor;
     bool do_to_hanzi =
         !html && !m_config.model_files.pinyin_to_hanzi_dict_path.empty() &&
@@ -380,9 +380,6 @@ std::string mnt_engine::translate_internal(std::string text) {
     bool do_to_pinyin =
         !html && !m_config.model_files.hanzi_to_pinyin_dict_path.empty() &&
         m_config.out_lang == "zh";
-    if (do_to_hanzi || do_to_pinyin) {
-        text_processor.emplace(-1);
-    }
 
     for (std::smatch sm;
          std::regex_search(text, sm, r) || !line.empty() || !text.empty();) {
@@ -402,10 +399,12 @@ std::string mnt_engine::translate_internal(std::string text) {
         if (sm.empty() || line.size() > segment_size) {
             try {
                 if (is_shutdown()) return {};
+
                 if (do_to_hanzi) {
-                    text_processor->pinyin_to_hanzi(
+                    text_tools::pinyin_to_hanzi(
                         line, m_config.model_files.pinyin_to_hanzi_dict_path);
                 }
+
                 line.assign(m_bergamot_api_api.bergamot_api_translate(
                     m_bergamot_ctx_first, line.c_str(), true));
 
@@ -416,7 +415,7 @@ std::string mnt_engine::translate_internal(std::string text) {
                         m_bergamot_ctx_second, line.c_str(), true));
 
                 if (do_to_pinyin) {
-                    text_processor->hanzi_to_pinyin(
+                    text_tools::hanzi_to_pinyin(
                         line, m_config.model_files.hanzi_to_pinyin_dict_path);
                 }
 

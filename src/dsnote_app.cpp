@@ -3233,6 +3233,10 @@ void dsnote_app::hanzi_to_pinyin() {
     repair_text(text_repair_task_type_t::hanzi_to_pinyin);
 }
 
+void dsnote_app::pinyin_hanzi_toggle() {
+    repair_text(text_repair_task_type_t::pinyin_hanzi_toggle);
+}
+
 void dsnote_app::repair_text(text_repair_task_type_t task_type) {
     if (note().isEmpty()) {
         qWarning() << "text is empty";

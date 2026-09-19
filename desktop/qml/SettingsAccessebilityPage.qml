@@ -124,7 +124,7 @@ ColumnLayout {
               "<li><i>stop-listening</i> - " + qsTranslate("SettingsPage", "Stops listening. The already captured voice is decoded into text.") + "</li>" +
               "<li><i>transcribe-file</i> - " + qsTranslate("SettingsPage", "Transcribe a file specified by command-line %1 option.").arg("<i>--input-file</i>") + "</li>" +
               "<li><i>start-reading</i> - " + qsTranslate("SettingsPage", "Starts reading.") + "</li>" +
-              "<li><i>start-reading-clipboard</i> (X11) - " + qsTranslate("SettingsPage", "Starts reading text from the clipboard.") + "</li>" +
+              "<li><i>start-reading-clipboard</i> - " + qsTranslate("SettingsPage", "Starts reading text from the clipboard.") + "</li>" +
               "<li><i>start-reading-text</i> - " + qsTranslate("SettingsPage", "Starts reading text from command-line %1 option.").arg("<i>--text</i>") + "</li>" +
               "<li><i>start-reading-file</i> - " + qsTranslate("SettingsPage", "Starts reading text from a file specified by command-line %1 option.").arg("<i>--input-file</i>") + "</li>" +
               "<li><i>start-reading-url</i> - " + qsTranslate("SettingsPage", "Starts reading text of a web page specified by command-line %1 option.").arg("<i>--input-url</i>") + "</li>" +

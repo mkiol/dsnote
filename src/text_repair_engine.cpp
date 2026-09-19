@@ -17,6 +17,7 @@
 #include <array>
 
 #include "logger.hpp"
+#include "text_tools.hpp"
 
 std::ostream& operator<<(std::ostream& os, text_repair_engine::gpu_api_t api) {
     switch (api) {
@@ -85,6 +86,9 @@ std::ostream& operator<<(std::ostream& os,
             break;
         case text_repair_engine::task_type_t::hanzi_to_pinyin:
             os << "hanzi-to-pinyin";
+            break;
+        case text_repair_engine::task_type_t::pinyin_hanzi_toggle:
+            os << "pinyin-hanzi-toggle";
             break;
         case text_repair_engine::task_type_t::none:
             os << "none";
@@ -262,6 +266,7 @@ std::vector<text_repair_engine::task_t> text_repair_engine::make_tasks(
                         return "he";
                     case task_type_t::pinyin_to_hanzi:
                     case task_type_t::hanzi_to_pinyin:
+                    case task_type_t::pinyin_hanzi_toggle:
                         return "zh";
                     case task_type_t::restore_punctuation:
                     case task_type_t::none:
@@ -308,8 +313,6 @@ void text_repair_engine::process_task(task_t& task,
     switch (task.type) {
         case task_type_t::restore_diacritics_ar:
         case task_type_t::restore_diacritics_he:
-        case task_type_t::pinyin_to_hanzi:
-        case task_type_t::hanzi_to_pinyin:
             if (!m_text_processor)
                 m_text_processor.emplace(
                     m_config.use_gpu ? m_config.gpu_device.id : -1);
@@ -325,6 +328,10 @@ void text_repair_engine::process_task(task_t& task,
             LOGW("restore punctuation is unavailable as py is off";)
 #endif
             break;
+        case task_type_t::pinyin_to_hanzi:
+        case task_type_t::hanzi_to_pinyin:
+        case task_type_t::pinyin_hanzi_toggle:
+            break;
         case task_type_t::none:
             throw std::runtime_error{"invalid task type"};
     }
@@ -339,12 +346,21 @@ void text_repair_engine::process_task(task_t& task,
                 task.text, m_config.model_files.diacritizer_path_he);
             break;
         case task_type_t::pinyin_to_hanzi:
-            m_text_processor->pinyin_to_hanzi(
+            text_tools::pinyin_to_hanzi(
                 task.text, m_config.model_files.pinyin_to_hanzi_dict_path);
             break;
         case task_type_t::hanzi_to_pinyin:
-            m_text_processor->hanzi_to_pinyin(
+            text_tools::hanzi_to_pinyin(
                 task.text, m_config.model_files.hanzi_to_pinyin_dict_path);
+            break;
+        case task_type_t::pinyin_hanzi_toggle:
+            if (text_tools::is_pinyin(task.text)) {
+                text_tools::pinyin_to_hanzi(
+                    task.text, m_config.model_files.pinyin_to_hanzi_dict_path);
+            } else {
+                text_tools::hanzi_to_pinyin(
+                    task.text, m_config.model_files.hanzi_to_pinyin_dict_path);
+            }
             break;
         case task_type_t::restore_punctuation:
 #ifdef USE_PY

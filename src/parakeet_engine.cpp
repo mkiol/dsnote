@@ -684,7 +684,8 @@ void parakeet_engine::decode_speech(const parakeet_buf_t& buf) {
             const auto* lang_id = cld2_detect_language(
                 result.c_str(),
                 static_cast<int>(std::clamp<size_t>(
-                    result.size(), 0, std::numeric_limits<int>::max())));
+                    result.size(), 0, std::numeric_limits<int>::max())),
+                nullptr);
             if (lang_id == nullptr) {
                 LOGD("cannot detect decoded text language");
                 return m_config.lang_code;

@@ -69,6 +69,7 @@ class text_repair_engine {
         restore_punctuation = 3,
         pinyin_to_hanzi = 4,
         hanzi_to_pinyin = 5,
+        pinyin_hanzi_toggle = 6,
     };
     friend std::ostream& operator<<(std::ostream& os, task_type_t task_type);
 

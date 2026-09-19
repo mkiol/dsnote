@@ -1,6 +1,6 @@
 diff -ruN -x '.*' cld2-org/cld2_api.cpp cld2-patched/cld2_api.cpp
 --- cld2-org/cld2_api.cpp	1970-01-01 01:00:00.000000000 +0100
-+++ cld2-patched/cld2_api.cpp	2026-09-13 14:49:49.563098436 +0200
++++ cld2-patched/cld2_api.cpp	2026-09-19 15:45:26.698824223 +0200
 @@ -0,0 +1,194 @@
 +#include "cld2_api.h"
 +
@@ -65,10 +65,6 @@ diff -ruN -x '.*' cld2-org/cld2_api.cpp cld2-patched/cld2_api.cpp
 +            return "hu";
 +        case ESTONIAN:
 +            return "et";
-+        case TG_UNKNOWN_LANGUAGE:
-+            return "";
-+        case UNKNOWN_LANGUAGE:
-+            return "";
 +        case BULGARIAN:
 +            return "bg";
 +        case CROATIAN:
@@ -178,10 +174,10 @@ diff -ruN -x '.*' cld2-org/cld2_api.cpp cld2-patched/cld2_api.cpp
 +        case NORWEGIAN_N:
 +            return "nn";
 +    }
-+    return "";
++    return nullptr;
 +}
 +
-+const char* cld2_detect_language(const char* buffer, int buffer_length) {
++const char* cld2_detect_language(const char* buffer, int buffer_length, int* cld2_lang_code) {
 +    CLD2::CLDHints cld_hints{};
 +    CLD2::Language language3[3];
 +    int percent3[3];
@@ -194,24 +190,26 @@ diff -ruN -x '.*' cld2-org/cld2_api.cpp cld2-patched/cld2_api.cpp
 +        language3, percent3, normalized_score3, /*resultchunkvector=*/nullptr,
 +        &text_bytes, &is_reliable);
 +
++    if (cld2_lang_code) {
++        *cld2_lang_code = lang;
++    }
++
 +    return lang_str(lang);
 +}
 diff -ruN -x '.*' cld2-org/cld2_api.h cld2-patched/cld2_api.h
 --- cld2-org/cld2_api.h	1970-01-01 01:00:00.000000000 +0100
-+++ cld2-patched/cld2_api.h	2026-09-13 14:28:21.538318230 +0200
-@@ -0,0 +1,18 @@
++++ cld2-patched/cld2_api.h	2026-09-19 15:43:40.307172511 +0200
+@@ -0,0 +1,16 @@
 +#ifndef CLD2_API_H
 +#define CLD2_API_H
 +
 +#define CLD2_API_EXPORT __attribute__((visibility("default")))
-+#define CLD2_SUCCESS 0
-+#define CLD2_ERROR 1
 +
 +#ifdef __cplusplus
 +extern "C" {
 +#endif
 +
-+CLD2_API_EXPORT const char* cld2_detect_language(const char* buffer, int buffer_length);
++CLD2_API_EXPORT const char* cld2_detect_language(const char* buffer, int buffer_length, int* cld2_lang_code);
 +
 +#ifdef __cplusplus
 +}
@@ -220,7 +218,7 @@ diff -ruN -x '.*' cld2-org/cld2_api.h cld2-patched/cld2_api.h
 +#endif  // CLD2_API_H
 diff -ruN -x '.*' cld2-org/CMakeLists.txt cld2-patched/CMakeLists.txt
 --- cld2-org/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ cld2-patched/CMakeLists.txt	2026-09-13 14:50:01.668174510 +0200
++++ cld2-patched/CMakeLists.txt	2026-09-19 17:15:34.907983443 +0200
 @@ -0,0 +1,50 @@
 +cmake_minimum_required(VERSION 3.5)
 +
@@ -252,12 +250,12 @@ diff -ruN -x '.*' cld2-org/CMakeLists.txt cld2-patched/CMakeLists.txt
 +    ${cld2_source_dir}/utf8statetable.cc
 +    ${cld2_source_dir}/cld_generated_cjk_uni_prop_80.cc
 +    ${cld2_source_dir}/cld2_generated_cjk_compatible.cc
-+    ${cld2_source_dir}/cld_generated_cjk_delta_bi_4.cc
++    ${cld2_source_dir}/cld_generated_cjk_delta_bi_32.cc
 +    ${cld2_source_dir}/generated_distinct_bi_0.cc
-+    ${cld2_source_dir}/cld2_generated_quadchrome_2.cc
-+    ${cld2_source_dir}/cld2_generated_deltaoctachrome.cc
-+    ${cld2_source_dir}/cld2_generated_distinctoctachrome.cc
-+    ${cld2_source_dir}/cld_generated_score_quad_octa_2.cc
++    ${cld2_source_dir}/cld2_generated_quad0122.cc
++    ${cld2_source_dir}/cld2_generated_deltaocta0122.cc
++    ${cld2_source_dir}/cld2_generated_distinctocta0122.cc
++    ${cld2_source_dir}/cld_generated_score_quad_octa_0122.cc
 +)
 +
 +add_library(${CMAKE_PROJECT_NAME} STATIC cld2_api.cpp ${cld2_sources})
