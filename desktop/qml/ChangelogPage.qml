@@ -55,7 +55,7 @@ DialogPage {
         <li>AMD ROCm hardware acceleration support in <i>FasterWhisper</i>.
             To enable ROCm acceleration with Flatpak, install the AMD add-on.</li>
         <li>Temperature and Repetition Penalty options in Whisper engine <i>Custom</i> profile</li>
-        <li>Support <i>pinyin</i> output for Chinese language (<i>User Interface</i> &rarr; <i>Speech to Text</i> &rarr; <i>Use pinyin</i>)</li>
+        <li>Pinyin support for Chinese langauge (<i>User Interface</i> &rarr; <i>Speech to Text</i> &rarr; <i>Use pinyin</i>)</li>
         <li>OpenVINO hardware acceleration in <i>WhisperCpp</i> was removed as it provided minimal performance improvement.</li>
         </ul>
         </ul>
@@ -65,11 +65,11 @@ DialogPage {
         <li>Updated RHVoice models for: Czech, Serbian, Spanish</li>
         <li>New Piper models for: Albanian, Bulgarian, Dutch, Greek, Hindi, Indonesian, Kurdish, Latvian, Polish, Swedish, Telugu, Ukrainian, Urdu</li>
         <li>New F5-TTS model for Latvian</li>
-        <li>Support for <i>pinyin</i> input for Chinese language (<i>User Interface</i> &rarr; <i>Text to Speech</i> &rarr; <i>Use pinyin</i>)</li>
+        <li>Pinyin support for Chinese langauge (<i>User Interface</i> &rarr; <i>Text to Speech</i> &rarr; <i>Use pinyin</i>)</li>
         </ul>
         <p>" + qsTr("Translator") + "</p>
         <ul>
-        <li>Support for <i>pinyin</i> for Chinese language (<i>User Interface</i> &rarr; <i>Translator</i> &rarr; <i>Use pinyin</i>)</li>
+        <li>Pinyin support for Chinese langauge (<i>User Interface</i> &rarr; <i>Translator</i> &rarr; <i>Use pinyin</i>)</li>
         </ul>
         <p>" + qsTr("User Interface") + "</p>
         <ul>
