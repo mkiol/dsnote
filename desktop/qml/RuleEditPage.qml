@@ -102,6 +102,13 @@ DialogPage {
         }
     }
 
+    onRuleTestTextChanged: {
+        if (ruleTestText.length === 0)
+            _testTextArea.textArea1.text = app.trans_rules_test_text
+        else
+            _testTextArea.textArea1.text = root.ruleTestText
+    }
+
     Component {
         id: patterHelpDialog
 
@@ -237,21 +244,23 @@ DialogPage {
                 readOnly: true
                 color: _testTextArea.dimColor
             }
-
-            Component.onCompleted: {
-                if (root.ruleTestText.length === 0)
-                    _testTextArea.textArea1.text = app.trans_rules_test_text
-                else
-                    _testTextArea.textArea1.text = root.ruleTestText
-            }
         }
 
-        CheckBox {
-            id: caseSensitiveCheckBox
+        GridLayout {
+            columns: verticalMode ? 1 : 2
+            columnSpacing: appWin.padding
+            Layout.fillWidth: true
 
-            checked: root.ruleCaseSensitive
-            text: qsTr("Case sensitive")
-            onCheckedChanged: root.testRule()
+            Item {
+                Layout.preferredWidth: root.verticalMode ? 0 : (_typeForm.width / 2) - 2 * parent.columnSpacing
+            }
+
+            CheckBox {
+                id: caseSensitiveCheckBox
+                checked: root.ruleCaseSensitive
+                text: qsTr("Case sensitive")
+                onCheckedChanged: root.testRule()
+            }
         }
 
         ComboBoxForm {

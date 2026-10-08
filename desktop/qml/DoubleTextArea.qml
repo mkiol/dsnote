@@ -8,6 +8,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import org.kde.kirigami.primitives as Kirigami
 
 GridLayout {
     id: root
@@ -33,28 +34,38 @@ GridLayout {
     rowSpacing: appWin.padding
     Layout.fillWidth: true
 
-    ScrollView {
-        clip: true
-
+    RowLayout {
         Layout.fillWidth: true
-        Layout.leftMargin: root.indends * appWin.padding
-        Layout.preferredHeight: root.preferredHeight * (root.verticalMode ? 1 : 3)
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
-        TextArea {
-            id: _textArea1
+        ScrollView {
+            clip: true
 
-            selectByMouse: true
-            wrapMode: TextEdit.Wrap
-            verticalAlignment: TextEdit.AlignTop
-            color: root.textColor
+            Layout.fillWidth: true
+            Layout.leftMargin: root.indends * appWin.padding
+            Layout.preferredHeight: root.preferredHeight * (root.verticalMode ? 1 : 3)
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered && root.toolTip1.length !== 0
-            ToolTip.text: root.toolTip1
-            hoverEnabled: true
+            TextArea {
+                id: _textArea1
 
-            TextContextMenu {}
+                selectByMouse: true
+                wrapMode: TextEdit.Wrap
+                verticalAlignment: TextEdit.AlignTop
+                color: root.textColor
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered && root.toolTip1.length !== 0
+                ToolTip.text: root.toolTip1
+                hoverEnabled: true
+
+                TextContextMenu {}
+            }
+        }
+        
+        Kirigami.Icon {
+            Layout.alignment: Qt.AlignCenter
+            visible: !root.verticalMode
+            source: root.verticalMode ? "go-down-symbolic" : "go-next-symbolic"
         }
     }
 
