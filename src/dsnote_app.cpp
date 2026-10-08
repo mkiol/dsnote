@@ -869,7 +869,7 @@ settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
 
             rule_matches = text.contains(rx);
             if (rule_matches) {
-                if (!rule.replace.contains("\\U") && !replace.contains("\\u")) {
+                if (!replace.contains("\\U") && !replace.contains("\\u")) {
                     text.replace(rx, replace);
                 } else {
                     QRegularExpressionMatchIterator it = rx.globalMatch(text);
@@ -887,8 +887,10 @@ settings::trans_rule_flags_t dsnote_app::apply_trans_rule(
                             after.replace(QStringLiteral("\\%1").arg(i),
                                           match.captured(i));
                         }
-                        text.replace(pos, len, after);
-                        offset += after.size() - len;
+                        if (match.lastCapturedIndex() > 0) {
+                            text.replace(pos, len, after);
+                            offset += after.size() - len;
+                        }
                     }
                 }
             }
@@ -940,12 +942,14 @@ dsnote_app::trans_rule_result_t dsnote_app::transform_text(
         }
 
         auto actions = apply_trans_rule(
-            text, {/*flags=*/flags,
-                   /*type=*/
-                   static_cast<settings::trans_rule_type_t>(vl.at(1).toUInt()),
-                   /*name=*/vl.at(2).toString(),
-                   /*pattern=*/vl.at(3).toString(),
-                   /*replace=*/vl.at(4).toString()});
+            text, {
+                      .flags = flags,
+                      .type = static_cast<settings::trans_rule_type_t>(
+                          vl.at(1).toUInt()),
+                      .name = vl.at(2).toString(),
+                      .pattern = vl.at(3).toString(),
+                      .replace = vl.at(4).toString(),
+                  });
 
         result.action_flags |= actions;
     }
@@ -966,14 +970,18 @@ QVariantList dsnote_app::test_trans_rule(unsigned int flags,
     }
 
     auto rflags = apply_trans_rule(
-        out_text, {/*flags=*/static_cast<settings::trans_rule_flags_t>(flags),
-                   /*type=*/static_cast<settings::trans_rule_type_t>(type),
-                   /*name=*/{},
-                   /*pattern=*/pattern,
-                   /*replace=*/replace});
+        out_text, {
+                      .flags = static_cast<settings::trans_rule_flags_t>(flags),
+                      .type = static_cast<settings::trans_rule_type_t>(type),
+                      .name = {},
+                      .pattern = pattern,
+                      .replace = replace,
+                  });
 
-    return {(rflags & settings::trans_rule_flags_t::TransRuleMatched) > 0,
-            out_text};
+    return {
+        (rflags & settings::trans_rule_flags_t::TransRuleMatched) > 0,
+        out_text,
+    };
 }
 
 bool dsnote_app::trans_rule_re_pattern_valid(const QString &pattern) {

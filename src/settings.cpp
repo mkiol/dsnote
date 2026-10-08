@@ -2837,10 +2837,11 @@ QVariantList settings::make_default_trans_rules() {
            "capital letter")
             .arg("period", "."),
         /*[3] pattern=*/
-        QString{"[\\s\\,\\?\\!\\.]*period[\\s\\,\\?\\!\\.]*(\\w)?"},
+        QString{"[\\s\\,\\?\\!\\.]*period[\\s\\,\\?\\!\\.]*(\\w?)"},
         /*[4] replace=*/QString{". \\U\\1"},
         /*[5] langs=*/QString{"en"},
-        /*[6] test_test=*/QString{}});
+        /*[6] test_text=*/"One period two period three period",
+    });
     rules.push_back(QVariantList{
         /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetStt,
         /*[1] type=*/
@@ -2851,10 +2852,11 @@ QVariantList settings::make_default_trans_rules() {
            "lowercase letter")
             .arg("comma", ","),
         /*[3] pattern=*/
-        QString{"[\\s\\,\\?\\!\\.]*comma[\\s\\,\\?\\!\\.]*(\\w)?"},
+        QString{"[\\s\\,\\?\\!\\.]*comma[\\s\\,\\?\\!\\.]*(\\w?)"},
         /*[4] replace=*/QString{", \\u\\1"},
         /*[5] langs=*/QString{"en"},
-        /*[6] test_test=*/QString{}});
+        /*[6] test_text=*/"One comma Two comma Three comma",
+    });
     rules.push_back(QVariantList{
         /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetStt,
         /*[1] type=*/
@@ -2867,7 +2869,9 @@ QVariantList settings::make_default_trans_rules() {
         QString{"[\\s*\\,]?new[\\s\\-]*line[\\s\\,\\?\\!\\.]*"},
         /*[4] replace=*/QString{".\\n"},
         /*[5] langs=*/QString{"en"},
-        /*[6] test_test=*/QString{}});
+        /*[6] test_text=*/
+        "One new line Two newline Three new-line",
+    });
     // rules.push_back(QVariantList{
     //     /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetTts,
     //     /*[1] type=*/
@@ -2879,7 +2883,7 @@ QVariantList settings::make_default_trans_rules() {
     //     QString{"."},
     //     /*[4] replace=*/QString{". {silence:1s}"},
     //     /*[5] langs=*/QString{},
-    //     /*[6] test_test=*/QString{}});
+    //     /*[6] test_text=*/QString{},});
     rules.push_back(QVariantList{
         /*[0] flags=*/flags | trans_rule_flags_t::TransRuleTargetTts,
         /*[1] type=*/
@@ -2892,7 +2896,8 @@ QVariantList settings::make_default_trans_rules() {
         QString{"Micha[lł]"},
         /*[4] replace=*/QString{"Me how"},
         /*[5] langs=*/QString{"en"},
-        /*[6] test_test=*/QString{}});
+        /*[6] test_text=*/"My name is Michał.",
+    });
     return rules;
 }
 
