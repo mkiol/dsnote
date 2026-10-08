@@ -25,7 +25,7 @@ RowForm {
         ToolTip.visible: hovered && root.toolTip.length !== 0
         ToolTip.text: root.toolTip
         hoverEnabled: true
-        color: root.root.textColor
+        color: root.textColor
 
         Accessible.name: root.label.text
 
