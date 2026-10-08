@@ -19,10 +19,13 @@
 #include <QTextStream>
 #include <QTimer>
 #include <algorithm>
+#include <cstdlib>
+#include <cstring>
 #include <iterator>
 #include <utility>
 
 #include "downloader.hpp"
+#include "logger.hpp"
 #include "media_compressor.hpp"
 #include "module_tools.hpp"
 #include "mtag_tools.hpp"
@@ -297,6 +300,28 @@ QDebug operator<<(QDebug d, const dsnote_app::trans_rule_t &rule) {
     return d;
 }
 
+[[maybe_unused]] static void set_env(const char *name, const char *value,
+                                     bool force = false) {
+    auto *old_value = getenv(name);
+    if (old_value && std::strcmp(value, old_value) == 0) {
+        // already set
+        return;
+    }
+
+    if (old_value && !force) {
+        LOGD("skip set env: " << name << " = " << old_value << " => " << value);
+        return;
+    }
+
+    if (old_value) {
+        LOGD("set env: " << name << " = " << old_value << " => " << value);
+    } else {
+        LOGD("set env: " << name << " = " << value);
+    }
+
+    setenv(name, value, 1);
+}
+
 static QString audio_quality_to_str(settings::audio_quality_t quality) {
     switch (quality) {
         case settings::audio_quality_t::AudioQualityVbrHigh:
@@ -531,6 +556,14 @@ dsnote_app::dsnote_app(QObject *parent)
 }
 
 void dsnote_app::create_player() {
+#ifdef USE_SFOS
+    /* setup audio class for proper audio routing and interaction with audio
+       player see SFOS forum for problem description:
+       https://forum.sailfishos.org/t/playing-audio-file-with-qmediaplayer-pause-media-player/2732/5
+     */
+    set_env("NEMO_RESOURCE_CLASS_OVERRIDE", "game", false);
+#endif
+
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_player = std::make_unique<QMediaPlayer>(QObject::parent(),
                                               QMediaPlayer::LowLatency);

@@ -17,6 +17,7 @@
 #include <QVariant>
 #include <algorithm>
 #include <cstdlib>
+#include <cstring>
 #include <functional>
 #include <numeric>
 #include <optional>
@@ -147,6 +148,28 @@ QDebug operator<<(QDebug d, speech_service::beep_role_t beep_role) {
     }
 
     return d;
+}
+
+[[maybe_unused]] static void set_env(const char *name, const char *value,
+                                     bool force = false) {
+    auto *old_value = getenv(name);
+    if (old_value && std::strcmp(value, old_value) == 0) {
+        // already set
+        return;
+    }
+
+    if (old_value && !force) {
+        LOGD("skip set env: " << name << " = " << old_value << " => " << value);
+        return;
+    }
+
+    if (old_value) {
+        LOGD("set env: " << name << " = " << old_value << " => " << value);
+    } else {
+        LOGD("set env: " << name << " = " << value);
+    }
+
+    setenv(name, value, 1);
 }
 
 namespace {
@@ -301,6 +324,14 @@ speech_service::speech_service(QObject *parent)
     connect(
         this, &speech_service::requet_update_task_state, this,
         [this] { update_task_state(); }, Qt::QueuedConnection);
+
+#ifdef USE_SFOS
+    /* setup audio class for proper audio routing and interaction with audio
+       player see SFOS forum for problem description:
+       https://forum.sailfishos.org/t/playing-audio-file-with-qmediaplayer-pause-media-player/2732/5
+     */
+    set_env("NEMO_RESOURCE_CLASS_OVERRIDE", "game", false);
+#endif
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(&m_player, &QMediaPlayer::stateChanged, this,
 #else
