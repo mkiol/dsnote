@@ -1356,6 +1356,7 @@ bool speech_service::is_new_stt_engine_required(
     if (m_stt_engine->model_files() != config.model_files) return true;
     if (m_stt_engine->model_files() != config.model_files) return true;
     if (m_stt_engine->lang() != config.lang) return true;
+    if (m_stt_engine->lang_code() != config.lang_code) return true;
     if (config.use_gpu != m_stt_engine->use_gpu() ||
         config.gpu_device != m_stt_engine->gpu_device()) {
         return true;

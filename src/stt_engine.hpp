@@ -170,6 +170,7 @@ class stt_engine {
     auto speech_status() const { return m_config.speech_started; }
     const model_files_t& model_files() const { return m_config.model_files; }
     const std::string& lang() const { return m_config.lang; }
+    const std::string& lang_code() const { return m_config.lang_code; }
     auto use_gpu() const { return m_config.use_gpu; }
     auto gpu_device() const { return m_config.gpu_device; }
     auto text_format() const { return m_config.text_format; }
