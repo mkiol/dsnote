@@ -36,6 +36,7 @@ Currently these are used:
   - [whisper.cpp + Parakeet](https://github.com/ggerganov/whisper.cpp)
   - [Faster Whisper](https://github.com/guillaumekln/faster-whisper)
   - [april-asr](https://github.com/abb128/april-asr)
+  - [Qwen3-ASR](https://github.com/QwenLM/Qwen3-ASR)
 - Text to Speech (TTS)
   - [espeak-ng](https://github.com/espeak-ng/espeak-ng)
   - [MBROLA](https://github.com/numediart/MBROLA)
@@ -47,6 +48,7 @@ Currently these are used:
   - [Kokoro](https://github.com/hexgrad/kokoro)
   - [Parler-TTS](https://github.com/huggingface/parler-tts)
   - [F5-TTS](https://github.com/SWivid/F5-TTS)
+  - [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS)
   - [S.A.M.](https://discordier.github.io/sam)
 - Machine Translation (MT)
   - [Bergamot Translator](https://github.com/browsermt/bergamot-translator)
@@ -137,7 +139,7 @@ Following languages and models are supported and enable for download:
 <sup>(e) experimental, most likely doesn't work well</sup>
 <br/>
 
-Faster Whisper, Coqui TTS and Mimic3 models are only available on x86-64.
+Faster Whisper, Qwen3-ASR, Coqui TTS, Mimic3 and Qwen3-TTS models are only available on x86-64.
 
 Language models can be downloaded directly from the app.
 
@@ -224,6 +226,9 @@ Features comparison between Base, Tiny and Add-ons Flatpak packages:
 | Whisper (whisper.cpp) STT Vulkan        | +        | +        |                |                   |
 | FasterWhisper STT                       | +        | -        |                |                   |
 | FasterWhisper STT CUDA                  | -        | -        |                | +                 |
+| Qwen3-ASR STT                           | +        | -        |                |                   |
+| Qwen3-ASR STT ROCm                      | -        | -        | +              |                   |
+| Qwen3-ASR STT CUDA                      | -        | -        |                | +                 |
 | April-ASR STT                           | +        | +        |                |                   |
 | eSpeak TTS                              | +        | +        |                |                   |
 | MBROLA TTS                              | +        | +        |                |                   |
@@ -245,6 +250,9 @@ Features comparison between Base, Tiny and Add-ons Flatpak packages:
 | F5-TTS                                  | +        | -        |                |                   |
 | F5-TTS ROCm                             | -        | -        | +              |                   |
 | F5-TTS CUDA                             | -        | -        |                | +                 |
+| Qwen3-TTS                               | +        | -        |                |                   |
+| Qwen3-TTS ROCm                          | -        | -        | +              |                   |
+| Qwen3-TTS CUDA                          | -        | -        |                | +                 |
 | S.A.M TTS                               | +        | +        |                |                   |
 | Punctuation restoration                 | +        | -        |                |                   |
 | Translator                              | +        | +        |                |                   |
@@ -482,7 +490,7 @@ Model definition looks like this:
 }
 ```
 
-Allowed engine types: `stt_ds`, `stt_vosk`, `stt_april`, `stt_whisper`, `stt_fasterwhisper`, `tts_piper`, `tts_rhvoice`, `tts_espeak`, `tts_coqui`, `tts_mimic3`, `tts_whisperspeech`, `tts_sam`, `tts_parler`, `tts_f5`, `tts_kokoro`, `mnt_bergamot`
+Allowed engine types: `stt_ds`, `stt_vosk`, `stt_april`, `stt_whisper`, `stt_fasterwhisper`, `stt_qwen3asr`, `tts_piper`, `tts_rhvoice`, `tts_espeak`, `tts_coqui`, `tts_mimic3`, `tts_whisperspeech`, `tts_sam`, `tts_parler`, `tts_f5`, `tts_kokoro`, `tts_qwen3tts`, `mnt_bergamot`
 
 Allowed compression types: `none`, `gz`, `xz`, `tarxz`, `targz`, `zip`, `zipall`, `dir`, `dirgz`
 
@@ -582,6 +590,8 @@ please consider doing one or two of the following:
 - [Kokoro](https://github.com/hexgrad/kokoro)
 - [Parler-TTS](https://github.com/huggingface/parler-tts)
 - [F5-TTS](https://github.com/SWivid/F5-TTS)
+- [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS)
+- [Qwen3-ASR](https://github.com/QwenLM/Qwen3-ASR)
 - [S.A.M.](https://discordier.github.io/sam)
 - [rdrview](https://github.com/eafer/rdrview)
 - [CLD2](https://github.com/CLD2Owners/cld2)
@@ -665,6 +675,8 @@ please consider doing one or two of the following:
 - **Kokoro**, released under the [Apache License 2.0](https://github.com/hexgrad/kokoro/raw/refs/heads/main/LICENSE)
 - **Parler-TTS**, released under the [Apache License 2.0](https://raw.githubusercontent.com/huggingface/parler-tts/refs/heads/main/LICENSE)
 - **F5-TTS**, released under the [MIT License](https://github.com/SWivid/F5-TTS/raw/refs/heads/main/LICENSE)
+- **Qwen3-TTS**, released under the [Apache License 2.0](https://github.com/QwenLM/Qwen3-TTS/raw/main/LICENSE)
+- **Qwen3-ASR**, released under the [Apache License 2.0](https://github.com/QwenLM/Qwen3-ASR/raw/main/LICENSE)
 - **rdrview**, released under the [Apache License 2.0](https://github.com/eafer/rdrview/raw/refs/heads/master/LICENSE)
 - **CLD2**, released under the [Apache License 2.0](https://github.com/CLD2Owners/cld2/blob/master/LICENSE)
 - **google_pinyinim**, released under the [Apache License 2.0](https://github.com/aron566/google_pinyinim/raw/refs/heads/master/LICENSE)

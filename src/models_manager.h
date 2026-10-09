@@ -88,7 +88,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         STT_ENGINE_TABLE TTS_ENGINE_TABLE MNT_ENGINE_TABLE
 #undef X
                 engine_other = 1U
-            << 24U,
+            << 25U,
         /* engine end */
         generic_end = engine_other,
         stt_start = 1U << 26U,

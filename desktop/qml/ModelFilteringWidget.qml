@@ -59,18 +59,20 @@ ColumnLayout {
             case 3: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineSttVosk; break
             case 4: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineSttWhisper; break
             case 5: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineSttParakeet; break
-            case 6: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsCoqui; break
-            case 7: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsEspeak; break
-            case 8: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsMimic3; break
-            case 9: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsPiper; break
-            case 10: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsRhvoice; break
-            case 11: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsWhisperSpeech; break
-            case 12: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsParler; break
-            case 13: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsF5; break
-            case 14: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsKokoro; break
-            case 15: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsSam; break
-            case 16: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineMnt; break
-            case 17: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineOther; break
+            case 6: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineSttQwen3Asr; break
+            case 7: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsCoqui; break
+            case 8: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsEspeak; break
+            case 9: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsMimic3; break
+            case 10: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsPiper; break
+            case 11: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsRhvoice; break
+            case 12: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsWhisperSpeech; break
+            case 13: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsParler; break
+            case 14: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsF5; break
+            case 15: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsKokoro; break
+            case 16: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsQwen3Tts; break
+            case 17: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineTtsSam; break
+            case 18: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineMnt; break
+            case 19: root.models_model.featureFilterFlags = ModelsListModel.FeatureEngineOther; break
             }
         } else if (speed_checkBox.checked) {
             switch(index) {
@@ -293,6 +295,7 @@ ColumnLayout {
                     "Vosk STT",
                     "WhisperCpp STT",
                     "Parakeet STT",
+                    "Qwen3-ASR STT",
                     "Coqui TTS",
                     "eSpeak TTS",
                     "Mimic3 TTS",
@@ -302,6 +305,7 @@ ColumnLayout {
                     "Parler-TTS",
                     "F5-TTS",
                     "Kokoro TTS",
+                    "Qwen3-TTS",
                     "SAM TTS",
                     "Bergamot MT",
                     qsTr("Other")

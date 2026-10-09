@@ -40,6 +40,8 @@
     X(fasterwhisper_gpu) \
     X(parakeet_stt)      \
     X(parakeet_gpu)      \
+    X(qwen3asr_stt)      \
+    X(qwen3asr_gpu)      \
     X(whisperspeech_tts) \
     X(whisperspeech_gpu) \
     X(coqui_tts)         \
@@ -50,6 +52,8 @@
     X(f5_gpu)            \
     X(kokoro_tts)        \
     X(kokoro_gpu)        \
+    X(qwen3tts_tts)      \
+    X(qwen3tts_gpu)      \
     X(punctuator)        \
     X(diacritizer_he)    \
     X(translator)        \

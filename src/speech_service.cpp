@@ -52,6 +52,8 @@
 #include "parler_engine.hpp"
 #include "py_executor.hpp"
 #include "py_tools.hpp"
+#include "qwen3asr_engine.hpp"
+#include "qwen3tts_engine.hpp"
 #include "whisperspeech_engine.hpp"
 #endif
 
@@ -1362,7 +1364,14 @@ bool speech_service::is_new_stt_engine_required(
         return true;
     }
     if (m_stt_engine->whisper_config() != config.whisper_config) {
+#ifdef USE_PY
+        // qwen3asr uses only initial_prompt from whisper config, which
+        // is updated with set_whisper_config without reloading the model
+        if (engine_type != models_manager::model_engine_t::stt_qwen3asr)
+            return true;
+#else
         return true;
+#endif
     }
 
     return false;
@@ -1581,6 +1590,24 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
 #ifdef USE_PY
         if (model_config->stt->engine == models_manager::model_engine_t::stt_fasterwhisper) {
             ENGINE_OPTS(fasterwhisper)
+        }
+        if (model_config->stt->engine ==
+            models_manager::model_engine_t::stt_qwen3asr) {
+            // initial_prompt is used as qwen3-asr context
+            stt_engine::whisper_config_t wc{};
+            wc.initial_prompt =
+                get_value_from_options("initial_prompt", QString{}, options)
+                    .toStdString();
+            config.whisper_config.emplace(std::move(wc));
+            if (settings::instance()->qwen3asr_use_gpu() &&
+                settings::instance()->has_qwen3asr_gpu_device()) {
+                if (auto device = make_gpu_device<stt_engine>(
+                        settings::instance()->qwen3asr_gpu_device(),
+                        settings::instance()->qwen3asr_auto_gpu_device())) {
+                    config.gpu_device = std::move(*device);
+                    config.use_gpu = true;
+                }
+            }
         }
 #endif
 #undef ENGINE_OPTS
@@ -3179,6 +3206,8 @@ QVariantMap speech_service::features_availability() {
         "kokoro-tts-zh",
         QVariantList{py_availability->kokoro_tts && py_availability->kokoro_zh,
                      "Kokoro TTS " + tr("Chinese")});
+    m_features_availability.insert(
+        "qwen3tts-tts", QVariantList{py_availability->qwen3_tts, "Qwen3-TTS"});
 #ifdef ARCH_X86_64
     auto has_cuda = gpu_tools::has_cuda_runtime();
     auto has_cudnn = gpu_tools::has_cudnn();
@@ -3272,6 +3301,25 @@ QVariantMap speech_service::features_availability() {
     if (tts_kokoro_hip)
         hw_feature_flags |=
             settings::hw_feature_flags_t::hw_feature_tts_kokoro_hip;
+
+    bool tts_qwen3tts_cuda =
+        py_availability->qwen3_tts && py_availability->torch_cuda;
+    bool tts_qwen3tts_hip =
+        py_availability->qwen3_tts && py_availability->torch_hip;
+    m_features_availability.insert(
+        "qwen3tts-tts-cuda",
+        QVariantList{tts_qwen3tts_cuda,
+                     "Qwen3-TTS CUDA " + tr("HW acceleration")});
+    m_features_availability.insert(
+        "qwen3tts-tts-hip",
+        QVariantList{tts_qwen3tts_hip,
+                     "Qwen3-TTS ROCm " + tr("HW acceleration")});
+    if (tts_qwen3tts_cuda)
+        hw_feature_flags |=
+            settings::hw_feature_flags_t::HW_FEATURE(cuda, qwen3tts, tts);
+    if (tts_qwen3tts_hip)
+        hw_feature_flags |=
+            settings::hw_feature_flags_t::HW_FEATURE(hip, qwen3tts, tts);
 #endif  // ARCH_X86_64
     m_features_availability.insert(
         "coqui-tts-ja",
@@ -3341,6 +3389,29 @@ QVariantMap speech_service::features_availability() {
             settings::hw_feature_flags_t::hw_feature_stt_fasterwhisper_hip;
     }
 #endif  // ARCH_X86_64
+    m_features_availability.insert(
+        "qwen3asr-stt",
+        QVariantList{py_availability->qwen3_asr, "Qwen3-ASR STT"});
+#ifdef ARCH_X86_64
+    bool stt_qwen3asr_cuda =
+        py_availability->qwen3_asr && py_availability->torch_cuda;
+    bool stt_qwen3asr_hip =
+        py_availability->qwen3_asr && py_availability->torch_hip;
+    m_features_availability.insert(
+        "qwen3asr-stt-cuda",
+        QVariantList{stt_qwen3asr_cuda,
+                     "Qwen3-ASR STT CUDA " + tr("HW acceleration")});
+    m_features_availability.insert(
+        "qwen3asr-stt-hip",
+        QVariantList{stt_qwen3asr_hip,
+                     "Qwen3-ASR STT ROCm " + tr("HW acceleration")});
+    if (stt_qwen3asr_cuda)
+        hw_feature_flags |=
+            settings::hw_feature_flags_t::HW_FEATURE(cuda, qwen3asr, stt);
+    if (stt_qwen3asr_hip)
+        hw_feature_flags |=
+            settings::hw_feature_flags_t::HW_FEATURE(hip, qwen3asr, stt);
+#endif  // ARCH_X86_64
     m_features_availability.insert("punctuator",
                                    QVariantList{py_availability->transformers,
                                                 tr("Punctuation restoration")});
@@ -3365,7 +3436,9 @@ QVariantMap speech_service::features_availability() {
     ma.tts_kokoro = py_availability->kokoro_tts;
     ma.tts_kokoro_ja = py_availability->kokoro_ja;
     ma.tts_kokoro_zh = py_availability->kokoro_zh;
+    ma.tts_qwen3tts = py_availability->qwen3_tts;
     ma.stt_fasterwhisper = py_availability->faster_whisper;
+    ma.stt_qwen3asr = py_availability->qwen3_asr;
     ma.ttt_hftc = py_availability->transformers;
     ma.ttt_unikud = py_availability->unikud;
     ma.option_r = py_availability->uroman;
