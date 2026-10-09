@@ -1068,3 +1068,31 @@ modules:
     - type: file
       url: https://files.pythonhosted.org/packages/fd/4d/4b880086bd0d3e034d25647be1d830afc3e3f610e98c4ab3490af6b1b6d5/yarl-1.24.2-py3-none-any.whl
       sha256: 2783d9226db8797636cd6896e4de81feed252d1db72265686c9558d97a4d94b9
+- name: python3-qwen
+  cleanup:
+    - /bin
+  build-options:
+    strip: true
+    env:
+      PYTHONPATH: /app/extensions/cpu/lib/python3.13/site-packages:/app/lib/python3.13/site-packages
+  buildsystem: simple
+  build-commands:
+    # --no-deps: upstream pins transformers==4.57.x and accelerate==1.12.0 (incompatible with
+    # transformers 5.0.0 / accelerate 1.13.0 above); all runtime deps they use are provided by the modules above.
+    # The patches add transformers 5 compatibility and make the 'sox' and 'nagisa' imports optional.
+    - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+      --prefix=${FLATPAK_DEST} --no-build-isolation --no-deps
+      "qwen-tts==0.1.1" "qwen-asr==0.0.6"
+    - patch --batch --unified -p1 --directory=${FLATPAK_DEST}/lib/python3.13/site-packages/qwen_tts -i "$(realpath .)"/qwen-tts.patch
+    - patch --batch --unified -p1 --directory=${FLATPAK_DEST}/lib/python3.13/site-packages/qwen_asr -i "$(realpath .)"/qwen-asr.patch
+  sources:
+    - type: file
+      url: https://files.pythonhosted.org/packages/01/12/d3027a7e4dc2eea0b12a4bf8414a7109f055004e1771666e01d8859d3ca0/qwen_asr-0.0.6-py3-none-any.whl
+      sha256: b9c55a38413298f3a990a4475467399daec6e8f4172363053fc42e2166c2dfd3
+    - type: file
+      url: https://files.pythonhosted.org/packages/31/01/95f3ae26f5b7eb2105f69ad2c15af5a28b9ebdd1258a0b27541f5ebd6225/qwen_tts-0.1.1-py3-none-any.whl
+      sha256: 11a290d8dabc7ef91a90c54478c8ab19b3edb1d85c0882313721892bdc4af15d
+    - type: file
+      path: ../patches/qwen-asr.patch
+    - type: file
+      path: ../patches/qwen-tts.patch
