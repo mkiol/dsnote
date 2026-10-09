@@ -2076,7 +2076,7 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
             qDebug() << "new mnt engine required";
 
             if (m_mnt_engine) {
-                m_tts_engine.reset();
+                m_mnt_engine.reset();
                 qDebug() << "mnt engine destroyed successfully";
             }
 
