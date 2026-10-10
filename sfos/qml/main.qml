@@ -362,7 +362,9 @@ ApplicationWindow {
                 target: app
                 onNote_copied: toast.show(qsTr("Copied!"))
                 onTranscribe_done: toast.show(qsTr("Import from the file is complete!"))
+                onTrans_rule_import_done: toast.show(qsTr("Import from the file is complete!"))
                 onSave_note_to_file_done: toast.show(qsTr("Export to file is complete!"))
+                onTrans_rule_export_done: toast.show(qsTr("Export to file is complete!"))
                 onImport_file_multiple_streams: {
                     pageStack.push(Qt.resolvedUrl("StreamSelectionDialog.qml"),
                                    {acceptDestination: root, acceptDestinationAction: PageStackAction.Pop,

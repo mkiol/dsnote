@@ -7,6 +7,7 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Dialogs as Dialogs
 import QtQuick.Layouts
 
 import org.mkiol.dsnote.Settings 1.0
@@ -23,7 +24,17 @@ DialogPage {
                                              appWin.padding
     property color textColor: appWin.appTextColor
 
-    title: qsTr("Rules")
+    // enum BatchMode { BatchModeNone = 0, BatchModeExport = 1, BatchModeDelete = 2 }
+    property int _batchMode: 0
+    property int _itemSelected: 0
+
+    title: {
+        switch(_batchMode) {
+            case 1: return qsTr("Select rules to export")
+            case 2: return qsTr("Select rules to delete")
+        }
+        return qsTr("Rules")
+    }
 
     function defaultRuleName(type, pattern, replace) {
         switch(type) {
@@ -42,9 +53,75 @@ DialogPage {
     }
 
     onOpened: {
+        _batchMode = 0
+
         if ((_settings.hint_done_flags & Settings.HintDoneRules) == 0) {
             appWin.openPopup(helpDialog)
         }
+    }
+
+    on_BatchModeChanged: {
+        // reset item selection
+        _itemSelected = 0
+        if (listViewStackItem && listViewStackItem.currentItem) {
+            for(var i = 0; i <  listViewStackItem.currentItem.count; ++i) {
+                listViewStackItem.currentItem.itemAtIndex(i).selected = false
+            }
+        }
+    }
+
+    function updateItemSelected() {
+        _itemSelected = countItemSelected()
+    }
+
+    function countItemSelected() {
+        var count = 0
+        if (listViewStackItem && listViewStackItem.currentItem) {
+            for(var i = 0; i <  listViewStackItem.currentItem.count; ++i) {
+                if (listViewStackItem.currentItem.itemAtIndex(i).selected) {
+                    ++count
+                }
+            }
+        }
+        return count
+    }
+
+    function exportSelected(filePath) {
+        var indexes = []
+        if (listViewStackItem && listViewStackItem.currentItem) {
+            for(var i = 0; i <  listViewStackItem.currentItem.count; ++i) {
+                if (listViewStackItem.currentItem.itemAtIndex(i).selected) {
+                    indexes.push(i)
+                }
+            }
+        }
+
+        if (indexes.length > 0) {
+            app.export_trans_rule(indexes, filePath)
+        }
+
+        _batchMode = 0
+    }
+
+    function deleteSelected() {
+        var indexes = []
+        if (listViewStackItem && listViewStackItem.currentItem) {
+            for(var i = 0; i <  listViewStackItem.currentItem.count; ++i) {
+                if (listViewStackItem.currentItem.itemAtIndex(i).selected) {
+                    indexes.push(i)
+                }
+            }
+        }
+
+        if (indexes.length > 0) {
+            _settings.trans_rule_delete_multiple(indexes)
+        }
+
+        _batchMode = 0
+    }
+
+    function importRules(filePath) {
+        app.import_trans_rule(filePath)
     }
 
     Component {
@@ -90,12 +167,18 @@ DialogPage {
     footer: RowLayout {
         height: closeButton.height + appWin.padding
 
+        Item {
+            visible: _batchMode !== 0
+            Layout.fillWidth: true
+        }
+
         Button {
             id: createNewButton
 
             Layout.leftMargin: root.leftPadding + appWin.padding
             Layout.bottomMargin: root.bottomPadding
 
+            visible: root._batchMode === 0
             text: qsTr("Create a new rule")
             icon.name: "special-effects-symbolic"
             onClicked: appWin.openDialog("RuleEditPage.qml")
@@ -103,6 +186,79 @@ DialogPage {
         }
 
         Button {
+            Layout.bottomMargin: root.bottomPadding
+
+            visible: root._batchMode === 0
+            text: qsTr("Export")
+            icon.name: "document-export-symbolic"
+            onClicked: root._batchMode = 1
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Select rules and export to a file")
+            hoverEnabled: true
+        }
+
+        Button {
+            Layout.bottomMargin: root.bottomPadding
+
+            enabled: root._itemSelected > 0
+            visible: root._batchMode === 1
+            text: qsTr("Export %n selected rule(s)", "", root._itemSelected)
+            icon.name: "document-export-symbolic"
+            onClicked: fileWriteDialog.open()
+        }
+
+        Button {
+            Layout.bottomMargin: root.bottomPadding
+
+            visible: root._batchMode === 0
+            text: qsTr("Import")
+            icon.name: "document-import-symbolic"
+            onClicked: fileReadDialog.open()
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Import rules from a file")
+            hoverEnabled: true
+        }
+
+        Button {
+            Layout.bottomMargin: root.bottomPadding
+
+            visible: root._batchMode === 0
+            text: qsTr("Delete multiple")
+            icon.name: "edit-delete-symbolic"
+            onClicked: root._batchMode = 2
+
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Select and delete multiple rules at once")
+            hoverEnabled: true
+        }
+
+        Button {
+            Layout.bottomMargin: root.bottomPadding
+
+            enabled: root._itemSelected > 0
+            visible: root._batchMode === 2
+            text: qsTr("Delete %n selected rule(s)", "", root._itemSelected)
+            icon.name: "edit-delete-symbolic"
+            onClicked: root.deleteSelected()
+        }
+
+        Button {
+            Layout.bottomMargin: root.bottomPadding
+
+            visible: root._batchMode !== 0
+            text: qsTr("Cancel")
+            icon.name: "action-unavailable-symbolic"
+            onClicked: root._batchMode = 0
+            Keys.onEscapePressed: root._batchMode = 0
+        }
+
+        Button {
+            visible: root._batchMode === 0
             icon.name: "help-about-symbolic"
             display: AbstractButton.IconOnly
             text: qsTr("Help")
@@ -125,6 +281,7 @@ DialogPage {
             Layout.rightMargin: root.leftPadding + appWin.padding
             Layout.bottomMargin: root.bottomPadding
 
+            visible: root._batchMode === 0
             text: qsTr("Close")
             icon.name: "window-close-symbolic"
             onClicked: root.reject()
@@ -142,6 +299,7 @@ DialogPage {
             readonly property bool ruleTargetTts: (modelData[0] & Settings.TransRuleTargetTts) != 0
             readonly property string ruleName: modelData[2].length > 0 ? modelData[2] :
                                                                          defaultRuleName(modelData[1], modelData[3], modelData[4])
+            property bool selected: false
 
             text: ruleName
             onClicked: openEdit()
@@ -158,12 +316,26 @@ DialogPage {
             }
 
             function openEdit() {
-                appWin.openDialog("RuleEditPage.qml", {rule: modelData, ruleIndex: index})
+                if (root._batchMode !== 0) {
+                    selected = !selected
+                    root.updateItemSelected()
+                } else {
+                    appWin.openDialog("RuleEditPage.qml", {rule: modelData, ruleIndex: index})
+                }
             }
 
             contentItem: RowLayout {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
+
+                CheckBox {
+                    visible: root._batchMode !== 0
+                    checked: itemDelegate.selected
+                    onCheckedChanged: {
+                        itemDelegate.selected = checked
+                        root.updateItemSelected()
+                    }
+                }
 
                 Label {
                     text: "" + (index + 1) + " "
@@ -174,7 +346,7 @@ DialogPage {
                     icon.name: "arrow-up-symbolic"
                     display: Button.IconOnly
                     text: qsTr("Move up")
-                    enabled: index > 0
+                    enabled: index > 0 && root._batchMode === 0
                     onClicked: _settings.trans_rule_move_up(index)
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -187,7 +359,7 @@ DialogPage {
                     icon.name: "arrow-down-symbolic"
                     display: Button.IconOnly
                     text: qsTr("Move down")
-                    enabled: (index + 1) < _settings.trans_rules.length
+                    enabled: (index + 1) < _settings.trans_rules.length && root._batchMode === 0
                     onClicked: _settings.trans_rule_move_down(index)
 
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -209,6 +381,7 @@ DialogPage {
                 Switch {
                     id: sttSwitch
 
+                    enabled: root._batchMode === 0
                     checked: itemDelegate.ruleTargetStt
                     Layout.alignment: Qt.AlignHCenter
                     onCheckedChanged: {
@@ -225,6 +398,7 @@ DialogPage {
                 Switch {
                     id: ttsSwitch
 
+                    enabled: root._batchMode === 0
                     checked: itemDelegate.ruleTargetTts
                     Layout.alignment: Qt.AlignHCenter
                     onCheckedChanged: {
@@ -241,6 +415,7 @@ DialogPage {
                 Button {
                     id: editButton
 
+                    enabled: root._batchMode === 0
                     text: qsTr("Edit")
                     icon.name: "edit-entry-symbolic"
                     display: Button.IconOnly
@@ -255,6 +430,7 @@ DialogPage {
                 Button {
                     id: cloneButton
 
+                    enabled: root._batchMode === 0
                     text: qsTr("Clone")
                     icon.name: "entry-clone-symbolic"
                     display: Button.IconOnly
@@ -269,6 +445,7 @@ DialogPage {
                 Button {
                     id: deleteButton
 
+                    enabled: root._batchMode === 0
                     icon.name: "edit-delete-symbolic"
                     display: Button.IconOnly
                     text: qsTr("Delete")
@@ -309,6 +486,34 @@ DialogPage {
 
             model: _settings.trans_rules
             delegate: ruleDelegate
+        }
+    }
+
+    Dialogs.FileDialog {
+        id: fileWriteDialog
+
+        title: qsTr("Save File")
+        nameFilters: [
+            qsTr("All supported files") + " (*.json)",
+            qsTr("All files") + " (*)"]
+        fileMode: Dialogs.FileDialog.SaveFile
+        onAccepted: {
+            var file_path = _settings.file_path_from_url(fileWriteDialog.selectedFile)
+            root.exportSelected(file_path)
+        }
+    }
+
+    Dialogs.FileDialog {
+        id: fileReadDialog
+
+        title: qsTr("Open file")
+        nameFilters: [
+            qsTr("All supported files") + " (*.json)",
+            qsTr("All files") + " (*)"]
+        fileMode: Dialogs.FileDialog.OpenFile
+        onAccepted: {
+            var file_path = _settings.file_path_from_url(fileReadDialog.selectedFile)
+            root.importRules(file_path)
         }
     }
 }

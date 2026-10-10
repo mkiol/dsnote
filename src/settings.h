@@ -206,6 +206,27 @@
     X(UiAppearanceForceDark, "force-dark", 2, 0) \
     X(UiAppearanceForceLight, "force-light", 3, 0)
 
+// name, name_str, value
+#define TRANS_RULE_TYPE_TABLE                             \
+    X(TransRuleTypeNone, "none", 0, 0)                    \
+    X(TransRuleTypeReplaceSimple, "replace-simple", 1, 0) \
+    X(TransRuleTypeReplaceRe, "replace-re", 2, 0)         \
+    X(TransRuleTypeMatchSimple, "match-simple", 3, 0)     \
+    X(TransRuleTypeMatchRe, "match-re", 4, 0)
+
+// name, name_str, value
+#define TRANS_RULE_FLAGS_TABLE                                                 \
+    X(TransRuleMatched, "matched", 1U << 1U, 0)                                \
+    X(TransRuleTargetStt, "target-stt", 1U << 5U, 0)                           \
+    X(TransRuleTargetTts, "target-tts", 1U << 6U, 0)                           \
+    X(TransRuleActionStop, "action-stop", 1U << 10U, 0)                        \
+    X(TransRuleActionStopListening, "action-stop-listening", 1U << 11U, 0)     \
+    X(TransRuleActionDeleteLastSentence, "action-delete-last-sentence",        \
+      1U << 12U, 0)                                                            \
+    X(TransRuleActionReadLastSentence, "action-read-last-sentence", 1U << 13U, \
+      0)                                                                       \
+    X(TransRuleCaseSensitive, "case-sensitive", 1U << 14U, 0)
+
 class settings : public QSettings, public singleton<settings> {
     Q_OBJECT
 
@@ -711,14 +732,9 @@ class settings : public QSettings, public singleton<settings> {
 
     enum trans_rule_flags_t : unsigned int {
         TransRuleNone = 0U,
-        TransRuleMatched = 1U << 0U,
-        TransRuleTargetStt = 1U << 5U,
-        TransRuleTargetTts = 1U << 6U,
-        TransRuleActionStop = 1U << 10U,
-        TransRuleActionStopListening = 1U << 11U,
-        TransRuleActionDeleteLastSentence = 1U << 12U,
-        TransRuleActionReadLastSentence = 1U << 13U,
-        TransRuleCaseSensitive = 1U << 14U,
+#define X(name, name_str, value, ...) name = value,
+        TRANS_RULE_FLAGS_TABLE
+#undef X
     };
     Q_ENUM(trans_rule_flags_t)
     friend trans_rule_flags_t operator|(trans_rule_flags_t a,
@@ -730,11 +746,9 @@ class settings : public QSettings, public singleton<settings> {
     friend QDebug operator<<(QDebug d, trans_rule_flags_t flags);
 
     enum class trans_rule_type_t : uint8_t {
-        TransRuleTypeNone = 0,
-        TransRuleTypeReplaceSimple = 1,
-        TransRuleTypeReplaceRe = 2,
-        TransRuleTypeMatchSimple = 3,
-        TransRuleTypeMatchRe = 4,
+#define X(name, name_str, value, ...) name = value,
+        TRANS_RULE_TYPE_TABLE
+#undef X
     };
     Q_ENUM(trans_rule_type_t)
     friend QDebug operator<<(QDebug d, trans_rule_type_t type);
@@ -1048,6 +1062,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE void trans_rule_set_target_stt(int index, bool enabled);
     Q_INVOKABLE void trans_rule_set_target_tts(int index, bool enabled);
     Q_INVOKABLE void trans_rule_delete(int index);
+    Q_INVOKABLE void trans_rule_delete_multiple(const QVariantList &indexes);
     Q_INVOKABLE void trans_rule_move_up(int index);
     Q_INVOKABLE void trans_rule_move_down(int index);
     Q_INVOKABLE void trans_rule_clone(int index);

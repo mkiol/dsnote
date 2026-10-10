@@ -581,7 +581,9 @@ ApplicationWindow {
 
         onNote_copied: toast.show(qsTr("Copied!"))
         onTranscribe_done: toast.show(qsTr("Import from the file is complete!"))
+        onTrans_rule_import_done: toast.show(qsTr("Import from the file is complete!"))
         onSave_note_to_file_done: toast.show(qsTr("Export to file is complete!"))
+        onTrans_rule_export_done: toast.show(qsTr("Export to file is complete!"))
         onText_repair_done: toast.show(qsTr("Text repair is complete!"))
         onText_decoded_to_clipboard: {
             var policy = false
@@ -591,8 +593,9 @@ ApplicationWindow {
             case Settings.DesktopNotificationAlways: policy = true; break
             }
 
-            if (policy)
+            if (policy) {
                 app.show_desktop_notification(qsTr("Text copied to clipboard!"), "", false)
+            }
         }
         onImport_file_multiple_streams: {
             streamSelectionDialog.filePath = file_path
@@ -662,7 +665,7 @@ ApplicationWindow {
                 break;
             case DsnoteApp.ErrorLicenseDownload:
                 toast.show(qsTr("Error: Couldn't download a licence."))
-                break;   
+                break;
             default:
                 toast.show(qsTr("Error: An unknown problem has occurred."))
             }

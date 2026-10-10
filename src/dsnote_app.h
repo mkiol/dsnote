@@ -328,7 +328,7 @@ class dsnote_app : public QObject {
         ErrorTtsNotConfigured = 17,
         ErrorMntNotConfigured = 18,
         ErrorLicenseDownload = 19,
-        ErrorNoService = 100
+        ErrorNoService = 100,
     };
     Q_ENUM(error_t)
     friend QDebug operator<<(QDebug d, error_t type);
@@ -473,6 +473,9 @@ class dsnote_app : public QObject {
                                        const QString &replace,
                                        const QString &langs, unsigned int type,
                                        const QString &test_text);
+    Q_INVOKABLE void export_trans_rule(const QVariantList &indexes,
+                                       const QString &file_path);
+    Q_INVOKABLE void import_trans_rule(const QString &file_path);
     Q_INVOKABLE bool trans_rule_re_pattern_valid(const QString &pattern);
     [[nodiscard]] Q_INVOKABLE QVariantList available_stt_models_info() const;
     [[nodiscard]] Q_INVOKABLE QVariantList available_tts_models_info() const;
@@ -564,6 +567,8 @@ class dsnote_app : public QObject {
     void trans_rules_test_text_changed();
     void py_version_changed();
     void download_progress_changed(double progress);
+    void trans_rule_export_done();
+    void trans_rule_import_done();
 
    private:
     enum class action_t : uint8_t {
@@ -576,7 +581,7 @@ class dsnote_app : public QObject {
     enum class action_error_code_t {
         success = 0,
         not_enabled = 10,
-        unknown_name = 99
+        unknown_name = 99,
     };
 
     // must be the same as text_repair_engine::task_type_t

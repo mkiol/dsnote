@@ -7,8 +7,6 @@
 
 #include "settings.h"
 
-#include <qicon.h>
-
 #include <type_traits>
 
 #ifdef USE_DESKTOP
@@ -258,23 +256,13 @@ std::ostream& operator<<(std::ostream& os,
 
 QDebug operator<<(QDebug d, settings::trans_rule_type_t type) {
     switch (type) {
-        case settings::trans_rule_type_t::TransRuleTypeNone:
-            d << "none";
-            break;
-        case settings::trans_rule_type_t::TransRuleTypeReplaceSimple:
-            d << "replace-simple";
-            break;
-        case settings::trans_rule_type_t::TransRuleTypeReplaceRe:
-            d << "replace-re";
-            break;
-        case settings::trans_rule_type_t::TransRuleTypeMatchSimple:
-            d << "match-simple";
-            break;
-        case settings::trans_rule_type_t::TransRuleTypeMatchRe:
-            d << "match-re";
-            break;
+#define X(name, name_str, value, ...)       \
+    case settings::trans_rule_type_t::name: \
+        d << name_str;                      \
+        break;
+        TRANS_RULE_TYPE_TABLE
+#undef X
     }
-
     return d;
 }
 
@@ -330,25 +318,12 @@ std::ostream& operator<<(std::ostream& os,
 QDebug operator<<(QDebug d, settings::trans_rule_flags_t flags) {
     if (flags == settings::trans_rule_flags_t::TransRuleNone) {
         d << "none";
-    } else {
-        if (flags & settings::trans_rule_flags_t::TransRuleMatched)
-            d << "matched,";
-        if (flags & settings::trans_rule_flags_t::TransRuleTargetStt)
-            d << "target-stt,";
-        if (flags & settings::trans_rule_flags_t::TransRuleTargetTts)
-            d << "target-tts,";
-        if (flags & settings::trans_rule_flags_t::TransRuleActionStop)
-            d << "action-stop,";
-        if (flags & settings::trans_rule_flags_t::TransRuleActionStopListening)
-            d << "action-stop-listening,";
-        if (flags &
-            settings::trans_rule_flags_t::TransRuleActionDeleteLastSentence)
-            d << "action-delete-last-sentence,";
-        if (flags &
-            settings::trans_rule_flags_t::TransRuleActionReadLastSentence)
-            d << "action-read-last-sentence,";
-    }
-
+        return d;
+    };
+#define X(name, name_str, value, ...) \
+    if (flags & settings::trans_rule_flags_t::name) d << name_str << ", ";
+    TRANS_RULE_FLAGS_TABLE
+#undef X
     return d;
 }
 
@@ -2941,12 +2916,20 @@ void settings::trans_rule_set_target_tts(int index, bool enabled) {
 }
 
 void settings::trans_rule_delete(int index) {
-    if (index < 0) return;
+    trans_rule_delete_multiple(QVariantList{} << index);
+}
+
+void settings::trans_rule_delete_multiple(const QVariantList& indexes) {
     auto rules = trans_rules();
-    if (rules.size() > index) {
-        rules.erase(std::next(rules.begin(), index));
-        set_trans_rules(rules);
+    for (const auto& vidx : indexes) {
+        auto idx = vidx.toInt();
+        if (idx < 0 || idx >= rules.size()) continue;
+        rules[idx].clear();
     }
+
+    rules.erase(std::remove(rules.begin(), rules.end(), QVariant{}),
+                rules.end());
+    set_trans_rules(rules);
 }
 
 void settings::trans_rule_move_up(int index) {

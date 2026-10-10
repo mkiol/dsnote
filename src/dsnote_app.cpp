@@ -7,6 +7,16 @@
 
 #include "dsnote_app.h"
 
+#include <qbuffer.h>
+#include <qcontainerfwd.h>
+#include <qjsondocument.h>
+#include <qjsonobject.h>
+#include <qjsonparseerror.h>
+#include <qlogging.h>
+#include <qnamespace.h>
+#include <qobject.h>
+#include <qtypes.h>
+
 #include <QAudioOutput>
 #include <QClipboard>
 #include <QDBusConnection>
@@ -14,6 +24,9 @@
 #include <QDir>
 #include <QFile>
 #include <QGuiApplication>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QKeySequence>
 #include <QRegularExpression>
 #include <QTextStream>
@@ -1030,11 +1043,188 @@ QString dsnote_app::trans_rules_test_text() const {
     return m_trans_rules_test_text;
 }
 
-void dsnote_app::set_trans_rules_test_text(const QString &value) {
-    if (m_trans_rules_test_text != value) {
-        m_trans_rules_test_text = value;
+void dsnote_app::set_trans_rules_test_text(const QString &text) {
+    if (m_trans_rules_test_text != text) {
+        m_trans_rules_test_text = text;
         emit trans_rules_test_text_changed();
     }
+}
+
+void dsnote_app::export_trans_rule(const QVariantList &indexes,
+                                   const QString &file_path) {
+    auto rules = settings::instance()->trans_rules();
+
+    QJsonArray jrules;
+
+    for (const auto &vindex : indexes) {
+        int idx = vindex.toInt();
+        if (idx < 0 || idx >= rules.size()) {
+            qWarning() << "invalid trans rule index:" << idx;
+            continue;
+        }
+
+        auto vl = rules.at(idx).toList();
+        if (vl.size() < 6) {
+            qWarning() << "invalid trans rule at index:" << idx;
+            continue;
+        }
+
+        QJsonObject jrule;
+        jrule["flags"] = [&] {
+            auto flags =
+                static_cast<settings::trans_rule_flags_t>(vl.at(0).toUInt());
+            QJsonArray jflags;
+#define X(name, name_str, value, ...) \
+    if (flags & settings::trans_rule_flags_t::name) jflags << name_str;
+            TRANS_RULE_FLAGS_TABLE
+#undef X
+            return jflags;
+        }();
+        jrule["type"] = [&] {
+            auto type =
+                static_cast<settings::trans_rule_type_t>(vl.at(1).toUInt());
+            switch (type) {
+#define X(name, name_str, value, ...)       \
+    case settings::trans_rule_type_t::name: \
+        return name_str;
+                TRANS_RULE_TYPE_TABLE
+#undef X
+            }
+            return "";
+        }();
+        jrule["name"] = vl.at(2).toString();
+        jrule["pattern"] = vl.at(3).toString();
+        jrule["replace"] = vl.at(4).toString();
+        jrule["langs"] = vl.at(5).toString();
+        jrule["test-text"] = vl.at(6).toString();
+
+        jrules.push_back(jrule);
+    }
+
+    if (jrules.empty()) {
+        qWarning() << "no trans rules to export created";
+        emit error(dsnote_app::ErrorExportFileGeneral);
+        return;
+    }
+
+    QFile file{file_path};
+    if (!file.open(QIODevice::WriteOnly)) {
+        qWarning() << "failed to write trans rules to file:" << file_path;
+        emit error(dsnote_app::ErrorExportFileGeneral);
+        return;
+    }
+
+    file.write(QJsonDocument(jrules).toJson());
+
+    qDebug() << "trans rules exported successfully:" << jrules.size()
+             << file_path;
+    emit trans_rule_export_done();
+}
+
+void dsnote_app::import_trans_rule(const QString &file_path) {
+    QFile file{file_path};
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "failed to read trans rules from file:" << file_path;
+        emit error(dsnote_app::ErrorImportFileGeneral);
+        return;
+    }
+
+    QJsonParseError jerror;
+    auto jdoc = QJsonDocument::fromJson(file.readAll(), &jerror);
+    if (jerror.error != QJsonParseError::NoError) {
+        qWarning() << "failed to parse json:" << jerror.errorString();
+        emit error(dsnote_app::ErrorImportFileGeneral);
+        return;
+    }
+
+    if (!jdoc.isArray()) {
+        qWarning() << "json is not array";
+        emit error(dsnote_app::ErrorImportFileGeneral);
+        return;
+    }
+
+    auto vrules = settings::instance()->trans_rules();
+
+    auto old_rules_count = vrules.size();
+
+    auto jarr = jdoc.array();
+    for (const auto &jrule : jarr) {
+        auto jorule = jrule.toObject();
+        auto flags = [&] {
+            unsigned int flags = 0;
+            auto jflags = jorule["flags"].toArray();
+            for (const auto &jflag : jflags) {
+                auto sflag = jflag.toString();
+                if (false) {
+                }
+#define X(name, name_str, value, ...)                                        \
+    else if (sflag.compare(QStringLiteral(name_str), Qt::CaseInsensitive) == \
+             0) {                                                            \
+        flags |= value;                                                      \
+    }
+                TRANS_RULE_FLAGS_TABLE
+#undef X
+            }
+            return flags;
+        }();
+        auto type = [&] {
+            auto stype = jorule["type"].toString();
+#define X(name, name_str, value, ...)                                        \
+    if (stype.compare(QStringLiteral(name_str), Qt::CaseInsensitive) == 0) { \
+        return settings::trans_rule_type_t::name;                            \
+    }
+            TRANS_RULE_TYPE_TABLE
+#undef X
+            return settings::trans_rule_type_t::TransRuleTypeNone;
+        }();
+        auto name = jorule["name"].toString();
+        auto pattern = jorule["pattern"].toString();
+        auto replace = jorule["replace"].toString();
+        auto langs = jorule["langs"].toString();
+        auto test_text = jorule["test-text"].toString();
+
+        // rule verification
+        if (pattern.isEmpty()) {
+            qWarning() << "imported trans rule pattern is empty:" << name;
+            continue;
+        }
+        if (type == settings::trans_rule_type_t::TransRuleTypeNone) {
+            qWarning() << "imported trans rule type is invalid:" << name;
+            continue;
+        }
+        if ((type == settings::trans_rule_type_t::TransRuleTypeMatchRe ||
+             type == settings::trans_rule_type_t::TransRuleTypeReplaceRe) &&
+            !trans_rule_re_pattern_valid(pattern)) {
+            qWarning() << "imported trans rule re pattern is invalid:" << name
+                       << pattern;
+            continue;
+        }
+
+        vrules.push_back(QVariantList{
+            /*[0] flags=*/flags,
+            /*[1] type=*/
+            static_cast<std::underlying_type_t<settings::trans_rule_type_t>>(
+                type),
+            /*[2] name=*/name,
+            /*[3] pattern=*/pattern,
+            /*[4] replace=*/replace,
+            /*[5] langs=*/langs,
+            /*[6] test_text=*/test_text,
+        });
+    }
+
+    auto imported_rules_count = vrules.size() - old_rules_count;
+    if (imported_rules_count < 1) {
+        qWarning() << "failed to import any trans rules from file:"
+                   << file_path;
+        emit error(dsnote_app::ErrorImportFileGeneral);
+        return;
+    }
+
+    qDebug() << "trans rules imported successfully:" << file_path
+             << imported_rules_count;
+    settings::instance()->set_trans_rules(vrules);
+    emit trans_rule_import_done();
 }
 
 void dsnote_app::update_voice_prompt(const QString &name,
@@ -1045,7 +1235,8 @@ void dsnote_app::update_voice_prompt(const QString &name,
         return;
     }
 
-    settings::instance()->tts_update_voice_prompt(name, {new_name, desc});
+    settings::instance()->tts_update_voice_prompt(
+        name, {.name = new_name, .desc = desc});
 }
 
 void dsnote_app::delete_voice_prompt(const QString &name) const {
