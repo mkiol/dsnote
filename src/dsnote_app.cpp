@@ -7,16 +7,6 @@
 
 #include "dsnote_app.h"
 
-#include <qbuffer.h>
-#include <qcontainerfwd.h>
-#include <qjsondocument.h>
-#include <qjsonobject.h>
-#include <qjsonparseerror.h>
-#include <qlogging.h>
-#include <qnamespace.h>
-#include <qobject.h>
-#include <qtypes.h>
-
 #include <QAudioOutput>
 #include <QClipboard>
 #include <QDBusConnection>
