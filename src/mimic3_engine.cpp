@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,6 +14,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
+#include <functional>
 #include <map>
 #include <string_view>
 #include <utility>
@@ -57,6 +58,41 @@ void mimic3_engine::stop() {
     LOGD("mimic3 stopped");
 }
 
+static void make_static_py_fun_wrapper(
+    const char* module_name, const char* class_name, const char* fun_name,
+    std::function<void(py::args args, py::kwargs kwargs)> wrap_fun) {
+    py::object py_class = py::module_::import(module_name).attr(class_name);
+    py::object original_fun =
+        py_class.attr("__dict__")[fun_name].attr("__func__");
+
+    py::cpp_function custom_fun =
+        py::cpp_function([original_fun, wrap_fun](
+                             py::args args, py::kwargs kwargs) -> py::object {
+            wrap_fun(args, kwargs);
+            return original_fun(*args, **kwargs);
+        });
+
+    py::object static_method_wrapper =
+        py::module_::import("builtins").attr("staticmethod")(custom_fun);
+    py_class.attr(fun_name) = static_method_wrapper;
+}
+
+static int nb_threads_limit() {
+    auto* nb_threads_str = std::getenv("OMP_NUM_THREADS");
+    if (nb_threads_str == nullptr) {
+        return 0;
+    }
+
+    int nb_threads = 0;
+    try {
+        nb_threads = std::stoi(nb_threads_str);
+    } catch ([[maybe_unused]] const std::exception& e) {
+        // ignore
+    }
+
+    return nb_threads > 0 ? nb_threads : 0;
+}
+
 void mimic3_engine::create_model() {
     const auto& voices_dir = m_config.data_dir;
     auto lang_dir = fmt::format("{}/lang", voices_dir);
@@ -86,6 +122,21 @@ void mimic3_engine::create_model() {
                 api.attr("Mimic3TextToSpeechSystem")(api.attr("Mimic3Settings")(
                     "voices_directories"_a = dirs, "no_download"_a = true));
             m_tts->attr("voice") = "lang/model";
+
+            /* limit number of cpu threads as set in OMP_NUM_THREADS env var */
+            auto nb_threads = nb_threads_limit();
+            if (nb_threads > 0) {
+                make_static_py_fun_wrapper(
+                    "mimic3_tts.voice", "Mimic3Voice", "_load_model",
+                    [nb_threads]([[maybe_unused]] py::args args,
+                                 py::kwargs kwargs) {
+                        py::object opts = py::module_::import("onnxruntime")
+                                              .attr("SessionOptions")();
+                        opts.attr("intra_op_num_threads") = nb_threads;
+                        opts.attr("inter_op_num_threads") = nb_threads;
+                        kwargs["session_options"] = opts;
+                    });
+            }
 
             m_tts->attr("preload_voice")("lang/model");
 
