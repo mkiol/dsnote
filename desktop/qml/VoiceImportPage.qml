@@ -107,6 +107,7 @@ DialogPage {
                       "<li><i>Coqui YourTTS</i></li>" +
                       "<li><i>WhisperSpeech</i></li>" +
                       "<li><i>F5-TTS</i></li>" +
+                      "<li><i>Qwen3-TTS Base</i></li>" +
                       "</ul>"
             }
         }

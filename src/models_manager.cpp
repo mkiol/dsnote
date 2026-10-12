@@ -1811,6 +1811,13 @@ models_manager::feature_flags models_manager::add_implicit_feature_flags(
             existing_features = add_new_feature(existing_features,
                                                 feature_flags::stt_punctuation);
             break;
+#ifdef USE_PY
+        case model_engine_t::stt_qwen3asr:
+            // no "tiny"/"base" heuristics, speed and quality from engine table
+            existing_features = add_new_feature(existing_features,
+                                                feature_flags::stt_punctuation);
+            break;
+#endif
         case model_engine_t::tts_piper:
             if (model_id.contains("high") || model_id.contains("medium"))
                 existing_features = add_new_feature(
@@ -1837,6 +1844,7 @@ models_manager::feature_flags models_manager::add_implicit_feature_flags(
         case model_engine_t::tts_parler:
         case model_engine_t::tts_f5:
         case model_engine_t::tts_kokoro:
+        case model_engine_t::tts_qwen3tts:
         case model_engine_t::ttt_hftc:
         case model_engine_t::ttt_unikud:
             break;

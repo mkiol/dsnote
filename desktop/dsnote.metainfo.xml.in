@@ -123,6 +123,10 @@
       <li>Support for Parakeet TDT model. Parakeet TDT is NVIDIA multilingual STT model designed for high-throughput speech to text transcription. 
         The model automatically detects the language of the audio, therefore is enabled in 'Auto detected' category.
         The model works well on CPU but also supports Vulkan, CUDA and ROCm GPU acceleration.</li>
+      <li>Support for 'Qwen3-ASR' 0.6B and 1.7B models. Qwen3-ASR is a multilingual STT model from the Qwen team,
+        available for 30 languages including Chinese-Cantonese.
+        The model automatically detects the language of the audio, therefore is also enabled in 'Auto detected' category.
+        The model works on CPU but also supports CUDA and ROCm GPU acceleration.</li>
       <li>Inline timestamps in text output.
         A new output format is now available, displaying timestamps that show when
         each segment of text was recognized in the audio.</li>
@@ -138,6 +142,10 @@
       </ul>
       <p>Text to Speech:</p>
       <ul>
+      <li>Support for 'Qwen3-TTS' 0.6B and 1.7B models for Chinese, English, French, German, Italian, Japanese, Korean, Portuguese, Russian and Spanish.
+        'Base' models clone a voice from an audio sample, 'CustomVoice' models provide 9 built-in voices
+        and the 1.7B 'VoiceDesign' model creates a voice from a text description (prompt).
+        The models support CUDA and ROCm GPU acceleration.</li>
       <li>New RHVoice models for: Belarusian, Croatian, English, Romanian, Russian</li>
       <li>Updated RHVoice models for: Czech, Serbian, Spanish</li>
       <li>New Piper models for: Albanian, Bulgarian, Dutch, Greek, Hindi, Indonesian, Kurdish, Latvian, Polish, Swedish, Telugu, Ukrainian, Urdu</li>
@@ -170,6 +178,7 @@
       <li>WhisperSpeech update to version 1.0.0</li>
       <li>Kokoro update to version 0.9.4</li>
       <li>F5-TTS update to version 1.1.20</li>
+      <li>New Python libraries: qwen-tts 0.1.1, qwen-asr 0.0.6</li>
       <li>Remove Parler-TTS due to dependency conflicts that cannot be fixed</li>
       <li>Flatpak runtime update to version 6.11</li>
       </ul>

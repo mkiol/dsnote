@@ -183,7 +183,7 @@ set(info_webpage_additional "https://gitlab.com/mkiol/${id}")
 set(info_license "Mozilla Public License 2.0")
 set(info_license_url "http://mozilla.org/MPL/2.0")
 set(info_license_spdx "MPL-2.0")
-set(info_conf_version "119")
+set(info_conf_version "120")
 set(info_addon_version "1.5") # if run as a flatpak pkg, the required add-on version
 set(info_version_type "-beta")
 #set(info_version_type "")
@@ -227,7 +227,7 @@ endif()
 if(WITH_PY)
     if(WITH_FLATPAK)
         set(info_libs_str "${info_libs_str} · Hugging Face Transformers · Coqui TTS · faster-whisper · \
-Mimic 3 · Unikud · WhisperSpeech · Parler-TTS · Kokoro TTS · F5-TTS")
+Mimic 3 · Unikud · WhisperSpeech · Parler-TTS · Kokoro TTS · F5-TTS · Qwen3-TTS · Qwen3-ASR")
     endif()
 endif()
 
@@ -455,6 +455,10 @@ if(WITH_PY)
         ${sources_dir}/f5_engine.hpp
         ${sources_dir}/kokoro_engine.cpp
         ${sources_dir}/kokoro_engine.hpp
+        ${sources_dir}/qwen3tts_engine.cpp
+        ${sources_dir}/qwen3tts_engine.hpp
+        ${sources_dir}/qwen3asr_engine.cpp
+        ${sources_dir}/qwen3asr_engine.hpp
         ${sources_dir}/whisperspeech_engine.hpp
         ${sources_dir}/whisperspeech_engine.cpp
         ${sources_dir}/coqui_engine.hpp

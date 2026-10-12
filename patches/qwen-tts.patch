@@ -1,0 +1,259 @@
+diff -ruN a/core/models/modeling_qwen3_tts.py b/core/models/modeling_qwen3_tts.py
+--- a/core/models/modeling_qwen3_tts.py
++++ b/core/models/modeling_qwen3_tts.py
+@@ -52,6 +52,19 @@
+ logger = logging.get_logger(__name__)
+ 
+ 
++def _default_rope_parameters(config=None, device=None, seq_len=None, **kwargs):
++    # transformers>=5 removed ROPE_INIT_FUNCTIONS["default"]; same math as transformers 4.57.
++    # config.rope_theta must win: transformers>=5 injects a 10000.0 default into rope_parameters.
++    base = getattr(config, "rope_theta", None)
++    if base is None:
++        base = (getattr(config, "rope_parameters", None) or {}).get("rope_theta", 10000.0)
++    partial_rotary_factor = getattr(config, "partial_rotary_factor", None) or 1.0
++    head_dim = getattr(config, "head_dim", None) or config.hidden_size // config.num_attention_heads
++    dim = int(head_dim * partial_rotary_factor)
++    inv_freq = 1.0 / (base ** (torch.arange(0, dim, 2, dtype=torch.int64).to(device=device, dtype=torch.float) / dim))
++    return inv_freq, 1.0
++
++
+ def download_weights_from_hf_specific(
+     model_name_or_path: str,
+     cache_dir: str | None,
+@@ -477,23 +490,9 @@
+     _supports_attention_backend = True
+ 
+     def _init_weights(self, module):
+-        # important: this ported version of Qwen2.5OmniThinker isn't meant for training from scratch - only
+-        # inference and fine-tuning - so the proper init weights code has been removed
+-        std = self.config.initializer_range if hasattr(self.config, "initializer_range") else 0.02
+-
+-        if isinstance(module, (nn.Linear, nn.Conv1d, nn.Conv3d, nn.ConvTranspose1d)):
+-            module.weight.data.normal_(mean=0.0, std=std)
+-            if module.bias is not None:
+-                module.bias.data.zero_()
+-        elif isinstance(module, nn.Embedding):
+-            module.weight.data.normal_(mean=0.0, std=std)
+-            if module.padding_idx is not None:
+-                module.weight.data[module.padding_idx].zero_()
+-        elif isinstance(module, nn.LayerNorm):
+-            if module.weight is not None:
+-                module.weight.data.fill_(1.0)
+-            if module.bias is not None:
+-                module.bias.data.zero_()
++        # Delegate to transformers: its implementation skips tensors loaded from the checkpoint
++        # (transformers>=5 calls _init_weights on every module after loading).
++        super()._init_weights(module)
+ 
+ 
+ class Qwen3TTSTalkerTextPreTrainedModel(PreTrainedModel):
+@@ -510,20 +509,13 @@
+     _supports_attention_backend = True
+ 
+     def _init_weights(self, module):
+-        std = self.config.initializer_range
+-        if isinstance(module, nn.Linear):
+-            module.weight.data.normal_(mean=0.0, std=std)
+-            if module.bias is not None:
+-                module.bias.data.zero_()
+-        elif isinstance(module, nn.Embedding):
+-            module.weight.data.normal_(mean=0.0, std=std)
+-            if module.padding_idx is not None:
+-                module.weight.data[module.padding_idx].zero_()
+-        elif isinstance(module, Qwen3TTSRMSNorm):
+-            module.weight.data.fill_(1.0)
++        # see Qwen3TTSPreTrainedModel._init_weights
++        super()._init_weights(module)
+ 
+ 
+ class Qwen3TTSTalkerRotaryEmbedding(nn.Module):
++    compute_default_rope_parameters = staticmethod(_default_rope_parameters)
++
+     def __init__(self, config: Qwen3TTSTalkerConfig, device=None):
+         super().__init__()
+         # BC: "rope_type" was originally "type"
+@@ -535,7 +527,7 @@
+         self.original_max_seq_len = config.max_position_embeddings
+ 
+         self.config = config
+-        self.rope_init_fn = ROPE_INIT_FUNCTIONS[self.rope_type]
++        self.rope_init_fn = ROPE_INIT_FUNCTIONS.get(self.rope_type, _default_rope_parameters)
+ 
+         inv_freq, self.attention_scaling = self.rope_init_fn(self.config, device)
+         self.register_buffer("inv_freq", inv_freq, persistent=False)
+@@ -559,6 +551,8 @@
+         return cos.to(dtype=x.dtype), sin.to(dtype=x.dtype)
+ 
+ class Qwen3TTSRotaryEmbedding(nn.Module):
++    compute_default_rope_parameters = staticmethod(_default_rope_parameters)
++
+     def __init__(self, config: Qwen3TTSConfig, device=None):
+         super().__init__()
+         # BC: "rope_type" was originally "type"
+@@ -570,7 +564,7 @@
+         self.original_max_seq_len = config.max_position_embeddings
+ 
+         self.config = config
+-        self.rope_init_fn = ROPE_INIT_FUNCTIONS[self.rope_type]
++        self.rope_init_fn = ROPE_INIT_FUNCTIONS.get(self.rope_type, _default_rope_parameters)
+ 
+         inv_freq, self.attention_scaling = self.rope_init_fn(self.config, device)
+         self.register_buffer("inv_freq", inv_freq, persistent=False)
+@@ -1018,7 +1012,7 @@
+ 
+     def __init__(self, config: Qwen3TTSTalkerCodePredictorConfig, embedding_dim: int):
+         super().__init__(config)
+-        self.padding_idx = config.pad_token_id
++        self.padding_idx = getattr(config, "pad_token_id", None)  # no default in transformers>=5
+         self.vocab_size = config.vocab_size
+         self.layers = nn.ModuleList(
+             [Qwen3TTSDecoderLayer(config, layer_idx) for layer_idx in range(config.num_hidden_layers)]
+@@ -1430,7 +1424,7 @@
+ 
+     def __init__(self, config):
+         super().__init__(config)
+-        self.padding_idx = config.pad_token_id
++        self.padding_idx = getattr(config, "pad_token_id", None)
+         self.vocab_size = config.vocab_size
+         self.layers = nn.ModuleList(
+             [Qwen3TTSTalkerDecoderLayer(config, layer_idx) for layer_idx in range(config.num_hidden_layers)]
+diff -ruN a/core/tokenizer_12hz/modeling_qwen3_tts_tokenizer_v2.py b/core/tokenizer_12hz/modeling_qwen3_tts_tokenizer_v2.py
+--- a/core/tokenizer_12hz/modeling_qwen3_tts_tokenizer_v2.py
++++ b/core/tokenizer_12hz/modeling_qwen3_tts_tokenizer_v2.py
+@@ -49,6 +49,19 @@
+ logger = logging.get_logger(__name__)
+ 
+ 
++def _default_rope_parameters(config=None, device=None, seq_len=None, **kwargs):
++    # transformers>=5 removed ROPE_INIT_FUNCTIONS["default"]; same math as transformers 4.57.
++    # config.rope_theta must win: transformers>=5 injects a 10000.0 default into rope_parameters.
++    base = getattr(config, "rope_theta", None)
++    if base is None:
++        base = (getattr(config, "rope_parameters", None) or {}).get("rope_theta", 10000.0)
++    partial_rotary_factor = getattr(config, "partial_rotary_factor", None) or 1.0
++    head_dim = getattr(config, "head_dim", None) or config.hidden_size // config.num_attention_heads
++    dim = int(head_dim * partial_rotary_factor)
++    inv_freq = 1.0 / (base ** (torch.arange(0, dim, 2, dtype=torch.int64).to(device=device, dtype=torch.float) / dim))
++    return inv_freq, 1.0
++
++
+ @dataclass
+ @auto_docstring
+ class Qwen3TTSTokenizerV2EncoderOutput(ModelOutput):
+@@ -155,6 +168,17 @@
+     _can_compile_fullgraph = False
+     _supports_attention_backend = True
+ 
++    @torch.no_grad()
++    def _init_weights(self, module):
++        # transformers>=5 leaves non-persistent buffers uninitialised unless _init_weights refills
++        # them; its built-in refill only matches classes named "*RotaryEmbedding".
++        if isinstance(module, Qwen3TTSTokenizerV2DecoderRotatoryEmbedding):
++            inv_freq, _ = module.rope_init_fn(module.config, module.inv_freq.device)
++            module.inv_freq.copy_(inv_freq)
++            module.original_inv_freq = module.inv_freq
++            return
++        super()._init_weights(module)
++
+ 
+ class Qwen3TTSTokenizerV2CausalConvNet(nn.Module):
+     def __init__(
+@@ -245,6 +269,7 @@
+ 
+ class Qwen3TTSTokenizerV2DecoderRotatoryEmbedding(nn.Module):
+     inv_freq: torch.Tensor  # fix linting for `register_buffer`
++    compute_default_rope_parameters = staticmethod(_default_rope_parameters)
+ 
+     def __init__(self, config: Qwen3TTSTokenizerV2DecoderConfig, device=None):
+         super().__init__()
+@@ -257,7 +282,7 @@
+         self.original_max_seq_len = config.max_position_embeddings
+ 
+         self.config = config
+-        self.rope_init_fn = ROPE_INIT_FUNCTIONS[self.rope_type]
++        self.rope_init_fn = ROPE_INIT_FUNCTIONS.get(self.rope_type, _default_rope_parameters)
+ 
+         inv_freq, self.attention_scaling = self.rope_init_fn(self.config, device)
+         self.register_buffer("inv_freq", inv_freq, persistent=False)
+diff -ruN a/core/tokenizer_25hz/vq/speech_vq.py b/core/tokenizer_25hz/vq/speech_vq.py
+--- a/core/tokenizer_25hz/vq/speech_vq.py
++++ b/core/tokenizer_25hz/vq/speech_vq.py
+@@ -13,7 +13,10 @@
+ # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+-import sox
++try:
++    import sox  # optional dependency, only needed by the 25Hz tokenizer
++except ImportError:
++    sox = None
+ import copy
+ import torch
+ import operator
+@@ -124,6 +127,8 @@
+         providers = ["CPUExecutionProvider"]
+         self.ort_session = onnxruntime.InferenceSession(audio_codec_with_xvector, sess_options=option, providers=providers)
+ 
++        if sox is None:
++            raise ImportError("XVectorExtractor requires the 'sox' package")
+         self.tfm = sox.Transformer()
+         self.tfm.norm(db_level=-6)
+ 
+diff -ruN a/inference/qwen3_tts_model.py b/inference/qwen3_tts_model.py
+--- a/inference/qwen3_tts_model.py
++++ b/inference/qwen3_tts_model.py
+@@ -51,6 +51,44 @@
+     ref_text: Optional[str] = None
+ 
+ 
++# pre-tokenizer regex that transformers 4.57.x installs for fix_mistral_regex=True
++_MISTRAL_FIX_REGEX = (
++    r"[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]*[\p{Ll}\p{Lm}\p{Lo}\p{M}]+|"
++    r"[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]+[\p{Ll}\p{Lm}\p{Lo}\p{M}]*|"
++    r"\p{N}| ?[^\s\p{L}\p{N}]+[\r\n/]*|\s*[\r\n]+|\s+(?!\S)|\s+"
++)
++
++
++def load_processor_compat(auto_processor_cls, path):
++    """AutoProcessor.from_pretrained(path, fix_mistral_regex=True) that also works on
++    transformers 5.0.x (which raises TypeError: multiple values for 'fix_mistral_regex').
++    On fallback the same pre-tokenizer regex transformers 4.57.x installs is applied."""
++    try:
++        return auto_processor_cls.from_pretrained(path, fix_mistral_regex=True)
++    except TypeError as e:
++        if "fix_mistral_regex" not in str(e):
++            raise
++    import tokenizers
++    from transformers.utils import logging as hf_logging
++
++    # the fallback load warns about the pre-tokenizer regex that is fixed below
++    verbosity = hf_logging.get_verbosity()
++    hf_logging.set_verbosity_error()
++    try:
++        proc = auto_processor_cls.from_pretrained(path)
++    finally:
++        hf_logging.set_verbosity(verbosity)
++    tok = getattr(proc, "tokenizer", proc)
++    backend = getattr(tok, "backend_tokenizer", None)
++    if backend is not None:
++        split = tokenizers.pre_tokenizers.Split(pattern=tokenizers.Regex(_MISTRAL_FIX_REGEX), behavior="isolated")
++        if isinstance(backend.pre_tokenizer, tokenizers.pre_tokenizers.Sequence):
++            backend.pre_tokenizer[0] = split
++        else:
++            backend.pre_tokenizer = tokenizers.pre_tokenizers.Sequence([split, backend.pre_tokenizer])
++    return proc
++
++
+ class Qwen3TTSModel:
+     """
+     A HuggingFace-style wrapper for Qwen3 TTS models (CustomVoice/VoiceDesign/Base) that provides:
+@@ -115,7 +153,7 @@
+                 f"AutoModel returned {type(model)}, expected Qwen3TTSForConditionalGeneration. "
+             )
+ 
+-        processor = AutoProcessor.from_pretrained(pretrained_model_name_or_path, fix_mistral_regex=True,)
++        processor = load_processor_compat(AutoProcessor, pretrained_model_name_or_path)
+ 
+         generate_defaults = model.generate_config
+         return cls(model=model, processor=processor, generate_defaults=generate_defaults)

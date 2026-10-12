@@ -22,7 +22,7 @@ DialogPage {
     readonly property real _leftMargin: (root.mirrored && listViewExists && listViewStackItem.currentItem.ScrollBar.vertical.visible) ?
                                              appWin.padding + listViewStackItem.currentItem.ScrollBar.vertical.width :
                                              appWin.padding
-    readonly property bool _promptEnabled: app.feature_parler_tts
+    readonly property bool _promptEnabled: app.feature_parler_tts || app.feature_qwen3tts_tts
     property color textColor: appWin.appTextColor
 
     title: qsTr("Voice profiles")    

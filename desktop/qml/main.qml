@@ -411,7 +411,8 @@ ApplicationWindow {
             warning: true
             visible: _settings.hw_accel_supported() &&
                      ((app.feature_whispercpp_gpu && _settings.whisper_use_gpu) ||
-                      (app.feature_fasterwhisper_gpu && _settings.fasterwhisper_use_gpu)) &&
+                      (app.feature_fasterwhisper_gpu && _settings.fasterwhisper_use_gpu) ||
+                      (app.feature_qwen3asr_gpu && _settings.qwen3asr_use_gpu)) &&
                      ((_settings.error_flags & Settings.ErrorCudaUnknown) > 0)
             text: qsTr("Most likely, %1 kernel module has not been fully initialized.").arg("NVIDIA") + " " +
                   qsTr("Try executing %1 before running Speech Note.")

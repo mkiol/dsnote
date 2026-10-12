@@ -86,7 +86,7 @@ DialogPage {
             Label {
                 Layout.fillWidth: true
                 wrapMode: Text.Wrap
-                text: qsTr("Currently, text voice profiles can be used only in %1 models.").arg("<i>Parler TTS</i>") + " " +
+                text: qsTr("Currently, text voice profiles can be used only in %1 models.").arg("<i>Parler TTS</i>, <i>Qwen3-TTS VoiceDesign</i>") + " " +
                       qsTr("To learn more about how to create a good text description, check out the specific model's website.")
             }
 
@@ -94,6 +94,7 @@ DialogPage {
                 text: "<ul>" +
                       "<li>Parler TTS &rarr; <a href='https://github.com/huggingface/parler-tts'>https://github.com/huggingface/parler-tts</a></li>" +
                       "<li>Parler TTS Expresso &rarr; <a href='https://huggingface.co/parler-tts/parler-tts-mini-expresso'>https://huggingface.co/parler-tts/parler-tts-mini-expresso</a></li>" +
+                      "<li>Qwen3-TTS VoiceDesign &rarr; <a href='https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign'>https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign</a></li>" +
                       "</ul>"
             }
         }

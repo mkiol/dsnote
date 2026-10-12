@@ -58,6 +58,10 @@ QDebug operator<<(QDebug d, ModelsListModel::ModelFeatureFilterFlags flags) {
                 d << "engine-stt-parakeet";
                 break;
             case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureEngineSttQwen3Asr:
+                d << "engine-stt-qwen3asr";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
                 FeatureEngineSttApril:
                 d << "engine-stt-april";
                 break;
@@ -92,6 +96,10 @@ QDebug operator<<(QDebug d, ModelsListModel::ModelFeatureFilterFlags flags) {
             case ModelsListModel::ModelFeatureFilterFlags::
                 FeatureEngineTtsKokoro:
                 d << "engine-tts-kokoro";
+                break;
+            case ModelsListModel::ModelFeatureFilterFlags::
+                FeatureEngineTtsQwen3Tts:
+                d << "engine-tts-qwen3tts";
                 break;
             case ModelsListModel::ModelFeatureFilterFlags::FeatureEngineTtsF5:
                 d << "engine-tts-f5";

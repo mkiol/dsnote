@@ -36,6 +36,8 @@
 #ifdef USE_PY
 #define STT_ENGINE_TABLE_PY                                             \
     X(fasterwhisper, stt, true, false, false, true, 9, slow_processing, \
+      high_quality, "", 0)                                              \
+    X(qwen3asr, stt, true, true, false, true, 12, slow_processing,      \
       high_quality, "", 0)
 #else
 #define STT_ENGINE_TABLE_PY
@@ -57,36 +59,38 @@
 
 #ifdef USE_PY
 #define TTS_ENGINE_TABLE_PY                                                    \
-    X(coqui, tts, true, true, false, true, 15, slow_processing, high_quality,  \
+    X(coqui, tts, true, true, false, true, 16, slow_processing, high_quality,  \
       "", 0)                                                                   \
-    X(mimic3, tts, false, false, false, true, 16, medium_processing,           \
+    X(mimic3, tts, false, false, false, true, 17, medium_processing,           \
       medium_quality, "", 0)                                                   \
-    X(whisperspeech, tts, true, true, false, true, 17, slow_processing,        \
+    X(whisperspeech, tts, true, true, false, true, 18, slow_processing,        \
       high_quality, "", 0)                                                     \
-    X(parler, tts, true, true, false, true, 19, slow_processing, high_quality, \
+    X(parler, tts, true, true, false, true, 20, slow_processing, high_quality, \
       "", 0)                                                                   \
-    X(f5, tts, true, true, false, true, 20, slow_processing, high_quality, "", \
+    X(f5, tts, true, true, false, true, 21, slow_processing, high_quality, "", \
       0)                                                                       \
-    X(kokoro, tts, true, true, false, true, 21, medium_processing,             \
+    X(kokoro, tts, true, true, false, true, 22, medium_processing,             \
+      high_quality, "", 0)                                                     \
+    X(qwen3tts, tts, true, true, false, true, 23, slow_processing,             \
       high_quality, "", 0)
 #else
 #define TTS_ENGINE_TABLE_PY
 #endif
 #define TTS_ENGINE_TABLE                                                     \
-    X(piper, tts, false, false, false, false, 13, medium_processing,         \
+    X(piper, tts, false, false, false, false, 14, medium_processing,         \
       high_quality, "", 0)                                                   \
-    X(rhvoice, tts, false, false, false, false, 14, fast_processing,         \
+    X(rhvoice, tts, false, false, false, false, 15, fast_processing,         \
       low_quality, "", 0)                                                    \
-    X(espeak, tts, false, false, true, false, 12, fast_processing,           \
+    X(espeak, tts, false, false, true, false, 13, fast_processing,           \
       low_quality, "", 0)                                                    \
-    X(sam, tts, false, false, true, false, 18, fast_processing, low_quality, \
+    X(sam, tts, false, false, true, false, 19, fast_processing, low_quality, \
       "", 0)                                                                 \
     TTS_ENGINE_TABLE_PY
 
 /* MNT */
 
 #define MNT_ENGINE_TABLE                                              \
-    X(bergamot, mnt, false, false, false, false, 23, fast_processing, \
+    X(bergamot, mnt, false, false, false, false, 24, fast_processing, \
       medium_quality, "", 0)
 
 /* TTT */
@@ -147,7 +151,9 @@
     X(whisperspeech, tts, 2, 0) \
     X(parler, tts, 3, 0)        \
     X(f5, tts, 4, 0)            \
-    X(kokoro, tts, 5, 0)
+    X(kokoro, tts, 5, 0)        \
+    X(qwen3asr, stt, 20, 0)     \
+    X(qwen3tts, tts, 21, 0)
 #else
 #define HW_CUDA_ENGINE_TABLE_PY
 #endif
@@ -165,7 +171,9 @@
     X(whisperspeech, tts, 10, 0) \
     X(parler, tts, 11, 0)        \
     X(f5, tts, 12, 0)            \
-    X(kokoro, tts, 13, 0)
+    X(kokoro, tts, 13, 0)        \
+    X(qwen3asr, stt, 22, 0)      \
+    X(qwen3tts, tts, 23, 0)
 #else
 #define HW_HIP_ENGINE_TABLE_PY
 #endif

@@ -161,6 +161,7 @@ ColumnLayout {
             var f5_enable = app.feature_f5_tts && app.feature_f5_gpu
             var kokoro_enable = app.feature_kokoro_tts && app.feature_kokoro_gpu
             var whisperspeech_enable = app.feature_whisperspeech_tts && app.feature_whisperspeech_gpu
+            var qwen3tts_enable = app.feature_qwen3tts_tts && app.feature_qwen3tts_gpu
 
             // set idx if engine enabled
             if (idx === 0 && coqui_enable) return idx
@@ -168,6 +169,7 @@ ColumnLayout {
             if (idx === 2 && f5_enable) return idx
             if (idx === 3 && kokoro_enable) return idx
             if (idx === 4 && whisperspeech_enable) return idx
+            if (idx === 5 && qwen3tts_enable) return idx
 
             // set default
             if (coqui_enable) return 0
@@ -175,6 +177,7 @@ ColumnLayout {
             if (f5_enable) return 2
             if (kokoro_enable) return 3
             if (whisperspeech_enable) return 4
+            if (qwen3tts_enable) return 5
 
             return 0
         }
@@ -184,7 +187,8 @@ ColumnLayout {
                  (app.feature_whisperspeech_tts && app.feature_whisperspeech_gpu) ||
                  (app.feature_parler_tts && app.feature_parler_gpu) ||
                  (app.feature_f5_tts && app.feature_f5_gpu) ||
-                 (app.feature_kokoro_tts && app.feature_kokoro_gpu)
+                 (app.feature_kokoro_tts && app.feature_kokoro_gpu) ||
+                 (app.feature_qwen3tts_tts && app.feature_qwen3tts_gpu)
 
         TabButton {
             text: "Coqui"
@@ -213,6 +217,12 @@ ColumnLayout {
         TabButton {
             text: "WhisperSpeech"
             enabled: app.feature_whisperspeech_tts && app.feature_whisperspeech_gpu
+            width: implicitWidth
+        }
+
+        TabButton {
+            text: "Qwen3-TTS"
+            enabled: app.feature_qwen3tts_tts && app.feature_qwen3tts_gpu
             width: implicitWidth
         }
 
@@ -324,6 +334,27 @@ ColumnLayout {
                         use_gpu: _settings.whisperspeech_use_gpu
                         onUse_gpuChanged: _settings.whisperspeech_use_gpu = use_gpu
                         onDevice_indexChanged: _settings.whisperspeech_gpu_device_idx = device_index
+                    }
+
+                    Item {
+                        Layout.fillHeight: true
+                    }
+                }
+            }
+        }
+
+        Loader {
+            active: app.feature_qwen3tts_tts && app.feature_qwen3tts_gpu
+            sourceComponent: Component {
+                ColumnLayout {
+                    id: qwen3ttsTab
+
+                    GpuComboBox {
+                        devices: _settings.qwen3tts_gpu_devices
+                        device_index: _settings.qwen3tts_gpu_device_idx
+                        use_gpu: _settings.qwen3tts_use_gpu
+                        onUse_gpuChanged: _settings.qwen3tts_use_gpu = use_gpu
+                        onDevice_indexChanged: _settings.qwen3tts_gpu_device_idx = device_index
                     }
 
                     Item {

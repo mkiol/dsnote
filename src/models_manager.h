@@ -88,7 +88,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         STT_ENGINE_TABLE TTS_ENGINE_TABLE MNT_ENGINE_TABLE
 #undef X
                 engine_other = 1U
-            << 24U,
+            << 25U,
         /* engine end */
         generic_end = engine_other,
         stt_start = 1U << 26U,
@@ -97,7 +97,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         stt_end = stt_punctuation,
         tts_start = 1U << 28U,
         tts_voice_cloning = tts_start,
-        tts_prompt = 1U << 30U,
+        tts_prompt = 1U << 29U,
         tts_end = tts_prompt
     };
     friend feature_flags operator|(feature_flags a, feature_flags b) {
