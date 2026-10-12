@@ -449,7 +449,7 @@ void fake_keyboard::send_ctrl_v(bool shift) {
 #else
     // Non-X11 build: use ydo path (Wayland) by default
     if (m_ydo_daemon_socket >= 0) {
-        send_ctrl_v_ydo();
+        send_ctrl_v_ydo(shift);
     } else {
         LOGW("no method available to send ctrl+v");
     }
@@ -477,7 +477,7 @@ void fake_keyboard::send_ctrl_c(bool shift) {
 #else
     // Non-X11 build: use ydo path (Wayland) by default
     if (m_ydo_daemon_socket >= 0) {
-        send_ctrl_c_ydo();
+        send_ctrl_c_ydo(shift);
     } else {
         LOGW("no method available to send ctrl+c");
     }

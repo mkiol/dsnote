@@ -79,6 +79,7 @@ class fake_keyboard : public QObject {
     wl_keyboard* m_wl_keyboard = nullptr;
     std::mutex m_wl_mtx;
     int m_keyboard_layout_idx = -1;
+    unsigned int m_num_layouts = 0;
 #ifdef USE_X11_FEATURES
     Display* m_x11_display = nullptr;
     xdo* m_xdo = nullptr;
@@ -86,7 +87,6 @@ class fake_keyboard : public QObject {
     std::thread m_xdo_thread;
     unsigned long m_root_window = 0;
     unsigned long m_focus_window = 0;
-    unsigned int m_num_layouts = 0;
 #endif
 
     static int make_ydo_socket();

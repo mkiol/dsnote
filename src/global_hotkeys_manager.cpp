@@ -77,11 +77,7 @@ void global_hotkeys_manager::enable_or_disable() {
     }
 #else
     if (settings::instance()->hotkeys_enabled()) {
-        switch (settings::instance()->hotkeys_type()) {
-            case settings::hotkeys_type_t::HotkeysTypePortal:
-                enable_portal();
-                break;
-        }
+        enable_portal();
     }
 #endif
 }
@@ -353,6 +349,17 @@ void global_hotkeys_manager::set_portal_bindings() {
             &QObject::deleteLater);
 }
 
+void global_hotkeys_manager::reset_portal_connection() {
+    if (!is_portal_supported()) {
+        LOGW("portal not supported");
+        return;
+    }
+
+    disable_portal();
+
+    create_portal_session();
+}
+
 #ifdef USE_X11_FEATURES
 
 void global_hotkeys_manager::disable_x11() {
@@ -401,17 +408,6 @@ void global_hotkeys_manager::handle_x11_activated() {
     auto action_id = sender()->property("action").toString();
     LOGD("x11 hotkey activated: " << action_id);
     emit hotkey_activated(action_id, {});
-}
-
-void global_hotkeys_manager::reset_portal_connection() {
-    if (!is_portal_supported()) {
-        LOGW("portal not supported");
-        return;
-    }
-
-    disable_portal();
-
-    create_portal_session();
 }
 
 #endif  // USE_X11_FEATURES
