@@ -169,8 +169,8 @@ diff -ruN -x '.*' piper-org/CMakeLists.txt piper-patched/CMakeLists.txt
 +  PUBLIC_HEADER DESTINATION include)
 diff -ruN -x '.*' piper-org/piper_api.cpp piper-patched/piper_api.cpp
 --- piper-org/piper_api.cpp	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/piper_api.cpp	2026-06-04 20:52:40.121908215 +0200
-@@ -0,0 +1,61 @@
++++ piper-patched/piper_api.cpp	2026-10-13 10:43:29.474950727 +0200
+@@ -0,0 +1,66 @@
 +#include "piper_api.h"
 +#include "src/cpp/piper.hpp"
 +
@@ -184,11 +184,16 @@ diff -ruN -x '.*' piper-org/piper_api.cpp piper-patched/piper_api.cpp
 +    piper::Voice voice;
 +};
 +
-+piper_api::piper_api(std::string model_path, std::string model_config_path,
++piper_api::piper_api(std::string model_path, std::string model_config_path, int num_threads,
 +                     std::string espeak_ng_data_path, int64_t speaker_id) {
 +    m_ctx = std::make_unique<ctx>();
 +
 +    m_ctx->config.eSpeakDataPath = std::move(espeak_ng_data_path);
++
++    if (num_threads > 0) {
++        m_ctx->voice.session.options.SetInterOpNumThreads(num_threads);
++        m_ctx->voice.session.options.SetIntraOpNumThreads(num_threads);
++    }
 +
 +    piper::initialize(m_ctx->config);
 +
@@ -234,7 +239,7 @@ diff -ruN -x '.*' piper-org/piper_api.cpp piper-patched/piper_api.cpp
 +}
 diff -ruN -x '.*' piper-org/piper_api.h piper-patched/piper_api.h
 --- piper-org/piper_api.h	1970-01-01 01:00:00.000000000 +0100
-+++ piper-patched/piper_api.h	2023-08-19 17:04:26.521886454 +0200
++++ piper-patched/piper_api.h	2026-10-12 20:14:14.081201247 +0200
 @@ -0,0 +1,24 @@
 +#ifndef PIPER_API_H
 +#define PIPER_API_H
@@ -247,7 +252,7 @@ diff -ruN -x '.*' piper-org/piper_api.h piper-patched/piper_api.h
 +
 +class PIPER_API_EXPORT piper_api {
 +public:
-+    piper_api(std::string model_path, std::string model_config_path,
++    piper_api(std::string model_path, std::string model_config_path, int num_threads = 0,
 +              std::string espeak_ng_data_path = {}, int64_t speaker_id = -1);
 +    ~piper_api();
 +    float length_scale() const;

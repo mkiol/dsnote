@@ -41,7 +41,7 @@ void piper_engine::create_model() {
         }
 
         m_piper.emplace(std::move(model_file), std::move(config_file),
-                        m_config.data_dir, speaker_id);
+                        nb_threads_limit(), m_config.data_dir, speaker_id);
 
         m_initial_length_scale = m_piper->length_scale();
         LOGD("initial length scale: " << m_initial_length_scale);

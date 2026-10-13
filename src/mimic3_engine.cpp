@@ -77,22 +77,6 @@ static void make_static_py_fun_wrapper(
     py_class.attr(fun_name) = static_method_wrapper;
 }
 
-static int nb_threads_limit() {
-    auto* nb_threads_str = std::getenv("OMP_NUM_THREADS");
-    if (nb_threads_str == nullptr) {
-        return 0;
-    }
-
-    int nb_threads = 0;
-    try {
-        nb_threads = std::stoi(nb_threads_str);
-    } catch ([[maybe_unused]] const std::exception& e) {
-        // ignore
-    }
-
-    return nb_threads > 0 ? nb_threads : 0;
-}
-
 void mimic3_engine::create_model() {
     const auto& voices_dir = m_config.data_dir;
     auto lang_dir = fmt::format("{}/lang", voices_dir);
@@ -123,7 +107,7 @@ void mimic3_engine::create_model() {
                     "voices_directories"_a = dirs, "no_download"_a = true));
             m_tts->attr("voice") = "lang/model";
 
-            /* limit number of cpu threads as set in OMP_NUM_THREADS env var */
+            /* limit number of cpu threads */
             auto nb_threads = nb_threads_limit();
             if (nb_threads > 0) {
                 make_static_py_fun_wrapper(

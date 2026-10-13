@@ -1294,3 +1294,19 @@ void tts_engine::make_pkuseg_link(const std::string& pkuseg_dir,
     // create a dummy zip file to skip spacy download
     std::ofstream output{fmt::format("{}/{}.zip", pkuseg_home, pkuseg_name)};
 }
+
+int tts_engine::nb_threads_limit() {
+    auto* nb_threads_str = std::getenv("OMP_NUM_THREADS");
+    if (nb_threads_str == nullptr) {
+        return 0;
+    }
+
+    int nb_threads = 0;
+    try {
+        nb_threads = std::stoi(nb_threads_str);
+    } catch ([[maybe_unused]] const std::exception& e) {
+        // ignore
+    }
+
+    return nb_threads > 0 ? nb_threads : 0;
+}

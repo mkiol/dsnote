@@ -277,6 +277,7 @@ class tts_engine {
                              const std::string& cache_dir);
     static void make_pkuseg_link(const std::string& pkuseg_dir,
                                  const std::string& cache_dir);
+    static int nb_threads_limit();
 };
 
 #endif // TTS_ENGINE_HPP

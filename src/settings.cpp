@@ -1701,6 +1701,27 @@ void settings::update_qt_style(QQmlApplicationEngine* engine) {
 }
 #endif
 
+static void set_env(const char* name, const char* value, bool force) {
+    auto* old_value = std::getenv(name);
+    if (old_value && std::strcmp(value, old_value) == 0) {
+        // already set
+        return;
+    }
+
+    if (old_value && !force) {
+        LOGD("skip set env: " << name << " = " << old_value << " => " << value);
+        return;
+    }
+
+    if (old_value) {
+        LOGD("set env: " << name << " = " << old_value << " => " << value);
+    } else {
+        LOGD("set env: " << name << " = " << value);
+    }
+
+    setenv(name, value, 1);
+}
+
 void settings::enforce_num_threads() const {
     unsigned int conf_num_threads = num_threads();
 
@@ -1713,8 +1734,10 @@ void settings::enforce_num_threads() const {
     LOGD("enforcing num threads: " << num_threads);
 
     if (num_threads > 0) {
-        setenv("OPENBLAS_NUM_THREADS", std::to_string(num_threads).c_str(), 1);
-        setenv("OMP_NUM_THREADS", std::to_string(num_threads).c_str(), 1);
+        set_env("OPENBLAS_NUM_THREADS", std::to_string(num_threads).c_str(),
+                false);
+        set_env("OMP_NUM_THREADS", std::to_string(num_threads).c_str(), false);
+        set_env("MKL_NUM_THREADS", std::to_string(num_threads).c_str(), false);
     }
 }
 void settings::update_hw_devices_from_fa(
