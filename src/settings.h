@@ -57,7 +57,9 @@
     X(import_extract_readable, bool, true, false)                            \
     X(ui_appearance, settings::ui_appearance_t,                              \
       settings::ui_appearance_t::UiAppearanceAuto, true)                     \
-    X(pinyin_text, bool, false, false)
+    X(pinyin_text, bool, false, false)                                       \
+    X(tts_trim_trailing_silence, bool, true, false)                          \
+    X(tts_trailing_silence_dur_msec, int, 100, false)
 
 // name, default-value
 #define GPU_SCAN_TABLE                                          \

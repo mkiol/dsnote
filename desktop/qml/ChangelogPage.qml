@@ -33,7 +33,7 @@ DialogPage {
             and reads it aloud using TTS.</li>
         <li>New action <i>start-reading-url</i>. Use this action to have Speech Note read an HTTP web page.
             An action can be triggered via DBus call or with command-line option. You can enable <i>Actions</i> in the settings
-            (<i>Accessibility</i> &rarr; <i>Allow external applications to invoke actions</i>).</li>
+            (<i>Settings</i> &rarr; <i>Accessibility</i> &rarr; <i>Allow external applications to invoke actions</i>).</li>
         <li>New action <i>transcribe-file</i>. Use this action to transcribe a file.</li>
         </ul>
         <p>" + qsTr("Speech to Text") + "</p>
@@ -61,7 +61,7 @@ DialogPage {
         <li>AMD ROCm hardware acceleration support in <i>FasterWhisper</i>.
             To enable ROCm acceleration with Flatpak, install the AMD add-on.</li>
         <li>Temperature and Repetition Penalty options in Whisper engine <i>Custom</i> profile</li>
-        <li>Pinyin support for Chinese langauge (<i>User Interface</i> &rarr; <i>Speech to Text</i> &rarr; <i>Use pinyin</i>)</li>
+        <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Speech to Text</i> &rarr; <i>Use pinyin</i>)</li>
         <li>OpenVINO hardware acceleration in <i>WhisperCpp</i> was removed as it provided minimal performance improvement.</li>
         </ul>
         </ul>
@@ -79,18 +79,21 @@ DialogPage {
         <li>Updated RHVoice models for: Czech, Serbian, Spanish</li>
         <li>New Piper models for: Albanian, Bulgarian, Dutch, Greek, Hindi, Indonesian, Kurdish, Latvian, Polish, Swedish, Telugu, Ukrainian, Urdu</li>
         <li>New F5-TTS model for Latvian</li>
-        <li>Pinyin support for Chinese langauge (<i>User Interface</i> &rarr; <i>Text to Speech</i> &rarr; <i>Use pinyin</i>)</li>
+        <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Text to Speech</i> &rarr; <i>Use pinyin</i>)</li>
+        <li>An option to insert custom pause between sentences.
+            Override default TTS engine sentence pauses with a custom silence duration
+           (<i>Settings</i> &rarr; <i>Text to Speech</i> &rarr; <i>Insert custom pause between sentences</i>).</li>
         </ul>
         <p>" + qsTr("Translator") + "</p>
         <ul>
-        <li>Pinyin support for Chinese langauge (<i>User Interface</i> &rarr; <i>Translator</i> &rarr; <i>Use pinyin</i>)</li>
+        <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Use pinyin</i>)</li>
         </ul>
         <p>" + qsTr("User Interface") + "</p>
         <ul>
         <li>Import a note from a URL. Use the <i>Import a note from a URL</i> option in the main app toolbar to import text content from a link.
             The URL must use HTTP or HTTPS. For HTML pages, you can choose to extract only the readable text or import the entire page.</li>
         <li>Setting option to force the English language in the user interface</li>
-        <li>Setting option to force dark or light user interface color appearance (<i>User Interface</i> &rarr; <i>User interface color appearance</i>).
+        <li>Setting option to force dark or light user interface color appearance (<i>Settings</i> &rarr; <i>User Interface</i> &rarr; <i>User interface color appearance</i>).
             Change if you observe problems with incorrect colors under a dark theme.</li>
         <li><i>Speech Note</i> has been translated into Portuguese-Brazilian language.</li>
         </ul>

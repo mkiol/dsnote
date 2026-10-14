@@ -36,14 +36,26 @@ Page {
                 text: "<p>" + qsTr("Speech to Text") + "</p>
                 <ul>
                 <li>Improved transcription performance in <i>WhisperCpp</i>.
-                The updated <i>WhisperCpp</i> engine reduces transcription time by 10%.
-                Additionally, WhisperCpp models now support also older ARM32 CPUs, such as those in the Jolla C1.</li>
+                    The updated <i>WhisperCpp</i> engine reduces transcription time by 10%.
+                    Additionally, WhisperCpp models now support also older ARM32 CPUs, such as those in the Jolla C1.</li>
                 <li>Support for <i>Parakeet</i> TDT model. Parakeet TDT is NVIDIA multilingual STT model designed for high-throughput speech to text transcription. 
-                The model automatically detects the language of the audio, therefore is enabled in <i>Auto detected</i> category.
-                The model works well on CPU but also supports Vulkan, CUDA and ROCm GPU acceleration.
-                Parakeet TDT is available for the following languages: 
-                Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian,
-                Maltese, Polish, Portuguese, Romanian, Slovak, Slovenian, Spanish, Swedish, Russian and Ukrainian.</li>
+                    The model automatically detects the language of the audio, therefore is enabled in <i>Auto detected</i> category.
+                    The model works well on CPU but also supports Vulkan, CUDA and ROCm GPU acceleration.
+                    Parakeet TDT is available for the following languages:
+                    Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian,
+                    Maltese, Polish, Portuguese, Romanian, Slovak, Slovenian, Spanish, Swedish, Russian and Ukrainian.</li>
+                <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Speech to Text</i> &rarr; <i>Use pinyin</i>)</li>
+                </ul>
+                <p>" + qsTr("Text to Speech") + "</p>
+                <ul>
+                <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Text to Speech</i> &rarr; <i>Use pinyin</i>)</li>
+                <li>An option to insert custom pause between sentences.
+                    Override default TTS engine sentence pauses with a custom silence duration
+                   (<i>Settings</i> &rarr; <i>Text to Speech</i> &rarr; <i>Insert custom pause between sentences</i>).</li>
+                </ul>
+                <p>" + qsTr("Translator") + "</p>
+                <ul>
+                <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Use pinyin</i>)</li>
                 </ul>
                 <p>" + qsTr("Libraries") + "</p>
                 <ul>

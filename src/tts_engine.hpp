@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -128,9 +128,11 @@ class tts_engine {
         std::string nb_data;
         std::string lang_code;
         unsigned int speech_speed = 10;
+        unsigned int trailing_silence_dur_msec = 100;
         bool split_into_sentences = true;
         bool use_engine_speed_control = true;
         bool normalize_audio = true;
+        bool trim_trailing_silence = true;
         bool use_gpu = false;
         gpu_device_t gpu_device;
         audio_format_t audio_format = audio_format_t::wav;
@@ -182,6 +184,12 @@ class tts_engine {
     void set_speech_speed(unsigned int speech_speed);
     void set_ref_voice_file(std::string ref_voice_file);
     void set_ref_prompt(std::string ref_prompt);
+    void set_trailing_silence_dur_msec(int value) {
+        m_config.trailing_silence_dur_msec = value;
+    }
+    void set_trim_trailing_silence(bool value) {
+        m_config.trim_trailing_silence = value;
+    }
 
    protected:
     enum class task_type_t { speech_encoding, text_restoration };
@@ -267,7 +275,7 @@ class tts_engine {
         return m_state == state_t::stopping || m_state == state_t::stopped ||
                m_state == state_t::error;
     }
-    void post_process_wav(const std::string& wav_file,
+    void post_process_wav(const std::string& wav_file, bool remove_t_silence,
                           size_t silence_duration_msec) const;
     static bool file_exists(const std::string& file_path);
     static int64_t file_size(const std::string& file_path);

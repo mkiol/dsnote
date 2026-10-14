@@ -3330,6 +3330,10 @@ void dsnote_app::play_speech_internal(QString text, const QString &input_file,
                    static_cast<int>(settings::instance()->tts_tag_mode()));
     options.insert("ref_prompt",
                    settings::instance()->tts_desc_of_voice_prompt(ref_prompt));
+    options.insert("trim_trailing_silence",
+                   settings::instance()->tts_trim_trailing_silence());
+    options.insert("trailing_silence_dur",
+                   settings::instance()->tts_trailing_silence_dur_msec());
 
     if (m_available_tts_ref_voices_map.contains(ref_voice)) {
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
@@ -3767,6 +3771,10 @@ void dsnote_app::speech_to_file_internal(
                    static_cast<int>(settings::instance()->tts_tag_mode()));
     options.insert("ref_prompt",
                    settings::instance()->tts_desc_of_voice_prompt(ref_prompt));
+    options.insert("trim_trailing_silence",
+                   settings::instance()->tts_trim_trailing_silence());
+    options.insert("trailing_silence_dur",
+                   settings::instance()->tts_trailing_silence_dur_msec());
 
     if (m_available_tts_ref_voices_map.contains(ref_voice)) {
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();

@@ -264,6 +264,16 @@ Page {
                                          qsTr("This option does not work with all engines.")
                         }
 
+                        TextSwitch {
+                            checked: _settings.pinyin_text
+                            automaticCheck: false
+                            text: qsTr("Use pinyin")
+                            onClicked: {
+                                _settings.pinyin_text = !_settings.pinyin_text
+                            }
+                            description: qsTr("For Chinese, use pinyin instead of Chinese characters.")
+                        }
+
 //                        TextSwitch {
 //                            checked: _settings.whisper_autolang_with_sup
 //                            automaticCheck: false
@@ -514,6 +524,50 @@ Page {
                             }
                         }
 
+                        TextSwitch {
+                            checked: _settings.pinyin_text
+                            automaticCheck: false
+                            text: qsTr("Use pinyin")
+                            onClicked: {
+                                _settings.pinyin_text = !_settings.pinyin_text
+                            }
+                            description: qsTr("For Chinese, use pinyin instead of Chinese characters.")
+                        }
+
+                        TextSwitch {
+                            checked: _settings.tts_trim_trailing_silence
+                            automaticCheck: false
+                            text: qsTr("Insert custom pause between sentences")
+                            onClicked: {
+                                _settings.tts_trim_trailing_silence = !_settings.tts_trim_trailing_silence
+                            }
+                            description: qsTr("Override default TTS engine sentence pauses with a custom silence duration.") + " " +
+                                         qsTr("This option has no effect when %1 is disabled.").arg("<i>" + qsTr("Split text into sentences" + "</i>"))
+                        }
+
+                        Slider {
+                            id: ttsTrimTrailingSilenceSlider
+
+                            visible: _settings.tts_trim_trailing_silence
+                            opacity: enabled ? 1.0 : Theme.opacityLow
+                            width: parent.width
+                            minimumValue: 0
+                            maximumValue: 10000
+                            stepSize: 1
+                            handleVisible: true
+                            label: qsTr("Sentence pause duration")
+                            value: _settings.tts_trailing_silence_dur_msec
+                            valueText: value + " ms"
+                            onValueChanged: _settings.tts_trailing_silence_dur_msec = value
+
+                            Connections {
+                                target: _settings
+                                onSpeech_speedChanged: {
+                                    speechSpeedSlider.value = _settings.tts_trailing_silence_dur_msec
+                                }
+                            }
+                        }
+
                         SectionHeader {
                             visible: _settings.subtitles_support
                             text: qsTr("Subtitles")
@@ -573,6 +627,27 @@ Page {
                             onClicked: {
                                 _settings.translate_when_typing = !_settings.translate_when_typing
                             }
+                        }
+
+                        TextSwitch {
+                            checked: _settings.mnt_clean_text
+                            automaticCheck: false
+                            text: qsTr("Clean up the text")
+                            onClicked: {
+                                _settings.mnt_clean_text = !_settings.mnt_clean_text
+                            }
+                            description: qsTr("Remove duplicate whitespaces and extra line breaks in the text before translation.") + " " +
+                                         qsTr("If the input text is incorrectly formatted, this option may improve the translation quality.")
+                        }
+
+                        TextSwitch {
+                            checked: _settings.pinyin_text
+                            automaticCheck: false
+                            text: qsTr("Use pinyin")
+                            onClicked: {
+                                _settings.pinyin_text = !_settings.pinyin_text
+                            }
+                            description: qsTr("For Chinese, use pinyin instead of Chinese characters.")
                         }
                     }
                 }

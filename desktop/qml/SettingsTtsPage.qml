@@ -61,6 +61,31 @@ ColumnLayout {
         toolTipText: qsTranslate("SettingsPage", "For Chinese, use pinyin instead of Chinese characters.")
     }
 
+    CheckBoxSetting {
+        optionName: "tts_trim_trailing_silence"
+        text: qsTranslate("SettingsPage", "Insert custom pause between sentences")
+        toolTipText: qsTranslate("SettingsPage", "Override default TTS engine sentence pauses with a custom silence duration.") + " " +
+                     qsTranslate("SettingsPage", "This option has no effect when %1 is disabled.").arg("<i>" + qsTranslate("SettingsPage", "Split text into sentences" + "</i>"))
+    }
+
+    SpinBoxForm {
+        indends: 1
+        visible: _settings.tts_trim_trailing_silence
+        label.text: qsTranslate("SettingsPage", "Sentence pause duration")
+        spinBox {
+            from: 0
+            to: 10000
+            stepSize: 1
+            value: _settings.tts_trailing_silence_dur_msec
+            editable: true
+            textFromValue: function(value) { return value + " ms" }
+            valueFromText: function(text) { return parseInt(text) }
+            onValueModified: {
+                _settings.tts_trailing_silence_dur_msec = spinBox.value;
+            }
+        }
+    }
+
     CheckBox {
         checked: _settings.tts_tag_mode === Settings.TtsTagModeSupport
         text: qsTranslate("SettingsPage", "Use control tags")

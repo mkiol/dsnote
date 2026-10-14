@@ -30,6 +30,7 @@
 #include <QVariantList>
 #include <algorithm>
 #include <cstdlib>
+#include <cstring>
 #include <thread>
 
 #include "config.h"

@@ -1887,6 +1887,10 @@ QString speech_service::restart_tts_engine(const QString &model_id,
         config.ref_prompt =
             get_value_from_options("ref_prompt", QString{}, options)
                 .toStdString();
+        config.trim_trailing_silence =
+            get_value_from_options("trim_trailing_silence", true, options);
+        config.trailing_silence_dur_msec =
+            get_value_from_options("trailing_silence_dur", 100, options);
 
         // clang-format off
 #define X(_name, _role, _gpu, ...) X ## _gpu(_name, _role)
@@ -2030,6 +2034,10 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             m_tts_engine->set_lang_code(config.lang_code);
             m_tts_engine->set_tag_mode(config.tag_mode);
             m_tts_engine->set_normalize_audio(config.normalize_audio);
+            m_tts_engine->set_trailing_silence_dur_msec(
+                config.trailing_silence_dur_msec);
+            m_tts_engine->set_trim_trailing_silence(
+                config.trim_trailing_silence);
             m_tts_engine->restart();
         }
 

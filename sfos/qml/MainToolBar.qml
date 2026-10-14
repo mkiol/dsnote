@@ -67,6 +67,15 @@ PullDownMenu {
         }
     }
 
+    MenuItem {
+        visible: _settings.pinyin_text &&
+                 ((_settings.translator_mode && (app.active_mnt_lang == "zh" || app.active_mnt_out_lang == "zh")) ||
+                  (!_settings.translator_mode && (app.active_stt_model.startsWith("zh") || app.active_tts_model.startsWith("zh"))))
+        enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.note.length !== 0
+        text: qsTr("Toggle hanzi/pinyin (%1)").arg(qsTr("Chinese"))
+        onClicked: app.pinyin_hanzi_toggle()
+    }
+
     readonly property bool canCancelMnt: app.state === DsnoteApp.StateTranslating &&
                                          app.task_state !== DsnoteApp.TaskStateCancelling
     MenuItem {

@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,6 +18,7 @@
 #include <cctype>
 #include <clocale>
 #include <cmath>
+#include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -186,9 +187,11 @@ std::ostream& operator<<(std::ostream& os, const tts_engine::config_t& config) {
        << ", share-dir=" << config.share_dir
        << ", cache-dir=" << config.cache_dir << ", data-dir=" << config.data_dir
        << ", speech-speed=" << config.speech_speed
+       << ", trailing-silence-dur-msec=" << config.trailing_silence_dur_msec
        << ", split-into-sentences=" << config.split_into_sentences
        << ", use-engine-speed-control=" << config.use_engine_speed_control
        << ", normalize-audio=" << config.normalize_audio
+       << ", trim-trailing-silence=" << config.trim_trailing_silence
        << ", use-gpu=" << config.use_gpu << ", gpu-device=["
        << config.gpu_device << "]"
        << ", audio-format=" << config.audio_format;
@@ -418,7 +421,9 @@ std::string tts_engine::path_to_output_file(const std::string& text,
         m_config.speaker_id + m_config.lang +
         (m_config.normalize_audio ? "1" : "0") +
         (do_speech_change ? "1" : "0") +
-        (speech_speed == 10 ? "" : std::to_string(speech_speed)));
+        (speech_speed == 10 ? "" : std::to_string(speech_speed)) +
+        std::to_string(m_config.trailing_silence_dur_msec) +
+        (m_config.trim_trailing_silence ? "1" : "0"));
     return m_config.cache_dir + "/" + std::to_string(hash) + '.' +
            file_ext_for_format(m_config.audio_format);
 }
@@ -695,6 +700,7 @@ bool tts_engine::convert_wav_to_16bits(const std::string& wav_file) {
 }
 
 void tts_engine::post_process_wav(const std::string& wav_file,
+                                  bool remove_t_silence,
                                   size_t silence_duration_msec) const {
     std::ifstream is{wav_file, std::ios::binary | std::ios::ate};
     if (!is) {
@@ -717,21 +723,72 @@ void tts_engine::post_process_wav(const std::string& wav_file,
 
     is.seekg(0, std::ios::beg);
     auto header = read_wav_header(is);
+    unsigned int sample_size = sizeof(int16_t) * header.num_channels;
 
     size_t header_size = is.tellg();
     size -= header_size;
 
-    LOGD("wav file info: sample-rate=" << header.sample_rate
-                                       << ", channels=" << header.num_channels
-                                       << ", bits=" << header.bits_per_sample);
+    auto t_silence_size = [&]() -> size_t {
+        if (!remove_t_silence) {
+            return 0;
+        }
 
-    auto silence_size =
+        // detect trailing silence in input stream
+        auto t_silence_window_ms = 2000U;
+        auto t_silence_window_size = std::min<size_t>(
+            (header.num_channels * t_silence_window_ms * header.sample_rate) /
+                500U,
+            size);
+        is.seekg(size - t_silence_window_size, std::ios::beg);
+        unsigned int i_last_no_silence = 0;
+        bool silence_detected = false;
+
+        std::string buf(t_silence_window_size, '\0');
+        is.read(buf.data(), t_silence_window_size);
+
+        auto t_silence_window_sample_count =
+            t_silence_window_size / sample_size;
+
+        for (auto i = 0U; i < t_silence_window_sample_count; ++i) {
+            auto* buf16 = reinterpret_cast<int16_t*>(
+                buf.data() + (static_cast<size_t>(i * sample_size)));
+            if (sample_size > sizeof(int16_t)) {
+                // stereo
+                silence_detected =
+                    std::abs(buf16[0]) < 10 && std::abs(buf16[1]) < 10;
+            } else {
+                // mono
+                silence_detected = std::abs(buf16[0]) < 10;
+            }
+
+            if (!silence_detected) {
+                i_last_no_silence = i;
+            }
+        }
+        return (silence_detected
+                    ? (t_silence_window_sample_count - i_last_no_silence)
+                    : 0) *
+               sample_size;
+    }();
+
+    auto silence_to_add_size =
         (header.num_channels * silence_duration_msec * header.sample_rate) /
         500;
 
+    LOGD("wav file info: sample-rate="
+         << header.sample_rate << ", channels=" << header.num_channels
+         << ", bits=" << header.bits_per_sample
+         << ", sample-size=" << sample_size << ", data-size=" << size
+         << ", trailing-silence-size=" << t_silence_size
+         << ", silence-to-add-size=" << silence_to_add_size);
+
+    is.seekg(0, std::ios::beg);
+
+    size -= t_silence_size;
+
     os.seekp(0);
     write_wav_header(header.sample_rate, sizeof(int16_t), header.num_channels,
-                     (size + silence_size) / sizeof(int16_t), os);
+                     (size + silence_to_add_size) / sizeof(int16_t), os);
 
     static const size_t buf_size = 8192;
     char buf[buf_size];
@@ -773,15 +830,20 @@ void tts_engine::post_process_wav(const std::string& wav_file,
         }
     }
 
-    if (silence_size > 0) {
+    is.close();
+
+    if (silence_to_add_size > 0) {
         std::fill(&buf[0], &buf[buf_size - 1], 0);
 
-        while (os && silence_size > 0) {
-            auto size_to_write = std::min<size_t>(silence_size, buf_size);
+        while (os && silence_to_add_size > 0) {
+            auto size_to_write =
+                std::min<size_t>(silence_to_add_size, buf_size);
             os.write(buf, size_to_write);
-            silence_size -= size_to_write;
+            silence_to_add_size -= size_to_write;
         }
     }
+
+    os.close();
 
     unlink(wav_file.c_str());
     rename(tmp_file.c_str(), wav_file.c_str());
@@ -899,7 +961,17 @@ void tts_engine::process_encode_speech(const task_t& task, size_t& speech_time,
 
         convert_wav_to_16bits(output_file_wav);
 
-        post_process_wav(output_file_wav, m_config.has_option('0') ? 150 : 0);
+        unsigned int silence_ms_scaled =
+            m_config.trailing_silence_dur_msec *
+            (task.speed > 10 ? (10U / std::clamp(task.speed, 1U, 20U)) : 1);
+        LOGD("silence_ms_scaled=" << m_config.trailing_silence_dur_msec
+                                  << " => " << silence_ms_scaled
+                                  << ", speed=" << task.speed);
+        post_process_wav(
+            output_file_wav, m_config.trim_trailing_silence,
+            m_config.has_option('0') || m_config.trim_trailing_silence
+                ? m_config.trailing_silence_dur_msec
+                : 0);
 
         return output_file_wav;
     };
