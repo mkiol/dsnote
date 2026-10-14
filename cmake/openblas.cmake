@@ -8,6 +8,16 @@ set(openblas_flags
     -Wno-unused-function)
 list(JOIN openblas_flags " " openblas_flags)
 
+if(arch_x8664)
+    set(openblas_target CORE2)
+elseif(arch_arm32)
+    set(openblas_target ARMV7)
+elseif(arch_arm64)
+    set(openblas_target ARMV8)
+    set(openblas_dynamic_list CORTEXA53 CORTEXA57)
+    list(JOIN openblas_dynamic_list "\\\\\\\\\\\;" openblas_dynamic_list)
+endif()
+
 set(openblas_opts
     -DCMAKE_BUILD_TYPE=Release
     -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/external
@@ -21,16 +31,9 @@ set(openblas_opts
     -DBUILD_STATIC_LIBS=OFF
     -DBUILD_SHARED_LIBS=ON
     -DCMAKE_C_FLAGS=${openblas_flags}
+    -DTARGET=${openblas_target}
+    -DDYNAMIC_LIST=${openblas_dynamic_list}
 )
-
-if(arch_x8664)
-    list(APPEND openblas_opts -DTARGET=CORE2)
-elseif(arch_arm32)
-    list(APPEND openblas_opts -DTARGET=ARMV7)
-elseif(arch_arm64)
-    list(APPEND openblas_opts -DTARGET=ARMV8)
-    list(APPEND openblas_opts "-DDYNAMIC_LIST:string=CORTEXA53\\\\\\\\\\\\;CORTEXA57")
-endif()
 
 ExternalProject_Add(openblas
     SOURCE_DIR ${external_dir}/openblas
