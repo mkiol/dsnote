@@ -211,8 +211,8 @@ if(WITH_SYSTEMD_SERVICE)
     install(FILES "${PROJECT_BINARY_DIR}/dbus_speech.service" DESTINATION share/dbus-1/services RENAME ${info_dbus_service}.service)
 endif()
 
-if(BUILD_GOOGLE_PINYINIM)
-    install(DIRECTORY "${external_share_dir}/google-pinyinim-data" DESTINATION ${share_install_dir})
+if(BUILD_LIBPINYIN)
+    install(DIRECTORY "${external_lib_dir}/libpinyin/data" DESTINATION "${share_install_dir}/libpinyin")
 endif()
 
 if(BUILD_CPPPINYIN)

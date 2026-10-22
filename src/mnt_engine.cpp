@@ -20,6 +20,7 @@
 #include "cpu_tools.hpp"
 #endif
 #include "logger.hpp"
+#include "pinyin_tools.hpp"
 #include "text_tools.hpp"
 
 std::ostream& operator<<(std::ostream& os,
@@ -361,11 +362,10 @@ std::string mnt_engine::translate_internal(std::string text) {
 
     auto start = std::chrono::steady_clock::now();
 
-    std::ostringstream out_ss;
+    std::string out;
 
     static const std::regex r_htmt{"</p>|</div>|</h1>|</h2>|</h3>|</h4>"};
-    static const std::regex r_raw{
-        "\n|\\. |\\? |! |\\.\t|\\?\t|!\t|\\u3020|\\u06d4|\\u0589|\\u1803"};
+    static const std::regex r_raw{R"((?:[.!?]|؟|۔|᠃|᠉)(?=\s|$)|。|！|？)"};
     const std::regex& r = html ? r_htmt : r_raw;
     std::string line;
 
@@ -373,13 +373,18 @@ std::string mnt_engine::translate_internal(std::string text) {
     const size_t segment_max_size = 10 * segment_size;
 
     // pinyin conversion
-    std::optional<text_tools::processor> text_processor;
     bool do_to_hanzi =
         !html && !m_config.model_files.pinyin_to_hanzi_dict_path.empty() &&
         m_config.lang == "zh";
     bool do_to_pinyin =
         !html && !m_config.model_files.hanzi_to_pinyin_dict_path.empty() &&
         m_config.out_lang == "zh";
+    bool do_to_hanzi_punc =
+        !html && m_config.model_files.hanzi_to_pinyin_dict_path.empty() &&
+        m_config.out_lang == "zh";
+    LOGD("pinyin: do_to_hanzi=" << do_to_hanzi
+                                << ", do_to_pinyin=" << do_to_pinyin
+                                << ", do_to_hanzi_punc=" << do_to_hanzi_punc);
 
     for (std::smatch sm;
          std::regex_search(text, sm, r) || !line.empty() || !text.empty();) {
@@ -393,39 +398,56 @@ std::string mnt_engine::translate_internal(std::string text) {
 
         if (line.size() > segment_max_size) {
             text.insert(0, line, segment_max_size);
+            LOGW("max segment size reached in mnt: "
+                 << line.size() << " (max is " << segment_max_size << ")");
             line.resize(segment_max_size);
         }
 
         if (sm.empty() || line.size() > segment_size) {
             try {
-                if (is_shutdown()) return {};
+                if (is_shutdown()) {
+                    return {};
+                }
 
                 if (do_to_hanzi) {
-                    text_tools::pinyin_to_hanzi(
+                    pinyin_tools::pinyin_to_hanzi(
                         line, m_config.model_files.pinyin_to_hanzi_dict_path);
                 }
 
                 line.assign(m_bergamot_api_api.bergamot_api_translate(
                     m_bergamot_ctx_first, line.c_str(), true));
 
-                if (is_shutdown()) return {};
+                if (is_shutdown()) {
+                    return {};
+                }
 
-                if (m_bergamot_ctx_second)
+                if (m_bergamot_ctx_second) {
                     line.assign(m_bergamot_api_api.bergamot_api_translate(
                         m_bergamot_ctx_second, line.c_str(), true));
+                }
 
                 if (do_to_pinyin) {
-                    text_tools::hanzi_to_pinyin(
+                    pinyin_tools::hanzi_to_pinyin(
                         line, m_config.model_files.hanzi_to_pinyin_dict_path);
                 }
 
-                if (is_shutdown()) return {};
+                if (do_to_hanzi_punc) {
+                    line = pinyin_tools::punc_latin_to_ch(line);
+                }
+
+                if (is_shutdown()) {
+                    return {};
+                }
             } catch (const std::runtime_error& err) {
                 LOGE("translation error: " << err.what());
                 if (m_call_backs.error) m_call_backs.error(error_t::runtime);
             }
 
-            out_ss << line;
+            if (!html) {
+                text_tools::append_sentence_delim_space_if_needed(line);
+            }
+
+            out.append(line);
             line.clear();
 
             m_progress.current = m_progress.total - text.size();
@@ -433,7 +455,7 @@ std::string mnt_engine::translate_internal(std::string text) {
         }
     }
 
-    text.assign(out_ss.str());
+    text.assign(out);
 
     auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(
                    std::chrono::steady_clock::now() - start)

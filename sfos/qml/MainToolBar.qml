@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -68,12 +68,13 @@ PullDownMenu {
     }
 
     MenuItem {
-        visible: _settings.pinyin_text &&
-                 ((_settings.translator_mode && (app.active_mnt_lang == "zh" || app.active_mnt_out_lang == "zh")) ||
-                  (!_settings.translator_mode && (app.active_stt_model.startsWith("zh") || app.active_tts_model.startsWith("zh"))))
+        visible: (_settings.translator_mode && app.active_mnt_lang == "zh") ||
+                 (!_settings.translator_mode && (app.active_stt_model.lastIndexOf("zh") === 0 || app.active_tts_model.lastIndexOf("zh") === 0))
         enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.note.length !== 0
-        text: qsTr("Toggle hanzi/pinyin (%1)").arg(qsTr("Chinese"))
-        onClicked: app.pinyin_hanzi_toggle()
+        text: qsTr("Toggle Hanzi/Pinyin (%1)").arg(qsTr("Chinese"))
+        onClicked: {
+            app.pinyin_hanzi_toggle()
+        }
     }
 
     readonly property bool canCancelMnt: app.state === DsnoteApp.StateTranslating &&

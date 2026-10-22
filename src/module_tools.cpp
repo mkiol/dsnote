@@ -157,7 +157,7 @@ QString path_to_dir_for_path(const QString& dir, const QString& path) {
         return QFileInfo{path_full}.absolutePath();
     }
 
-    qWarning() << "can't find dir for path:" << dir << path;
+    qDebug() << "can't find dir for path:" << dir << path;
 
     return QString{};
 }

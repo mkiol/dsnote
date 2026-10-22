@@ -217,7 +217,7 @@ Item {
                 ScrollTextArea {
                     id: _translatedNoteTextArea
 
-                    enabled: !root.readOnly && app.mnt_configured && app.translated_text.length !== 0
+                    enabled: !root.readOnly && app.mnt_configured
                              && app.state !== DsnoteApp.StateTranslating
                     width: parent.width
                     height: root.textAreaHeight

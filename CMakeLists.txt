@@ -61,8 +61,8 @@ option(BUILD_WL_CLIPBOARD "download sources of wl-clipboard, build and install" 
 option(BUILD_XKBCOMMON "download sources of xkbcommon build and link statically" OFF)
 option(BUILD_RDRVIEW "download sources of rdrview, build and link statically" ON)
 option(BUILD_CLD2 "download sources of cld2, build and link statically" ON)
-option(BUILD_GOOGLE_PINYINIM "download sources of google_pinyinim, build and link statically" ON)
 option(BUILD_CPPPINYIN "download sources of cpp-pinyin, build and link statically" ON)
+option(BUILD_LIBPINYIN "download sources of libpinyin, build and link statically" ON)
 
 # options used only for testing
 option(DEV_USE_PYTHON311 OFF)
@@ -194,7 +194,7 @@ Alexandre Cerqueira Leite · Erhan Yükselci · Boštjan Štrumbelj")
 set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
 {fmt} · Piper · RHVoice · ssplit-cpp · nlohmann JSON · eSpeak NG · Bergamot Translator · \
 Rubber Band Library · simdjson · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
-libnumbertext · april-asr · html2md · maddy · SAM · rdrview · CLD2 · google_pinyinim · cpp-pinyin")
+libnumbertext · april-asr · html2md · maddy · SAM · rdrview · CLD2 · libpinyin · cpp-pinyin")
 if(WITH_DESKTOP)
     set(info_libs_str "${info_libs_str} · KDBusAddons")
 
@@ -388,6 +388,8 @@ set(dsnote_lib_sources
     ${sources_dir}/simdjson.cpp
     ${sources_dir}/text_tools.hpp
     ${sources_dir}/text_tools.cpp
+    ${sources_dir}/pinyin_tools.hpp
+    ${sources_dir}/pinyin_tools.cpp
     ${sources_dir}/mnt_engine.hpp
     ${sources_dir}/mnt_engine.cpp
     ${sources_dir}/gpu_tools.hpp
@@ -908,19 +910,20 @@ else()
     list(APPEND deps_libs ${cld2_path})
 endif()
 
-if(BUILD_GOOGLE_PINYINIM)
-    include(${cmake_path}/google_pinyinim.cmake)
-else()
-    find_library(google_pinyinim_path google_pinyinim_api REQUIRED)
-    list(APPEND deps_libs ${google_pinyinim_path})
-endif()
-
 if(BUILD_CPPPINYIN)
     include(${cmake_path}/cpppinyin.cmake)
 else()
     pkg_search_module(libcpppinyin REQUIRED cpp-pinyin)
     list(APPEND deps_libs ${libcpppinyin_LIBRARIES})
     list(APPEND includes ${libcpppinyin_INCLUDE_DIRS})
+endif()
+
+if(BUILD_LIBPINYIN)
+    include(${cmake_path}/libpinyin.cmake)
+else()
+    pkg_search_module(libpinyin REQUIRED libpinyin)
+    list(APPEND deps_libs ${libpinyin_LIBRARIES})
+    list(APPEND includes ${libpinyin_INCLUDE_DIRS})
 endif()
 
 if(WITH_SFOS)

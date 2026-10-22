@@ -265,13 +265,13 @@ Page {
                         }
 
                         TextSwitch {
-                            checked: _settings.pinyin_text
+                            checked: _settings.stt_pinyin
                             automaticCheck: false
-                            text: qsTr("Use pinyin")
+                            text: qsTr("Use Pinyin")
                             onClicked: {
-                                _settings.pinyin_text = !_settings.pinyin_text
+                                _settings.stt_pinyin = !_settings.stt_pinyin
                             }
-                            description: qsTr("For Chinese, use pinyin instead of Chinese characters.")
+                            description: qsTr("When transcribing Chinese, use Pinyin instead of Chinese characters.")
                         }
 
 //                        TextSwitch {
@@ -524,15 +524,15 @@ Page {
                             }
                         }
 
-                        TextSwitch {
-                            checked: _settings.pinyin_text
-                            automaticCheck: false
-                            text: qsTr("Use pinyin")
-                            onClicked: {
-                                _settings.pinyin_text = !_settings.pinyin_text
-                            }
-                            description: qsTr("For Chinese, use pinyin instead of Chinese characters.")
-                        }
+                        // TextSwitch {
+                        //     checked: _settings.tts_pinyin
+                        //     automaticCheck: false
+                        //     text: qsTr("Enable Pinyin support")
+                        //     onClicked: {
+                        //         _settings.tts_pinyin = !_settings.tts_pinyin
+                        //     }
+                        //     description: qsTr("When generating Chinese speech, detect Pinyin in the input text and convert it into Chinese characters.")
+                        // }
 
                         TextSwitch {
                             checked: _settings.tts_trim_trailing_silence
@@ -641,13 +641,13 @@ Page {
                         }
 
                         TextSwitch {
-                            checked: _settings.pinyin_text
+                            checked: _settings.mnt_pinyin
                             automaticCheck: false
-                            text: qsTr("Use pinyin")
+                            text: qsTr("Translate to Pinyin")
                             onClicked: {
-                                _settings.pinyin_text = !_settings.pinyin_text
+                                _settings.mnt_pinyin = !_settings.mnt_pinyin
                             }
-                            description: qsTr("For Chinese, use pinyin instead of Chinese characters.")
+                            description: qsTr("When translating into Chinese, use Pinyin instead of Chinese characters.")
                         }
                     }
                 }

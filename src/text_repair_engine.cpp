@@ -17,6 +17,7 @@
 #include <array>
 
 #include "logger.hpp"
+#include "pinyin_tools.hpp"
 #include "text_tools.hpp"
 
 std::ostream& operator<<(std::ostream& os, text_repair_engine::gpu_api_t api) {
@@ -98,7 +99,8 @@ std::ostream& operator<<(std::ostream& os,
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const text_repair_engine::config_t& config) {
+std::ostream& operator<<(std::ostream& os,
+                         const text_repair_engine::config_t& config) {
     os << "model-files=[" << config.model_files << "]"
        << ", text-format=" << config.text_format
        << ", share-dir=" << config.share_dir << ", data-dir=" << config.data_dir
@@ -132,9 +134,7 @@ std::ostream& operator<<(std::ostream& os, text_repair_engine::state_t state) {
 text_repair_engine::text_repair_engine(config_t config, callbacks_t call_backs)
     : m_config{std::move(config)}, m_call_backs{std::move(call_backs)} {}
 
-text_repair_engine::~text_repair_engine() {
-    LOGD("text-repair dtor");
-}
+text_repair_engine::~text_repair_engine() { LOGD("text-repair dtor"); }
 
 void text_repair_engine::start() {
     LOGD("text-repair start");
@@ -221,6 +221,21 @@ std::vector<text_repair_engine::task_t> text_repair_engine::make_tasks(
     const std::string& text, task_type_t task_type) const {
     std::vector<text_repair_engine::task_t> tasks;
 
+    if (task_type == task_type_t::pinyin_hanzi_toggle) {
+        if (pinyin_tools::is_hanzi(text)) {
+            LOGD("text is hanzi, so doing hanzi => pinyin conversion");
+            task_type = task_type_t::hanzi_to_pinyin;
+        } else if (pinyin_tools::is_pinyin(text)) {
+            LOGD("text is pinyin so doing pinyin => hanzi conversion");
+            task_type = task_type_t::pinyin_to_hanzi;
+        } else {
+            LOGW(
+                "text is neither pinyin nor hanzi so doing pinyin => do "
+                "nothing");
+            task_type = task_type_t::none;
+        }
+    }
+
     if (m_config.text_format == text_format_t::subrip) {
         auto subrip_start_idx = text_tools::subrip_text_start(text, 100);
         if (subrip_start_idx) {
@@ -256,53 +271,62 @@ std::vector<text_repair_engine::task_t> text_repair_engine::make_tasks(
         LOGW("text-repair fallback to plain text");
     }
 
-    if (task_type != task_type_t::restore_punctuation) {
-        auto [parts, _] =
-            text_tools::split(text, text_tools::split_engine_t::astrunc, [&] {
-                switch (task_type) {
-                    case task_type_t::restore_diacritics_ar:
-                        return "ar";
-                    case task_type_t::restore_diacritics_he:
-                        return "he";
-                    case task_type_t::pinyin_to_hanzi:
-                    case task_type_t::hanzi_to_pinyin:
-                    case task_type_t::pinyin_hanzi_toggle:
-                        return "zh";
-                    case task_type_t::restore_punctuation:
-                    case task_type_t::none:
-                        break;
+    switch (task_type) {
+        case task_type_t::restore_diacritics_ar:
+        case task_type_t::restore_diacritics_he:
+        case task_type_t::pinyin_to_hanzi:
+        case task_type_t::hanzi_to_pinyin:
+        case task_type_t::pinyin_hanzi_toggle: {
+            auto [parts, _] = text_tools::split(
+                text, text_tools::split_engine_t::astrunc, [&] {
+                    switch (task_type) {
+                        case task_type_t::restore_diacritics_ar:
+                            return "ar";
+                        case task_type_t::restore_diacritics_he:
+                            return "he";
+                        case task_type_t::pinyin_to_hanzi:
+                        case task_type_t::hanzi_to_pinyin:
+                        case task_type_t::pinyin_hanzi_toggle:
+                            return "zh";
+                        case task_type_t::restore_punctuation:
+                        case task_type_t::none:
+                            break;
+                    }
+                    throw std::runtime_error{"invalid task type"};
+                }());
+            if (!parts.empty()) {
+                tasks.reserve(parts.size());
+                tasks.push_back(task_t{
+                    .text = std::move(parts.front()),
+                    .type = task_type,
+                    .first = true,
+                    .last = false,
+                });
+
+                for (auto it = parts.begin() + 1; it != parts.end(); ++it) {
+                    // text_tools::trim_line(*it);
+                    if (!it->empty())
+                        tasks.push_back(task_t{
+                            .text = std::move(*it),
+                            .type = task_type,
+                            .first = false,
+                            .last = false,
+                        });
                 }
-                throw std::runtime_error{"invalid task type"};
-            }());
-        if (!parts.empty()) {
-            tasks.reserve(parts.size());
+
+                tasks.back().last = true;
+            }
+            break;
+        }
+        case task_type_t::none:
+        case task_type_t::restore_punctuation:
             tasks.push_back(task_t{
-                .text = std::move(parts.front()),
+                .text = text,
                 .type = task_type,
                 .first = true,
-                .last = false,
+                .last = true,
             });
-
-            for (auto it = parts.begin() + 1; it != parts.end(); ++it) {
-                text_tools::trim_line(*it);
-                if (!it->empty())
-                    tasks.push_back(task_t{
-                        .text = std::move(*it),
-                        .type = task_type,
-                        .first = false,
-                        .last = false,
-                    });
-            }
-
-            tasks.back().last = true;
-        }
-    } else {
-        tasks.push_back(task_t{
-            .text = text,
-            .type = task_type,
-            .first = true,
-            .last = true,
-        });
+            break;
     }
 
     return tasks;
@@ -331,9 +355,8 @@ void text_repair_engine::process_task(task_t& task,
         case task_type_t::pinyin_to_hanzi:
         case task_type_t::hanzi_to_pinyin:
         case task_type_t::pinyin_hanzi_toggle:
-            break;
         case task_type_t::none:
-            throw std::runtime_error{"invalid task type"};
+            break;
     }
 
     switch (task.type) {
@@ -346,20 +369,20 @@ void text_repair_engine::process_task(task_t& task,
                 task.text, m_config.model_files.diacritizer_path_he);
             break;
         case task_type_t::pinyin_to_hanzi:
-            text_tools::pinyin_to_hanzi(
+            pinyin_tools::pinyin_to_hanzi(
                 task.text, m_config.model_files.pinyin_to_hanzi_dict_path);
             break;
         case task_type_t::hanzi_to_pinyin:
-            text_tools::hanzi_to_pinyin(
+            pinyin_tools::hanzi_to_pinyin(
                 task.text, m_config.model_files.hanzi_to_pinyin_dict_path);
             break;
         case task_type_t::pinyin_hanzi_toggle:
-            if (text_tools::is_pinyin(task.text)) {
-                text_tools::pinyin_to_hanzi(
-                    task.text, m_config.model_files.pinyin_to_hanzi_dict_path);
-            } else {
-                text_tools::hanzi_to_pinyin(
+            if (pinyin_tools::is_hanzi(task.text)) {
+                pinyin_tools::hanzi_to_pinyin(
                     task.text, m_config.model_files.hanzi_to_pinyin_dict_path);
+            } else {
+                pinyin_tools::pinyin_to_hanzi(
+                    task.text, m_config.model_files.pinyin_to_hanzi_dict_path);
             }
             break;
         case task_type_t::restore_punctuation:
@@ -370,12 +393,14 @@ void text_repair_engine::process_task(task_t& task,
 #endif
             break;
         case task_type_t::none:
-            throw std::runtime_error{"invalid task type"};
+            // do nothing
+            break;
     }
 
     if (task.text.empty()) return;
 
-    if (!repaired_text.empty()) repaired_text.append(" ");
+    text_tools::append_sentence_delim_space_if_needed(repaired_text);
+
     repaired_text.append(task.text);
 }
 

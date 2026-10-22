@@ -18,7 +18,12 @@ DialogPage {
     }
 
     RichLabel {
-        text: "<p>" + qsTr("Accessibility") + "</p>
+        text: "<p>" + qsTr("General") + "</p>
+        <ul>
+        <li>Pinyin support for the Chinese language. You can convert Chinese text from Hanzi to Pinyin and vice versa.
+            To switch between Pinyin and Hanzi, use the <i>Toggle Hanzi/Pinyin</i> option in <i>Repair text</i> menu.
+        </ul>
+        <p>" + qsTr("Accessibility") + "</p>
         <ul>
         <li>Improved <i>Insert into active window</i>.
             For faster text insertion, adjust the <i>Text to window method</i> in the advanced settings.
@@ -61,7 +66,9 @@ DialogPage {
         <li>AMD ROCm hardware acceleration support in <i>FasterWhisper</i>.
             To enable ROCm acceleration with Flatpak, install the AMD add-on.</li>
         <li>Temperature and Repetition Penalty options in Whisper engine <i>Custom</i> profile</li>
-        <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Speech to Text</i> &rarr; <i>Use pinyin</i>)</li>
+        <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Speech to Text</i> &rarr; <i>Use pinyin</i>).
+            Enable this option to transcribe Chinese speech directly into Pinyin.
+            Pinyin is supported only for Simplified Chinese script.</li>
         <li>OpenVINO hardware acceleration in <i>WhisperCpp</i> was removed as it provided minimal performance improvement.</li>
         </ul>
         </ul>
@@ -79,14 +86,19 @@ DialogPage {
         <li>Updated RHVoice models for: Czech, Serbian, Spanish</li>
         <li>New Piper models for: Albanian, Bulgarian, Dutch, Greek, Hindi, Indonesian, Kurdish, Latvian, Polish, Swedish, Telugu, Ukrainian, Urdu</li>
         <li>New F5-TTS model for Latvian</li>
-        <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Text to Speech</i> &rarr; <i>Use pinyin</i>)</li>
+        <li>Pinyin support for Chinese langauge.
+            If the text you enter is written in Pinyin, it will be internally converted to Chinese characters to ensure accurate speech synthesis.
+            Pinyin is supported only for Simplified Chinese script.</li>
         <li>An option to insert custom pause between sentences.
             Override default TTS engine sentence pauses with a custom silence duration
            (<i>Settings</i> &rarr; <i>Text to Speech</i> &rarr; <i>Insert custom pause between sentences</i>).</li>
         </ul>
         <p>" + qsTr("Translator") + "</p>
         <ul>
-        <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Use pinyin</i>)</li>
+        <li>Pinyin support for Chinese langauge.
+            If the text you enter is written in Pinyin, the translator will recognize it and translate it correctly into the selected language.
+            In addition, you can force the use of Pinyin as the translation output (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Translate to Pinyin</i>).
+            Pinyin is supported only for Simplified Chinese script.</li>
         </ul>
         <p>" + qsTr("User Interface") + "</p>
         <ul>

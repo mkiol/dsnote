@@ -495,12 +495,17 @@ ColumnLayout {
                 id: pinyinSwitch
 
                 enabled: app.state === DsnoteApp.StateIdle
-                visible: app.active_mnt_lang == "zh" || app.active_mnt_out_lang == "zh"
-                text: qsTr("Use pinyin")
-                checked: _settings.pinyin_text
+                visible: app.active_mnt_out_lang == "zh"
+                text: qsTr("Translate to Pinyin")
+                checked: _settings.mnt_pinyin
                 onClicked: {
-                    _settings.pinyin_text = !_settings.pinyin_text
+                    _settings.mnt_pinyin = checked
                 }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("When translating into Chinese, use Pinyin instead of Chinese characters.")
+                hoverEnabled: true
             }
         }
     }

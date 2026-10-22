@@ -33,7 +33,13 @@ Page {
             }
 
             LogItem {
-                text: "<p>" + qsTr("Speech to Text") + "</p>
+                text: "<p>" + qsTr("General") + "</p>
+                <ul>
+                <li>Pinyin support for the Chinese language. You can convert Chinese text from Hanzi to Pinyin and vice versa.
+                    To switch between Pinyin and Hanzi, use the appropriate pull-down menu option (<i>Toggle Hanzi/Pinyin</i>).
+                    Option is visible only when Chinese model is active (either STT, TTS, or Translator).</li>
+                </ul>
+                <p>" + qsTr("Speech to Text") + "</p>
                 <ul>
                 <li>Improved transcription performance in <i>WhisperCpp</i>.
                     The updated <i>WhisperCpp</i> engine reduces transcription time by 10%.
@@ -44,18 +50,25 @@ Page {
                     Parakeet TDT is available for the following languages:
                     Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian,
                     Maltese, Polish, Portuguese, Romanian, Slovak, Slovenian, Spanish, Swedish, Russian and Ukrainian.</li>
-                <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Speech to Text</i> &rarr; <i>Use pinyin</i>)</li>
+                <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Speech to Text</i> &rarr; <i>Use pinyin</i>).
+                    Enable this option to transcribe Chinese speech directly into Pinyin.
+                    Pinyin is supported only for Simplified Chinese script.</li>
                 </ul>
                 <p>" + qsTr("Text to Speech") + "</p>
                 <ul>
-                <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Text to Speech</i> &rarr; <i>Use pinyin</i>)</li>
+                <li>Pinyin support for Chinese langauge.
+                    If the text you enter is written in Pinyin, it will be internally converted to Chinese characters to ensure accurate speech synthesis.
+                    Pinyin is supported only for Simplified Chinese script.</li>
                 <li>An option to insert custom pause between sentences.
                     Override default TTS engine sentence pauses with a custom silence duration
                    (<i>Settings</i> &rarr; <i>Text to Speech</i> &rarr; <i>Insert custom pause between sentences</i>).</li>
                 </ul>
                 <p>" + qsTr("Translator") + "</p>
                 <ul>
-                <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Use pinyin</i>)</li>
+                <li>Pinyin support for Chinese langauge.
+                    If the text you enter is written in Pinyin, the translator will recognize it and translate it correctly into the selected language.
+                    In addition, you can force the use of Pinyin as the translation output (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Translate to Pinyin</i>).
+                    Pinyin is supported only for Simplified Chinese script.</li>
                 </ul>
                 <p>" + qsTr("Libraries") + "</p>
                 <ul>

@@ -32,6 +32,7 @@ cleanup:
   - /man
   - /dummy
   - /include
+  - /mkspecs
   - /lib/cmake
   - /lib/pkgconfig
   - /lib/python3.13/site-packages/__pycache__
@@ -50,6 +51,8 @@ cleanup:
   - /extensions/cpu/lib/python3.13/site-packages/torch/include
   - /lib/libSPIRV*
   - /lib/libshaderc*
+  - /lib/x86_64-linux-gnu
+  - /lib/sbom
   - /share/bash-completion
   - /share/cmake
   - /share/doc
@@ -64,6 +67,12 @@ cleanup:
   - /bin/vulkan*
   - /bin/speak*
   - /bin/xdo*
+  - /bin/kc*
+  - /bin/lu*
+  - /bin/lc*
+  - /bin/lr*
+  - /bin/gen*
+  - /bin/import*
   - /bin/*.py
   - /bin/*.sh
   - /bin/xdg-
@@ -863,18 +872,39 @@ modules:
       - type: patch
         path: ../patches/cld2.patch
 
-  - name: google_pinyinim
-    buildsystem: cmake-ninja
+  - name: kyotocabinet
+    buildsystem: autotools
     config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-      - -DQT_VERSION_MAJOR=6
+      - --enable-shared
+      - --disable-static
+      - --disable-zlib
+      - --disable-lzo
+      - --disable-lzma
+      - --disable-opt
     sources:
       - type: archive
-        url: https://github.com/aron566/google_pinyinim/archive/1a4fa548031ad53253003f0ad1cc66de0fd42a93.zip
-        sha256: b1d09d99421c36bd91856dc21061a8e692d17dba56cb3357a9fd27623794504d
+        url: https://dbmx.net/kyotocabinet/pkg/kyotocabinet-1.2.80.tar.gz
+        sha256: 4c85d736668d82920bfdbdb92ac3d66b7db1108f09581a769dd9160a02def349
+
+  - name: libpinyin
+    buildsystem: autotools
+    config-opts:
+      - --enable-shared
+      - --disable-static
+      - --with-dbm=KyotoCabinet
+      - --enable-libzhuyin
+    sources:
+      - type: archive
+        url: https://github.com/libpinyin/libpinyin/releases/download/v2.11.92/libpinyin-2.11.92.tar.gz
+        sha256: 3fca1818aec7f17dfe807d9707adcb279bb8dcd6a2931cb9a3d2bfadc50029e9
+      - type: file
+        url: https://downloads.sourceforge.net/libpinyin/model20.text.tar.gz
+        sha256: 59c68e89d43ff85f5a309489499cbcde282d2b04bd91888734884b7defcb1155
+      - type: shell
+        commands:
+          - ln -s model20.text.tar.gz data/model20.text.tar.gz
       - type: patch
-        path: ../patches/google_pinyinim.patch
+        path: ../patches/libpinyin.patch
 
   - name: cpppinyin
     buildsystem: cmake-ninja
@@ -948,7 +978,7 @@ modules:
       - -DBUILD_SAM=OFF
       - -DBUILD_RDRVIEW=OFF
       - -DBUILD_CLD2=OFF
-      - -DBUILD_GOOGLE_PINYINIM=OFF
+      - -DBUILD_LIBPINYIN=OFF
       - -DBUILD_CPPPINYIN=OFF
     post-install:
       - install -d ${FLATPAK_DEST}/extensions

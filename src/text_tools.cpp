@@ -7,10 +7,7 @@
 
 #include "text_tools.hpp"
 
-#include <cpp-pinyin/G2pglobal.h>
-#include <cpp-pinyin/Pinyin.h>
 #include <fmt/format.h>
-#include <google_pinyinim_api.h>
 #include <html2md/html2md.h>
 #include <maddy/parser.h>
 #include <rdrview_api.h>
@@ -22,42 +19,28 @@
 #include <cstddef>
 #include <cstdlib>
 #include <cwctype>
-#include <filesystem>
 #include <libnumbertext/Numbertext.hxx>
 #include <memory>
 #include <regex>
 #include <sstream>
 #include <string_view>
 #include <tuple>
-#include <unordered_map>
-#include <unordered_set>
 #include <utility>
+#include <unordered_set>
 
 #include "astrunc/astrunc.h"
-#include "cpp-pinyin/ChineseG2p.h"
 #include "logger.hpp"
+#include "pinyin_tools.hpp"
 #ifdef USE_PY
 #include "py_executor.hpp"
 #endif
 
-namespace text_tools {
-std::ostream& operator<<(std::ostream& os,
-                         const text_tools::segment_t& segment) {
-    os << "n=" << segment.n << ", t0=" << segment.t0 << ", t1=" << segment.t1
-       << ", text=" << segment.text;
-    return os;
-}
-
-static bool has_option(char c, const std::string& options) {
+namespace {
+bool has_option(char c, const std::string& options) {
     return options.find(c) != std::string::npos;
 }
 
-bool segment_t::operator==(const text_tools::segment_t& rhs) const {
-    return n == rhs.n && t0 == rhs.t0 && t1 == rhs.t1 && text == rhs.text;
-}
-
-static astrunc::access::lang_t lang_str_to_astrunc_lang(
-    const std::string& lang) {
+astrunc::access::lang_t lang_str_to_astrunc_lang(const std::string& lang) {
     if (lang.size() < 2) return astrunc::access::lang_t::NONE;
 
     switch (lang[0]) {
@@ -180,14 +163,14 @@ static astrunc::access::lang_t lang_str_to_astrunc_lang(
     return astrunc::access::lang_t::NONE;
 }
 
-static std::vector<std::string> split_to_sentences(const std::string& text,
-                                                   split_engine_t engine,
-                                                   const std::string& lang,
-                                                   const std::string& nb_data) {
+std::vector<std::string> split_to_sentences(const std::string& text,
+                                            text_tools::split_engine_t engine,
+                                            const std::string& lang,
+                                            const std::string& nb_data) {
     std::vector<std::string> parts;
 
     switch (engine) {
-        case split_engine_t::ssplit: {
+        case text_tools::split_engine_t::ssplit: {
             ug::ssplit::SentenceSplitter ssplit{};
 
             if (!nb_data.empty()) ssplit.loadFromSerialized(nb_data);
@@ -201,7 +184,7 @@ static std::vector<std::string> split_to_sentences(const std::string& text,
 
             break;
         }
-        case split_engine_t::astrunc: {
+        case text_tools::split_engine_t::astrunc: {
             int rc = astrunc::access::split(parts, text,
                                             lang_str_to_astrunc_lang(lang), -1);
             if (rc != 0) LOGE("astrunc split error");
@@ -212,46 +195,8 @@ static std::vector<std::string> split_to_sentences(const std::string& text,
     return parts;
 }
 
-std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
-    const std::string& text, split_engine_t engine, const std::string& lang,
-    const std::string& nb_data) {
-    std::pair<std::vector<std::string>, std::vector<break_line_info>> parts;
-
-    parts.first = split_to_sentences(text, engine, lang, nb_data);
-
-    size_t last_pos = 0;
-
-    for (auto& part : parts.first) {
-        if (!part.empty()) {
-            auto pos = text.find(part, last_pos);
-
-            if (pos == std::string::npos) {
-                parts.second.push_back({});
-                LOGD("cannot find part in orig text");
-            } else {
-                last_pos = pos + part.size();
-
-                break_line_info bl_info{};
-                for (; last_pos < text.size(); ++last_pos) {
-                    if (text.at(last_pos) == '\n') {
-                        bl_info.break_line = true;
-                        bl_info.count++;
-                    } else if (text.at(last_pos) != ' ') {
-                        --last_pos;
-                        break;
-                    }
-                }
-
-                parts.second.push_back(bl_info);
-            }
-        }
-    }
-
-    return parts;
-}
-
 // source: https://stackoverflow.com/a/148766
-static std::string wchar_to_UTF8(const wchar_t* in) {
+std::string wchar_to_UTF8(const wchar_t* in) {
     std::string out;
     unsigned int codepoint = 0;
     for (; *in != 0; ++in) {
@@ -291,7 +236,7 @@ static std::string wchar_to_UTF8(const wchar_t* in) {
 }
 
 // source: https://stackoverflow.com/a/148766
-static std::wstring UTF8_to_wchar(const char* in) {
+std::wstring UTF8_to_wchar(const char* in) {
     std::wstring out;
     unsigned int codepoint = 0;
     while (*in != 0) {
@@ -322,17 +267,192 @@ static std::wstring UTF8_to_wchar(const char* in) {
     return out;
 }
 
-static void ltrim(std::string& s) {
+void ltrim(std::string& s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
                 return !std::isspace(ch);
             }));
 }
 
-static void rtrim(std::string& s) {
+void rtrim(std::string& s) {
     s.erase(std::find_if(s.rbegin(), s.rend(),
                          [](unsigned char ch) { return !std::isspace(ch); })
                 .base(),
             s.end());
+}
+
+void replace_characters(std::string& text, const std::string& from,
+                        const std::string& to) {
+    auto w_text = UTF8_to_wchar(text.c_str());
+    auto w_from = UTF8_to_wchar(from.c_str());
+    auto w_to = UTF8_to_wchar(to.c_str());
+
+    if (w_from.size() != w_to.size()) {
+        LOGE("cannot replace characters, from and to sizes are not the same");
+        return;
+    }
+
+    std::transform(w_text.begin(), w_text.end(), w_text.begin(),
+                   [&](const auto c) {
+                       auto pos = w_from.find(c);
+                       if (pos == std::string::npos) return c;
+                       return w_to[pos];
+                   });
+
+    text.assign(wchar_to_UTF8(w_text.c_str()));
+}
+
+void add_extra_pause(std::string& text) {
+    if (text.empty()) return;
+
+    if (text.back() == '.' || text.back() == '!' || text.back() == '?')
+        text.append(" ,.");
+    else
+        text.append(". ,.");
+}
+
+void convert_subrip_to_html(std::string& text) {
+    std::stringstream in_ss{text};
+    std::stringstream out_ss;
+
+    static const std::regex html_tags{"<[^>]*>"};
+
+    unsigned int n = 0;
+    std::string text_line;
+    for (std::string line; std::getline(in_ss, line);) {
+        ltrim(line);
+        rtrim(line);
+
+        if (line.empty()) {
+            if (!text_line.empty()) {
+                out_ss << "<p>" << text_line << "</p>";
+                text_line.clear();
+            }
+
+            out_ss << "<p></p>";
+
+            n = 0;
+
+            continue;
+        }
+
+        if (n == 0) {
+            if (!std::all_of(line.cbegin(), line.cend(), [](auto c) {
+                    return std::isdigit(static_cast<unsigned char>(c)) != 0;
+                })) {
+                continue;
+            }
+        }
+
+        if (n < 2) {
+            out_ss << "<code>" << line << "</code>";
+            ++n;
+            continue;
+        }
+
+        if (!text_line.empty()) text_line.append("<span></span>");
+
+        line = std::regex_replace(line, html_tags, "");
+        text_line.append(line);
+
+        ++n;
+    }
+
+    if (!text_line.empty()) {
+        out_ss << "<p>" << text_line << "</p><p></p>";
+    }
+
+    text.assign(out_ss.str());
+}
+
+void convert_html_to_subrip(std::string& text) {
+    text = std::regex_replace(text, std::regex{"<p>|<code>|<span>"}, "");
+    text = std::regex_replace(text, std::regex{"</p>|</code>|</span>"}, "\n");
+}
+
+void convert_markdown_to_html(std::string& text) {
+    std::stringstream ss{text};
+
+    auto config = std::make_shared<maddy::ParserConfig>();
+    config->enabledParsers = maddy::types::ALL;
+
+    text.assign(maddy::Parser{config}.Parse(ss));
+}
+
+void convert_html_to_markdown(std::string& text) {
+    bool ok = false;
+
+    text.assign(html2md::Convert(text, &ok));
+
+    if (!ok) LOGW("error in html to markdown conversion");
+}
+
+bool is_digit(char c) { return c >= '0' && c <= '9'; }
+
+std::string_view utf8_last_char(std::string_view s) {
+    if (s.empty()) return {};
+    size_t i = s.size() - 1;
+    while (i > 0 && (static_cast<unsigned char>(s[i]) & 0xC0) == 0x80) --i;
+    const unsigned char lead = s[i];
+    size_t len = 1;
+    if ((lead & 0xE0) == 0xC0)
+        len = 2;
+    else if ((lead & 0xF0) == 0xE0)
+        len = 3;
+    else if ((lead & 0xF8) == 0xF0)
+        len = 4;
+    if (i + len > s.size()) return {};
+    return s.substr(i, len);
+}
+}  // namespace
+
+namespace text_tools {
+std::ostream& operator<<(std::ostream& os,
+                         const text_tools::segment_t& segment) {
+    os << "n=" << segment.n << ", t0=" << segment.t0 << ", t1=" << segment.t1
+       << ", text=" << segment.text;
+    return os;
+}
+
+bool segment_t::operator==(const text_tools::segment_t& rhs) const {
+    return n == rhs.n && t0 == rhs.t0 && t1 == rhs.t1 && text == rhs.text;
+}
+
+std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
+    const std::string& text, split_engine_t engine, const std::string& lang,
+    const std::string& nb_data) {
+    std::pair<std::vector<std::string>, std::vector<break_line_info>> parts;
+
+    parts.first = split_to_sentences(text, engine, lang, nb_data);
+
+    size_t last_pos = 0;
+
+    for (auto& part : parts.first) {
+        if (!part.empty()) {
+            auto pos = text.find(part, last_pos);
+
+            if (pos == std::string::npos) {
+                parts.second.push_back({});
+                LOGD("cannot find part in orig text");
+            } else {
+                last_pos = pos + part.size();
+
+                break_line_info bl_info{};
+                for (; last_pos < text.size(); ++last_pos) {
+                    if (text.at(last_pos) == '\n') {
+                        bl_info.break_line = true;
+                        bl_info.count++;
+                    } else if (text.at(last_pos) != ' ') {
+                        --last_pos;
+                        break;
+                    }
+                }
+
+                parts.second.push_back(bl_info);
+            }
+        }
+    }
+
+    return parts;
 }
 
 void restore_caps(std::string& text) {
@@ -478,112 +598,6 @@ void numbers_to_words(std::string& text, const std::string& lang,
     }
 }
 
-static void replace_characters(std::string& text, const std::string& from,
-                               const std::string& to) {
-    auto w_text = UTF8_to_wchar(text.c_str());
-    auto w_from = UTF8_to_wchar(from.c_str());
-    auto w_to = UTF8_to_wchar(to.c_str());
-
-    if (w_from.size() != w_to.size()) {
-        LOGE("cannot replace characters, from and to sizes are not the same");
-        return;
-    }
-
-    std::transform(w_text.begin(), w_text.end(), w_text.begin(),
-                   [&](const auto c) {
-                       auto pos = w_from.find(c);
-                       if (pos == std::string::npos) return c;
-                       return w_to[pos];
-                   });
-
-    text.assign(wchar_to_UTF8(w_text.c_str()));
-}
-
-static void add_extra_pause(std::string& text) {
-    if (text.empty()) return;
-
-    if (text.back() == '.' || text.back() == '!' || text.back() == '?')
-        text.append(" ,.");
-    else
-        text.append(". ,.");
-}
-
-static void convert_subrip_to_html(std::string& text) {
-    std::stringstream in_ss{text};
-    std::stringstream out_ss;
-
-    static const std::regex html_tags{"<[^>]*>"};
-
-    unsigned int n = 0;
-    std::string text_line;
-    for (std::string line; std::getline(in_ss, line);) {
-        ltrim(line);
-        rtrim(line);
-
-        if (line.empty()) {
-            if (!text_line.empty()) {
-                out_ss << "<p>" << text_line << "</p>";
-                text_line.clear();
-            }
-
-            out_ss << "<p></p>";
-
-            n = 0;
-
-            continue;
-        }
-
-        if (n == 0) {
-            if (!std::all_of(line.cbegin(), line.cend(), [](auto c) {
-                    return std::isdigit(static_cast<unsigned char>(c)) != 0;
-                })) {
-                continue;
-            }
-        }
-
-        if (n < 2) {
-            out_ss << "<code>" << line << "</code>";
-            ++n;
-            continue;
-        }
-
-        if (!text_line.empty()) text_line.append("<span></span>");
-
-        line = std::regex_replace(line, html_tags, "");
-        text_line.append(line);
-
-        ++n;
-    }
-
-    if (!text_line.empty()) {
-        out_ss << "<p>" << text_line << "</p><p></p>";
-    }
-
-    text.assign(out_ss.str());
-}
-
-static void convert_html_to_subrip(std::string& text) {
-    text = std::regex_replace(text, std::regex{"<p>|<code>|<span>"}, "");
-    text = std::regex_replace(text, std::regex{"</p>|</code>|</span>"}, "\n");
-}
-
-static void convert_markdown_to_html(std::string& text) {
-    std::stringstream ss{text};
-
-    auto config = std::make_shared<maddy::ParserConfig>();
-    config->enabledParsers = maddy::types::ALL;
-
-    text.assign(maddy::Parser{config}.Parse(ss));
-}
-
-static void convert_html_to_markdown(std::string& text) {
-    bool ok = false;
-
-    text.assign(html2md::Convert(text, &ok));
-
-    if (!ok) LOGW("error in html to markdown conversion");
-}
-
 void convert_text_format_to_html(std::string& text,
                                  text_format_t input_format) {
     switch (input_format) {
@@ -624,48 +638,6 @@ std::string to_timestamp(size_t msec) {
              static_cast<int>(msec));
 
     return std::string{buf};
-}
-
-static bool is_digit(char c) { return c >= '0' && c <= '9'; }
-
-static const std::regex subrip_time_rx{
-    "(\\d+):(\\d+):(\\d+)[,.](\\d{1,3})\\d*\\s+-->\\s+(\\d+):(\\d+):(\\d+)"
-    "\\d*[,.](\\d{1,3})\\s*"};
-
-std::optional<size_t> subrip_text_start(const std::string& text,
-                                        size_t max_lines) {
-    enum class state_t { unknown, num_line };
-
-    state_t state = state_t::unknown;
-    size_t subrip_start = 0;
-    std::istringstream is{text};
-
-    size_t n = 0;
-    for (std::string line; n < max_lines && std::getline(is, line); ++n) {
-        switch (state) {
-            case state_t::unknown:
-                if (is && !line.empty() &&
-                    std::all_of(line.cbegin(), line.cend(), is_digit)) {
-                    state = state_t::num_line;
-                    subrip_start = is.tellg();
-                    subrip_start -= line.size() + 1;
-                }
-                break;
-            case state_t::num_line:
-                if (std::regex_match(line.cbegin(), line.cend(),
-                                     subrip_time_rx))
-                    return subrip_start;
-                if (is && std::all_of(line.cbegin(), line.cend(), is_digit)) {
-                    state = state_t::num_line;
-                    subrip_start = is.tellg();
-                    subrip_start -= line.size() + 1;
-                } else
-                    state = state_t::unknown;
-                break;
-        }
-    }
-
-    return std::nullopt;
 }
 
 void convert_control_tags_to_html(std::string& text) {
@@ -811,6 +783,46 @@ raw_taged_segment_t raw_taged_segment_from_text(const std::string& text) {
     segment.text = std::regex_replace(text, rx, " ");
 
     return segment;
+}
+
+std::optional<size_t> subrip_text_start(const std::string& text,
+                                        size_t max_lines) {
+    enum class state_t { unknown, num_line };
+
+    state_t state = state_t::unknown;
+    size_t subrip_start = 0;
+    std::istringstream is{text};
+
+    static const std::regex subrip_time_rx{
+        "(\\d+):(\\d+):(\\d+)[,.](\\d{1,3})\\d*\\s+-->\\s+(\\d+):(\\d+):(\\d+)"
+        "\\d*[,.](\\d{1,3})\\s*"};
+
+    size_t n = 0;
+    for (std::string line; n < max_lines && std::getline(is, line); ++n) {
+        switch (state) {
+            case state_t::unknown:
+                if (is && !line.empty() &&
+                    std::all_of(line.cbegin(), line.cend(), is_digit)) {
+                    state = state_t::num_line;
+                    subrip_start = is.tellg();
+                    subrip_start -= line.size() + 1;
+                }
+                break;
+            case state_t::num_line:
+                if (std::regex_match(line.cbegin(), line.cend(),
+                                     subrip_time_rx))
+                    return subrip_start;
+                if (is && std::all_of(line.cbegin(), line.cend(), is_digit)) {
+                    state = state_t::num_line;
+                    subrip_start = is.tellg();
+                    subrip_start -= line.size() + 1;
+                } else
+                    state = state_t::unknown;
+                break;
+        }
+    }
+
+    return std::nullopt;
 }
 
 void segment_to_subrip_text(const segment_t& segment, std::ostringstream& os) {
@@ -1262,356 +1274,6 @@ void break_segments_to_multiline(unsigned int min_line_size,
         break_segment_to_multiline(min_line_size, max_line_size, segment);
 }
 
-std::string next_utf8_char(const std::string& input, size_t& i) {
-    if (i >= input.size()) return "";
-    unsigned char c = input[i];
-    if ((c & 0x80) == 0) {
-        i++;
-        return input.substr(i - 1, 1);
-    } else if ((c & 0xE0) == 0xC0) {
-        if (i + 1 >= input.size()) return "";
-        i += 2;
-        return input.substr(i - 2, 2);
-    } else if ((c & 0xF0) == 0xE0) {
-        if (i + 2 >= input.size()) return "";
-        i += 3;
-        return input.substr(i - 3, 3);
-    } else if ((c & 0xF8) == 0xF0) {
-        if (i + 3 >= input.size()) return "";
-        i += 4;
-        return input.substr(i - 4, 4);
-    }
-    return "";
-};
-
-bool is_punctuation_mark(const std::string& utf8_char) {
-    static const std::unordered_set<std::string> punctuation_marks = {
-        // ascii punctuation
-        "!",
-        "\"",
-        "#",
-        "$",
-        "%",
-        "&",
-        "'",
-        "(",
-        ")",
-        "*",
-        "+",
-        ",",
-        "-",
-        ".",
-        "/",
-        ":",
-        ";",
-        "<",
-        "=",
-        ">",
-        "?",
-        "@",
-        "[",
-        "\\",
-        "]",
-        "^",
-        "_",
-        "`",
-        "{",
-        "|",
-        "}",
-        "~",
-
-        // chinese punctuation
-        "\u3002",  // 。
-        "\uFF0C",  // ，
-        "\uFF01",  // ！
-        "\uFF1F",  // ？
-        "\uFF1A",  // ：
-        "\u3001",  // 、
-        "\u2014",  // —
-        "\u2027",  // ‧
-        "\u22EF",  // ⋯
-        "\u2E3A",  // ⸺
-        "\u3000",  // 　
-        "\u300A",  // 《
-        "\u300B",  // 》
-        "\u3008",  // 〈
-        "\u3009",  // 〉
-        "\u300D",  // 「
-        "\u300C",  // 」
-        "\u300E",  // 『
-        "\u300F",  // 』
-        "\u3010",  // 【
-        "\u3011",  // 】
-        "\uFF08",  // （
-        "\uFF09",  // ）
-    };
-
-    return punctuation_marks.contains(utf8_char);
-}
-
-std::string remove_pinyin_tones(const std::string& text, bool remove_punct) {
-    static const std::unordered_map<std::string, char> tone_map = {
-        {"ā", 'a'}, {"á", 'a'}, {"ǎ", 'a'}, {"à", 'a'}, {"Ā", 'a'}, {"Á", 'a'},
-        {"Ǎ", 'a'}, {"À", 'a'}, {"ō", 'o'}, {"ó", 'o'}, {"ǒ", 'o'}, {"ò", 'o'},
-        {"Ō", 'o'}, {"Ó", 'o'}, {"Ǒ", 'o'}, {"Ò", 'o'}, {"ē", 'e'}, {"é", 'e'},
-        {"ě", 'e'}, {"è", 'e'}, {"Ē", 'e'}, {"É", 'e'}, {"Ě", 'e'}, {"È", 'e'},
-        {"ī", 'i'}, {"í", 'i'}, {"ǐ", 'i'}, {"ì", 'i'}, {"Ī", 'i'}, {"Í", 'i'},
-        {"Ǐ", 'i'}, {"Ì", 'i'}, {"ū", 'u'}, {"ú", 'u'}, {"ǔ", 'u'}, {"ù", 'u'},
-        {"Ū", 'u'}, {"Ú", 'u'}, {"Ǔ", 'u'}, {"Ù", 'u'}, {"ü", 'v'}, {"ǘ", 'v'},
-        {"ǚ", 'v'}, {"ǜ", 'v'}, {"ǖ", 'v'}, {"Ü", 'v'}, {"Ǘ", 'v'}, {"Ǚ", 'v'},
-        {"Ǜ", 'v'}, {"Ǖ", 'v'}, {"ê", 'e'}, {"Ê", 'e'},
-    };
-
-    std::string result;
-
-    for (size_t i = 0; i < text.size();) {
-        auto utf8_char = next_utf8_char(text, i);
-        if (utf8_char.empty()) {
-            break;
-        }
-
-        auto it = tone_map.find(utf8_char);
-        if (it != tone_map.end()) {
-            // replace with tone-less character
-            result += it->second;
-            continue;
-        }
-
-        if (remove_punct && is_punctuation_mark(utf8_char)) {
-            // ignore punctuation
-            continue;
-        }
-
-        if (utf8_char.size() == 1) {
-            if (utf8_char[0] >= '0' && utf8_char[0] <= '5') {
-                // ignore number
-                continue;
-            }
-            result += static_cast<char>(
-                std::tolower(static_cast<unsigned char>(utf8_char[0])));
-            continue;
-        }
-
-        result += utf8_char;
-    }
-
-    return result;
-};
-
-void hanzi_to_pinyin(std::string& text, const std::string& model_path) {
-    if (is_pinyin(text)) {
-        LOGD("skip hanzi-to-pinyin because text is already pinyin");
-        return;
-    }
-
-    Pinyin::setDictionaryPath(model_path);
-
-    const auto g2p_man = std::make_unique<Pinyin::Pinyin>();
-    auto vec = g2p_man->hanziToPinyin(text, Pinyin::ManTone::Style::TONE,
-                                      Pinyin::Error::Default,
-                                      /*candidates=*/false, /*v_to_u=*/false,
-                                      /*neutral_tone_with_five=*/false);
-
-    text.assign(vec.toStdStr());
-}
-
-void pinyin_to_hanzi(std::string& text, const std::string& model_path) {
-    if (model_path.empty()) {
-        LOGD("pinyin-to-hanzi model path is empty");
-        return;
-    }
-
-    if (!is_pinyin(text)) {
-        LOGD("skip pinyin-to-hanzi because text is not pinyin");
-        return;
-    }
-
-    static const std::unordered_set<char> white_cars = {
-        ' ', '\t', '\n', '\r', '\f', '\v',
-    };
-
-    auto non_word_char = [](const std::string& utf8_char) {
-        if (utf8_char.empty()) {
-            return true;
-        }
-        if (utf8_char.size() == 1) {
-            auto c = utf8_char[0];
-            return white_cars.contains(c) || is_punctuation_mark(utf8_char);
-        }
-        return is_punctuation_mark(utf8_char);
-    };
-
-    auto split_into_tokens = [&](const std::string& input) {
-        std::vector<std::string> tokens;
-        std::string curr_token;
-        bool in_word = false;
-        size_t i = 0;
-
-        while (i < input.size()) {
-            auto utf8_char = next_utf8_char(input, i);
-            if (utf8_char.empty()) break;
-            if (!non_word_char(utf8_char)) {
-                if (!in_word && !curr_token.empty()) {
-                    tokens.push_back(curr_token);
-                    curr_token.clear();
-                }
-                curr_token += utf8_char;
-                in_word = true;
-            } else {
-                if (in_word && !curr_token.empty()) {
-                    tokens.push_back(curr_token);
-                    curr_token.clear();
-                }
-                curr_token += utf8_char;
-                in_word = false;
-            }
-        }
-
-        if (!curr_token.empty()) {
-            tokens.push_back(curr_token);
-        }
-
-        return tokens;
-    };
-
-    if (pinyinim_init(model_path.c_str()) != 0) {
-        LOGW("failed to init pinyinim");
-        return;
-    }
-
-    std::ostringstream os;
-
-    auto transform = [&](const std::string& word) {
-        const char* out_buf = nullptr;
-        size_t out_buf_size = 0;
-
-        auto cword = remove_pinyin_tones(word, false);
-
-        if (pinyinim_to_hanzi(cword.c_str(), cword.size(), &out_buf,
-                              &out_buf_size) != 0) {
-            LOGD("failed to pinyin to hanzi: " << word);
-        }
-
-        os << std::string_view(out_buf, out_buf_size);
-    };
-
-    auto tokens = split_into_tokens(text);
-
-    for (auto& token : tokens) {
-        if (token.empty()) {
-            continue;
-        }
-        size_t i = 0;
-        if (!non_word_char(next_utf8_char(token, i))) {
-            transform(token);
-            continue;
-        }
-
-        trim_line(token);
-        os << token;
-    }
-
-    text.assign(os.str());
-
-    pinyinim_free();
-}
-
-bool is_pinyin(const std::string& text) {
-    static const std::unordered_set<std::string> pinyin_dictionary = {
-        "a",     "ai",     "an",    "ang",    "ao",     "ba",    "bai",
-        "ban",   "bang",   "bao",   "bei",    "ben",    "beng",  "bi",
-        "bian",  "biao",   "bie",   "bin",    "bing",   "bo",    "bu",
-        "ca",    "cai",    "can",   "cang",   "cao",    "ce",    "cei",
-        "cen",   "ceng",   "cha",   "chai",   "chan",   "chang", "chao",
-        "che",   "chen",   "cheng", "chi",    "chong",  "chou",  "chu",
-        "chua",  "chuai",  "chuan", "chuang", "chui",   "chun",  "chuo",
-        "ci",    "cong",   "cou",   "cu",     "cuan",   "cui",   "cun",
-        "cuo",   "da",     "dai",   "dan",    "dang",   "dao",   "de",
-        "dei",   "den",    "deng",  "di",     "dian",   "diao",  "die",
-        "ding",  "diu",    "dong",  "dou",    "du",     "duan",  "dui",
-        "dun",   "duo",    "e",     "ei",     "en",     "eng",   "er",
-        "fa",    "fan",    "fang",  "fei",    "fen",    "feng",  "fiao",
-        "fo",    "fou",    "fu",    "ga",     "gai",    "gan",   "gang",
-        "gao",   "ge",     "gei",   "gen",    "geng",   "gong",  "gou",
-        "gu",    "gua",    "guai",  "guan",   "guang",  "gui",   "gun",
-        "guo",   "ha",     "hai",   "han",    "hang",   "hao",   "he",
-        "hei",   "hen",    "heng",  "hong",   "hou",    "hu",    "hua",
-        "huai",  "huan",   "huang", "hui",    "hun",    "huo",   "ji",
-        "jia",   "jian",   "jiang", "jiao",   "jie",    "jin",   "jing",
-        "jiong", "jiu",    "ju",    "juan",   "jue",    "jun",   "ka",
-        "kai",   "kan",    "kang",  "kao",    "ke",     "kei",   "ken",
-        "keng",  "kong",   "kou",   "ku",     "kua",    "kuai",  "kuan",
-        "kuang", "kui",    "kun",   "kuo",    "la",     "lai",   "lan",
-        "lang",  "lao",    "le",    "lei",    "leng",   "li",    "lia",
-        "lian",  "liang",  "liao",  "lie",    "lin",    "ling",  "liu",
-        "lo",    "long",   "lou",   "lu",     "luan",   "lun",   "luo",
-        "lv",    "lve",    "lü",    "lüe",    "ma",     "mai",   "man",
-        "mang",  "mao",    "me",    "mei",    "men",    "meng",  "mi",
-        "mian",  "miao",   "mie",   "min",    "ming",   "miu",   "mo",
-        "mou",   "mu",     "na",    "nai",    "nan",    "nang",  "nao",
-        "ne",    "nei",    "nen",   "neng",   "ng",     "ni",    "nian",
-        "niang", "niao",   "nie",   "nin",    "ning",   "niu",   "nong",
-        "nou",   "nu",     "nuan",  "nun",    "nuo",    "nv",    "nve",
-        "nü",    "nüe",    "o",     "ou",     "pa",     "pai",   "pan",
-        "pang",  "pao",    "pei",   "pen",    "peng",   "pi",    "pian",
-        "piao",  "pie",    "pin",   "ping",   "po",     "pou",   "pu",
-        "qi",    "qia",    "qian",  "qiang",  "qiao",   "qie",   "qin",
-        "qing",  "qiong",  "qiu",   "qu",     "quan",   "que",   "qun",
-        "ran",   "rang",   "rao",   "re",     "ren",    "reng",  "ri",
-        "rong",  "rou",    "ru",    "rua",    "ruan",   "rui",   "run",
-        "ruo",   "sa",     "sai",   "san",    "sang",   "sao",   "se",
-        "sei",   "sen",    "seng",  "sha",    "shai",   "shan",  "shang",
-        "shao",  "she",    "shei",  "shen",   "sheng",  "shi",   "shou",
-        "shu",   "shua",   "shuai", "shuan",  "shuang", "shui",  "shun",
-        "shuo",  "si",     "song",  "sou",    "su",     "suan",  "sui",
-        "sun",   "suo",    "ta",    "tai",    "tan",    "tang",  "tao",
-        "te",    "tei",    "teng",  "ti",     "tian",   "tiao",  "tie",
-        "ting",  "tong",   "tou",   "tu",     "tuan",   "tui",   "tun",
-        "tuo",   "wa",     "wai",   "wan",    "wang",   "wei",   "wen",
-        "weng",  "wo",     "wu",    "xi",     "xia",    "xian",  "xiang",
-        "xiao",  "xie",    "xin",   "xing",   "xiong",  "xiu",   "xu",
-        "xuan",  "xue",    "xun",   "ya",     "yan",    "yang",  "yao",
-        "ye",    "yi",     "yin",   "ying",   "yo",     "yong",  "you",
-        "yu",    "yuan",   "yue",   "yun",    "za",     "zai",   "zan",
-        "zang",  "zao",    "ze",    "zei",    "zen",    "zeng",  "zha",
-        "zhai",  "zhan",   "zhang", "zhao",   "zhe",    "zhei",  "zhen",
-        "zheng", "zhi",    "zhong", "zhou",   "zhu",    "zhua",  "zhuai",
-        "zhuan", "zhuang", "zhui",  "zhun",   "zhuo",   "zi",    "zong",
-        "zou",   "zu",     "zuan",  "zui",    "zun",    "zuo",
-    };
-
-    auto words = [&]() {
-        std::stringstream ss(text);
-        std::string word;
-        std::vector<std::string> words;
-        while (ss >> word) {
-            words.push_back(word);
-        }
-        return words;
-    }();
-
-    size_t total_words = 0;
-    size_t valid_pinyin_words = 0;
-
-    for (const auto& word : words) {
-        auto cword = remove_pinyin_tones(word, true);
-        if (cword.empty()) continue;
-
-        ++total_words;
-
-        if (pinyin_dictionary.contains(cword)) {
-            ++valid_pinyin_words;
-        }
-    }
-
-    if (total_words == 0) {
-        return false;
-    }
-
-    double ratio = static_cast<double>(valid_pinyin_words) / total_words;
-    return ratio >= 0.80;
-}
-
 bool extract_readable_content(std::string& text) {
     std::string output(text.size(), '\0');
 
@@ -1630,6 +1292,23 @@ bool extract_readable_content(std::string& text) {
     text.assign(std::move(output));
 
     return true;
+}
+
+void append_sentence_delim_space_if_needed(std::string& text) {
+    static const std::unordered_set<std::string_view>
+        chinese_sentence_terminators = {
+            "。",
+            "！",
+            "？",
+        };
+
+    if (text.empty() || std::isspace(text.back()) ||
+        chinese_sentence_terminators.contains(utf8_last_char(text))) {
+        // space no needed
+        return;
+    };
+
+    text.append(" ");
 }
 
 void processor::hebrew_diacritize(std::string& text,
@@ -1709,10 +1388,10 @@ std::string processor::preprocess(const std::string& text,
             hebrew_diacritize(new_text, model_path);
         } else if (lang == "zh") {
             LOGD("pinyin-to-hanzi pre-processing needed");
-            if (is_pinyin(text)) {
-                pinyin_to_hanzi(new_text, model_path);
+            if (!pinyin_tools::is_hanzi(text)) {
+                pinyin_tools::pinyin_to_hanzi(new_text, model_path);
             } else {
-                LOGD("skip pinyin-to-hanzi because text is not pinyin");
+                LOGD("skip pinyin-to-hanzi because text is hanzi");
             }
         }
     }

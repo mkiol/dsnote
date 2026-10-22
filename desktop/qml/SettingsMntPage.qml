@@ -31,9 +31,9 @@ ColumnLayout {
     }
 
     CheckBoxSetting {
-        optionName: "pinyin_text"
-        text: qsTranslate("SettingsPage", "Use pinyin")
-        toolTipText: qsTranslate("SettingsPage", "For Chinese, use pinyin instead of Chinese characters.")
+        optionName: "mnt_pinyin"
+        text: qsTranslate("SettingsPage", "Translate to Pinyin")
+        toolTipText: qsTranslate("SettingsPage", "When translating into Chinese, use Pinyin instead of Chinese characters.")
     }
 
     Item {

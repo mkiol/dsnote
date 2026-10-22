@@ -585,7 +585,7 @@ ApplicationWindow {
         onTrans_rule_import_done: toast.show(qsTr("Import from the file is complete!"))
         onSave_note_to_file_done: toast.show(qsTr("Export to file is complete!"))
         onTrans_rule_export_done: toast.show(qsTr("Export to file is complete!"))
-        onText_repair_done: toast.show(qsTr("Text repair is complete!"))
+        onText_repair_done: toast.show(qsTr("The text conversion is complete!"))
         onText_decoded_to_clipboard: {
             var policy = false
             switch(_settings.desktop_notification_policy) {

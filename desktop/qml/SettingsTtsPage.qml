@@ -55,11 +55,12 @@ ColumnLayout {
                      qsTranslate("SettingsPage", "Disable this option if you observe this problem.")
     }
 
-    CheckBoxSetting {
-        optionName: "pinyin_text"
-        text: qsTranslate("SettingsPage", "Use pinyin")
-        toolTipText: qsTranslate("SettingsPage", "For Chinese, use pinyin instead of Chinese characters.")
-    }
+    // CheckBoxSetting {
+    //     visible: false // user should not change this option
+    //     optionName: "tts_pinyin"
+    //     text: qsTranslate("SettingsPage", "Enable Pinyin support")
+    //     toolTipText: qsTranslate("SettingsPage", "When generating Chinese speech, detect Pinyin in the input text and convert it into Chinese characters.")
+    // }
 
     CheckBoxSetting {
         optionName: "tts_trim_trailing_silence"

@@ -99,7 +99,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.9.1" date="2026-09-20">
+    <release version="4.9.1" date="2026-10-20">
       <description>
       <p>Accessibility:</p>
       <ul>
@@ -137,7 +137,8 @@
       <li>AMD ROCm hardware acceleration support in 'FasterWhisper'.
         To enable ROCm acceleration with Flatpak, install the AMD add-on.</li>
       <li>Temperature and Repetition Penalty options in Whisper engine 'Custom' profile</li>
-      <li>Pinyin support for Chinese langauge</li>
+      <li>Pinyin support for Chinese langauge.
+        Enable setting option to transcribe Chinese speech directly into Pinyin.</li>
       <li>OpenVINO hardware acceleration in 'WhisperCpp' was removed as it provided minimal performance improvement.</li>
       </ul>
       <p>Text to Speech:</p>
@@ -150,12 +151,15 @@
       <li>Updated RHVoice models for: Czech, Serbian, Spanish</li>
       <li>New Piper models for: Albanian, Bulgarian, Dutch, Greek, Hindi, Indonesian, Kurdish, Latvian, Polish, Swedish, Telugu, Ukrainian, Urdu</li>
       <li>New F5-TTS model for Latvian</li>
-      <li>Pinyin support for Chinese langauge</li>
+      <li>Pinyin support for Chinese langauge.
+        If the text you enter is written in Pinyin, it will be internally converted to Chinese characters to ensure accurate speech synthesis.</li>
       <li>An option to insert custom pause between sentences</li>
       </ul>
       <p>Translator:</p>
       <ul>
-      <li>Pinyin support for Chinese langauge</li>
+      <li>Pinyin support for Chinese langauge.
+        If the text you enter is written in Pinyin, the translator will recognize it and translate it correctly into the selected language.
+        In addition, you can force the use of Pinyin as the translation output.</li>
       </ul>
       <p>User Interface:</p>
       <ul>

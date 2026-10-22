@@ -595,7 +595,7 @@ please consider doing one or two of the following:
 - [S.A.M.](https://discordier.github.io/sam)
 - [rdrview](https://github.com/eafer/rdrview)
 - [CLD2](https://github.com/CLD2Owners/cld2)
-- [google_pinyinim](https://github.com/aron566/google_pinyinim)
+- [libpinyin](https://github.com/libpinyin/libpinyin)
 - [cpp-pinyin](https://github.com/wolfgitpr/cpp-pinyin)
 - [Opal for SailfishOS](https://codeberg.org/opal-sfos)
 
@@ -679,7 +679,7 @@ please consider doing one or two of the following:
 - **Qwen3-ASR**, released under the [Apache License 2.0](https://github.com/QwenLM/Qwen3-ASR/raw/main/LICENSE)
 - **rdrview**, released under the [Apache License 2.0](https://github.com/eafer/rdrview/raw/refs/heads/master/LICENSE)
 - **CLD2**, released under the [Apache License 2.0](https://github.com/CLD2Owners/cld2/blob/master/LICENSE)
-- **google_pinyinim**, released under the [Apache License 2.0](https://github.com/aron566/google_pinyinim/raw/refs/heads/master/LICENSE)
+- **libpinyin**, released under the [GNU General Public License v3.0](https://raw.githubusercontent.com/libpinyin/libpinyin/refs/heads/main/COPYING)
 - **cpp-pinyin**, released under the [Apache License 2.0](https://github.com/wolfgitpr/cpp-pinyin/raw/refs/heads/main/LICENSE)
 - **Opal for SailfishOS**, released under the [AGPL-3.0 license](https://codeberg.org/opal-sfos/harbour-opal-gallery/raw/branch/main/LICENSES/AGPL-3.0-or-later.txt)
 

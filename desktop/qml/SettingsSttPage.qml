@@ -136,9 +136,9 @@ ColumnLayout {
     }
 
     CheckBoxSetting {
-        optionName: "pinyin_text"
-        text: qsTranslate("SettingsPage", "Use pinyin")
-        toolTipText: qsTranslate("SettingsPage", "For Chinese, use pinyin instead of Chinese characters.")
+        optionName: "stt_pinyin"
+        text: qsTranslate("SettingsPage", "Use Pinyin")
+        toolTipText: qsTranslate("SettingsPage", "When transcribing Chinese, use Pinyin instead of Chinese characters.")
     }
 
     SectionLabel {

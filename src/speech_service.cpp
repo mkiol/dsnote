@@ -1481,6 +1481,39 @@ static QString find_ggml_backend_dir() {
     return path;
 }
 
+static std::string model_path_in_share_or_lib(const char *path1,
+                                              const char *path2) {
+    auto path = module_tools::path_to_share_dir_for_path(path1) + path2;
+    if (QFileInfo::exists(path)) {
+        return path.toStdString();
+    }
+
+    path = module_tools::path_to_lib_dir_for_path(path1) + path2;
+    if (QFileInfo::exists(path)) {
+        return path.toStdString();
+    }
+
+    return {};
+}
+
+static std::string pinyin_to_hanzi_model_path() {
+    auto path = model_path_in_share_or_lib("/libpinyin", "/libpinyin/data");
+    if (path.empty()) {
+        LOGW("pinyin-to-hanzi model missing");
+        return {};
+    }
+    return path;
+}
+
+static std::string hanzi_to_pinyin_model_path() {
+    auto path = model_path_in_share_or_lib("/cpp-pinyin", "/cpp-pinyin/dict");
+    if (path.empty()) {
+        LOGW("hanzi-to-pinyin model missing");
+        return {};
+    }
+    return path;
+}
+
 QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                                            const QString &model_id,
                                            const QString &out_lang_id,
@@ -1520,16 +1553,8 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
         // for chinese, check pinyin input
         if (config.lang == "zh" &&
             get_value_from_options("pinyin_output", false, options)) {
-            auto hanzi_to_pinyin_dict =
-                module_tools::path_to_share_dir_for_path(
-                    QStringLiteral("/cpp-pinyin")) +
-                "/cpp-pinyin/dict";
-            if (QFileInfo::exists(hanzi_to_pinyin_dict)) {
-                config.model_files.hanzi_to_pinyin_dict_path =
-                    hanzi_to_pinyin_dict.toStdString();
-            } else {
-                LOGW("hanzi-to-pinyin dict missing: " << hanzi_to_pinyin_dict);
-            }
+            config.model_files.hanzi_to_pinyin_dict_path =
+                hanzi_to_pinyin_model_path();
         }
 
 #define ENGINE_OPTS(name_)                                                     \
@@ -1836,17 +1861,9 @@ QString speech_service::restart_tts_engine(const QString &model_id,
 
         // for chinese, check pinyin input
         if (config.lang == "zh" &&
-            get_value_from_options("pinyin_input", false, options)) {
-            auto pinyin_to_hanzi_dict =
-                module_tools::path_to_share_dir_for_path(
-                    QStringLiteral("/google-pinyinim-data")) +
-                "/google-pinyinim-data/dict_pinyin.dat";
-            if (QFileInfo::exists(pinyin_to_hanzi_dict)) {
-                config.model_files.pinyin_to_hanzi_dict_path =
-                    pinyin_to_hanzi_dict.toStdString();
-            } else {
-                LOGW("pinyin-to-hanzi dict missing: " << pinyin_to_hanzi_dict);
-            }
+            get_value_from_options("pinyin_input", true, options)) {
+            config.model_files.pinyin_to_hanzi_dict_path =
+                pinyin_to_hanzi_model_path();
         }
 
         config.cache_dir = settings::instance()->cache_dir().toStdString();
@@ -1915,15 +1932,12 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             auto l = model_config->tts->model_id.split('_');
             if (!l.isEmpty()) {
                 config.lang_code = l.last().toStdString();
-                config.share_dir = module_tools::path_to_share_dir_for_path(
-                                       "uroman/bin/uroman.pl")
-                                       .toStdString();
             }
-        } else {
-            config.share_dir =
-                module_tools::path_to_share_dir_for_path("/libnumbertext")
-                    .toStdString();
         }
+
+        config.share_dir =
+            module_tools::path_to_share_dir_for_path("/libnumbertext")
+                .toStdString();
 
         QFile nb_file{QStringLiteral(":/nonbreaking_prefixes/%1.txt")
                           .arg(model_config->tts->lang_id.split('-').first())};
@@ -2091,31 +2105,14 @@ QString speech_service::restart_mnt_engine(const QString &model_or_lang_id,
                 options)));
 
         // for chinese, check pinyin input
-        if (config.lang == "zh" &&
-            get_value_from_options("pinyin_input", false, options)) {
-            auto pinyin_to_hanzi_dict =
-                module_tools::path_to_share_dir_for_path(
-                    QStringLiteral("/google-pinyinim-data")) +
-                "/google-pinyinim-data/dict_pinyin.dat";
-            if (QFileInfo::exists(pinyin_to_hanzi_dict)) {
-                config.model_files.pinyin_to_hanzi_dict_path =
-                    pinyin_to_hanzi_dict.toStdString();
-            } else {
-                LOGW("pinyin-to-hanzi dict missing: " << pinyin_to_hanzi_dict);
-            }
+        if (config.lang == "zh") {
+            config.model_files.pinyin_to_hanzi_dict_path =
+                pinyin_to_hanzi_model_path();
         }
         if (config.out_lang == "zh" &&
             get_value_from_options("pinyin_output", false, options)) {
-            auto hanzi_to_pinyin_dict =
-                module_tools::path_to_share_dir_for_path(
-                    QStringLiteral("/cpp-pinyin")) +
-                "/cpp-pinyin/dict";
-            if (QFileInfo::exists(hanzi_to_pinyin_dict)) {
-                config.model_files.hanzi_to_pinyin_dict_path =
-                    hanzi_to_pinyin_dict.toStdString();
-            } else {
-                LOGW("hanzi-to-pinyin dict missing: " << hanzi_to_pinyin_dict);
-            }
+            config.model_files.hanzi_to_pinyin_dict_path =
+                hanzi_to_pinyin_model_path();
         }
 
         QFile nb_file{QStringLiteral(":/nonbreaking_prefixes/%1.txt")
@@ -2230,26 +2227,10 @@ bool speech_service::restart_text_repair_engine(const QVariantMap &options) {
             config.model_files.punctuator_path =
                 model_config->text_repair->punctuation->model_file
                     .toStdString();
-        if (auto pinyin_to_hanzi_dict =
-                module_tools::path_to_share_dir_for_path(
-                    QStringLiteral("/google-pinyinim-data")) +
-                "/google-pinyinim-data/dict_pinyin.dat";
-            QFileInfo::exists(pinyin_to_hanzi_dict)) {
-            config.model_files.pinyin_to_hanzi_dict_path =
-                pinyin_to_hanzi_dict.toStdString();
-        } else {
-            LOGW("pinyin-to-hanzi dict missing: " << pinyin_to_hanzi_dict);
-        }
-        if (auto hanzi_to_pinyin_dict =
-                module_tools::path_to_share_dir_for_path(
-                    QStringLiteral("/cpp-pinyin")) +
-                "/cpp-pinyin/dict";
-            QFileInfo::exists(hanzi_to_pinyin_dict)) {
-            config.model_files.hanzi_to_pinyin_dict_path =
-                hanzi_to_pinyin_dict.toStdString();
-        } else {
-            LOGW("hanzi-to-pinyin dict missing: " << hanzi_to_pinyin_dict);
-        }
+        config.model_files.pinyin_to_hanzi_dict_path =
+            pinyin_to_hanzi_model_path();
+        config.model_files.hanzi_to_pinyin_dict_path =
+            hanzi_to_pinyin_model_path();
         config.options = model_config->options.toStdString();
         config.text_format = text_repair_text_fromat_from_settings_format(
             static_cast<settings::text_format_t>(get_value_from_options(

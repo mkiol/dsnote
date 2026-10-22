@@ -1,0 +1,51 @@
+diff -ruN -x '.*' libpinyin-org/configure libpinyin-patched/configure
+--- libpinyin-org/configure	2026-09-29 10:29:32.000000000 +0200
++++ libpinyin-patched/configure	2026-10-16 09:57:05.396192498 +0200
+@@ -21326,6 +21326,13 @@
+ 
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for library containing kcdbopen" >&5
+ printf %s "checking for library containing kcdbopen... " >&6; }
++
++ac_ext=cpp
++ac_cpp='$CXXCPP $CPPFLAGS'
++ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
++
+ if test ${ac_cv_search_kcdbopen+y}
+ then :
+   printf %s "(cached) " >&6
+@@ -21394,6 +21401,11 @@
+ esac
+ fi
+ 
++ac_ext=c
++ac_cpp='$CPP $CPPFLAGS'
++ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ 
+ 
+ printf "%s\n" "#define HAVE_KYOTO_CABINET /**/" >>confdefs.h
+diff -ruN -x '.*' libpinyin-org/data/Makefile.am libpinyin-patched/data/Makefile.am
+--- libpinyin-org/data/Makefile.am	2024-12-16 06:52:18.000000000 +0100
++++ libpinyin-patched/data/Makefile.am	2026-10-16 10:10:00.691974908 +0200
+@@ -49,7 +49,6 @@
+ CLEANFILES		= $(binary_model_data)
+ 
+ interpolation2.text:
+-	wget http://downloads.sourceforge.net/libpinyin/models/model20.text.tar.gz
+ 	tar xvf model20.text.tar.gz -C $(top_srcdir)/data
+ 
+ 
+diff -ruN -x '.*' libpinyin-org/data/Makefile.in libpinyin-patched/data/Makefile.in
+--- libpinyin-org/data/Makefile.in	2026-09-29 10:29:32.000000000 +0200
++++ libpinyin-patched/data/Makefile.in	2026-10-20 10:56:27.899950704 +0200
+@@ -546,7 +546,6 @@
+ 
+ 
+ interpolation2.text:
+-	wget http://downloads.sourceforge.net/libpinyin/models/model20.text.tar.gz
+ 	tar xvf model20.text.tar.gz -C $(top_srcdir)/data
+ 
+ $(tablefiles) table.conf: interpolation2.text

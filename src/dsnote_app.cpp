@@ -383,7 +383,7 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(settings::instance(), &settings::mnt_text_format_changed, this,
             &dsnote_app::handle_translator_settings_changed,
             Qt::QueuedConnection);
-    connect(settings::instance(), &settings::pinyin_text_changed, this,
+    connect(settings::instance(), &settings::mnt_pinyin_changed, this,
             &dsnote_app::handle_translator_settings_changed,
             Qt::QueuedConnection);
     connect(settings::instance(), &settings::audio_input_device_changed, this,
@@ -1971,8 +1971,10 @@ void dsnote_app::set_active_mnt_lang(const QString &lang) {
     if (m_active_mnt_lang != lang) {
         qDebug() << "app active mnt lang:" << m_active_mnt_lang << "=>" << lang;
 
-        if (lang == active_mnt_out_lang()) {
+        if (lang == m_active_mnt_out_lang &&
+            m_active_mnt_out_lang != m_active_mnt_lang) {
             m_active_mnt_out_lang = m_active_mnt_lang;
+            emit active_mnt_out_lang_changed();
         }
 
         m_active_mnt_lang = lang;
@@ -2980,7 +2982,7 @@ void dsnote_app::transcribe_file_internal(
     auto lang =
         lang_from_model_id(model_id.isEmpty() ? active_stt_model() : model_id);
     if (lang == "zh") {
-        options.insert("pinyin_output", settings::instance()->pinyin_text());
+        options.insert("pinyin_output", settings::instance()->stt_pinyin());
     }
 
     m_current_stt_request = stt_request_t::transcribe_file;
@@ -3171,7 +3173,7 @@ void dsnote_app::listen_internal(stt_translate_req_t translate_req) {
 
     // for chinese, add pinyin output option
     if (out_lang == "zh") {
-        options.insert("pinyin_output", settings::instance()->pinyin_text());
+        options.insert("pinyin_output", settings::instance()->stt_pinyin());
     }
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
@@ -3344,7 +3346,7 @@ void dsnote_app::play_speech_internal(QString text, const QString &input_file,
 
     // for chinese, add pinyin input option
     if (lang == "zh") {
-        options.insert("pinyin_input", settings::instance()->pinyin_text());
+        options.insert("pinyin_input", settings::instance()->tts_pinyin());
     }
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
@@ -3603,14 +3605,9 @@ void dsnote_app::translate_internal(const QString &text) {
             static_cast<int>(settings::instance()->mnt_text_format()));
 
         // for chinese, add pinyin input option
-        if (m_active_mnt_lang.startsWith(QLatin1String("zh"),
-                                         Qt::CaseInsensitive)) {
-            options.insert("pinyin_input", settings::instance()->pinyin_text());
-        }
         if (m_active_mnt_out_lang.startsWith(QLatin1String("zh"),
                                              Qt::CaseInsensitive)) {
-            options.insert("pinyin_output",
-                           settings::instance()->pinyin_text());
+            options.insert("pinyin_output", settings::instance()->mnt_pinyin());
         }
 
         if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
@@ -3794,7 +3791,7 @@ void dsnote_app::speech_to_file_internal(
 
     // for chinese, add pinyin input option
     if (lang == "zh") {
-        options.insert("pinyin_input", settings::instance()->pinyin_text());
+        options.insert("pinyin_input", settings::instance()->tts_pinyin());
     }
 
     if (QFileInfo{dest_file}.suffix().toLower() != audio_ext) {
