@@ -464,7 +464,7 @@ ColumnLayout {
         leftPadding: appWin.padding
 
         GridLayout {
-            columns: (translateSwitch.implicitWidth + cleanSwitch.implicitWidth + 2 * columnSpacing) > appWin.width ? 1 : pinyinSwitch.visible ? 3 : 2
+            columns: (translateSwitch.implicitWidth + cleanSwitch.implicitWidth + 2 * columnSpacing) > appWin.width ? 1 : 2
 
             columnSpacing: appWin.padding
             rowSpacing: appWin.padding

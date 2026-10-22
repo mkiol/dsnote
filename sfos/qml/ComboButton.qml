@@ -24,7 +24,6 @@ Item {
     signal comboUpdated()
 
     implicitHeight: off ? Theme.itemSizeSmall : combo.height
-    height: implicitHeight
     enabled: !root.off
 
     Timer {

@@ -158,7 +158,7 @@ Item {
                     }
                 }
 
-                DuoComboButton {
+                DuoComboButtonCompact {
                     id: mntInCombo
 
                     visible: !root.noteTextArea.textArea.highlighted && !root.translatedNoteTextArea.textArea.highlighted
@@ -242,7 +242,7 @@ Item {
                     }
                 }
 
-                DuoComboButton {
+                DuoComboButtonCompact {
                     id: mntOutCombo
 
                     visible: !root.noteTextArea.textArea.highlighted && !root.translatedNoteTextArea.textArea.highlighted
