@@ -68,12 +68,25 @@ PullDownMenu {
     }
 
     MenuItem {
-        visible: (_settings.translator_mode && app.active_mnt_lang == "zh") ||
+        visible: _settings.translator_mode
+        enabled: !app.busy && app.mnt_configured && app.state === DsnoteApp.StateIdle
+        text: qsTr("Switch languages")
+        onClicked: {
+            app.switch_translated_text()
+        }
+    }
+
+    MenuItem {
+        visible: (_settings.translator_mode && (app.active_mnt_lang == "zh" || app.active_mnt_out_lang == "zh")) ||
                  (!_settings.translator_mode && (app.active_stt_model.lastIndexOf("zh") === 0 || app.active_tts_model.lastIndexOf("zh") === 0))
         enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.note.length !== 0
-        text: qsTr("Toggle Hanzi/Pinyin (%1)").arg(qsTr("Chinese"))
+        text: qsTr("Toggle Hanzi/Pinyin")
         onClicked: {
-            app.pinyin_hanzi_toggle()
+            if (_settings.translator_mode && app.active_mnt_out_lang == "zh") {
+                app.pinyin_hanzi_toggle_translate()
+            } else {
+                app.pinyin_hanzi_toggle()
+            }
         }
     }
 

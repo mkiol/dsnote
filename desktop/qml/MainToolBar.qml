@@ -248,27 +248,20 @@ ToolBar {
                                 }
                             }
 
-                            MenuItem {
-                                action: Action {
-                                    enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.note.length !== 0
-                                    text: qsTr("Convert Pinyin to Hanzi (%1)").arg(qsTr("Chinese"))
-                                    onTriggered: app.pinyin_to_hanzi()
-                                }
-                            }
-                            MenuItem {
-                                action: Action {
-                                    enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.note.length !== 0
-                                    text: qsTr("Convert Hanzi to Pinyin (%1)").arg(qsTr("Chinese"))
-                                    onTriggered: app.hanzi_to_pinyin()
-                                }
-                            }
-                            MenuItem {
-                                action: Action {
-                                    enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.note.length !== 0
-                                    text: qsTr("Toggle Hanzi/Pinyin (%1)").arg(qsTr("Chinese"))
-                                    onTriggered: app.pinyin_hanzi_toggle()
-                                }
-                            }
+                            // MenuItem {
+                            //     action: Action {
+                            //         enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.note.length !== 0
+                            //         text: qsTr("Convert Pinyin to Hanzi (%1)").arg(qsTr("Chinese"))
+                            //         onTriggered: app.pinyin_to_hanzi()
+                            //     }
+                            // }
+                            // MenuItem {
+                            //     action: Action {
+                            //         enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.note.length !== 0
+                            //         text: qsTr("Convert Hanzi to Pinyin (%1)").arg(qsTr("Chinese"))
+                            //         onTriggered: app.hanzi_to_pinyin()
+                            //     }
+                            // }
                         }
                     }
 

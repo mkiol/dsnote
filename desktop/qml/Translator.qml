@@ -109,6 +109,7 @@ ColumnLayout {
                     canTranslateAll: canTranslateSelected
                     showControlTags: canReadSelected
                     showInsertIndicator: _settings.insert_mode === Settings.InsertInLine
+                    canPinyin: app.active_mnt_lang == "zh"
                     textArea {
                         placeholderText: app.mnt_configured ? qsTr("Type here text to translate from...") : ""
                         onTextChanged: app.note = root.noteTextArea.textArea.text
@@ -161,6 +162,9 @@ ColumnLayout {
                     }
                     onTranslateSelectedClicked: {
                         app.translate_selected(start, end)
+                    }
+                    onPinyinClicked: {
+                        app.pinyin_hanzi_toggle()
                     }
                 }
             }
@@ -339,6 +343,7 @@ ColumnLayout {
                     canPaste: false
                     canReadSelected: mntOutCombo.second.button.enabled
                     canReadAll: canReadSelected
+                    canPinyin: app.active_mnt_out_lang == "zh"
                     textArea {
                         onTextChanged: {
                             app.translated_text = root.translatedNoteTextArea.textArea.text
@@ -347,6 +352,9 @@ ColumnLayout {
                     onCopyClicked: app.copy_translation_to_clipboard()
                     onReadSelectedClicked: {
                         app.play_speech_translator_selected(start, end, true)
+                    }
+                    onPinyinClicked: {
+                        app.pinyin_hanzi_toggle_translate()
                     }
                 }
 
@@ -456,7 +464,7 @@ ColumnLayout {
         leftPadding: appWin.padding
 
         GridLayout {
-            columns: (translateSwitch.implicitWidth + cleanSwitch.implicitWidth + pinyinSwitch.implicitWidth + 2 * columnSpacing) > appWin.width ? 1 : pinyinSwitch.visible ? 3 : 2
+            columns: (translateSwitch.implicitWidth + cleanSwitch.implicitWidth + 2 * columnSpacing) > appWin.width ? 1 : pinyinSwitch.visible ? 3 : 2
 
             columnSpacing: appWin.padding
             rowSpacing: appWin.padding
@@ -488,23 +496,6 @@ ColumnLayout {
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Remove duplicate whitespaces and extra line breaks in the text before translation.") + " " +
                               qsTr("If the input text is incorrectly formatted, this option may improve the translation quality.")
-                hoverEnabled: true
-            }
-
-            Switch {
-                id: pinyinSwitch
-
-                enabled: app.state === DsnoteApp.StateIdle
-                visible: app.active_mnt_out_lang == "zh"
-                text: qsTr("Translate to Pinyin")
-                checked: _settings.mnt_pinyin
-                onClicked: {
-                    _settings.mnt_pinyin = checked
-                }
-
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("When translating into Chinese, use Pinyin instead of Chinese characters.")
                 hoverEnabled: true
             }
         }

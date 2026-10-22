@@ -1813,9 +1813,29 @@ void dsnote_app::handle_ttt_repair_text_finished(const QString &text,
         return;
     }
 
-    update_note(text, true);
+    switch (m_text_repair_destination) {
+        case text_repair_destination_t::note_replace:
+            update_note(text, true);
+            break;
+        case text_repair_destination_t::translation_replace:
+            set_translated_text(text);
+            break;
+    }
 
-    emit text_repair_done();
+    switch (m_text_repair_task) {
+        case text_repair_task_type_t::none:
+        case text_repair_task_type_t::restore_diacritics_ar:
+        case text_repair_task_type_t::restore_diacritics_he:
+        case text_repair_task_type_t::restore_punctuation:
+            emit text_repair_done();
+            break;
+        case text_repair_task_type_t::pinyin_to_hanzi:
+        case text_repair_task_type_t::hanzi_to_pinyin:
+        case text_repair_task_type_t::pinyin_hanzi_toggle:
+            break;
+    }
+
+    m_text_repair_task = text_repair_task_type_t::none;
 }
 
 void dsnote_app::handle_tts_speech_to_file_finished(const QStringList &files,
@@ -3442,49 +3462,63 @@ void dsnote_app::play_speech_translator_selected(int start, int end,
 }
 
 void dsnote_app::restore_diacritics_ar() {
-    repair_text(text_repair_task_type_t::restore_diacritics_ar);
+    repair_text(text_repair_task_type_t::restore_diacritics_ar, false);
 }
 
 void dsnote_app::restore_diacritics_he() {
-    repair_text(text_repair_task_type_t::restore_diacritics_he);
+    repair_text(text_repair_task_type_t::restore_diacritics_he, false);
 }
 
 void dsnote_app::restore_punctuation() {
-    repair_text(text_repair_task_type_t::restore_punctuation);
+    repair_text(text_repair_task_type_t::restore_punctuation, false);
 }
 
 void dsnote_app::pinyin_to_hanzi() {
-    repair_text(text_repair_task_type_t::pinyin_to_hanzi);
+    repair_text(text_repair_task_type_t::pinyin_to_hanzi, false);
 }
 
 void dsnote_app::hanzi_to_pinyin() {
-    repair_text(text_repair_task_type_t::hanzi_to_pinyin);
+    repair_text(text_repair_task_type_t::hanzi_to_pinyin, false);
 }
 
 void dsnote_app::pinyin_hanzi_toggle() {
-    repair_text(text_repair_task_type_t::pinyin_hanzi_toggle);
+    repair_text(text_repair_task_type_t::pinyin_hanzi_toggle, false);
 }
 
-void dsnote_app::repair_text(text_repair_task_type_t task_type) {
-    if (note().isEmpty()) {
+void dsnote_app::pinyin_hanzi_toggle_translate() {
+    repair_text(text_repair_task_type_t::pinyin_hanzi_toggle, true);
+}
+
+void dsnote_app::repair_text(text_repair_task_type_t task_type,
+                             bool translation) {
+    QString text = translation ? translated_text() : note();
+
+    if (text.isEmpty()) {
         qWarning() << "text is empty";
         return;
     }
+
+    m_text_repair_destination =
+        translation ? text_repair_destination_t::translation_replace
+                    : text_repair_destination_t::note_replace;
+    m_text_repair_task = task_type;
 
     int new_task = 0;
 
     QVariantMap options;
     options.insert(
         "text_format",
-        static_cast<int>(settings::instance()->stt_tts_text_format()));
+        static_cast<int>(translation
+                             ? settings::instance()->mnt_text_format()
+                             : settings::instance()->stt_tts_text_format()));
     options.insert("task_type", static_cast<int>(task_type));
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
-        new_task = speech_service::instance()->ttt_repair_text(note(), options);
+        new_task = speech_service::instance()->ttt_repair_text(text, options);
     } else {
         qDebug() << "[app => dbus] call TttRepairText";
 
-        new_task = m_dbus_service.TttRepairText(note(), options);
+        new_task = m_dbus_service.TttRepairText(text, options);
     }
 
     m_primary_task.set(new_task);

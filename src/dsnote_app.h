@@ -403,6 +403,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void pinyin_to_hanzi();
     Q_INVOKABLE void hanzi_to_pinyin();
     Q_INVOKABLE void pinyin_hanzi_toggle();
+    Q_INVOKABLE void pinyin_hanzi_toggle_translate();
     Q_INVOKABLE void pause_speech();
     Q_INVOKABLE void resume_speech();
     Q_INVOKABLE void translate();
@@ -642,6 +643,11 @@ class dsnote_app : public QObject {
     friend QDebug operator<<(QDebug d,
                              dsnote_app::text_destination_t destination);
 
+    enum class text_repair_destination_t {
+        note_replace = 0,
+        translation_replace = 1
+    };
+
     enum class mc_state_t { idle, extracting_subtitles };
 
     enum class stt_translate_req_t { conf, on, off };
@@ -741,6 +747,9 @@ class dsnote_app : public QObject {
     std::queue<QUrl> m_urls_to_open;
     std::queue<std::pair<action_t, QVariantMap>> m_pending_actions;
     text_destination_t m_text_destination = text_destination_t::note_add;
+    text_repair_destination_t m_text_repair_destination =
+        text_repair_destination_t::note_replace;
+    text_repair_task_type_t m_text_repair_task = text_repair_task_type_t::none;
     std::optional<desktop_notification_t> m_desktop_notification;
     QVariantMap m_features_availability;
     bool m_service_reload_called = false;
@@ -1022,7 +1031,7 @@ class dsnote_app : public QObject {
     int player_current_voice_ref_idx() const {
         return m_player_current_voice_ref_idx;
     }
-    void repair_text(text_repair_task_type_t task_type);
+    void repair_text(text_repair_task_type_t task_type, bool translation);
     void switch_mnt_langs();
     QString stt_auto_lang_id() const { return m_stt_auto_lang_id; }
     void update_stt_auto_lang(QString lang_id);

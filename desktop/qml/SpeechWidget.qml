@@ -126,7 +126,7 @@ RowLayout {
                             if (app.task_state === DsnoteApp.TaskStateInitializing)
                                 return qsTr("Getting ready, please wait...")
                             if (app.state === DsnoteApp.StateRestoringText)
-                                return qsTr("Repairing the text...")
+                                return qsTr("Converting text...")
                             if (app.state === DsnoteApp.StateWritingSpeechToFile)
                                 return qsTr("Converting text to speech...") +
                                         (app.speech_to_file_progress > 0.0 ? " " +

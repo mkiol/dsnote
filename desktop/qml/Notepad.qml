@@ -76,6 +76,7 @@ ColumnLayout {
         canReadAll: canReadSelected
         showControlTags: canReadSelected
         showInsertIndicator: _settings.insert_mode === Settings.InsertAtCursor
+        canPinyin: app.active_stt_model.lastIndexOf("zh") === 0 || app.active_tts_model.lastIndexOf("zh") === 0
         textArea {
             placeholderText: app.stt_configured || app.tts_configured ?
                                  qsTr("Type here or press %1 to make a note...")
@@ -121,6 +122,9 @@ ColumnLayout {
         onUndoFallbackClicked: app.undo_or_redu_note()
         onReadSelectedClicked: {
             app.play_speech_selected(start, end)
+        }
+        onPinyinClicked: {
+            app.pinyin_hanzi_toggle()
         }
     }
 

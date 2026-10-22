@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -29,6 +29,7 @@ Item {
     property bool canReadAll: false
     property bool canTranslateSelected: false
     property bool canTranslateAll: false
+    property bool canPinyin: false
     // readonly property bool _fitContent: scrollView.availableHeight - 4 * appWin.padding >= scrollView.contentHeight
     // readonly property bool _contextActive: _textFormatCombo.hovered || copyButton.hovered || clearButton.hovered ||
     //                                        undoButton.hovered || redoButton.hovered || pasteButton.hovered ||
@@ -40,6 +41,7 @@ Item {
     signal undoFallbackClicked()
     signal readSelectedClicked(int start, int end);
     signal translateSelectedClicked(int start, int end);
+    signal pinyinClicked();
 
     function scrollToBottom() {
         var position = (scrollView.contentHeight - scrollView.availableHeight) / scrollView.contentHeight
@@ -269,6 +271,21 @@ Item {
             Layout.fillWidth: true
         }
 
+        ToolButton {
+            id: pinyinButton
+
+            Layout.alignment: Qt.AlignRight
+            icon.name: "ime-pinyin"
+            text: qsTr("Toggle Hanzi/Pinyin")
+            display: AbstractButton.IconOnly
+            onClicked: root.pinyinClicked()
+            visible: root.textArea.text.length !== 0 && root.canPinyin
+
+            ToolTip.visible: hovered
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.text: qsTr("Toggle Hanzi/Pinyin")
+            hoverEnabled: true
+        }
         ToolButton {
             id: copyButton
 

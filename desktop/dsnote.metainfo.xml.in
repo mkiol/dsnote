@@ -101,6 +101,11 @@
   <releases>
     <release version="4.9.1" date="2026-10-20">
       <description>
+      <p>General</p>
+      <ul>
+      <li>Pinyin support for the Chinese language. You can convert Chinese text from Hanzi to Pinyin and vice versa.
+        To switch between Pinyin and Hanzi, use the 'Toggle Hanzi/Pinyin' button in the text area.</li>
+      </ul>
       <p>Accessibility:</p>
       <ul>
       <li>Improved 'Insert into active window'.
