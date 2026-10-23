@@ -106,7 +106,10 @@ ColumnLayout {
         optionName: "stt_use_note_as_prompt"
         text: qsTranslate("SettingsPage", "Use note as context")
         toolTipText: qsTranslate("SettingsPage", "Use an existing note as the initial context in decoding.") + " " +
-                     qsTranslate("SettingsPage", "This option only works with %1 and %2 models.").arg("<i>WhisperCpp</i>, <i>FasterWhisper</i>").arg("<i>Qwen3-ASR</i>")
+                     qsTranslate("SettingsPage", "This option only works with %1, %2 and %3 models.")
+                     .arg("<i>WhisperCpp</i>")
+                     .arg("<i>FasterWhisper</i>")
+                     .arg("<i>Qwen3-ASR</i>")
     }
 
     CheckBoxSetting {

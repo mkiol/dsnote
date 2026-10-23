@@ -86,7 +86,7 @@ DialogPage {
             Label {
                 Layout.fillWidth: true
                 wrapMode: Text.Wrap
-                text: qsTr("Currently, text voice profiles can be used only in %1 models.").arg("<i>Parler TTS</i>, <i>Qwen3-TTS VoiceDesign</i>") + " " +
+                text: qsTr("Currently, text voice profiles can be used only in %1 and %2 models.").arg("<i>Parler TTS</i>").arg("<i>Qwen3-TTS VoiceDesign</i>") + " " +
                       qsTr("To learn more about how to create a good text description, check out the specific model's website.")
             }
 
