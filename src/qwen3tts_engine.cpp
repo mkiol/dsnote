@@ -34,24 +34,6 @@ static const size_t s_max_new_tokens_limit = 8192;
 static const size_t s_max_new_tokens_base = 256;
 static const size_t s_max_new_tokens_per_char = 8;
 
-static bool cpu_has_native_bf16() {
-    std::ifstream cpuinfo_file{"/proc/cpuinfo"};
-    if (!cpuinfo_file) return false;
-
-    for (std::string line; std::getline(cpuinfo_file, line);) {
-        if (line.rfind("flags", 0) != 0) continue;
-
-        std::istringstream ss{line};
-        for (std::string flag; ss >> flag;) {
-            if (flag == "avx512_bf16" || flag == "amx_bf16") return true;
-        }
-
-        break;  // flags of the first cpu are enough
-    }
-
-    return false;
-}
-
 // bf16 only on GPUs with native support (ROCm, NVIDIA Ampere or newer),
 // torch.cuda.is_bf16_supported() also reports emulated bf16 as supported
 static bool gpu_has_native_bf16(const py::module_& torch, int device_id) {
@@ -248,7 +230,7 @@ void qwen3tts_engine::create_model() {
 
             auto use_bf16 =
                 use_cuda ? gpu_has_native_bf16(torch, m_config.gpu_device.id)
-                         : cpu_has_native_bf16();
+                         : cpu_tools::cpu_has_native_bf16();
 
             LOGD("using device: " << m_device_str << ", dtype: "
                                   << (use_bf16 ? "bfloat16" : "float32"));

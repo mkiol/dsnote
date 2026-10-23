@@ -191,4 +191,10 @@ void log_hw_caps() {
     LOGD("hw-caps for " << arch() << ": "
                         << static_cast<hw_cap_flags_t>(flags));
 }
+
+bool cpu_has_native_bf16() {
+    auto cpu_flags = cpu_tools::cpuinfo().feature_flags;
+    return cpu_flags & cpu_tools::feature_flags_t::feature_avx512_bf16 ||
+           cpu_flags & cpu_tools::feature_flags_t::feature_amx_bf16;
+}
 }  // namespace cpu_tools

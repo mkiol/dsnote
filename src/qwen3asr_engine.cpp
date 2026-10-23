@@ -187,26 +187,6 @@ bool qwen3asr_engine::gpu_has_native_bf16(const py::module_& torch,
     return capability[0].cast<int>() >= 8;
 }
 
-bool qwen3asr_engine::cpu_has_native_bf16() {
-    std::ifstream is{"/proc/cpuinfo"};
-    if (!is) return false;
-
-    std::string line;
-    while (std::getline(is, line)) {
-        if (line.rfind("flags", 0) != 0) continue;
-
-        std::istringstream ls{line};
-        std::string flag;
-        while (ls >> flag) {
-            if (flag == "avx512_bf16" || flag == "amx_bf16") return true;
-        }
-
-        return false;
-    }
-
-    return false;
-}
-
 // qwen3-asr doesn't provide timestamps (forced aligner is not used), so text
 // of decoded chunk is split into sentences and duration of the chunk is
 // divided proportionally to the length of each sentence
@@ -300,7 +280,7 @@ void qwen3asr_engine::create_model() {
             // fp16 is never used
             auto use_bf16 =
                 use_cuda ? gpu_has_native_bf16(torch, m_config.gpu_device.id)
-                         : cpu_has_native_bf16();
+                         : cpu_tools::cpu_has_native_bf16();
             const auto* dtype_str = use_bf16 ? "bfloat16" : "float32";
 
             LOGD("using device: " << device_str << ", dtype: " << dtype_str);

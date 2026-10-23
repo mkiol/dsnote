@@ -13,15 +13,17 @@
 #include <type_traits>
 
 // enum_id, cpuinfo_str, name_str, enum_value, dummy
-#define CPUTOOLS_CPU_FEATURE_FLAG_TABLE        \
-    X(avx, "avx", "avx", 1U << 0U, 0)          \
-    X(avx2, "avx2", "avx2", 1U << 1U, 0)       \
-    X(avx512, "avx512", "avx512", 1U << 2U, 0) \
-    X(fma, "fma", "fma", 1U << 3U, 0)          \
-    X(f16c, "f16c", "f16c", 1U << 4U, 0)       \
-    X(asimd, "asimd", "asimd", 1U << 5U, 0)    \
-    X(sse4_1, "sse4_1", "sse4.1", 1U << 6U, 0) \
-    X(bmi2, "bmi2", "bmi2", 1U << 7U, 0)
+#define CPUTOOLS_CPU_FEATURE_FLAG_TABLE                       \
+    X(avx, "avx", "avx", 1U << 0U, 0)                         \
+    X(avx2, "avx2", "avx2", 1U << 1U, 0)                      \
+    X(avx512, "avx512", "avx512", 1U << 2U, 0)                \
+    X(fma, "fma", "fma", 1U << 3U, 0)                         \
+    X(f16c, "f16c", "f16c", 1U << 4U, 0)                      \
+    X(asimd, "asimd", "asimd", 1U << 5U, 0)                   \
+    X(sse4_1, "sse4_1", "sse4.1", 1U << 6U, 0)                \
+    X(bmi2, "bmi2", "bmi2", 1U << 7U, 0)                      \
+    X(avx512_bf16, "avx512_bf16", "avx512-bf16", 1U << 8U, 0) \
+    X(amx_bf16, "amx_bf16", "amx-bf16", 1U << 9U, 0)
 
 // enum_id, name_str, hw_cap_flag, hwcpa_var, hwcap_macro
 #ifdef ARCH_ARM_32
@@ -138,6 +140,7 @@ cpuinfo_t cpuinfo();
 cpuinfo_t parse_cpuinfo(std::istream& stream);
 arch_t arch();
 void log_hw_caps();
+bool cpu_has_native_bf16();
 }  // namespace cpu_tools
 
 std::ostream& operator<<(std::ostream& os, cpu_tools::arch_t arch);

@@ -63,7 +63,6 @@ class qwen3asr_engine : public stt_engine {
     static std::vector<text_tools::segment_t> make_segments(
         const std::string& text, const std::string& lang, size_t first_n,
         size_t t0, size_t duration);
-    static bool cpu_has_native_bf16();
     static bool gpu_has_native_bf16(const py::module_& torch, int device_id);
 
     void reset_impl() override;
