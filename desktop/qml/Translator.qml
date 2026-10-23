@@ -109,7 +109,7 @@ ColumnLayout {
                     canTranslateAll: canTranslateSelected
                     showControlTags: canReadSelected
                     showInsertIndicator: _settings.insert_mode === Settings.InsertInLine
-                    canPinyin: app.active_mnt_lang == "zh"
+                    canPinyin: app.feature_pinyin && app.active_mnt_lang == "zh"
                     textArea {
                         placeholderText: app.mnt_configured ? qsTr("Type here text to translate from...") : ""
                         onTextChanged: app.note = root.noteTextArea.textArea.text
@@ -343,7 +343,7 @@ ColumnLayout {
                     canPaste: false
                     canReadSelected: mntOutCombo.second.button.enabled
                     canReadAll: canReadSelected
-                    canPinyin: app.active_mnt_out_lang == "zh"
+                    canPinyin: app.feature_pinyin && app.active_mnt_out_lang == "zh"
                     textArea {
                         onTextChanged: {
                             app.translated_text = root.translatedNoteTextArea.textArea.text

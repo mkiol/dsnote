@@ -77,8 +77,8 @@ PullDownMenu {
     }
 
     MenuItem {
-        visible: (_settings.translator_mode && (app.active_mnt_lang == "zh" || app.active_mnt_out_lang == "zh")) ||
-                 (!_settings.translator_mode && (app.active_stt_model.lastIndexOf("zh") === 0 || app.active_tts_model.lastIndexOf("zh") === 0))
+        visible: app.feature_pinyin && ((_settings.translator_mode && (app.active_mnt_lang == "zh" || app.active_mnt_out_lang == "zh")) ||
+                 (!_settings.translator_mode && (app.active_stt_model.lastIndexOf("zh") === 0 || app.active_tts_model.lastIndexOf("zh") === 0)))
         enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.note.length !== 0
         text: qsTr("Toggle Hanzi/Pinyin")
         onClicked: {

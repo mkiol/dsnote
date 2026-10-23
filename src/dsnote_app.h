@@ -60,7 +60,8 @@
     X(fake_keyboard)     \
     X(fake_keyboard_ydo) \
     X(hotkeys)           \
-    X(hotkeys_portal)
+    X(hotkeys_portal)    \
+    X(pinyin)
 
 // name, name_str
 #define TEXT_DESTINATION_TABLE           \

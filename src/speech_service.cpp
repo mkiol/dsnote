@@ -3464,6 +3464,12 @@ QVariantMap speech_service::features_availability() {
     ma.option_r = py_availability->uroman;
 #endif  // USE_PY
 
+    // pinyin
+    bool has_pinyin = !pinyin_to_hanzi_model_path().empty() &&
+                      !hanzi_to_pinyin_model_path().empty();
+    m_features_availability.insert("pinyin",
+                                   QVariantList{has_pinyin, "Pinyin"});
+
     ma.stt_ds = ds_engine::available();
     ma.mnt_bergamot = mnt_engine::available();
 

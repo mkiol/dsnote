@@ -5476,6 +5476,10 @@ bool dsnote_app::feature_hotkeys_portal() const {
 #endif
 }
 
+bool dsnote_app::feature_pinyin() const {
+    return feature_available("pinyin", false);
+}
+
 void dsnote_app::update_feature_statuses() {
     bool changed = false;
 #ifdef USE_DESKTOP
