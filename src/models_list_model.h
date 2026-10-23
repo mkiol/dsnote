@@ -70,21 +70,23 @@ class ModelsListModel : public SelectableItemModel {
         FeatureEngineSttFasterWhisper = 1U << 9U,
         FeatureEngineSttApril = 1U << 10U,
         FeatureEngineSttParakeet = 1U << 11U,
-        FeatureEngineSttEnd = FeatureEngineSttParakeet,
-        FeatureEngineTtsStart = 1U << 12U,
+        FeatureEngineSttQwen3Asr = 1U << 12U,
+        FeatureEngineSttEnd = FeatureEngineSttQwen3Asr,
+        FeatureEngineTtsStart = 1U << 13U,
         FeatureEngineTtsEspeak = FeatureEngineTtsStart,
-        FeatureEngineTtsPiper = 1U << 13U,
-        FeatureEngineTtsRhvoice = 1U << 14U,
-        FeatureEngineTtsCoqui = 1U << 15U,
-        FeatureEngineTtsMimic3 = 1U << 16U,
-        FeatureEngineTtsWhisperSpeech = 1U << 17U,
-        FeatureEngineTtsSam = 1U << 18U,
-        FeatureEngineTtsParler = 1U << 19U,
-        FeatureEngineTtsF5 = 1U << 20U,
-        FeatureEngineTtsKokoro = 1U << 21U,
-        FeatureEngineTtsEnd = FeatureEngineTtsKokoro,
-        FeatureEngineMnt = 1U << 23U,
-        FeatureEngineOther = 1U << 24U,
+        FeatureEngineTtsPiper = 1U << 14U,
+        FeatureEngineTtsRhvoice = 1U << 15U,
+        FeatureEngineTtsCoqui = 1U << 16U,
+        FeatureEngineTtsMimic3 = 1U << 17U,
+        FeatureEngineTtsWhisperSpeech = 1U << 18U,
+        FeatureEngineTtsSam = 1U << 19U,
+        FeatureEngineTtsParler = 1U << 20U,
+        FeatureEngineTtsF5 = 1U << 21U,
+        FeatureEngineTtsKokoro = 1U << 22U,
+        FeatureEngineTtsQwen3Tts = 1U << 23U,
+        FeatureEngineTtsEnd = FeatureEngineTtsQwen3Tts,
+        FeatureEngineMnt = 1U << 24U,
+        FeatureEngineOther = 1U << 25U,
         FeatureGenericEnd = FeatureEngineOther,
         FeatureSttStart = 1U << 26U,
         FeatureSttIntermediateResults = FeatureSttStart,
@@ -97,12 +99,13 @@ class ModelsListModel : public SelectableItemModel {
         FeatureLast = FeatureTtsEnd,
         FeatureAllSttEngines = FeatureEngineSttDs | FeatureEngineSttVosk |
             FeatureEngineSttWhisper | FeatureEngineSttFasterWhisper |
-            FeatureEngineSttApril | FeatureEngineSttParakeet,
+            FeatureEngineSttApril | FeatureEngineSttParakeet |
+            FeatureEngineSttQwen3Asr,
         FeatureAllTtsEngines = FeatureEngineTtsEspeak | FeatureEngineTtsPiper |
             FeatureEngineTtsRhvoice | FeatureEngineTtsCoqui |
             FeatureEngineTtsMimic3 | FeatureEngineTtsWhisperSpeech |
             FeatureEngineTtsSam | FeatureEngineTtsParler | FeatureEngineTtsF5 |
-            FeatureEngineTtsKokoro,
+            FeatureEngineTtsKokoro | FeatureEngineTtsQwen3Tts,
         FeatureAll = FeatureFastProcessing | FeatureMediumProcessing |
             FeatureSlowProcessing | FeatureQualityHigh | FeatureQualityMedium |
             FeatureQualityLow | FeatureAllSttEngines | FeatureAllTtsEngines |

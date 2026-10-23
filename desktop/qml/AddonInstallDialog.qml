@@ -71,10 +71,12 @@ HelpDialog {
               "<ul>" +
               "<li>WhisperCpp STT</li>" +
               "<li>FasterWhisper STT</li>" +
+              "<li>Qwen3-ASR STT</li>" +
               "<li>Coqui TTS</li>" +
               "<li>F5-TTS</li>" +
               "<li>Kokoro TTS</li>" +
               "<li>Parler-TTS</li>" +
+              "<li>Qwen3-TTS</li>" +
               "<li>WhisperSpeech TTS</li>" +
               "</ul>"
     }
@@ -88,10 +90,12 @@ HelpDialog {
         text: qsTr("The add-on enables faster processing when using the following Speech to Text and Text to Speech engines:") + " " +
               "<ul>" +
               "<li>WhisperCpp STT</li>" +
+              "<li>Qwen3-ASR STT</li>" +
               "<li>Coqui TTS</li>" +
               "<li>F5-TTS</li>" +
               "<li>Kokoro TTS</li>" +
               "<li>Parler-TTS</li>" +
+              "<li>Qwen3-TTS</li>" +
               "<li>WhisperSpeech TTS</li>" +
               "</ul>"
     }

@@ -106,7 +106,7 @@ ColumnLayout {
         optionName: "stt_use_note_as_prompt"
         text: qsTranslate("SettingsPage", "Use note as context")
         toolTipText: qsTranslate("SettingsPage", "Use an existing note as the initial context in decoding.") + " " +
-                     qsTranslate("SettingsPage", "This option only works with %1 and %2 models.").arg("<i>WhisperCpp</i>").arg("<i>FasterWhisper</i>")
+                     qsTranslate("SettingsPage", "This option only works with %1 and %2 models.").arg("<i>WhisperCpp</i>, <i>FasterWhisper</i>").arg("<i>Qwen3-ASR</i>")
     }
 
     CheckBoxSetting {
@@ -331,6 +331,8 @@ ColumnLayout {
         Layout.rightMargin: 1
         currentIndex: {
             var idx = _settings.settings_stt_engine_idx
+            // Qwen3-ASR tab has only hardware acceleration options
+            var qwen3asr_enable = app.feature_qwen3asr_stt && app.feature_qwen3asr_gpu
             if (idx === 0) {
                 if (app.feature_whispercpp_stt) {
                     return 0;
@@ -340,6 +342,9 @@ ColumnLayout {
                 }
                 if (app.feature_parakeet_stt) {
                     return 2
+                }
+                if (qwen3asr_enable) {
+                    return 3
                 }
             } else if (idx === 1) {
                 if (app.feature_fasterwhisper_stt) {
@@ -351,7 +356,26 @@ ColumnLayout {
                 if (app.feature_parakeet_stt) {
                     return 2
                 }
+                if (qwen3asr_enable) {
+                    return 3
+                }
             } else if (idx === 2) {
+                if (app.feature_parakeet_stt) {
+                    return 2
+                }
+                if (app.feature_fasterwhisper_stt) {
+                    return 1
+                }
+                if (app.feature_whispercpp_stt) {
+                    return 0;
+                }
+                if (qwen3asr_enable) {
+                    return 3
+                }
+            } else if (idx === 3) {
+                if (qwen3asr_enable) {
+                    return 3
+                }
                 if (app.feature_parakeet_stt) {
                     return 2
                 }
@@ -365,7 +389,8 @@ ColumnLayout {
             return -1
         }
         onCurrentIndexChanged: _settings.settings_stt_engine_idx = currentIndex
-        visible: app.feature_whispercpp_stt || app.feature_fasterwhisper_stt ||  app.feature_parakeet_stt
+        visible: app.feature_whispercpp_stt || app.feature_fasterwhisper_stt ||  app.feature_parakeet_stt ||
+                 (app.feature_qwen3asr_stt && app.feature_qwen3asr_gpu)
 
         TabButton {
             enabled: app.feature_whispercpp_stt
@@ -382,6 +407,12 @@ ColumnLayout {
         TabButton {
             enabled: app.feature_parakeet_stt
             text: "Parakeet"
+            width: implicitWidth
+        }
+
+        TabButton {
+            enabled: app.feature_qwen3asr_stt && app.feature_qwen3asr_gpu
+            text: "Qwen3-ASR"
             width: implicitWidth
         }
 
@@ -917,6 +948,28 @@ ColumnLayout {
                         use_gpu: _settings.parakeet_use_gpu
                         onUse_gpuChanged: _settings.parakeet_use_gpu = use_gpu
                         onDevice_indexChanged: _settings.parakeet_gpu_device_idx = device_index
+                    }
+
+                    Item {
+                        Layout.fillHeight: true
+                    }
+                }
+            }
+        }
+        Loader {
+            active: app.feature_qwen3asr_stt && app.feature_qwen3asr_gpu
+            sourceComponent: Component {
+                ColumnLayout {
+                    id: qwen3asrTab
+
+                    GpuComboBox {
+                        id: qwen3asrGpuComboBox
+
+                        devices: _settings.qwen3asr_gpu_devices
+                        device_index: _settings.qwen3asr_gpu_device_idx
+                        use_gpu: _settings.qwen3asr_use_gpu
+                        onUse_gpuChanged: _settings.qwen3asr_use_gpu = use_gpu
+                        onDevice_indexChanged: _settings.qwen3asr_gpu_device_idx = device_index
                     }
 
                     Item {

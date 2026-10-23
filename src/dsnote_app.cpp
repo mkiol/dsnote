@@ -5338,6 +5338,15 @@ bool dsnote_app::feature_fasterwhisper_gpu() const {
            feature_available("faster-whisper-stt-hip", false);
 }
 
+bool dsnote_app::feature_qwen3asr_stt() const {
+    return feature_available("qwen3asr-stt", false);
+}
+
+bool dsnote_app::feature_qwen3asr_gpu() const {
+    return feature_available("qwen3asr-stt-cuda", false) ||
+           feature_available("qwen3asr-stt-hip", false);
+}
+
 bool dsnote_app::feature_coqui_tts() const {
     return feature_available("coqui-tts", false);
 }
@@ -5381,6 +5390,15 @@ bool dsnote_app::feature_kokoro_tts() const {
 bool dsnote_app::feature_kokoro_gpu() const {
     return feature_available("kokoro-tts-cuda", false) ||
            feature_available("kokoro-tts-hip", false);
+}
+
+bool dsnote_app::feature_qwen3tts_tts() const {
+    return feature_available("qwen3tts-tts", false);
+}
+
+bool dsnote_app::feature_qwen3tts_gpu() const {
+    return feature_available("qwen3tts-tts-cuda", false) ||
+           feature_available("qwen3tts-tts-hip", false);
 }
 
 bool dsnote_app::feature_punctuator() const {

@@ -130,6 +130,8 @@ Dialog {
                         return "FasterWhisper"
                     else if (f & ModelsListModel.FeatureEngineSttParakeet)
                         return "Parakeet"
+                    else if (f & ModelsListModel.FeatureEngineSttQwen3Asr)
+                        return "Qwen3-ASR"
                     else if (f & ModelsListModel.FeatureEngineSttApril)
                         return "April-ASR"
                     else if (f & ModelsListModel.FeatureEngineTtsEspeak)
@@ -148,6 +150,10 @@ Dialog {
                         return "Parler-TTS"
                     else if (f & ModelsListModel.FeatureEngineTtsF5)
                         return "F5-TTS"
+                    else if (f & ModelsListModel.FeatureEngineTtsKokoro)
+                        return "Kokoro"
+                    else if (f & ModelsListModel.FeatureEngineTtsQwen3Tts)
+                        return "Qwen3-TTS"
                     else if (f & ModelsListModel.FeatureEngineTtsSam)
                         return "S.A.M."
                     return ""
@@ -177,7 +183,9 @@ Dialog {
                     }
                     if ((f & ModelsListModel.FeatureEngineTtsCoqui) ||
                              (f & ModelsListModel.FeatureEngineTtsParler) ||
-                             (f & ModelsListModel.FeatureEngineTtsF5)) {
+                             (f & ModelsListModel.FeatureEngineTtsF5) ||
+                             (f & ModelsListModel.FeatureEngineSttQwen3Asr) ||
+                             (f & ModelsListModel.FeatureEngineTtsQwen3Tts)) {
                         return "NVIDIA CUDA, AMD ROCm"
                     }
                     return ""

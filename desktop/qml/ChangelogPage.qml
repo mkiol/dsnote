@@ -44,6 +44,12 @@ DialogPage {
             Parakeet TDT is available for the following languages: 
             Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian,
             Maltese, Polish, Portuguese, Romanian, Slovak, Slovenian, Spanish, Swedish, Russian and Ukrainian.</li>
+        <li>Support for <i>Qwen3-ASR</i> 0.6B and 1.7B models. Qwen3-ASR is a multilingual STT model from the Qwen team.
+            The model automatically detects the language of the audio, therefore is also enabled in <i>Auto detected</i> category.
+            The model works on CPU but also supports CUDA and ROCm GPU acceleration (in Flatpak, install the NVIDIA or AMD add-on).
+            Qwen3-ASR is available for the following 30 languages:
+            Arabic, Chinese, Chinese-Cantonese (广东话), Czech, Danish, Dutch, English, Finnish, French, German, Greek, Hindi, Hungarian, Indonesian,
+            Italian, Japanese, Korean, Macedonian, Malay, Persian, Polish, Portuguese, Romanian, Russian, Spanish, Swedish, Tagalog, Thai, Turkish and Vietnamese.</li>
         <li>Inline timestamps in text output.
             A new output format is now available, displaying timestamps that show when each segment of text was recognized in the audio.
             To enable new format set <i>Text format</i> to <i>Inline timestamps</i>. 
@@ -61,6 +67,14 @@ DialogPage {
         </ul>
         <p>" + qsTr("Text to Speech") + "</p>
         <ul>
+        <li>Support for <i>Qwen3-TTS</i> 0.6B and 1.7B models. Qwen3-TTS is a multilingual TTS model from the Qwen team.
+            The models are available for: Chinese, English, French, German, Italian, Japanese, Korean, Portuguese, Russian and Spanish.
+            <i>Base</i> models clone a voice from an audio sample. For the best results, make sure that the text spoken in the audio sample
+            is set correctly in <i>Voice profiles</i> &rarr; <i>Audio sample</i> menu.
+            <i>CustomVoice</i> models provide 9 built-in voices.
+            The 1.7B <i>VoiceDesign</i> model creates a voice from a text description (prompt).
+            To use it, you need to configure a <i>Text voice profile</i> in the <i>Voice profiles</i> menu.
+            Qwen3-TTS works best with CUDA or ROCm acceleration (in Flatpak, install the NVIDIA or AMD add-on). CPU only processing can be very slow.</li>
         <li>New RHVoice models for: Belarusian, Croatian, English, Romanian, Russian</li>
         <li>Updated RHVoice models for: Czech, Serbian, Spanish</li>
         <li>New Piper models for: Albanian, Bulgarian, Dutch, Greek, Hindi, Indonesian, Kurdish, Latvian, Polish, Swedish, Telugu, Ukrainian, Urdu</li>
@@ -92,6 +106,7 @@ DialogPage {
         <li>WhisperSpeech update to version 1.0.0</li>
         <li>Kokoro update to version 0.9.4</li>
         <li>F5-TTS update to version 1.1.20</li>
+        <li>New Python libraries: qwen-tts 0.1.1, qwen-asr 0.0.6</li>
         <li>Remove Parler-TTS due to dependency conflicts that cannot be fixed</li>
         <li>Flatpak runtime update to version 6.11</li>
         </ul>"

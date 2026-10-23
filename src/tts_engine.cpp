@@ -1176,7 +1176,11 @@ void tts_engine::make_silence_wav_file(size_t duration_msec,
 void tts_engine::setup_ref_voice() {
     if (m_config.ref_voice_file.empty()) return;
 
-    auto hash = std::hash<std::string>{}(m_config.ref_voice_file);
+    // ctime is a part of the hash, so a stale wav is not reused when the voice
+    // sample file is replaced by a new one with the same name
+    auto hash = std::hash<std::string>{}(
+        m_config.ref_voice_file +
+        std::to_string(create_date_sec(m_config.ref_voice_file)));
 
     m_ref_voice_wav_file =
         m_config.cache_dir + "/" + std::to_string(hash) + ".wav";

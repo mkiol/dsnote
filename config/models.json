@@ -8487,6 +8487,504 @@
             "lang_id": "pl"
         },
         {
+            "name": "Multilingual (Qwen3-ASR 0.6B)",
+            "model_id": "multilang_qwen3asr_06b",
+            "engine": "stt_qwen3asr",
+            "lang_id": "multilang",
+            "checksum": "6e7683ce",
+            "checksum_quick": "212b952d",
+            "size": "1880560703",
+            "features": [
+                "stt_punctuation"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "info": "https://huggingface.co/Qwen/Qwen3-ASR-0.6B",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/Qwen/Qwen3-ASR-0.6B/resolve/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/chat_template.json",
+                "https://huggingface.co/Qwen/Qwen3-ASR-0.6B/resolve/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/config.json",
+                "https://huggingface.co/Qwen/Qwen3-ASR-0.6B/resolve/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/generation_config.json",
+                "https://huggingface.co/Qwen/Qwen3-ASR-0.6B/resolve/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/merges.txt",
+                "https://huggingface.co/Qwen/Qwen3-ASR-0.6B/resolve/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/model.safetensors",
+                "https://huggingface.co/Qwen/Qwen3-ASR-0.6B/resolve/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/preprocessor_config.json",
+                "https://huggingface.co/Qwen/Qwen3-ASR-0.6B/resolve/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/tokenizer_config.json",
+                "https://huggingface.co/Qwen/Qwen3-ASR-0.6B/resolve/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/vocab.json"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "Auto (Qwen3-ASR 0.6B)",
+            "model_id": "auto_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "lang_id": "auto"
+        },
+        {
+            "name": "中文 (Qwen3-ASR 0.6B)",
+            "model_id": "zh_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "zh_qwen3asr",
+            "lang_id": "zh"
+        },
+        {
+            "name": "广东话 (Qwen3-ASR 0.6B)",
+            "model_id": "zh_qwen3asr_yue_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "zh_qwen3asr",
+            "lang_id": "zh",
+            "lang_code": "yue"
+        },
+        {
+            "name": "English (Qwen3-ASR 0.6B)",
+            "model_id": "en_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "en_qwen3asr",
+            "lang_id": "en"
+        },
+        {
+            "name": "عربي (Qwen3-ASR 0.6B)",
+            "model_id": "ar_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "ar_qwen3asr",
+            "lang_id": "ar"
+        },
+        {
+            "name": "Deutsch (Qwen3-ASR 0.6B)",
+            "model_id": "de_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "de_qwen3asr",
+            "lang_id": "de"
+        },
+        {
+            "name": "Français (Qwen3-ASR 0.6B)",
+            "model_id": "fr_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "fr_qwen3asr",
+            "lang_id": "fr"
+        },
+        {
+            "name": "Español (Qwen3-ASR 0.6B)",
+            "model_id": "es_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "es_qwen3asr",
+            "lang_id": "es"
+        },
+        {
+            "name": "Português (Qwen3-ASR 0.6B)",
+            "model_id": "pt_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "pt_qwen3asr",
+            "lang_id": "pt"
+        },
+        {
+            "name": "Bahasa Indonesia (Qwen3-ASR 0.6B)",
+            "model_id": "id_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "id_qwen3asr",
+            "lang_id": "id"
+        },
+        {
+            "name": "Italiano (Qwen3-ASR 0.6B)",
+            "model_id": "it_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "it_qwen3asr",
+            "lang_id": "it"
+        },
+        {
+            "name": "한국어 (Qwen3-ASR 0.6B)",
+            "model_id": "ko_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "ko_qwen3asr",
+            "lang_id": "ko"
+        },
+        {
+            "name": "Русский (Qwen3-ASR 0.6B)",
+            "model_id": "ru_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "ru_qwen3asr",
+            "lang_id": "ru"
+        },
+        {
+            "name": "ไทย (Qwen3-ASR 0.6B)",
+            "model_id": "th_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "th_qwen3asr",
+            "lang_id": "th"
+        },
+        {
+            "name": "Tiếng Việt (Qwen3-ASR 0.6B)",
+            "model_id": "vi_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "vi_qwen3asr",
+            "lang_id": "vi"
+        },
+        {
+            "name": "日本語 (Qwen3-ASR 0.6B)",
+            "model_id": "ja_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "ja_qwen3asr",
+            "lang_id": "ja"
+        },
+        {
+            "name": "Türkçe (Qwen3-ASR 0.6B)",
+            "model_id": "tr_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "tr_qwen3asr",
+            "lang_id": "tr"
+        },
+        {
+            "name": "हिन्दी (Qwen3-ASR 0.6B)",
+            "model_id": "hi_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "hi_qwen3asr",
+            "lang_id": "hi"
+        },
+        {
+            "name": "Melayu (Qwen3-ASR 0.6B)",
+            "model_id": "ms_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "ms_qwen3asr",
+            "lang_id": "ms"
+        },
+        {
+            "name": "Nederlands (Qwen3-ASR 0.6B)",
+            "model_id": "nl_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "nl_qwen3asr",
+            "lang_id": "nl"
+        },
+        {
+            "name": "Svenska (Qwen3-ASR 0.6B)",
+            "model_id": "sv_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "sv_qwen3asr",
+            "lang_id": "sv"
+        },
+        {
+            "name": "Dansk (Qwen3-ASR 0.6B)",
+            "model_id": "da_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "da_qwen3asr",
+            "lang_id": "da"
+        },
+        {
+            "name": "Suomi (Qwen3-ASR 0.6B)",
+            "model_id": "fi_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "fi_qwen3asr",
+            "lang_id": "fi"
+        },
+        {
+            "name": "Polski (Qwen3-ASR 0.6B)",
+            "model_id": "pl_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "pl_qwen3asr",
+            "lang_id": "pl"
+        },
+        {
+            "name": "Čeština (Qwen3-ASR 0.6B)",
+            "model_id": "cs_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "cs_qwen3asr",
+            "lang_id": "cs"
+        },
+        {
+            "name": "Tagalog (Qwen3-ASR 0.6B)",
+            "model_id": "tl_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "tl_qwen3asr",
+            "lang_id": "tl"
+        },
+        {
+            "name": "فارسی (Qwen3-ASR 0.6B)",
+            "model_id": "fa_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "fa_qwen3asr",
+            "lang_id": "fa"
+        },
+        {
+            "name": "Ελληνικά (Qwen3-ASR 0.6B)",
+            "model_id": "el_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "el_qwen3asr",
+            "lang_id": "el"
+        },
+        {
+            "name": "Română (Qwen3-ASR 0.6B)",
+            "model_id": "ro_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "ro_qwen3asr",
+            "lang_id": "ro"
+        },
+        {
+            "name": "Magyar (Qwen3-ASR 0.6B)",
+            "model_id": "hu_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "hu_qwen3asr",
+            "lang_id": "hu"
+        },
+        {
+            "name": "Македонски (Qwen3-ASR 0.6B)",
+            "model_id": "mk_qwen3asr_06b",
+            "model_alias_of": "multilang_qwen3asr_06b",
+            "pack_id": "mk_qwen3asr",
+            "lang_id": "mk"
+        },
+        {
+            "name": "Multilingual (Qwen3-ASR 1.7B)",
+            "model_id": "multilang_qwen3asr_17b",
+            "engine": "stt_qwen3asr",
+            "lang_id": "multilang",
+            "checksum": "5e06130",
+            "checksum_quick": "a8e06bb2",
+            "size": "4703055333",
+            "features": [
+                "stt_punctuation"
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "info": "https://huggingface.co/Qwen/Qwen3-ASR-1.7B",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/Qwen/Qwen3-ASR-1.7B/resolve/7278e1e70fe206f11671096ffdd38061171dd6e5/chat_template.json",
+                "https://huggingface.co/Qwen/Qwen3-ASR-1.7B/resolve/7278e1e70fe206f11671096ffdd38061171dd6e5/config.json",
+                "https://huggingface.co/Qwen/Qwen3-ASR-1.7B/resolve/7278e1e70fe206f11671096ffdd38061171dd6e5/generation_config.json",
+                "https://huggingface.co/Qwen/Qwen3-ASR-1.7B/resolve/7278e1e70fe206f11671096ffdd38061171dd6e5/merges.txt",
+                "https://huggingface.co/Qwen/Qwen3-ASR-1.7B/resolve/7278e1e70fe206f11671096ffdd38061171dd6e5/model-00001-of-00002.safetensors",
+                "https://huggingface.co/Qwen/Qwen3-ASR-1.7B/resolve/7278e1e70fe206f11671096ffdd38061171dd6e5/model-00002-of-00002.safetensors",
+                "https://huggingface.co/Qwen/Qwen3-ASR-1.7B/resolve/7278e1e70fe206f11671096ffdd38061171dd6e5/model.safetensors.index.json",
+                "https://huggingface.co/Qwen/Qwen3-ASR-1.7B/resolve/7278e1e70fe206f11671096ffdd38061171dd6e5/preprocessor_config.json",
+                "https://huggingface.co/Qwen/Qwen3-ASR-1.7B/resolve/7278e1e70fe206f11671096ffdd38061171dd6e5/tokenizer_config.json",
+                "https://huggingface.co/Qwen/Qwen3-ASR-1.7B/resolve/7278e1e70fe206f11671096ffdd38061171dd6e5/vocab.json"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "Auto (Qwen3-ASR 1.7B)",
+            "model_id": "auto_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "lang_id": "auto"
+        },
+        {
+            "name": "中文 (Qwen3-ASR 1.7B)",
+            "model_id": "zh_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "zh_qwen3asr",
+            "lang_id": "zh"
+        },
+        {
+            "name": "广东话 (Qwen3-ASR 1.7B)",
+            "model_id": "zh_qwen3asr_yue_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "zh_qwen3asr",
+            "lang_id": "zh",
+            "lang_code": "yue"
+        },
+        {
+            "name": "English (Qwen3-ASR 1.7B)",
+            "model_id": "en_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "en_qwen3asr",
+            "lang_id": "en"
+        },
+        {
+            "name": "عربي (Qwen3-ASR 1.7B)",
+            "model_id": "ar_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "ar_qwen3asr",
+            "lang_id": "ar"
+        },
+        {
+            "name": "Deutsch (Qwen3-ASR 1.7B)",
+            "model_id": "de_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "de_qwen3asr",
+            "lang_id": "de"
+        },
+        {
+            "name": "Français (Qwen3-ASR 1.7B)",
+            "model_id": "fr_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "fr_qwen3asr",
+            "lang_id": "fr"
+        },
+        {
+            "name": "Español (Qwen3-ASR 1.7B)",
+            "model_id": "es_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "es_qwen3asr",
+            "lang_id": "es"
+        },
+        {
+            "name": "Português (Qwen3-ASR 1.7B)",
+            "model_id": "pt_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "pt_qwen3asr",
+            "lang_id": "pt"
+        },
+        {
+            "name": "Bahasa Indonesia (Qwen3-ASR 1.7B)",
+            "model_id": "id_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "id_qwen3asr",
+            "lang_id": "id"
+        },
+        {
+            "name": "Italiano (Qwen3-ASR 1.7B)",
+            "model_id": "it_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "it_qwen3asr",
+            "lang_id": "it"
+        },
+        {
+            "name": "한국어 (Qwen3-ASR 1.7B)",
+            "model_id": "ko_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "ko_qwen3asr",
+            "lang_id": "ko"
+        },
+        {
+            "name": "Русский (Qwen3-ASR 1.7B)",
+            "model_id": "ru_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "ru_qwen3asr",
+            "lang_id": "ru"
+        },
+        {
+            "name": "ไทย (Qwen3-ASR 1.7B)",
+            "model_id": "th_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "th_qwen3asr",
+            "lang_id": "th"
+        },
+        {
+            "name": "Tiếng Việt (Qwen3-ASR 1.7B)",
+            "model_id": "vi_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "vi_qwen3asr",
+            "lang_id": "vi"
+        },
+        {
+            "name": "日本語 (Qwen3-ASR 1.7B)",
+            "model_id": "ja_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "ja_qwen3asr",
+            "lang_id": "ja"
+        },
+        {
+            "name": "Türkçe (Qwen3-ASR 1.7B)",
+            "model_id": "tr_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "tr_qwen3asr",
+            "lang_id": "tr"
+        },
+        {
+            "name": "हिन्दी (Qwen3-ASR 1.7B)",
+            "model_id": "hi_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "hi_qwen3asr",
+            "lang_id": "hi"
+        },
+        {
+            "name": "Melayu (Qwen3-ASR 1.7B)",
+            "model_id": "ms_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "ms_qwen3asr",
+            "lang_id": "ms"
+        },
+        {
+            "name": "Nederlands (Qwen3-ASR 1.7B)",
+            "model_id": "nl_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "nl_qwen3asr",
+            "lang_id": "nl"
+        },
+        {
+            "name": "Svenska (Qwen3-ASR 1.7B)",
+            "model_id": "sv_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "sv_qwen3asr",
+            "lang_id": "sv"
+        },
+        {
+            "name": "Dansk (Qwen3-ASR 1.7B)",
+            "model_id": "da_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "da_qwen3asr",
+            "lang_id": "da"
+        },
+        {
+            "name": "Suomi (Qwen3-ASR 1.7B)",
+            "model_id": "fi_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "fi_qwen3asr",
+            "lang_id": "fi"
+        },
+        {
+            "name": "Polski (Qwen3-ASR 1.7B)",
+            "model_id": "pl_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "pl_qwen3asr",
+            "lang_id": "pl"
+        },
+        {
+            "name": "Čeština (Qwen3-ASR 1.7B)",
+            "model_id": "cs_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "cs_qwen3asr",
+            "lang_id": "cs"
+        },
+        {
+            "name": "Tagalog (Qwen3-ASR 1.7B)",
+            "model_id": "tl_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "tl_qwen3asr",
+            "lang_id": "tl"
+        },
+        {
+            "name": "فارسی (Qwen3-ASR 1.7B)",
+            "model_id": "fa_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "fa_qwen3asr",
+            "lang_id": "fa"
+        },
+        {
+            "name": "Ελληνικά (Qwen3-ASR 1.7B)",
+            "model_id": "el_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "el_qwen3asr",
+            "lang_id": "el"
+        },
+        {
+            "name": "Română (Qwen3-ASR 1.7B)",
+            "model_id": "ro_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "ro_qwen3asr",
+            "lang_id": "ro"
+        },
+        {
+            "name": "Magyar (Qwen3-ASR 1.7B)",
+            "model_id": "hu_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "hu_qwen3asr",
+            "lang_id": "hu"
+        },
+        {
+            "name": "Македонски (Qwen3-ASR 1.7B)",
+            "model_id": "mk_qwen3asr_17b",
+            "model_alias_of": "multilang_qwen3asr_17b",
+            "pack_id": "mk_qwen3asr",
+            "lang_id": "mk"
+        },
+        {
             "name": "English (Vosk Small)",
             "model_id": "en_vosk_small",
             "engine": "stt_vosk",
@@ -36276,6 +36774,1878 @@
             "lang_id": "zh",
             "speaker": "zm_yunyang",
             "options": "a"
+        },
+        {
+            "name": "Multilingual (Qwen3-TTS 0.6B Base)",
+            "model_id": "multilang_qwen3tts_06b_base",
+            "engine": "tts_qwen3tts",
+            "lang_id": "multilang",
+            "checksum": "34432759",
+            "checksum_quick": "95d818f",
+            "size": "1833805154",
+            "options": "x",
+            "features": [
+                "tts_voice_cloning"
+            ],
+            "sups": [
+                {
+                    "role": "vocoder",
+                    "file_name": "qwen3tts_tokenizer_12hz_vocoder",
+                    "checksum": "4af2ebd6",
+                    "checksum_quick": "9eda99c4",
+                    "size": "682295662",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/config.json",
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/preprocessor_config.json",
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/model.safetensors"
+                    ]
+                }
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "info": "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-Base",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-Base/resolve/5d83992436eae1d760afd27aff78a71d676296fc/config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-Base/resolve/5d83992436eae1d760afd27aff78a71d676296fc/generation_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-Base/resolve/5d83992436eae1d760afd27aff78a71d676296fc/merges.txt",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-Base/resolve/5d83992436eae1d760afd27aff78a71d676296fc/model.safetensors",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-Base/resolve/5d83992436eae1d760afd27aff78a71d676296fc/preprocessor_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-Base/resolve/5d83992436eae1d760afd27aff78a71d676296fc/tokenizer_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-Base/resolve/5d83992436eae1d760afd27aff78a71d676296fc/vocab.json"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "Multilingual (Qwen3-TTS 0.6B CustomVoice)",
+            "model_id": "multilang_qwen3tts_06b_customvoice",
+            "engine": "tts_qwen3tts",
+            "lang_id": "multilang",
+            "checksum": "34342a62",
+            "checksum_quick": "519cbc65",
+            "size": "1816087872",
+            "sups": [
+                {
+                    "role": "vocoder",
+                    "file_name": "qwen3tts_tokenizer_12hz_vocoder",
+                    "checksum": "4af2ebd6",
+                    "checksum_quick": "9eda99c4",
+                    "size": "682295662",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/config.json",
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/preprocessor_config.json",
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/model.safetensors"
+                    ]
+                }
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "info": "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice/resolve/85e237c12c027371202489a0ec509ded67b5e4b5/config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice/resolve/85e237c12c027371202489a0ec509ded67b5e4b5/generation_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice/resolve/85e237c12c027371202489a0ec509ded67b5e4b5/merges.txt",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice/resolve/85e237c12c027371202489a0ec509ded67b5e4b5/model.safetensors",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice/resolve/85e237c12c027371202489a0ec509ded67b5e4b5/preprocessor_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice/resolve/85e237c12c027371202489a0ec509ded67b5e4b5/tokenizer_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice/resolve/85e237c12c027371202489a0ec509ded67b5e4b5/vocab.json"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "Multilingual (Qwen3-TTS 1.7B Base)",
+            "model_id": "multilang_qwen3tts_17b_base",
+            "engine": "tts_qwen3tts",
+            "lang_id": "multilang",
+            "checksum": "5a11a581",
+            "checksum_quick": "bc9b0d6a",
+            "size": "3861874626",
+            "options": "x",
+            "features": [
+                "tts_voice_cloning"
+            ],
+            "sups": [
+                {
+                    "role": "vocoder",
+                    "file_name": "qwen3tts_tokenizer_12hz_vocoder",
+                    "checksum": "4af2ebd6",
+                    "checksum_quick": "9eda99c4",
+                    "size": "682295662",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/config.json",
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/preprocessor_config.json",
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/model.safetensors"
+                    ]
+                }
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "info": "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-Base/resolve/fd4b254389122332181a7c3db7f27e918eec64e3/config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-Base/resolve/fd4b254389122332181a7c3db7f27e918eec64e3/generation_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-Base/resolve/fd4b254389122332181a7c3db7f27e918eec64e3/merges.txt",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-Base/resolve/fd4b254389122332181a7c3db7f27e918eec64e3/model.safetensors",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-Base/resolve/fd4b254389122332181a7c3db7f27e918eec64e3/preprocessor_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-Base/resolve/fd4b254389122332181a7c3db7f27e918eec64e3/tokenizer_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-Base/resolve/fd4b254389122332181a7c3db7f27e918eec64e3/vocab.json"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "Multilingual (Qwen3-TTS 1.7B CustomVoice)",
+            "model_id": "multilang_qwen3tts_17b_customvoice",
+            "engine": "tts_qwen3tts",
+            "lang_id": "multilang",
+            "checksum": "12795902",
+            "checksum_quick": "80147c10",
+            "size": "3837863848",
+            "sups": [
+                {
+                    "role": "vocoder",
+                    "file_name": "qwen3tts_tokenizer_12hz_vocoder",
+                    "checksum": "4af2ebd6",
+                    "checksum_quick": "9eda99c4",
+                    "size": "682295662",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/config.json",
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/preprocessor_config.json",
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/model.safetensors"
+                    ]
+                }
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "info": "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice/resolve/0c0e3051f131929182e2c023b9537f8b1c68adfe/config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice/resolve/0c0e3051f131929182e2c023b9537f8b1c68adfe/generation_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice/resolve/0c0e3051f131929182e2c023b9537f8b1c68adfe/merges.txt",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice/resolve/0c0e3051f131929182e2c023b9537f8b1c68adfe/model.safetensors",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice/resolve/0c0e3051f131929182e2c023b9537f8b1c68adfe/preprocessor_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice/resolve/0c0e3051f131929182e2c023b9537f8b1c68adfe/tokenizer_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice/resolve/0c0e3051f131929182e2c023b9537f8b1c68adfe/vocab.json"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "Multilingual (Qwen3-TTS 1.7B VoiceDesign)",
+            "model_id": "multilang_qwen3tts_17b_voicedesign",
+            "engine": "tts_qwen3tts",
+            "lang_id": "multilang",
+            "checksum": "a88330d6",
+            "checksum_quick": "562e943",
+            "size": "3837863361",
+            "options": "v",
+            "features": [
+                "tts_prompt"
+            ],
+            "sups": [
+                {
+                    "role": "vocoder",
+                    "file_name": "qwen3tts_tokenizer_12hz_vocoder",
+                    "checksum": "4af2ebd6",
+                    "checksum_quick": "9eda99c4",
+                    "size": "682295662",
+                    "comp": "dir",
+                    "urls": [
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/config.json",
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/preprocessor_config.json",
+                        "https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz/resolve/7dd38ad4e9bad454aae9cd937d0cd577604fe229/model.safetensors"
+                    ]
+                }
+            ],
+            "license": {
+                "id": "Apache-2.0",
+                "name": "Apache License 2.0",
+                "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                "accept_required": false
+            },
+            "info": "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+            "comp": "dir",
+            "urls": [
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign/resolve/5ecdb67327fd37bb2e042aab12ff7391903235d3/config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign/resolve/5ecdb67327fd37bb2e042aab12ff7391903235d3/generation_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign/resolve/5ecdb67327fd37bb2e042aab12ff7391903235d3/merges.txt",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign/resolve/5ecdb67327fd37bb2e042aab12ff7391903235d3/model.safetensors",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign/resolve/5ecdb67327fd37bb2e042aab12ff7391903235d3/preprocessor_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign/resolve/5ecdb67327fd37bb2e042aab12ff7391903235d3/tokenizer_config.json",
+                "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign/resolve/5ecdb67327fd37bb2e042aab12ff7391903235d3/vocab.json"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "English (Qwen3-TTS 0.6B Base)",
+            "model_id": "en_qwen3tts_06b_base",
+            "model_alias_of": "multilang_qwen3tts_06b_base",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en"
+        },
+        {
+            "name": "English (Qwen3-TTS 0.6B Vivian Female)",
+            "model_id": "en_qwen3tts_06b_vivian",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "vivian"
+        },
+        {
+            "name": "English (Qwen3-TTS 0.6B Serena Female)",
+            "model_id": "en_qwen3tts_06b_serena",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "serena"
+        },
+        {
+            "name": "English (Qwen3-TTS 0.6B Uncle Fu Male)",
+            "model_id": "en_qwen3tts_06b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "English (Qwen3-TTS 0.6B Dylan Male)",
+            "model_id": "en_qwen3tts_06b_dylan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "dylan"
+        },
+        {
+            "name": "English (Qwen3-TTS 0.6B Eric Male)",
+            "model_id": "en_qwen3tts_06b_eric",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "eric"
+        },
+        {
+            "name": "English (Qwen3-TTS 0.6B Ryan Male)",
+            "model_id": "en_qwen3tts_06b_ryan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "ryan"
+        },
+        {
+            "name": "English (Qwen3-TTS 0.6B Aiden Male)",
+            "model_id": "en_qwen3tts_06b_aiden",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "aiden"
+        },
+        {
+            "name": "English (Qwen3-TTS 0.6B Ono Anna Female)",
+            "model_id": "en_qwen3tts_06b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "English (Qwen3-TTS 0.6B Sohee Female)",
+            "model_id": "en_qwen3tts_06b_sohee",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "sohee"
+        },
+        {
+            "name": "English (Qwen3-TTS 1.7B Base)",
+            "model_id": "en_qwen3tts_17b_base",
+            "model_alias_of": "multilang_qwen3tts_17b_base",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en"
+        },
+        {
+            "name": "English (Qwen3-TTS 1.7B Vivian Female)",
+            "model_id": "en_qwen3tts_17b_vivian",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "vivian"
+        },
+        {
+            "name": "English (Qwen3-TTS 1.7B Serena Female)",
+            "model_id": "en_qwen3tts_17b_serena",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "serena"
+        },
+        {
+            "name": "English (Qwen3-TTS 1.7B Uncle Fu Male)",
+            "model_id": "en_qwen3tts_17b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "English (Qwen3-TTS 1.7B Dylan Male)",
+            "model_id": "en_qwen3tts_17b_dylan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "dylan"
+        },
+        {
+            "name": "English (Qwen3-TTS 1.7B Eric Male)",
+            "model_id": "en_qwen3tts_17b_eric",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "eric"
+        },
+        {
+            "name": "English (Qwen3-TTS 1.7B Ryan Male)",
+            "model_id": "en_qwen3tts_17b_ryan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "ryan"
+        },
+        {
+            "name": "English (Qwen3-TTS 1.7B Aiden Male)",
+            "model_id": "en_qwen3tts_17b_aiden",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "aiden"
+        },
+        {
+            "name": "English (Qwen3-TTS 1.7B Ono Anna Female)",
+            "model_id": "en_qwen3tts_17b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "English (Qwen3-TTS 1.7B Sohee Female)",
+            "model_id": "en_qwen3tts_17b_sohee",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en",
+            "speaker": "sohee"
+        },
+        {
+            "name": "English (Qwen3-TTS 1.7B VoiceDesign)",
+            "model_id": "en_qwen3tts_17b_voicedesign",
+            "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
+            "pack_id": "en_qwen3tts",
+            "lang_id": "en"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 0.6B Base)",
+            "model_id": "zh_qwen3tts_06b_base",
+            "model_alias_of": "multilang_qwen3tts_06b_base",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 0.6B Vivian Female)",
+            "model_id": "zh_qwen3tts_06b_vivian",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "vivian"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 0.6B Serena Female)",
+            "model_id": "zh_qwen3tts_06b_serena",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "serena"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 0.6B Uncle Fu Male)",
+            "model_id": "zh_qwen3tts_06b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 0.6B Dylan Male)",
+            "model_id": "zh_qwen3tts_06b_dylan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "dylan"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 0.6B Eric Male)",
+            "model_id": "zh_qwen3tts_06b_eric",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "eric"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 0.6B Ryan Male)",
+            "model_id": "zh_qwen3tts_06b_ryan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "ryan"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 0.6B Aiden Male)",
+            "model_id": "zh_qwen3tts_06b_aiden",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "aiden"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 0.6B Ono Anna Female)",
+            "model_id": "zh_qwen3tts_06b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 0.6B Sohee Female)",
+            "model_id": "zh_qwen3tts_06b_sohee",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "sohee"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 1.7B Base)",
+            "model_id": "zh_qwen3tts_17b_base",
+            "model_alias_of": "multilang_qwen3tts_17b_base",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 1.7B Vivian Female)",
+            "model_id": "zh_qwen3tts_17b_vivian",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "vivian"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 1.7B Serena Female)",
+            "model_id": "zh_qwen3tts_17b_serena",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "serena"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 1.7B Uncle Fu Male)",
+            "model_id": "zh_qwen3tts_17b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 1.7B Dylan Male)",
+            "model_id": "zh_qwen3tts_17b_dylan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "dylan"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 1.7B Eric Male)",
+            "model_id": "zh_qwen3tts_17b_eric",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "eric"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 1.7B Ryan Male)",
+            "model_id": "zh_qwen3tts_17b_ryan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "ryan"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 1.7B Aiden Male)",
+            "model_id": "zh_qwen3tts_17b_aiden",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "aiden"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 1.7B Ono Anna Female)",
+            "model_id": "zh_qwen3tts_17b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 1.7B Sohee Female)",
+            "model_id": "zh_qwen3tts_17b_sohee",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh",
+            "speaker": "sohee"
+        },
+        {
+            "name": "中文 (Qwen3-TTS 1.7B VoiceDesign)",
+            "model_id": "zh_qwen3tts_17b_voicedesign",
+            "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
+            "pack_id": "zh_qwen3tts",
+            "lang_id": "zh"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 0.6B Base)",
+            "model_id": "ja_qwen3tts_06b_base",
+            "model_alias_of": "multilang_qwen3tts_06b_base",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 0.6B Vivian Female)",
+            "model_id": "ja_qwen3tts_06b_vivian",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "vivian"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 0.6B Serena Female)",
+            "model_id": "ja_qwen3tts_06b_serena",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "serena"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 0.6B Uncle Fu Male)",
+            "model_id": "ja_qwen3tts_06b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 0.6B Dylan Male)",
+            "model_id": "ja_qwen3tts_06b_dylan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "dylan"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 0.6B Eric Male)",
+            "model_id": "ja_qwen3tts_06b_eric",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "eric"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 0.6B Ryan Male)",
+            "model_id": "ja_qwen3tts_06b_ryan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "ryan"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 0.6B Aiden Male)",
+            "model_id": "ja_qwen3tts_06b_aiden",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "aiden"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 0.6B Ono Anna Female)",
+            "model_id": "ja_qwen3tts_06b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 0.6B Sohee Female)",
+            "model_id": "ja_qwen3tts_06b_sohee",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "sohee"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 1.7B Base)",
+            "model_id": "ja_qwen3tts_17b_base",
+            "model_alias_of": "multilang_qwen3tts_17b_base",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 1.7B Vivian Female)",
+            "model_id": "ja_qwen3tts_17b_vivian",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "vivian"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 1.7B Serena Female)",
+            "model_id": "ja_qwen3tts_17b_serena",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "serena"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 1.7B Uncle Fu Male)",
+            "model_id": "ja_qwen3tts_17b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 1.7B Dylan Male)",
+            "model_id": "ja_qwen3tts_17b_dylan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "dylan"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 1.7B Eric Male)",
+            "model_id": "ja_qwen3tts_17b_eric",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "eric"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 1.7B Ryan Male)",
+            "model_id": "ja_qwen3tts_17b_ryan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "ryan"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 1.7B Aiden Male)",
+            "model_id": "ja_qwen3tts_17b_aiden",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "aiden"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 1.7B Ono Anna Female)",
+            "model_id": "ja_qwen3tts_17b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 1.7B Sohee Female)",
+            "model_id": "ja_qwen3tts_17b_sohee",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja",
+            "speaker": "sohee"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS 1.7B VoiceDesign)",
+            "model_id": "ja_qwen3tts_17b_voicedesign",
+            "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
+            "pack_id": "ja_qwen3tts",
+            "lang_id": "ja"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 0.6B Base)",
+            "model_id": "ko_qwen3tts_06b_base",
+            "model_alias_of": "multilang_qwen3tts_06b_base",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 0.6B Vivian Female)",
+            "model_id": "ko_qwen3tts_06b_vivian",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "vivian"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 0.6B Serena Female)",
+            "model_id": "ko_qwen3tts_06b_serena",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "serena"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 0.6B Uncle Fu Male)",
+            "model_id": "ko_qwen3tts_06b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 0.6B Dylan Male)",
+            "model_id": "ko_qwen3tts_06b_dylan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "dylan"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 0.6B Eric Male)",
+            "model_id": "ko_qwen3tts_06b_eric",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "eric"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 0.6B Ryan Male)",
+            "model_id": "ko_qwen3tts_06b_ryan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "ryan"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 0.6B Aiden Male)",
+            "model_id": "ko_qwen3tts_06b_aiden",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "aiden"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 0.6B Ono Anna Female)",
+            "model_id": "ko_qwen3tts_06b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 0.6B Sohee Female)",
+            "model_id": "ko_qwen3tts_06b_sohee",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "sohee"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 1.7B Base)",
+            "model_id": "ko_qwen3tts_17b_base",
+            "model_alias_of": "multilang_qwen3tts_17b_base",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 1.7B Vivian Female)",
+            "model_id": "ko_qwen3tts_17b_vivian",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "vivian"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 1.7B Serena Female)",
+            "model_id": "ko_qwen3tts_17b_serena",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "serena"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 1.7B Uncle Fu Male)",
+            "model_id": "ko_qwen3tts_17b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 1.7B Dylan Male)",
+            "model_id": "ko_qwen3tts_17b_dylan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "dylan"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 1.7B Eric Male)",
+            "model_id": "ko_qwen3tts_17b_eric",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "eric"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 1.7B Ryan Male)",
+            "model_id": "ko_qwen3tts_17b_ryan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "ryan"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 1.7B Aiden Male)",
+            "model_id": "ko_qwen3tts_17b_aiden",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "aiden"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 1.7B Ono Anna Female)",
+            "model_id": "ko_qwen3tts_17b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 1.7B Sohee Female)",
+            "model_id": "ko_qwen3tts_17b_sohee",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko",
+            "speaker": "sohee"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS 1.7B VoiceDesign)",
+            "model_id": "ko_qwen3tts_17b_voicedesign",
+            "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
+            "pack_id": "ko_qwen3tts",
+            "lang_id": "ko"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 0.6B Base)",
+            "model_id": "de_qwen3tts_06b_base",
+            "model_alias_of": "multilang_qwen3tts_06b_base",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 0.6B Vivian Female)",
+            "model_id": "de_qwen3tts_06b_vivian",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "vivian"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 0.6B Serena Female)",
+            "model_id": "de_qwen3tts_06b_serena",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "serena"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 0.6B Uncle Fu Male)",
+            "model_id": "de_qwen3tts_06b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 0.6B Dylan Male)",
+            "model_id": "de_qwen3tts_06b_dylan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "dylan"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 0.6B Eric Male)",
+            "model_id": "de_qwen3tts_06b_eric",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "eric"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 0.6B Ryan Male)",
+            "model_id": "de_qwen3tts_06b_ryan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "ryan"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 0.6B Aiden Male)",
+            "model_id": "de_qwen3tts_06b_aiden",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "aiden"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 0.6B Ono Anna Female)",
+            "model_id": "de_qwen3tts_06b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 0.6B Sohee Female)",
+            "model_id": "de_qwen3tts_06b_sohee",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "sohee"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 1.7B Base)",
+            "model_id": "de_qwen3tts_17b_base",
+            "model_alias_of": "multilang_qwen3tts_17b_base",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 1.7B Vivian Female)",
+            "model_id": "de_qwen3tts_17b_vivian",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "vivian"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 1.7B Serena Female)",
+            "model_id": "de_qwen3tts_17b_serena",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "serena"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 1.7B Uncle Fu Male)",
+            "model_id": "de_qwen3tts_17b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 1.7B Dylan Male)",
+            "model_id": "de_qwen3tts_17b_dylan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "dylan"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 1.7B Eric Male)",
+            "model_id": "de_qwen3tts_17b_eric",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "eric"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 1.7B Ryan Male)",
+            "model_id": "de_qwen3tts_17b_ryan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "ryan"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 1.7B Aiden Male)",
+            "model_id": "de_qwen3tts_17b_aiden",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "aiden"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 1.7B Ono Anna Female)",
+            "model_id": "de_qwen3tts_17b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 1.7B Sohee Female)",
+            "model_id": "de_qwen3tts_17b_sohee",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de",
+            "speaker": "sohee"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS 1.7B VoiceDesign)",
+            "model_id": "de_qwen3tts_17b_voicedesign",
+            "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
+            "pack_id": "de_qwen3tts",
+            "lang_id": "de"
+        },
+        {
+            "name": "Français (Qwen3-TTS 0.6B Base)",
+            "model_id": "fr_qwen3tts_06b_base",
+            "model_alias_of": "multilang_qwen3tts_06b_base",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr"
+        },
+        {
+            "name": "Français (Qwen3-TTS 0.6B Vivian Female)",
+            "model_id": "fr_qwen3tts_06b_vivian",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "vivian"
+        },
+        {
+            "name": "Français (Qwen3-TTS 0.6B Serena Female)",
+            "model_id": "fr_qwen3tts_06b_serena",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "serena"
+        },
+        {
+            "name": "Français (Qwen3-TTS 0.6B Uncle Fu Male)",
+            "model_id": "fr_qwen3tts_06b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "Français (Qwen3-TTS 0.6B Dylan Male)",
+            "model_id": "fr_qwen3tts_06b_dylan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "dylan"
+        },
+        {
+            "name": "Français (Qwen3-TTS 0.6B Eric Male)",
+            "model_id": "fr_qwen3tts_06b_eric",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "eric"
+        },
+        {
+            "name": "Français (Qwen3-TTS 0.6B Ryan Male)",
+            "model_id": "fr_qwen3tts_06b_ryan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "ryan"
+        },
+        {
+            "name": "Français (Qwen3-TTS 0.6B Aiden Male)",
+            "model_id": "fr_qwen3tts_06b_aiden",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "aiden"
+        },
+        {
+            "name": "Français (Qwen3-TTS 0.6B Ono Anna Female)",
+            "model_id": "fr_qwen3tts_06b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "Français (Qwen3-TTS 0.6B Sohee Female)",
+            "model_id": "fr_qwen3tts_06b_sohee",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "sohee"
+        },
+        {
+            "name": "Français (Qwen3-TTS 1.7B Base)",
+            "model_id": "fr_qwen3tts_17b_base",
+            "model_alias_of": "multilang_qwen3tts_17b_base",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr"
+        },
+        {
+            "name": "Français (Qwen3-TTS 1.7B Vivian Female)",
+            "model_id": "fr_qwen3tts_17b_vivian",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "vivian"
+        },
+        {
+            "name": "Français (Qwen3-TTS 1.7B Serena Female)",
+            "model_id": "fr_qwen3tts_17b_serena",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "serena"
+        },
+        {
+            "name": "Français (Qwen3-TTS 1.7B Uncle Fu Male)",
+            "model_id": "fr_qwen3tts_17b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "Français (Qwen3-TTS 1.7B Dylan Male)",
+            "model_id": "fr_qwen3tts_17b_dylan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "dylan"
+        },
+        {
+            "name": "Français (Qwen3-TTS 1.7B Eric Male)",
+            "model_id": "fr_qwen3tts_17b_eric",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "eric"
+        },
+        {
+            "name": "Français (Qwen3-TTS 1.7B Ryan Male)",
+            "model_id": "fr_qwen3tts_17b_ryan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "ryan"
+        },
+        {
+            "name": "Français (Qwen3-TTS 1.7B Aiden Male)",
+            "model_id": "fr_qwen3tts_17b_aiden",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "aiden"
+        },
+        {
+            "name": "Français (Qwen3-TTS 1.7B Ono Anna Female)",
+            "model_id": "fr_qwen3tts_17b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "Français (Qwen3-TTS 1.7B Sohee Female)",
+            "model_id": "fr_qwen3tts_17b_sohee",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr",
+            "speaker": "sohee"
+        },
+        {
+            "name": "Français (Qwen3-TTS 1.7B VoiceDesign)",
+            "model_id": "fr_qwen3tts_17b_voicedesign",
+            "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
+            "pack_id": "fr_qwen3tts",
+            "lang_id": "fr"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 0.6B Base)",
+            "model_id": "ru_qwen3tts_06b_base",
+            "model_alias_of": "multilang_qwen3tts_06b_base",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 0.6B Vivian Female)",
+            "model_id": "ru_qwen3tts_06b_vivian",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "vivian"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 0.6B Serena Female)",
+            "model_id": "ru_qwen3tts_06b_serena",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "serena"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 0.6B Uncle Fu Male)",
+            "model_id": "ru_qwen3tts_06b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 0.6B Dylan Male)",
+            "model_id": "ru_qwen3tts_06b_dylan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "dylan"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 0.6B Eric Male)",
+            "model_id": "ru_qwen3tts_06b_eric",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "eric"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 0.6B Ryan Male)",
+            "model_id": "ru_qwen3tts_06b_ryan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "ryan"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 0.6B Aiden Male)",
+            "model_id": "ru_qwen3tts_06b_aiden",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "aiden"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 0.6B Ono Anna Female)",
+            "model_id": "ru_qwen3tts_06b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 0.6B Sohee Female)",
+            "model_id": "ru_qwen3tts_06b_sohee",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "sohee"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 1.7B Base)",
+            "model_id": "ru_qwen3tts_17b_base",
+            "model_alias_of": "multilang_qwen3tts_17b_base",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 1.7B Vivian Female)",
+            "model_id": "ru_qwen3tts_17b_vivian",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "vivian"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 1.7B Serena Female)",
+            "model_id": "ru_qwen3tts_17b_serena",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "serena"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 1.7B Uncle Fu Male)",
+            "model_id": "ru_qwen3tts_17b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 1.7B Dylan Male)",
+            "model_id": "ru_qwen3tts_17b_dylan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "dylan"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 1.7B Eric Male)",
+            "model_id": "ru_qwen3tts_17b_eric",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "eric"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 1.7B Ryan Male)",
+            "model_id": "ru_qwen3tts_17b_ryan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "ryan"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 1.7B Aiden Male)",
+            "model_id": "ru_qwen3tts_17b_aiden",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "aiden"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 1.7B Ono Anna Female)",
+            "model_id": "ru_qwen3tts_17b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 1.7B Sohee Female)",
+            "model_id": "ru_qwen3tts_17b_sohee",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru",
+            "speaker": "sohee"
+        },
+        {
+            "name": "Русский (Qwen3-TTS 1.7B VoiceDesign)",
+            "model_id": "ru_qwen3tts_17b_voicedesign",
+            "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
+            "pack_id": "ru_qwen3tts",
+            "lang_id": "ru"
+        },
+        {
+            "name": "Português (Qwen3-TTS 0.6B Base)",
+            "model_id": "pt_qwen3tts_06b_base",
+            "model_alias_of": "multilang_qwen3tts_06b_base",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt"
+        },
+        {
+            "name": "Português (Qwen3-TTS 0.6B Vivian Female)",
+            "model_id": "pt_qwen3tts_06b_vivian",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "vivian"
+        },
+        {
+            "name": "Português (Qwen3-TTS 0.6B Serena Female)",
+            "model_id": "pt_qwen3tts_06b_serena",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "serena"
+        },
+        {
+            "name": "Português (Qwen3-TTS 0.6B Uncle Fu Male)",
+            "model_id": "pt_qwen3tts_06b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "Português (Qwen3-TTS 0.6B Dylan Male)",
+            "model_id": "pt_qwen3tts_06b_dylan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "dylan"
+        },
+        {
+            "name": "Português (Qwen3-TTS 0.6B Eric Male)",
+            "model_id": "pt_qwen3tts_06b_eric",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "eric"
+        },
+        {
+            "name": "Português (Qwen3-TTS 0.6B Ryan Male)",
+            "model_id": "pt_qwen3tts_06b_ryan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "ryan"
+        },
+        {
+            "name": "Português (Qwen3-TTS 0.6B Aiden Male)",
+            "model_id": "pt_qwen3tts_06b_aiden",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "aiden"
+        },
+        {
+            "name": "Português (Qwen3-TTS 0.6B Ono Anna Female)",
+            "model_id": "pt_qwen3tts_06b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "Português (Qwen3-TTS 0.6B Sohee Female)",
+            "model_id": "pt_qwen3tts_06b_sohee",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "sohee"
+        },
+        {
+            "name": "Português (Qwen3-TTS 1.7B Base)",
+            "model_id": "pt_qwen3tts_17b_base",
+            "model_alias_of": "multilang_qwen3tts_17b_base",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt"
+        },
+        {
+            "name": "Português (Qwen3-TTS 1.7B Vivian Female)",
+            "model_id": "pt_qwen3tts_17b_vivian",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "vivian"
+        },
+        {
+            "name": "Português (Qwen3-TTS 1.7B Serena Female)",
+            "model_id": "pt_qwen3tts_17b_serena",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "serena"
+        },
+        {
+            "name": "Português (Qwen3-TTS 1.7B Uncle Fu Male)",
+            "model_id": "pt_qwen3tts_17b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "Português (Qwen3-TTS 1.7B Dylan Male)",
+            "model_id": "pt_qwen3tts_17b_dylan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "dylan"
+        },
+        {
+            "name": "Português (Qwen3-TTS 1.7B Eric Male)",
+            "model_id": "pt_qwen3tts_17b_eric",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "eric"
+        },
+        {
+            "name": "Português (Qwen3-TTS 1.7B Ryan Male)",
+            "model_id": "pt_qwen3tts_17b_ryan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "ryan"
+        },
+        {
+            "name": "Português (Qwen3-TTS 1.7B Aiden Male)",
+            "model_id": "pt_qwen3tts_17b_aiden",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "aiden"
+        },
+        {
+            "name": "Português (Qwen3-TTS 1.7B Ono Anna Female)",
+            "model_id": "pt_qwen3tts_17b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "Português (Qwen3-TTS 1.7B Sohee Female)",
+            "model_id": "pt_qwen3tts_17b_sohee",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt",
+            "speaker": "sohee"
+        },
+        {
+            "name": "Português (Qwen3-TTS 1.7B VoiceDesign)",
+            "model_id": "pt_qwen3tts_17b_voicedesign",
+            "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
+            "pack_id": "pt_qwen3tts",
+            "lang_id": "pt"
+        },
+        {
+            "name": "Español (Qwen3-TTS 0.6B Base)",
+            "model_id": "es_qwen3tts_06b_base",
+            "model_alias_of": "multilang_qwen3tts_06b_base",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es"
+        },
+        {
+            "name": "Español (Qwen3-TTS 0.6B Vivian Female)",
+            "model_id": "es_qwen3tts_06b_vivian",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "vivian"
+        },
+        {
+            "name": "Español (Qwen3-TTS 0.6B Serena Female)",
+            "model_id": "es_qwen3tts_06b_serena",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "serena"
+        },
+        {
+            "name": "Español (Qwen3-TTS 0.6B Uncle Fu Male)",
+            "model_id": "es_qwen3tts_06b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "Español (Qwen3-TTS 0.6B Dylan Male)",
+            "model_id": "es_qwen3tts_06b_dylan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "dylan"
+        },
+        {
+            "name": "Español (Qwen3-TTS 0.6B Eric Male)",
+            "model_id": "es_qwen3tts_06b_eric",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "eric"
+        },
+        {
+            "name": "Español (Qwen3-TTS 0.6B Ryan Male)",
+            "model_id": "es_qwen3tts_06b_ryan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "ryan"
+        },
+        {
+            "name": "Español (Qwen3-TTS 0.6B Aiden Male)",
+            "model_id": "es_qwen3tts_06b_aiden",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "aiden"
+        },
+        {
+            "name": "Español (Qwen3-TTS 0.6B Ono Anna Female)",
+            "model_id": "es_qwen3tts_06b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "Español (Qwen3-TTS 0.6B Sohee Female)",
+            "model_id": "es_qwen3tts_06b_sohee",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "sohee"
+        },
+        {
+            "name": "Español (Qwen3-TTS 1.7B Base)",
+            "model_id": "es_qwen3tts_17b_base",
+            "model_alias_of": "multilang_qwen3tts_17b_base",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es"
+        },
+        {
+            "name": "Español (Qwen3-TTS 1.7B Vivian Female)",
+            "model_id": "es_qwen3tts_17b_vivian",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "vivian"
+        },
+        {
+            "name": "Español (Qwen3-TTS 1.7B Serena Female)",
+            "model_id": "es_qwen3tts_17b_serena",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "serena"
+        },
+        {
+            "name": "Español (Qwen3-TTS 1.7B Uncle Fu Male)",
+            "model_id": "es_qwen3tts_17b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "Español (Qwen3-TTS 1.7B Dylan Male)",
+            "model_id": "es_qwen3tts_17b_dylan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "dylan"
+        },
+        {
+            "name": "Español (Qwen3-TTS 1.7B Eric Male)",
+            "model_id": "es_qwen3tts_17b_eric",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "eric"
+        },
+        {
+            "name": "Español (Qwen3-TTS 1.7B Ryan Male)",
+            "model_id": "es_qwen3tts_17b_ryan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "ryan"
+        },
+        {
+            "name": "Español (Qwen3-TTS 1.7B Aiden Male)",
+            "model_id": "es_qwen3tts_17b_aiden",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "aiden"
+        },
+        {
+            "name": "Español (Qwen3-TTS 1.7B Ono Anna Female)",
+            "model_id": "es_qwen3tts_17b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "Español (Qwen3-TTS 1.7B Sohee Female)",
+            "model_id": "es_qwen3tts_17b_sohee",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es",
+            "speaker": "sohee"
+        },
+        {
+            "name": "Español (Qwen3-TTS 1.7B VoiceDesign)",
+            "model_id": "es_qwen3tts_17b_voicedesign",
+            "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
+            "pack_id": "es_qwen3tts",
+            "lang_id": "es"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 0.6B Base)",
+            "model_id": "it_qwen3tts_06b_base",
+            "model_alias_of": "multilang_qwen3tts_06b_base",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 0.6B Vivian Female)",
+            "model_id": "it_qwen3tts_06b_vivian",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "vivian"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 0.6B Serena Female)",
+            "model_id": "it_qwen3tts_06b_serena",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "serena"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 0.6B Uncle Fu Male)",
+            "model_id": "it_qwen3tts_06b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 0.6B Dylan Male)",
+            "model_id": "it_qwen3tts_06b_dylan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "dylan"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 0.6B Eric Male)",
+            "model_id": "it_qwen3tts_06b_eric",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "eric"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 0.6B Ryan Male)",
+            "model_id": "it_qwen3tts_06b_ryan",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "ryan"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 0.6B Aiden Male)",
+            "model_id": "it_qwen3tts_06b_aiden",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "aiden"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 0.6B Ono Anna Female)",
+            "model_id": "it_qwen3tts_06b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 0.6B Sohee Female)",
+            "model_id": "it_qwen3tts_06b_sohee",
+            "model_alias_of": "multilang_qwen3tts_06b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "sohee"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 1.7B Base)",
+            "model_id": "it_qwen3tts_17b_base",
+            "model_alias_of": "multilang_qwen3tts_17b_base",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 1.7B Vivian Female)",
+            "model_id": "it_qwen3tts_17b_vivian",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "vivian"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 1.7B Serena Female)",
+            "model_id": "it_qwen3tts_17b_serena",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "serena"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 1.7B Uncle Fu Male)",
+            "model_id": "it_qwen3tts_17b_uncle_fu",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "uncle_fu"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 1.7B Dylan Male)",
+            "model_id": "it_qwen3tts_17b_dylan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "dylan"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 1.7B Eric Male)",
+            "model_id": "it_qwen3tts_17b_eric",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "eric"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 1.7B Ryan Male)",
+            "model_id": "it_qwen3tts_17b_ryan",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "ryan"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 1.7B Aiden Male)",
+            "model_id": "it_qwen3tts_17b_aiden",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "aiden"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 1.7B Ono Anna Female)",
+            "model_id": "it_qwen3tts_17b_ono_anna",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "ono_anna"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 1.7B Sohee Female)",
+            "model_id": "it_qwen3tts_17b_sohee",
+            "model_alias_of": "multilang_qwen3tts_17b_customvoice",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it",
+            "speaker": "sohee"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS 1.7B VoiceDesign)",
+            "model_id": "it_qwen3tts_17b_voicedesign",
+            "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
+            "pack_id": "it_qwen3tts",
+            "lang_id": "it"
         }
     ],
     "packs": [
@@ -37291,6 +39661,267 @@
             "lang_id": "hi"
         },
         {
+            "name": "中文 (Qwen3-ASR)",
+            "id": "zh_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "zh",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "English (Qwen3-ASR)",
+            "id": "en_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "en",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "عربي (Qwen3-ASR)",
+            "id": "ar_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "ar",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Deutsch (Qwen3-ASR)",
+            "id": "de_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "de",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Français (Qwen3-ASR)",
+            "id": "fr_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "fr",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Español (Qwen3-ASR)",
+            "id": "es_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "es",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Português (Qwen3-ASR)",
+            "id": "pt_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "pt",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Bahasa Indonesia (Qwen3-ASR)",
+            "id": "id_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "id",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Italiano (Qwen3-ASR)",
+            "id": "it_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "it",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "한국어 (Qwen3-ASR)",
+            "id": "ko_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "ko",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Русский (Qwen3-ASR)",
+            "id": "ru_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "ru",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "ไทย (Qwen3-ASR)",
+            "id": "th_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "th",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Tiếng Việt (Qwen3-ASR)",
+            "id": "vi_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "vi",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "日本語 (Qwen3-ASR)",
+            "id": "ja_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "ja",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Türkçe (Qwen3-ASR)",
+            "id": "tr_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "tr",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "हिन्दी (Qwen3-ASR)",
+            "id": "hi_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "hi",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Melayu (Qwen3-ASR)",
+            "id": "ms_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "ms",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Nederlands (Qwen3-ASR)",
+            "id": "nl_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "nl",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Svenska (Qwen3-ASR)",
+            "id": "sv_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "sv",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Dansk (Qwen3-ASR)",
+            "id": "da_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "da",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Suomi (Qwen3-ASR)",
+            "id": "fi_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "fi",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Polski (Qwen3-ASR)",
+            "id": "pl_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "pl",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Čeština (Qwen3-ASR)",
+            "id": "cs_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "cs",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Tagalog (Qwen3-ASR)",
+            "id": "tl_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "tl",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "فارسی (Qwen3-ASR)",
+            "id": "fa_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "fa",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Ελληνικά (Qwen3-ASR)",
+            "id": "el_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "el",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Română (Qwen3-ASR)",
+            "id": "ro_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "ro",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Magyar (Qwen3-ASR)",
+            "id": "hu_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "hu",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
+            "name": "Македонски (Qwen3-ASR)",
+            "id": "mk_qwen3asr",
+            "engine": "stt_qwen3asr",
+            "lang_id": "mk",
+            "features": [
+                "stt_punctuation"
+            ]
+        },
+        {
             "name": "English (Piper Arctic Medium)",
             "id": "en_piper_us_arctic_medium",
             "engine": "tts_piper",
@@ -37457,6 +40088,66 @@
             "id": "zh_kokoro_82m",
             "engine": "tts_kokoro",
             "lang_id": "zh"
+        },
+        {
+            "name": "English (Qwen3-TTS)",
+            "id": "en_qwen3tts",
+            "engine": "tts_qwen3tts",
+            "lang_id": "en"
+        },
+        {
+            "name": "中文 (Qwen3-TTS)",
+            "id": "zh_qwen3tts",
+            "engine": "tts_qwen3tts",
+            "lang_id": "zh"
+        },
+        {
+            "name": "日本語 (Qwen3-TTS)",
+            "id": "ja_qwen3tts",
+            "engine": "tts_qwen3tts",
+            "lang_id": "ja"
+        },
+        {
+            "name": "한국어 (Qwen3-TTS)",
+            "id": "ko_qwen3tts",
+            "engine": "tts_qwen3tts",
+            "lang_id": "ko"
+        },
+        {
+            "name": "Deutsch (Qwen3-TTS)",
+            "id": "de_qwen3tts",
+            "engine": "tts_qwen3tts",
+            "lang_id": "de"
+        },
+        {
+            "name": "Français (Qwen3-TTS)",
+            "id": "fr_qwen3tts",
+            "engine": "tts_qwen3tts",
+            "lang_id": "fr"
+        },
+        {
+            "name": "Русский (Qwen3-TTS)",
+            "id": "ru_qwen3tts",
+            "engine": "tts_qwen3tts",
+            "lang_id": "ru"
+        },
+        {
+            "name": "Português (Qwen3-TTS)",
+            "id": "pt_qwen3tts",
+            "engine": "tts_qwen3tts",
+            "lang_id": "pt"
+        },
+        {
+            "name": "Español (Qwen3-TTS)",
+            "id": "es_qwen3tts",
+            "engine": "tts_qwen3tts",
+            "lang_id": "es"
+        },
+        {
+            "name": "Italiano (Qwen3-TTS)",
+            "id": "it_qwen3tts",
+            "engine": "tts_qwen3tts",
+            "lang_id": "it"
         },
         {
             "name": "English (Parler-TTS)",
