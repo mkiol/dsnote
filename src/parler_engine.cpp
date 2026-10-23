@@ -1,4 +1,4 @@
-/* Copyright (C) 2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2025-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,6 +16,7 @@
 #include "cpu_tools.hpp"
 #include "logger.hpp"
 #include "py_executor.hpp"
+#include "py_tools.hpp"
 
 using namespace pybind11::literals;
 
@@ -97,6 +98,8 @@ void parler_engine::create_model() {
 
         m_device_str =
             use_cuda ? fmt::format("cuda:{}", m_config.gpu_device.id) : "cpu";
+
+        py_tools::disable_transformers_progress_bar();
 
         try {
             auto parler_api = py::module_::import("parler_tts");

@@ -462,4 +462,17 @@ bool init_module() {
     return true;
 #endif
 }
+
+void disable_transformers_progress_bar() {
+#ifdef USE_PY
+    namespace py = pybind11;
+    try {
+        // transformers 5 prints progress bar when loading weights
+        py::module_::import("transformers.utils.logging")
+            .attr("disable_progress_bar")();
+    } catch (const std::exception& err) {
+        LOGW("failed to disable transformers progress bar: " << err.what());
+    }
+#endif
+}
 }  // namespace py_tools

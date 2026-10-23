@@ -25,6 +25,7 @@
 #include "cpu_tools.hpp"
 #include "logger.hpp"
 #include "py_executor.hpp"
+#include "py_tools.hpp"
 
 using namespace pybind11::literals;
 
@@ -240,15 +241,9 @@ void qwen3tts_engine::create_model() {
         m_device_str =
             use_cuda ? fmt::format("cuda:{}", m_config.gpu_device.id) : "cpu";
 
-        try {
-            try {
-                // transformers 5 prints progress bar when loading weights
-                py::module_::import("transformers.utils.logging")
-                    .attr("disable_progress_bar")();
-            } catch (const std::exception& err) {
-                LOGW("failed to disable progress bar: " << err.what());
-            }
+        py_tools::disable_transformers_progress_bar();
 
+        try {
             auto torch = py::module_::import("torch");
 
             auto use_bf16 =

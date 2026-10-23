@@ -22,6 +22,7 @@
 #include "cpu_tools.hpp"
 #include "logger.hpp"
 #include "py_executor.hpp"
+#include "py_tools.hpp"
 #include "text_tools.hpp"
 
 using namespace pybind11::literals;
@@ -304,14 +305,7 @@ void qwen3asr_engine::create_model() {
 
             LOGD("using device: " << device_str << ", dtype: " << dtype_str);
 
-            try {
-                // transformers prints progress bar when loading weights
-                py::module_::import("transformers.utils.logging")
-                    .attr("disable_progress_bar")();
-            } catch (const std::exception& err) {
-                LOGW("failed to disable transformers progress bar: "
-                     << err.what());
-            }
+            py_tools::disable_transformers_progress_bar();
 
             auto qwen_asr = py::module_::import("qwen_asr");
 

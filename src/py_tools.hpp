@@ -54,6 +54,9 @@ struct libs_availability_t {
 libs_availability_t libs_availability(libs_scan_type_t scan_type,
                                       unsigned int scan_flags);
 bool init_module();
+
+/* helpers (always run in py thread) */
+void disable_transformers_progress_bar();
 }  // namespace py_tools
 
 std::ostream& operator<<(std::ostream& os,
