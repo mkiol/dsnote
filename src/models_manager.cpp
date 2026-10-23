@@ -1901,7 +1901,7 @@ auto models_manager::extract_models(
     QDir dir{settings::instance()->models_dir()};
 #ifdef ARCH_ARM_32
     auto has_neon_fp = (cpu_tools::cpuinfo().feature_flags &
-                        cpu_tools::feature_flags_t::asimd) != 0;
+                        cpu_tools::feature_flags_t::feature_asimd) != 0;
 #endif
 
     for (const auto& ele : models_jarray) {

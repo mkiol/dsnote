@@ -28,7 +28,7 @@ using namespace pybind11::literals;
 coqui_engine::coqui_engine(config_t config, callbacks_t call_backs)
     : tts_engine{std::move(config), std::move(call_backs)} {
     if ((cpu_tools::cpuinfo().feature_flags &
-         cpu_tools::feature_flags_t::avx) == 0) {
+         cpu_tools::feature_flags_t::feature_avx) == 0) {
         LOGE("avx not supported but coqui engine needs it");
         throw std::runtime_error(
             "failed to init coqui engine: avx not supported");

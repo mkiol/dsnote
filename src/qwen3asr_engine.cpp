@@ -46,7 +46,7 @@ constexpr std::string_view qwen_cantonese = "Cantonese";
 qwen3asr_engine::qwen3asr_engine(config_t config, callbacks_t call_backs)
     : stt_engine{std::move(config), std::move(call_backs)} {
     if ((cpu_tools::cpuinfo().feature_flags &
-         cpu_tools::feature_flags_t::avx) == 0) {
+         cpu_tools::feature_flags_t::feature_avx) == 0) {
         LOGE("avx not supported but qwen3asr engine needs it");
         throw std::runtime_error(
             "failed to init qwen3asr engine: avx not supported");

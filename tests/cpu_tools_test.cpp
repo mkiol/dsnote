@@ -33,12 +33,12 @@ bogomips	: 7189.52)";
 
         auto cpuinfo = cpu_tools::parse_cpuinfo(is);
         cpu_tools::cpuinfo_t expected_cpuinfo = {
-            2u, cpu_tools::feature_flags_t::avx |
-                    cpu_tools::feature_flags_t::avx2 |
-                    cpu_tools::feature_flags_t::fma |
-                    cpu_tools::feature_flags_t::f16c |
-                    cpu_tools::feature_flags_t::sse4_1 |
-                    cpu_tools::feature_flags_t::bmi2};
+            2u, cpu_tools::feature_flags_t::feature_avx |
+                    cpu_tools::feature_flags_t::feature_avx2 |
+                    cpu_tools::feature_flags_t::feature_fma |
+                    cpu_tools::feature_flags_t::feature_f16c |
+                    cpu_tools::feature_flags_t::feature_sse4_1 |
+                    cpu_tools::feature_flags_t::feature_bmi2};
 
         REQUIRE(cpuinfo == expected_cpuinfo);
     }
@@ -65,7 +65,7 @@ CPU revision	: 4)";
 
         auto cpuinfo = cpu_tools::parse_cpuinfo(is);
         cpu_tools::cpuinfo_t expected_cpuinfo = {
-            2u, cpu_tools::feature_flags_t::asimd};
+            2u, cpu_tools::feature_flags_t::feature_asimd};
 
         REQUIRE(cpuinfo == expected_cpuinfo);
     }
@@ -94,7 +94,7 @@ CPU revision	: 4)";
 
         auto cpuinfo = cpu_tools::parse_cpuinfo(is);
         cpu_tools::cpuinfo_t expected_cpuinfo = {
-            2u, cpu_tools::feature_flags_t::asimd};
+            2u, cpu_tools::feature_flags_t::feature_asimd};
 
         REQUIRE(cpuinfo == expected_cpuinfo);
     }
@@ -124,7 +124,7 @@ CPU revision    : 14
 
         auto cpuinfo = cpu_tools::parse_cpuinfo(is);
         cpu_tools::cpuinfo_t expected_cpuinfo = {
-            2u, cpu_tools::feature_flags_t::asimd};
+            2u, cpu_tools::feature_flags_t::feature_asimd};
 
         REQUIRE(cpuinfo == expected_cpuinfo);
     }
@@ -154,7 +154,7 @@ CPU revision	: 5)";
 
         auto cpuinfo = cpu_tools::parse_cpuinfo(is);
         cpu_tools::cpuinfo_t expected_cpuinfo = {
-            2u, cpu_tools::feature_flags_t::none};
+            2u, cpu_tools::feature_flags_t::feature_none};
 
         REQUIRE(cpuinfo == expected_cpuinfo);
     }

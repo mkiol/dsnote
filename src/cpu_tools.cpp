@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -54,24 +54,17 @@ std::ostream& operator<<(std::ostream& os, cpu_tools::arm_cpu_arch_t arch) {
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, cpu_tools::cpuinfo_t cpuinfo) {
-    os << "processor-count=" << cpuinfo.number_of_processors << ", flags=[";
+std::ostream& operator<<(std::ostream& os, cpu_tools::feature_flags_t feature) {
+#define X(enum_id, cpuinfo_str, name_str, ...) \
+    if (feature & cpu_tools::feature_##enum_id) os << name_str ", ";
+    CPUTOOLS_CPU_FEATURE_FLAG_TABLE
+#undef X
+    return os;
+}
 
-    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx) os << "avx, ";
-    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx2)
-        os << "avx2, ";
-    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::avx512)
-        os << "avx512, ";
-    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::fma) os << "fma, ";
-    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::f16c)
-        os << "f16c, ";
-    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::asimd)
-        os << "asimd, ";
-    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::sse4_1)
-        os << "sse4.1, ";
-    if (cpuinfo.feature_flags & cpu_tools::feature_flags_t::bmi2)
-        os << "bmi2, ";
-    os << "]";
+std::ostream& operator<<(std::ostream& os, cpu_tools::cpuinfo_t cpuinfo) {
+    os << "processor-count=" << cpuinfo.number_of_processors << ", flags=["
+       << static_cast<cpu_tools::feature_flags_t>(cpuinfo.feature_flags) << "]";
 #if defined(ARCH_ARM_64) || defined(ARCH_ARM_32)
     os << ", arm-cpu-arch=" << cpuinfo.arm_cpu_arch;
 #endif
@@ -141,25 +134,11 @@ cpuinfo_t parse_cpuinfo(std::istream& stream) {
             if (std::smatch pieces_match;
                 std::regex_match(line, pieces_match, flags_rx) &&
                 pieces_match.size() > 2) {
-                if (pieces_match[2].str().find("avx") != std::string::npos)
-                    cpuinfo.feature_flags |= feature_flags_t::avx;
-                if (pieces_match[2].str().find("avx2") != std::string::npos)
-                    cpuinfo.feature_flags |= feature_flags_t::avx2;
-                if (pieces_match[2].str().find("avx512") != std::string::npos)
-                    cpuinfo.feature_flags |= feature_flags_t::avx512;
-                if (pieces_match[2].str().find("fma") != std::string::npos)
-                    cpuinfo.feature_flags |= feature_flags_t::fma;
-                if (pieces_match[2].str().find("f16c") != std::string::npos)
-                    cpuinfo.feature_flags |= feature_flags_t::f16c;
-                if (pieces_match[2].str().find("asimd") != std::string::npos)
-                    cpuinfo.feature_flags |= feature_flags_t::asimd;
-                if (pieces_match[2].str().find("neon") != std::string::npos)
-                    cpuinfo.feature_flags |= feature_flags_t::asimd;
-                if (pieces_match[2].str().find("sse4_1") != std::string::npos)
-                    cpuinfo.feature_flags |= feature_flags_t::sse4_1;
-                if (pieces_match[2].str().find("bmi2") != std::string::npos)
-                    cpuinfo.feature_flags |= feature_flags_t::bmi2;
-
+#define X(enum_id, cpuinfo_str, ...)                                  \
+    if (pieces_match[2].str().find(cpuinfo_str) != std::string::npos) \
+        cpuinfo.feature_flags |= feature_flags_t::feature_##enum_id;
+                CPUTOOLS_CPU_FEATURE_FLAG_TABLE
+#undef X
                 LOGD("cpu flags: " << pieces_match[2].str());
                 flags_done = true;
             }

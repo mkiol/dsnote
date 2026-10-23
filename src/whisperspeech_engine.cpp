@@ -26,7 +26,7 @@ whisperspeech_engine::whisperspeech_engine(config_t config,
                                            callbacks_t call_backs)
     : tts_engine{std::move(config), std::move(call_backs)} {
     if ((cpu_tools::cpuinfo().feature_flags &
-         cpu_tools::feature_flags_t::avx) == 0) {
+         cpu_tools::feature_flags_t::feature_avx) == 0) {
         LOGE("avx not supported but whisperspeech engine needs it");
         throw std::runtime_error(
             "failed to init whisperspeech engine: avx not supported");

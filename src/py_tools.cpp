@@ -111,7 +111,7 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type,
             break;
         case libs_scan_type_t::off_all_enabled:
             if (cpu_tools::cpuinfo().feature_flags &
-                cpu_tools::feature_flags_t::avx) {
+                cpu_tools::feature_flags_t::feature_avx) {
                 availability.coqui_tts = true;
                 availability.whisperspeech_tts = true;
                 availability.parler_tts =
@@ -162,7 +162,7 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type,
         LOGD("checking: torch cuda-hip (skipped)");
     } else {
         if (cpu_tools::cpuinfo().feature_flags &
-            cpu_tools::feature_flags_t::avx) {
+            cpu_tools::feature_flags_t::feature_avx) {
             try {
                 LOGD("checking: torch cuda-hip");
                 auto torch_cuda = py::module_::import("torch.cuda");
@@ -221,7 +221,8 @@ libs_availability_t libs_availability(libs_scan_type_t scan_type,
         return availability;
     }
 
-    if (cpu_tools::cpuinfo().feature_flags & cpu_tools::feature_flags_t::avx) {
+    if (cpu_tools::cpuinfo().feature_flags &
+        cpu_tools::feature_flags_t::feature_avx) {
         try {
             LOGD("checking: coqui tts");
             py::module_::import("TTS");

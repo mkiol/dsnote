@@ -10,8 +10,18 @@
 
 #include <iostream>
 #include <istream>
+#include <type_traits>
 
-
+// enum_id, cpuinfo_str, name_str, enum_value, dummy
+#define CPUTOOLS_CPU_FEATURE_FLAG_TABLE        \
+    X(avx, "avx", "avx", 1U << 0U, 0)          \
+    X(avx2, "avx2", "avx2", 1U << 1U, 0)       \
+    X(avx512, "avx512", "avx512", 1U << 2U, 0) \
+    X(fma, "fma", "fma", 1U << 3U, 0)          \
+    X(f16c, "f16c", "f16c", 1U << 4U, 0)       \
+    X(asimd, "asimd", "asimd", 1U << 5U, 0)    \
+    X(sse4_1, "sse4_1", "sse4.1", 1U << 6U, 0) \
+    X(bmi2, "bmi2", "bmi2", 1U << 7U, 0)
 
 // enum_id, name_str, hw_cap_flag, hwcpa_var, hwcap_macro
 #ifdef ARCH_ARM_32
@@ -97,15 +107,11 @@ enum class arch_t { unknown, x86_64, arm32, arm64 };
 enum class arm_cpu_arch_t { unknown, arm7, arm8, arm9 };
 
 enum feature_flags_t : unsigned int {
-    none = 0U,
-    avx = 1U << 0U,
-    avx2 = 1U << 1U,
-    avx512 = 1U << 2U,
-    fma = 1U << 3U,
-    f16c = 1U << 4U,
-    asimd = 1U << 5U,
-    sse4_1 = 1U << 6U,
-    bmi2 = 1U << 7U
+    feature_none = 0U,
+#define X(enum_id, cpuinfo_str, name_str, enum_value, ...) \
+    feature_##enum_id = enum_value,
+    CPUTOOLS_CPU_FEATURE_FLAG_TABLE
+#undef X
 };
 
 enum hw_cap_flags_t : unsigned int {
@@ -117,7 +123,8 @@ enum hw_cap_flags_t : unsigned int {
 
 struct cpuinfo_t {
     unsigned int number_of_processors = 0;
-    unsigned int feature_flags = feature_flags_t::none;
+    std::underlying_type_t<feature_flags_t> feature_flags =
+        feature_flags_t::feature_none;
     arm_cpu_arch_t arm_cpu_arch = arm_cpu_arch_t::unknown;
 
     bool operator==(const cpuinfo_t& rhs) const {
@@ -137,5 +144,6 @@ std::ostream& operator<<(std::ostream& os, cpu_tools::arch_t arch);
 std::ostream& operator<<(std::ostream& os, cpu_tools::arm_cpu_arch_t arch);
 std::ostream& operator<<(std::ostream& os, cpu_tools::cpuinfo_t cpuinfo);
 std::ostream& operator<<(std::ostream& os, cpu_tools::hw_cap_flags_t hw_cap_info);
+std::ostream& operator<<(std::ostream& os, cpu_tools::feature_flags_t feature);
 
 #endif // CPU_TOOLS_CPP

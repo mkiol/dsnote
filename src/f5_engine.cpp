@@ -1,4 +1,4 @@
-/* Copyright (C) 2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2025-2025 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -24,7 +24,7 @@ using namespace pybind11::literals;
 f5_engine::f5_engine(config_t config, callbacks_t call_backs)
     : tts_engine{std::move(config), std::move(call_backs)} {
     if ((cpu_tools::cpuinfo().feature_flags &
-         cpu_tools::feature_flags_t::avx) == 0) {
+         cpu_tools::feature_flags_t::feature_avx) == 0) {
         LOGE("avx not supported but f5 engine needs it");
         throw std::runtime_error("failed to init f5 engine: avx not supported");
     }
