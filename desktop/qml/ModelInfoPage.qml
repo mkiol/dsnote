@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -178,10 +178,8 @@ Dialog {
                              (f & ModelsListModel.FeatureEngineSttParakeet) ) {
                         return "NVIDIA CUDA, AMD ROCm, Vulkan, OpenCL"
                     }
-                    if (f & ModelsListModel.FeatureEngineSttFasterWhisper) {
-                        return "NVIDIA CUDA"
-                    }
-                    if ((f & ModelsListModel.FeatureEngineTtsCoqui) ||
+                    if ((f & ModelsListModel.FeatureEngineSttFasterWhisper) ||
+                             (f & ModelsListModel.FeatureEngineTtsCoqui) ||
                              (f & ModelsListModel.FeatureEngineTtsParler) ||
                              (f & ModelsListModel.FeatureEngineTtsF5) ||
                              (f & ModelsListModel.FeatureEngineSttQwen3Asr) ||
