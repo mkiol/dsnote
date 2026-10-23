@@ -37080,7 +37080,6 @@
             "name": "English (Qwen3-TTS 1.7B Base)",
             "model_id": "en_qwen3tts_17b_base",
             "model_alias_of": "multilang_qwen3tts_17b_base",
-            "pack_id": "en_qwen3tts",
             "lang_id": "en"
         },
         {
@@ -37159,7 +37158,6 @@
             "name": "English (Qwen3-TTS 1.7B VoiceDesign)",
             "model_id": "en_qwen3tts_17b_voicedesign",
             "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
-            "pack_id": "en_qwen3tts",
             "lang_id": "en"
         },
         {
@@ -37245,7 +37243,6 @@
             "name": "中文 (Qwen3-TTS 1.7B Base)",
             "model_id": "zh_qwen3tts_17b_base",
             "model_alias_of": "multilang_qwen3tts_17b_base",
-            "pack_id": "zh_qwen3tts",
             "lang_id": "zh"
         },
         {
@@ -37324,7 +37321,6 @@
             "name": "中文 (Qwen3-TTS 1.7B VoiceDesign)",
             "model_id": "zh_qwen3tts_17b_voicedesign",
             "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
-            "pack_id": "zh_qwen3tts",
             "lang_id": "zh"
         },
         {
@@ -37410,7 +37406,6 @@
             "name": "日本語 (Qwen3-TTS 1.7B Base)",
             "model_id": "ja_qwen3tts_17b_base",
             "model_alias_of": "multilang_qwen3tts_17b_base",
-            "pack_id": "ja_qwen3tts",
             "lang_id": "ja"
         },
         {
@@ -37489,7 +37484,6 @@
             "name": "日本語 (Qwen3-TTS 1.7B VoiceDesign)",
             "model_id": "ja_qwen3tts_17b_voicedesign",
             "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
-            "pack_id": "ja_qwen3tts",
             "lang_id": "ja"
         },
         {
@@ -37575,7 +37569,6 @@
             "name": "한국어 (Qwen3-TTS 1.7B Base)",
             "model_id": "ko_qwen3tts_17b_base",
             "model_alias_of": "multilang_qwen3tts_17b_base",
-            "pack_id": "ko_qwen3tts",
             "lang_id": "ko"
         },
         {
@@ -37654,7 +37647,6 @@
             "name": "한국어 (Qwen3-TTS 1.7B VoiceDesign)",
             "model_id": "ko_qwen3tts_17b_voicedesign",
             "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
-            "pack_id": "ko_qwen3tts",
             "lang_id": "ko"
         },
         {
@@ -37740,7 +37732,6 @@
             "name": "Deutsch (Qwen3-TTS 1.7B Base)",
             "model_id": "de_qwen3tts_17b_base",
             "model_alias_of": "multilang_qwen3tts_17b_base",
-            "pack_id": "de_qwen3tts",
             "lang_id": "de"
         },
         {
@@ -37819,7 +37810,6 @@
             "name": "Deutsch (Qwen3-TTS 1.7B VoiceDesign)",
             "model_id": "de_qwen3tts_17b_voicedesign",
             "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
-            "pack_id": "de_qwen3tts",
             "lang_id": "de"
         },
         {
@@ -37905,7 +37895,6 @@
             "name": "Français (Qwen3-TTS 1.7B Base)",
             "model_id": "fr_qwen3tts_17b_base",
             "model_alias_of": "multilang_qwen3tts_17b_base",
-            "pack_id": "fr_qwen3tts",
             "lang_id": "fr"
         },
         {
@@ -37984,7 +37973,6 @@
             "name": "Français (Qwen3-TTS 1.7B VoiceDesign)",
             "model_id": "fr_qwen3tts_17b_voicedesign",
             "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
-            "pack_id": "fr_qwen3tts",
             "lang_id": "fr"
         },
         {
@@ -38070,7 +38058,6 @@
             "name": "Русский (Qwen3-TTS 1.7B Base)",
             "model_id": "ru_qwen3tts_17b_base",
             "model_alias_of": "multilang_qwen3tts_17b_base",
-            "pack_id": "ru_qwen3tts",
             "lang_id": "ru"
         },
         {
@@ -38149,7 +38136,6 @@
             "name": "Русский (Qwen3-TTS 1.7B VoiceDesign)",
             "model_id": "ru_qwen3tts_17b_voicedesign",
             "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
-            "pack_id": "ru_qwen3tts",
             "lang_id": "ru"
         },
         {
@@ -38235,7 +38221,6 @@
             "name": "Português (Qwen3-TTS 1.7B Base)",
             "model_id": "pt_qwen3tts_17b_base",
             "model_alias_of": "multilang_qwen3tts_17b_base",
-            "pack_id": "pt_qwen3tts",
             "lang_id": "pt"
         },
         {
@@ -38314,7 +38299,6 @@
             "name": "Português (Qwen3-TTS 1.7B VoiceDesign)",
             "model_id": "pt_qwen3tts_17b_voicedesign",
             "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
-            "pack_id": "pt_qwen3tts",
             "lang_id": "pt"
         },
         {
@@ -38400,7 +38384,6 @@
             "name": "Español (Qwen3-TTS 1.7B Base)",
             "model_id": "es_qwen3tts_17b_base",
             "model_alias_of": "multilang_qwen3tts_17b_base",
-            "pack_id": "es_qwen3tts",
             "lang_id": "es"
         },
         {
@@ -38479,7 +38462,6 @@
             "name": "Español (Qwen3-TTS 1.7B VoiceDesign)",
             "model_id": "es_qwen3tts_17b_voicedesign",
             "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
-            "pack_id": "es_qwen3tts",
             "lang_id": "es"
         },
         {
@@ -38565,7 +38547,6 @@
             "name": "Italiano (Qwen3-TTS 1.7B Base)",
             "model_id": "it_qwen3tts_17b_base",
             "model_alias_of": "multilang_qwen3tts_17b_base",
-            "pack_id": "it_qwen3tts",
             "lang_id": "it"
         },
         {
@@ -38644,7 +38625,6 @@
             "name": "Italiano (Qwen3-TTS 1.7B VoiceDesign)",
             "model_id": "it_qwen3tts_17b_voicedesign",
             "model_alias_of": "multilang_qwen3tts_17b_voicedesign",
-            "pack_id": "it_qwen3tts",
             "lang_id": "it"
         }
     ],
