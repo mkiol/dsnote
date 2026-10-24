@@ -5458,7 +5458,15 @@ bool dsnote_app::feature_fake_keyboard() const {
 
 bool dsnote_app::feature_fake_keyboard_ydo() const {
 #ifdef USE_DESKTOP
-    return fake_keyboard::is_ydo_supported();
+    return fake_keyboard::is_ydo_supported().first;
+#else
+    return false;
+#endif
+}
+
+QString dsnote_app::feature_fake_keyboard_ydo_error_message() const {
+#ifdef USE_DESKTOP
+    return QString::fromStdString(fake_keyboard::is_ydo_supported().second);
 #else
     return false;
 #endif

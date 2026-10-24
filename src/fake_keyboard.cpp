@@ -124,7 +124,8 @@ fake_keyboard::~fake_keyboard() {
 }
 
 bool fake_keyboard::is_supported() {
-    return is_legacy_supported() || is_xdo_supported() || is_ydo_supported();
+    return is_legacy_supported() || is_xdo_supported() ||
+           is_ydo_supported().first;
 }
 
 bool fake_keyboard::is_xdo_supported() {
@@ -135,15 +136,16 @@ bool fake_keyboard::is_xdo_supported() {
 #endif
 }
 
-bool fake_keyboard::is_ydo_supported() {
-    auto ydo_daemon_socket = make_ydo_socket();
+std::pair<bool, std::string> fake_keyboard::is_ydo_supported() {
+    auto [ydo_daemon_socket, error_message] = make_ydo_socket();
 
     if (ydo_daemon_socket < 0) {
-        return false;
+        LOGD(error_message);
+        return {false, std::move(error_message)};
     }
 
     ::close(ydo_daemon_socket);
-    return true;
+    return {true, {}};
 }
 
 bool fake_keyboard::is_legacy_supported() {
@@ -583,11 +585,13 @@ void fake_keyboard::send_ctrl_c_xdo(bool shift) {
 }
 #endif
 
-int fake_keyboard::make_ydo_socket() {
+std::pair<int, std::string> fake_keyboard::make_ydo_socket() {
+    std::string error_message;
+
     auto ydo_daemon_socket = socket(AF_UNIX, SOCK_DGRAM, 0);
     if (ydo_daemon_socket < 0) {
         LOGW("failed to create ydo socket");
-        return -1;
+        return {-1, std::move(error_message)};
     }
 
     auto connect_socket = [&](const std::string &file) {
@@ -596,41 +600,61 @@ int fake_keyboard::make_ydo_socket() {
 
         snprintf(sa.sun_path, sizeof(sa.sun_path) - 1, "%s", file.c_str());
 
-        if (::connect(ydo_daemon_socket, (const struct sockaddr *)&sa,
+        if (::connect(ydo_daemon_socket,
+                      reinterpret_cast<const struct sockaddr *>(&sa),
                       sizeof(sa))) {
             int err = errno;
-            LOGD("failed to connect ydo socket: " << sa.sun_path << " "
-                                                  << strerror(err));
+            error_message +=
+                fmt::format("Failed to connect socket at {}: Error {} ({}); ",
+                            sa.sun_path, err, strerror(err));
             return false;
         }
 
-        LOGD("connected ydo socket: " << sa.sun_path);
+        LOGD("successfuly connected ydo socket: " << sa.sun_path);
         return true;
     };
 
-    auto *env_ys = getenv("YDOTOOL_SOCKET");
-    auto *env_xrd = getenv("XDG_RUNTIME_DIR");
+    auto get_env = [](const char *name) {
+        std::string value;
+        auto *env = getenv(name);
+        if (env) {
+            value.assign(env);
+        }
+        return value;
+    };
 
-    if (env_ys) {
-        if (!connect_socket(env_ys)) {
-            close(ydo_daemon_socket);
-            return -1;
+    auto env_ys = get_env("YDOTOOL_SOCKET");
+    if (!env_ys.empty()) {
+        if (connect_socket(env_ys)) {
+            return {ydo_daemon_socket, {}};
         }
-    } else if (env_xrd) {
-        if (!connect_socket(std::string{env_xrd} + "/.ydotool_socket")) {
-            if (!connect_socket("/tmp/.ydotool_socket")) {
-                close(ydo_daemon_socket);
-                return -1;
-            }
-        }
-    } else {
-        if (!connect_socket("/tmp/.ydotool_socket")) {
-            close(ydo_daemon_socket);
-            return -1;
-        }
+        // if YDOTOOL_SOCKET is set, don't try other socket locations
+        close(ydo_daemon_socket);
+        return {-1, std::move(error_message)};
     }
 
-    return ydo_daemon_socket;
+    auto env_xrd = get_env("XDG_RUNTIME_DIR");
+    if (!env_xrd.empty()) {
+        if (connect_socket(std::string{env_xrd} + "/.ydotool_socket")) {
+            return {ydo_daemon_socket, {}};
+        }
+        // try another
+    }
+
+    auto env_home = get_env("HOME");
+    if (!env_home.empty()) {
+        if (connect_socket(std::string{env_home} + "/.ydotool_socket")) {
+            return {ydo_daemon_socket, {}};
+        }
+        // try another
+    }
+
+    if (connect_socket("/tmp/.ydotool_socket")) {
+        return {ydo_daemon_socket, {}};
+    }
+
+    close(ydo_daemon_socket);
+    return {-1, std::move(error_message)};
 }
 
 void fake_keyboard::make_compose_table(const char *compose_file) {
@@ -651,10 +675,13 @@ void fake_keyboard::make_compose_table(const char *compose_file) {
 void fake_keyboard::init_ydo() {
     LOGD("using ydo fake-keyboard");
 
-    m_ydo_daemon_socket = make_ydo_socket();
-    if (m_ydo_daemon_socket < 0) {
+    auto [socket, error_message] = make_ydo_socket();
+    if (socket < 0) {
+        LOGE(error_message);
         throw std::runtime_error{"failed to connect to ydo daemon"};
     }
+
+    m_ydo_daemon_socket = socket;
 
     m_xkb_ctx = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
     if (!m_xkb_ctx) throw std::runtime_error{"no xkb context"};

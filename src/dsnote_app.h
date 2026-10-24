@@ -500,6 +500,7 @@ class dsnote_app : public QObject {
                                                 long long stop);
     Q_INVOKABLE QString clipboard_if_url() const;
     Q_INVOKABLE bool is_valid_url(const QString &text) const;
+    Q_INVOKABLE QString feature_fake_keyboard_ydo_error_message() const;
 
    signals:
     void active_stt_model_changed();

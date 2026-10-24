@@ -404,7 +404,10 @@ ColumnLayout {
                 .arg("<i>start-listening-active-window</i>")
                 .arg("<i>ydotool</i>") + (_settings.is_flatpak() ? (" " +
               qsTranslate("SettingsPage", "Also make sure that the Flatpak application has permission to access %1 daemon socket file.")
-                        .arg("<i>ydotool</i>")) : "")
+                        .arg("<i>ydotool</i>")) : "") + " " +
+              qsTranslate("SettingsPage", "If %1 uses a non-standard location for the socket file, use %2 environment variable to set the location of that file.")
+                .arg("<i>ydotool</i>").arg("<i>YDOTOOL_SOCKET</i>") + " " +
+              qsTranslate("SettingsPage", "Detailed error message: %1").arg("<i>" + app.feature_fake_keyboard_ydo_error_message() + "</i>")
     }
 
     ComboBoxForm {

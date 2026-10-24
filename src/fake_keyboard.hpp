@@ -19,6 +19,7 @@
 #include <queue>
 #include <string>
 #include <thread>
+#include <utility>
 
 #ifdef USE_X11_FEATURES
 #include <QGuiApplication>
@@ -43,7 +44,7 @@ class fake_keyboard : public QObject {
 
     static bool is_supported();
     static bool is_xdo_supported();
-    static bool is_ydo_supported();
+    static std::pair<bool, std::string> is_ydo_supported();
     static bool is_legacy_supported();
 
     explicit fake_keyboard(QObject* parent = nullptr);
@@ -89,7 +90,7 @@ class fake_keyboard : public QObject {
     unsigned long m_focus_window = 0;
 #endif
 
-    static int make_ydo_socket();
+    static std::pair<int, std::string> make_ydo_socket();
 
     void init_ydo();
     void send_text_ydo(const QString& text);
@@ -150,14 +151,24 @@ class fake_keyboard : public QObject {
     static void wly_keyboard_repeat_info(void* data, wl_keyboard* wl_keyboard,
                                          int32_t rate, int32_t delay);
     inline static const wl_callback_listener wly_callback{
-        wly_callback_callback};
+        .done = wly_callback_callback,
+    };
     inline static const wl_registry_listener wly_global_listener{
-        wly_global_callback, wly_global_remove_callback};
+        .global = wly_global_callback,
+        .global_remove = wly_global_remove_callback,
+    };
     inline static const wl_seat_listener wly_seat_listener{
-        wly_seat_capabilities, wly_seat_name};
+        .capabilities = wly_seat_capabilities,
+        .name = wly_seat_name,
+    };
     inline static const wl_keyboard_listener wly_keyboard_listener{
-        wly_keyboard_keymap, wly_keyboard_enter,     wly_keyboard_leave,
-        wly_keyboard_key,    wly_keyboard_modifiers, wly_keyboard_repeat_info};
+        .keymap = wly_keyboard_keymap,
+        .enter = wly_keyboard_enter,
+        .leave = wly_keyboard_leave,
+        .key = wly_keyboard_key,
+        .modifiers = wly_keyboard_modifiers,
+        .repeat_info = wly_keyboard_repeat_info,
+    };
 };
 
 #endif  // FAKE_KEYBOARD_HPP
