@@ -76,7 +76,7 @@ ColumnLayout {
         spinBox {
             from: 0
             to: 10000
-            stepSize: 1
+            stepSize: 100
             value: _settings.tts_trailing_silence_dur_msec
             editable: true
             textFromValue: function(value) { return value + " ms" }

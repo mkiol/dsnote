@@ -553,7 +553,7 @@ Page {
                             width: parent.width
                             minimumValue: 0
                             maximumValue: 10000
-                            stepSize: 1
+                            stepSize: 100
                             handleVisible: true
                             label: qsTr("Sentence pause duration")
                             value: _settings.tts_trailing_silence_dur_msec
