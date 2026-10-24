@@ -44,6 +44,9 @@ ExternalProject_Add(libpinyinmodel
     INSTALL_COMMAND ""
 )
 
+set(libpinyin_linker_flags "-pthread -L${external_lib_dir}")
+set(libpinyin_compiler_flags "-fPIC -I${external_include_dir}")
+
 ExternalProject_Add(libpinyin
     SOURCE_DIR ${external_dir}/libpinyin
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/libpinyin
@@ -57,9 +60,9 @@ ExternalProject_Add(libpinyin
     CONFIGURE_COMMAND <SOURCE_DIR>/configure
         PKG_CONFIG_PATH=${external_lib_dir}/pkgconfig
         LIBRARY_PATH=${external_lib_dir}
-        LDFLAGS=-L${external_lib_dir}
-        CFLAGS=-fPIC
-        CXXFLAGS=-fPIC
+        LDFLAGS=${libpinyin_linker_flags}
+        CFLAGS=${libpinyin_compiler_flags}
+        CXXFLAGS=${libpinyin_compiler_flags}
         --prefix=<INSTALL_DIR> --libdir=<INSTALL_DIR>/lib --srcdir=<SOURCE_DIR>
         --enable-static --disable-shared
         --with-dbm=KyotoCabinet --enable-libzhuyin
