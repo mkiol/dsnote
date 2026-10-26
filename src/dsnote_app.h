@@ -481,8 +481,15 @@ class dsnote_app : public QObject {
                                        const QString &test_text);
     Q_INVOKABLE void export_trans_rule(const QVariantList &indexes,
                                        const QString &file_path);
+    Q_INVOKABLE QString trans_rule_to_json_str(
+        unsigned int flags, const QString &name, const QString &pattern,
+        const QString &replace, const QString &langs, unsigned int type,
+        const QString &test_text) const;
+    Q_INVOKABLE QVariantList
+    trans_rule_from_json_str(const QString &json_str) const;
     Q_INVOKABLE void import_trans_rule(const QString &file_path);
-    Q_INVOKABLE bool trans_rule_re_pattern_valid(const QString &pattern);
+    Q_INVOKABLE bool trans_rule_re_pattern_valid(const QString &pattern) const;
+    Q_INVOKABLE bool trans_rule_json_str_valid(const QString &json_str) const;
     [[nodiscard]] Q_INVOKABLE QVariantList available_stt_models_info() const;
     [[nodiscard]] Q_INVOKABLE QVariantList available_tts_models_info() const;
     Q_INVOKABLE void update_feature_statuses();
@@ -1064,6 +1071,12 @@ class dsnote_app : public QObject {
         const QString &action_text_format_str, bool from_url, bool for_stt);
     downloader::data_t download_content(
         const QUrl &url, const QString &expected_content_type_pattern = {});
+    static QJsonObject trans_rule_to_jrule(const QVariantList &vrule);
+    static QVariantList trans_rule_to_vrule(
+        unsigned int flags, const QString &name, const QString &pattern,
+        const QString &replace, const QString &langs, unsigned int type,
+        const QString &test_text);
+    static QVariantList trans_rule_to_vrule(const QJsonObject &jrule);
 };
 
 #endif  // DSNOTE_APP_H

@@ -99,10 +99,13 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.9.1" date="2026-10-20">
+    <release version="4.9.1" date="2026-10-26">
       <description>
       <p>General</p>
       <ul>
+      <li>Import and Export 'Rules' to a JSON file.
+          With 'Rules' you can apply text transformation after Speech to Text or before Text to Speech.
+          You can now export and import all or selected rules to a file. Additionally, you can view and edit each rule in JSON format.</li>
       <li>Pinyin support for the Chinese language. You can convert Chinese text from Hanzi to Pinyin and vice versa.
         To switch between Pinyin and Hanzi, use the 'Toggle Hanzi/Pinyin' button in the text area.</li>
       </ul>
@@ -175,6 +178,8 @@
       <li>Setting option to force dark or light user interface color appearance.
           Change if you observe problems with incorrect colors under a dark theme.</li>
       <li>Speech Note has been translated into Portuguese-Brazilian language.</li>
+      <li>Improved error message shown when 'ydotool' daeemon can't be connected. 
+          The message contains information about what error occurred and on what socket it occurred.</li>
       </ul>
       <p>Flatpak:</p>
       <ul>

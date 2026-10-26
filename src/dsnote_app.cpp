@@ -987,8 +987,29 @@ QVariantList dsnote_app::test_trans_rule(unsigned int flags,
     };
 }
 
-bool dsnote_app::trans_rule_re_pattern_valid(const QString &pattern) {
+bool dsnote_app::trans_rule_re_pattern_valid(const QString &pattern) const {
     return QRegularExpression{pattern}.isValid();
+}
+
+bool dsnote_app::trans_rule_json_str_valid(const QString &json_str) const {
+    QJsonParseError error;
+    auto doc = QJsonDocument::fromJson(json_str.toUtf8(), &error);
+    if (error.error != QJsonParseError::ParseError::NoError) {
+        qDebug() << "failed to parse trans rule json:" << error.errorString();
+        return false;
+    }
+
+    if (!doc.isObject()) {
+        qDebug() << "trans rule json is not an object";
+        return false;
+    }
+
+    if (doc.object().isEmpty()) {
+        qDebug() << "trans rule json is an empty object";
+        return false;
+    }
+
+    return true;
 }
 
 void dsnote_app::update_trans_rule(int index, unsigned int flags,
@@ -1007,23 +1028,16 @@ void dsnote_app::update_trans_rule(int index, unsigned int flags,
         return;
     }
 
-    QVariantList rule{
-        /*[0] flags=*/flags,
-        /*[1] type=*/
-        static_cast<std::underlying_type_t<settings::trans_rule_type_t>>(type),
-        /*[2] name=*/name,
-        /*[3] pattern=*/pattern,
-        /*[4] replace=*/replace,
-        /*[5] langs=*/langs,
-        /*[6] test_text=*/test_text,
-    };
+    auto vrule = trans_rule_to_vrule(flags, /*name=*/name, /*pattern=*/pattern,
+                                     /*replace=*/replace, /*langs=*/langs, type,
+                                     test_text);
 
     if (index < 0) {
         // new rule
-        rules.push_back(rule);
+        rules.push_back(vrule);
     } else {
         // update existing rule
-        rules[index] = rule;
+        rules[index] = vrule;
     }
 
     settings::instance()->set_trans_rules(rules);
@@ -1038,6 +1052,142 @@ void dsnote_app::set_trans_rules_test_text(const QString &text) {
         m_trans_rules_test_text = text;
         emit trans_rules_test_text_changed();
     }
+}
+
+QJsonObject dsnote_app::trans_rule_to_jrule(const QVariantList &vrule) {
+    QJsonObject jrule;
+
+    if (vrule.size() < 6) {
+        return jrule;
+    }
+
+    jrule["flags"] = [&] {
+        auto flags =
+            static_cast<settings::trans_rule_flags_t>(vrule.at(0).toUInt());
+        QJsonArray jflags;
+#define X(name, name_str, value, ...) \
+    if (flags & settings::trans_rule_flags_t::name) jflags << name_str;
+        TRANS_RULE_FLAGS_TABLE
+#undef X
+        return jflags;
+    }();
+    jrule["type"] = [&] {
+        auto type =
+            static_cast<settings::trans_rule_type_t>(vrule.at(1).toUInt());
+        switch (type) {
+#define X(name, name_str, value, ...)       \
+    case settings::trans_rule_type_t::name: \
+        return name_str;
+            TRANS_RULE_TYPE_TABLE
+#undef X
+        }
+        return "";
+    }();
+    jrule["name"] = vrule.at(2).toString();
+    jrule["pattern"] = vrule.at(3).toString();
+    jrule["replace"] = vrule.at(4).toString();
+    jrule["langs"] = vrule.at(5).toString();
+    jrule["test-text"] = vrule.at(6).toString();
+
+    return jrule;
+}
+
+QVariantList dsnote_app::trans_rule_to_vrule(
+    unsigned int flags, const QString &name, const QString &pattern,
+    const QString &replace, const QString &langs, unsigned int type,
+    const QString &test_text) {
+    return {
+        /*[0] flags=*/flags,
+        /*[1] type=*/
+        static_cast<std::underlying_type_t<settings::trans_rule_type_t>>(type),
+        /*[2] name=*/name,
+        /*[3] pattern=*/pattern,
+        /*[4] replace=*/replace,
+        /*[5] langs=*/langs,
+        /*[6] test_text=*/test_text,
+    };
+}
+
+QVariantList dsnote_app::trans_rule_to_vrule(const QJsonObject &jrule) {
+    QVariantList vrule;
+
+    auto flags = [&] {
+        unsigned int flags = 0;
+        auto jflags = jrule["flags"].toArray();
+        for (const auto &jflag : jflags) {
+            auto sflag = jflag.toString();
+            if (false) {
+            }
+#define X(name, name_str, value, ...)                                        \
+    else if (sflag.compare(QStringLiteral(name_str), Qt::CaseInsensitive) == \
+             0) {                                                            \
+        flags |= value;                                                      \
+    }
+            TRANS_RULE_FLAGS_TABLE
+#undef X
+        }
+        return flags;
+    }();
+    auto type = [&] {
+        auto stype = jrule["type"].toString();
+#define X(name, name_str, value, ...)                                        \
+    if (stype.compare(QStringLiteral(name_str), Qt::CaseInsensitive) == 0) { \
+        return settings::trans_rule_type_t::name;                            \
+    }
+        TRANS_RULE_TYPE_TABLE
+#undef X
+        return settings::trans_rule_type_t::TransRuleTypeNone;
+    }();
+    auto name = jrule["name"].toString();
+    auto pattern = jrule["pattern"].toString();
+    auto replace = jrule["replace"].toString();
+    auto langs = jrule["langs"].toString();
+    auto test_text = jrule["test-text"].toString();
+
+    // rule verification
+    if (pattern.isEmpty()) {
+        qWarning() << "trans rule pattern is empty";
+        return vrule;
+    }
+    if (type == settings::trans_rule_type_t::TransRuleTypeNone) {
+        qWarning() << "imported trans rule type is invalid";
+        return vrule;
+    }
+    if ((type == settings::trans_rule_type_t::TransRuleTypeMatchRe ||
+         type == settings::trans_rule_type_t::TransRuleTypeReplaceRe) &&
+        !QRegularExpression{pattern}.isValid()) {
+        qWarning() << "imported trans rule re pattern is invalid:" << pattern;
+        return vrule;
+    }
+
+    vrule.assign({
+        /*[0] flags=*/flags,
+        /*[1] type=*/
+        static_cast<std::underlying_type_t<settings::trans_rule_type_t>>(type),
+        /*[2] name=*/name,
+        /*[3] pattern=*/pattern,
+        /*[4] replace=*/replace,
+        /*[5] langs=*/langs,
+        /*[6] test_text=*/test_text,
+    });
+
+    return vrule;
+}
+
+QString dsnote_app::trans_rule_to_json_str(
+    unsigned int flags, const QString &name, const QString &pattern,
+    const QString &replace, const QString &langs, unsigned int type,
+    const QString &test_text) const {
+    auto jrule = trans_rule_to_jrule(trans_rule_to_vrule(
+        /*flags=*/flags, /*name=*/name, /*pattern=*/pattern,
+        /*replace=*/replace,
+        /*langs=*/langs, /*type=*/type, /*test_text=*/test_text));
+    if (jrule.isEmpty()) {
+        qWarning() << "can't make json rule";
+        return {};
+    }
+
+    return QJsonDocument{jrule}.toJson();
 }
 
 void dsnote_app::export_trans_rule(const QVariantList &indexes,
@@ -1059,36 +1209,12 @@ void dsnote_app::export_trans_rule(const QVariantList &indexes,
             continue;
         }
 
-        QJsonObject jrule;
-        jrule["flags"] = [&] {
-            auto flags =
-                static_cast<settings::trans_rule_flags_t>(vl.at(0).toUInt());
-            QJsonArray jflags;
-#define X(name, name_str, value, ...) \
-    if (flags & settings::trans_rule_flags_t::name) jflags << name_str;
-            TRANS_RULE_FLAGS_TABLE
-#undef X
-            return jflags;
-        }();
-        jrule["type"] = [&] {
-            auto type =
-                static_cast<settings::trans_rule_type_t>(vl.at(1).toUInt());
-            switch (type) {
-#define X(name, name_str, value, ...)       \
-    case settings::trans_rule_type_t::name: \
-        return name_str;
-                TRANS_RULE_TYPE_TABLE
-#undef X
-            }
-            return "";
-        }();
-        jrule["name"] = vl.at(2).toString();
-        jrule["pattern"] = vl.at(3).toString();
-        jrule["replace"] = vl.at(4).toString();
-        jrule["langs"] = vl.at(5).toString();
-        jrule["test-text"] = vl.at(6).toString();
-
-        jrules.push_back(jrule);
+        auto jrule = trans_rule_to_jrule(vl);
+        if (jrule.isEmpty()) {
+            qWarning() << "invalid trans rule at index:" << idx;
+        } else {
+            jrules.push_back(jrule);
+        }
     }
 
     if (jrules.empty()) {
@@ -1109,6 +1235,35 @@ void dsnote_app::export_trans_rule(const QVariantList &indexes,
     qDebug() << "trans rules exported successfully:" << jrules.size()
              << file_path;
     emit trans_rule_export_done();
+}
+
+QVariantList dsnote_app::trans_rule_from_json_str(
+    const QString &json_str) const {
+    QVariantList vrule;
+
+    QJsonParseError error;
+    auto doc = QJsonDocument::fromJson(json_str.toUtf8(), &error);
+    if (error.error != QJsonParseError::ParseError::NoError) {
+        qDebug() << "failed to parse trans rule json:" << error.errorString();
+        return vrule;
+    }
+
+    if (!doc.isObject()) {
+        qDebug() << "trans rule json is not an object";
+        return vrule;
+    }
+
+    if (doc.object().isEmpty()) {
+        qDebug() << "trans rule json is an empty object";
+        return vrule;
+    }
+
+    vrule = trans_rule_to_vrule(doc.object());
+    if (vrule.empty() || vrule.size() < 6) {
+        qDebug() << "trans rule json is invalid: " << json_str;
+    }
+
+    return vrule;
 }
 
 void dsnote_app::import_trans_rule(const QString &file_path) {
@@ -1139,68 +1294,10 @@ void dsnote_app::import_trans_rule(const QString &file_path) {
 
     auto jarr = jdoc.array();
     for (const auto &jrule : jarr) {
-        auto jorule = jrule.toObject();
-        auto flags = [&] {
-            unsigned int flags = 0;
-            auto jflags = jorule["flags"].toArray();
-            for (const auto &jflag : jflags) {
-                auto sflag = jflag.toString();
-                if (false) {
-                }
-#define X(name, name_str, value, ...)                                        \
-    else if (sflag.compare(QStringLiteral(name_str), Qt::CaseInsensitive) == \
-             0) {                                                            \
-        flags |= value;                                                      \
-    }
-                TRANS_RULE_FLAGS_TABLE
-#undef X
-            }
-            return flags;
-        }();
-        auto type = [&] {
-            auto stype = jorule["type"].toString();
-#define X(name, name_str, value, ...)                                        \
-    if (stype.compare(QStringLiteral(name_str), Qt::CaseInsensitive) == 0) { \
-        return settings::trans_rule_type_t::name;                            \
-    }
-            TRANS_RULE_TYPE_TABLE
-#undef X
-            return settings::trans_rule_type_t::TransRuleTypeNone;
-        }();
-        auto name = jorule["name"].toString();
-        auto pattern = jorule["pattern"].toString();
-        auto replace = jorule["replace"].toString();
-        auto langs = jorule["langs"].toString();
-        auto test_text = jorule["test-text"].toString();
-
-        // rule verification
-        if (pattern.isEmpty()) {
-            qWarning() << "imported trans rule pattern is empty:" << name;
-            continue;
+        auto vrule = trans_rule_to_vrule(jrule.toObject());
+        if (!vrule.empty()) {
+            vrules.push_back(vrule);
         }
-        if (type == settings::trans_rule_type_t::TransRuleTypeNone) {
-            qWarning() << "imported trans rule type is invalid:" << name;
-            continue;
-        }
-        if ((type == settings::trans_rule_type_t::TransRuleTypeMatchRe ||
-             type == settings::trans_rule_type_t::TransRuleTypeReplaceRe) &&
-            !trans_rule_re_pattern_valid(pattern)) {
-            qWarning() << "imported trans rule re pattern is invalid:" << name
-                       << pattern;
-            continue;
-        }
-
-        vrules.push_back(QVariantList{
-            /*[0] flags=*/flags,
-            /*[1] type=*/
-            static_cast<std::underlying_type_t<settings::trans_rule_type_t>>(
-                type),
-            /*[2] name=*/name,
-            /*[3] pattern=*/pattern,
-            /*[4] replace=*/replace,
-            /*[5] langs=*/langs,
-            /*[6] test_text=*/test_text,
-        });
     }
 
     auto imported_rules_count = vrules.size() - old_rules_count;

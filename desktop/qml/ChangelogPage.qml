@@ -20,6 +20,11 @@ DialogPage {
     RichLabel {
         text: "<p>" + qsTr("General") + "</p>
         <ul>
+        <li>Import and Export <i>Rules</i> to a JSON file.
+            <i>Rules</i> let you apply text transformation after Speech to Text or before Text to Speech.
+            With <i>Rules</i>, you can easily and flexibly correct errors in decoded text or correct mispronounced words.
+            You can now export and import all or selected rules to a file. Additionally, you can view and edit each rule in JSON format.
+            <i>Rules</i> are disabled by default. To use them, you must enable them in the settings (<i>Settings</i> &rarr; <i>General</i> &rarr; <i>Show Rules</i>).</li>
         <li>Pinyin support for the Chinese language. You can convert Chinese text from Hanzi to Pinyin and vice versa.
             To switch between Pinyin and Hanzi, use the <i>Toggle Hanzi/Pinyin</i> button in the text area.</li>
         </ul>

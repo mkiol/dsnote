@@ -1,4 +1,4 @@
-/* Copyright (C) 2024-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -29,6 +29,8 @@ DialogPage {
     readonly property string ruleTestText: (rule && rule.length > 6) ? rule[6] : ""
     readonly property bool canSave: _patternForm.textField.text.length > 0
     readonly property int effectiveWidth: root.implicitWidth - root._leftMargin - root._rightMargin - appWin.padding
+    property bool jsonView: false
+    property bool validJson: false
 
     title: rule ? qsTr("Edit rule") : qsTr("Create a new rule")
 
@@ -48,7 +50,7 @@ DialogPage {
         appWin.openDialog("RuleMgmtPage.qml")
     }
 
-    function saveRule() {
+    function getFlags() {
         var flags = rule ? rule[0] : 0
         if (sttCheckBox.checked)
             flags |= Settings.TransRuleTargetStt
@@ -65,11 +67,15 @@ DialogPage {
         else
             flags &= ~Settings.TransRuleCaseSensitive
 
+        return flags
+    }
+
+    function saveRule() {
         var test_text = _testTextArea.textArea1.text.trim()
 
         app.update_trans_rule(
                    /*index=*/root.ruleIndex,
-                   /*flags=*/flags,
+                   /*flags=*/getFlags(),
                    /*name=*/_nameForm.textField.text,
                    /*pattern=*/_patternForm.textField.text,
                    /*replace=*/_replaceForm.textField.text,
@@ -77,6 +83,19 @@ DialogPage {
                    /*type=*/_typeForm.type,
                    /*test_text=*/test_text)
         appWin.openDialog("RuleMgmtPage.qml")
+    }
+
+    function toJson() {
+        var test_text = _testTextArea.textArea1.text.trim()
+
+        return app.trans_rule_to_json_str(
+                   /*flags=*/getFlags(),
+                   /*name=*/_nameForm.textField.text,
+                   /*pattern=*/_patternForm.textField.text,
+                   /*replace=*/_replaceForm.textField.text,
+                   /*langs=*/langsCheckBox.checked ? "" : langsTextField.text.trim(),
+                   /*type=*/_typeForm.type,
+                   /*test_text=*/test_text)
     }
 
     function testRule() {
@@ -99,6 +118,51 @@ DialogPage {
             _testTextArea.textArea2.color = _testTextArea.dimColor
         } else {
             _testTextArea.textArea2.color = "red"
+        }
+    }
+
+    onJsonViewChanged: {
+        if (jsonView) {
+            jsonTextArea.text = toJson()
+        } else {
+            var json_str = jsonTextArea.text
+            var vrule = app.trans_rule_from_json_str(json_str)
+            if (vrule.length < 7) {
+                console.log("invalid json rule")
+                return
+            }
+
+            var flags = vrule[0]
+            sttCheckBox.checked = flags & Settings.TransRuleTargetStt
+            ttsCheckBox.checked = flags & Settings.TransRuleTargetTts
+            caseSensitiveCheckBox.checked = flags & Settings.TransRuleCaseSensitive
+
+            var ruleType = vrule[1]
+            switch(ruleType) {
+                case Settings.TransRuleTypeReplaceSimple: _typeForm.comboBox.currentIndex = 0; break
+                case Settings.TransRuleTypeReplaceRe: _typeForm.comboBox.currentIndex = 1; break
+                //case Settings.TransRuleTypeMatchSimple: _typeForm.comboBox.currentIndex = 2; break
+                //case Settings.TransRuleTypeMatchRe: _typeForm.comboBox.currentIndex = 3; break
+                default: _typeForm.comboBox.currentIndex = 0; break
+            }
+
+            var ruleName = vrule[2]
+            _nameForm.textField.text = ruleName
+
+            var rulePattern = vrule[3]
+            _patternForm.textField.text = rulePattern
+
+            var ruleReplace = vrule[4]
+            _replaceForm.textField.text = ruleReplace
+
+            var ruleLangs = vrule[5]
+            langsCheckBox.checked = ruleLangs.length === 0
+            langsTextField.text = ruleLangs
+
+            var test_text = vrule[6]
+            if (test_text.length !== 0) {
+                _testTextArea.textArea1.text = test_text
+            }
         }
     }
 
@@ -195,6 +259,17 @@ DialogPage {
                 bottomMargin: root.bottomPadding
             }
 
+            Switch {
+                text: "JSON"
+                checked: root.jsonView
+                onClicked: root.jsonView = checked
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Switch to the JSON representation of the rule.")
+                hoverEnabled: true
+            }
+
             Item {
                 Layout.fillWidth: true
             }
@@ -218,193 +293,221 @@ DialogPage {
         }
     }
 
-    ColumnLayout {
+    StackLayout {
+        id: stackLayout
+
         property alias verticalMode: root.verticalMode
+
         Layout.fillWidth: true
+        Layout.topMargin: appWin.padding
+        currentIndex: root.jsonView ? 1 : 0
 
-        DoubleTextArea {
-            id: _testTextArea
-
-            preferredHeight: _patternForm.height
-
-            toolTip1: qsTr("Type here to see how the rule changes the text.")
-            textArea1 {
-                placeholderText: qsTr("Type here to see how the rule changes the text.")
-                onTextChanged: {
-                    app.trans_rules_test_text = _testTextArea.textArea1.text
-                    root.testRule()
-                }
-                font: _settings.notepad_font
-            }
-
-            toolTip2: qsTr("Text after applying the rule.") + " " + qsTr("Red color means that pattern doesn't match the text.")
-            textArea2 {
-                placeholderText: qsTr("Text after applying the rule.")
-                font: _settings.notepad_font
-                readOnly: true
-                color: _testTextArea.dimColor
-            }
-        }
-
-        GridLayout {
-            columns: verticalMode ? 1 : 2
-            columnSpacing: appWin.padding
+        ColumnLayout {
+            property alias verticalMode: root.verticalMode
             Layout.fillWidth: true
 
-            Item {
-                Layout.preferredWidth: root.verticalMode ? 0 : (_typeForm.width / 2) - 2 * parent.columnSpacing
-            }
+            DoubleTextArea {
+                id: _testTextArea
 
-            CheckBox {
-                id: caseSensitiveCheckBox
-                checked: root.ruleCaseSensitive
-                text: qsTr("Case sensitive")
-                onCheckedChanged: root.testRule()
-            }
-        }
+                preferredHeight: _patternForm.height
 
-        ComboBoxForm {
-            id: _typeForm
-
-            property int type: {
-                if (comboBox.currentIndex === 0)
-                    return Settings.TransRuleTypeReplaceSimple
-                if (comboBox.currentIndex === 1)
-                    return Settings.TransRuleTypeReplaceRe
-                if (comboBox.currentIndex === 2)
-                    return Settings.TransRuleTypeMatchSimple
-                if (comboBox.currentIndex === 3)
-                    return Settings.TransRuleTypeMatchRe
-                return 0
-            }
-
-            label.text: qsTr("Pattern type")
-            compact: true
-            toolTip: qsTr("Type of a pattern.") + " " +
-                     qsTr("You can simply replace the found text or replace the text with a regular expression.")
-            comboBox {
-                currentIndex: {
-                    switch(root.ruleType) {
-                    case Settings.TransRuleTypeReplaceSimple: return 0
-                    case Settings.TransRuleTypeReplaceRe: return 1
-                    //case Settings.TransRuleTypeMatchSimple: return 2
-                    //case Settings.TransRuleTypeMatchRe: return 3
+                toolTip1: qsTr("Type here to see how the rule changes the text.")
+                textArea1 {
+                    placeholderText: qsTr("Type here to see how the rule changes the text.")
+                    onTextChanged: {
+                        app.trans_rules_test_text = _testTextArea.textArea1.text
+                        root.testRule()
                     }
-                    return 0
+                    font: _settings.notepad_font
                 }
-                model: [
-                    qsTr("Replace"),
-                    qsTr("Replace (Regular expression)"),
-                    //qsTr("Match"),
-                    //qsTr("Match (Regular expression)")
-                ]
-                onActivated: root.testRule()
-            }
-        }
 
-        TextFieldWithHelpForm {
-            id: _patternForm
-
-            label.text: qsTr("Pattern")
-            valid: app.trans_rule_re_pattern_valid(text)
-            onHelpClicked: appWin.openPopup(patterHelpDialog)
-            textField {
-                text: root.rulePattern
-                onTextChanged: root.testRule()
-            }
-        }
-
-        TextFieldWithHelpForm {
-            id: _replaceForm
-
-            enabled: _typeForm.type === Settings.TransRuleTypeReplaceSimple ||
-                     _typeForm.type === Settings.TransRuleTypeReplaceRe
-            label.text: qsTr("Replacement text")
-            onHelpClicked: appWin.openPopup(replaceHelpDialog)
-            textField {
-                text: root.ruleReplace
-                onTextChanged: root.testRule()
-            }
-        }
-
-        TextFieldForm {
-            id: _nameForm
-
-            label.text: qsTr("Name")
-            toolTip: qsTr("Optional name of the rule. If the name is not specified, the default name will be used.")
-            textField {
-                text: root.ruleName
-                placeholderText: root.defaultRuleName(_typeForm.type,
-                                                      _patternForm.text,
-                                                      _replaceForm.text)
-            }
-        }
-
-        RowForm {
-            label.text: qsTr("Languages")
-
-            CheckBox {
-                id: langsCheckBox
-
-                checked: root.ruleLangs.length === 0
-                text: qsTr("All languages")
+                toolTip2: qsTr("Text after applying the rule.") + " " + qsTr("Red color means that pattern doesn't match the text.")
+                textArea2 {
+                    placeholderText: qsTr("Text after applying the rule.")
+                    font: _settings.notepad_font
+                    readOnly: true
+                    color: _testTextArea.dimColor
+                }
             }
 
-            TextField {
-                id: langsTextField
-
-                enabled: !langsCheckBox.checked
-                text: root.ruleLangs
+            GridLayout {
+                columns: verticalMode ? 1 : 2
+                columnSpacing: appWin.padding
                 Layout.fillWidth: true
-                placeholderText: qsTr("List of language codes")
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("A comma separated list of language codes for which the rule should be enabled.") + " " +
-                              qsTr("Example: %1 means that the rule applies only to Czech, Slovak and Polish languages.").arg("<i>cs, sk, pl</i>")
-                hoverEnabled: true
-                Accessible.name: placeholderText
-                TextContextMenu {}
-            }
-        }
-
-        RowForm {
-            label.text: qsTr("Types of usage")
-
-            CheckBox {
-                id: sttCheckBox
-
-                checked: root.ruleTargetStt
-                text: qsTr("Speech to Text")
-            }
-
-            RowLayout {
-                Layout.fillWidth: true
-
-                CheckBox {
-                    id: ttsCheckBox
-
-                    checked: root.ruleTargetTts
-                    text: qsTr("Text to Speech")
-                }
-
-                Button {
-                    icon.name: "audio-speakers-symbolic"
-                    flat: true
-                    visible: ttsCheckBox.checked
-                    display: AbstractButton.IconOnly
-                    enabled: ttsCheckBox.checked && _testTextArea.textArea2.text.length !== 0 && app.tts_configured
-                    action: Action {
-                        text: qsTr("Read the text")
-                        onTriggered: app.play_speech_from_text(_testTextArea.textArea2.text, "")
-                    }
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                    ToolTip.text: text
-                    hoverEnabled: true
-                }
 
                 Item {
+                    Layout.preferredWidth: root.verticalMode ? 0 : (_typeForm.width / 2) - 2 * parent.columnSpacing
+                }
+
+                CheckBox {
+                    id: caseSensitiveCheckBox
+                    checked: root.ruleCaseSensitive
+                    text: qsTr("Case sensitive")
+                    onCheckedChanged: root.testRule()
+                }
+            }
+
+            ComboBoxForm {
+                id: _typeForm
+
+                property int type: {
+                    if (comboBox.currentIndex === 0)
+                        return Settings.TransRuleTypeReplaceSimple
+                    if (comboBox.currentIndex === 1)
+                        return Settings.TransRuleTypeReplaceRe
+                    if (comboBox.currentIndex === 2)
+                        return Settings.TransRuleTypeMatchSimple
+                    if (comboBox.currentIndex === 3)
+                        return Settings.TransRuleTypeMatchRe
+                    return 0
+                }
+
+                label.text: qsTr("Pattern type")
+                compact: true
+                toolTip: qsTr("Type of a pattern.") + " " +
+                        qsTr("You can simply replace the found text or replace the text with a regular expression.")
+                comboBox {
+                    currentIndex: {
+                        switch(root.ruleType) {
+                        case Settings.TransRuleTypeReplaceSimple: return 0
+                        case Settings.TransRuleTypeReplaceRe: return 1
+                        //case Settings.TransRuleTypeMatchSimple: return 2
+                        //case Settings.TransRuleTypeMatchRe: return 3
+                        }
+                        return 0
+                    }
+                    model: [
+                        qsTr("Replace"),
+                        qsTr("Replace (Regular expression)"),
+                        //qsTr("Match"),
+                        //qsTr("Match (Regular expression)")
+                    ]
+                    onActivated: root.testRule()
+                }
+            }
+
+            TextFieldWithHelpForm {
+                id: _patternForm
+
+                label.text: qsTr("Pattern")
+                valid: app.trans_rule_re_pattern_valid(text)
+                onHelpClicked: appWin.openPopup(patterHelpDialog)
+                textField {
+                    text: root.rulePattern
+                    onTextChanged: root.testRule()
+                }
+            }
+
+            TextFieldWithHelpForm {
+                id: _replaceForm
+
+                enabled: _typeForm.type === Settings.TransRuleTypeReplaceSimple ||
+                        _typeForm.type === Settings.TransRuleTypeReplaceRe
+                label.text: qsTr("Replacement text")
+                onHelpClicked: appWin.openPopup(replaceHelpDialog)
+                textField {
+                    text: root.ruleReplace
+                    onTextChanged: root.testRule()
+                }
+            }
+
+            TextFieldForm {
+                id: _nameForm
+
+                label.text: qsTr("Name")
+                toolTip: qsTr("Optional name of the rule. If the name is not specified, the default name will be used.")
+                textField {
+                    text: root.ruleName
+                    placeholderText: root.defaultRuleName(_typeForm.type,
+                                                        _patternForm.text,
+                                                        _replaceForm.text)
+                }
+            }
+
+            RowForm {
+                label.text: qsTr("Languages")
+
+                CheckBox {
+                    id: langsCheckBox
+
+                    checked: root.ruleLangs.length === 0
+                    text: qsTr("All languages")
+                }
+
+                TextField {
+                    id: langsTextField
+
+                    enabled: !langsCheckBox.checked
+                    text: root.ruleLangs
                     Layout.fillWidth: true
+                    placeholderText: qsTr("List of language codes")
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("A comma separated list of language codes for which the rule should be enabled.") + " " +
+                                qsTr("Example: %1 means that the rule applies only to Czech, Slovak and Polish languages.").arg("<i>cs, sk, pl</i>")
+                    hoverEnabled: true
+                    Accessible.name: placeholderText
+                    TextContextMenu {}
+                }
+            }
+
+            RowForm {
+                label.text: qsTr("Types of usage")
+
+                CheckBox {
+                    id: sttCheckBox
+
+                    checked: root.ruleTargetStt
+                    text: qsTr("Speech to Text")
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    CheckBox {
+                        id: ttsCheckBox
+
+                        checked: root.ruleTargetTts
+                        text: qsTr("Text to Speech")
+                    }
+
+                    Button {
+                        icon.name: "audio-speakers-symbolic"
+                        flat: true
+                        visible: ttsCheckBox.checked
+                        display: AbstractButton.IconOnly
+                        enabled: ttsCheckBox.checked && _testTextArea.textArea2.text.length !== 0 && app.tts_configured
+                        action: Action {
+                            text: qsTr("Read the text")
+                            onTriggered: app.play_speech_from_text(_testTextArea.textArea2.text, "")
+                        }
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.visible: hovered
+                        ToolTip.text: text
+                        hoverEnabled: true
+                    }
+
+                    Item {
+                        Layout.fillWidth: true
+                    }
+                }
+            }
+        }
+
+        ColumnLayout {
+            property alias verticalMode: root.verticalMode
+            Layout.fillWidth: true
+
+            TextArea {
+                id: jsonTextArea
+
+                color: root.validJson ? palette.text : "red"
+
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                onTextChanged: {
+                    validJson = app.trans_rule_json_str_valid(text)
                 }
             }
         }
