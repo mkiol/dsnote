@@ -469,8 +469,6 @@ stt_engine::samples_process_result_t qwen3asr_engine::process_buff() {
 void qwen3asr_engine::decode_speech(const whisper_buf_t& buf) {
     LOGD("speech decoding started");
 
-    create_model();
-
     auto decoding_start = std::chrono::steady_clock::now();
 
     using result_t = std::pair<std::string, std::string>;
