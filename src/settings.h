@@ -26,42 +26,50 @@
 #include "qdebug.h"
 #include "singleton.h"
 
-// property-name, type, default-value, restart-required
-#define SETTINGS_PROPERTY_TABLE                                              \
-    X(stt_use_note_as_prompt, bool, true, false)                             \
-    X(stt_echo, bool, false, false)                                          \
-    X(tts_split_into_sentences, bool, true, false)                           \
-    X(show_repair_text, bool, false, false)                                  \
-    X(tts_use_engine_speed_control, bool, true, false)                       \
-    X(tts_normalize_audio, bool, true, false)                                \
-    X(stt_insert_stats, bool, false, false)                                  \
-    X(trans_rules_enabled, bool, false, false)                               \
-    X(mnt_clean_text, bool, false, false)                                    \
-    X(whisper_translate, bool, false, false)                                 \
-    X(use_tray, bool, false, false)                                          \
-    X(start_in_tray, bool, false, false)                                     \
-    X(clean_ref_voice, bool, true, false)                                    \
-    X(stt_clear_mic_audio_when_decoding, bool, false, false)                 \
-    X(stt_play_beep, bool, false, false)                                     \
-    X(translate_when_typing, bool, true, false)                              \
-    X(translator_mode, bool, false, false)                                   \
-    X(hotkeys_enabled, bool, false, false)                                   \
-    X(mtag, bool, false, false)                                              \
-    X(use_toggle_for_hotkey, bool, true, false)                              \
-    X(window_size_ratio, double, 0.6, false)                                 \
-    X(text_to_window_method, settings::text_to_window_method_t,              \
-      settings::text_to_window_method_t::TextToWindowMethodTyping, false)    \
-    X(text_from_window_method, settings::text_from_window_method_t,          \
-      settings::text_from_window_method_t::TextFromWindowMethodCtrlC, false) \
-    X(translate_ui, bool, true, true)                                        \
-    X(import_extract_readable, bool, true, false)                            \
-    X(ui_appearance, settings::ui_appearance_t,                              \
-      settings::ui_appearance_t::UiAppearanceAuto, true)                     \
-    X(tts_pinyin, bool, true, false)                                         \
-    X(stt_pinyin, bool, false, false)                                        \
-    X(mnt_pinyin, bool, false, false)                                        \
-    X(tts_trim_trailing_silence, bool, true, false)                          \
-    X(tts_trailing_silence_dur_msec, int, 100, false)
+// 1-property-name, 2-type, 3-default-value, 4-restart-required, 5-min-value,
+// 6-max-value, 7-step, 8-update-to-service-needed, 9-dummy
+#define SETTINGS_PROPERTY_TABLE                                                \
+    X(stt_use_note_as_prompt, bool, true, false, false, true, 0, false, 0)     \
+    X(stt_echo, bool, false, false, false, true, 0, false, 0)                  \
+    X(tts_split_into_sentences, bool, true, false, false, true, 0, false, 0)   \
+    X(show_repair_text, bool, false, false, false, true, 0, false, 0)          \
+    X(tts_use_engine_speed_control, bool, true, false, false, true, 0, false,  \
+      0)                                                                       \
+    X(tts_normalize_audio, bool, true, false, false, true, 0, false, 0)        \
+    X(stt_insert_stats, bool, false, false, false, true, 0, false, 0)          \
+    X(trans_rules_enabled, bool, false, false, false, true, 0, false, 0)       \
+    X(mnt_clean_text, bool, false, false, false, true, 0, false, 0)            \
+    X(whisper_translate, bool, false, false, false, true, 0, false, 0)         \
+    X(use_tray, bool, false, false, false, true, 0, false, 0)                  \
+    X(start_in_tray, bool, false, false, false, true, 0, false, 0)             \
+    X(clean_ref_voice, bool, true, false, false, true, 0, false, 0)            \
+    X(stt_clear_mic_audio_when_decoding, bool, false, false, false, true, 0,   \
+      false, 0)                                                                \
+    X(stt_play_beep, bool, false, false, false, true, 0, false, 0)             \
+    X(translate_when_typing, bool, true, false, false, true, 0, false, 0)      \
+    X(translator_mode, bool, false, false, false, true, 0, false, 0)           \
+    X(hotkeys_enabled, bool, false, false, false, true, 0, false, 0)           \
+    X(mtag, bool, false, false, false, true, 0, false, 0)                      \
+    X(use_toggle_for_hotkey, bool, true, false, false, true, 0, false, 0)      \
+    X(window_size_ratio, double, 0.6, false, 0.1, 1.0, 0.1, false, 0)          \
+    X(text_to_window_method, settings::text_to_window_method_t,                \
+      settings::text_to_window_method_t::TextToWindowMethodTyping, false, 0,   \
+      0, 0, false, 0)                                                          \
+    X(text_from_window_method, settings::text_from_window_method_t,            \
+      settings::text_from_window_method_t::TextFromWindowMethodCtrlC, false,   \
+      0, 0, 0, false, 0)                                                       \
+    X(translate_ui, bool, true, true, false, true, 0, false, 0)                \
+    X(import_extract_readable, bool, true, false, false, true, 0, false, 0)    \
+    X(ui_appearance, settings::ui_appearance_t,                                \
+      settings::ui_appearance_t::UiAppearanceAuto, true, false, true, 0,       \
+      false, 0)                                                                \
+    X(tts_pinyin, bool, true, false, false, true, 0, false, 0)                 \
+    X(stt_pinyin, bool, false, false, false, true, 0, false, 0)                \
+    X(mnt_pinyin, bool, false, false, false, true, 0, false, 0)                \
+    X(tts_trim_trailing_silence, bool, true, false, false, true, 0, false, 0)  \
+    X(tts_trailing_silence_dur_msec, int, 100, false, 0, 10000, 100, false, 0) \
+    X(inactivity_reset, bool, true, false, false, true, 0, true, 0)            \
+    X(inactivity_reset_timeout_sec, int, 600, false, 5, 3600, 1, true, 0)
 
 // name, default-value
 #define GPU_SCAN_TABLE                                          \
@@ -235,7 +243,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_OBJECT
 
     // app
-#define X(name, type, dvalue, restart) \
+#define X(name, type, dvalue, ...) \
     Q_PROPERTY(type name READ name WRITE set_##name NOTIFY name##_changed)
     SETTINGS_PROPERTY_TABLE
 #undef X
@@ -821,6 +829,8 @@ class settings : public QSettings, public singleton<settings> {
     settings();
 
     static launch_mode_t launch_mode;
+    void update_setting(const QString &name, const QVariant &new_value,
+                        bool force);
     QString module_checksum(const QString &name) const;
     void set_module_checksum(const QString &name, const QString &value);
     void scan_hw_devices(
@@ -835,9 +845,15 @@ class settings : public QSettings, public singleton<settings> {
     void detect_qt_styles();
 #endif
     // app
-#define X(name, type, dvalue, restart) \
-    type name() const;                 \
-    void set_##name(const type &value);
+#define X(xname, xtype, ...)                   \
+    xtype xname() const;                       \
+    void set_##xname(const xtype &value);      \
+    void force_##xname(const xtype &value);    \
+    Q_INVOKABLE void reset_##xname();          \
+    Q_INVOKABLE xtype default_##xname() const; \
+    Q_INVOKABLE xtype min_##xname() const;     \
+    Q_INVOKABLE xtype max_##xname() const;     \
+    Q_INVOKABLE xtype step_##xname() const;
     SETTINGS_PROPERTY_TABLE
 #undef X
 #define X(name, _)               \
@@ -1170,7 +1186,8 @@ class settings : public QSettings, public singleton<settings> {
 
    signals:
     // app
-#define X(name, type, dvalue, restart) void name##_changed();
+    void update_setting_requested(const QString &name, const QVariant &value);
+#define X(name, ...) void name##_changed();
     SETTINGS_PROPERTY_TABLE
 #undef X
 #define X(name, _) void hw_scan_##name##_changed();
@@ -1296,6 +1313,12 @@ class settings : public QSettings, public singleton<settings> {
     bool m_native_style = false;
     bool m_kde = false;
     QStringList m_available_qt_styles;
+
+#define X(xname, xtype, ...)                             \
+    static xtype normalized_##xname(const xtype &value); \
+    static xtype cast_num_##xname(double num_value);
+    SETTINGS_PROPERTY_TABLE
+#undef X
 
     static QString settings_filepath();
     void set_restart_required(bool value);

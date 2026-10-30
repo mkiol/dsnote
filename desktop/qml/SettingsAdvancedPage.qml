@@ -49,7 +49,7 @@ ColumnLayout {
 
                 Label {
                     font.bold: true
-                    text: modelData[0] ? "✔️" : "✖️"
+                    text: modelData[0] ? "✔" : "❌"
                     color: modelData[0] ? "green" : "red"
                 }
             }
@@ -57,7 +57,7 @@ ColumnLayout {
     }
 
     SectionLabel {
-        text: qsTranslate("SettingsPage", "CPU options")
+        text: qsTranslate("SettingsPage", "CPU and memory options")
     }
 
     SpinBoxForm {
@@ -79,6 +79,24 @@ ColumnLayout {
                 _settings.num_threads = spinBox.value;
             }
         }
+    }
+
+    CheckBoxSetting {
+        optionName: "inactivity_reset"
+        text: qsTranslate("SettingsPage", "Unload model after inactivity")
+        toolTipText: qsTranslate("SettingsPage", "Automatically unload the model from memory after a period of inactivity.") + " " +
+                     qsTranslate("SettingsPage", "This frees up memory, but the model will need to reload the next time it's used.")
+    }
+
+    SpinBoxFormSetting {
+        visible: _settings.inactivity_reset
+        indends: 1
+        optionName: "inactivity_reset_timeout_sec"
+        text: qsTranslate("SettingsPage", "Inactivity timeout")
+        unitName: "s"
+        toolTipText: qsTranslate("SettingsPage", "After a specified number of seconds of inactivity, the model will be unloaded to free up memory.") + " " + 
+                     qsTranslate("SettingsPage", "Lower values save memory but slow down the next response, as model needs to be reloaded.") + " " + 
+                     qsTranslate("SettingsPage", "Higher values keep responses fast but hold memory longer.")
     }
 
     SectionLabel {

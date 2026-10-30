@@ -357,30 +357,71 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
         .removeRecursively();
 }
 
-#define X(name, type, dvalue, restart)                                       \
-    type settings::name() const {                                            \
+#define X(xname, xtype, xdvalue, xrestart, xmin_value, xmax_value, xstep,    \
+          xneed_update, ...)                                                 \
+    xtype settings::xname() const {                                          \
         return [&](auto v) {                                                 \
             if constexpr (std::is_enum_v<decltype(v)>) {                     \
-                return static_cast<type>(                                    \
-                    value(QStringLiteral(#name), static_cast<int>(v))        \
+                return static_cast<xtype>(                                   \
+                    value(QStringLiteral(#xname), static_cast<int>(v))       \
                         .toInt());                                           \
             } else {                                                         \
-                return qvariant_cast<type>(value(QStringLiteral(#name), v)); \
+                return normalized_##xname(                                   \
+                    qvariant_cast<xtype>(value(QStringLiteral(#xname), v))); \
             }                                                                \
-        }(dvalue);                                                           \
+        }(xdvalue);                                                          \
     }                                                                        \
-    void settings::set_##name(const type& value) {                           \
-        if (name() != value) {                                               \
-            [&](auto v) {                                                    \
-                if constexpr (std::is_enum_v<decltype(v)>) {                 \
-                    setValue(QStringLiteral(#name), static_cast<int>(v));    \
-                } else {                                                     \
-                    setValue(QStringLiteral(#name), v);                      \
-                }                                                            \
-                emit name##_changed();                                       \
-                if (restart) set_restart_required(true);                     \
-            }(value);                                                        \
+    void settings::set_##xname(const xtype& value) {                         \
+        if (xname() != value) {                                              \
+            force_##xname(value);                                            \
         }                                                                    \
+    }                                                                        \
+    void settings::reset_##xname() { set_##xname(xdvalue); }                 \
+    xtype settings::default_##xname() const { return xdvalue; }              \
+    xtype settings::min_##xname() const {                                    \
+        return cast_num_##xname(xmin_value);                                 \
+    }                                                                        \
+    xtype settings::max_##xname() const {                                    \
+        return cast_num_##xname(xmax_value);                                 \
+    }                                                                        \
+    xtype settings::step_##xname() const { return cast_num_##xname(xstep); } \
+    void settings::force_##xname(const xtype& value) {                       \
+        [&](auto v) {                                                        \
+            if constexpr (std::is_enum_v<decltype(v)>) {                     \
+                setValue(QStringLiteral(#xname), static_cast<int>(v));       \
+                if constexpr (xneed_update) {                                \
+                    emit update_setting_requested(#xname,                    \
+                                                  static_cast<int>(v));      \
+                }                                                            \
+            } else {                                                         \
+                setValue(QStringLiteral(#xname), normalized_##xname(v));     \
+                if constexpr (xneed_update) {                                \
+                    emit update_setting_requested(#xname,                    \
+                                                  normalized_##xname(v));    \
+                }                                                            \
+            }                                                                \
+            emit xname##_changed();                                          \
+            if (xrestart) set_restart_required(true);                        \
+        }(value);                                                            \
+    }                                                                        \
+    xtype settings::normalized_##xname(const xtype& value) {                 \
+        return [&](auto v) {                                                 \
+            if constexpr (std::is_arithmetic_v<decltype(v)>) {               \
+                return std::clamp(v, static_cast<xtype>(xmin_value),         \
+                                  static_cast<xtype>(xmax_value));           \
+            } else {                                                         \
+                return v;                                                    \
+            }                                                                \
+        }(value);                                                            \
+    }                                                                        \
+    xtype settings::cast_num_##xname(double num_value) {                     \
+        return [&](auto v) {                                                 \
+            if constexpr (std::is_arithmetic_v<decltype(v)>) {               \
+                return num_value;                                            \
+            } else {                                                         \
+                return v;                                                    \
+            }                                                                \
+        }(xdvalue);                                                          \
     }
 SETTINGS_PROPERTY_TABLE
 #undef X
@@ -3297,4 +3338,19 @@ void settings::set_scan_flags(unsigned int flags) {
         emit scan_flags_changed();
         set_restart_required(true);
     }
+}
+
+void settings::update_setting(const QString& name, const QVariant& new_value,
+                              bool force) {
+    if (false) {
+    }
+#define X(xname, xtype, xdvalue, ...)                                      \
+    else if (name == #xname) {                                             \
+        auto nvalue = normalized_##xname(qvariant_cast<xtype>(new_value)); \
+        if (force || nvalue != xname()) {                                  \
+            force_##xname(nvalue);                                         \
+        }                                                                  \
+    }
+    SETTINGS_PROPERTY_TABLE
+#undef X
 }

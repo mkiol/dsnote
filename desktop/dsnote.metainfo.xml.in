@@ -99,15 +99,17 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.9.1" date="2026-10-26">
+    <release version="4.9.1" date="2026-10-30">
       <description>
       <p>General</p>
       <ul>
       <li>Import and Export 'Rules' to a JSON file.
-          With 'Rules' you can apply text transformation after Speech to Text or before Text to Speech.
-          You can now export and import all or selected rules to a file. Additionally, you can view and edit each rule in JSON format.</li>
+        With 'Rules' you can apply text transformation after Speech to Text or before Text to Speech.
+        You can now export and import all or selected rules to a file. Additionally, you can view and edit each rule in JSON format.</li>
       <li>Pinyin support for the Chinese language. You can convert Chinese text from Hanzi to Pinyin and vice versa.
         To switch between Pinyin and Hanzi, use the 'Toggle Hanzi/Pinyin' button in the text area.</li>
+      <li>Unload model after inactivity option.
+        After a specified number of seconds of inactivity, the model will be unloaded to free up memory.</li>
       </ul>
       <p>Accessibility:</p>
       <ul>

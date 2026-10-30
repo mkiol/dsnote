@@ -69,22 +69,12 @@ ColumnLayout {
                      qsTranslate("SettingsPage", "This option has no effect when %1 is disabled.").arg("<i>" + qsTranslate("SettingsPage", "Split text into sentences" + "</i>"))
     }
 
-    SpinBoxForm {
+    SpinBoxFormSetting {
         indends: 1
         visible: _settings.tts_trim_trailing_silence
-        label.text: qsTranslate("SettingsPage", "Sentence pause duration")
-        spinBox {
-            from: 0
-            to: 10000
-            stepSize: 100
-            value: _settings.tts_trailing_silence_dur_msec
-            editable: true
-            textFromValue: function(value) { return value + " ms" }
-            valueFromText: function(text) { return parseInt(text) }
-            onValueModified: {
-                _settings.tts_trailing_silence_dur_msec = spinBox.value;
-            }
-        }
+        optionName: "tts_trailing_silence_dur_msec"
+        text: qsTranslate("SettingsPage", "Sentence pause duration")
+        unitName: "ms"
     }
 
     CheckBox {

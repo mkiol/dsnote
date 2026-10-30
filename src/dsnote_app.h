@@ -992,6 +992,7 @@ class dsnote_app : public QObject {
     FEATURE_TABLE
 #undef X
     void request_reload();
+    void request_update_settings(const QString &name, const QVariant &value);
     bool stt_translate_needed_by_id(const QString &id) const;
     bool tts_ref_voice_needed_by_id(const QString &id) const;
     bool tts_ref_prompt_needed_by_id(const QString &id) const;

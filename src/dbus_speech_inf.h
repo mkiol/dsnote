@@ -276,6 +276,13 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("TttRepairText"), argumentList);
     }
 
+    inline QDBusPendingReply<int> UpdateSettings(const QVariantMap &settings)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(settings);
+        return asyncCallWithArgumentList(QStringLiteral("UpdateSettings"), argumentList);
+    }
+
 Q_SIGNALS: // SIGNALS
     void CurrentTaskPropertyChanged(int task);
     void DefaultMntLangPropertyChanged(const QString &lang);

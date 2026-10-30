@@ -525,6 +525,8 @@ dsnote_app::dsnote_app(QObject *parent)
                 &dsnote_app::request_reload, Qt::QueuedConnection);
         connect(settings::instance(), &settings::restore_punctuation_changed,
                 this, &dsnote_app::request_reload, Qt::QueuedConnection);
+        connect(settings::instance(), &settings::update_setting_requested, this,
+                &dsnote_app::request_update_settings, Qt::QueuedConnection);
 
         m_keepalive_timer.setSingleShot(true);
         m_keepalive_timer.setTimerType(Qt::VeryCoarseTimer);
@@ -640,6 +642,21 @@ void dsnote_app::request_reload() {
 
     if (reply.argumentAt<0>() != SUCCESS) {
         qWarning() << "failed to reload service, error was returned";
+    }
+}
+
+void dsnote_app::request_update_settings(const QString &name,
+                                         const QVariant &value) {
+    if (settings::launch_mode != settings::launch_mode_t::app) return;
+
+    qDebug() << "[app => dbus] UpdateSettings";
+
+    auto reply = m_dbus_service.UpdateSettings({{name, value}});
+    reply.waitForFinished();
+
+    if (reply.argumentAt<0>() != SUCCESS) {
+        qWarning()
+            << "failed to update settings on service side, error was returned";
     }
 }
 

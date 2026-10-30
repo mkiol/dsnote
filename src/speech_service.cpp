@@ -139,6 +139,19 @@ QDebug operator<<(QDebug d, speech_service::state_t state_value) {
     return d;
 }
 
+QDebug operator<<(QDebug d, speech_service::engine_t engine) {
+    switch (engine) {
+#define X(name, name_str, ...)           \
+    case speech_service::engine_t::name: \
+        d << name_str;                   \
+        break;
+        SPEECH_SERVICE_ENGINE_TABLE
+#undef X
+    }
+
+    return d;
+}
+
 QDebug operator<<(QDebug d, speech_service::beep_role_t beep_role) {
     switch (beep_role) {
         case speech_service::beep_role_t::stt_start_listen:
@@ -421,6 +434,14 @@ speech_service::speech_service(QObject *parent)
             emit default_mnt_out_lang_changed();
         },
         Qt::QueuedConnection);
+    connect(settings::instance(),
+            &settings::inactivity_reset_timeout_sec_changed, this,
+            &speech_service::handle_inactivity_reset_settings_changed,
+            Qt::QueuedConnection);
+    connect(settings::instance(), &settings::inactivity_reset_changed, this,
+            &speech_service::handle_inactivity_reset_settings_changed,
+            Qt::QueuedConnection);
+
     if (settings::launch_mode == settings::launch_mode_t::service) {
         connect(
             this, &speech_service::state_changed, this,
@@ -645,6 +666,22 @@ speech_service::speech_service(QObject *parent)
 #else
             features_availability();
 #endif
+    });
+
+    m_activity_tracker_timer.setSingleShot(true);
+    m_activity_tracker_timer.setTimerType(Qt::VeryCoarseTimer);
+    m_activity_tracker_timer.setInterval(
+        1000 * settings::instance()->inactivity_reset_timeout_sec());
+    connect(&m_activity_tracker_timer, &QTimer::timeout, this, [this] {
+        auto *s = settings::instance();
+        auto timer_dur_sec =
+            s->inactivity_reset() ? s->inactivity_reset_timeout_sec() : 0;
+        bool all_done = clean_inactive_items();
+        if (all_done) {
+            m_activity_tracker_timer.stop();
+        } else if (timer_dur_sec > 0) {
+            m_activity_tracker_timer.start();
+        }
     });
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -1244,8 +1281,10 @@ speech_service::choose_model_config(engine_t engine_type,
         if (it != models.cend()) {
             qDebug() << "found ttt model for stt:" << it->id;
 
-            active_config->stt->ttt =
-                ttt_model_config_t{it->id, it->model_file};
+            active_config->stt->ttt = ttt_model_config_t{
+                .model_id = it->id,
+                .model_file = it->model_file,
+            };
         }
     }
 #endif
@@ -2049,7 +2088,8 @@ QString speech_service::restart_tts_engine(const QString &model_id,
             m_tts_engine->set_tag_mode(config.tag_mode);
             m_tts_engine->set_normalize_audio(config.normalize_audio);
             m_tts_engine->set_trailing_silence_dur_msec(
-                config.trailing_silence_dur_msec);
+                safe_signed_unsigned_cast<int>(
+                    config.trailing_silence_dur_msec));
             m_tts_engine->set_trim_trailing_silence(
                 config.trim_trailing_silence);
             m_tts_engine->restart();
@@ -4500,6 +4540,7 @@ void speech_service::update_task_state() {
 void speech_service::set_state(state_t new_state) {
     if (new_state != m_state) {
         qDebug() << "service state changed:" << m_state << "=>" << new_state;
+        report_activity();
         m_state = new_state;
         emit state_changed();
     }
@@ -4892,6 +4933,166 @@ void speech_service::pre_process_text_for_tts(QString &text,
     }
 }
 
+std::set<speech_service::engine_t> speech_service::identify_active_items()
+    const {
+    std::set<speech_service::engine_t> active_items;
+
+    auto cur_state = state();
+    if (m_stt_engine) {
+        if (cur_state == state_t::listening_auto ||
+            cur_state == state_t::listening_manual ||
+            cur_state == state_t::listening_single_sentence ||
+            cur_state == state_t::transcribing_file) {
+            active_items.insert(engine_t::stt);
+        }
+    }
+    if (m_tts_engine) {
+        if (cur_state == state_t::playing_speech ||
+            cur_state == state_t::writing_speech_to_file) {
+            active_items.insert(engine_t::tts);
+        }
+    }
+    if (m_mnt_engine) {
+        if (cur_state == state_t::translating) {
+            active_items.insert(engine_t::mnt);
+        }
+    }
+    if (m_text_repair_engine) {
+        if (cur_state == state_t::repairing_text) {
+            active_items.insert(engine_t::text_repair);
+        }
+    }
+
+    return active_items;
+}
+
+void speech_service::report_activity() {
+    auto active_items = identify_active_items();
+    auto now_tp = std::chrono::system_clock::now();
+    for (auto item : active_items) {
+        m_activity_tracker.reset_activity(item, now_tp);
+        qDebug() << "report as active:" << item;
+    }
+
+    auto *s = settings::instance();
+    auto timer_dur_sec =
+        s->inactivity_reset() ? s->inactivity_reset_timeout_sec() : 0;
+    if (timer_dur_sec > 0 && !m_activity_tracker_timer.isActive()) {
+        m_activity_tracker_timer.start();
+    }
+}
+
+bool speech_service::clean_inactive_items() {
+    qDebug("clean inactive items: start");
+
+    auto now_tp = std::chrono::system_clock::now();
+    auto inactivity_dur_sec =
+        settings::instance()->inactivity_reset_timeout_sec();
+
+    // update last activity
+    auto active_items = identify_active_items();
+    for (auto item : active_items) {
+        m_activity_tracker.reset_activity(item, now_tp);
+        qDebug() << "report as active:" << item;
+    }
+
+    // items inactive longer than timeout
+    auto inactive_items =
+        m_activity_tracker.inactive_items(now_tp, inactivity_dur_sec);
+
+    for (auto item : inactive_items) {
+        // clean if exists
+        switch (item) {
+#define X(name, name_str, ...)                            \
+    case activity_tracker_t::item_t::name:                \
+        if (m_##name##_engine) {                          \
+            m_##name##_engine.reset();                    \
+            qDebug() << name_str " cleaned successfully"; \
+        }                                                 \
+        break;
+            SPEECH_SERVICE_ENGINE_TABLE
+#undef X
+        }
+    }
+
+    bool all_done = !any_engine_created();
+
+    if (all_done) {
+        qDebug("clean inactive items: all completed");
+    } else {
+        qDebug("clean inactive items: not all completed");
+    }
+
+    return all_done;
+}
+
+bool speech_service::any_engine_created() const {
+#define X(name, name_str, ...) \
+    if (m_##name##_engine) return true;
+    SPEECH_SERVICE_ENGINE_TABLE
+    return false;
+}
+
+void speech_service::handle_inactivity_reset_settings_changed() {
+    auto *s = settings::instance();
+    auto timer_dur_sec =
+        s->inactivity_reset() ? s->inactivity_reset_timeout_sec() : 0;
+    if (timer_dur_sec > 0) {
+        m_activity_tracker_timer.setInterval(1000 * timer_dur_sec);
+        m_activity_tracker_timer.start();
+    } else {
+        m_activity_tracker_timer.stop();
+    }
+}
+
+// activity_tracker_t
+
+speech_service::activity_tracker_t::time_point &
+speech_service::activity_tracker_t::tp_of_item(item_t item) {
+    switch (item) {
+#define X(name, ...)   \
+    case item_t::name: \
+        return name##_last_activity_tp;
+        SPEECH_SERVICE_ENGINE_TABLE
+#undef X
+    }
+    throw std::runtime_error{"invalid activity item"};
+}
+
+std::set<speech_service::activity_tracker_t::item_t>
+speech_service::activity_tracker_t::inactive_items(
+    speech_service::activity_tracker_t::time_point now_tp,
+    int inactivity_dur_sec) {
+    std::set<item_t> inactive_items;
+#define X(name, ...)                                      \
+    if (std::chrono::duration_cast<std::chrono::seconds>( \
+            now_tp - tp_of_item(item_t::name))            \
+            .count() > inactivity_dur_sec) {              \
+        inactive_items.insert(item_t::name);              \
+    }
+    SPEECH_SERVICE_ENGINE_TABLE
+#undef X
+
+    return inactive_items;
+}
+
+std::set<speech_service::activity_tracker_t::item_t>
+speech_service::activity_tracker_t::active_items(
+    speech_service::activity_tracker_t::time_point now_tp,
+    int inactivity_dur_sec) {
+    std::set<item_t> inactive_items;
+#define X(name, ...)                                      \
+    if (std::chrono::duration_cast<std::chrono::seconds>( \
+            now_tp - tp_of_item(item_t::name))            \
+            .count() <= inactivity_dur_sec) {             \
+        inactive_items.insert(item_t::name);              \
+    }
+    SPEECH_SERVICE_ENGINE_TABLE
+#undef X
+
+    return inactive_items;
+}
+
 // DBus
 
 int speech_service::SttStartListen(int mode, const QString &lang,
@@ -5073,11 +5274,7 @@ int speech_service::TttRepairText(const QString &text,
 }
 
 QVariantMap speech_service::FeaturesAvailability() {
-    qDebug() << "[dbus => "
-                "service] "
-                "called "
-                "FeaturesAvailab"
-                "ility";
+    qDebug() << "[dbus => service] called FeaturesAvailability";
     return features_availability();
 }
 
@@ -5090,6 +5287,16 @@ int speech_service::Reload() {
     models_manager::instance()->reload();
 
     refresh_status();
+
+    return SUCCESS;
+}
+
+int speech_service::UpdateSettings(const QVariantMap &settings_map) const {
+    qDebug() << "[dbus => service] called UpdateSettings";
+
+    for (auto it = settings_map.cbegin(); it != settings_map.cend(); ++it) {
+        settings::instance()->update_setting(it.key(), it.value(), true);
+    }
 
     return SUCCESS;
 }

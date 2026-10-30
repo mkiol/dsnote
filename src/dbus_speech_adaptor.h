@@ -298,6 +298,11 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
 "      <arg direction=\"out\" type=\"a{sv}\" name=\"models\"/>\n"
 "    </signal>\n"
+"    <method name=\"UpdateSettings\">\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.In0\"/>\n"
+"      <arg direction=\"in\" type=\"a{sv}\" name=\"settings\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
+"    </method>\n"
 "    <method name=\"TttRepairText\">\n"
 "      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.In1\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"text\"/>\n"
@@ -406,6 +411,7 @@ public Q_SLOTS: // METHODS
     int TtsSpeechToFile(const QString &text, const QString &lang, const QVariantMap &options);
     int TtsStopSpeech(int task);
     int TttRepairText(const QString &text, const QVariantMap &options);
+    int UpdateSettings(const QVariantMap &settings);
 Q_SIGNALS: // SIGNALS
     void CurrentTaskPropertyChanged(int task);
     void DefaultMntLangPropertyChanged(const QString &lang);

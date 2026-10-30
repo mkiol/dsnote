@@ -809,7 +809,8 @@
             <arg name="timer" type="i" direction="out" />
         </method>
 
-        <!-- private -->
+        <!-- private api -->
+
         <property name="Translations" type="a{sv}" access="read">
             <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantMap"/>
         </property>
@@ -828,12 +829,26 @@
           <arg name="models" type="a{sv}" direction="out" />
         </signal>
 
+        <!--
+            UpdateSettings:
+            @settings: a dict of settings (setting-name => setting-value)
+            @result: 0 - success, any other value - error
+
+            Updates settings on the service side. 
+            Call this method after the app has changed settings and needs to propagate them to the service.
+        -->
+        <method name="UpdateSettings">
+            <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QVariantMap"/>
+            <arg name="settings" type="a{sv}" direction="in" />
+            <arg name="result" type="i" direction="out" />
+        </method>
+
         <!-- ttt experimental api -->
 
         <!--
             TttRepairText:
             @text: input text
-            @options: A dict of options (option-name => option-value).
+            @options: a dict of options (option-name => option-value)
             @task: returned id of task which will be included in TttRepairTextFinished signals,
                    @task less than 0 idicates an error
 
@@ -857,5 +872,7 @@
             <arg name="text" type="s" direction="out" />
             <arg name="task" type="i" direction="out" />
         </signal>
+
+        <!-- end of private api -->
     </interface>
 </node>

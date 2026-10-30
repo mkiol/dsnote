@@ -134,7 +134,10 @@ std::ostream& operator<<(std::ostream& os, text_repair_engine::state_t state) {
 text_repair_engine::text_repair_engine(config_t config, callbacks_t call_backs)
     : m_config{std::move(config)}, m_call_backs{std::move(call_backs)} {}
 
-text_repair_engine::~text_repair_engine() { LOGD("text-repair dtor"); }
+text_repair_engine::~text_repair_engine() {
+    LOGD("text-repair dtor");
+    stop();
+}
 
 void text_repair_engine::start() {
     LOGD("text-repair start");

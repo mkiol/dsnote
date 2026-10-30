@@ -13,11 +13,13 @@
 #include <QMediaPlayer>
 #include <QObject>
 #include <QString>
+#include <QTime>
 #include <QTimer>
 #include <QVariantList>
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QAudioOutput>
 #endif
+#include <chrono>
 #include <map>
 #include <memory>
 #include <optional>
@@ -36,6 +38,19 @@
 #include "stt_engine.hpp"
 #include "text_repair_engine.hpp"
 #include "tts_engine.hpp"
+
+// 1-name, 2-name_str, 3-dummy
+#define SPEECH_SERVICE_ENGINE_TABLE \
+    X(stt, "stt", 0)                \
+    X(tts, "tts", 0)                \
+    X(mnt, "mnt", 0)                \
+    X(text_repair, "text-repair", 0)
+
+template <typename To, typename From>
+To safe_signed_unsigned_cast(From value) {
+    return static_cast<To>(
+        std::clamp<From>(value, 0, std::numeric_limits<To>::max()));
+}
 
 QDebug operator<<(QDebug d, const stt_engine::config_t &config);
 QDebug operator<<(QDebug d, const tts_engine::config_t &config);
@@ -278,7 +293,13 @@ class speech_service : public QObject, public singleton<speech_service> {
     void FeaturesAvailabilityUpdated();
 
    private:
-    enum class engine_t { stt, tts, mnt, text_repair };
+    enum class engine_t : uint8_t {
+#define X(name, name_str, ...) name,
+        SPEECH_SERVICE_ENGINE_TABLE
+#undef X
+    };
+    friend QDebug operator<<(QDebug d, engine_t engine);
+
     enum class beep_role_t { stt_start_listen, stt_end_listen };
     friend QDebug operator<<(QDebug d, beep_role_t beep_role);
 
@@ -372,6 +393,23 @@ class speech_service : public QObject, public singleton<speech_service> {
         std::underlying_type_t<task_flags_t> flags = task_flags_none;
     };
 
+    struct activity_tracker_t {
+        using item_t = engine_t;
+        using time_point = decltype(std::chrono::system_clock::now());
+#define X(name, ...) time_point name##_last_activity_tp;
+        SPEECH_SERVICE_ENGINE_TABLE
+#undef X
+
+        time_point &tp_of_item(item_t item);
+        std::set<item_t> inactive_items(time_point now_tp,
+                                        int inactivity_dur_sec);
+        std::set<item_t> active_items(time_point now_tp,
+                                      int inactivity_dur_sec);
+        void reset_activity(item_t item, time_point now_tp) {
+            tp_of_item(item) = now_tp;
+        }
+    };
+
     inline static const QString DBUS_SERVICE_NAME{
         QStringLiteral(APP_DBUS_SPEECH_SERVICE)};
     inline static const QString DBUS_SERVICE_PATH{QStringLiteral("/")};
@@ -405,6 +443,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     QTimer m_keepalive_timer;
     QTimer m_keepalive_current_task_timer;
     QTimer m_features_availability_timer;
+    QTimer m_activity_tracker_timer;
+    activity_tracker_t m_activity_tracker;
     int m_last_intermediate_text_task = INVALID_TASK;
     std::optional<task_t> m_previous_task;
     std::optional<task_t> m_current_task;
@@ -553,12 +593,18 @@ class speech_service : public QObject, public singleton<speech_service> {
     bool is_new_tts_engine_required(models_manager::model_engine_t engine_type,
                                     const tts_engine::config_t &config) const;
     void pre_process_text_for_tts(QString &text, const QVariantMap &options);
+    std::set<engine_t> identify_active_items() const;
+    void report_activity();
+    bool clean_inactive_items();
+    bool any_engine_created() const;
+    void handle_inactivity_reset_settings_changed();
 
     // DBus
     Q_INVOKABLE int Cancel(int task);
     Q_INVOKABLE int KeepAliveService();
     Q_INVOKABLE int KeepAliveTask(int task);
     Q_INVOKABLE int Reload();
+    Q_INVOKABLE int UpdateSettings(const QVariantMap &settings_map) const;
     Q_INVOKABLE int SttStartListen(int mode, const QString &lang,
                                    const QString &out_lang);
     Q_INVOKABLE int SttStartListen2(int mode, const QString &lang,

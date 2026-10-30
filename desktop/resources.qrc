@@ -50,6 +50,7 @@
         <file>qml/ComboBoxForm.qml</file>
         <file>qml/TipMessage.qml</file>
         <file>qml/SpinBoxForm.qml</file>
+        <file>qml/SpinBoxFormSetting.qml</file>
         <file>qml/TextContextMenu.qml</file>
         <file>qml/GpuComboBox.qml</file>
         <file>qml/MainTipMessage.qml</file>

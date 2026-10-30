@@ -668,6 +668,17 @@ Page {
                             }
                         }
 
+                        TextSwitch {
+                            checked: _settings.inactivity_reset
+                            automaticCheck: false
+                            text: qsTr("Unload model after inactivity")
+                            description: qsTr("Automatically unload the model from memory after a period of inactivity.") + " " +
+                                         qsTr("This frees up memory, but the model will need to reload the next time it's used.")
+                            onClicked: {
+                                _settings.inactivity_reset = !_settings.inactivity_reset
+                            }
+                        }
+
                         ItemBox {
                             title: qsTr("Location of language files")
                             value: _settings.models_dir_name

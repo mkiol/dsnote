@@ -27,6 +27,9 @@ DialogPage {
             <i>Rules</i> are disabled by default. To use them, you must enable them in the settings (<i>Settings</i> &rarr; <i>General</i> &rarr; <i>Show Rules</i>).</li>
         <li>Pinyin support for the Chinese language. You can convert Chinese text from Hanzi to Pinyin and vice versa.
             To switch between Pinyin and Hanzi, use the <i>Toggle Hanzi/Pinyin</i> button in the text area.</li>
+        <li>Unload model after inactivity option.
+            After a specified number of seconds of inactivity, the model will be unloaded to free up memory
+            (<i>Settings</i> &rarr; <i>Advanced</i> &rarr; <i>Unload model after inactivity</i>).</li>
         </ul>
         <p>" + qsTr("Accessibility") + "</p>
         <ul>
@@ -71,7 +74,7 @@ DialogPage {
         <li>AMD ROCm hardware acceleration support in <i>FasterWhisper</i>.
             To enable ROCm acceleration with Flatpak, install the AMD add-on.</li>
         <li>Temperature and Repetition Penalty options in Whisper engine <i>Custom</i> profile</li>
-        <li>Pinyin support for Chinese langauge (<i>Settings</i> &rarr; <i>Speech to Text</i> &rarr; <i>Use pinyin</i>).
+        <li>Pinyin support for Chinese language (<i>Settings</i> &rarr; <i>Speech to Text</i> &rarr; <i>Use pinyin</i>).
             Enable this option to transcribe Chinese speech directly into Pinyin.
             Pinyin is supported only for Simplified Chinese script.</li>
         <li>OpenVINO hardware acceleration in <i>WhisperCpp</i> was removed as it provided minimal performance improvement.</li>
@@ -100,13 +103,14 @@ DialogPage {
         </ul>
         <p>" + qsTr("Translator") + "</p>
         <ul>
-        <li>Pinyin support for Chinese langauge.
+        <li>Pinyin support for Chinese language.
             If the text you enter is written in Pinyin, the translator will recognize it and translate it correctly into the selected language.
             In addition, you can force the use of Pinyin as the translation output (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Translate to Pinyin</i>).
             Pinyin is supported only for Simplified Chinese script.</li>
         </ul>
         <p>" + qsTr("User Interface") + "</p>
         <ul>
+        <li>Qt UI toolkit update to version 6</li>
         <li>Import a note from a URL. Use the <i>Import a note from a URL</i> option in the main app toolbar to import text content from a link.
             The URL must use HTTP or HTTPS. For HTML pages, you can choose to extract only the readable text or import the entire page.</li>
         <li>Setting option to force the English language in the user interface</li>

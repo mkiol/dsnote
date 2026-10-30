@@ -363,3 +363,11 @@ int SpeechAdaptor::TttRepairText(const QString &text, const QVariantMap &options
     return task;
 }
 
+int SpeechAdaptor::UpdateSettings(const QVariantMap &settings)
+{
+    // handle method call org.mkiol.Speech.UpdateSettings
+    int result;
+    QMetaObject::invokeMethod(parent(), "UpdateSettings", Q_RETURN_ARG(int, result), Q_ARG(QVariantMap, settings));
+    return result;
+}
+
