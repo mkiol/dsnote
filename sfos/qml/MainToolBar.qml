@@ -76,19 +76,19 @@ PullDownMenu {
         }
     }
 
-    MenuItem {
-        visible: app.feature_pinyin && ((_settings.translator_mode && (app.active_mnt_lang == "zh" || app.active_mnt_out_lang == "zh")) ||
-                 (!_settings.translator_mode && (app.active_stt_model.lastIndexOf("zh") === 0 || app.active_tts_model.lastIndexOf("zh") === 0)))
-        enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.note.length !== 0
-        text: qsTr("Toggle Hanzi/Pinyin")
-        onClicked: {
-            if (_settings.translator_mode && app.active_mnt_out_lang == "zh") {
-                app.pinyin_hanzi_toggle_translate()
-            } else {
-                app.pinyin_hanzi_toggle()
-            }
-        }
-    }
+//    MenuItem {
+//        visible: app.feature_pinyin && ((_settings.translator_mode && (app.active_mnt_lang == "zh" || app.active_mnt_out_lang == "zh")) ||
+//                 (!_settings.translator_mode && (app.active_stt_model.lastIndexOf("zh") === 0 || app.active_tts_model.lastIndexOf("zh") === 0)))
+//        enabled: !app.busy && app.state === DsnoteApp.StateIdle && app.note.length !== 0
+//        text: qsTr("Toggle Hanzi/Pinyin")
+//        onClicked: {
+//            if (_settings.translator_mode && app.active_mnt_out_lang == "zh") {
+//                app.pinyin_hanzi_toggle_translate()
+//            } else {
+//                app.pinyin_hanzi_toggle()
+//            }
+//        }
+//    }
 
     readonly property bool canCancelMnt: app.state === DsnoteApp.StateTranslating &&
                                          app.task_state !== DsnoteApp.TaskStateCancelling

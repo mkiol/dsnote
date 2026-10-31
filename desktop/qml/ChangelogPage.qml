@@ -26,7 +26,8 @@ DialogPage {
             You can now export and import all or selected rules to a file. Additionally, you can view and edit each rule in JSON format.
             <i>Rules</i> are disabled by default. To use them, you must enable them in the settings (<i>Settings</i> &rarr; <i>General</i> &rarr; <i>Show Rules</i>).</li>
         <li>Pinyin support for the Chinese language. You can convert Chinese text from Hanzi to Pinyin and vice versa.
-            To switch between Pinyin and Hanzi, use the <i>Toggle Hanzi/Pinyin</i> button in the text area.</li>
+            To switch between Pinyin and Hanzi, use the <i>Toggle Hanzi/Pinyin</i> button in the text area.
+            Option is visible only when Chinese model is active (either STT, TTS, or Translator).</li>
         <li>Unload model after inactivity option.
             After a specified number of seconds of inactivity, the model will be unloaded to free up memory
             (<i>Settings</i> &rarr; <i>Advanced</i> &rarr; <i>Unload model after inactivity</i>).</li>

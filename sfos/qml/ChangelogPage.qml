@@ -36,7 +36,7 @@ Page {
                 text: "<p>" + qsTr("General") + "</p>
                 <ul>
                 <li>Pinyin support for the Chinese language. You can convert Chinese text from Hanzi to Pinyin and vice versa.
-                    To switch between Pinyin and Hanzi, use the appropriate pull-down menu option (<i>Toggle Hanzi/Pinyin</i>).
+                    To switch between Pinyin and Hanzi, use the <i>Toggle Hanzi/Pinyin</i> button in the text area.
                     Option is visible only when Chinese model is active (either STT, TTS, or Translator).</li>
                 <li>Unload model after inactivity option.
                     After a specified number of seconds of inactivity, the model will be unloaded to free up memory

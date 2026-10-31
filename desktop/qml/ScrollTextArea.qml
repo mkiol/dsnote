@@ -41,7 +41,7 @@ Item {
     signal undoFallbackClicked()
     signal readSelectedClicked(int start, int end);
     signal translateSelectedClicked(int start, int end);
-    signal pinyinClicked();
+    signal pinyinClicked()
 
     function scrollToBottom() {
         var position = (scrollView.contentHeight - scrollView.availableHeight) / scrollView.contentHeight

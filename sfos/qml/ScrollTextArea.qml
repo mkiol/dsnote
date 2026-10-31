@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -19,6 +19,7 @@ SilicaItem {
     property bool canRedo: false
     property bool canClear: true
     property bool canSwitch: false
+    property bool canPinyin: false
     readonly property bool canScrollBeginning: !flick.atYBeginning && flick.contentHeight > 0
     readonly property bool canScrollBottom: !flick.atYEnd && flick.contentHeight > 0
     property alias placeholderLabel: _placeholderLabel.text
@@ -30,6 +31,7 @@ SilicaItem {
     signal undoClicked()
     signal formatClicked()
     signal switchClicked()
+    signal pinyinClicked()
 
     function scrollToBottom() {
         if (canScrollBottom) {
@@ -105,7 +107,7 @@ SilicaItem {
         opacity: root.textArea.highlighted ? 0.0 :
                  root.enabled && (flick.moving || copyButton.pressed || clearButton.pressed ||
                                   undoButton.pressed || bottomButton.pressed || beginningButton.pressed ||
-                                  switchButton.pressed ||
+                                  switchButton.pressed || pinyinButton.pressed ||
                  flick.contentHeight <= (root.height - size)) ? 1.0 : 0.4
         Behavior on opacity { FadeAnimator {} }
         visible: opacity > 0.0
@@ -149,6 +151,17 @@ SilicaItem {
             height: parent.height
             anchors.right: parent.right
 
+
+            IconButton {
+                id: pinyinButton
+
+                width: toolsRow.size
+                height: toolsRow.size
+                icon.width: width; icon.height: height
+                visible: root.canPinyin && textArea.text.length !== 0
+                icon.source: "image://icons/icon-m-pinyin?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
+                onClicked: root.pinyinClicked()
+            }
             IconButton {
                 id: clearButton
 

@@ -27,14 +27,14 @@ Grid {
     columns: verticalMode ? 1 : 2
 
     Item {
-        width: verticalMode ? root.width : root.width / 2
+        width: root.verticalMode ? root.width : root.width / 2
         height: _first.height
 
         ComboButton {
             id: _first
 
             width: parent.width
-            rightMargin: verticalMode ? Theme.horizontalPageMargin : 0
+            rightMargin: root.verticalMode ? Theme.horizontalPageMargin : 0
         }
 
         IconButton {
@@ -52,8 +52,7 @@ Grid {
 
         visible: root.expanded || !root.verticalMode
         height: visible ? implicitHeight : 0.0
-        width: verticalMode ? root.width : root.width / 2
-        clip: true
-        Behavior on height { NumberAnimation { duration: 100 } }
+        width: root.verticalMode ? root.width : root.width / 2
+        //Behavior on height { NumberAnimation { duration: 100 } }
     }
 }

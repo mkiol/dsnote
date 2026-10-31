@@ -67,6 +67,7 @@ Item {
             canUndo: app.can_undo_note
             canRedo: app.can_redo_note
             canClear: true
+            canPinyin: app.active_stt_model.lastIndexOf("zh") === 0 || app.active_tts_model.lastIndexOf("zh") === 0
             placeholderLabel: app.stt_configured || app.tts_configured ?
                                  qsTr("Type here or press %1 to make a note...")
                                     .arg("<i>" + qsTr("Listen") + "</i>") : ""
@@ -100,6 +101,9 @@ Item {
                     _settings.stt_tts_text_format = Settings.TextFormatRaw
                     break;
                 }
+            }
+            onPinyinClicked: {
+                app.pinyin_hanzi_toggle()
             }
             formatName: {
                 switch(_settings.stt_tts_text_format) {

@@ -37,11 +37,12 @@
 #include <QtQml>
 
 #include "dirmodel.h"
-#else
+#include "icon_provider.hpp"
+#else // USE_SFOS
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
-#endif
+#endif // USE_SFOS
 
 #include "app_server.hpp"
 #include "avlogger.hpp"
@@ -779,6 +780,8 @@ static void start_app(const cmd::options& options,
                                 &dbus_app_server);
 
 #ifdef USE_SFOS
+    view->engine()->addImageProvider(QStringLiteral("icons"), new icon_provider{});
+
     // add module search path so Opal modules can be found
     view->engine()->addImportPath(
         SailfishApp::pathTo("qml/modules").toString());

@@ -104,6 +104,7 @@ Item {
                     canUndo: app.can_undo_note
                     canRedo: app.can_redo_note
                     canClear: true
+                    canPinyin: app.feature_pinyin && app.active_mnt_lang === "zh"
                     placeholderLabel: qsTr("Type here text to translate from...")
                     textArea {
                         onTextChanged: {
@@ -141,6 +142,9 @@ Item {
                             _settings.mnt_text_format = Settings.TextFormatRaw
                             break;
                         }
+                    }
+                    onPinyinClicked: {
+                        app.pinyin_hanzi_toggle()
                     }
                     formatName: {
                         switch(_settings.mnt_text_format) {
@@ -224,6 +228,7 @@ Item {
                     highlighted: true
                     canClear: false
                     canSwitch: app.mnt_configured && app.state === DsnoteApp.StateIdle
+                    canPinyin: app.feature_pinyin && app.active_mnt_out_lang === "zh"
                     textArea {
                         //placeholderText: qsTr("Translation")
                         onTextChanged: {
@@ -233,6 +238,9 @@ Item {
                     onClearClicked: root.translatedNoteTextArea.textArea.text = ""
                     onCopyClicked: app.copy_translation_to_clipboard()
                     onSwitchClicked: app.switch_translated_text()
+                    onPinyinClicked: {
+                        app.pinyin_hanzi_toggle_translate()
+                    }
 
                     BusyIndicatorWithProgress {
                         anchors.centerIn: parent

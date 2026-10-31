@@ -467,6 +467,12 @@ if(WITH_PY)
         ${sources_dir}/coqui_engine.cpp)
 endif()
 
+if(WITH_SFOS)
+    list(APPEND dsnote_lib_sources
+        ${sources_dir}/icon_provider.hpp
+        ${sources_dir}/icon_provider.cpp)
+endif()
+
 configure_file(config.h.in config.h)
 
 # qt version selection

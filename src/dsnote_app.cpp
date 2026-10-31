@@ -1177,7 +1177,7 @@ QVariantList dsnote_app::trans_rule_to_vrule(const QJsonObject &jrule) {
         return vrule;
     }
 
-    vrule.assign({
+    vrule = {
         /*[0] flags=*/flags,
         /*[1] type=*/
         static_cast<std::underlying_type_t<settings::trans_rule_type_t>>(type),
@@ -1186,7 +1186,7 @@ QVariantList dsnote_app::trans_rule_to_vrule(const QJsonObject &jrule) {
         /*[4] replace=*/replace,
         /*[5] langs=*/langs,
         /*[6] test_text=*/test_text,
-    });
+    };
 
     return vrule;
 }
@@ -5582,7 +5582,7 @@ QString dsnote_app::feature_fake_keyboard_ydo_error_message() const {
 #ifdef USE_DESKTOP
     return QString::fromStdString(fake_keyboard::is_ydo_supported().second);
 #else
-    return false;
+    return {};
 #endif
 }
 
