@@ -42,6 +42,12 @@ Page {
                     After a specified number of seconds of inactivity, the model will be unloaded to free up memory
                     (<i>Settings</i> &rarr; <i>Other</i> &rarr; <i>Unload model after inactivity</i>).</li>
                 </ul>
+                <p>" + qsTr("User Interface") + "</p>
+                <ul>
+                <li>Improvements for devices with camera cutout (the notch at the top of the screen).
+                    Use setting option to add extra padding to keep content below camera cutout
+                    (<i>Settings</i> &rarr; <i>User Interface</i> &rarr; <i>Keep content below camera cutout</i>).</li>
+                </ul>
                 <p>" + qsTr("Speech to Text") + "</p>
                 <ul>
                 <li>Improved transcription performance in <i>WhisperCpp</i>.

@@ -35,6 +35,33 @@ Page {
                     title: qsTr("User Interface")
 
                     content.sourceComponent: Column {
+                        ComboBox {
+                            label: qsTr("Keep content below camera cutout")
+                            currentIndex: {
+                                switch(_settings.ui_cutout_policy) {
+                                    case Settings.UiCutoutPolicyAuto: return 0
+                                    case Settings.UiCutoutPolicyNone: return 1
+                                    case Settings.UiCutoutPolicyAvoid: return 2
+                                }
+                                return 0
+                            }
+                            menu: ContextMenu {
+                                MenuItem { text: qsTr("Auto") }
+                                MenuItem { text: qsTr("Don't add extra padding") }
+                                MenuItem { text: qsTr("Add extra padding") }
+                            }
+                            onCurrentIndexChanged: {
+                                if (currentIndex === 1) {
+                                    _settings.ui_cutout_policy = Settings.UiCutoutPolicyNone
+                                } else if (currentIndex === 2) {
+                                    _settings.ui_cutout_policy = Settings.UiCutoutPolicyAvoid
+                                } else {
+                                    _settings.ui_cutout_policy = Settings.UiCutoutPolicyAuto
+                                }
+                            }
+                            description: qsTr("Controls whether extra padding is added to keep content below the camera cutout (the notch at the top of the screen).")
+                        }
+
                         TextSwitch {
                             checked: _settings.keep_last_note
                             automaticCheck: false

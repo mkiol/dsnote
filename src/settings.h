@@ -69,7 +69,10 @@
     X(tts_trim_trailing_silence, bool, true, false, false, true, 0, false, 0)  \
     X(tts_trailing_silence_dur_msec, int, 100, false, 0, 10000, 100, false, 0) \
     X(inactivity_reset, bool, true, false, false, true, 0, true, 0)            \
-    X(inactivity_reset_timeout_sec, int, 600, false, 5, 3600, 1, true, 0)
+    X(inactivity_reset_timeout_sec, int, 600, false, 5, 3600, 1, true, 0)      \
+    X(ui_cutout_policy, settings::ui_cutout_policy_t,                          \
+      settings::ui_cutout_policy_t::UiCutoutPolicyAuto, false, false, true, 0, \
+      false, 0)
 
 // name, default-value
 #define GPU_SCAN_TABLE                                          \
@@ -217,6 +220,12 @@
     X(UiAppearanceDontForce, "dont-force", 1, 0) \
     X(UiAppearanceForceDark, "force-dark", 2, 0) \
     X(UiAppearanceForceLight, "force-light", 3, 0)
+
+// name, name_str, value
+#define UI_CUTOUT_POLICY_TABLE          \
+    X(UiCutoutPolicyAuto, "auto", 0, 0) \
+    X(UiCutoutPolicyNone, "none", 1, 0) \
+    X(UiCutoutPolicyAvoid, "avoid", 2, 0)
 
 // name, name_str, value
 #define TRANS_RULE_TYPE_TABLE                             \
@@ -821,6 +830,13 @@ class settings : public QSettings, public singleton<settings> {
     friend std::ostream &operator<<(std::ostream &os,
                                     ui_appearance_t appearance);
 
+    enum class ui_cutout_policy_t : unsigned int {
+#define X(name, name_str, value, ...) name = value,
+        UI_CUTOUT_POLICY_TABLE
+#undef X
+    };
+    Q_ENUM(ui_cutout_policy_t)
+
     struct voice_profile_prompt_t {
         QString name;
         QString desc;
@@ -1033,6 +1049,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_INVOKABLE bool is_flatpak() const;
     Q_INVOKABLE bool is_flatpak_tiny() const;
     Q_INVOKABLE bool is_kde() const { return m_kde; }
+    Q_INVOKABLE bool device_has_cutout() const;
     Q_INVOKABLE QStringList qt_styles() const;
     Q_INVOKABLE bool file_exists(const QString &file_path) const;
     Q_INVOKABLE QString
@@ -1334,6 +1351,7 @@ class settings : public QSettings, public singleton<settings> {
     static bool hw_engine_disabled(
         hw_t hw_type,
         std::underlying_type_t<hw_feature_flags_t> hw_feature_flags);
+    static QString device_id();
 
     QString m_note;
 };

@@ -83,10 +83,22 @@ ApplicationWindow {
                                                  (app.state === DsnoteApp.StatePlayingSpeech ||
                                                   app.state === DsnoteApp.StateWritingSpeechToFile)
             readonly property bool panelAlwaysOpen: notepad && notepad.enabled && (app.stt_configured || app.tts_configured)
+            readonly property real notchSize: {
+                if (!verticalMode) return false
+                var avoid_cutout = false
+                switch(_settings.ui_cutout_policy) {
+                    case Settings.UiCutoutPolicyAuto: avoid_cutout = _settings.device_has_cutout(); break
+                    case Settings.UiCutoutPolicyNone: avoid_cutout = false; break
+                    case Settings.UiCutoutPolicyAvoid: avoid_cutout = true; break
+                }
+                return avoid_cutout ? Theme.paddingLarge : 0
+            }
             property var notepad: null
             property var translator: null
 
             allowedOrientations: Orientation.All
+
+            //_settings.device_has_cutout
 
             onNotepadChanged: update()
             onTranslatorChanged: update()
@@ -164,7 +176,7 @@ ApplicationWindow {
 
                 width: parent.width
                 height: parent.height - (_addTextDialog.expanded ? _addTextDialog.height : 0)
-                contentHeight: Math.max(column.height +
+                contentHeight: Math.max(column.height + root.notchSize +
                                         (root.translator && root.translator.enabled ? root.translator.height : 0) +
                                         (root.notepad && root.notepad.enabled ? root.notepad.height : 0) +
                                         (panel.open ? panel.height : 0), height)
@@ -184,8 +196,9 @@ ApplicationWindow {
                 Opal.TabView {
                     id: tabs
 
+                    y: root.notchSize
                     width: parent.width
-                    height: root.height - (panel.open ? panel.height : 0)
+                    height: root.height - root.notchSize - (panel.open ? panel.height : 0)
                     tabBarVisible: root.verticalMode && (
                                        (!_settings.translator_mode && (!root.notepad || !root.notepad.textHighlighted)) ||
                                        (_settings.translator_mode && (!root.translator || !root.translator.textHighlighted)))
@@ -300,13 +313,6 @@ ApplicationWindow {
                 VerticalScrollDecorator {
                     flickable: flick
                 }
-            }         
-
-            HintLabel {
-                enabled: (_settings.hint_done_flags & Settings.HintDoneTranslator) == 0
-                text: qsTr("To switch between %1 and %2 modes use option in pull-down menu.")
-                          .arg("<i>" + qsTr("Notepad") + "</i>").arg("<i>" + qsTr("Translator") + "</i>")
-                onClicked: _settings.set_hint_done(Settings.HintDoneTranslator)
             }
 
             AddTextDialog {

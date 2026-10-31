@@ -3354,3 +3354,35 @@ void settings::update_setting(const QString& name, const QVariant& new_value,
     SETTINGS_PROPERTY_TABLE
 #undef X
 }
+
+QString settings::device_id() {
+    QString id;
+#ifdef USE_SFOS
+    QFile file{"/etc/hw-release"};
+    if (!file.open(QIODevice::ReadOnly)) {
+        LOGW("cannot open hw-release file");
+        return id;
+    }
+
+    for (const auto& line : file.readAll().split('\n')) {
+        if (line.startsWith("ID=")) {
+            id = line.mid(3).trimmed();
+            break;
+        }
+    }
+#endif
+    return id;
+}
+
+bool settings::device_has_cutout() const {
+    static bool has_cutout = [] {
+        auto id = device_id();
+        LOGD("device id: " << id);
+        if (id.compare(QStringLiteral("jp2601"), Qt::CaseInsensitive) ==
+            0) {  // Jolla J2
+            return true;
+        }
+        return false;
+    }();
+    return has_cutout;
+}

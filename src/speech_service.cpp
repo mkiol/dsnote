@@ -5031,6 +5031,7 @@ bool speech_service::any_engine_created() const {
     if (m_##name##_engine) return true;
     SPEECH_SERVICE_ENGINE_TABLE
     return false;
+#undef X
 }
 
 void speech_service::handle_inactivity_reset_settings_changed() {
