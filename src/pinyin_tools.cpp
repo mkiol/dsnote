@@ -984,10 +984,13 @@ bool is_pinyin(const std::string& text) {
 
     std::stringstream ss(text);
     std::string token;
+    const int max_tokens = std::numeric_limits<int>::max() / 2;
     int total_tokens = 0;
     int valid_pinyin_tokens = 0;
 
+    int i = 0;
     while (ss >> token) {
+        if (i > max_tokens) break;
         auto normalized = normalize_pinyin_token(token);
         if (!normalized.empty()) {
             ++total_tokens;
@@ -1011,10 +1014,12 @@ bool is_hanzi(const std::string& text) {
         return false;
     }
 
+    const size_t max_count = std::numeric_limits<int>::max();
     size_t chinese_count = 0;
     size_t non_chinese_count = 0;
 
-    for (size_t i = 0; i < text.size();) {
+    for (size_t i = 0;
+         i < text.size() && max_count > (chinese_count + non_chinese_count);) {
         auto utf8_char = next_utf8_char(text, i);
         if (utf8_char.empty()) {
             break;
@@ -1058,8 +1063,7 @@ std::string punc_fix_ch(const std::string& text) {
     result.reserve(text.size());
 
     bool prev_was_dot = false;
-    size_t i = 0;
-    while (i < text.size()) {
+    for (size_t i = 0; i < text.size();) {
         auto utf8_char = next_utf8_char(text, i);
         if (utf8_char.empty()) {
             break;

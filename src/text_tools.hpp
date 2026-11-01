@@ -83,7 +83,7 @@ class processor {
 };
 
 std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
-    const std::string& text, split_engine_t engine, const std::string& lang,
+    const std::string& text, split_engine_t engine, std::string lang,
     const std::string& nb_data = {});
 std::vector<taged_segment_t> split_by_control_tags(const std::string& text);
 raw_taged_segment_t raw_taged_segment_from_text(const std::string& text);

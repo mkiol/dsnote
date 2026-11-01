@@ -156,7 +156,13 @@ astrunc::access::lang_t lang_str_to_astrunc_lang(const std::string& lang) {
             if (lang[1] == 'i') return astrunc::access::lang_t::VI;
             break;
         case 'z':
-            if (lang[1] == 'h') return astrunc::access::lang_t::ZH;
+            if (lang[1] == 'h') {
+                if (lang == "zh-pinyin") {
+                    // split pinyin like english
+                    return astrunc::access::lang_t::EN;
+                }
+                return astrunc::access::lang_t::ZH;
+            }
             break;
     }
 
@@ -191,6 +197,10 @@ std::vector<std::string> split_to_sentences(const std::string& text,
             break;
         }
     }
+
+    // for (const auto& p : parts) {
+    //     LOGD("sentence: " << p);
+    // }
 
     return parts;
 }
@@ -418,9 +428,15 @@ bool segment_t::operator==(const text_tools::segment_t& rhs) const {
 }
 
 std::pair<std::vector<std::string>, std::vector<break_line_info>> split(
-    const std::string& text, split_engine_t engine, const std::string& lang,
+    const std::string& text, split_engine_t engine, std::string lang,
     const std::string& nb_data) {
     std::pair<std::vector<std::string>, std::vector<break_line_info>> parts;
+
+    if (lang == "zh") {
+        if (pinyin_tools::is_pinyin(text)) {
+            lang = "zh-pinyin";
+        }
+    }
 
     parts.first = split_to_sentences(text, engine, lang, nb_data);
 
