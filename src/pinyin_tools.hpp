@@ -17,6 +17,7 @@ void pinyin_to_hanzi(std::string& text, const std::string& model_path);
 void hanzi_to_pinyin(std::string& text, const std::string& model_path);
 std::string punc_ch_to_latin(const std::string& text);
 std::string punc_latin_to_ch(const std::string& text);
+std::string punc_fix_ch(const std::string& text);
 }  // namespace text_tools
 
 #endif  // PINYIN_TOOLS_H

@@ -384,6 +384,7 @@ std::string mnt_engine::translate_internal(std::string text) {
     bool do_to_hanzi_punc =
         !html && m_config.model_files.hanzi_to_pinyin_dict_path.empty() &&
         m_config.out_lang == "zh";
+    bool do_hanzi_punc_fix = m_config.out_lang == "zh";
     LOGD("pinyin: do_to_hanzi=" << do_to_hanzi
                                 << ", do_to_pinyin=" << do_to_pinyin
                                 << ", do_to_hanzi_punc=" << do_to_hanzi_punc);
@@ -435,6 +436,10 @@ std::string mnt_engine::translate_internal(std::string text) {
 
                 if (do_to_hanzi_punc) {
                     line = pinyin_tools::punc_latin_to_ch(line);
+                }
+
+                if (do_hanzi_punc_fix) {
+                    line = pinyin_tools::punc_fix_ch(line);
                 }
 
                 if (is_shutdown()) {

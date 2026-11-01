@@ -1046,4 +1046,34 @@ bool is_hanzi(const std::string& text) {
     return total == 0 ? false : ratio >= 0.75;
 }
 
+std::string punc_fix_ch(const std::string& text) {
+    // remove space after chinese dot (。)
+
+    std::string result;
+
+    if (text.empty()) {
+        return {};
+    }
+
+    result.reserve(text.size());
+
+    bool prev_was_dot = false;
+    size_t i = 0;
+    while (i < text.size()) {
+        auto utf8_char = next_utf8_char(text, i);
+        if (utf8_char.empty()) {
+            break;
+        }
+        if (prev_was_dot && utf8_char == " ") {
+            // skip the space immediately following a chinese dot
+            prev_was_dot = false;
+            continue;
+        }
+        result += utf8_char;
+        prev_was_dot = utf8_char == "。";
+    }
+
+    return result;
+}
+
 }  // namespace pinyin_tools
