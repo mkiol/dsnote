@@ -730,7 +730,10 @@ class dsnote_app : public QObject {
     OrgMkiolSpeechInterface m_dbus_service;
     OrgFreedesktopNotificationsInterface m_dbus_notifications;
     service_state_t m_service_state = service_state_t::StateUnknown;
+    service_state_t m_service_state_pending = service_state_t::StateUnknown;
     service_task_state_t m_task_state = service_task_state_t::TaskStateIdle;
+    service_task_state_t m_task_state_pending =
+        service_task_state_t::TaskStateIdle;
     task_t m_primary_task;
     int m_current_task = INVALID_TASK;
     int m_init_attempts = -1;
@@ -741,6 +744,8 @@ class dsnote_app : public QObject {
     QTimer m_action_delay_timer;
     QTimer m_desktop_notification_delay_timer;
     QTimer m_auto_format_delay_timer;
+    QTimer m_service_state_change_timer;
+    QTimer m_task_state_change_timer;
     bool m_stt_configured = false;
     bool m_tts_configured = false;
     bool m_mnt_configured = false;
@@ -830,7 +835,9 @@ class dsnote_app : public QObject {
     void update_current_task();
     void update_listen();
     void set_service_state(service_state_t new_service_state);
+    void set_service_state_pending(service_state_t new_service_state);
     void set_task_state(service_task_state_t new_task_state);
+    void set_task_state_pending(service_task_state_t new_task_state);
     void handle_stt_intermediate_text(const QString &text, const QString &lang,
                                       int task);
     [[nodiscard]] int active_stt_model_idx() const;

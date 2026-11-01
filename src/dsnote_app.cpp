@@ -498,6 +498,34 @@ dsnote_app::dsnote_app(QObject *parent)
     connect(&m_auto_format_delay_timer, &QTimer::timeout, this,
             &dsnote_app::update_auto_text_format, Qt::QueuedConnection);
 
+    m_service_state_change_timer.setSingleShot(true);
+    m_service_state_change_timer.setInterval(100);
+    connect(
+        &m_service_state_change_timer, &QTimer::timeout, this,
+        [this] {
+            qDebug() << "app pending service state timeout:" << m_service_state
+                     << "=>" << m_service_state_pending;
+            if (m_service_state != m_service_state_pending &&
+                m_service_state_pending != service_state_t::StateUnknown) {
+                set_service_state(m_service_state_pending);
+            }
+            m_service_state_pending = service_state_t::StateUnknown;
+        },
+        Qt::QueuedConnection);
+
+    m_task_state_change_timer.setSingleShot(true);
+    m_task_state_change_timer.setInterval(100);
+    connect(
+        &m_task_state_change_timer, &QTimer::timeout, this,
+        [this] {
+            qDebug() << "app pending task state timeout:" << m_task_state
+                     << "=>" << m_task_state_pending;
+            if (m_task_state != m_task_state_pending) {
+                set_task_state(m_task_state_pending);
+            }
+        },
+        Qt::QueuedConnection);
+
     connect(&m_dbus_notifications,
             &OrgFreedesktopNotificationsInterface::NotificationClosed, this,
             &dsnote_app::handle_desktop_notification_closed);
@@ -1831,7 +1859,7 @@ void dsnote_app::handle_state_changed(int status) {
         qDebug() << "[dbus => app] signal StatusPropertyChanged:" << status;
     }
 
-    set_service_state(static_cast<service_state_t>(status));
+    set_service_state_pending(static_cast<service_state_t>(status));
 }
 
 void dsnote_app::handle_task_state_changed(int state) {
@@ -1845,7 +1873,7 @@ void dsnote_app::handle_task_state_changed(int state) {
         return;
     }
 
-    set_task_state(make_new_task_state(state));
+    set_task_state_pending(make_new_task_state(state));
 }
 
 void dsnote_app::handle_current_task_changed(int task) {
@@ -3966,6 +3994,13 @@ void dsnote_app::speech_to_file_internal(
 
 void dsnote_app::stop_play_speech() {}
 
+void dsnote_app::set_service_state_pending(service_state_t new_service_state) {
+    qDebug() << "app pending service state:" << m_service_state_pending << "=>"
+             << new_service_state;
+    m_service_state_pending = new_service_state;
+    m_service_state_change_timer.start();
+}
+
 void dsnote_app::set_service_state(service_state_t new_service_state) {
     switch (m_mc.state()) {
         case media_converter::state_t::idle:
@@ -4026,6 +4061,13 @@ void dsnote_app::set_service_state(service_state_t new_service_state) {
     }
 }
 
+void dsnote_app::set_task_state_pending(service_task_state_t new_task_state) {
+    qDebug() << "app pending task state:" << m_task_state_pending << "=>"
+             << new_task_state;
+    m_task_state_pending = new_task_state;
+    m_task_state_change_timer.start();
+}
+
 void dsnote_app::set_task_state(service_task_state_t new_task_state) {
     switch (m_mc.state()) {
         case media_converter::state_t::cancelling:
@@ -4073,7 +4115,7 @@ dsnote_app::service_task_state_t dsnote_app::make_new_task_state(
 void dsnote_app::update_task_state() {
     if (m_primary_task != m_current_task) {
         qWarning() << "invalid task, reseting task state";
-        set_task_state(service_task_state_t::TaskStateIdle);
+        set_task_state_pending(service_task_state_t::TaskStateIdle);
         return;
     }
 
@@ -4084,7 +4126,7 @@ void dsnote_app::update_task_state() {
         qDebug() << "[app => dbus] get TaskState";
         task_state_from_service = m_dbus_service.taskState();
     }
-    set_task_state(make_new_task_state(task_state_from_service));
+    set_task_state_pending(make_new_task_state(task_state_from_service));
 }
 
 int dsnote_app::active_stt_model_idx() const {
@@ -4426,7 +4468,7 @@ void dsnote_app::handle_keepalive_task_timeout() {
             update_current_task();
             update_service_state();
 
-            set_task_state(service_task_state_t::TaskStateIdle);
+            set_task_state_pending(service_task_state_t::TaskStateIdle);
         }
     };
 
