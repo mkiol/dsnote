@@ -504,9 +504,9 @@ speech_service::speech_service(QObject *parent)
         connect(this, &speech_service::ttt_repair_text_finished, this,
                 [this](const QString &text, int task) {
                     qDebug()
-                        << "[service => dbus] signal TtsRestoreTextFinished:"
+                        << "[service => dbus] signal TttRepairTextFinished:"
                         << task;
-                    emit TtrRepairTextFinished(text, task);
+                    emit TttRepairTextFinished(text, task);
                 });
         connect(this, &speech_service::tts_speech_to_file_progress_changed,
                 this, [this](double progress, int task) {

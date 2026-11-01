@@ -268,7 +268,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void TtsSpeechToFileFinished(const QStringList &files, int task);
     void TtsPartialSpeechPlaying(const QString &text, int task);
     void TtsSpeechToFileProgress(double progress, int task);
-    void TtrRepairTextFinished(const QString &text, int task);
+    void TttRepairTextFinished(const QString &text, int task);
     void SttLangsPropertyChanged(const QVariantMap &langs);
     void SttLangListPropertyChanged(const QVariantList &langs);
     void DefaultSttLangPropertyChanged(const QString &lang);
