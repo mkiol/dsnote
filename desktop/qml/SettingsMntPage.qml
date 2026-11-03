@@ -36,6 +36,36 @@ ColumnLayout {
         toolTipText: qsTranslate("SettingsPage", "When translating into Chinese, use Pinyin instead of Chinese characters.")
     }
 
+    ComboBoxForm {
+        id: uiTranslatorLayoutCombo
+
+        label.text: qsTranslate("SettingsPage", "Voice options in translator mode")
+        toolTip: qsTranslate("SettingsPage", "Choose which voice options appear in translator mode.")
+        comboBox {
+            currentIndex: {
+                switch (_settings.ui_translator_layout) {
+                    case Settings.UiTranslatorLayoutInTts: return 0
+                    case Settings.UiTranslatorLayoutInStt: return 1
+                    case Settings.UiTranslatorLayoutInBoth: return 0
+                }
+                return 0
+            }
+            model: [
+                qsTranslate("SettingsPage", "Show %1 option").arg(qsTranslate("SettingsPage", "Read")),
+                qsTranslate("SettingsPage", "Show %1 option").arg(qsTranslate("SettingsPage", "Listen"))
+            ]
+            onActivated: (index) => {
+                if (index === 0) {
+                    _settings.ui_translator_layout = Settings.UiTranslatorLayoutInBoth
+                } else if (index === 1) {
+                    _settings.ui_translator_layout = Settings.UiTranslatorLayoutInStt
+                } else {
+                    _settings.ui_translator_layout = Settings.UiTranslatorLayoutInBoth
+                }
+            }
+        }
+    }
+
     Item {
         Layout.fillHeight: true
     }

@@ -361,8 +361,9 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
           xneed_update, ...)                                                 \
     xtype settings::xname() const {                                          \
         return [&](auto v) {                                                 \
-            if constexpr (std::is_enum_v<decltype(v)>) {                     \
-                return static_cast<xtype>(                                   \
+            using V = std::remove_cvref_t<decltype(v)>;                      \
+            if constexpr (std::is_enum_v<V>) {                               \
+                return static_cast<V>(                                       \
                     value(QStringLiteral(#xname), static_cast<int>(v))       \
                         .toInt());                                           \
             } else {                                                         \
@@ -386,8 +387,9 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     }                                                                        \
     xtype settings::step_##xname() const { return cast_num_##xname(xstep); } \
     void settings::force_##xname(const xtype& value) {                       \
-        [&](auto v) {                                                        \
-            if constexpr (std::is_enum_v<decltype(v)>) {                     \
+        [&](const auto& v) {                                                 \
+            using V = std::remove_cvref_t<decltype(v)>;                      \
+            if constexpr (std::is_enum_v<V>) {                               \
                 setValue(QStringLiteral(#xname), static_cast<int>(v));       \
                 if constexpr (xneed_update) {                                \
                     emit update_setting_requested(#xname,                    \
@@ -405,18 +407,20 @@ settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
         }(value);                                                            \
     }                                                                        \
     xtype settings::normalized_##xname(const xtype& value) {                 \
-        return [&](auto v) {                                                 \
-            if constexpr (std::is_arithmetic_v<decltype(v)>) {               \
-                return std::clamp(v, static_cast<xtype>(xmin_value),         \
-                                  static_cast<xtype>(xmax_value));           \
+        return [&](const auto& v) {                                          \
+            using V = std::remove_cvref_t<decltype(v)>;                      \
+            if constexpr (std::is_arithmetic_v<V>) {                         \
+                return std::clamp(v, static_cast<V>(xmin_value),             \
+                                  static_cast<V>(xmax_value));               \
             } else {                                                         \
                 return v;                                                    \
             }                                                                \
         }(value);                                                            \
     }                                                                        \
     xtype settings::cast_num_##xname(double num_value) {                     \
-        return [&](auto v) {                                                 \
-            if constexpr (std::is_arithmetic_v<decltype(v)>) {               \
+        return [&](const auto& v) {                                          \
+            using V = std::remove_cvref_t<decltype(v)>;                      \
+            if constexpr (std::is_arithmetic_v<V>) {                         \
                 return num_value;                                            \
             } else {                                                         \
                 return v;                                                    \
@@ -631,38 +635,17 @@ void settings::set_default_tts_model_for_mnt_lang(const QString& lang,
     }
 }
 
-QString settings::active_tts_ref_voice() const {
-    return value(QStringLiteral("active_tts_ref_voice"), {}).toString();
-}
-
-void settings::set_active_tts_ref_voice(const QString& value) {
-    if (active_tts_ref_voice() != value) {
-        setValue(QStringLiteral("active_tts_ref_voice"), value);
-        emit active_tts_ref_voice_changed();
-    }
-}
-
-QString settings::active_tts_for_in_mnt_ref_voice() const {
-    return value(QStringLiteral("active_tts_for_in_mnt_ref_voice"), {})
+QString settings::default_stt_model_for_mnt_lang(const QString& lang) {
+    return value(QStringLiteral("default_stt_model_for_mnt_%1").arg(lang), {})
         .toString();
 }
 
-void settings::set_active_tts_for_in_mnt_ref_voice(const QString& value) {
-    if (active_tts_for_in_mnt_ref_voice() != value) {
-        setValue(QStringLiteral("active_tts_for_in_mnt_ref_voice"), value);
-        emit active_tts_for_in_mnt_ref_voice_changed();
-    }
-}
-
-QString settings::active_tts_for_out_mnt_ref_voice() const {
-    return value(QStringLiteral("active_tts_for_out_mnt_ref_voice"), {})
-        .toString();
-}
-
-void settings::set_active_tts_for_out_mnt_ref_voice(const QString& value) {
-    if (active_tts_for_out_mnt_ref_voice() != value) {
-        setValue(QStringLiteral("active_tts_for_out_mnt_ref_voice"), value);
-        emit active_tts_for_out_mnt_ref_voice_changed();
+void settings::set_default_stt_model_for_mnt_lang(const QString& lang,
+                                                  const QString& value) {
+    if (default_stt_model_for_mnt_lang(lang) != value) {
+        setValue(QStringLiteral("default_stt_model_for_mnt_%1").arg(lang),
+                 value);
+        emit default_stt_models_for_mnt_changed(lang);
     }
 }
 

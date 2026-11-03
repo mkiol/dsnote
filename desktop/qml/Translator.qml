@@ -26,6 +26,8 @@ ColumnLayout {
                                               qsTr("Go to the %1 to download models for the languages you intend to use.")
                                                 .arg("<i>" + qsTr("Languages and Models") + "</i>")
     readonly property alias verticalMode: grid.verticalMode
+    readonly property bool showStt: _settings.ui_translator_layout === Settings.UiTranslatorLayoutInStt
+    onShowSttChanged: update()
 
     Connections {
         target: app
@@ -59,10 +61,20 @@ ColumnLayout {
         if (app.mnt_configured) {
             mntInCombo.first.combo.currentIndex = app.active_mnt_lang_idx
             mntOutCombo.first.combo.currentIndex = app.active_mnt_out_lang_idx
-        }
-        if (app.mnt_configured && app.tts_configured) {
-            mntInCombo.second.combo.currentIndex = app.active_tts_model_for_in_mnt_idx
-            mntOutCombo.second.combo.currentIndex = app.active_tts_model_for_out_mnt_idx
+
+            if (showStt) {
+                if (app.stt_configured) {
+                    mntInCombo.second.combo.currentIndex = app.active_stt_model_for_in_mnt_idx
+                }
+                if (app.tts_configured) {
+                    mntOutCombo.second.combo.currentIndex = app.active_tts_model_for_out_mnt_idx
+                }
+            } else {
+                if (app.tts_configured) {
+                    mntInCombo.second.combo.currentIndex = app.active_tts_model_for_in_mnt_idx
+                    mntOutCombo.second.combo.currentIndex = app.active_tts_model_for_out_mnt_idx
+                }
+            }
         }
     }
 
@@ -195,61 +207,184 @@ ColumnLayout {
                     }
                 }
                 second {
-                    icon.name: "audio-speakers-symbolic"
-                    enabled: app.mnt_configured && app.tts_configured && app.state === DsnoteApp.StateIdle
-                    comboToolTip: mntInCombo.second.combo2RedBorder ?
-                                      qsTr("This model requires a voice profile.") + " " +
-                                      qsTr("Create one in %1.").arg("<i>" + qsTr("Voice profiles") + "</i>") :
-                                      qsTr("Text to Speech model for language to translate from.")
-                    comboPlaceholderText: qsTr("No Text to Speech model")
-                    combo2PlaceholderText: qsTr("No voice profile")
-                    combo2ToolTip: qsTr("Voice profile")
+                    icon.name: root.showStt ? "audio-input-microphone-symbolic" : "audio-speakers-symbolic"
+                    enabled: root.showStt ? app.mnt_configured && app.stt_configured && (app.state === DsnoteApp.StateIdle || app.state === DsnoteApp.StateListeningManual) :
+                                            app.mnt_configured && app.tts_configured && app.state === DsnoteApp.StateIdle
+                    comboToolTip: root.showStt ? qsTr("Speech to Text model for language to translate from.") :
+                                                 mntInCombo.second.combo2RedBorder ?
+                                                    qsTr("This model requires a voice profile.") + " " +
+                                                    qsTr("Create one in %1.").arg("<i>" + qsTr("Voice profiles") + "</i>") :
+                                                    qsTr("Text to Speech model for language to translate from.")
+                    comboPlaceholderText: root.showStt ? qsTr("No Speech to Text model") : qsTr("No Text to Speech model")
+                    combo2PlaceholderText: root.showStt ? "" : qsTr("No voice profile")
+                    combo2ToolTip: root.showStt ? "" : qsTr("Voice profile")
                     comboFillWidth: true
-                    comboRedBorder: !mntInCombo.second.off && ((app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voice_names.length === 0) ||
-                                                               (app.tts_for_in_mnt_ref_prompt_needed && _settings.tts_voice_prompts.length === 0))
+                    comboRedBorder: !root.showStt && !mntInCombo.second.off && ((app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voice_names.length === 0) ||
+                                                                                (app.tts_for_in_mnt_ref_prompt_needed && _settings.tts_voice_prompts.length === 0))
                     showSeparator: !mntInCombo.verticalMode
                     combo {
-                        model: app.available_tts_models_for_in_mnt
-                        enabled: mntInCombo.second.enabled &&
-                                 !mntInCombo.second.off &&
-                                 app.state === DsnoteApp.StateIdle
-                        onActivated: (index) => app.set_active_tts_model_for_in_mnt_idx(index)
-                        currentIndex: app.active_tts_model_for_in_mnt_idx
+                        model: root.showStt ? app.available_stt_models_for_in_mnt : app.available_tts_models_for_in_mnt
+                        enabled: mntInCombo.second.enabled && !mntInCombo.second.off && app.state === DsnoteApp.StateIdle
+                        onActivated: (index) => {
+                            if (root.showStt) app.set_active_stt_model_for_in_mnt_idx(index)
+                            else app.set_active_tts_model_for_in_mnt_idx(index)
+                        }
+                        currentIndex: root.showStt ? app.active_stt_model_for_in_mnt_idx : app.active_tts_model_for_in_mnt_idx
                     }
                     combo2 {
-                        visible: mntInCombo.refVoiceNeeded || mntInCombo.refPromptNeeded
-                        enabled: mntInCombo.second.enabled &&
-                                 !mntInCombo.second.off &&
-                                 app.state === DsnoteApp.StateIdle
-                        model: mntInCombo.refVoiceNeeded ? app.available_tts_ref_voice_names :
-                                                           _settings.tts_voice_prompt_names
+                        visible: !root.showStt && (mntInCombo.refVoiceNeeded || mntInCombo.refPromptNeeded)
+                        enabled: !root.showStt && mntInCombo.second.enabled && !mntInCombo.second.off && app.state === DsnoteApp.StateIdle
+                        model: mntInCombo.refVoiceNeeded ? app.available_tts_ref_voice_names : _settings.tts_voice_prompt_names
                         onActivated: (index) => {
                             if (mntInCombo.refVoiceNeeded)
                                 app.set_active_tts_for_in_mnt_ref_voice_idx(index)
                             else
                                 _settings.tts_active_voice_prompt_for_in_mnt_idx = index
                         }
-                        currentIndex:
-                            mntInCombo.refVoiceNeeded ?
-                                app.active_tts_for_in_mnt_ref_voice_idx :
-                                _settings.tts_active_voice_prompt_for_in_mnt_idx
+                        currentIndex: mntInCombo.refVoiceNeeded ? app.active_tts_for_in_mnt_ref_voice_idx : _settings.tts_active_voice_prompt_for_in_mnt_idx
                     }
                     frame {
                         leftPadding: appWin.padding
                         rightPadding: grid.verticalMode ? appWin.padding : 0
                     }
+                    buttonToolTip: root.showStt ? (qsTr("Listen") + " (Ctrl+Alt+Shift+L)") : qsTr("Read")
                     button {
-                        enabled: mntInCombo.second.enabled &&
-                                 !mntInCombo.second.off &&
-                                 app.note.length !== 0 &&
-                                 (!app.tts_for_in_mnt_ref_voice_needed || app.available_tts_ref_voice_names.length !== 0) &&
-                                 (!app.tts_for_in_mnt_ref_prompt_needed || _settings.tts_voice_prompts.length !== 0)
+                        enabled: root.showStt ? mntInCombo.second.enabled && !mntInCombo.second.off :
+                                                mntInCombo.second.enabled && !mntInCombo.second.off && app.note.length !== 0 &&
+                                                (!app.tts_for_in_mnt_ref_voice_needed || app.available_tts_ref_voice_names.length !== 0) &&
+                                                (!app.tts_for_in_mnt_ref_prompt_needed || _settings.tts_voice_prompts.length !== 0)
+                        onClicked: {
+                            if (!root.showStt) return
+                            if (_settings.speech_mode !== Settings.SpeechManual &&
+                                    app.state === DsnoteApp.StateIdle &&
+                                    app.task_state === DsnoteApp.TaskStateIdle)
+                                app.listen_mnt()
+                        }
+                        onReleased: {
+                            if (!root.showStt) return
+                            if (app.state === DsnoteApp.StateListeningManual || _settings.speech_mode === Settings.SpeechManual)
+                                app.stop_listen()
+                        }
+                        onPressed: {
+                            if (!root.showStt) return
+                            if (_settings.speech_mode === Settings.SpeechManual &&
+                                    app.state === DsnoteApp.StateIdle &&
+                                    app.task_state === DsnoteApp.TaskStateIdle) {
+                                app.listen_mnt()
+                            }
+                        }
+
                         action: Action {
-                            text: qsTr("Read")
-                            onTriggered: app.play_speech_translator(false)
+                            text: root.showStt ? qsTr("Listen") : qsTr("Read")
+                            shortcut: root.showStt ? "Ctrl+Alt+Shift+L" : ""
+                            onTriggered: {
+                                if (root.showStt) return
+                                app.play_speech_translator(false)
+                            }
                         }
                     }
                 }
+                // second {
+                //     icon.name: "audio-input-microphone-symbolic"
+                //     enabled: app.mnt_configured && app.stt_configured && app.state === DsnoteApp.StateIdle
+                //     comboToolTip: qsTr("Speech to Text model for language to translate from.")
+                //     comboPlaceholderText: qsTr("No Speech to Text model")
+                //     comboFillWidth: true
+                //     showSeparator: !mntInCombo.verticalMode
+                //     combo {
+                //         model: app.available_stt_models_for_in_mnt
+                //         enabled: mntInCombo.second.enabled && !mntInCombo.second.off && app.state === DsnoteApp.StateIdle
+                //         onActivated: (index) => app.set_active_stt_model_for_in_mnt_idx(index)
+                //         currentIndex: app.active_stt_model_for_in_mnt_idx
+                //     }
+                //     frame {
+                //         leftPadding: appWin.padding
+                //         rightPadding: grid.verticalMode ? appWin.padding : 0
+                //     }
+                //     buttonToolTip: qsTr("Listen") + " (Ctrl+Alt+Shift+L)"
+                //     button {
+                //         enabled: mntInCombo.second.enabled && !mntInCombo.second.off
+                //         onClicked: {
+                //             if (_settings.speech_mode !== Settings.SpeechManual &&
+                //                     app.state === DsnoteApp.StateIdle &&
+                //                     app.task_state === DsnoteApp.TaskStateIdle)
+                //                 app.listen()
+                //         }
+                //         onReleased: {
+                //             if (app.state === DsnoteApp.StateListeningManual || _settings.speech_mode === Settings.SpeechManual)
+                //                 app.stop_listen()
+                //         }
+                //         onPressed: {
+                //             if (_settings.speech_mode === Settings.SpeechManual &&
+                //                     app.state === DsnoteApp.StateIdle &&
+                //                     app.task_state === DsnoteApp.TaskStateIdle) {
+                //                 app.listen()
+                //             }
+                //         }
+
+                //         action: Action {
+                //             text: qsTr("Listen")
+                //             shortcut: "Ctrl+Alt+Shift+L"
+                //         }
+                //     }
+                // }
+                // second {
+                //     icon.name: "audio-speakers-symbolic"
+                //     enabled: app.mnt_configured && app.tts_configured && app.state === DsnoteApp.StateIdle
+                //     comboToolTip: mntInCombo.second.combo2RedBorder ?
+                //                       qsTr("This model requires a voice profile.") + " " +
+                //                       qsTr("Create one in %1.").arg("<i>" + qsTr("Voice profiles") + "</i>") :
+                //                       qsTr("Text to Speech model for language to translate from.")
+                //     comboPlaceholderText: qsTr("No Text to Speech model")
+                //     combo2PlaceholderText: qsTr("No voice profile")
+                //     combo2ToolTip: qsTr("Voice profile")
+                //     comboFillWidth: true
+                //     comboRedBorder: !mntInCombo.second.off && ((app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voice_names.length === 0) ||
+                //                                                (app.tts_for_in_mnt_ref_prompt_needed && _settings.tts_voice_prompts.length === 0))
+                //     showSeparator: !mntInCombo.verticalMode
+                //     combo {
+                //         model: app.available_tts_models_for_in_mnt
+                //         enabled: mntInCombo.second.enabled &&
+                //                  !mntInCombo.second.off &&
+                //                  app.state === DsnoteApp.StateIdle
+                //         onActivated: (index) => app.set_active_tts_model_for_in_mnt_idx(index)
+                //         currentIndex: app.active_tts_model_for_in_mnt_idx
+                //     }
+                //     combo2 {
+                //         visible: mntInCombo.refVoiceNeeded || mntInCombo.refPromptNeeded
+                //         enabled: mntInCombo.second.enabled &&
+                //                  !mntInCombo.second.off &&
+                //                  app.state === DsnoteApp.StateIdle
+                //         model: mntInCombo.refVoiceNeeded ? app.available_tts_ref_voice_names :
+                //                                            _settings.tts_voice_prompt_names
+                //         onActivated: (index) => {
+                //             if (mntInCombo.refVoiceNeeded)
+                //                 app.set_active_tts_for_in_mnt_ref_voice_idx(index)
+                //             else
+                //                 _settings.tts_active_voice_prompt_for_in_mnt_idx = index
+                //         }
+                //         currentIndex:
+                //             mntInCombo.refVoiceNeeded ?
+                //                 app.active_tts_for_in_mnt_ref_voice_idx :
+                //                 _settings.tts_active_voice_prompt_for_in_mnt_idx
+                //     }
+                //     frame {
+                //         leftPadding: appWin.padding
+                //         rightPadding: grid.verticalMode ? appWin.padding : 0
+                //     }
+                //     buttonToolTip: qsTr("Read") + " (Ctrl+Alt+Shift+R)"
+                //     button {
+                //         enabled: mntInCombo.second.enabled &&
+                //                  !mntInCombo.second.off &&
+                //                  app.note.length !== 0 &&
+                //                  (!app.tts_for_in_mnt_ref_voice_needed || app.available_tts_ref_voice_names.length !== 0) &&
+                //                  (!app.tts_for_in_mnt_ref_prompt_needed || _settings.tts_voice_prompts.length !== 0)
+                //         action: Action {
+                //             text: qsTr("Read")
+                //             onTriggered: app.play_speech_translator(false)
+                //         }
+                //     }
+                // }
             }
         }
 

@@ -79,6 +79,10 @@ Page {
                     In addition, you can force the use of Pinyin as the translation output (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Translate to Pinyin</i>).
                     Pinyin is supported only for Simplified Chinese script.</li>
                 </ul>
+                <li>Setting to choose whether the Read, Listen, or both options are available in translator mode.
+                    Listen lets you dictate text directly using Speech to Text
+                    (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Voice options in translator mode</i>).</li>
+                </ul>
                 <p>" + qsTr("Libraries") + "</p>
                 <ul>
                 <li>whisper.cpp update to version 1.9.1</li>

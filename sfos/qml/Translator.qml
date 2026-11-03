@@ -162,10 +162,14 @@ Item {
                     }
                 }
 
-                DuoComboButtonCompact {
+                TripleComboButtonCompact {
                     id: mntInCombo
 
                     visible: !root.noteTextArea.textArea.highlighted && !root.translatedNoteTextArea.textArea.highlighted
+                    secondVisible: _settings.ui_translator_layout === Settings.UiTranslatorLayoutInStt ||
+                                   _settings.ui_translator_layout === Settings.UiTranslatorLayoutInBoth
+                    thirdVisible: _settings.ui_translator_layout === Settings.UiTranslatorLayoutInTts ||
+                                  _settings.ui_translator_layout === Settings.UiTranslatorLayoutInBoth
                     verticalMode: true
                     width: parent.width
                     first {
@@ -184,6 +188,44 @@ Item {
                     }
 
                     second {
+                        enabled: app.mnt_configured && app.stt_configured && (app.state === DsnoteApp.StateIdle ||
+                                                                              app.state === DsnoteApp.StateListeningManual)
+                        comboModel: app.available_stt_models_for_in_mnt
+                        comboPlaceholderText: qsTr("No Speech to Text model")
+                        onComboActivated: app.set_active_stt_model_for_in_mnt_idx(index)
+                        onComboUpdated: app.set_active_stt_model_for_in_mnt_idx(app.active_stt_model_for_in_mnt_idx, true)
+                        combo {
+                            label: qsTr("Speech to Text")
+                            enabled: mntInCombo.second.enabled && !mntInCombo.second.off && app.state === DsnoteApp.StateIdle
+                            currentIndex: app.active_stt_model_for_in_mnt_idx
+                        }
+                        expandedHeight: root.verticalMode || !mntOutCombo.second.combo.menu ? 0 : mntOutCombo.second.combo.menu.height
+                        height: root.verticalMode ? mntInCombo.second.implicitHeight :
+                                                    Math.max(mntOutCombo.second.implicitHeight, mntInCombo.second.implicitHeight)
+                        button {
+                            enabled: mntInCombo.second.enabled && !mntInCombo.second.off
+                            text: qsTr("Listen")
+                            onClicked: {
+                                if (_settings.speech_mode !== Settings.SpeechManual &&
+                                        app.state === DsnoteApp.StateIdle &&
+                                        app.task_state === DsnoteApp.TaskStateIdle)
+                                    app.listen_mnt()
+                            }
+                            onReleased: {
+                                if (app.state === DsnoteApp.StateListeningManual || _settings.speech_mode === Settings.SpeechManual)
+                                    app.stop_listen()
+                            }
+                            onPressed: {
+                                if (_settings.speech_mode === Settings.SpeechManual &&
+                                        app.state === DsnoteApp.StateIdle &&
+                                        app.task_state === DsnoteApp.TaskStateIdle) {
+                                    app.listen_mnt()
+                                }
+                            }
+                        }
+                    }
+
+                    third {
                         enabled: app.mnt_configured && app.tts_configured && app.state === DsnoteApp.StateIdle
                         comboModel: app.available_tts_models_for_in_mnt
                         comboPlaceholderText: qsTr("No Text to Speech model")
@@ -191,23 +233,17 @@ Item {
                         onComboUpdated: app.set_active_tts_model_for_in_mnt_idx(app.active_tts_model_for_in_mnt_idx, true)
                         combo {
                             label: qsTr("Text to Speech")
-                            enabled: mntInCombo.second.enabled &&
-                                     !mntInCombo.second.off &&
-                                     app.state === DsnoteApp.StateIdle
+                            enabled: mntInCombo.third.enabled && !mntInCombo.third.off && app.state === DsnoteApp.StateIdle
                             currentIndex: app.active_tts_model_for_in_mnt_idx
                         }
                         expandedHeight: root.verticalMode || !mntOutCombo.second.combo.menu ? 0 : mntOutCombo.second.combo.menu.height
-                        height: root.verticalMode ? mntInCombo.second.implicitHeight :
-                                                    Math.max(mntOutCombo.second.implicitHeight, mntInCombo.second.implicitHeight)
+                        height: root.verticalMode ? mntInCombo.third.implicitHeight :
+                                                    Math.max(mntOutCombo.second.implicitHeight, mntInCombo.third.implicitHeight)
 
                         button {
-                            enabled: mntInCombo.second.enabled &&
-                                     !mntInCombo.second.off &&
-                                     app.note.length !== 0
+                            enabled: mntInCombo.third.enabled && !mntInCombo.third.off && app.note.length !== 0
                             text: qsTr("Read")
-                            onClicked: {
-                                app.play_speech_translator(false)
-                            }
+                            onClicked: app.play_speech_translator(false)
                         }
                     }
                 }

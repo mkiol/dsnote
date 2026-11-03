@@ -415,6 +415,8 @@ dsnote_app::dsnote_app(QObject *parent)
             update_available_tts_models_for_out_mnt();
             update_active_tts_model_for_in_mnt();
             update_active_tts_model_for_out_mnt();
+            update_available_stt_models_for_in_mnt();
+            update_active_stt_model_for_in_mnt();
             update_current_task();
             update_task_state();
             if (service_state() == StateTranscribingFile ||
@@ -1804,6 +1806,8 @@ void dsnote_app::handle_stt_models_changed(const QVariantMap &models) {
 
     update_configured_state();
     update_active_stt_model();
+    update_available_stt_models_for_in_mnt();
+    update_active_stt_model_for_in_mnt();
 }
 
 void dsnote_app::handle_tts_models_changed(const QVariantMap &models) {
@@ -2143,7 +2147,9 @@ void dsnote_app::set_active_mnt_lang(const QString &lang) {
 
         update_available_mnt_out_langs();
         update_available_tts_models_for_in_mnt();
+        update_available_stt_models_for_in_mnt();
         update_active_tts_model_for_in_mnt();
+        update_active_stt_model_for_in_mnt();
 
         emit active_mnt_lang_changed();
     }
@@ -2207,6 +2213,15 @@ void dsnote_app::set_active_tts_model_for_in_mnt(const QString &model) {
                  << m_active_tts_model_for_in_mnt << "=>" << model;
         m_active_tts_model_for_in_mnt = model;
         emit active_tts_model_for_in_mnt_changed();
+    }
+}
+
+void dsnote_app::set_active_stt_model_for_in_mnt(const QString &model) {
+    if (m_active_stt_model_for_in_mnt != model) {
+        qDebug() << "app active stt model for in mnt:"
+                 << m_active_stt_model_for_in_mnt << "=>" << model;
+        m_active_stt_model_for_in_mnt = model;
+        emit active_stt_model_for_in_mnt_changed();
     }
 }
 
@@ -2563,6 +2578,28 @@ void dsnote_app::update_available_tts_models_for_in_mnt() {
     }
 }
 
+void dsnote_app::update_available_stt_models_for_in_mnt() {
+    QVariantMap new_available_stt_models_for_in_mnt_map{};
+
+    auto lpp = m_active_mnt_lang + "_";
+    for (auto it = m_available_stt_models_map.cbegin();
+         it != m_available_stt_models_map.cend(); ++it) {
+        if (it.key().startsWith(lpp))
+            new_available_stt_models_for_in_mnt_map.insert(it.key(),
+                                                           it.value());
+    }
+
+    if (m_available_stt_models_for_in_mnt_map !=
+        new_available_stt_models_for_in_mnt_map) {
+        qDebug() << "app stt available models for in mnt:"
+                 << m_available_stt_models_for_in_mnt_map.size() << "=>"
+                 << new_available_stt_models_for_in_mnt_map.size();
+        m_available_stt_models_for_in_mnt_map =
+            std::move(new_available_stt_models_for_in_mnt_map);
+        emit available_stt_models_for_in_mnt_changed();
+    }
+}
+
 void dsnote_app::update_available_tts_models_for_out_mnt() {
     QVariantMap new_available_tts_models_for_out_mnt_map{};
 
@@ -2779,52 +2816,35 @@ bool dsnote_app::test_tts_ref_voice(int idx, const QString &new_name) const {
     return true;
 }
 
-QVariantList dsnote_app::available_tts_models_for_in_mnt() const {
+QVariantList dsnote_app::models(const QVariantMap &map) {
     QVariantList list;
 
-    for (auto it = m_available_tts_models_for_in_mnt_map.constBegin();
-         it != m_available_tts_models_for_in_mnt_map.constEnd(); ++it) {
+    for (auto it = map.constBegin(); it != map.constEnd(); ++it) {
         const auto v = it.value().toStringList();
         if (v.size() > 1) list.push_back(v.at(1));
     }
 
     return list;
+}
+
+QVariantList dsnote_app::available_tts_models_for_in_mnt() const {
+    return models(m_available_tts_models_for_in_mnt_map);
+}
+
+QVariantList dsnote_app::available_stt_models_for_in_mnt() const {
+    return models(m_available_stt_models_for_in_mnt_map);
 }
 
 QVariantList dsnote_app::available_tts_models_for_out_mnt() const {
-    QVariantList list;
-
-    for (auto it = m_available_tts_models_for_out_mnt_map.constBegin();
-         it != m_available_tts_models_for_out_mnt_map.constEnd(); ++it) {
-        const auto v = it.value().toStringList();
-        if (v.size() > 1) list.push_back(v.at(1));
-    }
-
-    return list;
+    return models(m_available_tts_models_for_out_mnt_map);
 }
 
 QVariantList dsnote_app::available_mnt_langs() const {
-    QVariantList list;
-
-    for (auto it = m_available_mnt_langs_map.constBegin();
-         it != m_available_mnt_langs_map.constEnd(); ++it) {
-        const auto v = it.value().toStringList();
-        if (v.size() > 1) list.push_back(v.at(1));
-    }
-
-    return list;
+    return models(m_available_mnt_langs_map);
 }
 
 QVariantList dsnote_app::available_mnt_out_langs() const {
-    QVariantList list;
-
-    for (auto it = m_available_mnt_out_langs_map.constBegin();
-         it != m_available_mnt_out_langs_map.constEnd(); ++it) {
-        const auto v = it.value().toStringList();
-        if (v.size() > 1) list.push_back(v.at(1));
-    }
-
-    return list;
+    return models(m_available_mnt_out_langs_map);
 }
 
 void dsnote_app::set_active_stt_model_idx(int idx, bool force) {
@@ -2950,6 +2970,30 @@ void dsnote_app::set_active_tts_model_for_in_mnt_idx(int idx, bool force) {
 
     if (force) {
         emit active_tts_model_for_in_mnt_changed();
+    }
+}
+
+void dsnote_app::set_active_stt_model_for_in_mnt_idx(int idx, bool force) {
+    if (m_active_mnt_lang.isEmpty()) {
+        qWarning() << "invalid active mnt lang";
+        return;
+    }
+
+    if (active_stt_model_for_in_mnt_idx() != idx && idx > -1 &&
+        idx < m_available_stt_models_for_in_mnt_map.size()) {
+        auto id = std::next(m_available_stt_models_for_in_mnt_map.cbegin(), idx)
+                      .key();
+
+        qDebug() << "new active stt model for in mnt:" << id;
+
+        settings::instance()->set_default_stt_model_for_mnt_lang(
+            m_active_mnt_lang, id);
+
+        update_active_stt_model_for_in_mnt();
+    }
+
+    if (force) {
+        emit active_stt_model_for_in_mnt_changed();
     }
 }
 
@@ -3252,40 +3296,52 @@ void dsnote_app::transcribe_ref_file(const QString &file_path) {
 void dsnote_app::listen() {
     m_text_destination = text_destination_t::note_add;
     m_current_stt_request = stt_request_t::listen;
-    listen_internal(stt_translate_req_t::conf);
+    listen_internal(active_stt_model(), stt_translate_req_t::conf);
+}
+
+void dsnote_app::listen_mnt() {
+    m_text_destination = text_destination_t::note_add;
+    m_current_stt_request = stt_request_t::listen;
+    listen_internal(active_stt_model_for_in_mnt(), stt_translate_req_t::off);
 }
 
 void dsnote_app::listen_translate() {
     m_text_destination = text_destination_t::note_add;
     m_current_stt_request = stt_request_t::listen_translate;
-    listen_internal(stt_translate_req_t::on);
+    listen_internal(active_stt_model(), stt_translate_req_t::on);
 }
 
 void dsnote_app::listen_to_active_window() {
     m_text_destination = text_destination_t::active_window;
     m_current_stt_request = stt_request_t::listen_active_window;
-    listen_internal(stt_translate_req_t::conf);
+    listen_internal(active_stt_model(), stt_translate_req_t::conf);
 }
 
 void dsnote_app::listen_translate_to_active_window() {
     m_text_destination = text_destination_t::active_window;
     m_current_stt_request = stt_request_t::listen_translate_active_window;
-    listen_internal(stt_translate_req_t::on);
+    listen_internal(active_stt_model(), stt_translate_req_t::on);
 }
 
 void dsnote_app::listen_to_clipboard() {
     m_text_destination = text_destination_t::clipboard;
     m_current_stt_request = stt_request_t::listen_clipboard;
-    listen_internal(stt_translate_req_t::conf);
+    listen_internal(active_stt_model(), stt_translate_req_t::conf);
 }
 
 void dsnote_app::listen_translate_to_clipboard() {
     m_text_destination = text_destination_t::clipboard;
     m_current_stt_request = stt_request_t::listen_translate_clipboard;
-    listen_internal(stt_translate_req_t::on);
+    listen_internal(active_stt_model(), stt_translate_req_t::on);
 }
 
-void dsnote_app::listen_internal(stt_translate_req_t translate_req) {
+void dsnote_app::listen_internal(const QString &model_id,
+                                 stt_translate_req_t translate_req) {
+    if (model_id.isEmpty()) {
+        qWarning() << "empty model id";
+        return;
+    }
+
     auto *s = settings::instance();
 
     int new_task = 0;
@@ -3321,7 +3377,7 @@ void dsnote_app::listen_internal(stt_translate_req_t translate_req) {
                    s->inline_timestamp_min_interval());
 
     auto out_lang = [&]() {
-        auto lang = lang_from_model_id(active_stt_model());
+        auto lang = lang_from_model_id(model_id);
         switch (translate_req) {
             case stt_translate_req_t::conf:
                 return s->whisper_translate() ? QStringLiteral("en") : lang;
@@ -3340,12 +3396,12 @@ void dsnote_app::listen_internal(stt_translate_req_t translate_req) {
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->stt_start_listen(
-            static_cast<speech_service::speech_mode_t>(s->speech_mode()), {},
-            out_lang, options);
+            static_cast<speech_service::speech_mode_t>(s->speech_mode()),
+            model_id, out_lang, options);
     } else {
         qDebug() << "[app => dbus] call SttStartListen2:" << s->speech_mode();
         new_task = m_dbus_service.SttStartListen2(
-            static_cast<int>(s->speech_mode()), {}, out_lang, options);
+            static_cast<int>(s->speech_mode()), model_id, out_lang, options);
     }
 
     m_primary_task.set(new_task);
@@ -4137,107 +4193,61 @@ int dsnote_app::active_stt_model_idx() const {
     return std::distance(m_available_stt_models_map.begin(), it);
 }
 
-QString dsnote_app::active_stt_model_name() const {
-    auto it = m_available_stt_models_map.find(m_active_stt_model);
-    if (it == m_available_stt_models_map.end()) {
+QString dsnote_app::model_name(const QString &model_id,
+                               const QVariantMap &map) {
+    auto it = map.find(model_id);
+    if (it == map.end()) {
         return {};
     }
 
     auto l = it.value().toStringList();
 
-    return l.size() > 1 ? l.at(1) : QString{};
+    return l.isEmpty() ? QString{} : l.front();
+}
+
+QString dsnote_app::active_stt_model_name() const {
+    return model_name(m_active_stt_model, m_available_stt_models_map);
 }
 
 QString dsnote_app::active_tts_model_name() const {
-    auto it = m_available_tts_models_map.find(m_active_tts_model);
-    if (it == m_available_tts_models_map.end()) {
-        return {};
-    }
-
-    auto l = it.value().toStringList();
-
-    return l.size() > 1 ? l.at(1) : QString{};
+    return model_name(m_active_tts_model, m_available_tts_models_map);
 }
 
 QString dsnote_app::active_tts_ref_voice_name() const {
-    auto it = m_available_tts_ref_voices_map.find(m_active_tts_ref_voice);
-    if (it == m_available_tts_ref_voices_map.end()) {
-        return {};
-    }
-
-    auto l = it.value().toStringList();
-
-    return l.isEmpty() ? QString{} : l.front();
+    return model_name(m_active_tts_ref_voice, m_available_tts_ref_voices_map);
 }
 
 QString dsnote_app::active_tts_for_in_mnt_ref_voice_name() const {
-    auto it =
-        m_available_tts_ref_voices_map.find(m_active_tts_for_in_mnt_ref_voice);
-    if (it == m_available_tts_ref_voices_map.end()) {
-        return {};
-    }
-
-    auto l = it.value().toStringList();
-
-    return l.isEmpty() ? QString{} : l.front();
+    return model_name(m_active_tts_for_in_mnt_ref_voice,
+                      m_available_tts_ref_voices_map);
 }
 
 QString dsnote_app::active_tts_for_out_mnt_ref_voice_name() const {
-    auto it =
-        m_available_tts_ref_voices_map.find(m_active_tts_for_out_mnt_ref_voice);
-    if (it == m_available_tts_ref_voices_map.end()) {
-        return {};
-    }
-
-    auto l = it.value().toStringList();
-
-    return l.isEmpty() ? QString{} : l.front();
+    return model_name(m_active_tts_for_out_mnt_ref_voice,
+                      m_available_tts_ref_voices_map);
 }
 
 QString dsnote_app::active_tts_model_for_in_mnt_name() const {
-    auto it = m_available_tts_models_for_in_mnt_map.find(
-        m_active_tts_model_for_in_mnt);
-    if (it == m_available_tts_models_for_in_mnt_map.end()) {
-        return {};
-    }
+    return model_name(m_active_tts_model_for_in_mnt,
+                      m_available_tts_models_for_in_mnt_map);
+}
 
-    auto l = it.value().toStringList();
-
-    return l.size() > 1 ? l.at(1) : QString{};
+QString dsnote_app::active_stt_model_for_in_mnt_name() const {
+    return model_name(m_active_stt_model_for_in_mnt,
+                      m_available_stt_models_for_in_mnt_map);
 }
 
 QString dsnote_app::active_tts_model_for_out_mnt_name() const {
-    auto it = m_available_tts_models_for_out_mnt_map.find(
-        m_active_tts_model_for_out_mnt);
-    if (it == m_available_tts_models_for_out_mnt_map.end()) {
-        return {};
-    }
-
-    auto l = it.value().toStringList();
-
-    return l.size() > 1 ? l.at(1) : QString{};
+    return model_name(m_active_tts_model_for_out_mnt,
+                      m_available_tts_models_for_out_mnt_map);
 }
 
 QString dsnote_app::active_mnt_lang_name() const {
-    auto it = m_available_mnt_langs_map.find(m_active_mnt_lang);
-    if (it == m_available_mnt_langs_map.end()) {
-        return {};
-    }
-
-    auto l = it.value().toStringList();
-
-    return l.size() > 1 ? l.at(1) : QString{};
+    return model_name(m_active_mnt_lang, m_available_mnt_langs_map);
 }
 
 QString dsnote_app::active_mnt_out_lang_name() const {
-    auto it = m_available_mnt_out_langs_map.find(m_active_mnt_out_lang);
-    if (it == m_available_mnt_out_langs_map.end()) {
-        return {};
-    }
-
-    auto l = it.value().toStringList();
-
-    return l.size() > 1 ? l.at(1) : QString{};
+    return model_name(m_active_mnt_out_lang, m_available_mnt_out_langs_map);
 }
 
 void dsnote_app::update_active_stt_model() {
@@ -4253,72 +4263,53 @@ void dsnote_app::update_active_stt_model() {
     set_active_stt_model(new_stt_model);
 }
 
-int dsnote_app::active_tts_model_idx() const {
-    auto it = m_available_tts_models_map.find(m_active_tts_model);
-    if (it == m_available_tts_models_map.end()) {
+int dsnote_app::model_idx(const QString &model_id, const QVariantMap &map) {
+    auto it = map.find(model_id);
+    if (it == map.end()) {
         return -1;
     }
-    return std::distance(m_available_tts_models_map.begin(), it);
+    return std::distance(map.begin(), it);
+}
+
+int dsnote_app::active_tts_model_idx() const {
+    return model_idx(m_active_tts_model, m_available_tts_models_map);
 }
 
 int dsnote_app::active_tts_ref_voice_idx() const {
-    auto it = m_available_tts_ref_voices_map.find(m_active_tts_ref_voice);
-    if (it == m_available_tts_ref_voices_map.end()) {
-        return -1;
-    }
-    return std::distance(m_available_tts_ref_voices_map.begin(), it);
+    return model_idx(m_active_tts_ref_voice, m_available_tts_ref_voices_map);
 }
 
 int dsnote_app::active_tts_for_in_mnt_ref_voice_idx() const {
-    auto it =
-        m_available_tts_ref_voices_map.find(m_active_tts_for_in_mnt_ref_voice);
-    if (it == m_available_tts_ref_voices_map.end()) {
-        return -1;
-    }
-    return std::distance(m_available_tts_ref_voices_map.begin(), it);
+    return model_idx(m_active_tts_for_in_mnt_ref_voice,
+                     m_available_tts_ref_voices_map);
 }
 
 int dsnote_app::active_tts_for_out_mnt_ref_voice_idx() const {
-    auto it =
-        m_available_tts_ref_voices_map.find(m_active_tts_for_out_mnt_ref_voice);
-    if (it == m_available_tts_ref_voices_map.end()) {
-        return -1;
-    }
-    return std::distance(m_available_tts_ref_voices_map.begin(), it);
+    return model_idx(m_active_tts_for_out_mnt_ref_voice,
+                     m_available_tts_ref_voices_map);
 }
 
 int dsnote_app::active_tts_model_for_in_mnt_idx() const {
-    auto it = m_available_tts_models_for_in_mnt_map.find(
-        m_active_tts_model_for_in_mnt);
-    if (it == m_available_tts_models_for_in_mnt_map.end()) {
-        return -1;
-    }
-    return std::distance(m_available_tts_models_for_in_mnt_map.begin(), it);
+    return model_idx(m_active_tts_model_for_in_mnt,
+                     m_available_tts_models_for_in_mnt_map);
+}
+
+int dsnote_app::active_stt_model_for_in_mnt_idx() const {
+    return model_idx(m_active_stt_model_for_in_mnt,
+                     m_available_stt_models_for_in_mnt_map);
 }
 
 int dsnote_app::active_tts_model_for_out_mnt_idx() const {
-    auto it = m_available_tts_models_for_out_mnt_map.find(
-        m_active_tts_model_for_out_mnt);
-    if (it == m_available_tts_models_for_out_mnt_map.end()) {
-        return -1;
-    }
-    return std::distance(m_available_tts_models_for_out_mnt_map.begin(), it);
+    return model_idx(m_active_tts_model_for_out_mnt,
+                     m_available_tts_models_for_out_mnt_map);
 }
 
 int dsnote_app::active_mnt_lang_idx() const {
-    auto it = m_available_mnt_langs_map.find(m_active_mnt_lang);
-    if (it == m_available_mnt_langs_map.end()) {
-        return -1;
-    }
-    return std::distance(m_available_mnt_langs_map.begin(), it);
+    return model_idx(m_active_mnt_lang, m_available_mnt_langs_map);
 }
 
 int dsnote_app::active_mnt_out_lang_idx() const {
-    auto it = m_available_mnt_out_langs_map.find(m_active_mnt_out_lang);
-    if (it == m_available_mnt_out_langs_map.end()) {
-        return -1;
-    }
-    return std::distance(m_available_mnt_out_langs_map.begin(), it);
+    return model_idx(m_active_mnt_out_lang, m_available_mnt_out_langs_map);
 }
 
 void dsnote_app::update_active_tts_model() {
@@ -4349,6 +4340,24 @@ void dsnote_app::update_active_tts_model_for_in_mnt() {
             m_available_tts_models_for_in_mnt_map.firstKey());
     } else {
         set_active_tts_model_for_in_mnt(default_model);
+    }
+}
+
+void dsnote_app::update_active_stt_model_for_in_mnt() {
+    if (m_available_stt_models_for_in_mnt_map.empty()) {
+        qWarning() << "no available stt models for in mnt";
+        return;
+    }
+
+    auto default_model =
+        settings::instance()->default_stt_model_for_mnt_lang(m_active_mnt_lang);
+
+    if (default_model.isEmpty() ||
+        !m_available_stt_models_for_in_mnt_map.contains(default_model)) {
+        set_active_stt_model_for_in_mnt(
+            m_available_stt_models_for_in_mnt_map.firstKey());
+    } else {
+        set_active_stt_model_for_in_mnt(default_model);
     }
 }
 

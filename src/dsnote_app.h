@@ -229,6 +229,20 @@ class dsnote_app : public QObject {
                    available_tts_models_for_out_mnt NOTIFY
                        available_tts_models_for_out_mnt_changed)
 
+    // stt for mnt
+    Q_PROPERTY(
+        int active_stt_model_for_in_mnt_idx READ active_stt_model_for_in_mnt_idx
+            NOTIFY active_stt_model_for_in_mnt_changed)
+    Q_PROPERTY(
+        QString active_stt_model_for_in_mnt READ active_stt_model_for_in_mnt
+            NOTIFY active_stt_model_for_in_mnt_changed)
+    Q_PROPERTY(QString active_stt_model_for_in_mnt_name READ
+                   active_stt_model_for_in_mnt_name NOTIFY
+                       active_stt_model_for_in_mnt_changed)
+    Q_PROPERTY(QVariantList available_stt_models_for_in_mnt READ
+                   available_stt_models_for_in_mnt NOTIFY
+                       available_stt_models_for_in_mnt_changed)
+
     // audio sources
     Q_PROPERTY(QStringList audio_sources READ audio_sources NOTIFY
                    audio_sources_changed)
@@ -378,6 +392,8 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void set_active_mnt_out_lang_idx(int idx, bool force = false);
     Q_INVOKABLE void set_active_tts_model_for_in_mnt_idx(int idx,
                                                          bool force = false);
+    Q_INVOKABLE void set_active_stt_model_for_in_mnt_idx(int idx,
+                                                         bool force = false);
     Q_INVOKABLE void set_active_tts_model_for_out_mnt_idx(int idx,
                                                           bool force = false);
     Q_INVOKABLE void import_file(const QString &file_path, int stream_index,
@@ -385,6 +401,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void cancel();
     Q_INVOKABLE void cancel_if_internal();
     Q_INVOKABLE void listen();
+    Q_INVOKABLE void listen_mnt();
     Q_INVOKABLE void listen_translate();
     Q_INVOKABLE void listen_to_active_window();
     Q_INVOKABLE void listen_translate_to_active_window();
@@ -523,6 +540,8 @@ class dsnote_app : public QObject {
     void active_tts_model_for_out_mnt_changed();
     void available_tts_models_for_in_mnt_changed();
     void available_tts_models_for_out_mnt_changed();
+    void active_stt_model_for_in_mnt_changed();
+    void available_stt_models_for_in_mnt_changed();
     void intermediate_text_changed();
     void text_changed();
     void text_decoded_to_clipboard();
@@ -723,6 +742,8 @@ class dsnote_app : public QObject {
     QVariantMap m_available_tts_models_for_in_mnt_map;
     QString m_active_tts_model_for_out_mnt;
     QVariantMap m_available_tts_models_for_out_mnt_map;
+    QString m_active_stt_model_for_in_mnt;
+    QVariantMap m_available_stt_models_for_in_mnt_map;
     QString m_intermediate_text;
     double m_speech_to_file_progress = -1.0;
     double m_translate_progress = -1.0;
@@ -797,6 +818,7 @@ class dsnote_app : public QObject {
     [[nodiscard]] QVariantList available_mnt_langs() const;
     [[nodiscard]] QVariantList available_mnt_out_langs() const;
     [[nodiscard]] QVariantList available_tts_models_for_in_mnt() const;
+    [[nodiscard]] QVariantList available_stt_models_for_in_mnt() const;
     [[nodiscard]] QVariantList available_tts_models_for_out_mnt() const;
     void handle_models_changed();
     void handle_stt_text_decoded(QString text, const QString &lang, int task);
@@ -832,6 +854,8 @@ class dsnote_app : public QObject {
     void update_available_tts_models_for_in_mnt();
     void update_active_tts_model_for_out_mnt();
     void update_available_tts_models_for_out_mnt();
+    void update_active_stt_model_for_in_mnt();
+    void update_available_stt_models_for_in_mnt();
     void update_current_task();
     void update_listen();
     void set_service_state(service_state_t new_service_state);
@@ -840,41 +864,50 @@ class dsnote_app : public QObject {
     void set_task_state_pending(service_task_state_t new_task_state);
     void handle_stt_intermediate_text(const QString &text, const QString &lang,
                                       int task);
+    static QString model_name(const QString &model_id, const QVariantMap &map);
+    static int model_idx(const QString &model_id, const QVariantMap &map);
+    static QVariantList models(const QVariantMap &map);
     [[nodiscard]] int active_stt_model_idx() const;
-    QString active_stt_model() { return m_active_stt_model; }
+    QString active_stt_model() const { return m_active_stt_model; }
     QString active_stt_model_name() const;
     [[nodiscard]] int active_tts_model_idx() const;
-    QString active_tts_model() { return m_active_tts_model; }
+    QString active_tts_model() const { return m_active_tts_model; }
     QString active_tts_model_name() const;
     [[nodiscard]] int active_tts_ref_voice_idx() const;
-    QString active_tts_ref_voice() { return m_active_tts_ref_voice; }
+    QString active_tts_ref_voice() const { return m_active_tts_ref_voice; }
     QString active_tts_ref_voice_name() const;
     [[nodiscard]] int active_tts_for_in_mnt_ref_voice_idx() const;
-    QString active_tts_for_in_mnt_ref_voice() {
+    QString active_tts_for_in_mnt_ref_voice() const {
         return m_active_tts_for_in_mnt_ref_voice;
     }
     QString active_tts_for_in_mnt_ref_voice_name() const;
     [[nodiscard]] int active_tts_for_out_mnt_ref_voice_idx() const;
-    QString active_tts_for_out_mnt_ref_voice() {
+    QString active_tts_for_out_mnt_ref_voice() const {
         return m_active_tts_for_out_mnt_ref_voice;
     }
     QString active_tts_for_out_mnt_ref_voice_name() const;
-    QString active_mnt_lang() { return m_active_mnt_lang; }
+    QString active_mnt_lang() const { return m_active_mnt_lang; }
     QString active_mnt_lang_name() const;
     [[nodiscard]] int active_mnt_lang_idx() const;
-    QString active_mnt_out_lang() { return m_active_mnt_out_lang; }
+    QString active_mnt_out_lang() const { return m_active_mnt_out_lang; }
     QString active_mnt_out_lang_name() const;
     [[nodiscard]] int active_mnt_out_lang_idx() const;
     [[nodiscard]] int active_tts_model_for_in_mnt_idx() const;
-    QString active_tts_model_for_in_mnt() {
+    QString active_tts_model_for_in_mnt() const {
         return m_active_tts_model_for_in_mnt;
     }
     QString active_tts_model_for_in_mnt_name() const;
     [[nodiscard]] int active_tts_model_for_out_mnt_idx() const;
-    QString active_tts_model_for_out_mnt() {
+    QString active_tts_model_for_out_mnt() const {
         return m_active_tts_model_for_out_mnt;
     }
     QString active_tts_model_for_out_mnt_name() const;
+    [[nodiscard]] int active_stt_model_for_in_mnt_idx() const;
+    QString active_stt_model_for_in_mnt() const {
+        return m_active_stt_model_for_in_mnt;
+    }
+    QString active_stt_model_for_in_mnt_name() const;
+
     QString intermediate_text() const { return m_intermediate_text; }
     void update_active_stt_lang_idx();
     void update_active_tts_lang_idx();
@@ -919,6 +952,7 @@ class dsnote_app : public QObject {
     void set_active_mnt_out_lang(const QString &lang);
     void set_active_tts_model_for_in_mnt(const QString &model);
     void set_active_tts_model_for_out_mnt(const QString &model);
+    void set_active_stt_model_for_in_mnt(const QString &model);
     void handle_ttt_models_changed(const QVariantMap &models);
     void handle_mnt_translate_progress(double new_progress, int task);
     void handle_mnt_translate_finished(const QString &in_text,
@@ -943,7 +977,8 @@ class dsnote_app : public QObject {
     bool can_undo_or_redu_note() const;
     QString translated_text() const;
     void set_translated_text(const QString text);
-    void listen_internal(stt_translate_req_t translate_req);
+    void listen_internal(const QString &model_id,
+                         stt_translate_req_t translate_req);
     void speech_to_file_internal(QString text, const QString &input_file,
                                  const QUrl &input_url, const QString &model_id,
                                  const QString &dest_file,

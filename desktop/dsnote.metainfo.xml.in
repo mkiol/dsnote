@@ -170,6 +170,8 @@
       <li>Pinyin support for Chinese langauge.
         If the text you enter is written in Pinyin, the translator will recognize it and translate it correctly into the selected language.
         In addition, you can force the use of Pinyin as the translation output.</li>
+      <li>Setting to choose whether the Read, Listen, or both options are available in translator mode.
+        Listen lets you dictate text directly using Speech to Text.</li>
       </ul>
       <p>User Interface:</p>
       <ul>

@@ -44,6 +44,9 @@ Grid {
                          (pressed ? Theme.highlightColor : Theme.primaryColor)
             onClicked: root.expanded = !root.expanded
             anchors.right: parent.right
+            anchors.rightMargin: Theme.paddingSmall
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
         }
     }
 
@@ -53,6 +56,5 @@ Grid {
         visible: root.expanded || !root.verticalMode
         height: visible ? implicitHeight : 0.0
         width: root.verticalMode ? root.width : root.width / 2
-        //Behavior on height { NumberAnimation { duration: 100 } }
     }
 }

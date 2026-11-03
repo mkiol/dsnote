@@ -35,33 +35,6 @@ Page {
                     title: qsTr("User Interface")
 
                     content.sourceComponent: Column {
-                        ComboBox {
-                            label: qsTr("Keep content below camera cutout")
-                            currentIndex: {
-                                switch(_settings.ui_cutout_policy) {
-                                    case Settings.UiCutoutPolicyAuto: return 0
-                                    case Settings.UiCutoutPolicyNone: return 1
-                                    case Settings.UiCutoutPolicyAvoid: return 2
-                                }
-                                return 0
-                            }
-                            menu: ContextMenu {
-                                MenuItem { text: qsTr("Auto") }
-                                MenuItem { text: qsTr("Don't add extra padding") }
-                                MenuItem { text: qsTr("Add extra padding") }
-                            }
-                            onCurrentIndexChanged: {
-                                if (currentIndex === 1) {
-                                    _settings.ui_cutout_policy = Settings.UiCutoutPolicyNone
-                                } else if (currentIndex === 2) {
-                                    _settings.ui_cutout_policy = Settings.UiCutoutPolicyAvoid
-                                } else {
-                                    _settings.ui_cutout_policy = Settings.UiCutoutPolicyAuto
-                                }
-                            }
-                            description: qsTr("Controls whether extra padding is added to keep content below the camera cutout (the notch at the top of the screen).")
-                        }
-
                         TextSwitch {
                             checked: _settings.keep_last_note
                             automaticCheck: false
@@ -158,6 +131,33 @@ Page {
                             onClicked: {
                                 _settings.subtitles_support = !_settings.subtitles_support
                             }
+                        }
+
+                        ComboBox {
+                            label: qsTr("Keep content below camera cutout")
+                            currentIndex: {
+                                switch(_settings.ui_cutout_policy) {
+                                    case Settings.UiCutoutPolicyAuto: return 0
+                                    case Settings.UiCutoutPolicyNone: return 1
+                                    case Settings.UiCutoutPolicyAvoid: return 2
+                                }
+                                return 0
+                            }
+                            menu: ContextMenu {
+                                MenuItem { text: qsTr("Auto") }
+                                MenuItem { text: qsTr("Don't add extra padding") }
+                                MenuItem { text: qsTr("Add extra padding") }
+                            }
+                            onCurrentIndexChanged: {
+                                if (currentIndex === 1) {
+                                    _settings.ui_cutout_policy = Settings.UiCutoutPolicyNone
+                                } else if (currentIndex === 2) {
+                                    _settings.ui_cutout_policy = Settings.UiCutoutPolicyAvoid
+                                } else {
+                                    _settings.ui_cutout_policy = Settings.UiCutoutPolicyAuto
+                                }
+                            }
+                            description: qsTr("Controls whether extra padding is added to keep content below the camera cutout (the notch at the top of the screen).")
                         }
                     }
                 }
@@ -675,6 +675,35 @@ Page {
                                 _settings.mnt_pinyin = !_settings.mnt_pinyin
                             }
                             description: qsTr("When translating into Chinese, use Pinyin instead of Chinese characters.")
+                        }
+
+                        ComboBox {
+                            label: qsTr("Voice options in translator mode")
+                            currentIndex: {
+                                switch (_settings.ui_translator_layout) {
+                                case Settings.UiTranslatorLayoutInTts: return 0
+                                case Settings.UiTranslatorLayoutInStt: return 1
+                                case Settings.UiTranslatorLayoutInBoth: return 2
+                                }
+                                return 0
+                            }
+                            menu: ContextMenu {
+                                MenuItem { text: qsTr("Show %1 option").arg("<i>" + qsTr("Read") + "</i>") }
+                                MenuItem { text: qsTr("Show %1 option").arg("<i>" + qsTr("Listen") + "</i>") }
+                                MenuItem { text: qsTr("Show both options") }
+                            }
+                            onCurrentIndexChanged: {
+                                if (currentIndex === 0) {
+                                    _settings.ui_translator_layout = Settings.UiTranslatorLayoutInTts
+                                } else if (currentIndex === 1) {
+                                    _settings.ui_translator_layout = Settings.UiTranslatorLayoutInStt
+                                } else if (currentIndex === 2) {
+                                    _settings.ui_translator_layout = Settings.UiTranslatorLayoutInBoth
+                                } else {
+                                    _settings.ui_translator_layout = Settings.UiTranslatorLayoutInBoth
+                                }
+                            }
+                            description: qsTr("Choose which voice options appear in translator mode.")
                         }
                     }
                 }

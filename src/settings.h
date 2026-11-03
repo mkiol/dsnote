@@ -61,8 +61,7 @@
     X(translate_ui, bool, true, true, false, true, 0, false, 0)                \
     X(import_extract_readable, bool, true, false, false, true, 0, false, 0)    \
     X(ui_appearance, settings::ui_appearance_t,                                \
-      settings::ui_appearance_t::UiAppearanceAuto, true, false, true, 0,       \
-      false, 0)                                                                \
+      settings::ui_appearance_t::UiAppearanceAuto, true, 0, 0, 0, false, 0)    \
     X(tts_pinyin, bool, true, false, false, true, 0, false, 0)                 \
     X(stt_pinyin, bool, false, false, false, true, 0, false, 0)                \
     X(mnt_pinyin, bool, false, false, false, true, 0, false, 0)                \
@@ -71,8 +70,16 @@
     X(inactivity_reset, bool, true, false, false, true, 0, true, 0)            \
     X(inactivity_reset_timeout_sec, int, 600, false, 5, 3600, 1, true, 0)      \
     X(ui_cutout_policy, settings::ui_cutout_policy_t,                          \
-      settings::ui_cutout_policy_t::UiCutoutPolicyAuto, false, false, true, 0, \
-      false, 0)
+      settings::ui_cutout_policy_t::UiCutoutPolicyAuto, false, 0, 0, 0, false, \
+      0)                                                                       \
+    X(active_tts_ref_voice, QString, QString{}, false, 0, 0, 0, false, 0)      \
+    X(active_tts_for_in_mnt_ref_voice, QString, QString{}, false, 0, 0, 0,     \
+      false, 0)                                                                \
+    X(active_tts_for_out_mnt_ref_voice, QString, QString{}, false, 0, 0, 0,    \
+      false, 0)                                                                \
+    X(ui_translator_layout, settings::ui_translator_layout_t,                  \
+      settings::ui_translator_layout_t::UiTranslatorLayoutInBoth, false, 0, 0,  \
+      0, false, 0)
 
 // name, default-value
 #define GPU_SCAN_TABLE                                          \
@@ -228,6 +235,12 @@
     X(UiCutoutPolicyAvoid, "avoid", 2, 0)
 
 // name, name_str, value
+#define UI_TRANSLATOR_LAYOUT_TABLE             \
+    X(UiTranslatorLayoutInTts, "in-tts", 0, 0) \
+    X(UiTranslatorLayoutInStt, "in-stt", 1, 0) \
+    X(UiTranslatorLayoutInBoth, "in-both", 2, 0)
+
+// name, name_str, value
 #define TRANS_RULE_TYPE_TABLE                             \
     X(TransRuleTypeNone, "none", 0, 0)                    \
     X(TransRuleTypeReplaceSimple, "replace-simple", 1, 0) \
@@ -364,16 +377,6 @@ class settings : public QSettings, public singleton<settings> {
     GPU_SCAN_TABLE
 #undef X
 
-    Q_PROPERTY(QString active_tts_ref_voice READ active_tts_ref_voice WRITE
-                   set_active_tts_ref_voice NOTIFY active_tts_ref_voice_changed)
-    Q_PROPERTY(QString active_tts_for_in_mnt_ref_voice READ
-                   active_tts_for_in_mnt_ref_voice WRITE
-                       set_active_tts_for_in_mnt_ref_voice NOTIFY
-                           active_tts_for_in_mnt_ref_voice_changed)
-    Q_PROPERTY(QString active_tts_for_out_mnt_ref_voice READ
-                   active_tts_for_out_mnt_ref_voice WRITE
-                       set_active_tts_for_out_mnt_ref_voice NOTIFY
-                           active_tts_for_out_mnt_ref_voice_changed)
     Q_PROPERTY(
         unsigned int addon_flags READ addon_flags NOTIFY addon_flags_changed)
     Q_PROPERTY(
@@ -837,6 +840,13 @@ class settings : public QSettings, public singleton<settings> {
     };
     Q_ENUM(ui_cutout_policy_t)
 
+    enum class ui_translator_layout_t : unsigned int {
+#define X(name, name_str, value, ...) name = value,
+        UI_TRANSLATOR_LAYOUT_TABLE
+#undef X
+    };
+    Q_ENUM(ui_translator_layout_t)
+
     struct voice_profile_prompt_t {
         QString name;
         QString desc;
@@ -928,6 +938,9 @@ class settings : public QSettings, public singleton<settings> {
     QString default_tts_model_for_mnt_lang(const QString &lang);
     void set_default_tts_model_for_mnt_lang(const QString &lang,
                                             const QString &value);
+    QString default_stt_model_for_mnt_lang(const QString &lang);
+    void set_default_stt_model_for_mnt_lang(const QString &lang,
+                                            const QString &value);
     int qt_style_idx() const;
     void set_qt_style_idx(int value);
     QString qt_style_name() const;
@@ -969,12 +982,6 @@ class settings : public QSettings, public singleton<settings> {
     void set_actions_api_enabled(bool value);
     bool diacritizer_enabled() const;
     void set_diacritizer_enabled(bool value);
-    QString active_tts_ref_voice() const;
-    void set_active_tts_ref_voice(const QString &value);
-    QString active_tts_for_in_mnt_ref_voice() const;
-    void set_active_tts_for_in_mnt_ref_voice(const QString &value);
-    QString active_tts_for_out_mnt_ref_voice() const;
-    void set_active_tts_for_out_mnt_ref_voice(const QString &value);
     std::underlying_type_t<addon_flags_t> addon_flags() const;
     std::underlying_type_t<system_flags_t> system_flags() const;
     std::underlying_type_t<error_flags_t> error_flags() const;
@@ -1220,6 +1227,7 @@ class settings : public QSettings, public singleton<settings> {
     void file_open_dir_changed();
     void prev_app_ver_changed();
     void default_tts_models_for_mnt_changed(const QString &lang);
+    void default_stt_models_for_mnt_changed(const QString &lang);
     void qt_style_changed();
     void restart_required_changed();
     void speech_speed_changed();
@@ -1237,9 +1245,6 @@ class settings : public QSettings, public singleton<settings> {
     void desktop_notification_details_changed();
     void actions_api_enabled_changed();
     void diacritizer_enabled_changed();
-    void active_tts_ref_voice_changed();
-    void active_tts_for_in_mnt_ref_voice_changed();
-    void active_tts_for_out_mnt_ref_voice_changed();
     void mnt_text_format_changed();
     void stt_tts_text_format_changed();
     void inline_timestamp_template_changed();
