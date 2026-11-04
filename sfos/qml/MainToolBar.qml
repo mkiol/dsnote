@@ -67,10 +67,14 @@ PullDownMenu {
         }
     }
 
-    MenuItem {
+    IconMenuItem {
         visible: _settings.translator_mode
+        icon.source: "image://theme/icon-m-transfer?" + (down ? Theme.highlightColor : Theme.primaryColor)
         enabled: !app.busy && app.mnt_configured && app.state === DsnoteApp.StateIdle
         text: qsTr("Switch languages")
+        anchors.horizontalCenter: parent.horizontalCenter
+        verticalAlignment: Text.AlignVCenter
+        width: implicitWidth
         onClicked: {
             app.switch_translated_text()
         }

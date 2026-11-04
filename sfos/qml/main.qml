@@ -82,7 +82,7 @@ ApplicationWindow {
             readonly property bool canCancelTts: !app.another_app_connected &&
                                                  (app.state === DsnoteApp.StatePlayingSpeech ||
                                                   app.state === DsnoteApp.StateWritingSpeechToFile)
-            readonly property bool panelAlwaysOpen: notepad && notepad.enabled && (app.stt_configured || app.tts_configured)
+            readonly property bool panelAlwaysOpen: false
             readonly property real notchSize: {
                 if (!verticalMode) return false
                 var avoid_cutout = false
