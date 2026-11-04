@@ -56,10 +56,15 @@ Item {
         if (app.mnt_configured) {
             mntInCombo.first.combo.currentIndex = app.active_mnt_lang_idx
             mntOutCombo.first.combo.currentIndex = app.active_mnt_out_lang_idx
-        }
-        if (app.mnt_configured && app.tts_configured) {
-            mntInCombo.second.combo.currentIndex = app.active_tts_model_for_in_mnt_idx
-            mntOutCombo.second.combo.currentIndex = app.active_tts_model_for_out_mnt_idx
+
+            if (app.tts_configured) {
+                mntInCombo.third.combo.currentIndex = app.active_tts_model_for_in_mnt_idx
+                mntOutCombo.second.combo.currentIndex = app.active_tts_model_for_out_mnt_idx
+            }
+
+            if (app.stt_configured) {
+                mntInCombo.second.combo.currentIndex = app.active_stt_model_for_in_mnt_idx
+            }
         }
 
         if (noteTextArea.textArea.text !== app.note) {
