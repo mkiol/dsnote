@@ -176,6 +176,7 @@ Item {
                     thirdVisible: _settings.ui_translator_layout === Settings.UiTranslatorLayoutInTts ||
                                   _settings.ui_translator_layout === Settings.UiTranslatorLayoutInBoth
                     verticalMode: true
+                    showExpandHint: expandHint.enabled
                     width: parent.width
                     first {
                         enabled: app.mnt_configured && app.state === DsnoteApp.StateIdle
@@ -370,5 +371,16 @@ Item {
                 }
             }
         }
+    }
+
+    HintLabel {
+        id: expandHint
+
+        enabled: _settings.translator_mode && app.mnt_configured &&
+                 (_settings.hint_done_flags & Settings.HintDoneTranslator) &&
+                 (_settings.hint_done_flags & Settings.HintDoneTranslatorExpand) == 0
+        text: qsTr("Click to show %1 and %2 options.")
+                  .arg("<i>" + qsTr("Listen") + "</i>").arg("<i>" + qsTr("Read") + "</i>")
+        onClicked: _settings.set_hint_done(Settings.HintDoneTranslatorExpand)
     }
 }

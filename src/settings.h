@@ -704,9 +704,12 @@ class settings : public QSettings, public singleton<settings> {
         HintDoneRules = 1U << 3U,
         HintDoneRefVoiceHelp = 1U << 4U,
         HintDoneRefPromptHelp = 1U << 5U,
-        HintDoneRefVoiceDefault = 1U << 6U
+        HintDoneRefVoiceDefault = 1U << 6U,
+        HintDoneTranslatorExpand = 1U << 7U,
+        HintDoneModelDownload = 1U << 8U,
     };
     Q_ENUM(hint_done_flags_t)
+
     // clang-format off
     enum hw_feature_flags_t : unsigned int {
         hw_feature_none = 0U,
@@ -1011,6 +1014,7 @@ class settings : public QSettings, public singleton<settings> {
     void set_settings_tts_engine_idx(int value);
     unsigned int hint_done_flags() const;
     Q_INVOKABLE void set_hint_done(settings::hint_done_flags_t value);
+    Q_INVOKABLE void reset_hints();
     tts_subtitles_sync_mode_t tts_subtitles_sync() const;
     void set_tts_subtitles_sync(tts_subtitles_sync_mode_t value);
     tts_tag_mode_t tts_tag_mode() const;

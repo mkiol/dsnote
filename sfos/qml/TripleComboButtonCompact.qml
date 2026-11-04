@@ -26,6 +26,7 @@ Grid {
         }
         return Math.max(first.comboItemHeight, second.comboItemHeight, third.comboItemHeight)
     }
+    property alias showExpandHint: _expandHint.visible
 
     columns: verticalMode ? 1 : 2
 
@@ -50,6 +51,17 @@ Grid {
             anchors.rightMargin: Theme.paddingSmall
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+        }
+
+        TapInteractionHint {
+            id: _expandHint
+
+            onVisibleChanged: {
+                if (visible) start()
+                else stop()
+            }
+            loops: Animation.Infinite
+            anchors.centerIn: _expandButton
         }
     }
 

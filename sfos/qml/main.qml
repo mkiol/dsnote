@@ -98,8 +98,6 @@ ApplicationWindow {
 
             allowedOrientations: Orientation.All
 
-            //_settings.device_has_cutout
-
             onNotepadChanged: update()
             onTranslatorChanged: update()
 
@@ -190,6 +188,12 @@ ApplicationWindow {
 
                     MainToolBar {
                         id: menu
+
+                        onActiveChanged: {
+                            if (active && modelDownloadHint.enabled) {
+                                _settings.set_hint_done(Settings.HintDoneModelDownload)
+                            }
+                        }
                     }
                 }
 
@@ -205,6 +209,11 @@ ApplicationWindow {
                     currentIndex: _settings.translator_mode ? 1 : 0
                     tabBarPosition: Qt.AlignTop
                     onCurrentIndexChanged: {
+                        // disable translatorHint
+                        if (translatorHint.enabled) {
+                            _settings.set_hint_done(Settings.HintDoneTranslator)
+                        }
+
                         _settings.translator_mode = currentIndex !== 0
                     }
 
@@ -313,6 +322,49 @@ ApplicationWindow {
                 VerticalScrollDecorator {
                     flickable: flick
                 }
+            }
+
+            HintLabel {
+                id: modelDownloadHint
+
+                modal: false
+                enabled: (!app.tts_configured && !app.stt_configured && !app.mnt_configured) &&
+                         (_settings.hint_done_flags & Settings.HintDoneModelDownload) == 0
+                text: qsTr("Go to the %1 to download models for the languages you intend to use.")
+                      .arg("<i>" + qsTr("Languages and Models") + "</i>")
+            }
+
+            TouchInteractionHint {
+                visible: modelDownloadHint.enabled
+                onVisibleChanged: {
+                    if (visible) start()
+                    else stop()
+                }
+                interactionMode: TouchInteraction.Pull
+                direction: TouchInteraction.Down
+                loops: Animation.Infinite
+            }
+
+            HintLabel {
+                id: translatorHint
+
+                modal: false
+                enabled: !modelDownloadHint.enabled &&
+                         (app.tts_configured || app.stt_configured || app.mnt_configured) &&
+                         (_settings.hint_done_flags & Settings.HintDoneTranslator) == 0
+                text: qsTr("Swipe left or right to switch between %1 and %2.")
+                          .arg("<i>" + qsTr("Notepad") + "</i>").arg("<i>" + qsTr("Translator") + "</i>")
+            }
+
+            TouchInteractionHint {
+                visible: translatorHint.enabled
+                onVisibleChanged: {
+                    if (visible) start()
+                    else stop()
+                }
+                interactionMode: TouchInteraction.Swipe
+                direction: _settings.translator_mode ? TouchInteraction.Right : TouchInteraction.Left
+                loops: Animation.Infinite
             }
 
             AddTextDialog {

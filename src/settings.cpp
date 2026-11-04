@@ -1090,6 +1090,11 @@ void settings::set_hint_done(settings::hint_done_flags_t value) {
     }
 }
 
+void settings::reset_hints() {
+    setValue(QStringLiteral("hint_done_flags"), 0);
+    emit hint_done_flags_changed();
+}
+
 settings::insert_mode_t settings::insert_mode() const {
     auto val = static_cast<insert_mode_t>(
         value(QStringLiteral("insert_mode"),

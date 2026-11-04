@@ -758,6 +758,14 @@ Page {
                                 }
                             }
                         }
+
+                        Button {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            text: qsTr("Reset tips and hints")
+                            onClicked: {
+                                remorse.execute(qsTr("Resetting tips and hints"), function() { _settings.reset_hints() } )
+                            }
+                        }
                     }
                 }
             }

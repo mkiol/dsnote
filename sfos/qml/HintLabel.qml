@@ -11,7 +11,7 @@ Item {
     property alias palette: label.palette
     property int bottomMargin: invert ? width/3 : Theme.paddingLarge*2
     property int topMargin: invert ? Theme.paddingLarge*2 : width/3
-
+    property bool modal: true
     signal clicked()
 
     anchors.fill: parent
@@ -41,6 +41,7 @@ Item {
     }
 
     MouseArea {
+        enabled: root.modal
         anchors.fill: parent
         onClicked: root.clicked()
     }
