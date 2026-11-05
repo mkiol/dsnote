@@ -536,13 +536,13 @@ dsnote_app::dsnote_app(QObject *parent)
             &dsnote_app::handle_desktop_notification_action_invoked);
 
     connect(&m_downloader, &downloader::progress_changed, this, [this] {
-      auto p = m_downloader.progress();
-      emit download_progress_changed(
-          p.second > 0 && m_downloader.busy() ? p.first / p.second : 0.0);
+        auto p = m_downloader.progress();
+        emit download_progress_changed(
+            p.second > 0 && m_downloader.busy() ? p.first / p.second : 0.0);
     });
     connect(&m_downloader, &downloader::busy_changed, this, [this] {
-      qDebug() << "downloader busy:" << m_downloader.busy();
-      update_service_state();
+        qDebug() << "downloader busy:" << m_downloader.busy();
+        update_service_state();
     });
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
@@ -3494,9 +3494,9 @@ void dsnote_app::play_speech_internal(QString text, const QString &input_file,
             if (text_format == settings::text_format_t::TextFormatHtml &&
                 !data.mime.contains(QLatin1String{"html"},
                                     Qt::CaseInsensitive)) {
-              // html format requested, but server mime is not html =>
-              // changing format to raw
-              text_format = settings::text_format_t::TextFormatRaw;
+                // html format requested, but server mime is not html =>
+                // changing format to raw
+                text_format = settings::text_format_t::TextFormatRaw;
             }
         }
     }
@@ -3896,10 +3896,10 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
         transtalated ? m_active_tts_model_for_out_mnt
                      : m_active_tts_model_for_in_mnt,
         dest_file, title_tag, track_tag,
-        transtalated                        ? tts_for_out_mnt_ref_voice_needed()
-                                                  ? active_tts_for_out_mnt_ref_voice()
-                                                  : QString{}
-                               : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
+        transtalated ? tts_for_out_mnt_ref_voice_needed()
+                           ? active_tts_for_out_mnt_ref_voice()
+                           : QString{}
+        : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
                                             : QString{},
         transtalated
             ? tts_for_out_mnt_ref_prompt_needed()
@@ -5001,112 +5001,114 @@ void dsnote_app::export_to_file_internal(const QString &text,
 
 dsnote_app::url_import_result_t dsnote_app::import_text_file(
     const QString &input_file, bool replace) {
-  QFile file{input_file};
-  if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-    qWarning() << "failed to open file for read:" << input_file;
-    return url_import_result_t::error_import_text_error;
-  }
-
-  make_undo();
-
-  // TODO: Do not assume that data is always UTF-8
-  auto n = QString::fromUtf8(file.readAll());
-
-  auto ext = QFileInfo{input_file}.suffix();
-  if (settings::instance()->import_extract_readable() &&
-      ext.compare("html", Qt::CaseInsensitive) == 0) {
-    qDebug() << "extracting readable content from html web page";
-    // TODO: Do not assume data is always UTF-8
-    std::string text_readable = n.toStdString();
-    if (text_tools::extract_readable_content(text_readable)) {
-      n = QString::fromStdString(text_readable);
+    QFile file{input_file};
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "failed to open file for read:" << input_file;
+        return url_import_result_t::error_import_text_error;
     }
-  }
 
-  if (replace) {
-    set_note(n);
-    set_last_cursor_position(n.size());
-  } else {
-    auto nn = insert_to_note(settings::instance()->note(), std::move(n), "",
-                             settings::instance()->insert_mode(), -1);
-    set_note(nn.first);
-    set_last_cursor_position(nn.second);
-  }
+    make_undo();
 
-  return url_import_result_t::ok_import_text;
+    // TODO: Do not assume that data is always UTF-8
+    auto n = QString::fromUtf8(file.readAll());
+
+    auto ext = QFileInfo{input_file}.suffix();
+    if (settings::instance()->import_extract_readable() &&
+        ext.compare("html", Qt::CaseInsensitive) == 0) {
+        qDebug() << "extracting readable content from html web page";
+        // TODO: Do not assume data is always UTF-8
+        std::string text_readable = n.toStdString();
+        if (text_tools::extract_readable_content(text_readable)) {
+            n = QString::fromStdString(text_readable);
+        }
+    }
+
+    if (replace) {
+        set_note(n);
+        set_last_cursor_position(n.size());
+    } else {
+        auto nn = insert_to_note(settings::instance()->note(), std::move(n), "",
+                                 settings::instance()->insert_mode(), -1);
+        set_note(nn.first);
+        set_last_cursor_position(nn.second);
+    }
+
+    return url_import_result_t::ok_import_text;
 }
 
 dsnote_app::url_import_result_t dsnote_app::import_text_url(
     const QUrl &input_url, bool replace) {
-  auto data = download_content(input_url, QStringLiteral("text"));
-  switch (data.error) {
-    case downloader::error_t::no_error:
-      break;
-    case downloader::error_t::aborted:
-      qWarning() << "invalid content type of url:" << input_url << data.mime;
-      return url_import_result_t::error_import_url_invalid_error;
-    case downloader::error_t::other:
-      qWarning() << "can't download:" << input_url;
-      return url_import_result_t::error_import_url_download_error;
-  }
-
-  make_undo();
-
-  // TODO: Do not assume that data is always UTF-8
-  auto n = QString::fromUtf8(data.bytes);
-
-  if (settings::instance()->import_extract_readable() &&
-      data.mime.contains(QLatin1String{"html"}, Qt::CaseInsensitive)) {
-    qDebug() << "extracting readable content from html web page";
-    // TODO: Do not assume data is always UTF-8
-    std::string text_readable = n.toStdString();
-    if (text_tools::extract_readable_content(text_readable)) {
-      n = QString::fromStdString(text_readable);
+    auto data = download_content(input_url, QStringLiteral("text"));
+    switch (data.error) {
+        case downloader::error_t::no_error:
+            break;
+        case downloader::error_t::aborted:
+            qWarning() << "invalid content type of url:" << input_url
+                       << data.mime;
+            return url_import_result_t::error_import_url_invalid_error;
+        case downloader::error_t::other:
+            qWarning() << "can't download:" << input_url;
+            return url_import_result_t::error_import_url_download_error;
     }
-  }
 
-  if (replace) {
-    set_note(n);
-    set_last_cursor_position(n.size());
-  } else {
-    auto nn = insert_to_note(settings::instance()->note(), std::move(n), "",
-                             settings::instance()->insert_mode(), -1);
-    set_note(nn.first);
-    set_last_cursor_position(nn.second);
-  }
+    make_undo();
 
-  return url_import_result_t::ok_import_text;
+    // TODO: Do not assume that data is always UTF-8
+    auto n = QString::fromUtf8(data.bytes);
+
+    if (settings::instance()->import_extract_readable() &&
+        data.mime.contains(QLatin1String{"html"}, Qt::CaseInsensitive)) {
+        qDebug() << "extracting readable content from html web page";
+        // TODO: Do not assume data is always UTF-8
+        std::string text_readable = n.toStdString();
+        if (text_tools::extract_readable_content(text_readable)) {
+            n = QString::fromStdString(text_readable);
+        }
+    }
+
+    if (replace) {
+        set_note(n);
+        set_last_cursor_position(n.size());
+    } else {
+        auto nn = insert_to_note(settings::instance()->note(), std::move(n), "",
+                                 settings::instance()->insert_mode(), -1);
+        set_note(nn.first);
+        set_last_cursor_position(nn.second);
+    }
+
+    return url_import_result_t::ok_import_text;
 }
 
 void dsnote_app::import_file(const QString &file_path, int stream_index,
                              bool replace) {
-  auto result = import_url_internal(QUrl::fromLocalFile(file_path),
-                                    stream_index, replace);
+    auto result = import_url_internal(QUrl::fromLocalFile(file_path),
+                                      stream_index, replace);
 
-  qDebug() << "import file result:" << result;
+    qDebug() << "import file result:" << result;
 
-  switch (result) {
-    case dsnote_app::url_import_result_t::ok_streams_selection:
-    case dsnote_app::url_import_result_t::ok_import_audio:
-    case dsnote_app::url_import_result_t::ok_import_subtitles:
-    case dsnote_app::url_import_result_t::ok_import_text:
-      break;
-    case dsnote_app::url_import_result_t::error_requested_stream_not_found:
-    case dsnote_app::url_import_result_t::error_no_supported_streams:
-      reset_urls_queue();
-      emit error(error_t::ErrorImportFileNoStreams);
-      break;
-    case dsnote_app::url_import_result_t::error_import_audio_stt_not_configured:
-      reset_urls_queue();
-      emit error(error_t::ErrorSttNotConfigured);
-      break;
-    case dsnote_app::url_import_result_t::error_import_subtitles_error:
-    case dsnote_app::url_import_result_t::error_import_text_error:
-    case dsnote_app::url_import_result_t::error_import_url_invalid_error:
-    case dsnote_app::url_import_result_t::error_import_url_download_error:
-      reset_urls_queue();
-      emit error(error_t::ErrorImportFileGeneral);
-      break;
+    switch (result) {
+        case dsnote_app::url_import_result_t::ok_streams_selection:
+        case dsnote_app::url_import_result_t::ok_import_audio:
+        case dsnote_app::url_import_result_t::ok_import_subtitles:
+        case dsnote_app::url_import_result_t::ok_import_text:
+            break;
+        case dsnote_app::url_import_result_t::error_requested_stream_not_found:
+        case dsnote_app::url_import_result_t::error_no_supported_streams:
+            reset_urls_queue();
+            emit error(error_t::ErrorImportFileNoStreams);
+            break;
+        case dsnote_app::url_import_result_t::
+            error_import_audio_stt_not_configured:
+            reset_urls_queue();
+            emit error(error_t::ErrorSttNotConfigured);
+            break;
+        case dsnote_app::url_import_result_t::error_import_subtitles_error:
+        case dsnote_app::url_import_result_t::error_import_text_error:
+        case dsnote_app::url_import_result_t::error_import_url_invalid_error:
+        case dsnote_app::url_import_result_t::error_import_url_download_error:
+            reset_urls_queue();
+            emit error(error_t::ErrorImportFileGeneral);
+            break;
     }
 }
 
@@ -5247,8 +5249,9 @@ dsnote_app::url_import_result_t dsnote_app::import_url_internal(
 
             if (media_info->audio_streams.empty() &&
                 media_info->subtitles_streams.empty()) {
-              qWarning() << "file does not contain audio or subtitles streams";
-              return url_import_result_t::error_no_supported_streams;
+                qWarning()
+                    << "file does not contain audio or subtitles streams";
+                return url_import_result_t::error_no_supported_streams;
             }
 
             if (stream_index < 0) {
@@ -6230,19 +6233,19 @@ QString dsnote_app::download_license(const QUrl &url) {
 
 downloader::data_t dsnote_app::download_content(
     const QUrl &url, const QString &expected_content_type_pattern) {
-  downloader::data_t data{};
+    downloader::data_t data{};
 
-  if (url.isValid() && (url.scheme() == "http" || url.scheme() == "https")) {
-    qDebug() << "downloading content:" << url.toString();
+    if (url.isValid() && (url.scheme() == "http" || url.scheme() == "https")) {
+        qDebug() << "downloading content:" << url.toString();
 
-    data = m_downloader.download_data(url, expected_content_type_pattern);
+        data = m_downloader.download_data(url, expected_content_type_pattern);
 
-    qDebug() << "downloaded content:" << data.mime << data.bytes.size();
-  } else {
-    qDebug() << "invalid content url to download:" << url;
-  }
+        qDebug() << "downloaded content:" << data.mime << data.bytes.size();
+    } else {
+        qDebug() << "invalid content url to download:" << url;
+    }
 
-  return data;
+    return data;
 }
 
 static bool has_model_options(const QVariantMap &map, const QString &id,
@@ -6897,11 +6900,11 @@ dsnote_app::action_when_busy_policy_from_str(const QString &policy_str) {
 
 settings::text_format_t dsnote_app::text_format_from_action_str(
     const QString &action_text_format_str, bool from_url, bool for_stt) {
-  if (action_text_format_str.isEmpty() ||
-      action_text_format_str.compare("auto", Qt::CaseInsensitive) == 0) {
-    return from_url && !for_stt ? settings::text_format_t::TextFormatHtml
-                                : settings::text_format_t::TextFormatRaw;
-  }
+    if (action_text_format_str.isEmpty() ||
+        action_text_format_str.compare("auto", Qt::CaseInsensitive) == 0) {
+        return from_url && !for_stt ? settings::text_format_t::TextFormatHtml
+                                    : settings::text_format_t::TextFormatRaw;
+    }
 
     auto format = [&action_text_format_str] {
 #define X(name, str, type, ...)                                          \
@@ -6923,19 +6926,19 @@ settings::text_format_t dsnote_app::text_format_from_action_str(
 }
 
 QString dsnote_app::clipboard_if_url() const {
-  auto url = QUrl{QGuiApplication::clipboard()->text()};
-  if (url.isValid() &&
-      (url.scheme().compare("http", Qt::CaseInsensitive) == 0 ||
-       url.scheme().compare("https", Qt::CaseInsensitive) == 0)) {
-    return url.toString();
-  }
+    auto url = QUrl{QGuiApplication::clipboard()->text()};
+    if (url.isValid() &&
+        (url.scheme().compare("http", Qt::CaseInsensitive) == 0 ||
+         url.scheme().compare("https", Qt::CaseInsensitive) == 0)) {
+        return url.toString();
+    }
 
-  return {};
+    return {};
 }
 
 bool dsnote_app::is_valid_url(const QString &text) const {
-  auto url = QUrl{text};
-  return url.isValid() &&
-         (url.scheme().compare("http", Qt::CaseInsensitive) == 0 ||
-          url.scheme().compare("https", Qt::CaseInsensitive) == 0);
+    auto url = QUrl{text};
+    return url.isValid() &&
+           (url.scheme().compare("http", Qt::CaseInsensitive) == 0 ||
+            url.scheme().compare("https", Qt::CaseInsensitive) == 0);
 }
