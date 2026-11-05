@@ -18,6 +18,7 @@ ApplicationWindow {
     id: appWin
 
     property var addTextDialog: null
+    property bool showingModelDownloadHint: false
 
     allowedOrientations: Orientation.All
     initialPage: mainPage
@@ -332,6 +333,8 @@ ApplicationWindow {
                          (_settings.hint_done_flags & Settings.HintDoneModelDownload) == 0
                 text: qsTr("Go to the %1 to download models for the languages you intend to use.")
                       .arg("<i>" + qsTr("Languages and Models") + "</i>")
+                onEnabledChanged: appWin.showingModelDownloadHint = enabled
+                Component.onCompleted:  appWin.showingModelDownloadHint = enabled
             }
 
             TouchInteractionHint {

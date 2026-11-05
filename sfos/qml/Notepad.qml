@@ -20,6 +20,9 @@ Item {
     property bool readOnly: false
     readonly property double textAreaHeight: root.maxHeight - listenReadCombos.height
     readonly property bool textHighlighted: noteTextArea.textArea.highlighted
+    readonly property bool showingPlaceholder: !appWin.showingModelDownloadHint && !app.busy && !service.busy && app.connected &&
+                                               app.note.length === 0 && !app.stt_configured && !app.tts_configured &&
+                                               !_noteTextArea.textArea.highlighted
 
     Connections {
         target: app
@@ -117,9 +120,7 @@ Item {
             }
 
             PlaceholderLabel {
-                enabled: !app.busy && !service.busy && app.connected &&
-                         app.note.length === 0 && !app.stt_configured && !app.tts_configured &&
-                         !_noteTextArea.textArea.highlighted
+                enabled: root.showingPlaceholder
                 text: qsTr("Neither Speech to Text nor Text to Speech model has been set up yet.") + " " +
                       qsTr("Go to the %1 to download models for the languages you intend to use.")
                         .arg("<i>" + qsTr("Languages and Models") + "</i>")
@@ -129,7 +130,7 @@ Item {
         DuoComboButton {
             id: listenReadCombos
 
-            visible: !root.textHighlighted
+            visible: !root.showingPlaceholder && !root.textHighlighted
             verticalMode: root.verticalMode
             width: parent.width
             first {

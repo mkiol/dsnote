@@ -78,7 +78,7 @@ Item {
     }
 
     PlaceholderLabel {
-        enabled: !app.mnt_configured
+        enabled: !appWin.showingModelDownloadHint && !app.mnt_configured
         text: qsTr("Translator model has not been set up yet.") + " " +
               qsTr("Go to the %1 to download models for the languages you intend to use.")
                 .arg("<i>" + qsTr("Languages and Models") + "</i>")
