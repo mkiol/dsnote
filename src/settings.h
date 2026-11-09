@@ -51,6 +51,10 @@
     X(hotkeys_enabled, bool, false, false, false, true, 0, false, 0)           \
     X(mtag, bool, false, false, false, true, 0, false, 0)                      \
     X(use_toggle_for_hotkey, bool, true, false, false, true, 0, false, 0)      \
+    X(hotkey_stt_toggle_on_key_release, bool, false, false, false, true, 0,    \
+      false, 0)                                                                \
+    X(hotkey_tts_toggle_on_key_release, bool, false, false, false, true, 0,    \
+      false, 0)                                                                \
     X(window_size_ratio, double, 0.6, false, 0.1, 1.0, 0.1, false, 0)          \
     X(text_to_window_method, settings::text_to_window_method_t,                \
       settings::text_to_window_method_t::TextToWindowMethodTyping, false, 0,   \
@@ -81,7 +85,10 @@
       settings::ui_translator_layout_t::UiTranslatorLayoutInBoth, false, 0, 0, \
       0, false, 0)                                                             \
     X(colors_scheme_dir, QString, QString{"/usr/share/color-schemes"}, true,   \
-      0, 0, 0, false, 0)
+      0, 0, 0, false, 0)                                                       \
+    X(speech_mode, settings::speech_mode_t,                                    \
+      settings::speech_mode_t::SpeechSingleSentence, false, 0, 0, 0, false, 0) \
+    X(speech_speed, unsigned int, 10U, false, 1U, 20U, 1U, false, 0)
 
 // name, default-value
 #define GPU_SCAN_TABLE                                          \
@@ -93,68 +100,69 @@
     X(vulkan_igpu, true)                                        \
     X(vulkan_cpu, false) /* will work but extremely slow */
 
-// id, action-name, description, default-key-combination, trigger-on-deactivate
+// 1-name, 2-name_str, 3-desc, 4-default-key-combination, 5-type,
+// 6-trigger-on-deactivate, 7-name_toggle, 8-dummy
 #define HOTKEY_TABLE                                                           \
     X(start_listening, "start-listening",                                      \
       QCoreApplication::translate("SettingsPage", "Start listening"),          \
-      "Ctrl+Alt+Shift+L", false)                                               \
+      "Ctrl+Alt+Shift+L", stt, false, stop_listening, 0)                       \
     X(start_listening_translate, "start-listening-translate",                  \
       QCoreApplication::translate("SettingsPage",                              \
                                   "Start listening, always translate"),        \
-      "", false)                                                               \
+      "", stt, false, stop_listening, 0)                                       \
     X(start_listening_active_window, "start-listening-active-window",          \
       QCoreApplication::translate("SettingsPage",                              \
                                   "Start listening, text to active window"),   \
-      "Ctrl+Alt+Shift+K", false)                                               \
+      "Ctrl+Alt+Shift+K", stt, false, stop_listening, 0)                       \
     X(start_listening_translate_active_window,                                 \
       "start-listening-translate-active-window",                               \
       QCoreApplication::translate(                                             \
           "SettingsPage",                                                      \
           "Start listening, always translate, text to active window"),         \
-      "", false)                                                               \
+      "", stt, false, stop_listening, 0)                                       \
     X(start_listening_clipboard, "start-listening-clipboard",                  \
       QCoreApplication::translate("SettingsPage",                              \
                                   "Start listening, text to clipboard"),       \
-      "Ctrl+Alt+Shift+J", false)                                               \
+      "Ctrl+Alt+Shift+J", stt, false, stop_listening, 0)                       \
     X(start_listening_translate_clipboard,                                     \
       "start-listening-translate-clipboard",                                   \
       QCoreApplication::translate(                                             \
           "SettingsPage",                                                      \
           "Start listening, always translate, text to clipboard"),             \
-      "", false)                                                               \
+      "", stt, false, stop_listening, 0)                                       \
     X(stop_listening, "stop-listening",                                        \
       QCoreApplication::translate("SettingsPage", "Stop listening"),           \
-      "Ctrl+Alt+Shift+S", false)                                               \
+      "Ctrl+Alt+Shift+S", stt, false, none, 0)                                 \
     X(start_reading, "start-reading",                                          \
       QCoreApplication::translate("SettingsPage", "Start reading"),            \
-      "Ctrl+Alt+Shift+R", false)                                               \
+      "Ctrl+Alt+Shift+R", tts, false, cancel, 0)                               \
     X(start_reading_clipboard, "start-reading-clipboard",                      \
       QCoreApplication::translate("SettingsPage",                              \
                                   "Start reading text from clipboard"),        \
-      "Ctrl+Alt+Shift+E", false)                                               \
+      "Ctrl+Alt+Shift+E", tts, false, cancel, 0)                               \
     X(start_reading_active_window, "start-reading-active-window",              \
       QCoreApplication::translate(                                             \
           "SettingsPage", "Start reading text selected in active window"),     \
-      "Ctrl+Alt+?", true)                                                      \
+      "Ctrl+Alt+?", tts, true, none, 0)                                        \
     X(pause_resume_reading, "pause-resume-reading",                            \
       QCoreApplication::translate("SettingsPage", "Pause/Resume reading"),     \
-      "Ctrl+Alt+Shift+P", false)                                               \
+      "Ctrl+Alt+Shift+P", tts, false, pause_resume_reading, 0)                 \
     X(cancel, "cancel", QCoreApplication::translate("SettingsPage", "Cancel"), \
-      "Ctrl+Alt+Shift+C", false)                                               \
+      "Ctrl+Alt+Shift+C", other, false, none, 0)                               \
     X(switch_to_next_stt_model, "switch-to-next-stt-model",                    \
       QCoreApplication::translate("SettingsPage", "Switch to next STT model"), \
-      "Ctrl+Alt+Shift+B", false)                                               \
+      "Ctrl+Alt+Shift+B", other, false, none, 0)                               \
     X(switch_to_next_tts_model, "switch-to-next-tts-model",                    \
       QCoreApplication::translate("SettingsPage", "Switch to next TTS model"), \
-      "Ctrl+Alt+Shift+M", false)                                               \
+      "Ctrl+Alt+Shift+M", other, false, none, 0)                               \
     X(switch_to_prev_stt_model, "switch-to-prev-stt-model",                    \
       QCoreApplication::translate("SettingsPage",                              \
                                   "Switch to previous STT model"),             \
-      "Ctrl+Alt+Shift+V", false)                                               \
+      "Ctrl+Alt+Shift+V", other, false, none, 0)                               \
     X(switch_to_prev_tts_model, "switch-to-prev-tts-model",                    \
       QCoreApplication::translate("SettingsPage",                              \
                                   "Switch to previous TTS model"),             \
-      "Ctrl+Alt+Shift+N", false)
+      "Ctrl+Alt+Shift+N", other, false, none, 0)
 
 // name, name_str
 #define ACTION_TABLE                                                     \
@@ -272,8 +280,6 @@ class settings : public QSettings, public singleton<settings> {
     SETTINGS_PROPERTY_TABLE
 #undef X
     Q_PROPERTY(QString note READ note WRITE set_note NOTIFY note_changed)
-    Q_PROPERTY(speech_mode_t speech_mode READ speech_mode WRITE set_speech_mode
-                   NOTIFY speech_mode_changed)
     Q_PROPERTY(insert_mode_t insert_mode READ insert_mode WRITE set_insert_mode
                    NOTIFY insert_mode_changed)
     Q_PROPERTY(mode_t mode READ mode WRITE set_mode NOTIFY mode_changed)
@@ -332,8 +338,6 @@ class settings : public QSettings, public singleton<settings> {
                    NOTIFY qt_style_changed)
     Q_PROPERTY(bool restart_required READ restart_required NOTIFY
                    restart_required_changed)
-    Q_PROPERTY(unsigned int speech_speed READ speech_speed WRITE
-                   set_speech_speed NOTIFY speech_speed_changed)
     Q_PROPERTY(QFont notepad_font READ notepad_font WRITE set_notepad_font
                    NOTIFY notepad_font_changed)
     Q_PROPERTY(text_file_format_t text_file_format READ text_file_format WRITE
@@ -354,7 +358,7 @@ class settings : public QSettings, public singleton<settings> {
                    set_hotkeys_type NOTIFY hotkeys_type_changed)
     Q_PROPERTY(QVariantList hotkeys_table READ hotkeys_table NOTIFY
                    hotkeys_table_changed)
-#define X(name, id, desc, keys, on_deactivate)                \
+#define X(name, ...)                                          \
     Q_PROPERTY(QString hotkey_##name READ hotkey_##name WRITE \
                    set_hotkey_##name NOTIFY hotkeys_changed)
     HOTKEY_TABLE
@@ -561,7 +565,7 @@ class settings : public QSettings, public singleton<settings> {
     enum class speech_mode_t {
         SpeechAutomatic = 0,
         SpeechManual = 1,
-        SpeechSingleSentence = 2
+        SpeechSingleSentence = 2,
     };
     Q_ENUM(speech_mode_t)
     friend QDebug operator<<(QDebug d, speech_mode_t speech_mode);
@@ -902,10 +906,6 @@ class settings : public QSettings, public singleton<settings> {
 #undef X
     QString note() const;
     void set_note(const QString &value);
-    speech_mode_t speech_mode() const;
-    void set_speech_mode(speech_mode_t value);
-    unsigned int speech_speed() const;
-    void set_speech_speed(unsigned int value);
     insert_mode_t insert_mode() const;
     void set_insert_mode(insert_mode_t value);
     mode_t mode() const;
@@ -981,7 +981,7 @@ class settings : public QSettings, public singleton<settings> {
     QVariantList hotkeys_table() const;
     Q_INVOKABLE void reset_hotkey(const QString &id);
     Q_INVOKABLE void set_hotkey(const QString &id, const QString &value);
-#define X(name, id, desc, keys, on_deactivate)    \
+#define X(name, ...)                              \
     QString hotkey_##name() const;                \
     void set_hotkey_##name(const QString &value); \
     Q_INVOKABLE void reset_hotkey_##name();
@@ -1231,7 +1231,6 @@ class settings : public QSettings, public singleton<settings> {
 #define X(name, _) void hw_scan_##name##_changed();
     GPU_SCAN_TABLE
 #undef X
-    void speech_mode_changed();
     void note_changed();
     void insert_mode_changed();
     void mode_changed();
@@ -1244,7 +1243,6 @@ class settings : public QSettings, public singleton<settings> {
     void default_stt_models_for_mnt_changed(const QString &lang);
     void qt_style_changed();
     void restart_required_changed();
-    void speech_speed_changed();
     void notepad_font_changed();
     void text_file_format_changed();
     void video_file_format_changed();

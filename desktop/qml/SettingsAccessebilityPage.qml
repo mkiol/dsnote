@@ -93,6 +93,22 @@ ColumnLayout {
         }
     }
 
+    CheckBoxSetting {
+        indends: 1
+        visible: _settings.hotkeys_enabled && app.feature_hotkeys
+        optionName: "hotkey_stt_toggle_on_key_release"
+        text: qsTranslate("SettingsPage", "Hold behavior for %1 shortcuts").arg("<i>" + qsTranslate("SettingsPage", "Listen") + "</i>")
+        toolTipText: qsTranslate("SettingsPage", "Hold the shortcut key to start listening, release it to stop.")
+    }
+
+    CheckBoxSetting {
+        indends: 1
+        visible: _settings.hotkeys_enabled && app.feature_hotkeys
+        optionName: "hotkey_tts_toggle_on_key_release"
+        text: qsTranslate("SettingsPage", "Hold behavior for %1 shortcuts").arg("<i>" + qsTranslate("SettingsPage", "Read") + "</i>")
+        toolTipText: qsTranslate("SettingsPage", "Hold the shortcut key to start reading, release it to cancel.")
+    }
+
     CheckBox {
         checked: _settings.actions_api_enabled
         text: qsTranslate("SettingsPage", "Allow external applications to invoke actions")
@@ -158,17 +174,10 @@ ColumnLayout {
                         .arg("<i>ydotool</i>")) : "")
     }
 
-    CheckBox {
-        checked: _settings.use_toggle_for_hotkey
+    CheckBoxSetting {
+        optionName: "use_toggle_for_hotkey"
         text: qsTranslate("SettingsPage", "Toggle behavior for actions")
-        onCheckedChanged: {
-            _settings.use_toggle_for_hotkey = checked
-        }
-
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.visible: hovered
-        ToolTip.text: qsTranslate("SettingsPage", "Start listening/reading shortcuts or actions will also stop listening/reading if they are triggered while listening/reading is active.")
-        hoverEnabled: true
+        toolTipText: qsTranslate("SettingsPage", "Start listening/reading shortcuts or actions will also stop listening/reading if they are triggered while listening/reading is active.")
     }
 
     Item {

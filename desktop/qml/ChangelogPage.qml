@@ -49,6 +49,8 @@ DialogPage {
             An action can be triggered via DBus call or with command-line option. You can enable <i>Actions</i> in the settings
             (<i>Settings</i> &rarr; <i>Accessibility</i> &rarr; <i>Allow external applications to invoke actions</i>).</li>
         <li>New action <i>transcribe-file</i>. Use this action to transcribe a file.</li>
+        <li>Use a global shortcut as a push-to-talk or push-to-read button (hold to start, release to stop).
+            To enable use <i>Settings</i> &rarr; <i>Accessibility</i> &rarr; <i>Hold behavior for Listen/Read shortcut</i> option.</li>
         </ul>
         <p>" + qsTr("Speech to Text") + "</p>
         <ul>

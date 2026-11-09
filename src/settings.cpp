@@ -900,34 +900,6 @@ void settings::set_mode(mode_t value) {
     }
 }
 
-settings::speech_mode_t settings::speech_mode() const {
-    return static_cast<speech_mode_t>(
-        value(QStringLiteral("speech_mode"),
-              static_cast<int>(speech_mode_t::SpeechSingleSentence))
-            .toInt());
-}
-
-void settings::set_speech_mode(speech_mode_t value) {
-    if (speech_mode() != value) {
-        setValue(QStringLiteral("speech_mode"), static_cast<int>(value));
-        emit speech_mode_changed();
-    }
-}
-
-unsigned int settings::speech_speed() const {
-    return std::clamp(value(QStringLiteral("speech_speed2"), 10U).toUInt(), 1U,
-                      20U);
-}
-
-void settings::set_speech_speed(unsigned int value) {
-    value = std::clamp(value, 1U, 20U);
-
-    if (speech_speed() != value) {
-        setValue(QStringLiteral("speech_speed2"), static_cast<int>(value));
-        emit speech_speed_changed();
-    }
-}
-
 QString settings::note() const {
     if (keep_last_note())
         return value(QStringLiteral("note"), {}).toString();
@@ -2328,47 +2300,47 @@ void settings::set_num_threads(int value) {
 
 QVariantList settings::hotkeys_table() const {
     QVariantList table;
-#define X(name, id, desc, key, on_deactivate) \
-    table.push_back(QStringList{id, desc, hotkey_##name()});
+#define X(xname, xname_str, xdesc, ...) \
+    table.push_back(QStringList{xname_str, xdesc, hotkey_##xname()});
     HOTKEY_TABLE
 #undef X
     return table;
 }
 
 void settings::reset_hotkey(const QString& requested_id) {
-#define X(name, id, desc, key, on_deactivate) \
-    if (requested_id == id) {                 \
-        reset_hotkey_##name();                \
-        return;                               \
+#define X(xname, xname_str, ...)     \
+    if (requested_id == xname_str) { \
+        reset_hotkey_##xname();      \
+        return;                      \
     }
     HOTKEY_TABLE
 #undef X
 }
 
 void settings::set_hotkey(const QString& requested_id, const QString& value) {
-#define X(name, id, desc, key, on_deactivate) \
-    if (requested_id == id) {                 \
-        set_hotkey_##name(value);             \
-        return;                               \
+#define X(xname, xname_str, ...)     \
+    if (requested_id == xname_str) { \
+        set_hotkey_##xname(value);   \
+        return;                      \
     }
     HOTKEY_TABLE
 #undef X
 }
 
-#define X(name, id, desc, _key, on_deactivate)                             \
-    QString settings::hotkey_##name() const {                              \
-        return value(QStringLiteral("hotkey_" #name), QLatin1String{_key}) \
-            .toString();                                                   \
-    }                                                                      \
-    void settings::set_hotkey_##name(const QString& value) {               \
-        if (value != hotkey_##name()) {                                    \
-            setValue(QStringLiteral("hotkey_" #name), value);              \
-            emit hotkeys_changed();                                        \
-        }                                                                  \
-    }                                                                      \
-    void settings::reset_hotkey_##name() {                                 \
-        set_hotkey_##name(QLatin1String{_key});                            \
-        emit hotkeys_table_changed();                                      \
+#define X(xname, xname_str, xdesc, xkey, ...)                               \
+    QString settings::hotkey_##xname() const {                              \
+        return value(QStringLiteral("hotkey_" #xname), QLatin1String{xkey}) \
+            .toString();                                                    \
+    }                                                                       \
+    void settings::set_hotkey_##xname(const QString& value) {               \
+        if (value != hotkey_##xname()) {                                    \
+            setValue(QStringLiteral("hotkey_" #xname), value);              \
+            emit hotkeys_changed();                                         \
+        }                                                                   \
+    }                                                                       \
+    void settings::reset_hotkey_##xname() {                                 \
+        set_hotkey_##xname(QLatin1String{xkey});                            \
+        emit hotkeys_table_changed();                                       \
     }
 HOTKEY_TABLE
 #undef X

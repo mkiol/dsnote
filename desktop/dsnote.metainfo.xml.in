@@ -127,6 +127,7 @@
       <li>New action 'start-reading-url'. Use this action to have Speech Note read an HTTP web page.
         An action can be triggered via DBus call or with command-line option.</li>
       <li>New action 'transcribe-file'. Use this action to transcribe a file with support for 'output-file' param.</li>
+      <li>Use a global shortcut as a push-to-talk or push-to-read button (hold to start, release to stop)</li>
       </ul>
       <p>Speech to Text:</p>
       <ul>

@@ -273,8 +273,7 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
     if (vad_status) {
         LOGD("vad: speech detected");
 
-        if (m_config.speech_mode != speech_mode_t::manual &&
-            m_config.speech_mode != speech_mode_t::single_sentence)
+        if (m_config.speech_mode != speech_mode_t::single_sentence)
             set_speech_detection_status(
                 speech_detection_status_t::speech_detected);
 
@@ -313,9 +312,10 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
 
     auto final_decode = [&] {
         if (eof) return true;
-        if (m_config.speech_mode != speech_mode_t::manual &&
-            m_intermediate_text && !m_intermediate_text->empty() && !vad_status)
+        if (m_intermediate_text && !m_intermediate_text->empty() &&
+            !vad_status) {
             return true;
+        }
         return false;
     }();
 
@@ -338,13 +338,13 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
         m_speech_buf.clear();
 
         if (final_decode)
-            flush(!eof && m_config.speech_mode == speech_mode_t::automatic
+            flush(!eof && m_config.speech_mode == speech_mode_t::continuous
                       ? flush_t::regular
                       : flush_t::eof);
     }
 
     if (!vad_status && !final_decode &&
-        m_config.speech_mode == speech_mode_t::automatic)
+        m_config.speech_mode == speech_mode_t::continuous)
         set_speech_detection_status(speech_detection_status_t::no_speech);
 
     free_buf();

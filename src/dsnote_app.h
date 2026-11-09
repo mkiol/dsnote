@@ -402,11 +402,6 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void cancel_if_internal();
     Q_INVOKABLE void listen();
     Q_INVOKABLE void listen_mnt();
-    Q_INVOKABLE void listen_translate();
-    Q_INVOKABLE void listen_to_active_window();
-    Q_INVOKABLE void listen_translate_to_active_window();
-    Q_INVOKABLE void listen_to_clipboard();
-    Q_INVOKABLE void listen_translate_to_clipboard();
     Q_INVOKABLE void stop_listen();
     Q_INVOKABLE void play_speech();
     Q_INVOKABLE void play_speech_selected(int start, int end);
@@ -978,7 +973,10 @@ class dsnote_app : public QObject {
     QString translated_text() const;
     void set_translated_text(const QString text);
     void listen_internal(const QString &model_id,
-                         stt_translate_req_t translate_req);
+                         stt_translate_req_t translate_req,
+                         settings::speech_mode_t speech_mode,
+                         text_destination_t text_destination,
+                         stt_request_t stt_request_type);
     void speech_to_file_internal(QString text, const QString &input_file,
                                  const QUrl &input_url, const QString &model_id,
                                  const QString &dest_file,

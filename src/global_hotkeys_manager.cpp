@@ -35,9 +35,15 @@ global_hotkeys_manager::global_hotkeys_manager(QObject *parent)
     connect(settings::instance(), &settings::hotkeys_changed, this,
             &global_hotkeys_manager::enable_or_disable);
 
-    // create map which hotkey should be triggered on deactivation
-#define X(name, id, desc, key, on_deactivate) \
-    m_hotkey_on_deactivate_map.insert(id, on_deactivate);
+#define X(xname, xname_str, xdesc, xkey, xtype, xdeact, xname_toggle, ...)     \
+    m_hotkey_map.insert(hotkey_t::xname, {                                     \
+                                             .hotkey = hotkey_t::xname,        \
+                                             .action_name = xname_str,         \
+                                             .type = hotkey_type_t::xtype,     \
+                                             .toggle = hotkey_t::xname_toggle, \
+                                             .trigger_on_deactivate = xdeact,  \
+                                         });                                   \
+    m_action_to_hotkey_map.insert(QStringLiteral(xname_str), hotkey_t::xname);
     HOTKEY_TABLE
 #undef X
 
@@ -104,36 +110,107 @@ void global_hotkeys_manager::disable_portal() {
     disconnect(m_portal_deactivated_conn);
 }
 
+std::pair<QString, /*toggle enabled*/ bool>
+global_hotkeys_manager::map_action_to_final_action(const QString &action_id,
+                                                   bool activated) const {
+    std::pair<QString, bool> final_action_id{{}, false};
+
+    auto it = m_action_to_hotkey_map.find(action_id);
+    if (it == m_action_to_hotkey_map.cend()) {
+        LOGW("unknown action-id: " << action_id);
+        return final_action_id;
+    }
+
+    auto it_info = m_hotkey_map.find(it.value());
+    if (it_info == m_hotkey_map.cend()) {
+        LOGE("unknown hotkey: action-id=" << action_id << ", hotkey="
+                                          << static_cast<int>(it.value()));
+        return final_action_id;
+    }
+
+    const auto &info = it_info.value();
+
+    auto hotkey_toggle = hotkey_t::none;
+    if (info.toggle != hotkey_t::none) {
+        switch (info.type) {
+            case hotkey_type_t::stt:
+                if (settings::instance()->hotkey_stt_toggle_on_key_release()) {
+                    hotkey_toggle = info.toggle;
+                }
+                break;
+            case hotkey_type_t::tts:
+                if (settings::instance()->hotkey_tts_toggle_on_key_release()) {
+                    hotkey_toggle = info.toggle;
+                }
+                break;
+            case hotkey_type_t::other:
+                break;
+        }
+    }
+
+    auto hotkey_to_trigger = hotkey_t::none;
+
+    if (activated) {
+        // trigger only if hotkey should not be triggered on deactivation
+        if (!info.trigger_on_deactivate) {
+            hotkey_to_trigger = info.hotkey;
+        }
+    } else {  // deactivate
+        hotkey_to_trigger = hotkey_toggle;
+
+        // trigger only if hotkey should be triggered on deactivation
+        if (hotkey_to_trigger == hotkey_t::none && info.trigger_on_deactivate) {
+            hotkey_to_trigger = info.hotkey;
+        }
+    }
+
+    if (hotkey_to_trigger == hotkey_t::none) {
+        // do nothing
+        return final_action_id;
+    }
+
+    it_info = m_hotkey_map.find(hotkey_to_trigger);
+    if (it_info == m_hotkey_map.cend()) {
+        LOGE("unknown hotkey after mapping: action-id="
+             << action_id
+             << ", hotkey=" << static_cast<int>(hotkey_to_trigger));
+        return final_action_id;
+    }
+
+    final_action_id.first = it_info.value().action_name;
+    final_action_id.second = hotkey_toggle != hotkey_t::none;
+
+    return final_action_id;
+}
+
+void global_hotkeys_manager::handle_portal_action(const QString &action_id,
+                                                  bool activated) {
+    auto [final_action_id, toggle_enabled] =
+        map_action_to_final_action(action_id, activated);
+    if (final_action_id.isEmpty()) {
+        // do nothing
+        return;
+    }
+
+    LOGD("portal hotkey to trigger: " << action_id << " => " << final_action_id
+                                      << ", toggle-enabled=" << toggle_enabled);
+
+    emit hotkey_activated(final_action_id,
+                          {{"toggle-on-release", toggle_enabled}});
+}
+
 void global_hotkeys_manager::handle_portal_activated(
     [[maybe_unused]] const QDBusObjectPath &session_handle,
     const QString &action_id, [[maybe_unused]] qulonglong timestamp,
     [[maybe_unused]] const QVariantMap &options) {
-    auto it = m_hotkey_on_deactivate_map.find(action_id);
-    if (it == m_hotkey_on_deactivate_map.cend()) {
-        LOGW("unknown portal hotkey activated: " << action_id);
-        return;
-    }
-    // trigger only if hotkey should not be triggered on deactivation
-    if (!it.value()) {
-        LOGD("portal hotkey activated: " << action_id);
-        emit hotkey_activated(action_id, {});
-    }
+    handle_portal_action(action_id, /*activated=*/true);
 }
 
 void global_hotkeys_manager::handle_portal_deactivated(
     [[maybe_unused]] const QDBusObjectPath &session_handle,
     const QString &action_id, [[maybe_unused]] qulonglong timestamp,
     [[maybe_unused]] const QVariantMap &options) {
-    auto it = m_hotkey_on_deactivate_map.find(action_id);
-    if (it == m_hotkey_on_deactivate_map.cend()) {
-        LOGW("unknown portal hotkey deactivated: " << action_id);
-        return;
-    }
-    // trigger only if hotkey should be triggered on deactivation
-    if (it.value()) {
-        LOGD("portal hotkey activated: " << action_id);
-        emit hotkey_activated(action_id, {});
-    }
+    handle_portal_action(action_id, /*activated=*/false);
 }
 
 static void register_app_id_in_portal() {
@@ -247,7 +324,7 @@ void global_hotkeys_manager::handle_list_shortcuts_response(
     }
 
     QStringList shortcuts_id_list;
-#define X(name, id, desc, key, on_deactivate) shortcuts_id_list.push_back(id);
+#define X(xname, xname_str, ...) shortcuts_id_list.push_back(xname_str);
     HOTKEY_TABLE
 #undef X
 
@@ -315,15 +392,15 @@ void global_hotkeys_manager::set_portal_bindings() {
         return key;
     };
 
-#define X(name, id, desc, key, on_deactivate)                              \
-    {                                                                      \
-        PortalShortcut shortcut;                                           \
-        QVariantMap shortcut_options;                                      \
-        shortcut.first = id;                                               \
-        shortcut_options.insert("description", desc);                      \
-        shortcut_options.insert("preferred_trigger", key_to_xdg_key(key)); \
-        shortcut.second = shortcut_options;                                \
-        shortcuts.append(shortcut);                                        \
+#define X(xname, xname_str, xdesc, xkey, ...)                               \
+    {                                                                       \
+        PortalShortcut shortcut;                                            \
+        QVariantMap shortcut_options;                                       \
+        shortcut.first = xname_str;                                         \
+        shortcut_options.insert("description", xdesc);                      \
+        shortcut_options.insert("preferred_trigger", key_to_xdg_key(xkey)); \
+        shortcut.second = shortcut_options;                                 \
+        shortcuts.append(shortcut);                                         \
     }
     HOTKEY_TABLE
 #undef X
@@ -363,12 +440,10 @@ void global_hotkeys_manager::reset_portal_connection() {
 #ifdef USE_X11_FEATURES
 
 void global_hotkeys_manager::disable_x11() {
-#define X(name, id, desc, key, on_deactivate) \
-    QObject::disconnect(&m_x11_hotkeys.name);
+#define X(xname, ...) QObject::disconnect(&m_x11_hotkeys.xname);
     HOTKEY_TABLE
 #undef X
-#define X(name, id, desc, key, on_deactivate) \
-    m_x11_hotkeys.name.setRegistered(false);
+#define X(xname, ...) m_x11_hotkeys.xname.setRegistered(false);
     HOTKEY_TABLE
 #undef X
 }
@@ -381,23 +456,20 @@ void global_hotkeys_manager::enable_x11() {
 
     auto *s = settings::instance();
 
-#define X(name, id, desc, keyw, on_deactivate)                                \
-    if (!s->hotkey_##name().isEmpty()) {                                      \
-        if (!m_x11_hotkeys.name.setShortcut(QKeySequence{s->hotkey_##name()}, \
-                                            true)) {                          \
-            LOGW(                                                             \
-                "failed to register global hotkey, perhaps it is "            \
-                "already in use: "                                            \
-                << s->hotkey_##name());                                       \
-        }                                                                     \
-        m_x11_hotkeys.name.setProperty("action", id);                         \
-        if (on_deactivate) {                                                  \
-            QObject::connect(&m_x11_hotkeys.name, &QHotkey::released, this,   \
-                             &global_hotkeys_manager::handle_x11_activated);  \
-        } else {                                                              \
-            QObject::connect(&m_x11_hotkeys.name, &QHotkey::activated, this,  \
-                             &global_hotkeys_manager::handle_x11_activated);  \
-        }                                                                     \
+#define X(xname, xname_str, ...)                                          \
+    if (!s->hotkey_##xname().isEmpty()) {                                 \
+        if (!m_x11_hotkeys.xname.setShortcut(                             \
+                QKeySequence{s->hotkey_##xname()}, true)) {               \
+            LOGW(                                                         \
+                "failed to register global hotkey, perhaps it is "        \
+                "already in use: "                                        \
+                << s->hotkey_##xname());                                  \
+        }                                                                 \
+        m_x11_hotkeys.xname.setProperty("action", xname_str);             \
+        QObject::connect(&m_x11_hotkeys.xname, &QHotkey::released, this,  \
+                         &global_hotkeys_manager::handle_x11_activated);  \
+        QObject::connect(&m_x11_hotkeys.xname, &QHotkey::activated, this, \
+                         &global_hotkeys_manager::handle_x11_activated);  \
     }
 
     HOTKEY_TABLE
@@ -406,8 +478,35 @@ void global_hotkeys_manager::enable_x11() {
 
 void global_hotkeys_manager::handle_x11_activated() {
     auto action_id = sender()->property("action").toString();
-    LOGD("x11 hotkey activated: " << action_id);
-    emit hotkey_activated(action_id, {});
+
+    auto [final_action_id, toggle_enabled] =
+        map_action_to_final_action(action_id, /*activated=*/true);
+    if (final_action_id.isEmpty()) {
+        // do nothing
+        return;
+    }
+
+    LOGD("x11 hotkey activated: " << action_id << " => " << final_action_id
+                                  << ", toggle-enabled=" << toggle_enabled);
+    emit hotkey_activated(final_action_id,
+                          {{"toggle-on-release", toggle_enabled}});
+}
+
+void global_hotkeys_manager::handle_x11_released() {
+    auto action_id = sender()->property("action").toString();
+
+    auto [final_action_id, toggle_enabled] =
+        map_action_to_final_action(action_id, /*activated=*/false);
+    if (final_action_id.isEmpty()) {
+        // do nothing
+        return;
+    }
+
+    LOGD("x11 hotkey activated on release: "
+         << action_id << " => " << final_action_id
+         << ", toggle-enabled=" << toggle_enabled);
+    emit hotkey_activated(final_action_id,
+                          {{"toggle-on-release", toggle_enabled}});
 }
 
 #endif  // USE_X11_FEATURES

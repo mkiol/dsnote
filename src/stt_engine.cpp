@@ -22,11 +22,8 @@ using namespace std::chrono_literals;
 
 std::ostream& operator<<(std::ostream& os, stt_engine::speech_mode_t mode) {
     switch (mode) {
-        case stt_engine::speech_mode_t::automatic:
+        case stt_engine::speech_mode_t::continuous:
             os << "automatic";
-            break;
-        case stt_engine::speech_mode_t::manual:
-            os << "manual";
             break;
         case stt_engine::speech_mode_t::single_sentence:
             os << "single-sentence";
@@ -529,11 +526,8 @@ void stt_engine::set_state(state_t new_state) {
 void stt_engine::flush(flush_t type) {
     LOGD("flush: " << type);
 
-    if (m_config.speech_mode == speech_mode_t::automatic) {
+    if (m_config.speech_mode == speech_mode_t::continuous) {
         set_speech_detection_status(speech_detection_status_t::no_speech);
-    } else if (type != flush_t::restart &&
-               m_config.speech_mode == speech_mode_t::manual) {
-        set_speech_started(false);
     }
 
     if (m_intermediate_text && !m_intermediate_text->empty()) {
@@ -574,8 +568,7 @@ void stt_engine::set_speech_started(bool value) {
 
         m_config.speech_started = value;
         m_start_time.reset();
-        if (m_config.speech_mode == speech_mode_t::manual ||
-            m_config.speech_mode == speech_mode_t::single_sentence) {
+        if (m_config.speech_mode == speech_mode_t::single_sentence) {
             set_speech_detection_status(
                 value ? speech_detection_status_t::speech_detected
                       : speech_detection_status_t::no_speech);

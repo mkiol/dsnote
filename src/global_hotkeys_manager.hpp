@@ -14,6 +14,7 @@
 #include <QObject>
 #include <QString>
 #include <QVariantMap>
+#include <utility>
 
 #include "settings.h"
 
@@ -39,6 +40,23 @@ class global_hotkeys_manager : public QObject {
                           const QVariantMap& arguments);
 
    private:
+    enum class hotkey_t {
+        none,
+#define X(xname, ...) xname,
+        HOTKEY_TABLE
+#undef X
+    };
+
+    enum class hotkey_type_t { stt, tts, other };
+
+    struct hotkey_info_t {
+        hotkey_t hotkey = hotkey_t::none;
+        QString action_name;
+        hotkey_type_t type = hotkey_type_t::other;
+        hotkey_t toggle = hotkey_t::none;
+        bool trigger_on_deactivate = false;
+    };
+
     inline static const QString DBUS_SERVICE_NAME{
         QStringLiteral("org.freedesktop.portal.Desktop")};
     inline static const QString DBUS_SERVICE_PATH{
@@ -51,10 +69,11 @@ class global_hotkeys_manager : public QObject {
     QDBusObjectPath m_portal_session;
     QMetaObject::Connection m_portal_activated_conn;
     QMetaObject::Connection m_portal_deactivated_conn;
-    QHash<QString, bool> m_hotkey_on_deactivate_map;
+    QHash<hotkey_t, hotkey_info_t> m_hotkey_map;
+    QHash<QString, hotkey_t> m_action_to_hotkey_map;
 #ifdef USE_X11_FEATURES
     struct x11_hotkeys_t {
-#define X(name, id, desc, key, on_deactivate) QHotkey name;
+#define X(xname, ...) QHotkey xname;
         HOTKEY_TABLE
 #undef X
     };
@@ -63,6 +82,7 @@ class global_hotkeys_manager : public QObject {
     void enable_x11();
     void disable_x11();
     void handle_x11_activated();
+    void handle_x11_released();
 #endif
 
     void create_portal_session();
@@ -71,6 +91,9 @@ class global_hotkeys_manager : public QObject {
     void enable_or_disable();
     void enable_portal();
     void disable_portal();
+    std::pair<QString, bool> map_action_to_final_action(
+        const QString& action_id, bool activated) const;
+    void handle_portal_action(const QString& action_id, bool activated);
     void handle_portal_activated(const QDBusObjectPath& session_handle,
                                  const QString& action_id, qulonglong timestamp,
                                  const QVariantMap& options);

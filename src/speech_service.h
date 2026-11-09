@@ -34,6 +34,7 @@
 #include "dbus_speech_adaptor.h"
 #include "mnt_engine.hpp"
 #include "models_manager.h"
+#include "settings.h"
 #include "singleton.h"
 #include "stt_engine.hpp"
 #include "text_repair_engine.hpp"
@@ -45,6 +46,12 @@
     X(tts, "tts", 0)                \
     X(mnt, "mnt", 0)                \
     X(text_repair, "text-repair", 0)
+
+// 1-name, 2-name_str, 3-value, 3-dummy
+#define SPEECH_SERVICE_TASK_FLAGS_TABLE                                       \
+    X(stt_clear_mic_audio_when_decoding, "stt-clear-mic-audio-when-decoding", \
+      1 << 1, 0)                                                              \
+    X(stt_play_beep, "stt-play-beep", 1 << 2, 0)
 
 template <typename To, typename From>
 To safe_signed_unsigned_cast(From value) {
@@ -116,7 +123,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         single_sentence = 2,
         play_speech = 3,
         speech_to_file = 4,
-        translate = 5
+        translate = 5,
     };
 
     enum class source_t { none = 0, mic = 1, file = 2 };
@@ -204,6 +211,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     QVariantMap mnt_out_langs(QString in_lang) const;
     QVariantMap features_availability();
     static void remove_cached_files();
+    static speech_mode_t to_service_speech_mode(
+        settings::speech_mode_t speech_mode);
 
    signals:
     void models_changed();
@@ -218,6 +227,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     void stt_intermediate_text_decoded(const QString &text, const QString &lang,
                                        int task);
     void stt_text_decoded(const QString &text, const QString &lang, int task);
+    void stt_text_decoded_partial(const QString &text, const QString &lang,
+                                  int task);
     void tts_play_speech_finished(int task);
     void tts_speech_to_file_finished(QStringList files, int task);
     void tts_speech_encoded(const speech_service::tts_partial_result_t &result);
@@ -376,9 +387,11 @@ class speech_service : public QObject, public singleton<speech_service> {
 
     enum task_flags_t {
         task_flags_none = 0,
-        task_flags_stt_clear_mic_audio_when_decoding = 1 << 1,
-        task_flags_stt_play_beep = 1 << 2,
+#define X(xname, xname_str, xvalue, ...) task_flags_##xname = xvalue,
+        SPEECH_SERVICE_TASK_FLAGS_TABLE
+#undef X
     };
+    friend QDebug operator<<(QDebug d, task_flags_t flags);
 
     struct task_t {
         int id = INVALID_TASK;
@@ -458,6 +471,9 @@ class speech_service : public QObject, public singleton<speech_service> {
     std::queue<tts_partial_result_t> m_tts_queue;
     QVariantMap m_features_availability;
     bool m_models_changed_handled = false;
+    QString m_stt_pending_text;
+    QString m_stt_pending_lang;
+
     bool feature_discovery_done() const {
         return !m_features_availability.isEmpty();
     }
@@ -484,12 +500,14 @@ class speech_service : public QObject, public singleton<speech_service> {
                                        std::string &&out_text,
                                        const std::string &out_lang);
     void handle_ttt_text_repaired(const QString &text, int task_id);
-    void handle_stt_text_decoded(const std::string &text,
-                                 const std::string &lang);
+    void handle_stt_text_decoded_from_engine(const std::string &text,
+                                             const std::string &lang);
     void handle_stt_text_decoded(const QString &text, const QString &lang,
                                  int task_id);
-    void handle_stt_intermediate_text_decoded(const std::string &text,
-                                              const std::string &lang);
+    void handle_stt_text_decoded_partial(const QString &text,
+                                         const QString &lang, int task_id);
+    void handle_stt_intermediate_text_decoded_from_engine(
+        const std::string &text, const std::string &lang);
     void handle_tts_speech_encoded(const std::string &text,
                                    const std::string &audio_file_path,
                                    tts_engine::audio_format_t format,

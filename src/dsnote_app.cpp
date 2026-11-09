@@ -325,7 +325,8 @@ QDebug operator<<(QDebug d, const dsnote_app::trans_rule_t &rule) {
     setenv(name, value, 1);
 }
 
-static QString audio_quality_to_str(settings::audio_quality_t quality) {
+namespace {
+QString audio_quality_to_str(settings::audio_quality_t quality) {
     switch (quality) {
         case settings::audio_quality_t::AudioQualityVbrHigh:
             return QStringLiteral("vbr_high");
@@ -338,7 +339,7 @@ static QString audio_quality_to_str(settings::audio_quality_t quality) {
     return QStringLiteral("vbr_medium");
 }
 
-static media_compressor::quality_t audio_quality_to_media_quality(
+media_compressor::quality_t audio_quality_to_media_quality(
     settings::audio_quality_t quality) {
     switch (quality) {
         case settings::audio_quality_t::AudioQualityVbrHigh:
@@ -351,6 +352,7 @@ static media_compressor::quality_t audio_quality_to_media_quality(
 
     throw std::runtime_error{"invalid quality value"};
 }
+}  // namespace
 
 dsnote_app::dsnote_app(QObject *parent)
     : QObject{parent},
@@ -1924,19 +1926,34 @@ void dsnote_app::handle_tts_play_speech_finished(int task) {
                 listen();
                 break;
             case dsnote_app::stt_request_t::listen_translate:
-                listen_translate();
+                listen_internal(active_stt_model(), stt_translate_req_t::on,
+                                settings::instance()->speech_mode(),
+                                text_destination_t::note_add,
+                                stt_request_t::listen_translate);
                 break;
             case dsnote_app::stt_request_t::listen_active_window:
-                listen_to_active_window();
+                listen_internal(active_stt_model(), stt_translate_req_t::conf,
+                                settings::instance()->speech_mode(),
+                                text_destination_t::active_window,
+                                stt_request_t::listen_active_window);
                 break;
             case dsnote_app::stt_request_t::listen_translate_active_window:
-                listen_translate_to_active_window();
+                listen_internal(active_stt_model(), stt_translate_req_t::on,
+                                settings::instance()->speech_mode(),
+                                text_destination_t::active_window,
+                                stt_request_t::listen_translate_active_window);
                 break;
             case dsnote_app::stt_request_t::listen_clipboard:
-                listen_to_clipboard();
+                listen_internal(active_stt_model(), stt_translate_req_t::conf,
+                                settings::instance()->speech_mode(),
+                                text_destination_t::clipboard,
+                                stt_request_t::listen_clipboard);
                 break;
             case dsnote_app::stt_request_t::listen_translate_clipboard:
-                listen_translate_to_clipboard();
+                listen_internal(active_stt_model(), stt_translate_req_t::on,
+                                settings::instance()->speech_mode(),
+                                text_destination_t::clipboard,
+                                stt_request_t::listen_translate_clipboard);
                 break;
             case dsnote_app::stt_request_t::transcribe_file:
                 break;
@@ -3294,53 +3311,29 @@ void dsnote_app::transcribe_ref_file(const QString &file_path) {
 }
 
 void dsnote_app::listen() {
-    m_text_destination = text_destination_t::note_add;
-    m_current_stt_request = stt_request_t::listen;
-    listen_internal(active_stt_model(), stt_translate_req_t::conf);
+    listen_internal(active_stt_model(), stt_translate_req_t::conf,
+                    settings::instance()->speech_mode(),
+                    text_destination_t::note_add, stt_request_t::listen);
 }
 
 void dsnote_app::listen_mnt() {
-    m_text_destination = text_destination_t::note_add;
-    m_current_stt_request = stt_request_t::listen;
-    listen_internal(active_stt_model_for_in_mnt(), stt_translate_req_t::off);
-}
-
-void dsnote_app::listen_translate() {
-    m_text_destination = text_destination_t::note_add;
-    m_current_stt_request = stt_request_t::listen_translate;
-    listen_internal(active_stt_model(), stt_translate_req_t::on);
-}
-
-void dsnote_app::listen_to_active_window() {
-    m_text_destination = text_destination_t::active_window;
-    m_current_stt_request = stt_request_t::listen_active_window;
-    listen_internal(active_stt_model(), stt_translate_req_t::conf);
-}
-
-void dsnote_app::listen_translate_to_active_window() {
-    m_text_destination = text_destination_t::active_window;
-    m_current_stt_request = stt_request_t::listen_translate_active_window;
-    listen_internal(active_stt_model(), stt_translate_req_t::on);
-}
-
-void dsnote_app::listen_to_clipboard() {
-    m_text_destination = text_destination_t::clipboard;
-    m_current_stt_request = stt_request_t::listen_clipboard;
-    listen_internal(active_stt_model(), stt_translate_req_t::conf);
-}
-
-void dsnote_app::listen_translate_to_clipboard() {
-    m_text_destination = text_destination_t::clipboard;
-    m_current_stt_request = stt_request_t::listen_translate_clipboard;
-    listen_internal(active_stt_model(), stt_translate_req_t::on);
+    listen_internal(active_stt_model_for_in_mnt(), stt_translate_req_t::off,
+                    settings::instance()->speech_mode(),
+                    text_destination_t::note_add, stt_request_t::listen);
 }
 
 void dsnote_app::listen_internal(const QString &model_id,
-                                 stt_translate_req_t translate_req) {
+                                 stt_translate_req_t translate_req,
+                                 settings::speech_mode_t speech_mode,
+                                 text_destination_t text_destination,
+                                 stt_request_t stt_request_type) {
     if (model_id.isEmpty()) {
         qWarning() << "empty model id";
         return;
     }
+
+    m_text_destination = text_destination;
+    m_current_stt_request = stt_request_type;
 
     auto *s = settings::instance();
 
@@ -3375,6 +3368,7 @@ void dsnote_app::listen_internal(const QString &model_id,
     options.insert("inline_timestamp_template", s->inline_timestamp_template());
     options.insert("inline_timestamp_min_interval",
                    s->inline_timestamp_min_interval());
+    options.insert("stt_no_partial_decoding", true);
 
     auto out_lang = [&]() {
         auto lang = lang_from_model_id(model_id);
@@ -3391,17 +3385,17 @@ void dsnote_app::listen_internal(const QString &model_id,
 
     // for chinese, add pinyin output option
     if (out_lang == "zh") {
-        options.insert("pinyin_output", settings::instance()->stt_pinyin());
+        options.insert("pinyin_output", s->stt_pinyin());
     }
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->stt_start_listen(
-            static_cast<speech_service::speech_mode_t>(s->speech_mode()),
-            model_id, out_lang, options);
+            speech_service::to_service_speech_mode(speech_mode), model_id,
+            out_lang, options);
     } else {
-        qDebug() << "[app => dbus] call SttStartListen2:" << s->speech_mode();
-        new_task = m_dbus_service.SttStartListen2(
-            static_cast<int>(s->speech_mode()), model_id, out_lang, options);
+        qDebug() << "[app => dbus] call SttStartListen2:" << speech_mode;
+        new_task = m_dbus_service.SttStartListen2(static_cast<int>(speech_mode),
+                                                  model_id, out_lang, options);
     }
 
     m_primary_task.set(new_task);
@@ -6035,24 +6029,40 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
         qDebug() << "converting action:" << action << "=>" << caction;
     }
 
+    auto toggle_enabled = arguments.value("toggle-on-release").toBool();
+
+    // if toggle-on-release is enabled, force speech-manual mode for listen
+    auto speech_mode = toggle_enabled ? settings::speech_mode_t::SpeechManual
+                                      : settings::instance()->speech_mode();
+
     switch (caction) {
         case dsnote_app::action_t::start_listening:
             listen();
             break;
         case dsnote_app::action_t::start_listening_translate:
-            listen_translate();
+            listen_internal(active_stt_model(), stt_translate_req_t::on,
+                            speech_mode, text_destination_t::note_add,
+                            stt_request_t::listen_translate);
             break;
         case dsnote_app::action_t::start_listening_active_window:
-            listen_to_active_window();
+            listen_internal(active_stt_model(), stt_translate_req_t::conf,
+                            speech_mode, text_destination_t::active_window,
+                            stt_request_t::listen_active_window);
             break;
         case dsnote_app::action_t::start_listening_translate_active_window:
-            listen_translate_to_active_window();
+            listen_internal(active_stt_model(), stt_translate_req_t::on,
+                            speech_mode, text_destination_t::active_window,
+                            stt_request_t::listen_translate_active_window);
             break;
         case dsnote_app::action_t::start_listening_clipboard:
-            listen_to_clipboard();
+            listen_internal(active_stt_model(), stt_translate_req_t::conf,
+                            speech_mode, text_destination_t::clipboard,
+                            stt_request_t::listen_clipboard);
             break;
         case dsnote_app::action_t::start_listening_translate_clipboard:
-            listen_translate_to_clipboard();
+            listen_internal(active_stt_model(), stt_translate_req_t::on,
+                            speech_mode, text_destination_t::clipboard,
+                            stt_request_t::listen_translate_clipboard);
             break;
         case dsnote_app::action_t::transcribe_file: {
             if (!add_action_to_queue_if_needed(action, arguments)) {

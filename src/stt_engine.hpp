@@ -32,14 +32,14 @@ using namespace std::chrono_literals;
 
 class stt_engine {
    public:
-    enum class speech_mode_t { automatic = 0, manual = 1, single_sentence = 2 };
+    enum class speech_mode_t { continuous = 0, single_sentence = 1 };
     friend std::ostream& operator<<(std::ostream& os, speech_mode_t mode);
 
     enum class speech_detection_status_t {
         no_speech = 0,
         speech_detected = 1,
         decoding = 2,
-        initializing = 3
+        initializing = 3,
     };
     friend std::ostream& operator<<(std::ostream& os,
                                     speech_detection_status_t status);
@@ -48,7 +48,7 @@ class stt_engine {
         aggressiveness0 = 0,
         aggressiveness1 = 1,
         aggressiveness2 = 2,
-        aggressiveness3 = 3
+        aggressiveness3 = 3,
     };
     friend std::ostream& operator<<(std::ostream& os, vad_mode_t mode);
 
@@ -128,7 +128,7 @@ class stt_engine {
         model_files_t model_files;
         std::string cache_dir;
         std::string lib_dir;
-        speech_mode_t speech_mode = speech_mode_t::automatic;
+        speech_mode_t speech_mode = speech_mode_t::continuous;
         vad_mode_t vad_mode = vad_mode_t::aggressiveness3;
         bool speech_started = false;
         bool insert_stats = false;

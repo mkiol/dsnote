@@ -165,6 +165,15 @@ QDebug operator<<(QDebug d, speech_service::beep_role_t beep_role) {
     return d;
 }
 
+QDebug operator<<(QDebug d, speech_service::task_flags_t flags) {
+#define X(xname, xname_str, ...)                    \
+    if (flags & speech_service::task_flags_##xname) \
+        d.nospace() << xname_str << ", ";
+    SPEECH_SERVICE_TASK_FLAGS_TABLE
+#undef X
+    return d;
+}
+
 [[maybe_unused]] static void set_env(const char *name, const char *value,
                                      bool force = false) {
     auto *old_value = getenv(name);
@@ -276,9 +285,9 @@ speech_service::speech_service(QObject *parent)
                 emit model_download_progress(id, progress);
             });
     connect(this, &speech_service::stt_text_decoded, this,
-            static_cast<void (speech_service::*)(const QString &,
-                                                 const QString &, int)>(
-                &speech_service::handle_stt_text_decoded),
+            &speech_service::handle_stt_text_decoded, Qt::QueuedConnection);
+    connect(this, &speech_service::stt_text_decoded_partial, this,
+            &speech_service::handle_stt_text_decoded_partial,
             Qt::QueuedConnection);
     connect(this, &speech_service::sentence_timeout, this,
             static_cast<void (speech_service::*)(int)>(
@@ -1570,8 +1579,24 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                 model_config->stt->ttt->model_file.toStdString();
         config.lang = model_config->stt->lang_id.toStdString();
         config.lang_code = model_config->stt->lang_code.toStdString();
-        config.speech_mode =
-            static_cast<stt_engine::speech_mode_t>(speech_mode);
+        config.speech_mode = [&] {
+            switch (speech_mode) {
+                case speech_mode_t::automatic:
+                case speech_mode_t::manual:
+                    return stt_engine::speech_mode_t::continuous;
+                case speech_mode_t::single_sentence:
+                    return stt_engine::speech_mode_t::single_sentence;
+                case speech_mode_t::play_speech:
+                case speech_mode_t::speech_to_file:
+                case speech_mode_t::translate:
+                    break;
+            }
+            LOGE(
+                "invalid speech mode for stt, fallback to single-sentence: "
+                "speech-mode="
+                << static_cast<int>(speech_mode));
+            return stt_engine::speech_mode_t::single_sentence;
+        }();
         config.options = model_config->options.toStdString();
         config.text_format = stt_text_fromat_from_settings_format(
             static_cast<settings::text_format_t>(get_value_from_options(
@@ -1720,11 +1745,12 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             stt_engine::callbacks_t call_backs{
                 .text_decoded =
                     [this](const std::string &text, const std::string &lang) {
-                        handle_stt_text_decoded(text, lang);
+                        handle_stt_text_decoded_from_engine(text, lang);
                     },
                 .intermediate_text_decoded =
                     [this](const std::string &text, const std::string &lang) {
-                        handle_stt_intermediate_text_decoded(text, lang);
+                        handle_stt_intermediate_text_decoded_from_engine(text,
+                                                                         lang);
                     },
                 .speech_detection_status_changed =
                     [this](stt_engine::speech_detection_status_t status) {
@@ -2344,7 +2370,7 @@ bool speech_service::restart_text_repair_engine(const QVariantMap &options) {
     return false;
 }
 
-void speech_service::handle_stt_intermediate_text_decoded(
+void speech_service::handle_stt_intermediate_text_decoded_from_engine(
     const std::string &text, const std::string &lang) {
     if (m_current_task) {
         m_last_intermediate_text_task = m_current_task->id;
@@ -2363,6 +2389,29 @@ void speech_service::handle_stt_text_decoded(
         if (m_current_task->speech_mode == speech_mode_t::single_sentence) {
             stt_stop_listen(m_current_task->id);
         }
+    }
+}
+
+void speech_service::handle_stt_text_decoded_partial(const QString &text,
+                                                     const QString &lang,
+                                                     int task_id) {
+    if (!m_current_task || m_current_task->id != task_id) {
+        qWarning() << "task id is not current:" << task_id;
+        return;
+    }
+
+    if (m_current_task->speech_mode == speech_mode_t::manual) {
+        LOGD("stt text decoded partial: task-id="
+             << task_id << ", text-size=" << text.size()
+             << ", pending-text-size=" << m_stt_pending_text.size());
+        // will report decoded text on stop_listening
+        if (!m_stt_pending_text.isEmpty()) {
+            m_stt_pending_text += " ";
+        }
+        m_stt_pending_text += text;
+        m_stt_pending_lang = lang;
+    } else {
+        emit stt_text_decoded(text, lang, task_id);
     }
 }
 
@@ -2822,19 +2871,16 @@ void speech_service::handle_mnt_progress_changed(int task_id) {
     }
 }
 
-void speech_service::handle_stt_text_decoded(const std::string &text,
-                                             const std::string &lang) {
+void speech_service::handle_stt_text_decoded_from_engine(
+    const std::string &text, const std::string &lang) {
     if (m_current_task) {
-        if (m_previous_task &&
-            m_last_intermediate_text_task == m_previous_task->id) {
-            emit stt_text_decoded(QString::fromStdString(text),
-                                  QString::fromStdString(lang),
-                                  m_previous_task->id);
-        } else {
-            emit stt_text_decoded(QString::fromStdString(text),
-                                  QString::fromStdString(lang),
-                                  m_current_task->id);
-        }
+        const auto &task = m_previous_task && m_last_intermediate_text_task ==
+                                                  m_previous_task->id
+                               ? m_previous_task
+                               : m_current_task;
+        emit handle_stt_text_decoded_partial(QString::fromStdString(text),
+                                             QString::fromStdString(lang),
+                                             task->id);
     } else {
         qWarning() << "current task does not exist";
     }
@@ -3921,6 +3967,8 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
         flags |= task_flags_stt_play_beep;
     }
 
+    qDebug() << "flags:" << static_cast<task_flags_t>(flags);
+
     m_current_task = {
         .id = next_task_id(),
         .engine = engine_t::stt,
@@ -3930,6 +3978,9 @@ int speech_service::stt_start_listen(speech_mode_t mode, QString lang,
         .options = options,
         .flags = flags,
     };
+
+    m_stt_pending_text.clear();
+    m_stt_pending_lang.clear();
 
     if (m_current_task->model_id.isEmpty()) {
         m_current_task.reset();
@@ -4341,6 +4392,16 @@ void speech_service::stop_stt_engine() {
     restart_audio_source({});
 
     if (m_current_task && m_current_task->engine == engine_t::stt) {
+        if (m_current_task->speech_mode == speech_mode_t::manual &&
+            !m_stt_pending_text.isEmpty()) {
+            // got pending text
+            qDebug() << "reporting stt pending text";
+            emit stt_text_decoded(m_stt_pending_text, m_stt_pending_lang,
+                                  m_current_task->id);
+            m_stt_pending_text.clear();
+            m_stt_pending_lang.clear();
+        }
+
         m_current_task.reset();
         stop_keepalive_current_task();
         emit current_task_changed();
@@ -4461,14 +4522,28 @@ void speech_service::update_task_state() {
             m_state == state_t::playing_speech) {
             return 4;
         } else if (m_stt_engine && m_stt_engine->started()) {
+            bool do_not_report_partial_state_change =
+                m_current_task &&
+                m_current_task->speech_mode == speech_mode_t::manual &&
+                m_stt_engine->speech_status();
+
+            LOGD("stt task state update: dnrpsc="
+                 << do_not_report_partial_state_change
+                 << ", speech-status=" << m_stt_engine->speech_status()
+                 << ", speech-detection-status="
+                 << m_stt_engine->speech_detection_status());
+
             switch (m_stt_engine->speech_detection_status()) {
                 case stt_engine::speech_detection_status_t::speech_detected:
                     return 1;
                 case stt_engine::speech_detection_status_t::decoding:
-                    return 2;
+                    return do_not_report_partial_state_change ? 1 : 2;
                 case stt_engine::speech_detection_status_t::initializing:
                     return 3;
                 case stt_engine::speech_detection_status_t::no_speech:
+                    if (do_not_report_partial_state_change) {
+                        return 1;
+                    };
                     break;
             }
         } else if (player_state == QMediaPlayer::PausedState ||
@@ -4570,8 +4645,7 @@ void speech_service::refresh_status() {
         } else if (m_current_task->engine == engine_t::mnt) {
             new_state = state_t::translating;
         } else if (m_current_task->speech_mode == speech_mode_t::manual) {
-            new_state = m_stt_engine && m_stt_engine->started() &&
-                                m_stt_engine->speech_status()
+            new_state = m_stt_engine && m_stt_engine->started()
                             ? state_t::listening_manual
                             : state_t::idle;
         } else if (m_current_task->speech_mode == speech_mode_t::automatic) {
@@ -5102,17 +5176,16 @@ int speech_service::SttStartListen(int mode, const QString &lang,
              << out_lang;
     m_keepalive_timer.start();
 
-    speech_mode_t speech_mode;
-
-    if (mode == 0)
-        speech_mode = speech_mode_t::automatic;
-    else if (mode == 1)
-        speech_mode = speech_mode_t::manual;
-    else if (mode == 2)
-        speech_mode = speech_mode_t::single_sentence;
-    else {
-        qWarning() << "invalid speech mode";
-        return INVALID_TASK;
+    speech_mode_t speech_mode = speech_service::to_service_speech_mode(
+        static_cast<settings::speech_mode_t>(mode));
+    switch (speech_mode) {
+        case speech_mode_t::automatic:
+        case speech_mode_t::manual:
+        case speech_mode_t::single_sentence:
+            break;
+        default:
+            qWarning() << "invalid speech mode";
+            return INVALID_TASK;
     }
 
     return stt_start_listen(speech_mode, lang, out_lang, {});
@@ -5125,17 +5198,16 @@ int speech_service::SttStartListen2(int mode, const QString &lang,
              << out_lang;
     m_keepalive_timer.start();
 
-    speech_mode_t speech_mode;
-
-    if (mode == 0)
-        speech_mode = speech_mode_t::automatic;
-    else if (mode == 1)
-        speech_mode = speech_mode_t::manual;
-    else if (mode == 2)
-        speech_mode = speech_mode_t::single_sentence;
-    else {
-        qWarning() << "invalid speech mode";
-        return INVALID_TASK;
+    speech_mode_t speech_mode = speech_service::to_service_speech_mode(
+        static_cast<settings::speech_mode_t>(mode));
+    switch (speech_mode) {
+        case speech_mode_t::automatic:
+        case speech_mode_t::manual:
+        case speech_mode_t::single_sentence:
+            break;
+        default:
+            qWarning() << "invalid speech mode";
+            return INVALID_TASK;
     }
 
     return stt_start_listen(speech_mode, lang, out_lang, options);
@@ -5300,4 +5372,17 @@ int speech_service::UpdateSettings(const QVariantMap &settings_map) const {
     }
 
     return SUCCESS;
+}
+
+speech_service::speech_mode_t speech_service::to_service_speech_mode(
+    settings::speech_mode_t speech_mode) {
+    switch (speech_mode) {
+        case settings::speech_mode_t::SpeechAutomatic:
+            return speech_service::speech_mode_t::automatic;
+        case settings::speech_mode_t::SpeechManual:
+            return speech_service::speech_mode_t::manual;
+        case settings::speech_mode_t::SpeechSingleSentence:
+            return speech_service::speech_mode_t::single_sentence;
+    }
+    throw std::runtime_error{"speech_mode value"};
 }

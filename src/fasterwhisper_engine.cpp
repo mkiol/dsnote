@@ -219,16 +219,17 @@ stt_engine::samples_process_result_t fasterwhisper_engine::process_buff() {
     if (vad_status) {
         LOGD("vad: speech detected");
 
-        if (m_config.speech_mode != speech_mode_t::manual &&
-            m_config.speech_mode != speech_mode_t::single_sentence)
+        if (m_config.speech_mode != speech_mode_t::single_sentence) {
             set_speech_detection_status(
                 speech_detection_status_t::speech_detected);
+        }
 
-        if (m_config.text_format == text_format_t::raw)
+        if (m_config.text_format == text_format_t::raw) {
             push_buf_to_whisper_buf(vad_buf, m_speech_buf);
-        else
+        } else {
             push_buf_to_whisper_buf(m_in_buf.buf.data(), m_in_buf.size,
                                     m_speech_buf);
+        }
 
         restart_sentence_timer();
     } else {
@@ -240,7 +241,7 @@ stt_engine::samples_process_result_t fasterwhisper_engine::process_buff() {
             m_call_backs.sentence_timeout();
         }
 
-        if (m_config.speech_mode == speech_mode_t::automatic)
+        if (m_config.speech_mode == speech_mode_t::continuous)
             set_speech_detection_status(speech_detection_status_t::no_speech);
 
         if (m_speech_buf.empty())
@@ -261,25 +262,24 @@ stt_engine::samples_process_result_t fasterwhisper_engine::process_buff() {
 
         if (m_speech_buf.empty()) return false;
 
-        if ((m_config.speech_mode == speech_mode_t::manual ||
-             m_speech_detection_status ==
-                 speech_detection_status_t::speech_detected) &&
-            vad_status && !eof)
+        if (m_speech_detection_status ==
+                speech_detection_status_t::speech_detected &&
+            vad_status && !eof) {
             return false;
+        }
 
-        if ((m_config.speech_mode == speech_mode_t::manual ||
-             m_config.speech_mode == speech_mode_t::single_sentence) &&
+        if (m_config.speech_mode == speech_mode_t::single_sentence &&
             m_speech_detection_status == speech_detection_status_t::no_speech &&
-            !eof)
+            !eof) {
             return false;
+        }
 
         return true;
     }();
 
     if (!decode_samples) {
-        if (eof || (m_config.speech_mode == speech_mode_t::manual &&
-                    m_speech_detection_status ==
-                        speech_detection_status_t::no_speech)) {
+        if (eof ||
+            m_speech_detection_status == speech_detection_status_t::no_speech) {
             flush(eof ? flush_t::eof : flush_t::regular);
             free_buf();
             return samples_process_result_t::no_samples_needed;

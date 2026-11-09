@@ -7,12 +7,16 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 CheckBox {
     id: root
 
     property string optionName: ""
     property string toolTipText: ""
+    property int indends: 0
+
+    Layout.leftMargin: indends * appWin.padding
 
     checked: _settings[optionName]
 

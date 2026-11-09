@@ -419,10 +419,10 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
     if (vad_status) {
         LOGD("vad: speech detected");
 
-        if (m_config.speech_mode != speech_mode_t::manual &&
-            m_config.speech_mode != speech_mode_t::single_sentence)
+        if (m_config.speech_mode == speech_mode_t::continuous) {
             set_speech_detection_status(
                 speech_detection_status_t::speech_detected);
+        }
 
         if (m_config.text_format == text_format_t::raw)
             push_buf_to_whisper_buf(vad_buf, m_speech_buf);
@@ -440,8 +440,9 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
             m_call_backs.sentence_timeout();
         }
 
-        if (m_config.speech_mode == speech_mode_t::automatic)
+        if (m_config.speech_mode == speech_mode_t::continuous) {
             set_speech_detection_status(speech_detection_status_t::no_speech);
+        }
 
         if (m_speech_buf.empty())
             m_segment_time_discarded_before +=
@@ -461,14 +462,12 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
 
         if (m_speech_buf.empty()) return false;
 
-        if ((m_config.speech_mode == speech_mode_t::manual ||
-             m_speech_detection_status ==
-                 speech_detection_status_t::speech_detected) &&
+        if ((m_speech_detection_status ==
+             speech_detection_status_t::speech_detected) &&
             vad_status && !eof)
             return false;
 
-        if ((m_config.speech_mode == speech_mode_t::manual ||
-             m_config.speech_mode == speech_mode_t::single_sentence) &&
+        if (m_config.speech_mode == speech_mode_t::single_sentence &&
             m_speech_detection_status == speech_detection_status_t::no_speech &&
             !eof)
             return false;
@@ -477,9 +476,8 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
     }();
 
     if (!decode_samples) {
-        if (eof || (m_config.speech_mode == speech_mode_t::manual &&
-                    m_speech_detection_status ==
-                        speech_detection_status_t::no_speech)) {
+        if (eof ||
+            m_speech_detection_status == speech_detection_status_t::no_speech) {
             flush(eof ? flush_t::eof : flush_t::regular);
             free_buf();
             return samples_process_result_t::no_samples_needed;
