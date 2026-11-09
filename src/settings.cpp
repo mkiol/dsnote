@@ -7,15 +7,6 @@
 
 #include "settings.h"
 
-#include <type_traits>
-
-#ifdef USE_DESKTOP
-#include <QDBusConnection>
-#include <QDBusInterface>
-#include <QDBusVariant>
-#include <QIcon>
-#include <QQuickStyle>
-#endif
 #include <QCoreApplication>
 #include <QDate>
 #include <QDebug>
@@ -32,6 +23,16 @@
 #include <cstdlib>
 #include <cstring>
 #include <thread>
+#include <type_traits>
+
+#ifdef USE_DESKTOP
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusVariant>
+#include <QIcon>
+#include <QMap>
+#include <QQuickStyle>
+#endif
 
 #include "config.h"
 #include "cpu_tools.hpp"
@@ -39,6 +40,9 @@
 #include "logger.hpp"
 #include "module_tools.hpp"
 #include "qtlogger.hpp"
+#ifdef USE_DESKTOP
+#include "dbus_portal_settings_inf.h"
+#endif
 
 QDebug operator<<(QDebug d, settings::mode_t mode) {
     switch (mode) {
@@ -321,11 +325,31 @@ QDebug operator<<(QDebug d, settings::trans_rule_flags_t flags) {
         d << "none";
         return d;
     };
-#define X(name, name_str, value, ...) \
-    if (flags & settings::trans_rule_flags_t::name) d << name_str << ", ";
+#define X(name, name_str, value, ...)               \
+    if (flags & settings::trans_rule_flags_t::name) \
+        d.nospace() << name_str << ", ";
     TRANS_RULE_FLAGS_TABLE
 #undef X
     return d;
+}
+
+std::ostream& operator<<(
+    std::ostream& os, const settings::portal_appearance_t& portal_appearance) {
+    os << "color-scheme=";
+    switch (portal_appearance.color_scheme) {
+        case settings::portal_appearance_t::color_scheme_t::no_preference:
+            os << "no-preference";
+            break;
+        case settings::portal_appearance_t::color_scheme_t::prefer_dark:
+            os << "prefer-dark";
+            break;
+        case settings::portal_appearance_t::color_scheme_t::prefer_light:
+            os << "prefer-light";
+            break;
+    }
+    os << ", color-scheme-name="
+       << portal_appearance.color_scheme_name.toStdString();
+    return os;
 }
 
 settings::launch_mode_t settings::launch_mode = launch_mode_t::app_stanalone;
@@ -1572,35 +1596,60 @@ void settings::detect_qt_styles() {
     LOGD("detected qt styles: " << m_available_qt_styles);
 }
 
-static bool portal_dark_appearance_preferred() {
+settings::portal_appearance_t settings::portal_appearance_info() {
     // https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.Settings.html#settings
-    QDBusInterface iface(QStringLiteral("org.freedesktop.portal.Desktop"),
-                         QStringLiteral("/org/freedesktop/portal/desktop"),
-                         QStringLiteral("org.freedesktop.portal.Settings"),
-                         QDBusConnection::sessionBus());
+
+    portal_appearance_t info;
+
+    OrgFreedesktopPortalSettingsInterface iface{
+        QStringLiteral("org.freedesktop.portal.Desktop"),
+        QStringLiteral("/org/freedesktop/portal/desktop"),
+        QDBusConnection::sessionBus()};
+
     if (!iface.isValid()) {
         LOGD("failed to connect to portal settings service");
-        return false;
+        return info;
     }
 
-    auto reply = iface.call(QStringLiteral("Read"),
-                            QStringLiteral("org.freedesktop.appearance"),
-                            QStringLiteral("color-scheme"));
-    if (reply.type() != QDBusMessage::ReplyMessage) {
-        LOGD("invalid portal settings read reply");
-        return false;
+    {
+        static const auto ns = QStringLiteral("org.freedesktop.appearance");
+        auto reply = iface.Read(ns, QStringLiteral("color-scheme"));
+        reply.waitForFinished();
+        if (reply.isError()) {
+            LOGW("dbus error: " << reply.error().message());
+            return info;
+        }
+        auto val =
+            reply.value().variant().value<QDBusVariant>().variant().toUInt();
+        switch (val) {
+            case 1:
+                info.color_scheme =
+                    portal_appearance_t::color_scheme_t::prefer_dark;
+                break;
+            case 2:
+                info.color_scheme =
+                    portal_appearance_t::color_scheme_t::prefer_light;
+                break;
+            default:
+                info.color_scheme =
+                    portal_appearance_t::color_scheme_t::no_preference;
+                break;
+        }
     }
 
-    uint scheme = reply.arguments()
-                      .at(0)
-                      .value<QDBusVariant>()
-                      .variant()
-                      .value<QDBusVariant>()
-                      .variant()
-                      .toUInt();
-    LOGD("portal color-scheme: " << scheme);
+    {
+        static const auto ns = QStringLiteral("org.kde.kdeglobals.General");
+        auto reply = iface.ReadAll(QStringList{} << ns);
+        reply.waitForFinished();
+        if (reply.isError()) {
+            LOGW("dbus error: " << reply.error().message());
+            return info;
+        }
+        info.color_scheme_name =
+            reply.value().value(ns).value("ColorScheme").toString();
+    }
 
-    return scheme == 1;
+    return info;
 }
 
 void settings::set_qt_style() {
@@ -1659,43 +1708,52 @@ void settings::set_qt_style() {
         // to work LOGD("setting QT_QUICK_CONTROLS_STYLE environment variable
         // to: " << style); qputenv("QT_QUICK_CONTROLS_STYLE", style.toUtf8());
 
+        auto portal_info = portal_appearance_info();
+
         LOGD("using qt style: " << style);
         LOGD("ui appearance: " << ui_appearance());
+        LOGD("portal appearance info: " << portal_info);
+
+        auto color_file_from_scheme = [](const QString& color_scheme) {
+            auto path = QDir{settings::instance()->colors_scheme_dir()}
+                            .absoluteFilePath(
+                                QStringLiteral("%1.colors").arg(color_scheme));
+            if (!QFileInfo::exists(path)) {
+                LOGW("color scheme file not found: " << path);
+                return QString{};
+            }
+            return path;
+        };
 
         auto color_scheme = [&]() -> std::pair<QString, QString> {
-            static const auto* color_scheme_file_dark =
-                "/usr/share/color-schemes/BreezeDark.colors";
-            static const auto* color_scheme_file_light =
-                "/usr/share/color-schemes/BreezeLight.colors";
             static const auto* theme_dark = "breeze-dark";
             static const auto* theme_light = "breeze";
+            static const auto* color_dark = "BreezeDark";
+            static const auto* color_light = "BreezeLight";
+            bool dark = portal_info.color_scheme ==
+                        portal_appearance_t::color_scheme_t::prefer_dark;
             switch (ui_appearance()) {
                 case ui_appearance_t::UiAppearanceAuto:
                     // set KDE_COLOR_SCHEME_PATH based on portal color-scheme
-                    // apply only for non-kde and only for kde style
-                    if (!m_kde && style.startsWith("org.kde.breeze")) {
-                        if (portal_dark_appearance_preferred()) {
-                            return {color_scheme_file_dark, theme_dark};
-                        }
-                        return {color_scheme_file_light, theme_light};
+                    // apply only for kde style
+                    if (style.startsWith("org.kde")) {
+                        return {dark ? color_file_from_scheme(color_dark)
+                                     : color_file_from_scheme(color_light),
+                                dark ? theme_dark : theme_light};
                     }
                     break;
                 case ui_appearance_t::UiAppearanceDontForce:
                     break;
                 case ui_appearance_t::UiAppearanceForceDark:
-                    return {color_scheme_file_dark, theme_dark};
+                    return {color_file_from_scheme(color_dark), theme_dark};
                 case ui_appearance_t::UiAppearanceForceLight:
-                    return {color_scheme_file_light, theme_light};
+                    return {color_file_from_scheme(color_light), theme_light};
             }
             return {};
         }();
         if (!color_scheme.first.isEmpty()) {
-            if (QFile::exists(color_scheme.first)) {
-                qApp->setProperty("KDE_COLOR_SCHEME_PATH", color_scheme.first);
-                LOGD("applied KDE_COLOR_SCHEME_PATH: " << color_scheme.first);
-            } else {
-                LOGW("color scheme file not found: " << color_scheme.first);
-            }
+            qApp->setProperty("KDE_COLOR_SCHEME_PATH", color_scheme.first);
+            LOGD("applied KDE_COLOR_SCHEME_PATH: " << color_scheme.first);
         }
         if (!color_scheme.second.isEmpty()) {
             QIcon::setThemeName(color_scheme.second);

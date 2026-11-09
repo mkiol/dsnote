@@ -436,7 +436,9 @@ if(WITH_DESKTOP)
         ${sources_dir}/dbus_portal_globalshortcuts_inf.cpp
         ${sources_dir}/dbus_portal_globalshortcuts_inf.h
         ${sources_dir}/dbus_portal_request_inf.cpp
-        ${sources_dir}/dbus_portal_request_inf.h)
+        ${sources_dir}/dbus_portal_request_inf.h
+        ${sources_dir}/dbus_portal_settings_inf.cpp
+        ${sources_dir}/dbus_portal_settings_inf.h)
 endif()
 
 if(WITH_PY)

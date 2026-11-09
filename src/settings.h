@@ -78,8 +78,10 @@
     X(active_tts_for_out_mnt_ref_voice, QString, QString{}, false, 0, 0, 0,    \
       false, 0)                                                                \
     X(ui_translator_layout, settings::ui_translator_layout_t,                  \
-      settings::ui_translator_layout_t::UiTranslatorLayoutInBoth, false, 0, 0,  \
-      0, false, 0)
+      settings::ui_translator_layout_t::UiTranslatorLayoutInBoth, false, 0, 0, \
+      0, false, 0)                                                             \
+    X(colors_scheme_dir, QString, QString{"/usr/share/color-schemes"}, true,   \
+      0, 0, 0, false, 0)
 
 // name, default-value
 #define GPU_SCAN_TABLE                                          \
@@ -855,6 +857,14 @@ class settings : public QSettings, public singleton<settings> {
         QString desc;
     };
 
+    struct portal_appearance_t {
+        enum class color_scheme_t { no_preference, prefer_dark, prefer_light };
+        color_scheme_t color_scheme = color_scheme_t::no_preference;
+        QString color_scheme_name;
+    };
+    friend std::ostream &operator<<(
+        std::ostream &os, const portal_appearance_t &portal_appearance);
+
     settings();
 
     static launch_mode_t launch_mode;
@@ -1361,6 +1371,7 @@ class settings : public QSettings, public singleton<settings> {
         hw_t hw_type,
         std::underlying_type_t<hw_feature_flags_t> hw_feature_flags);
     static QString device_id();
+    static portal_appearance_t portal_appearance_info();
 
     QString m_note;
 };
