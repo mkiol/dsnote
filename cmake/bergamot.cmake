@@ -39,7 +39,8 @@ if(arch_x8664)
                         echo "patch cmd failed, likely already patched"
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
-            -DCMAKE_INSTALL_LIBDIR=lib
+            -DCMAKE_INSTALL_LIBDIR=<INSTALL_DIR>/lib
+            -DCMAKE_LIBRARY_PATH=${external_lib_dir}
             -DCMAKE_POSITION_INDEPENDENT_CODE=ON
             -DBLAS_LIB_PATH=${blas_lib_path}
             -DBLAS_INC_DIR=${blas_include_dir}
@@ -63,6 +64,9 @@ if(arch_x8664)
     if(BUILD_OPENBLAS)
         ExternalProject_Add_StepDependencies(bergamotfallback configure openblas)
     endif()
+    if(BUILD_SSPLITCPP)
+        ExternalProject_Add_StepDependencies(bergamotfallback configure ssplitcpp)
+    endif()
 
     list(APPEND deps bergamotfallback)
 endif(arch_x8664)
@@ -79,7 +83,10 @@ ExternalProject_Add(bergamot
                   -i ${patches_dir}/bergamot.patch ||
                   echo "patch cmd failed, likely already patched"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+        -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+        -DCMAKE_INSTALL_LIBDIR=<INSTALL_DIR>/lib
+        -DCMAKE_LIBRARY_PATH=${external_lib_dir}
+        -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         -DBLAS_LIB_PATH=${blas_lib_path}
         -DBLAS_INC_DIR=${blas_include_dir}
         -DUSE_INTRINSICS_SSE2=ON
@@ -100,6 +107,9 @@ ExternalProject_Add(bergamot
 
 if(BUILD_OPENBLAS)
     ExternalProject_Add_StepDependencies(bergamot configure openblas)
+endif()
+if(BUILD_SSPLITCPP)
+    ExternalProject_Add_StepDependencies(bergamot configure ssplitcpp)
 endif()
 
 list(APPEND deps bergamot)

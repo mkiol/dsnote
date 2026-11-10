@@ -1,3 +1,26 @@
+diff -ruN -x '.*' bergamot-org/3rd_party/CMakeLists.txt bergamot-patched/3rd_party/CMakeLists.txt
+--- bergamot-org/3rd_party/CMakeLists.txt	2026-08-16 14:38:03.941613632 +0200
++++ bergamot-patched/3rd_party/CMakeLists.txt	2026-11-10 13:19:33.934040462 +0100
+@@ -8,16 +8,14 @@
+   add_link_options(${WASM_LINK_FLAGS})
+ endif(COMPILE_WASM)
+ 
+-add_subdirectory(ssplit-cpp EXCLUDE_FROM_ALL)
++find_path(ssplit_include_dir ssplit.h)
++message(STATUS "found ssplit include dir at ${ssplit_include_dir}")
+ 
+ # Add include directories for 3rd party targets to be able to use it anywhere in the
+ # project without explicitly specifying their include directories. Once they
+ # fixe this problem, it can be removed.
+ get_property(INCDIRS DIRECTORY marian-dev/src PROPERTY INCLUDE_DIRECTORIES)
+-target_include_directories(marian PUBLIC ${INCDIRS})
+-
+-get_property(INCLUDE_DIRECTORIES DIRECTORY ssplit-cpp/src PROPERTY INCLUDE_DIRECTORIES)
+-target_include_directories(ssplit PUBLIC ${INCLUDE_DIRECTORIES})
++target_include_directories(marian PUBLIC ${INCDIRS} ${ssplit_include_dir})
+ 
+ get_property(COMPILE_DEFINITIONS DIRECTORY marian-dev PROPERTY COMPILE_DEFINITIONS) 
+ target_compile_definitions(marian PUBLIC ${COMPILE_DEFINITIONS})
 diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/CMakeLists.txt bergamot-patched/3rd_party/marian-dev/CMakeLists.txt
 --- bergamot-org/3rd_party/marian-dev/CMakeLists.txt	2026-08-16 14:38:14.773587585 +0200
 +++ bergamot-patched/3rd_party/marian-dev/CMakeLists.txt	2026-08-16 14:42:47.436557864 +0200
@@ -730,7 +753,7 @@ diff -ruN -x '.*' bergamot-org/bergamot_api.h bergamot-patched/bergamot_api.h
 +#endif  // BERGAMOT_API_H
 diff -ruN -x '.*' bergamot-org/CMakeLists.txt bergamot-patched/CMakeLists.txt
 --- bergamot-org/CMakeLists.txt	2026-08-16 14:38:03.942228983 +0200
-+++ bergamot-patched/CMakeLists.txt	2026-08-16 14:42:47.440981629 +0200
++++ bergamot-patched/CMakeLists.txt	2026-11-10 11:47:01.950011096 +0100
 @@ -53,7 +53,7 @@
  if(MSVC)
    add_definitions(-DUSE_SSE2=1) # Supposed to fix something in the sse_mathfun.h but not sure it does
@@ -762,6 +785,23 @@ diff -ruN -x '.*' bergamot-org/CMakeLists.txt bergamot-patched/CMakeLists.txt
  endif(COMPILE_WASM)
  
  option(COMPILE_PYTHON "Compile python bindings. Intended to be activated with setup.py" OFF)
+diff -ruN -x '.*' bergamot-org/src/translator/CMakeLists.txt bergamot-patched/src/translator/CMakeLists.txt
+--- bergamot-org/src/translator/CMakeLists.txt	2026-08-16 14:38:03.950571268 +0200
++++ bergamot-patched/src/translator/CMakeLists.txt	2026-11-10 13:22:16.173832514 +0100
+@@ -38,7 +38,12 @@
+     target_compile_definitions(bergamot-translator PUBLIC ENABLE_CACHE_STATS)
+ endif(ENABLE_CACHE_STATS)
+ 
+-target_link_libraries(bergamot-translator marian ssplit)
++if(USE_STATIC_LIBS)
++  find_library(ssplit_lib_path NAMES libssplit.a REQUIRED)
++else()
++  find_library(ssplit_lib_path ssplit REQUIRED)
++endif()
++target_link_libraries(bergamot-translator marian ${ssplit_lib_path})
+ 
+ target_include_directories(bergamot-translator
+     PUBLIC ${PROJECT_SOURCE_DIR}
 diff -ruN -x '.*' bergamot-org/src/translator/logging.h bergamot-patched/src/translator/logging.h
 --- bergamot-org/src/translator/logging.h	2026-08-16 14:38:03.953571273 +0200
 +++ bergamot-patched/src/translator/logging.h	2026-08-16 14:42:47.441243490 +0200
