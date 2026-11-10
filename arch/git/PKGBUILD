@@ -25,6 +25,7 @@ depends=(
   'libxtst'
   'ocl-icd'
   'openblas'
+  'pcre2'
   'python>=3.11'
   'qqc2-breeze-style'
   'qqc2-desktop-style'
@@ -91,6 +92,7 @@ build() {
         -DBUILD_CATCH2=OFF \
         -DBUILD_OPENBLAS=OFF \
         -DBUILD_XZ=OFF \
+        -DBUILD_PCRE2=OFF \
         -DBUILD_PYBIND11=OFF \
         -DBUILD_RUBBERBAND=OFF \
         -DBUILD_FFMPEG=ON \

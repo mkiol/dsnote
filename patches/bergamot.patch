@@ -807,17 +807,21 @@ diff -ruN -x '.*' bergamot-org/CMakeLists.txt bergamot-patched/CMakeLists.txt
  option(COMPILE_PYTHON "Compile python bindings. Intended to be activated with setup.py" OFF)
 diff -ruN -x '.*' bergamot-org/src/translator/CMakeLists.txt bergamot-patched/src/translator/CMakeLists.txt
 --- bergamot-org/src/translator/CMakeLists.txt	2026-08-16 14:38:03.950571268 +0200
-+++ bergamot-patched/src/translator/CMakeLists.txt	2026-11-10 13:22:16.173832514 +0100
-@@ -38,7 +38,12 @@
++++ bergamot-patched/src/translator/CMakeLists.txt	2026-11-10 14:30:40.638198455 +0100
+@@ -38,7 +38,16 @@
      target_compile_definitions(bergamot-translator PUBLIC ENABLE_CACHE_STATS)
  endif(ENABLE_CACHE_STATS)
  
 -target_link_libraries(bergamot-translator marian ssplit)
 +if(USE_STATIC_LIBS)
 +  find_library(ssplit_lib_path NAMES libssplit.a REQUIRED)
++  find_library(pcre2_path pcre2-8 REQUIRED)
++  find_library(pcre2posix_path pcre2-posix REQUIRED)
++  set(ssplit_lib_path ${ssplit_lib_path} ${pcre2_path} ${pcre2posix_path})
 +else()
 +  find_library(ssplit_lib_path ssplit REQUIRED)
 +endif()
++message(STATUS "found ssplit libs at ${ssplit_lib_path}")
 +target_link_libraries(bergamot-translator marian ${ssplit_lib_path})
  
  target_include_directories(bergamot-translator
