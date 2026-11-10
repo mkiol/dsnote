@@ -367,6 +367,26 @@ diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/src/common/binary.cpp bergam
                                                        // non-aligned models can be read with the same procedure.
                                                        // No version-bump required. Gets 5-8% of speed back when mmapped.
  }
+diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/src/data/sentencepiece_vocab.cpp bergamot-patched/3rd_party/marian-dev/src/data/sentencepiece_vocab.cpp
+--- bergamot-org/3rd_party/marian-dev/src/data/sentencepiece_vocab.cpp	2026-08-16 14:38:14.962587868 +0200
++++ bergamot-patched/3rd_party/marian-dev/src/data/sentencepiece_vocab.cpp	2026-11-10 13:39:22.896790663 +0100
+@@ -4,7 +4,6 @@
+ #include "common/options.h"
+ #include "common/logging.h"
+ #include "common/filesystem.h"
+-#include "common/regex.h"
+ 
+ #include <sstream>
+ #include <random>
+@@ -329,7 +328,7 @@
+ #endif // USE_SENTENCEPIECE
+ 
+ Ptr<IVocab> createSentencePieceVocab(const std::string& vocabPath, Ptr<Options> options, size_t batchIndex) {
+-  bool isSentencePiece = regex::regex_search(vocabPath, regex::regex("\\.(spm)$"));
++  bool isSentencePiece = vocabPath.size() >= 4 && vocabPath.compare(vocabPath.size() - 4, 4, ".spm") == 0;
+   if(isSentencePiece) {
+ #ifdef USE_SENTENCEPIECE
+     return New<SentencePieceVocab>(options, batchIndex);
 diff -ruN -x '.*' bergamot-org/3rd_party/marian-dev/src/layers/lsh.cpp bergamot-patched/3rd_party/marian-dev/src/layers/lsh.cpp
 --- bergamot-org/3rd_party/marian-dev/src/layers/lsh.cpp	2026-08-16 14:38:14.978587892 +0200
 +++ bergamot-patched/3rd_party/marian-dev/src/layers/lsh.cpp	2026-08-16 14:42:47.439223657 +0200
