@@ -237,6 +237,20 @@ modules:
       url: https://files.pythonhosted.org/packages/fc/fa/b2d55f0d53c7c7f5dc0b6dbb48cc4344ee84fb572f23de28040bf2cde89d/curated-tokenizers-0.0.9.tar.gz
       sha256: c93d47e54ab3528a6db2796eeb4bdce5d44e8226c671e42c2f23522ab1d0ce25
     - type: file
+      path: ../patches/curated-tokenizers.patch
+    - type: shell
+      commands:
+        - |
+          set -e
+          name="curated-tokenizers-0.0.9"
+          file="${PWD}/${name}.tar.gz"
+          tmp="${PWD}/${name}"
+          tar -xvf "$file"
+          patch --batch --unified -p1 --directory=$(realpath .)/${name} -i "$(realpath .)"/curated-tokenizers.patch
+          rm "$file"
+          tar -czvf "$file" ${name}
+          rm -rf "$tmp"
+    - type: file
       url: https://files.pythonhosted.org/packages/d6/67/3b72b3fdfcadab61bc8f59c17e63770e526ffabd583ed32f174a7c01af85/curated_transformers-0.1.1-py2.py3-none-any.whl
       sha256: d716063d73d803c6925d2dab56fde9b9ab8e89e663c2c0587804944ba488ff01
     - type: file
