@@ -40,7 +40,7 @@ RowLayout {
                     enabled: false
                     visible: false
                     Layout.alignment: Qt.AlignVCenter
-                    icon.name: "audio-speakers-symbolic"
+                    icon.name: "text-speak-symbolic"
                 }
 
                 ComboBox {

@@ -472,7 +472,7 @@ DialogPage {
                     }
 
                     Button {
-                        icon.name: "audio-speakers-symbolic"
+                        icon.name: "text-speak-symbolic"
                         flat: true
                         visible: ttsCheckBox.checked
                         display: AbstractButton.IconOnly

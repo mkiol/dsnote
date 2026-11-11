@@ -12,6 +12,7 @@ import QtQuick.Layouts
 Item {
     id: root
 
+    property bool _enabled: true
     property string name: ""
     property alias textArea: _textArea
     property alias textFormatCombo: _textFormatCombo
@@ -56,7 +57,7 @@ Item {
         enabled: root.enabled
         clip: true
 
-        opacity: enabled ? 1.0 : 0.8
+        opacity: _enabled ? 1.0 : 0.8
         Behavior on opacity { OpacityAnimator { duration: 100 } }
 
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
@@ -64,7 +65,7 @@ Item {
         TextArea {
             id: _textArea
 
-            enabled: root.enabled
+            readOnly: !root._enabled
             color: {
                 if (root._contextActive && !root._fitContent) {
                     var c = root.textColor
@@ -78,7 +79,11 @@ Item {
             verticalAlignment: TextEdit.AlignTop
             font: _settings.notepad_font
             onCursorPositionChanged: cursorIndicator.update(cursorPosition)
-            Component.onCompleted: cursorIndicator.update(-1)
+            Component.onCompleted: {
+                //console.log("background:", background, background.elementType)
+                //background.elementType = ""
+                cursorIndicator.update(-1)
+            }
             onTextChanged: cursorIndicator.update(cursorPosition)
             Accessible.name: root.name
             bottomPadding: _textFormatCombo.height + 2 * appWin.padding
@@ -139,7 +144,7 @@ Item {
 
                 MenuItem {
                     action: Action {
-                        icon.name: "audio-speakers-symbolic"
+                        icon.name: "text-speak-symbolic"
                         text: (root.textArea.selectedText.length !== 0 && root.canReadSelected) ? qsTr("Read selection") : qsTr("Read All")
                     }
                     enabled: (root.textArea.selectedText.length !== 0 && root.canReadSelected) || root.canReadAll
@@ -153,7 +158,7 @@ Item {
 
                 MenuItem {
                     action: Action {
-                        icon.name: "audio-speakers-symbolic"
+                        icon.name: "text-speak-symbolic"
                         text: qsTr("Read from cursor position")
                     }
                     enabled: root.textArea.cursorPosition >= 0 &&
@@ -166,7 +171,7 @@ Item {
 
                 MenuItem {
                     action: Action {
-                        icon.name: "audio-speakers-symbolic"
+                        icon.name: "text-speak-symbolic"
                         text: qsTr("Read to cursor position")
                     }
                     enabled: root.textArea.cursorPosition > 0 && root.canReadSelected

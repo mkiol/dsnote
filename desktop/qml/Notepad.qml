@@ -15,6 +15,7 @@ import org.mkiol.dsnote.Settings 1.0
 ColumnLayout {
     id: root
 
+    property bool showing: false
     property alias noteTextArea: _noteTextArea
     property bool readOnly: false
     readonly property string placeholderText: qsTr("Neither Speech to Text nor Text to Speech model has been set up yet.") + " " +
@@ -45,7 +46,7 @@ ColumnLayout {
             noteTextArea.scrollToBottom()
         }
 
-        if (!root.enabled || app.busy || service.busy) return;
+        if (!root.showing || app.busy || service.busy) return;
 
         if (app.stt_configured) {
             listenReadCombos.first.combo.currentIndex = app.active_stt_model_idx
@@ -58,7 +59,7 @@ ColumnLayout {
     }
 
     visible: opacity > 0.0
-    opacity: enabled ? 1.0 : 0.0
+    opacity: showing ? 1.0 : 0.0
     Behavior on opacity { OpacityAnimator { duration: 100 } }
 
     ScrollTextArea {
@@ -70,7 +71,7 @@ ColumnLayout {
         Layout.rightMargin: appWin.padding
 
         name: qsTr("Notepad")
-        enabled: root.enabled
+        _enabled: root.showing
         canUndoFallback: app.can_undo_note
         canReadSelected: listenReadCombos.second.button.enabled
         canReadAll: canReadSelected
@@ -183,7 +184,7 @@ ColumnLayout {
         }
 
         second {
-            icon.name: "audio-speakers-symbolic"
+            icon.name: "text-speak-symbolic"
             enabled: app.tts_configured && app.state === DsnoteApp.StateIdle
             comboToolTip: listenReadCombos.second.comboRedBorder ?
                               qsTr("This model requires a voice profile.") + " " +

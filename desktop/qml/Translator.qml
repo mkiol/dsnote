@@ -15,6 +15,7 @@ import org.mkiol.dsnote.Settings 1.0
 ColumnLayout {
     id: root
 
+    property bool showing: false
     property alias noteTextArea: _noteTextArea
     property alias translatedNoteTextArea: _translatedNoteTextArea
     property bool readOnly: false
@@ -56,7 +57,7 @@ ColumnLayout {
             translatedNoteTextArea.scrollToBottom()
         }
 
-        if (!root.enabled || app.busy || service.busy) return;
+        if (!root.showing || app.busy || service.busy) return;
 
         if (app.mnt_configured) {
             mntInCombo.first.combo.currentIndex = app.active_mnt_lang_idx
@@ -79,7 +80,7 @@ ColumnLayout {
     }
 
     visible: opacity > 0.0
-    opacity: enabled ? 1.0 : 0.0
+    opacity: showing ? 1.0 : 0.0
     Behavior on opacity { OpacityAnimator { duration: 100 } }
 
     GridLayout {
@@ -105,13 +106,13 @@ ColumnLayout {
                 leftPadding: appWin.padding
                 topPadding: 0
                 rightPadding: grid.verticalMode ? appWin.padding : 0
-                enabled: app.mnt_configured
+                // enabled: app.mnt_configured
 
                 ScrollTextArea {
                     id: _noteTextArea
 
                     name: qsTr("Text to translate from")
-                    enabled: !root.readOnly && app.mnt_configured
+                    _enabled: !root.readOnly && app.mnt_configured
                     anchors.fill: parent
                     canUndoFallback: app.can_undo_note
                     canReadSelected: mntInCombo.second.button.enabled
@@ -207,7 +208,7 @@ ColumnLayout {
                     }
                 }
                 second {
-                    icon.name: root.showStt ? "audio-input-microphone-symbolic" : "audio-speakers-symbolic"
+                    icon.name: root.showStt ? "audio-input-microphone-symbolic" : "text-speak-symbolic"
                     enabled: root.showStt ? app.mnt_configured && app.stt_configured && (app.state === DsnoteApp.StateIdle || app.state === DsnoteApp.StateListeningManual) :
                                             app.mnt_configured && app.tts_configured && app.state === DsnoteApp.StateIdle
                     comboToolTip: root.showStt ? qsTr("Speech to Text model for language to translate from.") :
@@ -283,108 +284,26 @@ ColumnLayout {
                             }
                         }
                     }
+                    button2ToolTip: qsTr("Toggle %1/%2").arg("<i>" + qsTr("Read") + "</i>").arg("<i>" + qsTr("Listen") + "</i>")
+                    button2 {
+                        icon.name: "swap-panels-symbolic"
+                        display: AbstractButton.IconOnly
+                        action: Action {
+                            text: qsTr("Toggle %1/%2").arg("<i>" + qsTr("Read") + "</i>").arg("<i>" + qsTr("Listen") + "</i>")
+                            onTriggered: {
+                                switch (_settings.ui_translator_layout) {
+                                    case Settings.UiTranslatorLayoutInStt:
+                                        _settings.ui_translator_layout = Settings.UiTranslatorLayoutInBoth
+                                        break
+                                    case Settings.UiTranslatorLayoutInTts:
+                                    case Settings.UiTranslatorLayoutInBoth:
+                                        _settings.ui_translator_layout = Settings.UiTranslatorLayoutInStt
+                                        break
+                                }
+                            }
+                        }
+                    }
                 }
-                // second {
-                //     icon.name: "audio-input-microphone-symbolic"
-                //     enabled: app.mnt_configured && app.stt_configured && app.state === DsnoteApp.StateIdle
-                //     comboToolTip: qsTr("Speech to Text model for language to translate from.")
-                //     comboPlaceholderText: qsTr("No Speech to Text model")
-                //     comboFillWidth: true
-                //     showSeparator: !mntInCombo.verticalMode
-                //     combo {
-                //         model: app.available_stt_models_for_in_mnt
-                //         enabled: mntInCombo.second.enabled && !mntInCombo.second.off && app.state === DsnoteApp.StateIdle
-                //         onActivated: (index) => app.set_active_stt_model_for_in_mnt_idx(index)
-                //         currentIndex: app.active_stt_model_for_in_mnt_idx
-                //     }
-                //     frame {
-                //         leftPadding: appWin.padding
-                //         rightPadding: grid.verticalMode ? appWin.padding : 0
-                //     }
-                //     buttonToolTip: qsTr("Listen") + " (Ctrl+Alt+Shift+L)"
-                //     button {
-                //         enabled: mntInCombo.second.enabled && !mntInCombo.second.off
-                //         onClicked: {
-                //             if (_settings.speech_mode !== Settings.SpeechManual &&
-                //                     app.state === DsnoteApp.StateIdle &&
-                //                     app.task_state === DsnoteApp.TaskStateIdle)
-                //                 app.listen()
-                //         }
-                //         onReleased: {
-                //             if (app.state === DsnoteApp.StateListeningManual || _settings.speech_mode === Settings.SpeechManual)
-                //                 app.stop_listen()
-                //         }
-                //         onPressed: {
-                //             if (_settings.speech_mode === Settings.SpeechManual &&
-                //                     app.state === DsnoteApp.StateIdle &&
-                //                     app.task_state === DsnoteApp.TaskStateIdle) {
-                //                 app.listen()
-                //             }
-                //         }
-
-                //         action: Action {
-                //             text: qsTr("Listen")
-                //             shortcut: "Ctrl+Alt+Shift+L"
-                //         }
-                //     }
-                // }
-                // second {
-                //     icon.name: "audio-speakers-symbolic"
-                //     enabled: app.mnt_configured && app.tts_configured && app.state === DsnoteApp.StateIdle
-                //     comboToolTip: mntInCombo.second.combo2RedBorder ?
-                //                       qsTr("This model requires a voice profile.") + " " +
-                //                       qsTr("Create one in %1.").arg("<i>" + qsTr("Voice profiles") + "</i>") :
-                //                       qsTr("Text to Speech model for language to translate from.")
-                //     comboPlaceholderText: qsTr("No Text to Speech model")
-                //     combo2PlaceholderText: qsTr("No voice profile")
-                //     combo2ToolTip: qsTr("Voice profile")
-                //     comboFillWidth: true
-                //     comboRedBorder: !mntInCombo.second.off && ((app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voice_names.length === 0) ||
-                //                                                (app.tts_for_in_mnt_ref_prompt_needed && _settings.tts_voice_prompts.length === 0))
-                //     showSeparator: !mntInCombo.verticalMode
-                //     combo {
-                //         model: app.available_tts_models_for_in_mnt
-                //         enabled: mntInCombo.second.enabled &&
-                //                  !mntInCombo.second.off &&
-                //                  app.state === DsnoteApp.StateIdle
-                //         onActivated: (index) => app.set_active_tts_model_for_in_mnt_idx(index)
-                //         currentIndex: app.active_tts_model_for_in_mnt_idx
-                //     }
-                //     combo2 {
-                //         visible: mntInCombo.refVoiceNeeded || mntInCombo.refPromptNeeded
-                //         enabled: mntInCombo.second.enabled &&
-                //                  !mntInCombo.second.off &&
-                //                  app.state === DsnoteApp.StateIdle
-                //         model: mntInCombo.refVoiceNeeded ? app.available_tts_ref_voice_names :
-                //                                            _settings.tts_voice_prompt_names
-                //         onActivated: (index) => {
-                //             if (mntInCombo.refVoiceNeeded)
-                //                 app.set_active_tts_for_in_mnt_ref_voice_idx(index)
-                //             else
-                //                 _settings.tts_active_voice_prompt_for_in_mnt_idx = index
-                //         }
-                //         currentIndex:
-                //             mntInCombo.refVoiceNeeded ?
-                //                 app.active_tts_for_in_mnt_ref_voice_idx :
-                //                 _settings.tts_active_voice_prompt_for_in_mnt_idx
-                //     }
-                //     frame {
-                //         leftPadding: appWin.padding
-                //         rightPadding: grid.verticalMode ? appWin.padding : 0
-                //     }
-                //     buttonToolTip: qsTr("Read") + " (Ctrl+Alt+Shift+R)"
-                //     button {
-                //         enabled: mntInCombo.second.enabled &&
-                //                  !mntInCombo.second.off &&
-                //                  app.note.length !== 0 &&
-                //                  (!app.tts_for_in_mnt_ref_voice_needed || app.available_tts_ref_voice_names.length !== 0) &&
-                //                  (!app.tts_for_in_mnt_ref_prompt_needed || _settings.tts_voice_prompts.length !== 0)
-                //         action: Action {
-                //             text: qsTr("Read")
-                //             onTriggered: app.play_speech_translator(false)
-                //         }
-                //     }
-                // }
             }
         }
 
@@ -466,7 +385,7 @@ ColumnLayout {
                     id: _translatedNoteTextArea
 
                     name: qsTr("Translated text")
-                    enabled: !root.readOnly && app.mnt_configured && app.translated_text.length !== 0
+                    _enabled: !root.readOnly && app.mnt_configured && app.translated_text.length !== 0
                     anchors.fill: parent
                     textColor: {
                         var c = palette.text
@@ -525,7 +444,7 @@ ColumnLayout {
                     }
                 }
                 second {
-                    icon.name: "audio-speakers-symbolic"
+                    icon.name: "text-speak-symbolic"
                     enabled: app.mnt_configured && app.tts_configured &&
                              app.state === DsnoteApp.StateIdle
                     comboToolTip: mntOutCombo.second.combo2RedBorder ?

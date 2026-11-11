@@ -424,7 +424,7 @@ ApplicationWindow {
 
             Layout.topMargin: appWin.padding
             Layout.fillWidth: true
-            enabled: _settings.translator_mode
+            showing: _settings.translator_mode
             readOnly: appWin.canCancelStt
         }
 
@@ -433,7 +433,7 @@ ApplicationWindow {
 
             Layout.topMargin: appWin.padding
             Layout.fillWidth: true
-            enabled: !_settings.translator_mode
+            showing: !_settings.translator_mode
         }
 
         Item {

@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,6 +13,7 @@ RowLayout {
     id: root
 
     property alias button: _button
+    property alias button2: _button2
     property alias icon: _icon.icon
     property alias controlEnabled: row.enabled
     property alias combo: _combo
@@ -25,6 +26,7 @@ RowLayout {
     property string combo3ToolTip: ""
     property string checkToolTip: ""
     property string buttonToolTip: ""
+    property string button2ToolTip: ""
     readonly property bool off: combo.model.length === 0
     property string comboPlaceholderText: ""
     property string combo2PlaceholderText: ""
@@ -182,6 +184,21 @@ RowLayout {
                 Layout.preferredWidth: appWin.buttonWidth
 
                 Accessible.description: root.buttonToolTip
+            }
+
+            Button {
+                id: _button2
+
+                visible: text.length !== 0
+                enabled: !root.off
+
+                ToolTip.visible: root.button2ToolTip.length !== 0 && hovered
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: root.button2ToolTip
+
+                Layout.alignment: Qt.AlignVCenter
+
+                Accessible.description: root.button2ToolTip
             }
         }
     }
