@@ -88,7 +88,11 @@
       0, 0, 0, false, 0)                                                       \
     X(speech_mode, settings::speech_mode_t,                                    \
       settings::speech_mode_t::SpeechSingleSentence, false, 0, 0, 0, false, 0) \
-    X(speech_speed, unsigned int, 10U, false, 1U, 20U, 1U, false, 0)
+    X(speech_speed, unsigned int, 10U, false, 1U, 20U, 1U, false, 0)           \
+    X(fake_keyboard_delay, int, 20, false, 1, 1000, 1, false, 0)               \
+    X(fake_keyboard_layout, QString, QString{}, false, 0, 0, 0, false, 0)      \
+    X(x11_compose_file, QString, QString{}, false, 0, 0, 0, false, 0)          \
+    X(py_path, QString, QString{}, true, 0, 0, 0, false, 0)
 
 // name, default-value
 #define GPU_SCAN_TABLE                                          \
@@ -400,10 +404,6 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(
         default_export_tab_t default_export_tab READ default_export_tab WRITE
             set_default_export_tab NOTIFY default_export_tab_changed)
-    Q_PROPERTY(QString x11_compose_file READ x11_compose_file WRITE
-                   set_x11_compose_file NOTIFY x11_compose_file_changed)
-    Q_PROPERTY(QString fake_keyboard_layout READ fake_keyboard_layout WRITE
-                   set_fake_keyboard_layout NOTIFY fake_keyboard_layout_changed)
     Q_PROPERTY(
         unsigned int error_flags READ error_flags NOTIFY error_flags_changed)
     Q_PROPERTY(unsigned int hint_done_flags READ hint_done_flags NOTIFY
@@ -460,8 +460,6 @@ class settings : public QSettings, public singleton<settings> {
     Q_PROPERTY(
         fake_keyboard_type_t fake_keyboard_type READ fake_keyboard_type WRITE
             set_fake_keyboard_type NOTIFY fake_keyboard_type_changed)
-    Q_PROPERTY(int fake_keyboard_delay READ fake_keyboard_delay WRITE
-                   set_fake_keyboard_delay NOTIFY fake_keyboard_delay_changed)
     // service
 
     Q_PROPERTY(QString models_dir READ models_dir WRITE set_models_dir NOTIFY
@@ -495,8 +493,6 @@ class settings : public QSettings, public singleton<settings> {
                    set_cache_policy NOTIFY cache_policy_changed)
     Q_PROPERTY(int num_threads READ num_threads WRITE set_num_threads NOTIFY
                    num_threads_changed)
-    Q_PROPERTY(
-        QString py_path READ py_path WRITE set_py_path NOTIFY py_path_changed)
     Q_PROPERTY(bool gpu_override_version READ gpu_override_version WRITE
                    set_gpu_override_version NOTIFY gpu_override_version_changed)
     Q_PROPERTY(
@@ -1014,10 +1010,6 @@ class settings : public QSettings, public singleton<settings> {
     void set_default_export_tab(default_export_tab_t value);
     int mix_volume_change() const;
     void set_mix_volume_change(int value);
-    QString x11_compose_file() const;
-    void set_x11_compose_file(const QString &value);
-    QString fake_keyboard_layout() const;
-    void set_fake_keyboard_layout(const QString &value);
     int settings_stt_engine_idx() const;
     void set_settings_stt_engine_idx(int value);
     int settings_tts_engine_idx() const;
@@ -1050,8 +1042,6 @@ class settings : public QSettings, public singleton<settings> {
     void set_tts_active_voice_prompt_for_out_mnt_idx(int idx);
     fake_keyboard_type_t fake_keyboard_type() const;
     void set_fake_keyboard_type(fake_keyboard_type_t value);
-    int fake_keyboard_delay() const;
-    void set_fake_keyboard_delay(int value);
     QString tts_desc_of_voice_prompt(const QString &name) const;
     std::optional<voice_profile_prompt_t> tts_voice_prompt(
         const QString &name) const;
@@ -1145,8 +1135,6 @@ class settings : public QSettings, public singleton<settings> {
     void set_py_scan_mode(py_scan_mode_t value);
     int num_threads() const;
     void set_num_threads(int value);
-    QString py_path() const;
-    void set_py_path(const QString &value);
     void set_cache_audio_format(cache_audio_format_t value);
     cache_audio_format_t cache_audio_format() const;
     void set_cache_policy(cache_policy_t value);
@@ -1270,8 +1258,6 @@ class settings : public QSettings, public singleton<settings> {
     void default_export_tab_changed();
     void tts_subtitles_sync_changed();
     void mix_volume_change_changed();
-    void x11_compose_file_changed();
-    void fake_keyboard_layout_changed();
     void error_flags_changed();
     void settings_stt_engine_idx_changed();
     void settings_tts_engine_idx_changed();
@@ -1283,7 +1269,6 @@ class settings : public QSettings, public singleton<settings> {
     void tts_active_voice_prompt_for_in_mnt_changed();
     void tts_active_voice_prompt_for_out_mnt_changed();
     void fake_keyboard_type_changed();
-    void fake_keyboard_delay_changed();
     void active_voice_profile_type_changed();
 
     // service
@@ -1301,7 +1286,6 @@ class settings : public QSettings, public singleton<settings> {
     void cache_audio_format_changed();
     void cache_policy_changed();
     void num_threads_changed();
-    void py_path_changed();
     void gpu_override_version_changed();
     void gpu_overrided_version_changed();
     void gpu_devices_changed();

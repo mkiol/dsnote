@@ -278,22 +278,16 @@ ColumnLayout {
         }
     }
 
-    TextFieldForm {
-        id: pyTextField
-
-        indends: 1
+    TextFieldFormSetting {
         visible: _settings.py_scan_mode === Settings.PyScanOn || _settings.py_scan_mode === Settings.PyScanOffAllEnabled
-        label.text: qsTranslate("SettingsPage", "Location of Python libraries (version: %1)").arg(app.py_version.length === 0 ? "0.0.0" : app.py_version)
-        toolTip: qsTranslate("SettingsPage", "Python libraries directory (%1).").arg("<i>PYTHONPATH</i>") + " " +
+        optionName: "py_path"
+        labelText: qsTranslate("SettingsPage", "Location of Python libraries (version: %1)").arg(app.py_version.length === 0 ? "0.0.0" : app.py_version)
+        toolTipText: qsTranslate("SettingsPage", "Python libraries directory (%1).").arg("<i>PYTHONPATH</i>") + " " +
                  qsTranslate("SettingsPage", "Leave blank to use the default value.") + " " +
                  (_settings.is_flatpak() ?
                       qsTranslate("SettingsPage", "Make sure that the Flatpak application has permissions to access the directory.") :
                       qsTranslate("SettingsPage", "This option may be useful if you use %1 module to manage Python libraries.").arg("<i>venv</i>"))
-        textField {
-            text: _settings.py_path
-            onTextChanged: _settings.py_path = pyTextField.textField.text
-            placeholderText: qsTranslate("SettingsPage", "Leave blank to use the default value.")
-        }
+        placeholderText: qsTranslate("SettingsPage", "Leave blank to use the default value.")
     }
 
     function setScanFlags() {
@@ -367,46 +361,34 @@ ColumnLayout {
         }
     }
 
-    SpinBoxForm {
+    SpinBoxFormSetting {
         visible: app.feature_fake_keyboard
-        label.text: qsTranslate("SettingsPage", "Keystroke delay")
-        toolTip: qsTranslate("SettingsPage", "The delay between simulated keystrokes used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>")
-        spinBox {
-            from: 1
-            to: 1000
-            stepSize: 1
-            value: _settings.fake_keyboard_delay
-            onValueChanged: {
-                _settings.fake_keyboard_delay = spinBox.value;
-            }
-        }
+        indends: 1
+        optionName: "fake_keyboard_delay"
+        text: qsTranslate("SettingsPage", "Keystroke delay")
+        unitName: "ms"
+        toolTipText: qsTranslate("SettingsPage", "The delay between simulated keystrokes used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>")
     }
 
-    TextFieldForm {
+    TextFieldFormSetting {
         visible: app.feature_fake_keyboard && _settings.fake_keyboard_type !== Settings.FakeKeyboardTypeXdo
-        label.text: qsTranslate("SettingsPage", "Compose file")
-        toolTip: qsTranslate("SettingsPage", "X11 compose file used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>") + " " +
+        optionName: "x11_compose_file"
+        labelText: qsTranslate("SettingsPage", "Compose file")
+        toolTipText: qsTranslate("SettingsPage", "X11 compose file used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>") + " " +
                  qsTranslate("SettingsPage", "Leave blank to use the default value.") +
                  (_settings.is_flatpak() ?
                       (" " + qsTranslate("SettingsPage", "Make sure that the Flatpak application has permissions to access the directory.")) :
                       "")
-        textField {
-            text: _settings.x11_compose_file
-            onTextChanged: _settings.x11_compose_file = text
-            placeholderText: qsTranslate("SettingsPage", "Leave blank to use the default value.")
-        }
+        placeholderText: qsTranslate("SettingsPage", "Leave blank to use the default value.")
     }
 
-    TextFieldForm {
+    TextFieldFormSetting {
         visible: app.feature_fake_keyboard && _settings.fake_keyboard_type === Settings.FakeKeyboardTypeYdo
-        label.text: qsTranslate("SettingsPage", "Keyboard layout")
-        toolTip: qsTranslate("SettingsPage", "Keyboard layout used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>") + " " +
+        optionName: "fake_keyboard_layout"
+        labelText: qsTranslate("SettingsPage", "Keyboard layout")
+        toolTipText: qsTranslate("SettingsPage", "Keyboard layout used in %1.").arg("<i>" + qsTranslate("SettingsPage", "Insert into active window") + "</i>") + " " +
                  qsTranslate("SettingsPage", "Leave blank to use the default value.")
-        textField {
-            text: _settings.fake_keyboard_layout
-            onTextChanged: _settings.fake_keyboard_layout = text
-            placeholderText: qsTranslate("SettingsPage", "Leave blank to use the default value.")
-        }
+        placeholderText: qsTranslate("SettingsPage", "Leave blank to use the default value.")
     }
 
     TipMessage {

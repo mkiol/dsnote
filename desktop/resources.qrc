@@ -46,7 +46,9 @@
         <file>qml/Dot.qml</file>
         <file>qml/HorizontalLine.qml</file>
         <file>qml/TextFieldForm.qml</file>
+        <file>qml/TextFieldFormSetting.qml</file>
         <file>qml/TextFieldComboForm.qml</file>
+        <file>qml/TextFieldWithHelpForm.qml</file>
         <file>qml/ComboBoxForm.qml</file>
         <file>qml/TipMessage.qml</file>
         <file>qml/SpinBoxForm.qml</file>
@@ -61,7 +63,6 @@
         <file>qml/DoubleTextArea.qml</file>
         <file>qml/HelpDialog.qml</file>
         <file>qml/RowForm.qml</file>
-        <file>qml/TextFieldWithHelpForm.qml</file>
         <file>qml/LayoutFixer.qml</file>
         <file>qml/VoiceAudioSampleEditPage.qml</file>
         <file>qml/StackViewQuick.qml</file>

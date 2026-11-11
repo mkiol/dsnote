@@ -633,18 +633,6 @@ void settings::set_restore_punctuation(bool value) {
     }
 }
 
-QString settings::py_path() const {
-    return value(QStringLiteral("service/py_path"), {}).toString();
-}
-
-void settings::set_py_path(const QString& value) {
-    if (py_path() != value) {
-        setValue(QStringLiteral("service/py_path"), value);
-        emit py_path_changed();
-        set_restart_required(true);
-    }
-}
-
 QString settings::default_tts_model_for_mnt_lang(const QString& lang) {
     return value(QStringLiteral("default_tts_model_for_mnt_%1").arg(lang), {})
         .toString();
@@ -1108,28 +1096,6 @@ void settings::set_insert_mode(insert_mode_t value) {
     if (insert_mode() != value) {
         setValue(QStringLiteral("insert_mode"), static_cast<int>(value));
         emit insert_mode_changed();
-    }
-}
-
-QString settings::x11_compose_file() const {
-    return value(QStringLiteral("x11_compose_file"), {}).toString();
-}
-
-void settings::set_x11_compose_file(const QString& value) {
-    if (x11_compose_file() != value) {
-        setValue(QStringLiteral("x11_compose_file"), value);
-        emit x11_compose_file_changed();
-    }
-}
-
-QString settings::fake_keyboard_layout() const {
-    return value(QStringLiteral("fake_keyboard_layout"), {}).toString();
-}
-
-void settings::set_fake_keyboard_layout(const QString& value) {
-    if (fake_keyboard_layout() != value) {
-        setValue(QStringLiteral("fake_keyboard_layout"), value);
-        emit fake_keyboard_layout_changed();
     }
 }
 
@@ -3329,18 +3295,6 @@ void settings::set_fake_keyboard_type(fake_keyboard_type_t value) {
     if (fake_keyboard_type() != value) {
         setValue(QStringLiteral("fake_keyboard_type"), static_cast<int>(value));
         emit fake_keyboard_type_changed();
-    }
-}
-
-int settings::fake_keyboard_delay() const {
-    auto v = value(QStringLiteral("fake_keyboard_delay"), 20).toInt();
-    return std::clamp(v, 1, 1000);
-}
-
-void settings::set_fake_keyboard_delay(int value) {
-    if (fake_keyboard_delay() != value) {
-        setValue(QStringLiteral("fake_keyboard_delay"), value);
-        emit fake_keyboard_delay_changed();
     }
 }
 
