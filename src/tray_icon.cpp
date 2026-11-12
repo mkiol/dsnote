@@ -313,25 +313,23 @@ void tray_icon::make_menu() {
                      "audio-input-microphone-symbolic", m_menu_translate);
     m_menu.addSeparator();
     m_menu_translate.addSeparator();
-    add_action_to_menu(action_t::start_reading, "audio-speakers-symbolic",
+    add_action_to_menu(action_t::start_reading, "text-speak-symbolic",
                        tr("Start reading"), m_menu);
-    add_action_to_menu(action_t::start_reading, "audio-speakers-symbolic",
+    add_action_to_menu(action_t::start_reading, "text-speak-symbolic",
                        tr("Start reading"), m_menu_translate);
-    add_action_to_menu(action_t::start_reading_clipboard,
-                       "audio-speakers-symbolic",
+    add_action_to_menu(action_t::start_reading_clipboard, "text-speak-symbolic",
                        tr("Start reading text from clipboard"), m_menu);
-    add_action_to_menu(
-        action_t::start_reading_clipboard, "audio-speakers-symbolic",
-        tr("Start reading text from clipboard"), m_menu_translate);
+    add_action_to_menu(action_t::start_reading_clipboard, "text-speak-symbolic",
+                       tr("Start reading text from clipboard"),
+                       m_menu_translate);
     add_action_to_menu(action_t::pause_resume_reading,
                        "media-playback-pause-symbolic",
                        tr("Pause/Resume reading"), m_menu);
     add_action_to_menu(action_t::pause_resume_reading,
                        "media-playback-pause-symbolic",
                        tr("Pause/Resume reading"), m_menu_translate);
-    add_menu_to_menu(action_t::change_tts_model, "audio-speakers-symbolic",
-                     m_menu);
-    add_menu_to_menu(action_t::change_tts_model, "audio-speakers-symbolic",
+    add_menu_to_menu(action_t::change_tts_model, "text-speak-symbolic", m_menu);
+    add_menu_to_menu(action_t::change_tts_model, "text-speak-symbolic",
                      m_menu_translate);
     m_menu.addSeparator();
     m_menu_translate.addSeparator();
