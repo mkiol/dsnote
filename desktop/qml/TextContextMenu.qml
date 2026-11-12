@@ -30,7 +30,7 @@ Menu {
 
     Component.onCompleted: {
         // disable spell check in text-area because context menu does not support it right now
-        disableSpellCheckInTextArea()
+        _timer.start()
 
         var is_native = _settings.is_native_style()
 
@@ -51,6 +51,13 @@ Menu {
                 root.open()
             })
         }
+    }
+
+    Timer {
+        id: _timer
+
+        interval: 10
+        onTriggered: root.disableSpellCheckInTextArea()
     }
 
     MenuItem {

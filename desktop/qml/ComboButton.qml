@@ -36,33 +36,36 @@ RowLayout {
     property alias comboRedBorder: _comboRedBorder.visible
     property alias combo2RedBorder: _combo2RedBorder.visible
     property alias combo3RedBorder: _combo3RedBorder.visible
-    property alias showSeparator: _separator.visible
+    property bool showBorder: true
 
     Layout.fillWidth: verticalMode ? true : comboFillWidth
 
     Frame {
         id: _frame
 
-        Layout.fillWidth: true
-        background: Item {}
+        property int _height: Math.max(_combo.implicitHeight, _button.implicitHeight)
 
-        topPadding: 2
-        bottomPadding: 2
+        Layout.fillWidth: true
+
+        topInset: 0
+        bottomInset: 0
+        topPadding: 3
+        bottomPadding: 3
+        leftInset: appWin.padding
+        rightInset: appWin.padding
         leftPadding: appWin.padding
-        rightPadding: appWin.padding
+        rightPadding: appWin.padding + (root.showBorder ? 3 : 0)
+
+        Component.onCompleted: {
+            if (!root.showBorder) {
+                background = null
+            }
+        }
 
         RowLayout {
             id: row
 
             anchors.fill: parent
-
-            ToolSeparator {
-                id: _separator
-
-                orientation: Qt.Vertical
-                visible: false
-                enabled: true
-            }
 
             ToolButton {
                 id: _icon
@@ -72,6 +75,10 @@ RowLayout {
                 Layout.alignment: Qt.AlignVCenter
                 visible: icon.name.length !== 0
                 enabled: !root.off
+                leftInset: appWin.padding
+                leftPadding: appWin.padding
+                rightInset: 0
+                rightPadding: 0
             }
 
             ComboBox {
@@ -89,6 +96,7 @@ RowLayout {
                 ToolTip.text: desc
                 hoverEnabled: true
                 Accessible.name: desc
+                height: _frame._height
 
                 Rectangle {
                     id: _comboRedBorder
@@ -117,6 +125,7 @@ RowLayout {
                 ToolTip.text: desc
                 hoverEnabled: true
                 Accessible.name: desc
+                height: _frame._height
 
                 Rectangle {
                     id: _combo2RedBorder
@@ -144,6 +153,7 @@ RowLayout {
                 ToolTip.text: desc
                 hoverEnabled: true
                 Accessible.name: desc
+                height: _frame._height
 
                 Rectangle {
                     id: _combo3RedBorder
@@ -173,8 +183,11 @@ RowLayout {
             Button {
                 id: _button
 
+                property real textImplicitWidth:  _buttonMetrics.boundingRect.width + 4 * appWin.padding
+
                 visible: text.length !== 0
                 enabled: !root.off
+                height: _frame._height
 
                 ToolTip.visible: root.buttonToolTip.length !== 0 && hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -184,6 +197,13 @@ RowLayout {
                 Layout.preferredWidth: appWin.buttonWidth
 
                 Accessible.description: root.buttonToolTip
+
+                TextMetrics {
+                    id: _buttonMetrics
+
+                    font: _button.font
+                    text: _button.text
+                }
             }
 
             Button {
@@ -191,6 +211,7 @@ RowLayout {
 
                 visible: text.length !== 0
                 enabled: !root.off
+                height: _frame._height
 
                 ToolTip.visible: root.button2ToolTip.length !== 0 && hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval

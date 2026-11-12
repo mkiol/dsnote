@@ -195,7 +195,6 @@ ColumnLayout {
             combo2PlaceholderText: qsTr("No voice profile")
             comboRedBorder: (app.tts_ref_voice_needed && app.available_tts_ref_voice_names.length === 0) ||
                             (app.tts_ref_prompt_needed && _settings.tts_voice_prompts.length === 0)
-            showSeparator: !listenReadCombos.verticalMode
             combo {
                 enabled: listenReadCombos.second.enabled &&
                          !listenReadCombos.second.off &&

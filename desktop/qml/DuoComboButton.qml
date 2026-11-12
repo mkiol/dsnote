@@ -18,7 +18,7 @@ GridLayout {
 
     columns: verticalMode ? 1 : 2
     columnSpacing: 0
-    rowSpacing: 0
+    rowSpacing: _first.showBorder && _second.showBorder ? 3 : 0
 
     ComboButton {
         id: _first

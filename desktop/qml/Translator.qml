@@ -196,15 +196,15 @@ ColumnLayout {
                     comboPlaceholderText: qsTr("No Translator model")
                     comboPrefWidth: root._mntComboSize
                     comboFillWidth: false
+                    showBorder: false
                     combo {
                         model: app.available_mnt_langs
                         onActivated: (index) => app.set_active_mnt_lang_idx(index)
                         currentIndex: app.active_mnt_lang_idx
                     }
                     frame {
-                        leftPadding: appWin.padding
-                        rightPadding: grid.verticalMode || !mntInCombo.verticalMode ?
-                                          appWin.padding : 0
+                        rightPadding: grid.verticalMode || !mntInCombo.verticalMode ? appWin.padding : 0
+                        rightInset: grid.verticalMode || !mntInCombo.verticalMode ? appWin.padding : 3
                     }
                 }
                 second {
@@ -222,7 +222,6 @@ ColumnLayout {
                     comboFillWidth: true
                     comboRedBorder: !root.showStt && !mntInCombo.second.off && ((app.tts_for_in_mnt_ref_voice_needed && app.available_tts_ref_voice_names.length === 0) ||
                                                                                 (app.tts_for_in_mnt_ref_prompt_needed && _settings.tts_voice_prompts.length === 0))
-                    showSeparator: !mntInCombo.verticalMode
                     combo {
                         model: root.showStt ? app.available_stt_models_for_in_mnt : app.available_tts_models_for_in_mnt
                         enabled: mntInCombo.second.enabled && !mntInCombo.second.off && app.state === DsnoteApp.StateIdle
@@ -245,8 +244,8 @@ ColumnLayout {
                         currentIndex: mntInCombo.refVoiceNeeded ? app.active_tts_for_in_mnt_ref_voice_idx : _settings.tts_active_voice_prompt_for_in_mnt_idx
                     }
                     frame {
-                        leftPadding: appWin.padding
-                        rightPadding: grid.verticalMode ? appWin.padding : 0
+                        rightInset: grid.verticalMode ? appWin.padding : 0
+                        rightPadding: grid.verticalMode ? appWin.padding + 3 : 3
                     }
                     buttonToolTip: root.showStt ? (qsTr("Listen") + " (Ctrl+Alt+Shift+L)") : qsTr("Read")
                     button {
@@ -433,13 +432,13 @@ ColumnLayout {
                     comboPlaceholderText: qsTr("No Translator model")
                     comboPrefWidth: root._mntComboSize
                     comboFillWidth: false
+                    showBorder: false
                     combo {
                         model: app.available_mnt_out_langs
                         onActivated: (index) => app.set_active_mnt_out_lang_idx(index)
                         currentIndex: app.active_mnt_out_lang_idx
                     }
                     frame {
-                        rightPadding: appWin.padding
                         leftPadding: grid.verticalMode ? appWin.padding : 0
                     }
                 }
@@ -457,7 +456,6 @@ ColumnLayout {
                     comboFillWidth: true
                     comboRedBorder: !mntOutCombo.second.off && ((app.tts_for_out_mnt_ref_voice_needed && app.available_tts_ref_voice_names.length === 0) ||
                                                                (app.tts_for_out_mnt_ref_prompt_needed && _settings.tts_voice_prompts.length === 0))
-                    showSeparator: !mntOutCombo.verticalMode
                     combo {
                         model: app.available_tts_models_for_out_mnt
                         enabled: mntOutCombo.second.enabled &&
@@ -485,9 +483,8 @@ ColumnLayout {
                                 _settings.tts_active_voice_prompt_for_out_mnt_idx
                     }
                     frame {
-                        rightPadding: appWin.padding
-                        leftPadding: grid.verticalMode || !mntOutCombo.verticalMode ?
-                                         appWin.padding : 0
+                        leftPadding: grid.verticalMode || !mntOutCombo.verticalMode ? appWin.padding : 0
+                        leftInset: grid.verticalMode || !mntOutCombo.verticalMode ? appWin.padding : 0
                     }
                     buttonToolTip: qsTr("Read") + " (Ctrl+Alt+Shift+R)"
                     button {

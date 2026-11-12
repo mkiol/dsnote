@@ -1,4 +1,4 @@
-/* Copyright (C) 2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2025-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -165,16 +165,37 @@ DialogPage {
             }
         }
 
-        Button {
+        ComboButton {
+            id: _sttOpts
+
+            Layout.fillWidth: true
+            icon.name: "audio-input-microphone-symbolic"
             enabled: app.stt_configured && app.state === DsnoteApp.StateIdle
-            Layout.alignment: Qt.AlignRight
-            text: qsTr("Decode text from audio sample")
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Use the current active Speech to Text model to decode text from an audio sample.")
-            onClicked: {
-                app.transcribe_ref_file(root.dataFile)
+            comboToolTip: qsTr("Speech to Text model")
+            comboPlaceholderText: qsTr("No Speech to Text model")
+            frame {
+                leftPadding: 3
+                rightPadding: 3
+                leftInset: 0
+                rightInset: 0
             }
+            combo {
+                model: app.available_stt_models
+                onActivated: (index) => app.set_active_stt_model_idx(index)
+                currentIndex: app.active_stt_model_idx
+            }
+            buttonToolTip: qsTr("Transcribe audio to text using Speech to Text.")
+            button {
+                Layout.preferredWidth: _sttOpts.button.textImplicitWidth
+                onClicked: app.transcribe_ref_file(root.dataFile)
+                action: Action {
+                    text: qsTr("Transcribe audio")
+                }
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
         }
 
         TextFieldForm {
