@@ -3711,6 +3711,10 @@ QVariantMap speech_service::features_availability() {
                           py_availability->py_version.minor,
                           py_availability->py_version.micro)));
 #endif
+    m_features_availability.insert(
+        "config-version", QVariantList{} << QStringLiteral(APP_CONF_VERSION));
+    m_features_availability.insert(
+        "service-version", QVariantList{} << QStringLiteral(APP_VERSION));
     refresh_status();
 
     emit features_availability_updated();

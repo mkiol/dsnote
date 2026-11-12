@@ -5689,6 +5689,21 @@ void dsnote_app::update_feature_statuses() {
     }
 }
 
+QVariant dsnote_app::fa_feature_value(const QString &name) const {
+    if (!m_features_availability.contains(name)) {
+        qDebug() << "fa doesn't contain feature:" << name;
+        return {};
+    }
+
+    auto vl = m_features_availability.value(name).toList();
+    if (vl.isEmpty()) {
+        qWarning() << "fa value is an empty list:" << name;
+        return {};
+    }
+
+    return vl.front();
+}
+
 QVariantList dsnote_app::features_availability() {
     QVariantList list;
 
@@ -5723,28 +5738,31 @@ QVariantList dsnote_app::features_availability() {
 
 #ifdef USE_DESKTOP
     if (!m_features_availability.isEmpty()) {
-        m_features_availability.insert(
-            "hotkeys", QVariantList{m_gs_manager.is_supported(),
-                                    tr("Global keyboard shortcuts")});
+        m_features_availability.insert("hotkeys",
+                                       QVariantList{
+                                           m_gs_manager.is_supported(),
+                                           tr("Global keyboard shortcuts"),
+                                       });
         auto fake_keyboard_supported = fake_keyboard::is_supported();
-        m_features_availability.insert(
-            "fake-keyboard", QVariantList{fake_keyboard_supported,
-                                          tr("Insert text to active window")});
+        m_features_availability.insert("fake-keyboard",
+                                       QVariantList{
+                                           fake_keyboard_supported,
+                                           tr("Insert text to active window"),
+                                       });
         m_tray.set_fake_keyboard_supported(fake_keyboard_supported);
     }
 #endif
 
-    // update py version
-    if (m_features_availability.contains("py-version")) {
-        auto vl = m_features_availability.value("py-version").toList();
-        if (!vl.isEmpty()) {
-            auto new_py_version = vl.front().toString();
-            if (new_py_version != m_py_version) {
-                m_py_version = new_py_version;
-                emit py_version_changed();
-            }
-        }
+    auto new_py_version = fa_feature_value("py-version").toString();
+    if (new_py_version != m_py_version) {
+        m_py_version = new_py_version;
+        emit py_version_changed();
     }
+
+    qDebug() << "fa config-version:"
+             << fa_feature_value("config-version").toString();
+    qDebug() << "fa service-version:"
+             << fa_feature_value("service-version").toString();
 
     auto it = m_features_availability.cbegin();
     while (it != m_features_availability.cend()) {

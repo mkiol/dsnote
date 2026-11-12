@@ -1118,6 +1118,7 @@ class dsnote_app : public QObject {
         const QString &replace, const QString &langs, unsigned int type,
         const QString &test_text);
     static QVariantList trans_rule_to_vrule(const QJsonObject &jrule);
+    QVariant fa_feature_value(const QString &name) const;
 };
 
 #endif  // DSNOTE_APP_H
