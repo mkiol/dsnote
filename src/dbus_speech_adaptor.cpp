@@ -363,6 +363,14 @@ int SpeechAdaptor::TttRepairText(const QString &text, const QVariantMap &options
     return task;
 }
 
+int SpeechAdaptor::UnloadModels()
+{
+    // handle method call org.mkiol.Speech.UnloadModels
+    int result;
+    QMetaObject::invokeMethod(parent(), "UnloadModels", Q_RETURN_ARG(int, result));
+    return result;
+}
+
 int SpeechAdaptor::UpdateSettings(const QVariantMap &settings)
 {
     // handle method call org.mkiol.Speech.UpdateSettings

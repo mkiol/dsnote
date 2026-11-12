@@ -5060,6 +5060,27 @@ void speech_service::report_activity() {
     }
 }
 
+void speech_service::unload_models() {
+    qDebug() << "unload models: start";
+#define X(name, name_str, ...) \
+    m_##name##_engine.reset(); \
+    qDebug() << name_str " cleaned successfully";
+    SPEECH_SERVICE_ENGINE_TABLE
+#undef X
+    qDebug() << "unload models: completed";
+
+    // ideally would be to restart python interpreter to cleanup all python
+    // leftovers, but it is not possible due to "well known" issue with cpython:
+    // https://github.com/python/cpython/issues/78846
+    //
+    // #ifdef USE_PY
+    //     qDebug() << "py restart: start";
+    //     py_executor::instance()->stop();
+    //     py_executor::instance()->start();
+    //     qDebug() << "py restart: completed";
+    // #endif
+}
+
 bool speech_service::clean_inactive_items() {
     qDebug("clean inactive items: start");
 
@@ -5364,6 +5385,14 @@ int speech_service::Reload() {
     models_manager::instance()->reload();
 
     refresh_status();
+
+    return SUCCESS;
+}
+
+int speech_service::UnloadModels() {
+    qDebug() << "[dbus => service] called UnloadModels";
+
+    unload_models();
 
     return SUCCESS;
 }

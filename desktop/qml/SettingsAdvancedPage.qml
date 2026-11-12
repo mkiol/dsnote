@@ -99,6 +99,17 @@ ColumnLayout {
                      qsTranslate("SettingsPage", "Higher values keep responses fast but hold memory longer.")
     }
 
+    Button {
+        text: qsTranslate("SettingsPage", "Unload all models")
+        onClicked: app.unload_models()
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: qsTranslate("SettingsPage", "Unloads all active models to free up memory.") + " " + 
+                      qsTranslate("SettingsPage", "Models will reload automatically when needed.")
+        hoverEnabled: true
+    }
+
     SectionLabel {
         visible: _settings.hw_accel_supported()
         text: qsTranslate("SettingsPage", "Hardware acceleration options")

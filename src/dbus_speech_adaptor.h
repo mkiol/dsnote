@@ -274,6 +274,9 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"Reload\">\n"
 "      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
 "    </method>\n"
+"    <method name=\"UnloadModels\">\n"
+"      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
+"    </method>\n"
 "    <method name=\"KeepAliveTask\">\n"
 "      <arg direction=\"in\" type=\"i\" name=\"task\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"timer\"/>\n"
@@ -411,6 +414,7 @@ public Q_SLOTS: // METHODS
     int TtsSpeechToFile(const QString &text, const QString &lang, const QVariantMap &options);
     int TtsStopSpeech(int task);
     int TttRepairText(const QString &text, const QVariantMap &options);
+    int UnloadModels();
     int UpdateSettings(const QVariantMap &settings);
 Q_SIGNALS: // SIGNALS
     void CurrentTaskPropertyChanged(int task);

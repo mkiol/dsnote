@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23,7 +23,10 @@ py_executor::~py_executor() {
 }
 
 void py_executor::start() {
-    if (!m_thread.joinable()) m_thread = std::thread{&py_executor::loop, this};
+    if (!m_thread.joinable()) {
+        m_shutting_down = false;
+        m_thread = std::thread{&py_executor::loop, this};
+    }
 }
 
 void py_executor::stop() {
@@ -126,22 +129,24 @@ void py_executor::loop() {
         m_py_interpreter.emplace();
 
 #ifdef USE_PY
-        libs_availability = py_tools::libs_availability(
-            [scan_type = settings::instance()->py_scan_mode()] {
-                switch (scan_type) {
-                    case settings::py_scan_mode_t::PyScanOn:
-                        LOGD("py scan mode: on");
-                        return py_tools::libs_scan_type_t::on;
-                    case settings::py_scan_mode_t::PyScanOffAllEnabled:
-                        LOGD("py scan mode: off-all-enabled");
-                        return py_tools::libs_scan_type_t::off_all_enabled;
-                    case settings::py_scan_mode_t::PyScanOffAllDisabled:
-                        LOGD("py scan mode: off-all-disabled");
-                        return py_tools::libs_scan_type_t::off_all_disabled;
-                }
-                LOGF("invalid py scan mode");
-            }(),
-            settings::instance()->scan_flags());
+        if (!libs_availability) {
+            libs_availability = py_tools::libs_availability(
+                [scan_type = settings::instance()->py_scan_mode()] {
+                    switch (scan_type) {
+                        case settings::py_scan_mode_t::PyScanOn:
+                            LOGD("py scan mode: on");
+                            return py_tools::libs_scan_type_t::on;
+                        case settings::py_scan_mode_t::PyScanOffAllEnabled:
+                            LOGD("py scan mode: off-all-enabled");
+                            return py_tools::libs_scan_type_t::off_all_enabled;
+                        case settings::py_scan_mode_t::PyScanOffAllDisabled:
+                            LOGD("py scan mode: off-all-disabled");
+                            return py_tools::libs_scan_type_t::off_all_disabled;
+                    }
+                    LOGF("invalid py scan mode");
+                }(),
+                settings::instance()->scan_flags());
+        }
 #else
         libs_availability = py_tools::libs_availability_t{};
 #endif

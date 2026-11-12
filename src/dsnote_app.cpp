@@ -6970,3 +6970,11 @@ bool dsnote_app::is_valid_url(const QString &text) const {
            (url.scheme().compare("http", Qt::CaseInsensitive) == 0 ||
             url.scheme().compare("https", Qt::CaseInsensitive) == 0);
 }
+
+void dsnote_app::unload_models() {
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
+        speech_service::instance()->unload_models();
+    } else {
+        qDebug() << "[app => dbus] call UnloadModels";
+    }
+}

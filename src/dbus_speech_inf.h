@@ -276,6 +276,12 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("TttRepairText"), argumentList);
     }
 
+    inline QDBusPendingReply<int> UnloadModels()
+    {
+        QList<QVariant> argumentList;
+        return asyncCallWithArgumentList(QStringLiteral("UnloadModels"), argumentList);
+    }
+
     inline QDBusPendingReply<int> UpdateSettings(const QVariantMap &settings)
     {
         QList<QVariant> argumentList;
