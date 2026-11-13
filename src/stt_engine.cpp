@@ -686,3 +686,23 @@ void stt_engine::set_env(const char* name, const char* value, bool force) {
 
     setenv(name, value, 1);
 }
+
+void stt_engine::push_buf_to_f32_buf(
+    const std::vector<in_buf_t::buf_t::value_type>& buf, f32_buf_t& f32_buf) {
+    // convert s16 to f32 sample format
+    std::transform(
+        buf.cbegin(), buf.cend(), std::back_inserter(f32_buf), [](auto sample) {
+            return static_cast<f32_buf_t::value_type>(sample) / 32768.0F;
+        });
+}
+
+void stt_engine::push_buf_to_f32_buf(const in_buf_t::buf_t::value_type* data,
+                                     in_buf_t::buf_t::size_type size,
+                                     f32_buf_t& f32_buf) {
+    // convert s16 to f32 sample format
+    f32_buf.reserve(f32_buf.size() + size);
+    for (size_t i = 0; i < size; ++i) {
+        f32_buf.push_back(static_cast<f32_buf_t::value_type>(data[i]) /
+                          32768.0F);
+    }
+}

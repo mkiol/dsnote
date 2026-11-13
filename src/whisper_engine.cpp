@@ -328,28 +328,6 @@ void whisper_engine::open_whisper_lib() {
 #endif
 }
 
-void whisper_engine::push_buf_to_whisper_buf(
-    const std::vector<in_buf_t::buf_t::value_type>& buf,
-    whisper_buf_t& whisper_buf) {
-    // convert s16 to f32 sample format
-    std::transform(buf.cbegin(), buf.cend(), std::back_inserter(whisper_buf),
-                   [](auto sample) {
-                       return static_cast<whisper_buf_t::value_type>(sample) /
-                              32768.0F;
-                   });
-}
-
-void whisper_engine::push_buf_to_whisper_buf(in_buf_t::buf_t::value_type* data,
-                                             in_buf_t::buf_t::size_type size,
-                                             whisper_buf_t& whisper_buf) {
-    // convert s16 to f32 sample format
-    whisper_buf.reserve(whisper_buf.size() + size);
-    for (size_t i = 0; i < size; ++i) {
-        whisper_buf.push_back(static_cast<whisper_buf_t::value_type>(data[i]) /
-                              32768.0F);
-    }
-}
-
 void whisper_engine::reset_impl() { m_speech_buf.clear(); }
 
 void whisper_engine::stop_processing_impl() {
@@ -425,10 +403,10 @@ stt_engine::samples_process_result_t whisper_engine::process_buff() {
         }
 
         if (m_config.text_format == text_format_t::raw)
-            push_buf_to_whisper_buf(vad_buf, m_speech_buf);
+            push_buf_to_f32_buf(vad_buf, m_speech_buf);
         else
-            push_buf_to_whisper_buf(m_in_buf.buf.data(), m_in_buf.size,
-                                    m_speech_buf);
+            push_buf_to_f32_buf(m_in_buf.buf.data(), m_in_buf.size,
+                                m_speech_buf);
 
         restart_sentence_timer();
     } else {
@@ -594,7 +572,7 @@ whisper_full_params whisper_engine::make_wparams() {
     return wparams;
 }
 
-void whisper_engine::decode_speech(const whisper_buf_t& buf) {
+void whisper_engine::decode_speech(const f32_buf_t& buf) {
     LOGD("speech decoding started");
 
     create_model();

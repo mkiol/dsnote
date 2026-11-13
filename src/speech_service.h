@@ -617,6 +617,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     bool clean_inactive_items();
     bool any_engine_created() const;
     void handle_inactivity_reset_settings_changed();
+    static stt_engine::speech_mode_t to_stt_speech_mode(
+        speech_mode_t speech_mode);
 
     // DBus
     Q_INVOKABLE int Cancel(int task);

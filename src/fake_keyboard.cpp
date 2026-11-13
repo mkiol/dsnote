@@ -342,6 +342,9 @@ void fake_keyboard::ydo_type_char(uint32_t c) {
         if (l3_shift && m_l3_shift_keycode > 8)
             ydo_uinput_emit(EV_KEY, m_l3_shift_keycode - 8, 0, true);
         if (shift) ydo_uinput_emit(EV_KEY, KEY_LEFTSHIFT, 0, true);
+
+        std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(
+            settings::instance()->fake_keyboard_delay()));
     }
 }
 

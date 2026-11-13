@@ -326,28 +326,6 @@ void parakeet_engine::open_parakeet_lib() {
 #endif
 }
 
-void parakeet_engine::push_buf_to_parakeet_buf(
-    const std::vector<in_buf_t::buf_t::value_type>& buf,
-    parakeet_buf_t& parakeet_buf) {
-    // convert s16 to f32 sample format
-    std::transform(buf.cbegin(), buf.cend(), std::back_inserter(parakeet_buf),
-                   [](auto sample) {
-                       return static_cast<parakeet_buf_t::value_type>(sample) /
-                              32768.0F;
-                   });
-}
-
-void parakeet_engine::push_buf_to_parakeet_buf(in_buf_t::buf_t::value_type* data,
-                                             in_buf_t::buf_t::size_type size,
-                                             parakeet_buf_t& parakeet_buf) {
-    // convert s16 to f32 sample format
-    parakeet_buf.reserve(parakeet_buf.size() + size);
-    for (size_t i = 0; i < size; ++i) {
-        parakeet_buf.push_back(static_cast<parakeet_buf_t::value_type>(data[i]) /
-                              32768.0F);
-    }
-}
-
 void parakeet_engine::reset_impl() { m_speech_buf.clear(); }
 
 void parakeet_engine::stop_processing_impl() {
@@ -412,10 +390,10 @@ stt_engine::samples_process_result_t parakeet_engine::process_buff() {
         }
 
         if (m_config.text_format == text_format_t::raw) {
-            push_buf_to_parakeet_buf(vad_buf, m_speech_buf);
+            push_buf_to_f32_buf(vad_buf, m_speech_buf);
         } else {
-            push_buf_to_parakeet_buf(m_in_buf.buf.data(), m_in_buf.size,
-                                    m_speech_buf);
+            push_buf_to_f32_buf(m_in_buf.buf.data(), m_in_buf.size,
+                                m_speech_buf);
         }
 
         restart_sentence_timer();
@@ -559,7 +537,7 @@ parakeet_full_params parakeet_engine::make_wparams() {
     return wparams;
 }
 
-void parakeet_engine::decode_speech(const parakeet_buf_t& buf) {
+void parakeet_engine::decode_speech(const f32_buf_t& buf) {
     LOGD("speech decoding started");
 
     create_model();

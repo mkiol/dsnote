@@ -1562,6 +1562,22 @@ static std::string hanzi_to_pinyin_model_path() {
     return path;
 }
 
+stt_engine::speech_mode_t speech_service::to_stt_speech_mode(
+    speech_mode_t speech_mode) {
+    switch (speech_mode) {
+        case speech_mode_t::automatic:
+        case speech_mode_t::manual:
+            return stt_engine::speech_mode_t::continuous;
+        case speech_mode_t::single_sentence:
+            return stt_engine::speech_mode_t::single_sentence;
+        case speech_mode_t::play_speech:
+        case speech_mode_t::speech_to_file:
+        case speech_mode_t::translate:
+            break;
+    }
+    LOGF("invalid speech mode for stt: " << static_cast<int>(speech_mode));
+}
+
 QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                                            const QString &model_id,
                                            const QString &out_lang_id,
@@ -1579,24 +1595,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
                 model_config->stt->ttt->model_file.toStdString();
         config.lang = model_config->stt->lang_id.toStdString();
         config.lang_code = model_config->stt->lang_code.toStdString();
-        config.speech_mode = [&] {
-            switch (speech_mode) {
-                case speech_mode_t::automatic:
-                case speech_mode_t::manual:
-                    return stt_engine::speech_mode_t::continuous;
-                case speech_mode_t::single_sentence:
-                    return stt_engine::speech_mode_t::single_sentence;
-                case speech_mode_t::play_speech:
-                case speech_mode_t::speech_to_file:
-                case speech_mode_t::translate:
-                    break;
-            }
-            LOGE(
-                "invalid speech mode for stt, fallback to single-sentence: "
-                "speech-mode="
-                << static_cast<int>(speech_mode));
-            return stt_engine::speech_mode_t::single_sentence;
-        }();
+        config.speech_mode = to_stt_speech_mode(speech_mode);
         config.options = model_config->options.toStdString();
         config.text_format = stt_text_fromat_from_settings_format(
             static_cast<settings::text_format_t>(get_value_from_options(
@@ -1816,8 +1815,7 @@ QString speech_service::restart_stt_engine(speech_mode_t speech_mode,
             qDebug() << "new stt engine not required, only restart";
             m_stt_engine->stop();
             m_stt_engine->start();
-            m_stt_engine->set_speech_mode(
-                static_cast<stt_engine::speech_mode_t>(speech_mode));
+            m_stt_engine->set_speech_mode(to_stt_speech_mode(speech_mode));
             m_stt_engine->set_text_format(config.text_format);
             m_stt_engine->set_sub_config(config.sub_config);
             m_stt_engine->set_insert_stats(config.insert_stats);

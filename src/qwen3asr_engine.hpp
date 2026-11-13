@@ -29,8 +29,6 @@ class qwen3asr_engine : public stt_engine {
     ~qwen3asr_engine() override;
 
    private:
-    using whisper_buf_t = std::vector<float>;
-
     inline static const size_t m_speech_max_size = m_sample_rate * 60;  // 60s
     // shorter audio is padded with silence (0.5s)
     inline static const size_t m_speech_min_size = m_sample_rate / 2;
@@ -41,7 +39,7 @@ class qwen3asr_engine : public stt_engine {
     inline static const size_t m_context_max_size = 1000;  // unicode chars
 
     std::optional<py::object> m_model;
-    whisper_buf_t m_speech_buf;
+    f32_buf_t m_speech_buf;
     bool m_auto_lang = false;
     // qwen language name or empty when auto-detection should be used
     std::string m_lang_name;
@@ -49,13 +47,7 @@ class qwen3asr_engine : public stt_engine {
 
     void create_model();
     samples_process_result_t process_buff() override;
-    void decode_speech(const whisper_buf_t& buf);
-    static void push_buf_to_whisper_buf(
-        const std::vector<in_buf_t::buf_t::value_type>& buf,
-        whisper_buf_t& whisper_buf);
-    static void push_buf_to_whisper_buf(in_buf_t::buf_t::value_type* data,
-                                        in_buf_t::buf_t::size_type size,
-                                        whisper_buf_t& whisper_buf);
+    void decode_speech(const f32_buf_t& buf);
     static std::string lang_to_qwen_name(const std::string& lang,
                                          const std::string& lang_code);
     static std::string qwen_name_to_lang(const std::string& qwen_langs_str);

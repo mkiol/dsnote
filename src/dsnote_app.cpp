@@ -6055,7 +6055,9 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
 
     switch (caction) {
         case dsnote_app::action_t::start_listening:
-            listen();
+            listen_internal(active_stt_model(), stt_translate_req_t::conf,
+                            speech_mode, text_destination_t::note_add,
+                            stt_request_t::listen);
             break;
         case dsnote_app::action_t::start_listening_translate:
             listen_internal(active_stt_model(), stt_translate_req_t::on,

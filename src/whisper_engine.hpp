@@ -294,8 +294,6 @@ class whisper_engine : public stt_engine {
     ~whisper_engine() override;
 
    private:
-    using whisper_buf_t = std::vector<float>;
-
     inline static const char* supported_whisperlib_ver = "1.9.1";
     inline static const char* supported_ggmllib_ver = "0.15.1";
 
@@ -344,7 +342,7 @@ class whisper_engine : public stt_engine {
         }
     };
 
-    whisper_buf_t m_speech_buf;
+    f32_buf_t m_speech_buf;
     whisper_api m_whisper_api;
     void* m_whisperlib_handle = nullptr;
     void* m_ggmllib_handle = nullptr;
@@ -356,13 +354,7 @@ class whisper_engine : public stt_engine {
     void open_whisper_lib();
     void create_model();
     samples_process_result_t process_buff() override;
-    void decode_speech(const whisper_buf_t& buf);
-    static void push_buf_to_whisper_buf(
-        const std::vector<in_buf_t::buf_t::value_type>& buf,
-        whisper_buf_t& whisper_buf);
-    static void push_buf_to_whisper_buf(in_buf_t::buf_t::value_type* data,
-                                        in_buf_t::buf_t::size_type size,
-                                        whisper_buf_t& whisper_buf);
+    void decode_speech(const f32_buf_t& buf);
     whisper_full_params make_wparams();
     void reset_impl() override;
     void stop_processing_impl() override;

@@ -26,25 +26,16 @@ class fasterwhisper_engine : public stt_engine {
     ~fasterwhisper_engine() override;
 
    private:
-    using whisper_buf_t = std::vector<float>;
-
     inline static const size_t m_speech_max_size = m_sample_rate * 60;  // 60s
     inline static const int m_threads = 8;
 
     std::optional<py::object> m_model;
-    whisper_buf_t m_speech_buf;
+    f32_buf_t m_speech_buf;
     bool m_auto_lang = false;
 
     void create_model();
     samples_process_result_t process_buff() override;
-    void decode_speech(const whisper_buf_t& buf);
-    static void push_buf_to_whisper_buf(
-        const std::vector<in_buf_t::buf_t::value_type>& buf,
-        whisper_buf_t& whisper_buf);
-    static void push_buf_to_whisper_buf(in_buf_t::buf_t::value_type* data,
-                                        in_buf_t::buf_t::size_type size,
-                                        whisper_buf_t& whisper_buf);
-
+    void decode_speech(const f32_buf_t& buf);
     void reset_impl() override;
     void stop_processing_impl() override;
     void start_processing_impl() override;

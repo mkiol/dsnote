@@ -100,28 +100,6 @@ void qwen3asr_engine::stop() {
     LOGD("qwen3asr stopped");
 }
 
-void qwen3asr_engine::push_buf_to_whisper_buf(
-    const std::vector<in_buf_t::buf_t::value_type>& buf,
-    whisper_buf_t& whisper_buf) {
-    // convert s16 to f32 sample format
-    std::transform(buf.cbegin(), buf.cend(), std::back_inserter(whisper_buf),
-                   [](auto sample) {
-                       return static_cast<whisper_buf_t::value_type>(sample) /
-                              32768.0F;
-                   });
-}
-
-void qwen3asr_engine::push_buf_to_whisper_buf(in_buf_t::buf_t::value_type* data,
-                                              in_buf_t::buf_t::size_type size,
-                                              whisper_buf_t& whisper_buf) {
-    // convert s16 to f32 sample format
-    whisper_buf.reserve(whisper_buf.size() + size);
-    for (size_t i = 0; i < size; ++i) {
-        whisper_buf.push_back(static_cast<whisper_buf_t::value_type>(data[i]) /
-                              32768.0F);
-    }
-}
-
 std::string qwen3asr_engine::lang_to_qwen_name(const std::string& lang,
                                                const std::string& lang_code) {
     if (lang_code == "yue") return std::string{qwen_cantonese};
@@ -361,10 +339,10 @@ stt_engine::samples_process_result_t qwen3asr_engine::process_buff() {
         }
 
         if (m_config.text_format == text_format_t::raw)
-            push_buf_to_whisper_buf(vad_buf, m_speech_buf);
+            push_buf_to_f32_buf(vad_buf, m_speech_buf);
         else
-            push_buf_to_whisper_buf(m_in_buf.buf.data(), m_in_buf.size,
-                                    m_speech_buf);
+            push_buf_to_f32_buf(m_in_buf.buf.data(), m_in_buf.size,
+                                m_speech_buf);
 
         restart_sentence_timer();
     } else {
@@ -465,7 +443,7 @@ stt_engine::samples_process_result_t qwen3asr_engine::process_buff() {
     return samples_process_result_t::wait_for_samples;
 }
 
-void qwen3asr_engine::decode_speech(const whisper_buf_t& buf) {
+void qwen3asr_engine::decode_speech(const f32_buf_t& buf) {
     LOGD("speech decoding started");
 
     auto decoding_start = std::chrono::steady_clock::now();

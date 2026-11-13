@@ -186,6 +186,8 @@ class stt_engine {
     }
 
    protected:
+    using f32_buf_t = std::vector<float>;
+
     enum class lock_type_t { free, processed, borrowed };
     friend std::ostream& operator<<(std::ostream& os, lock_type_t lock_type);
 
@@ -273,6 +275,12 @@ class stt_engine {
     void reset_segment_counters();
     static bool file_exists(const std::string& file_path);
     static void set_env(const char* name, const char* value, bool force);
+    static void push_buf_to_f32_buf(
+        const std::vector<in_buf_t::buf_t::value_type>& buf,
+        f32_buf_t& f32_buf);
+    static void push_buf_to_f32_buf(const in_buf_t::buf_t::value_type* data,
+                                    in_buf_t::buf_t::size_type size,
+                                    f32_buf_t& f32_buf);
 };
 
 #endif  // STT_ENGINE_H

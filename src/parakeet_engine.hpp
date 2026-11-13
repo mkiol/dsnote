@@ -134,8 +134,6 @@ class parakeet_engine : public stt_engine {
     ~parakeet_engine() override;
 
    private:
-    using parakeet_buf_t = std::vector<float>;
-
     inline static const char* supported_parakeetlib_ver = "1.9.1";
     inline static const char* supported_ggmllib_ver = "0.15.1";
 
@@ -182,7 +180,7 @@ class parakeet_engine : public stt_engine {
         }
     };
 
-    parakeet_buf_t m_speech_buf;
+    f32_buf_t m_speech_buf;
     parakeet_api m_parakeet_api;
     void* m_parakeetlib_handle = nullptr;
     void* m_ggmllib_handle = nullptr;
@@ -193,13 +191,7 @@ class parakeet_engine : public stt_engine {
     void open_parakeet_lib();
     void create_model();
     samples_process_result_t process_buff() override;
-    void decode_speech(const parakeet_buf_t& buf);
-    static void push_buf_to_parakeet_buf(
-        const std::vector<in_buf_t::buf_t::value_type>& buf,
-        parakeet_buf_t& parakeet_buf);
-    static void push_buf_to_parakeet_buf(in_buf_t::buf_t::value_type* data,
-                                        in_buf_t::buf_t::size_type size,
-                                        parakeet_buf_t& parakeet_buf);
+    void decode_speech(const f32_buf_t& buf);
     parakeet_full_params make_wparams();
     void reset_impl() override;
     void stop_processing_impl() override;

@@ -50,7 +50,7 @@ class vosk_engine : public stt_engine {
         void (*vosk_recognizer_set_words)(VoskRecognizer* recognizer,
                                           int words) = nullptr;
 
-        inline auto ok() const {
+        auto ok() const {
             return vosk_model_new && vosk_model_free && vosk_recognizer_new &&
                    vosk_recognizer_reset && vosk_recognizer_free &&
                    vosk_recognizer_accept_waveform_s &&
