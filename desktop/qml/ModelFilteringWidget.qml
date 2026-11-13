@@ -119,7 +119,7 @@ ColumnLayout {
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
             Layout.preferredWidth: 2 * appWin.buttonWithIconWidth
             onTextChanged: root.models_model.filter = text.toLowerCase().trim()
-            color: palette.text
+            color: appWin.appTextColor
             Accessible.description: placeholderText
 
             TextContextMenu {}
@@ -152,7 +152,7 @@ ColumnLayout {
             //     height: 1
             //     radius: 5
             //     width: filterButton.width
-            //     color: filterButton.palette.highlight
+            //     color: appWin.appHighlightColor
             //     opacity: 0.5
             // }
 

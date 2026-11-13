@@ -1353,7 +1353,10 @@ class settings : public QSettings, public singleton<settings> {
         hw_t hw_type,
         std::underlying_type_t<hw_feature_flags_t> hw_feature_flags);
     static QString device_id();
+
+#ifdef USE_DESKTOP
     static portal_appearance_t portal_appearance_info();
+#endif
 
     QString m_note;
 };

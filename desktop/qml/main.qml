@@ -34,6 +34,7 @@ ApplicationWindow {
     readonly property alias toast: _toast
     property color appTextColor: palette.active.text
     property color appBaseColor: palette.active.base
+    property color appHighlightColor: palette.active.highlight
     property var features: app.features_availability()
 
     LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
@@ -270,6 +271,7 @@ ApplicationWindow {
 
     TextField {
         id: _dummyTextField
+        color: appWin.appTextColor
         visible: false
         height: 0
         Component.onCompleted: console.log("default font pixel size:", font.pixelSize)
@@ -453,7 +455,7 @@ ApplicationWindow {
                  !app.tts_configured && app.note.length === 0
         offset: -panel.height
         text: notepad.placeholderText
-        color: notepad.noteTextArea.textArea.color
+        color: appWin.appTextColor
     }
 
     Loader {

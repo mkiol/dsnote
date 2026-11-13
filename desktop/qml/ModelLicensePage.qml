@@ -115,6 +115,7 @@ Dialog {
             wrapMode: Text.Wrap
             readOnly: true
             textFormat: TextEdit.PlainText
+            color: appWin.appTextColor
 
             BusyIndicator {
                 anchors.centerIn:  parent

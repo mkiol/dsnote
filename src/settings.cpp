@@ -1475,7 +1475,7 @@ void settings::detect_qt_styles() {
         "/usr/lib64/qt6/qml",                    // Fedora/RHEL x86_64
         "/usr/local/lib/qt6/qml",                // Manual installations
         "/usr/lib/qml",                          // Flatpak runtime
-        "/app/lib/qml"                           // Flatpak app
+        "/app/lib/qml",                          // Flatpak app
     };
 
     // Scan for QtQuick/Controls/<StyleName> directories
@@ -1725,7 +1725,7 @@ void settings::update_qt_style(QQmlApplicationEngine* engine) {
 
     set_qt_style();
 }
-#endif
+#endif  // USE_DESKTOP
 
 static void set_env(const char* name, const char* value, bool force) {
     auto* old_value = std::getenv(name);

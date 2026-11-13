@@ -45,7 +45,7 @@ GridLayout {
         Layout.preferredWidth: root.verticalMode ? 0 :
              ((parent.width / 2) - (_comboBox.visible && root.compact ? _comboBox.width + root.columnSpacing : 0))
         Layout.leftMargin: root.verticalMode ? (root.indends + 1) * appWin.padding : 0
-        color: root.valid ? palette.text : "red"
+        color: root.valid ? appWin.appTextColor : "red"
 
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
         ToolTip.visible: hovered && root.toolTip.length !== 0

@@ -42,7 +42,7 @@ GridLayout {
         Layout.preferredWidth: (root.verticalMode ? psize * 2 : (psize - (_scanButton.width + _resetButton.width + 2 * root.columnSpacing))) - 3 * appWin.padding
         Layout.leftMargin: root.verticalMode ? appWin.padding : 0
         Layout.rightMargin: root.verticalMode ? 3 * appWin.padding : 0
-        color: palette.text
+        color: appWin.appTextColor
 
         TextContextMenu {}
     }

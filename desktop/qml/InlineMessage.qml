@@ -12,7 +12,7 @@ import QtQuick.Layouts
 Frame {
      id: root
 
-     property color color: palette.highlight
+     property color color: appWin.appHighlightColor
      property bool closable: false
      property alias actionButton: _actionButton
      property string actionButtonToolTip: ""

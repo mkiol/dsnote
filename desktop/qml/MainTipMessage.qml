@@ -14,7 +14,7 @@ TipMessage {
 
     property bool warning: false
 
-    color: warning ? "red" : palette.text
+    color: warning ? "red" : appWin.appTextColor
     Layout.topMargin: appWin.padding
     Layout.leftMargin: appWin.padding
     Layout.rightMargin: appWin.padding

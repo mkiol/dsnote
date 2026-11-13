@@ -387,7 +387,7 @@ ColumnLayout {
                     _enabled: !root.readOnly && app.mnt_configured && app.translated_text.length !== 0
                     anchors.fill: parent
                     textColor: {
-                        var c = palette.text
+                        var c = appWin.appTextColor
                         return Qt.rgba(c.r, c.g, c.b, 0.8)
                     }
                     canClear: false
@@ -414,7 +414,7 @@ ColumnLayout {
                 PlaceholderLabel {
                     enabled: !app.mnt_configured
                     text: root.placeholderText
-                    color: _translatedNoteTextArea.textArea.color
+                    color: appWin.appTextColor
                 }
             }
 

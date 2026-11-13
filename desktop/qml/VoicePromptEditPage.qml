@@ -164,6 +164,7 @@ DialogPage {
             hoverEnabled: true
             Layout.fillWidth: true
             text: root.dataDesc
+            color: appWin.appTextColor
             Layout.minimumHeight: _nameForm.textField.implicitHeight * 3
 
             TextContextMenu {}

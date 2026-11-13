@@ -10,7 +10,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Rectangle {
-    color: palette.highlight
+    color: appWin.appHighlightColor
     height: 2
     radius: 2
     Layout.fillWidth: true

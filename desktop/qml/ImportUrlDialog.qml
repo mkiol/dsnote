@@ -73,6 +73,7 @@ DialogPage {
             Layout.fillWidth: true
             inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoPredictiveText
             placeholderText: qsTr("Enter URL")
+            color: appWin.appTextColor
             Keys.onReturnPressed: {
                 if (root.canAccept)
                     root.accept();

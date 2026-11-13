@@ -446,6 +446,7 @@ DialogPage {
                     ToolTip.text: qsTr("A comma separated list of language codes for which the rule should be enabled.") + " " +
                                 qsTr("Example: %1 means that the rule applies only to Czech, Slovak and Polish languages.").arg("<i>cs, sk, pl</i>")
                     hoverEnabled: true
+                    color: appWin.appTextColor
                     Accessible.name: placeholderText
                     TextContextMenu {}
                 }
@@ -501,7 +502,7 @@ DialogPage {
             TextArea {
                 id: jsonTextArea
 
-                color: root.validJson ? palette.text : "red"
+                color: root.validJson ? appWin.appTextColor : "red"
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -509,6 +510,8 @@ DialogPage {
                 onTextChanged: {
                     validJson = app.trans_rule_json_str_valid(text)
                 }
+
+                TextContextMenu {}
             }
         }
     }

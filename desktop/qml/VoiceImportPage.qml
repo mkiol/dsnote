@@ -302,7 +302,7 @@ DialogPage {
                     y: parent.height / 2
                     x: parent.first.handle.x + parent.first.handle.width / 2
                     width: (parent.width * app.player_position/app.player_duration) - x
-                    color: palette.text
+                    color: appWin.appTextColor
                 }
             }
 
@@ -349,6 +349,7 @@ DialogPage {
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
         ToolTip.visible: hovered
         ToolTip.text: placeholderText
+        color: appWin.appTextColor
         hoverEnabled: true
         Layout.fillWidth: true
         Layout.minimumHeight: _nameForm.textField.implicitHeight * 3

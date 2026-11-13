@@ -65,7 +65,7 @@ ColumnLayout {
 
     TipMessage {
         indends: 2
-        color: palette.text
+        color: appWin.appTextColor
         visible: root.enabled && root.use_gpu && root.devices.length > 1 && gpuCombo.displayText.search("ROCm") !== -1
         text: qsTr("Tip: If you observe problems with hardware acceleration, try to enable %1 option.")
               .arg("<i>" + qsTr("Advanced") + "</i> &rarr; <i>" +
@@ -75,7 +75,7 @@ ColumnLayout {
 
     TipMessage {
         indends: 2
-        color: palette.text
+        color: appWin.appTextColor
         visible: root.show_rocm_warning && root.enabled && root.use_gpu && root.devices.length > 1 && gpuCombo.displayText.search("ROCm") !== -1
         text: qsTr("This engine can be slow when using %1.").arg("ROCm") + " " +
               qsTr("Disable hardware acceleration if you observe problems.")

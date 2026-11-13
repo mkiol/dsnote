@@ -212,13 +212,6 @@ ColumnLayout {
         textField {
             text: _settings.inline_timestamp_template
             readOnly: true
-            // color: palette.text
-            // background: Rectangle {
-            //     color: palette.base
-            //     border.color: palette.mid
-            //     border.width: 1
-            //     radius: 2
-            // }
         }
         button {
             text: qsTranslate("SettingsPage", "Edit")
@@ -275,13 +268,13 @@ ColumnLayout {
                 Layout.fillWidth: true
                 placeholderText: "[{hh}:{mm}:{ss}] {text}"
                 selectByMouse: true
+                color: appWin.appTextColor
             }
 
             Label {
                 Layout.fillWidth: true
                 wrapMode: Text.Wrap
                 font.pixelSize: appWin.textFontSize * 0.9
-                color: palette.text
                 textFormat: Text.RichText
                 text: qsTranslate("SettingsPage", "Available tokens:<br><b>{hh}</b> (hours), <b>{mm}</b> (minutes), <b>{ss}</b> (seconds), <b>{text}</b> (transcribed text)")
             }
@@ -289,7 +282,7 @@ ColumnLayout {
             Rectangle {
                 Layout.fillWidth: true
                 height: 1
-                color: palette.mid
+                color: appWin.appTextColor
                 opacity: 0.5
             }
 
@@ -299,7 +292,6 @@ ColumnLayout {
 
                 Label {
                     text: qsTranslate("SettingsPage", "Presets:")
-                    color: palette.text
                     opacity: 0.8
                 }
 

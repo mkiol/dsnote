@@ -36,7 +36,7 @@ RowLayout {
         Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
         Layout.preferredWidth: 2 * appWin.buttonWithIconWidth
         onTextChanged: root.lang_model.filter = text.toLowerCase().trim()
-        color: palette.text
+        color: appWin.appTextColor
         Accessible.description: placeholderText
 
         TextContextMenu {}

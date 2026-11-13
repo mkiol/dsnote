@@ -104,7 +104,7 @@ Item {
                 }
 
                 visible: root.showInsertIndicator && !parent.activeFocus
-                color: parent.palette.text
+                color: appWin.appTextColor
             }
 
             TextContextMenu {
