@@ -515,7 +515,7 @@ ColumnLayout {
         leftPadding: appWin.padding
 
         GridLayout {
-            columns: (translateSwitch.implicitWidth + cleanSwitch.implicitWidth + 2 * columnSpacing) > appWin.width ? 1 : 2
+            columns: (translateSwitch.implicitWidth + cleanSwitch.implicitWidth + echoSwitch.implicitWidth + 2 * columnSpacing) > appWin.width ? 1 : 3
 
             columnSpacing: appWin.padding
             rowSpacing: appWin.padding
@@ -547,6 +547,24 @@ ColumnLayout {
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Remove duplicate whitespaces and extra line breaks in the text before translation.") + " " +
                               qsTr("If the input text is incorrectly formatted, this option may improve the translation quality.")
+                hoverEnabled: true
+            }
+
+            Switch {
+                id: echoSwitch
+
+                Layout.alignment: Qt.AlignCenter
+                enabled: app.state === DsnoteApp.StateIdle
+                text: qsTr("Echo mode")
+                checked: _settings.mnt_echo
+                onClicked: {
+                    _settings.mnt_echo = !_settings.mnt_echo
+                }
+
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.visible: hovered
+                ToolTip.text: qsTranslate("SettingsPage", "When text is inserted using Speech to Text (%1 button), it is translated to the chosen language and immediately read aloud using the selected Text to Speech model.")
+                              .arg("<i>" + qsTranslate("SettingsPage", "Listen") + "</i>")
                 hoverEnabled: true
             }
         }

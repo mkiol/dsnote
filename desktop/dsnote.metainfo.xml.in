@@ -99,7 +99,7 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.9.1" date="2026-10-30">
+    <release version="4.9.1" date="2026-11-14">
       <description>
       <p>General</p>
       <ul>
@@ -172,6 +172,8 @@
         If the text you enter is written in Pinyin, the translator will recognize it and translate it correctly into the selected language.
         In addition, you can force the use of Pinyin as the translation output.</li>
       <li>Setting to choose whether the 'Read' or 'Listen' options are visible in translator mode.</li>
+      <li>Echo mode in the Translator. When text is inserted using Speech to Text, it is translated to the chosen language and immediately
+         read aloud using the selected Text to Speech model.</li>
       </ul>
       <p>User Interface:</p>
       <ul>

@@ -82,6 +82,9 @@ Page {
                 <li>Setting to choose whether the Read, Listen, or both options are available in translator mode.
                     Listen lets you dictate text directly using Speech to Text
                     (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Voice options in translator mode</i>).</li>
+                <li>Echo mode in the Translator. When text is inserted using Speech to Text (<i>Listen</i> button), it is translated to the chosen language and immediately
+                    read aloud using the selected Text to Speech model
+                    (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Echo mode</i>).</li>
                 </ul>
                 <p>" + qsTr("Libraries") + "</p>
                 <ul>

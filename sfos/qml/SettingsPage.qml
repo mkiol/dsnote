@@ -242,7 +242,8 @@ Page {
                             onClicked: {
                                 _settings.stt_echo = !_settings.stt_echo
                             }
-                            description: qsTr("After processing, the decoded text will be immediately read out using the currently set Text to Speech model.")
+                            description: qsTr("After processing, the decoded text will be immediately read out using the currently set Text to Speech model.") + " " +
+                                         qsTr("To echo translated text, enable Echo mode in Translator settings.")
                         }
 
                         TextSwitch {
@@ -665,6 +666,18 @@ Page {
                             }
                             description: qsTr("Remove duplicate whitespaces and extra line breaks in the text before translation.") + " " +
                                          qsTr("If the input text is incorrectly formatted, this option may improve the translation quality.")
+                        }
+
+                        TextSwitch {
+                            checked: _settings.mnt_echo
+                            automaticCheck: false
+                            text: qsTr("Echo mode")
+                            onClicked: {
+                                _settings.mnt_echo = !_settings.mnt_echo
+                            }
+                            description: qsTranslate("SettingsPage", "When text is inserted using Speech to Text (%1 button), it is translated to the chosen language and immediately read aloud using the selected Text to Speech model.")
+                                         .arg("<i>" + qsTranslate("SettingsPage", "Listen") + "</i>") + " " +
+                                         qsTranslate("SettingsPage", "This option controls Echo mode in Translator only. To echo text before translation, enable Echo mode in Speech to Text settings.")
                         }
 
                         TextSwitch {

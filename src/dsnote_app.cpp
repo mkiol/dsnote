@@ -245,13 +245,13 @@ QDebug operator<<(QDebug d, dsnote_app::auto_text_format_t format) {
     return d;
 }
 
-QDebug operator<<(QDebug d, dsnote_app::text_destination_t destination) {
+QDebug operator<<(QDebug d, dsnote_app::stt_destination_t destination) {
     switch (destination) {
-#define X(name, str, ...)                      \
-    case dsnote_app::text_destination_t::name: \
-        d << (str);                            \
+#define X(name, str, ...)                     \
+    case dsnote_app::stt_destination_t::name: \
+        d << (str);                           \
         break;
-        TEXT_DESTINATION_TABLE
+        STT_DESTINATION_TABLE
 #undef X
     }
     return d;
@@ -1435,10 +1435,10 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
         transform_text(text, transform_text_target_t::stt, lang);
     }
 
-    qDebug() << "text destination:" << m_text_destination;
+    qDebug() << "text destination:" << m_stt_destination;
 
-    switch (m_text_destination) {
-        case text_destination_t::note_add: {
+    switch (m_stt_destination) {
+        case stt_destination_t::note_add: {
             make_undo();
             auto n =
                 insert_to_note(settings::instance()->note(), text, lang,
@@ -1454,42 +1454,41 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
             emit intermediate_text_changed();
             break;
         }
-        case text_destination_t::note_replace: {
+        case stt_destination_t::note_replace: {
             make_undo();
             auto n = insert_to_note(QString{}, text, lang,
                                     settings::instance()->insert_mode(), -1);
             set_note(n.first);
             set_last_cursor_position(n.second);
-            m_text_destination = text_destination_t::note_add;
+            m_stt_destination = stt_destination_t::note_add;
             this->m_intermediate_text.clear();
             emit text_changed();
             emit intermediate_text_changed();
             break;
         }
-        case text_destination_t::file_replace:
-        case text_destination_t::file_add: {
+        case stt_destination_t::file_replace:
+        case stt_destination_t::file_add: {
             if (text.isEmpty() || m_stt_dest_file.isEmpty()) {
                 break;
             }
 
             QFile out_file{m_stt_dest_file};
-            if (!out_file.open(
-                    QIODevice::WriteOnly | QIODevice::Text |
-                    (m_text_destination == text_destination_t::file_add
-                         ? QIODevice::Append
-                         : QIODevice::Truncate))) {
+            if (!out_file.open(QIODevice::WriteOnly | QIODevice::Text |
+                               (m_stt_destination == stt_destination_t::file_add
+                                    ? QIODevice::Append
+                                    : QIODevice::Truncate))) {
                 qWarning() << "cant open file for write:" << m_stt_dest_file;
                 break;
             }
             if (out_file.size() > 0 &&
-                m_text_destination == text_destination_t::file_add) {
+                m_stt_destination == stt_destination_t::file_add) {
                 // if file is not empty, write starting from a new line
                 out_file.write("\n");
             }
             out_file.write(text.toUtf8());
             break;
         }
-        case text_destination_t::active_window:
+        case stt_destination_t::active_window:
             if (text.isEmpty()) {
                 break;
             }
@@ -1547,29 +1546,76 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
             qWarning() << "send to keyboard is not implemented";
 #endif
             break;
-        case text_destination_t::clipboard:
+        case stt_destination_t::clipboard:
             QGuiApplication::clipboard()->setText(text);
             emit text_decoded_to_clipboard();
             break;
-        case text_destination_t::internal:
+        case stt_destination_t::internal:
             emit text_decoded_internal(text);
             return;
     }
 
-    // echo mode handling
-    if (settings::instance()->stt_echo() && m_current_stt_request &&
+    if (settings::instance()->translator_mode() &&
+        settings::instance()->translate_when_typing() &&
+        (m_stt_destination == stt_destination_t::note_add ||
+         m_stt_destination == stt_destination_t::note_replace) &&
+        m_current_stt_request &&
         m_current_stt_request.value() != stt_request_t::transcribe_file) {
-        if (service_state() == service_state_t::StateListeningAuto &&
-            m_current_stt_request) {
+        if (service_state() == service_state_t::StateListeningAuto) {
+            // any new task will cancel listening on service side, so
             // in always-on listening, set pending request to resume listening
-            // just after playing speech
             m_pending_stt_request = m_current_stt_request;
+            m_pending_stt_text = std::move(text);
+            qDebug() << "trigger partial translation for listening-auto";
+            translate();
+            return;
+        } else if (settings::instance()->mnt_echo()) {
+            qDebug() << "trigger partial translation for before echo";
+            m_pending_stt_text = std::move(text);
+            translate();
+            return;
         }
+    }
 
-        play_speech_from_text_format(
-            text, active_tts_model(),
+    handle_echo_mode(text);
+}
+
+bool dsnote_app::handle_echo_mode(const QString &text_to_echo) {
+    bool do_echo =
+        !text_to_echo.isEmpty() && m_current_stt_request &&
+        m_current_stt_request.value() != stt_request_t::transcribe_file &&
+        (settings::instance()->stt_echo() ||
+         (settings::instance()->mnt_echo() &&
+          settings::instance()->translator_mode()));
+
+    if (!do_echo) {
+        // echo not needed
+        return false;
+    }
+
+    bool async = false;
+
+    if (service_state() == service_state_t::StateListeningAuto &&
+        m_current_stt_request) {
+        // a new task will automatically cancel ongoing task on service side, so
+        // in always-on listening, set pending request to resume listening just
+        // after playing speech
+        m_pending_stt_request = m_current_stt_request;
+    }
+
+    if (settings::instance()->translator_mode() &&
+        settings::instance()->mnt_echo() &&
+        (m_stt_destination == stt_destination_t::note_add ||
+         m_stt_destination == stt_destination_t::note_replace)) {
+        // before playing text it needs to be translated
+        async = translate_internal(text_to_echo, mnt_destination_t::tts);
+    } else {
+        async = play_speech_from_text_format(
+            text_to_echo, active_tts_model(),
             settings::instance()->stt_tts_text_format());
     }
+
+    return async;
 }
 
 void dsnote_app::handle_tts_partial_speech(const QString &text, int task) {
@@ -1911,6 +1957,53 @@ void dsnote_app::handle_current_task_changed(int task) {
     update_task_state();
 }
 
+void dsnote_app::handle_pending_stt_request() {
+    if (!m_pending_stt_request) {
+        // no pending request
+        return;
+    }
+    auto request = m_pending_stt_request.value();
+    m_pending_stt_request.reset();
+
+    switch (request) {
+        case dsnote_app::stt_request_t::listen:
+            listen();
+            break;
+        case dsnote_app::stt_request_t::listen_translate:
+            listen_internal(active_stt_model(), stt_translate_req_t::on,
+                            settings::instance()->speech_mode(),
+                            stt_destination_t::note_add,
+                            stt_request_t::listen_translate);
+            break;
+        case dsnote_app::stt_request_t::listen_active_window:
+            listen_internal(active_stt_model(), stt_translate_req_t::conf,
+                            settings::instance()->speech_mode(),
+                            stt_destination_t::active_window,
+                            stt_request_t::listen_active_window);
+            break;
+        case dsnote_app::stt_request_t::listen_translate_active_window:
+            listen_internal(active_stt_model(), stt_translate_req_t::on,
+                            settings::instance()->speech_mode(),
+                            stt_destination_t::active_window,
+                            stt_request_t::listen_translate_active_window);
+            break;
+        case dsnote_app::stt_request_t::listen_clipboard:
+            listen_internal(active_stt_model(), stt_translate_req_t::conf,
+                            settings::instance()->speech_mode(),
+                            stt_destination_t::clipboard,
+                            stt_request_t::listen_clipboard);
+            break;
+        case dsnote_app::stt_request_t::listen_translate_clipboard:
+            listen_internal(active_stt_model(), stt_translate_req_t::on,
+                            settings::instance()->speech_mode(),
+                            stt_destination_t::clipboard,
+                            stt_request_t::listen_translate_clipboard);
+            break;
+        case dsnote_app::stt_request_t::transcribe_file:
+            break;
+    }
+}
+
 void dsnote_app::handle_tts_play_speech_finished(int task) {
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
     } else {
@@ -1918,46 +2011,7 @@ void dsnote_app::handle_tts_play_speech_finished(int task) {
     }
 
     if (m_pending_stt_request) {
-        auto request = m_pending_stt_request.value();
-        m_pending_stt_request.reset();
-
-        switch (request) {
-            case dsnote_app::stt_request_t::listen:
-                listen();
-                break;
-            case dsnote_app::stt_request_t::listen_translate:
-                listen_internal(active_stt_model(), stt_translate_req_t::on,
-                                settings::instance()->speech_mode(),
-                                text_destination_t::note_add,
-                                stt_request_t::listen_translate);
-                break;
-            case dsnote_app::stt_request_t::listen_active_window:
-                listen_internal(active_stt_model(), stt_translate_req_t::conf,
-                                settings::instance()->speech_mode(),
-                                text_destination_t::active_window,
-                                stt_request_t::listen_active_window);
-                break;
-            case dsnote_app::stt_request_t::listen_translate_active_window:
-                listen_internal(active_stt_model(), stt_translate_req_t::on,
-                                settings::instance()->speech_mode(),
-                                text_destination_t::active_window,
-                                stt_request_t::listen_translate_active_window);
-                break;
-            case dsnote_app::stt_request_t::listen_clipboard:
-                listen_internal(active_stt_model(), stt_translate_req_t::conf,
-                                settings::instance()->speech_mode(),
-                                text_destination_t::clipboard,
-                                stt_request_t::listen_clipboard);
-                break;
-            case dsnote_app::stt_request_t::listen_translate_clipboard:
-                listen_internal(active_stt_model(), stt_translate_req_t::on,
-                                settings::instance()->speech_mode(),
-                                text_destination_t::clipboard,
-                                stt_request_t::listen_translate_clipboard);
-                break;
-            case dsnote_app::stt_request_t::transcribe_file:
-                break;
-        }
+        handle_pending_stt_request();
     } else {
         this->m_intermediate_text.clear();
         emit intermediate_text_changed();
@@ -2084,7 +2138,18 @@ void dsnote_app::handle_mnt_translate_finished(
     qDebug() << "translated text:" << out_text;
 #endif
 
-    set_translated_text(out_text);
+    switch (m_mnt_destination) {
+        case mnt_destination_t::translation_replace:
+            set_translated_text(out_text);
+            if (!handle_echo_mode(m_pending_stt_text)) {
+                handle_pending_stt_request();
+            }
+            m_pending_stt_text.clear();
+            break;
+        case mnt_destination_t::tts:
+            play_speech_translator_internal(out_text, /*translated=*/true);
+            break;
+    }
 }
 
 void dsnote_app::handle_stt_default_model_changed(const QString &model) {
@@ -2281,7 +2346,7 @@ void dsnote_app::handle_stt_file_transcribe_finished(int task) {
         return;
     }
 
-    if (m_text_destination != text_destination_t::internal) {
+    if (m_stt_destination != stt_destination_t::internal) {
         emit transcribe_done();
     }
 
@@ -3091,7 +3156,7 @@ void dsnote_app::switch_mnt_langs() {
 }
 
 void dsnote_app::cancel_if_internal() {
-    if (m_text_destination != text_destination_t::internal) {
+    if (m_stt_destination != stt_destination_t::internal) {
         return;
     }
 
@@ -3154,26 +3219,26 @@ void dsnote_app::cancel() {
 
 void dsnote_app::transcribe_file_internal(
     const QString &model_id, const QString &input_file, int stream_index,
-    text_destination_t destination, settings::text_format_t text_format,
+    stt_destination_t destination, settings::text_format_t text_format,
     bool use_note_as_prompt, const QString &dest_file, bool translate) {
     qDebug() << "transcribe file request: model_id=" << model_id
              << "input_file=" << input_file << "stream_index=" << stream_index
              << "destination=" << destination << "dest_file=" << dest_file
              << "translate=" << translate;
 
-    m_text_destination = destination;
+    m_stt_destination = destination;
     m_stt_dest_file = dest_file;
 
     bool replace = [&] {
         switch (destination) {
-            case text_destination_t::note_replace:
-            case text_destination_t::file_replace:
-            case text_destination_t::active_window:
-            case text_destination_t::clipboard:
-            case text_destination_t::internal:
+            case stt_destination_t::note_replace:
+            case stt_destination_t::file_replace:
+            case stt_destination_t::active_window:
+            case stt_destination_t::clipboard:
+            case stt_destination_t::internal:
                 return true;
-            case text_destination_t::note_add:
-            case text_destination_t::file_add:
+            case stt_destination_t::note_add:
+            case stt_destination_t::file_add:
                 return false;
         }
         return false;
@@ -3231,8 +3296,7 @@ void dsnote_app::transcribe_file(const QString &model_id,
     auto *s = settings::instance();
     transcribe_file_internal(
         model_id, file_path, stream_index,
-        replace ? text_destination_t::note_replace
-                : text_destination_t::note_add,
+        replace ? stt_destination_t::note_replace : stt_destination_t::note_add,
         text_format_str.isEmpty()
             ? s->stt_tts_text_format()
             : text_format_from_action_str(text_format_str, /*from_url=*/false,
@@ -3248,8 +3312,7 @@ void dsnote_app::transcribe_file_to_file(const QString &model_id,
     auto *s = settings::instance();
     transcribe_file_internal(
         model_id, input_file, -1,
-        replace ? text_destination_t::file_replace
-                : text_destination_t::file_add,
+        replace ? stt_destination_t::file_replace : stt_destination_t::file_add,
         text_format_from_action_str(text_format_str, /*from_url=*/false,
                                     /*for_stt=*/true),
         s->stt_use_note_as_prompt(), dest_file, translate);
@@ -3286,7 +3349,7 @@ void dsnote_app::transcribe_ref_file_import(long long start, long long stop) {
 }
 
 void dsnote_app::transcribe_ref_file(const QString &file_path) {
-    m_text_destination = text_destination_t::internal;
+    m_stt_destination = stt_destination_t::internal;
 
     int new_task = 0;
 
@@ -3313,26 +3376,26 @@ void dsnote_app::transcribe_ref_file(const QString &file_path) {
 void dsnote_app::listen() {
     listen_internal(active_stt_model(), stt_translate_req_t::conf,
                     settings::instance()->speech_mode(),
-                    text_destination_t::note_add, stt_request_t::listen);
+                    stt_destination_t::note_add, stt_request_t::listen);
 }
 
 void dsnote_app::listen_mnt() {
     listen_internal(active_stt_model_for_in_mnt(), stt_translate_req_t::off,
                     settings::instance()->speech_mode(),
-                    text_destination_t::note_add, stt_request_t::listen);
+                    stt_destination_t::note_add, stt_request_t::listen);
 }
 
 void dsnote_app::listen_internal(const QString &model_id,
                                  stt_translate_req_t translate_req,
                                  settings::speech_mode_t speech_mode,
-                                 text_destination_t text_destination,
+                                 stt_destination_t text_destination,
                                  stt_request_t stt_request_type) {
     if (model_id.isEmpty()) {
         qWarning() << "empty model id";
         return;
     }
 
-    m_text_destination = text_destination;
+    m_stt_destination = text_destination;
     m_current_stt_request = stt_request_type;
 
     auto *s = settings::instance();
@@ -3341,15 +3404,15 @@ void dsnote_app::listen_internal(const QString &model_id,
 
     QVariantMap options;
     auto text_format =
-        m_text_destination == text_destination_t::note_add ||
-                m_text_destination == text_destination_t::note_replace
+        m_stt_destination == stt_destination_t::note_add ||
+                m_stt_destination == stt_destination_t::note_replace
             ? s->stt_tts_text_format()
             : settings::text_format_t::TextFormatRaw;
     options.insert("text_format", static_cast<int>(text_format));
     options.insert("audio_input", s->audio_input_device());
     bool insert_stats =
-        m_text_destination == text_destination_t::note_add ||
-                m_text_destination == text_destination_t::note_replace
+        m_stt_destination == stt_destination_t::note_add ||
+                m_stt_destination == stt_destination_t::note_replace
             ? s->stt_insert_stats()
             : false;
     options.insert("insert_stats", insert_stats);
@@ -3464,7 +3527,7 @@ QString dsnote_app::lang_from_model_id(const QString &model_id) {
     return l.isEmpty() ? QString{} : l.front().toLower();
 }
 
-void dsnote_app::play_speech_internal(QString text, const QString &input_file,
+bool dsnote_app::play_speech_internal(QString text, const QString &input_file,
                                       const QUrl &input_url,
                                       const QString &model_id,
                                       const QString &ref_voice,
@@ -3474,7 +3537,7 @@ void dsnote_app::play_speech_internal(QString text, const QString &input_file,
         QFile file{input_file};
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             qWarning() << "failed to open input-file:" << input_file;
-            return;
+            return false;
         }
         // TODO: Do not assume data is always UTF-8
         text = QString::fromUtf8(file.readAll());
@@ -3497,7 +3560,7 @@ void dsnote_app::play_speech_internal(QString text, const QString &input_file,
 
     if (text.isEmpty()) {
         qWarning() << "cannot tts, text is empty";
-        return;
+        return false;
     }
 
     if (text_format == settings::text_format_t::TextFormatHtml) {
@@ -3574,6 +3637,8 @@ void dsnote_app::play_speech_internal(QString text, const QString &input_file,
 
     this->m_intermediate_text.clear();
     emit intermediate_text_changed();
+
+    return true;
 }
 
 void dsnote_app::play_speech() {
@@ -3609,8 +3674,8 @@ void dsnote_app::play_speech_selected(int start, int end) {
 }
 
 void dsnote_app::play_speech_translator_selected(int start, int end,
-                                                 bool transtalated) {
-    auto size = transtalated ? m_translated_text.size() : note().size();
+                                                 bool translated) {
+    auto size = translated ? m_translated_text.size() : note().size();
 
     if (size == 0) return;
 
@@ -3622,35 +3687,10 @@ void dsnote_app::play_speech_translator_selected(int start, int end,
 
     if (start == end) return;
 
-    if (!transtalated && m_active_tts_model_for_in_mnt.isEmpty()) {
-        qWarning() << "no active tts model for in mnt";
-        return;
-    }
-
-    if (transtalated && m_active_tts_model_for_out_mnt.isEmpty()) {
-        qWarning() << "no active tts model for out mnt";
-        return;
-    }
-
-    play_speech_internal(
-        transtalated ? m_translated_text.mid(start, end - start)
-                     : note().mid(start, end - start),
-        QString{}, QUrl{},
-        transtalated ? m_active_tts_model_for_out_mnt
-                     : m_active_tts_model_for_in_mnt,
-        transtalated ? tts_for_out_mnt_ref_voice_needed()
-                           ? active_tts_for_out_mnt_ref_voice()
-                           : QString{}
-        : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
-                                            : QString{},
-        transtalated
-            ? tts_for_out_mnt_ref_prompt_needed()
-                  ? settings::instance()->tts_active_voice_prompt_for_out_mnt()
-                  : QString{}
-        : tts_for_in_mnt_ref_prompt_needed()
-            ? settings::instance()->tts_active_voice_prompt_for_in_mnt()
-            : QString{},
-        settings::instance()->mnt_text_format());
+    play_speech_translator_internal(
+        translated ? m_translated_text.mid(start, end - start)
+                   : note().mid(start, end - start),
+        translated);
 }
 
 void dsnote_app::restore_diacritics_ar() {
@@ -3740,40 +3780,46 @@ void dsnote_app::play_speech_from_text_format_str(
                                     /*for_stt=*/false));
 }
 
-void dsnote_app::play_speech_from_text_format(
+bool dsnote_app::play_speech_from_text_format(
     const QString &text, const QString &model_id,
     settings::text_format_t text_format) {
-    play_speech_internal(text, QString{}, QUrl{}, model_id,
-                         tts_ref_voice_needed_by_id(model_id)
-                             ? active_tts_ref_voice()
-                             : QString{},
-                         tts_ref_prompt_needed_by_id(model_id)
-                             ? settings::instance()->tts_active_voice_prompt()
-                             : QString{},
-                         text_format);
+    return play_speech_internal(
+        text, QString{}, QUrl{}, model_id,
+        tts_ref_voice_needed_by_id(model_id) ? active_tts_ref_voice()
+                                             : QString{},
+        tts_ref_prompt_needed_by_id(model_id)
+            ? settings::instance()->tts_active_voice_prompt()
+            : QString{},
+        text_format);
 }
 
-void dsnote_app::play_speech_translator(bool transtalated) {
-    if (!transtalated && m_active_tts_model_for_in_mnt.isEmpty()) {
+void dsnote_app::play_speech_translator(bool translated) {
+    play_speech_translator_internal(translated ? m_translated_text : note(),
+                                    translated);
+}
+
+void dsnote_app::play_speech_translator_internal(QString text,
+                                                 bool translated) {
+    if (!translated && m_active_tts_model_for_in_mnt.isEmpty()) {
         qWarning() << "no active tts model for in mnt";
         return;
     }
 
-    if (transtalated && m_active_tts_model_for_out_mnt.isEmpty()) {
+    if (translated && m_active_tts_model_for_out_mnt.isEmpty()) {
         qWarning() << "no active tts model for out mnt";
         return;
     }
 
     play_speech_internal(
-        transtalated ? m_translated_text : note(), QString{}, QUrl{},
-        transtalated ? m_active_tts_model_for_out_mnt
-                     : m_active_tts_model_for_in_mnt,
-        transtalated ? tts_for_out_mnt_ref_voice_needed()
-                           ? active_tts_for_out_mnt_ref_voice()
-                           : QString{}
+        std::move(text), QString{}, QUrl{},
+        translated ? m_active_tts_model_for_out_mnt
+                   : m_active_tts_model_for_in_mnt,
+        translated ? tts_for_out_mnt_ref_voice_needed()
+                         ? active_tts_for_out_mnt_ref_voice()
+                         : QString{}
         : tts_for_in_mnt_ref_voice_needed() ? active_tts_for_in_mnt_ref_voice()
                                             : QString{},
-        transtalated
+        translated
             ? tts_for_out_mnt_ref_prompt_needed()
                   ? settings::instance()->tts_active_voice_prompt_for_out_mnt()
                   : QString{}
@@ -3808,49 +3854,67 @@ void dsnote_app::translate_selected(int start, int end) {
 
     if (start == end) return;
 
-    translate_internal(note().mid(start, end - start));
+    translate_internal(note().mid(start, end - start),
+                       mnt_destination_t::translation_replace);
 }
 
-void dsnote_app::translate() { translate_internal(note()); }
+void dsnote_app::translate() {
+    translate_internal(note(), mnt_destination_t::translation_replace);
+}
 
-void dsnote_app::translate_internal(const QString &text) {
+bool dsnote_app::translate_internal(const QString &text,
+                                    mnt_destination_t destination) {
     if (m_active_mnt_lang.isEmpty() || m_active_mnt_out_lang.isEmpty()) {
         qWarning() << "invalid active mnt lang";
-        return;
+        return false;
     }
 
     if (text.isEmpty()) {
-        set_translated_text({});
-    } else {
-        int new_task = 0;
+        qWarning() << "empty text to translate";
 
-        QVariantMap options;
-        options.insert("clean_text", settings::instance()->mnt_clean_text());
-        options.insert(
-            "text_format",
-            static_cast<int>(settings::instance()->mnt_text_format()));
-
-        // for chinese, add pinyin input option
-        if (m_active_mnt_out_lang.startsWith(QLatin1String("zh"),
-                                             Qt::CaseInsensitive)) {
-            options.insert("pinyin_output", settings::instance()->mnt_pinyin());
+        switch (destination) {
+            case mnt_destination_t::translation_replace:
+                set_translated_text({});
+                this->m_intermediate_text.clear();
+                emit intermediate_text_changed();
+                break;
+            case mnt_destination_t::tts:
+                break;
         }
-
-        if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
-            new_task = speech_service::instance()->mnt_translate(
-                text, m_active_mnt_lang, m_active_mnt_out_lang, options);
-        } else {
-            qDebug() << "[app => dbus] call MntTranslate";
-
-            new_task = m_dbus_service.MntTranslate2(
-                text, m_active_mnt_lang, m_active_mnt_out_lang, options);
-        }
-
-        m_primary_task.set(new_task);
+        return false;
     }
+
+    int new_task = 0;
+
+    m_mnt_destination = destination;
+
+    QVariantMap options;
+    options.insert("clean_text", settings::instance()->mnt_clean_text());
+    options.insert("text_format",
+                   static_cast<int>(settings::instance()->mnt_text_format()));
+
+    // for chinese, add pinyin input option
+    if (m_active_mnt_out_lang.startsWith(QLatin1String("zh"),
+                                         Qt::CaseInsensitive)) {
+        options.insert("pinyin_output", settings::instance()->mnt_pinyin());
+    }
+
+    if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
+        new_task = speech_service::instance()->mnt_translate(
+            text, m_active_mnt_lang, m_active_mnt_out_lang, options);
+    } else {
+        qDebug() << "[app => dbus] call MntTranslate";
+
+        new_task = m_dbus_service.MntTranslate2(text, m_active_mnt_lang,
+                                                m_active_mnt_out_lang, options);
+    }
+
+    m_primary_task.set(new_task);
 
     this->m_intermediate_text.clear();
     emit intermediate_text_changed();
+
+    return true;
 }
 
 void dsnote_app::speech_to_file(const QString &dest_file,
@@ -5125,7 +5189,7 @@ void dsnote_app::handle_mc_state_changed() {
                 } else {
                     update_note(
                         m_mc.string_data(),
-                        m_text_destination == text_destination_t::note_replace);
+                        m_stt_destination == stt_destination_t::note_replace);
 
                     settings::instance()->set_stt_tts_text_format(
                         settings::text_format_t::TextFormatSubRip);
@@ -5311,9 +5375,9 @@ dsnote_app::url_import_result_t dsnote_app::import_url_internal(
                             error_import_subtitles_error;
                     }
 
-                    m_text_destination = replace
-                                             ? text_destination_t::note_replace
-                                             : text_destination_t::note_add;
+                    m_stt_destination = replace
+                                            ? stt_destination_t::note_replace
+                                            : stt_destination_t::note_add;
                     return url_import_result_t::ok_import_subtitles;
                 case media_compressor::media_type_t::video:
                 case media_compressor::media_type_t::unknown:
@@ -5363,7 +5427,7 @@ void dsnote_app::open_next_url() {
 
     auto result = import_url_internal(
         m_urls_to_open.front(), -1,
-        m_text_destination == text_destination_t::note_replace);
+        m_stt_destination == stt_destination_t::note_replace);
 
     qDebug() << "import url result:" << result;
 
@@ -5422,8 +5486,8 @@ void dsnote_app::import_urls(const QList<QUrl> &input_urls, bool replace) {
         if (m_urls_to_open.size() == 1) m_urls_to_open.push({});
         if (!note().isEmpty()) make_undo();
         qDebug() << "importing urls:" << input_urls;
-        m_text_destination = replace ? text_destination_t::note_replace
-                                     : text_destination_t::note_add;
+        m_stt_destination = replace ? stt_destination_t::note_replace
+                                    : stt_destination_t::note_add;
         m_open_urls_delay_timer.start();
     }
 }
@@ -6056,32 +6120,32 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
     switch (caction) {
         case dsnote_app::action_t::start_listening:
             listen_internal(active_stt_model(), stt_translate_req_t::conf,
-                            speech_mode, text_destination_t::note_add,
+                            speech_mode, stt_destination_t::note_add,
                             stt_request_t::listen);
             break;
         case dsnote_app::action_t::start_listening_translate:
             listen_internal(active_stt_model(), stt_translate_req_t::on,
-                            speech_mode, text_destination_t::note_add,
+                            speech_mode, stt_destination_t::note_add,
                             stt_request_t::listen_translate);
             break;
         case dsnote_app::action_t::start_listening_active_window:
             listen_internal(active_stt_model(), stt_translate_req_t::conf,
-                            speech_mode, text_destination_t::active_window,
+                            speech_mode, stt_destination_t::active_window,
                             stt_request_t::listen_active_window);
             break;
         case dsnote_app::action_t::start_listening_translate_active_window:
             listen_internal(active_stt_model(), stt_translate_req_t::on,
-                            speech_mode, text_destination_t::active_window,
+                            speech_mode, stt_destination_t::active_window,
                             stt_request_t::listen_translate_active_window);
             break;
         case dsnote_app::action_t::start_listening_clipboard:
             listen_internal(active_stt_model(), stt_translate_req_t::conf,
-                            speech_mode, text_destination_t::clipboard,
+                            speech_mode, stt_destination_t::clipboard,
                             stt_request_t::listen_clipboard);
             break;
         case dsnote_app::action_t::start_listening_translate_clipboard:
             listen_internal(active_stt_model(), stt_translate_req_t::on,
-                            speech_mode, text_destination_t::clipboard,
+                            speech_mode, stt_destination_t::clipboard,
                             stt_request_t::listen_translate_clipboard);
             break;
         case dsnote_app::action_t::transcribe_file: {

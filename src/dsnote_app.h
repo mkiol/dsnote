@@ -64,7 +64,7 @@
     X(pinyin)
 
 // name, name_str
-#define TEXT_DESTINATION_TABLE           \
+#define STT_DESTINATION_TABLE            \
     X(note_add, "note-add", 0)           \
     X(note_replace, "note-replace", 0)   \
     X(file_add, "file-add", 0)           \
@@ -407,9 +407,9 @@ class dsnote_app : public QObject {
     Q_INVOKABLE void play_speech_selected(int start, int end);
     Q_INVOKABLE void play_speech_from_text(const QString &text,
                                            const QString &model_id);
-    Q_INVOKABLE void play_speech_translator(bool transtalated);
+    Q_INVOKABLE void play_speech_translator(bool translated);
     Q_INVOKABLE void play_speech_translator_selected(int start, int end,
-                                                     bool transtalated);
+                                                     bool translated);
     Q_INVOKABLE void restore_diacritics_ar();
     Q_INVOKABLE void restore_diacritics_he();
     Q_INVOKABLE void restore_punctuation();
@@ -659,22 +659,27 @@ class dsnote_app : public QObject {
         bool close_request = false;
     };
 
-    enum class text_destination_t : uint8_t {
+    enum class stt_destination_t : uint8_t {
 #define X(name, str, ...) name,
-        TEXT_DESTINATION_TABLE
+        STT_DESTINATION_TABLE
 #undef X
     };
     friend QDebug operator<<(QDebug d,
-                             dsnote_app::text_destination_t destination);
+                             dsnote_app::stt_destination_t destination);
 
-    enum class text_repair_destination_t {
+    enum class text_repair_destination_t : uint8_t {
         note_replace = 0,
-        translation_replace = 1
+        translation_replace = 1,
     };
 
-    enum class mc_state_t { idle, extracting_subtitles };
+    enum class mnt_destination_t : uint8_t {
+        translation_replace = 0,
+        tts = 1,
+    };
 
-    enum class stt_translate_req_t { conf, on, off };
+    enum class mc_state_t : uint8_t { idle, extracting_subtitles };
+
+    enum class stt_translate_req_t : uint8_t { conf, on, off };
 
     struct dest_file_info_t {
         QString input_path;
@@ -693,7 +698,7 @@ class dsnote_app : public QObject {
         listen_translate_active_window,
         listen_clipboard,
         listen_translate_clipboard,
-        transcribe_file
+        transcribe_file,
     };
     friend QDebug operator<<(QDebug d, dsnote_app::stt_request_t request);
 
@@ -777,9 +782,11 @@ class dsnote_app : public QObject {
     bool m_undo_flag = false;  // true => undo, false => redu
     std::queue<QUrl> m_urls_to_open;
     std::queue<std::pair<action_t, QVariantMap>> m_pending_actions;
-    text_destination_t m_text_destination = text_destination_t::note_add;
+    stt_destination_t m_stt_destination = stt_destination_t::note_add;
     text_repair_destination_t m_text_repair_destination =
         text_repair_destination_t::note_replace;
+    mnt_destination_t m_mnt_destination =
+        mnt_destination_t::translation_replace;
     text_repair_task_type_t m_text_repair_task = text_repair_task_type_t::none;
     std::optional<desktop_notification_t> m_desktop_notification;
     QVariantMap m_features_availability;
@@ -799,6 +806,7 @@ class dsnote_app : public QObject {
     int m_last_cursor_position = -1;
     std::optional<stt_request_t> m_current_stt_request;
     std::optional<stt_request_t> m_pending_stt_request;
+    QString m_pending_stt_text;
     QString m_trans_rules_test_text;
     QString m_py_version;
     downloader m_downloader;
@@ -976,7 +984,7 @@ class dsnote_app : public QObject {
     void listen_internal(const QString &model_id,
                          stt_translate_req_t translate_req,
                          settings::speech_mode_t speech_mode,
-                         text_destination_t text_destination,
+                         stt_destination_t text_destination,
                          stt_request_t stt_request_type);
     void speech_to_file_internal(QString text, const QString &input_file,
                                  const QUrl &input_url, const QString &model_id,
@@ -987,7 +995,7 @@ class dsnote_app : public QObject {
                                  settings::text_format_t text_format,
                                  settings::audio_format_t audio_format,
                                  settings::audio_quality_t audio_quality);
-    void play_speech_from_text_format(const QString &text,
+    bool play_speech_from_text_format(const QString &text,
                                       const QString &model_id,
                                       settings::text_format_t text_format);
     void play_speech_from_text_format_str(const QString &text,
@@ -995,11 +1003,12 @@ class dsnote_app : public QObject {
                                           const QUrl &input_url,
                                           const QString &model_id,
                                           const QString &text_format_str);
-    void play_speech_internal(QString text, const QString &input_file,
+    bool play_speech_internal(QString text, const QString &input_file,
                               const QUrl &input_url, const QString &model_id,
                               const QString &ref_voice,
                               const QString &ref_prompt,
                               settings::text_format_t text_format);
+    void play_speech_translator_internal(QString text, bool translated);
     void export_to_file_internal(const QString &text, const QString &dest_file);
     void copy_to_clipboard_internal(const QString &text);
     void handle_translate_delayed();
@@ -1013,7 +1022,7 @@ class dsnote_app : public QObject {
                                  const QString &text_format_str);
     void transcribe_file_internal(const QString &model_id,
                                   const QString &input_file, int stream_index,
-                                  text_destination_t destination,
+                                  stt_destination_t destination,
                                   settings::text_format_t text_format,
                                   bool use_note_as_prompt,
                                   const QString &dest_file, bool translate);
@@ -1060,7 +1069,7 @@ class dsnote_app : public QObject {
     void update_tray_task_state();
     void update_auto_text_format_delayed();
     void update_auto_text_format();
-    void translate_internal(const QString &text);
+    bool translate_internal(const QString &text, mnt_destination_t destination);
     url_import_result_t import_text_file(const QString &input_file,
                                          bool replace);
     url_import_result_t import_text_url(const QUrl &input_url, bool replace);
@@ -1120,6 +1129,8 @@ class dsnote_app : public QObject {
         const QString &test_text);
     static QVariantList trans_rule_to_vrule(const QJsonObject &jrule);
     QVariant fa_feature_value(const QString &name) const;
+    void handle_pending_stt_request();
+    bool handle_echo_mode(const QString &text_to_echo);
 };
 
 #endif  // DSNOTE_APP_H

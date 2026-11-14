@@ -92,7 +92,8 @@
     X(fake_keyboard_delay, int, 20, false, 1, 1000, 1, false, 0)               \
     X(fake_keyboard_layout, QString, QString{}, false, 0, 0, 0, false, 0)      \
     X(x11_compose_file, QString, QString{}, false, 0, 0, 0, false, 0)          \
-    X(py_path, QString, QString{}, true, 0, 0, 0, false, 0)
+    X(py_path, QString, QString{}, true, 0, 0, 0, false, 0)                    \
+    X(mnt_echo, bool, false, false, false, true, 0, false, 0)
 
 // name, default-value
 #define GPU_SCAN_TABLE                                          \

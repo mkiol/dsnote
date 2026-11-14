@@ -2422,7 +2422,9 @@ void speech_service::handle_stt_engine_eof(int task_id) {
 
     if (!m_current_task || m_current_task->id != task_id ||
         m_current_task->engine != engine_t::stt) {
-        qDebug() << "ignoring stt eof";
+        qDebug() << "late stt eof";
+
+        stop_stt();
         return;
     }
 
@@ -4504,6 +4506,8 @@ void speech_service::handle_task_timeout() {
 }
 
 void speech_service::update_task_state() {
+    LOGD("service: update task state");
+
     refresh_status();
 
     // 0 = Idle
@@ -4624,6 +4628,7 @@ void speech_service::set_state(state_t new_state) {
 }
 
 void speech_service::refresh_status() {
+    LOGD("service: refresh status");
     state_t new_state;
 
     if (models_manager::instance()->busy() || !feature_discovery_done() ||
@@ -4645,7 +4650,13 @@ void speech_service::refresh_status() {
         } else if (m_current_task->engine == engine_t::tts) {
             new_state = state_t::playing_speech;
         } else if (m_current_task->engine == engine_t::mnt) {
-            new_state = state_t::translating;
+            if (m_mnt_engine &&
+                m_mnt_engine->state() != mnt_engine::state_t::idle &&
+                m_mnt_engine->state() != mnt_engine::state_t::error) {
+                new_state = state_t::translating;
+            } else {
+                new_state = state_t::idle;
+            }
         } else if (m_current_task->speech_mode == speech_mode_t::manual) {
             new_state = m_stt_engine && m_stt_engine->started()
                             ? state_t::listening_manual
@@ -4671,10 +4682,11 @@ void speech_service::refresh_status() {
     } else if (m_current_task && m_current_task->engine == engine_t::mnt) {
         if (m_mnt_engine &&
             m_mnt_engine->state() != mnt_engine::state_t::idle &&
-            m_mnt_engine->state() != mnt_engine::state_t::error)
+            m_mnt_engine->state() != mnt_engine::state_t::error) {
             new_state = state_t::translating;
-        else
+        } else {
             new_state = state_t::idle;
+        }
     } else if (m_current_task &&
                m_current_task->engine == engine_t::text_repair) {
         if (m_text_repair_engine &&

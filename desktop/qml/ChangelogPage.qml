@@ -102,7 +102,7 @@ DialogPage {
             Pinyin is supported only for Simplified Chinese script.</li>
         <li>An option to insert custom pause between sentences.
             Override default TTS engine sentence pauses with a custom silence duration
-           (<i>Settings</i> &rarr; <i>Text to Speech</i> &rarr; <i>Insert custom pause between sentences</i>).</li>
+            (<i>Settings</i> &rarr; <i>Text to Speech</i> &rarr; <i>Insert custom pause between sentences</i>).</li>
         </ul>
         <p>" + qsTr("Translator") + "</p>
         <ul>
@@ -112,6 +112,9 @@ DialogPage {
             Pinyin is supported only for Simplified Chinese script.</li>
         <li>Setting to choose whether the <i>Read</i> or <i>Listen</i> options are visible in translator mode.
             (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Voice options in translator mode</i>).</li>
+        <li>Echo mode in the Translator. When text is inserted using Speech to Text (<i>Listen</i> button), it is translated to the chosen language and immediately
+            read aloud using the selected Text to Speech model
+            (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Echo mode</i>).</li>
         </ul>
         <p>" + qsTr("User Interface") + "</p>
         <ul>
