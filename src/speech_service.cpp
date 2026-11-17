@@ -547,6 +547,15 @@ speech_service::speech_service(QObject *parent)
                 emit TaskStatePropertyChanged(task_state());
             },
             Qt::QueuedConnection);
+        connect(
+            this, &speech_service::listening_state_changed, this,
+            [this]() {
+                qDebug()
+                    << "[service => dbus] signal ListeningStatePropertyChanged:"
+                    << listening_state();
+                emit ListeningStatePropertyChanged(listening_state());
+            },
+            Qt::QueuedConnection);
         connect(this, &speech_service::models_changed, this, [this]() {
             // stt
 
@@ -2723,6 +2732,24 @@ void speech_service::handle_tts_speech_encoded(tts_partial_result_t result) {
     }
 }
 
+void speech_service::play_stt_beep_if_needed(beep_role_t beep_role) {
+    if ((m_current_task->flags & task_flags_t::task_flags_stt_play_beep) == 0) {
+        // ignore beep request
+        return;
+    }
+
+    switch (beep_role) {
+        case beep_role_t::stt_start_listen:
+            if (listening_state()) return;
+            break;
+        case beep_role_t::stt_end_listen:
+            if (!listening_state()) return;
+            break;
+    }
+
+    play_beep(beep_role);
+}
+
 void speech_service::play_beep(beep_role_t beep_role) {
     auto get_beep_file = [](const QString &name) {
         // get from user data dir
@@ -3156,7 +3183,12 @@ void speech_service::delete_model(const QString &id) {
 }
 
 void speech_service::handle_audio_available() {
-    if (m_source && m_stt_engine && m_stt_engine->started()) {
+    if (!m_source || !m_stt_engine) {
+        // ignore
+        return;
+    }
+
+    if (m_stt_engine->started()) {
         auto status = m_stt_engine->speech_detection_status();
         if (m_source->type() == audio_source::source_type::mic) {
             if ((status == stt_engine::speech_detection_status_t::decoding &&
@@ -3165,6 +3197,7 @@ void speech_service::handle_audio_available() {
                   task_flags_stt_clear_mic_audio_when_decoding)) ||
                 status == stt_engine::speech_detection_status_t::initializing) {
                 m_source->clear();
+                set_listening_state(false);
                 return;
             }
         } else if (status ==
@@ -3177,7 +3210,6 @@ void speech_service::handle_audio_available() {
 
         if (buf) {
             auto audio_data = m_source->read_audio(buf, max_size);
-
             m_stt_engine->return_buf(buf, audio_data.size, audio_data.sof,
                                      audio_data.eof);
             set_progress(m_source->progress());
@@ -3189,6 +3221,10 @@ void speech_service::handle_audio_available() {
         } else {
             m_source->slowdown();
         }
+    }
+
+    if (!m_source->stopped()) {
+        set_listening_state(true);
     }
 }
 
@@ -4169,10 +4205,11 @@ int speech_service::cancel(int task) {
         else
             stop_tts_engine();
     } else if (m_current_task->engine == engine_t::stt) {
-        if (m_stt_engine && m_stt_engine->started())
-            m_stt_engine->request_stop();
-        else
+        if (m_stt_engine && m_stt_engine->started()) {
+            request_stop_stt_engine();
+        } else {
             stop_stt_engine();
+        }
     } else if (m_current_task->engine == engine_t::mnt) {
         if (m_mnt_engine &&
             m_mnt_engine->state() == mnt_engine::state_t::translating)
@@ -4346,18 +4383,16 @@ int speech_service::tts_stop_speech(int task) {
 void speech_service::stop_stt_engine_gracefully() {
     qDebug() << "stop stt engine gracefully";
 
-    if (m_source) {
-        if (m_stt_engine) m_stt_engine->set_speech_started(false);
-        if (!m_source->stopped()) {
-            m_source->stop();
-            if (m_current_task &&
-                (m_current_task->flags & task_flags_stt_play_beep)) {
-                play_beep(beep_role_t::stt_end_listen);
-            }
-        }
-    } else {
+    if (!m_stt_engine) {
         stop_stt_engine();
     }
+
+    if (m_source && !m_source->stopped()) {
+        m_source->stop();
+        set_listening_state(false);
+    }
+
+    update_task_state();
 }
 
 void speech_service::stop_tts_engine() {
@@ -4388,10 +4423,29 @@ void speech_service::stop_text_repair_engine() {
     update_task_state();
 }
 
+void speech_service::request_stop_stt_engine() {
+    if (!m_stt_engine || !m_stt_engine->started()) {
+        // not needed
+        return;
+    }
+    // if (m_stt_engine->speech_status() && m_current_task &&
+    //     (m_current_task->flags & task_flags_stt_play_beep)) {
+    //     play_beep(beep_role_t::stt_end_listen);
+    // }
+    m_stt_engine->request_stop();
+}
+
 void speech_service::stop_stt_engine() {
     qDebug() << "stop stt engine";
 
-    if (m_stt_engine) m_stt_engine->stop();
+    if (m_stt_engine) {
+        // auto listening = m_stt_engine->speech_status();
+        m_stt_engine->stop();
+        // if (listening && m_current_task &&
+        //     (m_current_task->flags & task_flags_stt_play_beep)) {
+        //     play_beep(beep_role_t::stt_end_listen);
+        // }
+    }
 
     restart_audio_source({});
 
@@ -4455,6 +4509,8 @@ void speech_service::handle_audio_ended() {
 
 void speech_service::restart_audio_source(
     const std::variant<QString, stt_source_file_props_t> &config) {
+    set_listening_state(false);
+
     if (m_stt_engine && m_stt_engine->started()) {
         qDebug() << "creating audio source";
 
@@ -4466,10 +4522,6 @@ void speech_service::restart_audio_source(
                 std::get<stt_source_file_props_t>(config).stream_index);
         } else {
             m_source = std::make_unique<mic_source>(std::get<QString>(config));
-            if (m_current_task &&
-                (m_current_task->flags & task_flags_stt_play_beep)) {
-                play_beep(beep_role_t::stt_start_listen);
-            }
         }
 
         set_progress(m_source->progress());
@@ -4503,6 +4555,17 @@ void speech_service::handle_task_timeout() {
             emit current_task_changed();
         }
     }
+}
+
+void speech_service::set_listening_state(bool listening) {
+    if (listening != m_listening_state) {
+        LOGD("listening state changed: " << m_listening_state << " => "
+                                         << listening);
+        m_listening_state = listening;
+        emit listening_state_changed();
+    }
+
+    play_stt_beep_if_needed(beep_role_t::stt_start_listen);
 }
 
 void speech_service::update_task_state() {

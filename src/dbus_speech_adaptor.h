@@ -40,6 +40,10 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "    <signal name=\"TaskStatePropertyChanged\">\n"
 "      <arg direction=\"out\" type=\"i\" name=\"taskState\"/>\n"
 "    </signal>\n"
+"    <property access=\"read\" type=\"i\" name=\"ListeningState\"/>\n"
+"    <signal name=\"ListeningStatePropertyChanged\">\n"
+"      <arg direction=\"out\" type=\"i\" name=\"listeningState\"/>\n"
+"    </signal>\n"
 "    <property access=\"readwrite\" type=\"s\" name=\"DefaultSttLang\"/>\n"
 "    <signal name=\"DefaultSttLangPropertyChanged\">\n"
 "      <arg direction=\"out\" type=\"s\" name=\"lang\"/>\n"
@@ -350,6 +354,9 @@ public: // PROPERTIES
     QString defaultTtsModel() const;
     void setDefaultTtsModel(const QString &value);
 
+    Q_PROPERTY(int ListeningState READ listeningState)
+    int listeningState() const;
+
     Q_PROPERTY(QVariantList MntLangList READ mntLangList)
     QVariantList mntLangList() const;
 
@@ -426,6 +433,7 @@ Q_SIGNALS: // SIGNALS
     void DefaultTtsModelPropertyChanged(const QString &model);
     void ErrorOccured(int code);
     void FeaturesAvailabilityUpdated();
+    void ListeningStatePropertyChanged(int listeningState);
     void MntLangListChanged(const QVariantList &langs);
     void MntLangsPropertyChanged(const QVariantMap &langs);
     void MntTranslateFinished(const QString &in_text, const QString &in_lang, const QString &out_text, const QString &out_lang, int task);

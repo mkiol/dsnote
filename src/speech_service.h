@@ -68,6 +68,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     // Speech DBus API
     Q_PROPERTY(int State READ dbus_state CONSTANT)
     Q_PROPERTY(int TaskState READ task_state CONSTANT)
+    Q_PROPERTY(int ListeningState READ listening_state CONSTANT)
     Q_PROPERTY(QVariantMap SttLangs READ available_stt_langs CONSTANT)
     Q_PROPERTY(QVariantList SttLangList READ available_stt_lang_list CONSTANT)
     Q_PROPERTY(QVariantMap TtsLangs READ available_tts_langs CONSTANT)
@@ -203,6 +204,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     QVariantList available_stt_tts_lang_list() const;
     QVariantList available_mnt_lang_list() const;
     auto task_state() const { return m_task_state; }
+    auto listening_state() const { return m_listening_state; }
     state_t state() const;
     int current_task_id() const;
     double stt_transcribe_file_progress(int task) const;
@@ -219,6 +221,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void models_changed();
     void model_download_progress(const QString &id, double progress);
     void task_state_changed();
+    void listening_state_changed();
     void state_changed();
     void buff_ready();
     void stt_transcribe_file_progress_changed(double progress, int task);
@@ -270,7 +273,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     void StatePropertyChanged(int state);
     void ErrorOccured(int code);
     void CurrentTaskPropertyChanged(int task);
-    void TaskStatePropertyChanged(int speech);
+    void TaskStatePropertyChanged(int state);
+    void ListeningStatePropertyChanged(int state);
     void SttFileTranscribeFinished(int task);
     void SttFileTranscribeProgress(double progress, int task);
     void SttIntermediateTextDecoded(const QString &text, const QString &lang,
@@ -469,6 +473,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     QAudioOutput m_beep_player_audio_output;
 #endif
     int m_task_state = 0;
+    bool m_listening_state = false;
     std::queue<tts_partial_result_t> m_tts_queue;
     QVariantMap m_features_availability;
     bool m_models_changed_handled = false;
@@ -558,6 +563,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     void refresh_status();
     void stop_stt_engine_gracefully();
     void stop_stt_engine();
+    void request_stop_stt_engine();
     void stop_tts_engine();
     void stop_text_repair_engine();
     void stop_mnt_engine();
@@ -592,6 +598,7 @@ class speech_service : public QObject, public singleton<speech_service> {
         const std::map<QString, model_data_t> &available_models_map);
     void set_state(state_t new_state);
     void update_task_state();
+    void set_listening_state(bool listening);
     void handle_tts_queue();
     static std::vector<std::reference_wrapper<const model_data_t>>
     model_data_for_lang(
@@ -606,6 +613,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     static void setup_modules();
     static void setup_env();
     void clean_tts_queue();
+    void play_stt_beep_if_needed(beep_role_t beep_role);
     void play_beep(beep_role_t beep_role);
     bool is_new_stt_engine_required(models_manager::model_engine_t engine_type,
                                     const stt_engine::config_t &config) const;

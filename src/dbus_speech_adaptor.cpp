@@ -111,6 +111,12 @@ void SpeechAdaptor::setDefaultTtsModel(const QString &value)
     parent()->setProperty("DefaultTtsModel", QVariant::fromValue(value));
 }
 
+int SpeechAdaptor::listeningState() const
+{
+    // get the value of property ListeningState
+    return qvariant_cast< int >(parent()->property("ListeningState"));
+}
+
 QVariantList SpeechAdaptor::mntLangList() const
 {
     // get the value of property MntLangList

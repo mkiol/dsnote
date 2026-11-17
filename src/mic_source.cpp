@@ -195,12 +195,14 @@ void mic_source::init_audio(const QString& preferred_audio_input) {
     qDebug() << "using audio input:" << get_device_name(device)
              << "(preferred was " << preferred_audio_input << ")";
     m_audio_source = std::make_unique<AudioSourceType>(device, format);
+    m_audio_source->setBufferSize(AUDIO_BUFFER_SIZE_BYTES);
 
     connect(m_audio_source.get(), &AudioSourceType::stateChanged, this,
             &mic_source::handle_state_changed);
 }
 
 void mic_source::start() {
+    qDebug() << "mic source start";
     m_audio_device = m_audio_source->start();
 
     m_timer.setInterval(200);  // 200 ms
@@ -232,10 +234,10 @@ void mic_source::handle_read_timeout() {
         return;
     }
 
-    /*bool bytes_available = !m_eof || m_audio_source->bufferSize() > 0;
-    qDebug() << "mic read timeout: b_avai=" << bytes_available
-             << "eof=" << m_eof << "ended=" << m_ended << "sof=" << m_sof
-             << "b_ready=" << m_audio_source->bufferSize();*/
+    // bool bytes_available = !m_eof || m_audio_source->bufferSize() > 0;
+    // qDebug() << "mic read timeout: b_avai=" << bytes_available
+    //          << "eof=" << m_eof << "ended=" << m_ended << "sof=" << m_sof
+    //          << "b_ready=" << m_audio_source->bufferSize();
 
     if (m_ended) {
         emit ended();
@@ -269,9 +271,9 @@ audio_source::audio_data mic_source::read_audio(char* buf, size_t max_size) {
 
     bool bytes_available = !m_eof || m_audio_device->bytesAvailable() > 0;
 
-    /*qDebug() << "read_audio: b_avai=" << bytes_available << "eof=" << m_eof
-             << "ended=" << m_ended << "sof=" << m_sof
-             << "b_ready=" << m_audio_device->bytesAvailable();*/
+    // qDebug() << "read_audio: b_avai=" << bytes_available << "eof=" << m_eof
+    //          << "ended=" << m_ended << "sof=" << m_sof
+    //          << "b_ready=" << m_audio_device->bytesAvailable();
 
     if (!bytes_available) {
         data.eof = m_eof;

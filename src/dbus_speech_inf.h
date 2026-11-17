@@ -75,6 +75,10 @@ public:
     inline void setDefaultTtsModel(const QString &value)
     { setProperty("DefaultTtsModel", QVariant::fromValue(value)); }
 
+    Q_PROPERTY(int ListeningState READ listeningState)
+    inline int listeningState() const
+    { return qvariant_cast< int >(property("ListeningState")); }
+
     Q_PROPERTY(QVariantList MntLangList READ mntLangList)
     inline QVariantList mntLangList() const
     { return qvariant_cast< QVariantList >(property("MntLangList")); }
@@ -299,6 +303,7 @@ Q_SIGNALS: // SIGNALS
     void DefaultTtsModelPropertyChanged(const QString &model);
     void ErrorOccured(int code);
     void FeaturesAvailabilityUpdated();
+    void ListeningStatePropertyChanged(int listeningState);
     void MntLangListChanged(const QVariantList &langs);
     void MntLangsPropertyChanged(const QVariantMap &langs);
     void MntTranslateFinished(const QString &in_text, const QString &in_lang, const QString &out_text, const QString &out_lang, int task);

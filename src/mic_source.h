@@ -37,20 +37,20 @@ class mic_source : public audio_source {
     bool ok() const override;
     audio_data read_audio(char* buf, size_t max_size) override;
     void clear() override;
-    inline source_type type() const override { return source_type::mic; }
+    source_type type() const override { return source_type::mic; }
     void stop() override;
     void slowdown() override;
     void speedup() override;
     static QStringList audio_inputs();
 
    private:
+    static const long long AUDIO_BUFFER_SIZE_BYTES = 2097152;  // 2MB
     std::unique_ptr<AudioSourceType> m_audio_source;
     QTimer m_timer;
     QIODevice* m_audio_device = nullptr;
     bool m_eof = false;
     bool m_sof = true;
     bool m_ended = false;
-    bool m_stopped = false;
 
     void init_audio(const QString& preferred_audio_input);
     void start();

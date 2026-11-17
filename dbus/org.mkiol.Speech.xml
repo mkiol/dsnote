@@ -49,6 +49,24 @@
         </signal>
 
         <!--
+            ListeningState:
+
+            An indicator of listening state. 
+            Valid states: 0 = No listening, 1 = Listening
+        -->
+        <property name="ListeningState" type="i" access="read" />
+
+        <!--
+            ListeningStatePropertyChanged:
+            @listeningState: new value of ListeningState property
+
+            Emitted whenever ListeningState property changes.
+        -->
+        <signal name="ListeningStatePropertyChanged">
+          <arg name="listeningState" type="i" direction="out" />
+        </signal>
+
+        <!--
             DefaultSttLang:
 
             An id of language which is default for STT tasks.

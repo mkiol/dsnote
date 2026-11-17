@@ -253,6 +253,8 @@ class dsnote_app : public QObject {
 
     Q_PROPERTY(service_task_state_t task_state READ task_state NOTIFY
                    task_state_changed)
+    Q_PROPERTY(bool listening_state READ listening_state NOTIFY
+                   listening_state_changed)
     Q_PROPERTY(bool busy READ busy NOTIFY busy_changed)
     Q_PROPERTY(
         bool stt_configured READ stt_configured NOTIFY stt_configured_changed)
@@ -544,6 +546,7 @@ class dsnote_app : public QObject {
     void text_decoded_internal(const QString &text);
     void text_decoded_to_active_window();
     void task_state_changed();
+    void listening_state_changed();
     void busy_changed();
     void stt_configured_changed();
     void tts_configured_changed();
@@ -691,7 +694,7 @@ class dsnote_app : public QObject {
             settings::audio_format_t::AudioFormatWav;
     };
 
-    enum class stt_request_t : uint8_t {
+    enum class stt_request_type_t : uint8_t {
         listen,
         listen_translate,
         listen_active_window,
@@ -700,7 +703,15 @@ class dsnote_app : public QObject {
         listen_translate_clipboard,
         transcribe_file,
     };
-    friend QDebug operator<<(QDebug d, dsnote_app::stt_request_t request);
+    friend QDebug operator<<(QDebug d, dsnote_app::stt_request_type_t request);
+
+    struct stt_request_t {
+        stt_request_type_t type = stt_request_type_t::listen;
+        QString model_id;
+        settings::speech_mode_t speech_mode =
+            settings::speech_mode_t::SpeechSingleSentence;
+        QVariantMap options;
+    };
 
     struct trans_rule_t {
         settings::trans_rule_flags_t flags =
@@ -756,6 +767,7 @@ class dsnote_app : public QObject {
     service_task_state_t m_task_state = service_task_state_t::TaskStateIdle;
     service_task_state_t m_task_state_pending =
         service_task_state_t::TaskStateIdle;
+    bool m_listening_state = false;
     task_t m_primary_task;
     int m_current_task = INVALID_TASK;
     int m_init_attempts = -1;
@@ -845,6 +857,7 @@ class dsnote_app : public QObject {
     void update_progress();
     void update_service_state();
     void update_task_state();
+    void update_listening_state();
     void update_active_stt_model();
     void update_available_stt_models();
     void update_active_tts_model();
@@ -866,6 +879,7 @@ class dsnote_app : public QObject {
     void set_service_state_pending(service_state_t new_service_state);
     void set_task_state(service_task_state_t new_task_state);
     void set_task_state_pending(service_task_state_t new_task_state);
+    void set_listening_state(bool new_listening_state);
     void handle_stt_intermediate_text(const QString &text, const QString &lang,
                                       int task);
     static QString model_name(const QString &model_id, const QVariantMap &map);
@@ -919,6 +933,7 @@ class dsnote_app : public QObject {
     void update_active_mnt_out_lang_idx();
     service_state_t service_state() const { return m_service_state; }
     auto task_state() const { return m_task_state; }
+    auto listening_state() const { return m_listening_state; }
     auto auto_text_format() const { return m_auto_text_format; }
     auto mc_progress() const { return m_mc.progress(); }
     QStringList audio_sources() const;
@@ -985,7 +1000,8 @@ class dsnote_app : public QObject {
                          stt_translate_req_t translate_req,
                          settings::speech_mode_t speech_mode,
                          stt_destination_t text_destination,
-                         stt_request_t stt_request_type);
+                         stt_request_type_t stt_request_type,
+                         QVariantMap options);
     void speech_to_file_internal(QString text, const QString &input_file,
                                  const QUrl &input_url, const QString &model_id,
                                  const QString &dest_file,

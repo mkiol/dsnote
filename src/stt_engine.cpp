@@ -492,11 +492,7 @@ stt_engine::speech_detection_status_t stt_engine::speech_detection_status()
         case state_t::initializing:
             return speech_detection_status_t::initializing;
         case state_t::decoding:
-            if (m_speech_detection_status ==
-                speech_detection_status_t::speech_detected)
-                break;
-            else
-                return speech_detection_status_t::decoding;
+            return speech_detection_status_t::decoding;
         case state_t::idle:
             break;
     }

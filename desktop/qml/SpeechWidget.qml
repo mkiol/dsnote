@@ -145,6 +145,8 @@ RowLayout {
                                 return qsTr("Transcribing audio file...") +
                                         (app.transcribe_progress > 0.0 ? " " +
                                                                          Math.round(app.transcribe_progress * 100) + "%" : "")
+                            if (app.state === DsnoteApp.StateListeningAuto && app.task_state === DsnoteApp.TaskStateProcessing && app.listening_state) 
+                                return qsTr("Keep talking... (processing your last sentence while you talk)")
                             if (app.task_state === DsnoteApp.TaskStateProcessing)
                                 return qsTr("Processing, please wait...")
                             if (app.state === DsnoteApp.StateListeningSingleSentence ||
