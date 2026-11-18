@@ -138,9 +138,10 @@ ColumnLayout {
         Layout.fillWidth: true
         verticalMode: width < appWin.height * (app.tts_ref_voice_needed ? 1.4 : 1.0)
         first {
+            active: app.listening_state
             icon.name: "audio-input-microphone-symbolic"
-            enabled: app.stt_configured && (app.state === DsnoteApp.StateIdle ||
-                                            app.state === DsnoteApp.StateListeningManual)
+            _enabled: app.stt_configured && (app.state === DsnoteApp.StateIdle ||
+                                             app.state === DsnoteApp.StateListeningManual)
             comboToolTip: qsTr("Speech to Text model") + (app.stt_auto_lang_name.length > 0 ? (" | " + app.stt_auto_lang_name) : "")
             comboPlaceholderText: qsTr("No Speech to Text model")
             checkToolTip: qsTr("Translate to English")
@@ -185,7 +186,8 @@ ColumnLayout {
 
         second {
             icon.name: "text-speak-symbolic"
-            enabled: app.tts_configured && app.state === DsnoteApp.StateIdle
+            active: app.task_state === DsnoteApp.TaskStateSpeechPlaying && !app.current_tts_mnt_in && !app.current_tts_mnt_out
+            _enabled: app.tts_configured && app.state === DsnoteApp.StateIdle
             comboToolTip: listenReadCombos.second.comboRedBorder ?
                               qsTr("This model requires a voice profile.") + " " +
                               qsTr("Create one in %1.").arg("<i>" + qsTr("Voice profiles") + "</i>") : qsTr("Text to Speech model")
@@ -196,7 +198,7 @@ ColumnLayout {
             comboRedBorder: (app.tts_ref_voice_needed && app.available_tts_ref_voice_names.length === 0) ||
                             (app.tts_ref_prompt_needed && _settings.tts_voice_prompts.length === 0)
             combo {
-                enabled: listenReadCombos.second.enabled &&
+                enabled: listenReadCombos.second._enabled &&
                          !listenReadCombos.second.off &&
                          app.state === DsnoteApp.StateIdle
                 model: app.available_tts_models
@@ -205,7 +207,7 @@ ColumnLayout {
             }
             combo2 {
                 visible: listenReadCombos.refVoiceNeeded || listenReadCombos.refPromptNeeded
-                enabled: listenReadCombos.second.enabled &&
+                enabled: listenReadCombos.second._enabled &&
                          !listenReadCombos.second.off &&
                          app.state === DsnoteApp.StateIdle
                 model: listenReadCombos.refVoiceNeeded ? app.available_tts_ref_voice_names :
@@ -222,7 +224,7 @@ ColumnLayout {
             }
             combo3 {
                 visible: true
-                enabled: listenReadCombos.second.enabled &&
+                enabled: listenReadCombos.second._enabled &&
                          !listenReadCombos.second.off &&
                          app.state === DsnoteApp.StateIdle &&
                          (_settings.stt_tts_text_format !== Settings.TextFormatSubRip ||
@@ -257,7 +259,7 @@ ColumnLayout {
             }
             buttonToolTip: qsTr("Read") + " (Ctrl+Alt+Shift+R)"
             button {
-                enabled: listenReadCombos.second.enabled &&
+                enabled: listenReadCombos.second._enabled &&
                          !listenReadCombos.second.off &&
                          app.note.length !== 0 &&
                          (!app.tts_ref_voice_needed || app.available_tts_ref_voice_names.length !== 0) &&

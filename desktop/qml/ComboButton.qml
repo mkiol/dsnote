@@ -37,13 +37,24 @@ RowLayout {
     property alias combo2RedBorder: _combo2RedBorder.visible
     property alias combo3RedBorder: _combo3RedBorder.visible
     property bool showBorder: true
+    property bool _enabled: true
+    property bool active: false
 
     Layout.fillWidth: verticalMode ? true : comboFillWidth
+
+    onActiveChanged: {
+        if (_frame._border) {
+            var color = _frame._implicitBorderColor
+            _frame._border.color = root.active ? appWin.appHighlightColor : color
+        }
+    }
 
     Frame {
         id: _frame
 
         property int _height: Math.max(_combo.implicitHeight, _button.implicitHeight)
+        property color _implicitBorderColor: appWin.appTextColor
+        property var _border: null
 
         Layout.fillWidth: true
 
@@ -59,6 +70,11 @@ RowLayout {
         Component.onCompleted: {
             if (!root.showBorder) {
                 background = null
+            }
+            if (background && background.border && background.border.color) {
+                var color = background.border.color
+                _frame._implicitBorderColor = color
+                _frame._border = background.border
             }
         }
 
@@ -79,6 +95,7 @@ RowLayout {
                 leftPadding: appWin.padding
                 rightInset: 0
                 rightPadding: 0
+                icon.color: root.active ? appWin.appHighlightColor : appWin.appTextColor
             }
 
             ComboBox {
@@ -89,7 +106,7 @@ RowLayout {
                 Layout.fillWidth: verticalMode ? true : root.comboFillWidth
                 Layout.preferredWidth: root.verticalMode ? implicitWidth : root.comboPrefWidth
                 Layout.alignment: Qt.AlignVCenter
-                enabled: !root.off
+                enabled: !root.off && root._enabled
                 displayText: root.off ? root.comboPlaceholderText : currentText
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -118,7 +135,7 @@ RowLayout {
                 visible: false
                 Layout.preferredWidth: appWin.buttonWidth * 1.5
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-                enabled: !root.off
+                enabled: !root.off && root._enabled
                 displayText: !model || model.length === 0 ? root.combo2PlaceholderText : currentText
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -147,7 +164,7 @@ RowLayout {
                 visible: false
                 Layout.preferredWidth: appWin.buttonWidth
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-                enabled: !root.off
+                enabled: !root.off && root._enabled
                 ToolTip.visible: hovered
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: desc
@@ -172,7 +189,7 @@ RowLayout {
 
                 visible: false
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-                enabled: !root.off
+                enabled: !root.off && root._enabled
                 ToolTip.visible: hovered
                 //ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: root.checkToolTip
@@ -186,7 +203,7 @@ RowLayout {
                 property real textImplicitWidth:  _buttonMetrics.boundingRect.width + 4 * appWin.padding
 
                 visible: text.length !== 0
-                enabled: !root.off
+                enabled: !root.off && root._enabled
                 height: _frame._height
 
                 ToolTip.visible: root.buttonToolTip.length !== 0 && hovered
@@ -210,7 +227,7 @@ RowLayout {
                 id: _button2
 
                 visible: text.length !== 0
-                enabled: !root.off
+                enabled: !root.off && root._enabled
                 height: _frame._height
 
                 ToolTip.visible: root.button2ToolTip.length !== 0 && hovered

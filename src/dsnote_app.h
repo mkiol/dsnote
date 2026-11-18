@@ -228,6 +228,10 @@ class dsnote_app : public QObject {
     Q_PROPERTY(QVariantList available_tts_models_for_out_mnt READ
                    available_tts_models_for_out_mnt NOTIFY
                        available_tts_models_for_out_mnt_changed)
+    Q_PROPERTY(bool current_tts_mnt_in READ current_tts_mnt_in NOTIFY
+                   tts_current_request_changed)
+    Q_PROPERTY(bool current_tts_mnt_out READ current_tts_mnt_out NOTIFY
+                   tts_current_request_changed)
 
     // stt for mnt
     Q_PROPERTY(
@@ -601,6 +605,7 @@ class dsnote_app : public QObject {
     void download_progress_changed(double progress);
     void trans_rule_export_done();
     void trans_rule_import_done();
+    void tts_current_request_changed();
 
    private:
     enum class action_t : uint8_t {
@@ -714,6 +719,11 @@ class dsnote_app : public QObject {
         QVariantMap options;
     };
 
+    struct tts_request_t {
+        QString model_id;
+        QVariantMap options;
+    };
+
     struct trans_rule_t {
         settings::trans_rule_flags_t flags =
             settings::trans_rule_flags_t::TransRuleNone;
@@ -819,6 +829,7 @@ class dsnote_app : public QObject {
     int m_last_cursor_position = -1;
     std::optional<stt_request_t> m_current_stt_request;
     std::optional<stt_request_t> m_pending_stt_request;
+    std::optional<tts_request_t> m_current_tts_request;
     QString m_pending_stt_text;
     QString m_trans_rules_test_text;
     QString m_py_version;
@@ -1011,7 +1022,8 @@ class dsnote_app : public QObject {
                                  const QString &ref_prompt,
                                  settings::text_format_t text_format,
                                  settings::audio_format_t audio_format,
-                                 settings::audio_quality_t audio_quality);
+                                 settings::audio_quality_t audio_quality,
+                                 QVariantMap options);
     bool play_speech_from_text_format(const QString &text,
                                       const QString &model_id,
                                       settings::text_format_t text_format);
@@ -1024,7 +1036,8 @@ class dsnote_app : public QObject {
                               const QUrl &input_url, const QString &model_id,
                               const QString &ref_voice,
                               const QString &ref_prompt,
-                              settings::text_format_t text_format);
+                              settings::text_format_t text_format,
+                              QVariantMap options);
     void play_speech_translator_internal(QString text, bool translated);
     void export_to_file_internal(const QString &text, const QString &dest_file);
     void copy_to_clipboard_internal(const QString &text);
@@ -1149,6 +1162,10 @@ class dsnote_app : public QObject {
     void handle_pending_stt_request();
     bool handle_stt_echo(const QString &text_to_echo);
     bool handle_stt_partial_translation(QString &text_to_translate);
+    void reset_current_tts_request();
+    void set_current_tts_request(tts_request_t request);
+    bool current_tts_mnt_in() const;
+    bool current_tts_mnt_out() const;
 };
 
 #endif  // DSNOTE_APP_H

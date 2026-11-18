@@ -2048,6 +2048,8 @@ void dsnote_app::handle_tts_play_speech_finished(int task) {
         qDebug() << "[dbus => app] signal TtsPlaySpeechFinished:" << task;
     }
 
+    reset_current_tts_request();
+
     if (m_pending_stt_request) {
         handle_pending_stt_request();
     } else {
@@ -2115,6 +2117,8 @@ void dsnote_app::handle_tts_speech_to_file_finished(const QStringList &files,
     if (QFile::exists(m_dest_file_info.output_path)) {
         QFile::remove(m_dest_file_info.output_path);
     }
+
+    reset_current_tts_request();
 
     if (m_dest_file_info.input_path.isEmpty()) {
         export_to_audio_internal(files, m_dest_file_info.output_path);
@@ -3614,7 +3618,8 @@ bool dsnote_app::play_speech_internal(QString text, const QString &input_file,
                                       const QString &model_id,
                                       const QString &ref_voice,
                                       const QString &ref_prompt,
-                                      settings::text_format_t text_format) {
+                                      settings::text_format_t text_format,
+                                      QVariantMap options) {
     if (text.isEmpty() && !input_file.isEmpty()) {
         QFile file{input_file};
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -3663,9 +3668,8 @@ bool dsnote_app::play_speech_internal(QString text, const QString &input_file,
 
     int new_task = 0;
 
-    QVariantMap options;
-    options.insert(
-        "speech_speed",
+    add_if_new(
+        options, "speech_speed",
         settings::instance()->stt_tts_text_format() !=
                     settings::text_format_t::TextFormatSubRip ||
                 settings::instance()->tts_subtitles_sync() ==
@@ -3675,36 +3679,40 @@ bool dsnote_app::play_speech_internal(QString text, const QString &input_file,
                         TtsSubtitleSyncOnDontFit
             ? settings::instance()->speech_speed()
             : 10);
-    options.insert("text_format", static_cast<int>(text_format));
-    options.insert(
-        "sync_subs",
-        static_cast<int>(settings::instance()->tts_subtitles_sync()));
-    options.insert("split_into_sentences",
-                   settings::instance()->tts_split_into_sentences());
-    options.insert("use_engine_speed_control",
-                   settings::instance()->tts_use_engine_speed_control());
-    options.insert("normalize_audio",
-                   settings::instance()->tts_normalize_audio());
-    options.insert("tag_mode",
-                   static_cast<int>(settings::instance()->tts_tag_mode()));
-    options.insert("ref_prompt",
-                   settings::instance()->tts_desc_of_voice_prompt(ref_prompt));
-    options.insert("trim_trailing_silence",
-                   settings::instance()->tts_trim_trailing_silence());
-    options.insert("trailing_silence_dur",
-                   settings::instance()->tts_trailing_silence_dur_msec());
+    add_if_new(options, "text_format", static_cast<int>(text_format));
+    add_if_new(options, "sync_subs",
+               static_cast<int>(settings::instance()->tts_subtitles_sync()));
+    add_if_new(options, "split_into_sentences",
+               settings::instance()->tts_split_into_sentences());
+    add_if_new(options, "use_engine_speed_control",
+               settings::instance()->tts_use_engine_speed_control());
+    add_if_new(options, "normalize_audio",
+               settings::instance()->tts_normalize_audio());
+    add_if_new(options, "tag_mode",
+               static_cast<int>(settings::instance()->tts_tag_mode()));
+    add_if_new(options, "ref_prompt",
+               settings::instance()->tts_desc_of_voice_prompt(ref_prompt));
+    add_if_new(options, "trim_trailing_silence",
+               settings::instance()->tts_trim_trailing_silence());
+    add_if_new(options, "trailing_silence_dur",
+               settings::instance()->tts_trailing_silence_dur_msec());
 
     if (m_available_tts_ref_voices_map.contains(ref_voice)) {
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
-        if (l.size() > 1) options.insert("ref_voice_file", l.at(1));
+        if (l.size() > 1) add_if_new(options, "ref_voice_file", l.at(1));
     }
-    options.insert("inline_timestamp_template",
-                   settings::instance()->inline_timestamp_template());
+    add_if_new(options, "inline_timestamp_template",
+               settings::instance()->inline_timestamp_template());
 
     // for chinese, add pinyin input option
     if (lang == "zh") {
-        options.insert("pinyin_input", settings::instance()->tts_pinyin());
+        add_if_new(options, "pinyin_input", settings::instance()->tts_pinyin());
     }
+
+    set_current_tts_request({
+        .model_id = model_id,
+        .options = options,
+    });
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->tts_play_speech(text, model_id,
@@ -3730,7 +3738,7 @@ void dsnote_app::play_speech() {
         tts_ref_prompt_needed()
             ? settings::instance()->tts_active_voice_prompt()
             : QString{},
-        settings::instance()->stt_tts_text_format());
+        settings::instance()->stt_tts_text_format(), {});
 }
 
 void dsnote_app::play_speech_selected(int start, int end) {
@@ -3752,7 +3760,7 @@ void dsnote_app::play_speech_selected(int start, int end) {
         tts_ref_prompt_needed()
             ? settings::instance()->tts_active_voice_prompt()
             : QString{},
-        settings::instance()->stt_tts_text_format());
+        settings::instance()->stt_tts_text_format(), {});
 }
 
 void dsnote_app::play_speech_translator_selected(int start, int end,
@@ -3859,7 +3867,8 @@ void dsnote_app::play_speech_from_text_format_str(
             : QString{},
         text_format_from_action_str(text_format_str,
                                     /*from_url=*/!input_url.isEmpty(),
-                                    /*for_stt=*/false));
+                                    /*for_stt=*/false),
+        {});
 }
 
 bool dsnote_app::play_speech_from_text_format(
@@ -3872,7 +3881,7 @@ bool dsnote_app::play_speech_from_text_format(
         tts_ref_prompt_needed_by_id(model_id)
             ? settings::instance()->tts_active_voice_prompt()
             : QString{},
-        text_format);
+        text_format, {});
 }
 
 void dsnote_app::play_speech_translator(bool translated) {
@@ -3892,6 +3901,9 @@ void dsnote_app::play_speech_translator_internal(QString text,
         return;
     }
 
+    QVariantMap options;
+    options.insert(translated ? "mnt_out" : "mnt_in", true);
+
     play_speech_internal(
         std::move(text), QString{}, QUrl{},
         translated ? m_active_tts_model_for_out_mnt
@@ -3908,7 +3920,7 @@ void dsnote_app::play_speech_translator_internal(QString text,
         : tts_for_in_mnt_ref_prompt_needed()
             ? settings::instance()->tts_active_voice_prompt_for_in_mnt()
             : QString{},
-        settings::instance()->mnt_text_format());
+        settings::instance()->mnt_text_format(), options);
 }
 
 void dsnote_app::translate_delayed() {
@@ -4012,7 +4024,7 @@ void dsnote_app::speech_to_file(const QString &dest_file,
             : QString{},
         settings::instance()->stt_tts_text_format(),
         settings::instance()->audio_format(),
-        settings::instance()->audio_quality());
+        settings::instance()->audio_quality(), {});
 }
 
 void dsnote_app::speech_to_file_translator(bool transtalated,
@@ -4050,7 +4062,7 @@ void dsnote_app::speech_to_file_translator(bool transtalated,
             : QString{},
         settings::instance()->mnt_text_format(),
         settings::instance()->audio_format(),
-        settings::instance()->audio_quality());
+        settings::instance()->audio_quality(), {});
 }
 
 void dsnote_app::speech_to_file_internal(
@@ -4059,7 +4071,7 @@ void dsnote_app::speech_to_file_internal(
     const QString &track_tag, const QString &ref_voice,
     const QString &ref_prompt, settings::text_format_t text_format,
     settings::audio_format_t audio_format,
-    settings::audio_quality_t audio_quality) {
+    settings::audio_quality_t audio_quality, QVariantMap options) {
     if (dest_file.isEmpty()) {
         qWarning() << "dest file is empty";
         return;
@@ -4113,9 +4125,8 @@ void dsnote_app::speech_to_file_internal(
 
     int new_task = 0;
 
-    QVariantMap options;
-    options.insert(
-        "speech_speed",
+    add_if_new(
+        options, "speech_speed",
         settings::instance()->stt_tts_text_format() !=
                     settings::text_format_t::TextFormatSubRip ||
                 settings::instance()->tts_subtitles_sync() ==
@@ -4125,32 +4136,31 @@ void dsnote_app::speech_to_file_internal(
                         TtsSubtitleSyncOnDontFit
             ? settings::instance()->speech_speed()
             : 10);
-    options.insert("text_format", static_cast<int>(text_format));
-    options.insert(
-        "sync_subs",
-        static_cast<int>(settings::instance()->tts_subtitles_sync()));
-    options.insert("not_merge_files", true);
-    options.insert("split_into_sentences",
-                   settings::instance()->tts_split_into_sentences());
-    options.insert("use_engine_speed_control",
-                   settings::instance()->tts_use_engine_speed_control());
-    options.insert("normalize_audio",
-                   settings::instance()->tts_normalize_audio());
-    options.insert("tag_mode",
-                   static_cast<int>(settings::instance()->tts_tag_mode()));
-    options.insert("ref_prompt",
-                   settings::instance()->tts_desc_of_voice_prompt(ref_prompt));
-    options.insert("trim_trailing_silence",
-                   settings::instance()->tts_trim_trailing_silence());
-    options.insert("trailing_silence_dur",
-                   settings::instance()->tts_trailing_silence_dur_msec());
+    add_if_new(options, "text_format", static_cast<int>(text_format));
+    add_if_new(options, "sync_subs",
+               static_cast<int>(settings::instance()->tts_subtitles_sync()));
+    add_if_new(options, "not_merge_files", true);
+    add_if_new(options, "split_into_sentences",
+               settings::instance()->tts_split_into_sentences());
+    add_if_new(options, "use_engine_speed_control",
+               settings::instance()->tts_use_engine_speed_control());
+    add_if_new(options, "normalize_audio",
+               settings::instance()->tts_normalize_audio());
+    add_if_new(options, "tag_mode",
+               static_cast<int>(settings::instance()->tts_tag_mode()));
+    add_if_new(options, "ref_prompt",
+               settings::instance()->tts_desc_of_voice_prompt(ref_prompt));
+    add_if_new(options, "trim_trailing_silence",
+               settings::instance()->tts_trim_trailing_silence());
+    add_if_new(options, "trailing_silence_dur",
+               settings::instance()->tts_trailing_silence_dur_msec());
 
     if (m_available_tts_ref_voices_map.contains(ref_voice)) {
         auto l = m_available_tts_ref_voices_map.value(ref_voice).toStringList();
-        if (l.size() > 1) options.insert("ref_voice_file", l.at(1));
+        if (l.size() > 1) add_if_new(options, "ref_voice_file", l.at(1));
     }
-    options.insert("inline_timestamp_template",
-                   settings::instance()->inline_timestamp_template());
+    add_if_new(options, "inline_timestamp_template",
+               settings::instance()->inline_timestamp_template());
 
     auto real_audio_format =
         settings::audio_format_from_filename(audio_format, dest_file);
@@ -4158,12 +4168,12 @@ void dsnote_app::speech_to_file_internal(
         settings::audio_format_str_from_filename(audio_format, dest_file);
     auto audio_ext = settings::audio_ext_from_filename(audio_format, dest_file);
 
-    options.insert("audio_format", audio_format_str);
-    options.insert("audio_quality", audio_quality_to_str(audio_quality));
+    add_if_new(options, "audio_format", audio_format_str);
+    add_if_new(options, "audio_quality", audio_quality_to_str(audio_quality));
 
     // for chinese, add pinyin input option
     if (lang == "zh") {
-        options.insert("pinyin_input", settings::instance()->tts_pinyin());
+        add_if_new(options, "pinyin_input", settings::instance()->tts_pinyin());
     }
 
     if (QFileInfo{dest_file}.suffix().toLower() != audio_ext) {
@@ -4175,6 +4185,11 @@ void dsnote_app::speech_to_file_internal(
     m_dest_file_info.title_tag = title_tag;
     m_dest_file_info.track_tag = track_tag;
     m_dest_file_info.audio_format = real_audio_format;
+
+    set_current_tts_request({
+        .model_id = model_id,
+        .options = options,
+    });
 
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         new_task = speech_service::instance()->tts_speech_to_file(
@@ -4924,10 +4939,12 @@ void dsnote_app::undo_or_redu_note() {
 }
 
 void dsnote_app::handle_translator_settings_changed() {
-    if (settings::instance()->translator_mode()) {
-        if (settings::instance()->translate_when_typing()) translate_delayed();
-    } else if (service_state() == service_state_t::StateTranslating) {
+    if (service_state() != service_state_t::StateIdle) {
         cancel();
+    }
+    if (settings::instance()->translator_mode() &&
+        settings::instance()->translate_when_typing()) {
+        translate_delayed();
     }
 }
 
@@ -5004,7 +5021,7 @@ void dsnote_app::export_to_audio_mix_translator(bool transtalated,
             : QString{},
         settings::instance()->mnt_text_format(),
         settings::audio_format_t::AudioFormatOggOpus,
-        settings::audio_quality_t::AudioQualityVbrHigh);
+        settings::audio_quality_t::AudioQualityVbrHigh, {});
 }
 
 void dsnote_app::export_to_audio_mix(const QString &input_file,
@@ -5024,7 +5041,7 @@ void dsnote_app::export_to_audio_mix(const QString &input_file,
             : QString{},
         settings::instance()->stt_tts_text_format(),
         settings::audio_format_t::AudioFormatOggOpus,
-        settings::audio_quality_t::AudioQualityVbrHigh);
+        settings::audio_quality_t::AudioQualityVbrHigh, {});
 }
 
 void dsnote_app::export_to_audio_internal(const QStringList &input_files,
@@ -6331,7 +6348,7 @@ void dsnote_app::execute_action(action_t action, const QVariantMap &arguments) {
                         /*from_url=*/action == action_t::start_reading_url,
                         /*for_stt=*/false),
                     settings::filename_to_audio_format_static(output_file),
-                    settings::instance()->audio_quality());
+                    settings::instance()->audio_quality(), {});
             }
 
             break;
@@ -7149,4 +7166,24 @@ void dsnote_app::unload_models() {
     } else {
         qDebug() << "[app => dbus] call UnloadModels";
     }
+}
+
+void dsnote_app::reset_current_tts_request() {
+    m_current_tts_request.reset();
+    emit tts_current_request_changed();
+}
+
+void dsnote_app::set_current_tts_request(tts_request_t request) {
+    m_current_tts_request = std::move(request);
+    emit tts_current_request_changed();
+}
+
+bool dsnote_app::current_tts_mnt_in() const {
+    return m_current_tts_request &&
+           m_current_tts_request->options.value("mnt_in").toBool();
+}
+
+bool dsnote_app::current_tts_mnt_out() const {
+    return m_current_tts_request &&
+           m_current_tts_request->options.value("mnt_out").toBool();
 }
