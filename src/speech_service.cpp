@@ -289,6 +289,9 @@ speech_service::speech_service(QObject *parent)
     connect(this, &speech_service::stt_text_decoded_partial, this,
             &speech_service::handle_stt_text_decoded_partial,
             Qt::QueuedConnection);
+    connect(this, &speech_service::stt_intermediate_text_decoded_partial, this,
+            &speech_service::handle_stt_intermediate_text_decoded_partial,
+            Qt::QueuedConnection);
     connect(this, &speech_service::sentence_timeout, this,
             static_cast<void (speech_service::*)(int)>(
                 &speech_service::handle_stt_sentence_timeout),
@@ -2381,11 +2384,27 @@ void speech_service::handle_stt_intermediate_text_decoded_from_engine(
     const std::string &text, const std::string &lang) {
     if (m_current_task) {
         m_last_intermediate_text_task = m_current_task->id;
-        emit stt_intermediate_text_decoded(QString::fromStdString(text),
-                                           QString::fromStdString(lang),
-                                           m_current_task->id);
+        emit stt_intermediate_text_decoded_partial(QString::fromStdString(text),
+                                                   QString::fromStdString(lang),
+                                                   m_current_task->id);
     } else {
         qWarning() << "current task does not exist";
+    }
+}
+
+void speech_service::handle_stt_intermediate_text_decoded_partial(
+    const QString &text, const QString &lang, int task_id) {
+    if (!m_current_task || m_current_task->id != task_id) {
+        qWarning() << "task id is not current:" << task_id;
+        return;
+    }
+
+    if (!m_stt_pending_text.isEmpty() &&
+        m_current_task->speech_mode == speech_mode_t::manual) {
+        emit stt_intermediate_text_decoded(m_stt_pending_text + " " + text,
+                                           lang, task_id);
+    } else {
+        emit stt_intermediate_text_decoded(text, lang, task_id);
     }
 }
 

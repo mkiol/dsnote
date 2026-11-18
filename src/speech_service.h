@@ -230,6 +230,8 @@ class speech_service : public QObject, public singleton<speech_service> {
     void stt_file_transcribe_finished(int task);
     void stt_intermediate_text_decoded(const QString &text, const QString &lang,
                                        int task);
+    void stt_intermediate_text_decoded_partial(const QString &text,
+                                               const QString &lang, int task);
     void stt_text_decoded(const QString &text, const QString &lang, int task);
     void stt_text_decoded_partial(const QString &text, const QString &lang,
                                   int task);
@@ -514,6 +516,9 @@ class speech_service : public QObject, public singleton<speech_service> {
                                          const QString &lang, int task_id);
     void handle_stt_intermediate_text_decoded_from_engine(
         const std::string &text, const std::string &lang);
+    void handle_stt_intermediate_text_decoded_partial(const QString &text,
+                                                      const QString &lang,
+                                                      int task_id);
     void handle_tts_speech_encoded(const std::string &text,
                                    const std::string &audio_file_path,
                                    tts_engine::audio_format_t format,
