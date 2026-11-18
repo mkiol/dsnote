@@ -30,6 +30,7 @@ class vad {
     void restart();
     const buf_t& remove_silence(const buf_t::value_type* frame, size_t frame_size);
     bool is_speech(const buf_t::value_type* frame, size_t frame_size);
+    const buf_t& voice_samples() const { return m_output_samples; }
 
    private:
     inline static const size_t m_chunk_size = 480;

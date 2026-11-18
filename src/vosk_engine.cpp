@@ -201,12 +201,6 @@ void vosk_engine::create_model() {
 void vosk_engine::reset_impl() {
     m_speech_buf.clear();
 
-#ifdef DUMP_AUDIO_TO_FILE
-    m_file_audio_input.reset();
-    m_file_audio_after_denoise.reset();
-    m_file_audio_after_vad.reset();
-#endif
-
     restart_recognizer(false);
 }
 
@@ -217,57 +211,12 @@ void vosk_engine::push_inbuf_to_samples() {
 }
 
 stt_engine::samples_process_result_t vosk_engine::process_buff() {
-    if (!lock_buff_for_processing())
-        return samples_process_result_t::wait_for_samples;
-
-    auto eof = m_in_buf.eof;
-    auto sof = m_in_buf.sof;
-
-    LOGD("process samples buf: mode="
-         << m_config.speech_mode << ", in-buf size=" << m_in_buf.size
-         << ", speech-buf size=" << m_speech_buf.size() << ", sof=" << sof
-         << ", eof=" << eof);
-
-    if (sof) {
+    if (m_in_buf.sof) {
         m_speech_buf.clear();
-        m_start_time.reset();
-        m_vad.reset();
-        reset_segment_counters();
-
         restart_recognizer(false);
     }
 
-#ifdef DUMP_AUDIO_TO_FILE
-    if (!m_file_audio_input)
-        m_file_audio_input = std::make_unique<std::ofstream>("audio_input.pcm");
-    m_file_audio_input->write(
-        reinterpret_cast<char*>(m_in_buf.buf.data()),
-        m_in_buf.size * sizeof(decltype(m_in_buf.buf)::value_type));
-#endif
-
-    m_denoiser.process(m_in_buf.buf.data(), m_in_buf.size);
-
-#ifdef DUMP_AUDIO_TO_FILE
-    if (!m_file_audio_after_denoise)
-        m_file_audio_after_denoise =
-            std::make_unique<std::ofstream>("audio_after_denoise.pcm");
-    m_file_audio_after_denoise->write(
-        reinterpret_cast<char*>(m_in_buf.buf.data()),
-        m_in_buf.size * sizeof(decltype(m_in_buf.buf)::value_type));
-#endif
-
-    const auto& vad_buf =
-        m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.size);
-
-#ifdef DUMP_AUDIO_TO_FILE
-    if (!m_file_audio_after_vad)
-        m_file_audio_after_vad =
-            std::make_unique<std::ofstream>("audio_after_vad.pcm");
-    m_file_audio_after_vad->write(
-        reinterpret_cast<const char*>(vad_buf.data()),
-        vad_buf.size() * sizeof(decltype(m_in_buf.buf)::value_type));
-#endif
-
+    const auto& vad_buf = m_vad.voice_samples();
     bool vad_status = !vad_buf.empty();
 
     if (vad_status) {
@@ -303,6 +252,7 @@ stt_engine::samples_process_result_t vosk_engine::process_buff() {
                 (1000 * m_in_buf.size) / m_sample_rate;
     }
 
+    auto eof = m_in_buf.eof;
     m_in_buf.clear();
 
     if (m_thread_exit_requested) {

@@ -102,35 +102,17 @@ void april_engine::push_inbuf_to_samples() {
 }
 
 stt_engine::samples_process_result_t april_engine::process_buff() {
-    if (!lock_buff_for_processing())
-        return samples_process_result_t::wait_for_samples;
-
-    auto eof = m_in_buf.eof;
-    auto sof = m_in_buf.sof;
-
-    LOGD("process samples buf: mode="
-         << m_config.speech_mode << ", in-buf size=" << m_in_buf.size
-         << ", speech-buf size=" << m_speech_buf.size() << ", sof=" << sof
-         << ", eof=" << eof);
-
-    if (sof) {
+    if (m_in_buf.sof) {
         m_speech_buf.clear();
-        m_start_time.reset();
-        m_vad.reset();
         restart_session(false);
         m_result.clear();
         m_result_prev_segment.clear();
         m_prev_segment_end_time.reset();
         m_prev_segment_start_time.reset();
-        reset_segment_counters();
         m_segments.clear();
     }
 
-    m_denoiser.process(m_in_buf.buf.data(), m_in_buf.size);
-
-    const auto& vad_buf =
-        m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.size);
-
+    const auto& vad_buf = m_vad.voice_samples();
     bool vad_status = !vad_buf.empty();
 
     if (vad_status) {
@@ -168,6 +150,7 @@ stt_engine::samples_process_result_t april_engine::process_buff() {
                 (1000 * m_in_buf.size) / m_sample_rate;
     }
 
+    auto eof = m_in_buf.eof;
     m_in_buf.clear();
 
     if (m_thread_exit_requested) {

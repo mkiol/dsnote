@@ -21,6 +21,11 @@
 #include <thread>
 #include <utility>
 
+#ifdef DUMP_AUDIO_TO_FILE
+#include <fstream>
+#include <memory>
+#endif
+
 #include "denoiser.hpp"
 #include "vad.hpp"
 
@@ -187,6 +192,7 @@ class stt_engine {
 
    protected:
     using f32_buf_t = std::vector<float>;
+    using i16_buf_t = std::vector<short>;
 
     enum class lock_type_t { free, processed, borrowed };
     friend std::ostream& operator<<(std::ostream& os, lock_type_t lock_type);
@@ -248,6 +254,12 @@ class stt_engine {
     size_t m_segment_time_discarded_after = 0;
     std::optional<size_t> m_last_inline_timestamp_t0;
 
+#ifdef DUMP_AUDIO_TO_FILE
+    std::unique_ptr<std::ofstream> m_file_audio_input;
+    std::unique_ptr<std::ofstream> m_file_audio_after_denoise;
+    std::unique_ptr<std::ofstream> m_file_audio_after_vad;
+#endif
+
     static void ltrim(std::string& s);
     static void rtrim(std::string& s);
     static std::string merge_texts(const std::string& old_text,
@@ -281,6 +293,7 @@ class stt_engine {
     static void push_buf_to_f32_buf(const in_buf_t::buf_t::value_type* data,
                                     in_buf_t::buf_t::size_type size,
                                     f32_buf_t& f32_buf);
+    samples_process_result_t process_buff_full();
 };
 
 #endif  // STT_ENGINE_H

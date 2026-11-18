@@ -338,7 +338,8 @@ void stt_engine::process() {
                 flush(flush_t::restart);
             }
 
-            if (process_buff() == samples_process_result_t::wait_for_samples &&
+            if (process_buff_full() ==
+                    samples_process_result_t::wait_for_samples &&
                 !m_thread_exit_requested)
                 m_processing_cv.wait(lock);
         }
@@ -444,6 +445,57 @@ void stt_engine::reset_in_processing() {
 
 stt_engine::samples_process_result_t stt_engine::process_buff() {
     return samples_process_result_t::wait_for_samples;
+}
+
+stt_engine::samples_process_result_t stt_engine::process_buff_full() {
+    if (!lock_buff_for_processing())
+        return samples_process_result_t::wait_for_samples;
+
+    auto eof = m_in_buf.eof;
+    auto sof = m_in_buf.sof;
+
+    LOGD("process samples buf: mode=" << m_config.speech_mode
+                                      << ", in-buf size=" << m_in_buf.size
+                                      << ", sof=" << sof << ", eof=" << eof);
+
+    if (sof) {
+        m_start_time.reset();
+        m_vad.reset();
+        reset_segment_counters();
+    }
+
+#ifdef DUMP_AUDIO_TO_FILE
+    if (!m_file_audio_input)
+        m_file_audio_input = std::make_unique<std::ofstream>("audio_input.pcm");
+    m_file_audio_input->write(
+        reinterpret_cast<char*>(m_in_buf.buf.data()),
+        m_in_buf.size * sizeof(decltype(m_in_buf.buf)::value_type));
+#endif
+
+    m_denoiser.process(m_in_buf.buf.data(), m_in_buf.size);
+
+#ifdef DUMP_AUDIO_TO_FILE
+    if (!m_file_audio_after_denoise)
+        m_file_audio_after_denoise =
+            std::make_unique<std::ofstream>("audio_after_denoise.pcm");
+    m_file_audio_after_denoise->write(
+        reinterpret_cast<char*>(m_in_buf.buf.data()),
+        m_in_buf.size * sizeof(decltype(m_in_buf.buf)::value_type));
+#endif
+
+    m_vad.remove_silence(m_in_buf.buf.data(), m_in_buf.size);
+
+#ifdef DUMP_AUDIO_TO_FILE
+    const auto& vad_buf = m_vad.voice_samples();
+    if (!m_file_audio_after_vad)
+        m_file_audio_after_vad =
+            std::make_unique<std::ofstream>("audio_after_vad.pcm");
+    m_file_audio_after_vad->write(
+        reinterpret_cast<const char*>(vad_buf.data()),
+        vad_buf.size() * sizeof(decltype(m_in_buf.buf)::value_type));
+#endif
+
+    return process_buff();
 }
 
 std::string stt_engine::merge_texts(const std::string& old_text,

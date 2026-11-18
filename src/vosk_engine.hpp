@@ -13,11 +13,6 @@
 #include <string>
 #include <vector>
 
-#ifdef DUMP_AUDIO_TO_FILE
-#include <fstream>
-#include <memory>
-#endif
-
 #include "stt_engine.hpp"
 #include "text_tools.hpp"
 
@@ -66,12 +61,6 @@ class vosk_engine : public stt_engine {
     void* m_lib_handle = nullptr;
     VoskModel* m_vosk_model = nullptr;
     VoskRecognizer* m_vosk_recognizer = nullptr;
-
-#ifdef DUMP_AUDIO_TO_FILE
-    std::unique_ptr<std::ofstream> m_file_audio_input;
-    std::unique_ptr<std::ofstream> m_file_audio_after_denoise;
-    std::unique_ptr<std::ofstream> m_file_audio_after_vad;
-#endif
 
     void open_lib();
     void create_model();
