@@ -114,7 +114,7 @@ DialogPage {
             (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Voice options in translator mode</i>).</li>
         <li>Echo mode in the Translator. When text is inserted using Speech to Text (<i>Listen</i> button), it is translated to the chosen language and immediately
             read aloud using the selected Text to Speech model
-            (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Echo mode</i>).</li>
+            (<i>Settings</i> &rarr; <i>Translator</i> &rarr; <i>Echo translation</i>).</li>
         </ul>
         <p>" + qsTr("User Interface") + "</p>
         <ul>

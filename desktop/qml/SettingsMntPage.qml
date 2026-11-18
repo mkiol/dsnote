@@ -32,10 +32,12 @@ ColumnLayout {
 
     CheckBoxSetting {
         optionName: "mnt_echo"
-        text: qsTranslate("SettingsPage", "Echo mode")
+        text: qsTranslate("SettingsPage", "Echo translation")
         toolTipText: qsTranslate("SettingsPage", "When text is inserted using Speech to Text (%1 button), it is translated to the chosen language and immediately read aloud using the selected Text to Speech model.")
                      .arg("<i>" + qsTranslate("SettingsPage", "Listen") + "</i>") + " " +
-                     qsTranslate("SettingsPage", "This option controls Echo mode in Translator only. To echo text before translation, enable Echo mode in Speech to Text settings.")
+                     qsTranslate("SettingsPage", "This option works in Translator only. To echo text before translation, enable the %1 option in Speech to Text settings.")
+                     .arg("<i>" + qsTranslate("SettingsPage", "Echo mode") + "</i>") + " " +
+                     qsTranslate("SettingsPage", "When both options are on, %1 takes precedence.").arg("<i>" + qsTranslate("SettingsPage", "Echo translation") + "</i>")
     }
 
     CheckBoxSetting {

@@ -242,8 +242,9 @@ Page {
                             onClicked: {
                                 _settings.stt_echo = !_settings.stt_echo
                             }
-                            description: qsTr("After processing, the decoded text will be immediately read out using the currently set Text to Speech model.") + " " +
-                                         qsTr("To echo translated text, enable Echo mode in Translator settings.")
+                            description: qsTranslate("SettingsPage", "After processing, the decoded text will be immediately read out using the currently set Text to Speech model.") + " " +
+                                         qsTranslate("SettingsPage", "To read translated text, enable the %1 option in Translator settings.").arg("<i>" + qsTranslate("SettingsPage", "Echo translation") + "</i>") + " " +
+                                         qsTranslate("SettingsPage", "When both options are on, %1 takes precedence.").arg("<i>" + qsTranslate("SettingsPage", "Echo translation") + "</i>")
                         }
 
                         TextSwitch {
@@ -671,13 +672,15 @@ Page {
                         TextSwitch {
                             checked: _settings.mnt_echo
                             automaticCheck: false
-                            text: qsTr("Echo mode")
+                            text: qsTr("Echo translation")
                             onClicked: {
                                 _settings.mnt_echo = !_settings.mnt_echo
                             }
                             description: qsTranslate("SettingsPage", "When text is inserted using Speech to Text (%1 button), it is translated to the chosen language and immediately read aloud using the selected Text to Speech model.")
-                                         .arg("<i>" + qsTranslate("SettingsPage", "Listen") + "</i>") + " " +
-                                         qsTranslate("SettingsPage", "This option controls Echo mode in Translator only. To echo text before translation, enable Echo mode in Speech to Text settings.")
+                                        .arg("<i>" + qsTranslate("SettingsPage", "Listen") + "</i>") + " " +
+                                        qsTranslate("SettingsPage", "This option works in Translator only. To echo text before translation, enable the %1 option in Speech to Text settings.")
+                                        .arg("<i>" + qsTranslate("SettingsPage", "Echo mode") + "</i>") + " " +
+                                        qsTranslate("SettingsPage", "When both options are on, %1 takes precedence.").arg("<i>" + qsTranslate("SettingsPage", "Echo translation") + "</i>")
                         }
 
                         TextSwitch {

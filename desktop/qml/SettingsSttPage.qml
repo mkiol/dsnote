@@ -100,7 +100,8 @@ ColumnLayout {
         optionName: "stt_echo"
         text: qsTranslate("SettingsPage", "Echo mode")
         toolTipText: qsTranslate("SettingsPage", "After processing, the decoded text will be immediately read out using the currently set Text to Speech model.") + " " +
-                     qsTranslate("SettingsPage", "To echo translated text, enable Echo mode in Translator settings.")
+                     qsTranslate("SettingsPage", "To read translated text, enable the %1 option in Translator settings.").arg("<i>" + qsTranslate("SettingsPage", "Echo translation") + "</i>") + " " +
+                     qsTranslate("SettingsPage", "When both options are on, %1 takes precedence.").arg("<i>" + qsTranslate("SettingsPage", "Echo translation") + "</i>")
     }
 
     CheckBoxSetting {

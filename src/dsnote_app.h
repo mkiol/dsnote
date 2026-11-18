@@ -710,6 +710,7 @@ class dsnote_app : public QObject {
         QString model_id;
         settings::speech_mode_t speech_mode =
             settings::speech_mode_t::SpeechSingleSentence;
+        bool resume = false;
         QVariantMap options;
     };
 
@@ -1146,7 +1147,8 @@ class dsnote_app : public QObject {
     static QVariantList trans_rule_to_vrule(const QJsonObject &jrule);
     QVariant fa_feature_value(const QString &name) const;
     void handle_pending_stt_request();
-    bool handle_echo_mode(const QString &text_to_echo);
+    bool handle_stt_echo(const QString &text_to_echo);
+    bool handle_stt_partial_translation(QString &text_to_translate);
 };
 
 #endif  // DSNOTE_APP_H

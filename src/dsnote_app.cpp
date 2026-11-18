@@ -1563,64 +1563,84 @@ void dsnote_app::handle_stt_text_decoded(QString text, const QString &lang,
             return;
     }
 
-    if (settings::instance()->translator_mode() &&
-        settings::instance()->translate_when_typing() &&
-        (m_stt_destination == stt_destination_t::note_add ||
-         m_stt_destination == stt_destination_t::note_replace) &&
-        m_current_stt_request &&
-        m_current_stt_request->type != stt_request_type_t::transcribe_file) {
-        if (service_state() == service_state_t::StateListeningAuto) {
-            // any new task will cancel listening on service side, so
-            // in always-on listening, set pending request to resume listening
-            m_pending_stt_request = m_current_stt_request;
-            m_pending_stt_text = std::move(text);
-            qDebug() << "trigger partial translation for listening-auto";
-            translate();
-            return;
-        } else if (settings::instance()->mnt_echo()) {
-            qDebug() << "trigger partial translation for before echo";
-            m_pending_stt_text = std::move(text);
-            translate();
-            return;
-        }
+    if (!handle_stt_partial_translation(text)) {
+        handle_stt_echo(text);
     }
-
-    handle_echo_mode(text);
 }
 
-bool dsnote_app::handle_echo_mode(const QString &text_to_echo) {
-    bool do_echo =
-        !text_to_echo.isEmpty() && m_current_stt_request &&
-        m_current_stt_request->type != stt_request_type_t::transcribe_file &&
-        (settings::instance()->stt_echo() ||
-         (settings::instance()->mnt_echo() &&
-          settings::instance()->translator_mode()));
+bool dsnote_app::handle_stt_partial_translation(QString &text_to_translate) {
+    // TODO: move partial translation to service
+    if (text_to_translate.isEmpty() || !m_current_stt_request ||
+        m_current_stt_request->type == stt_request_type_t::transcribe_file ||
+        (m_stt_destination != stt_destination_t::note_add &&
+         m_stt_destination != stt_destination_t::note_replace)) {
+        // do nothing
+        return false;
+    }
 
-    if (!do_echo) {
-        // echo not needed
+    if (!m_current_stt_request->options.value("partial_translation").toBool()) {
+        // partial translation disabled
         return false;
     }
 
     bool async = false;
 
     if (service_state() == service_state_t::StateListeningAuto &&
-        m_current_stt_request) {
+        m_current_stt_request->resume) {
+        qDebug() << "trigger partial translation in listening-auto";
+        async =
+            translate_internal(note(), mnt_destination_t::translation_replace);
+
+        if (async) {
+            // translate task will cancel listening on service side, so
+            // in listening-auto, set pending request to resume listening
+            m_pending_stt_request = m_current_stt_request;
+            m_pending_stt_text = std::move(text_to_translate);
+        }
+    } else if (m_current_stt_request->options.value("mnt_echo").toBool()) {
+        qDebug() << "trigger partial translation before echo";
+        m_pending_stt_text = std::move(text_to_translate);
+        async =
+            translate_internal(note(), mnt_destination_t::translation_replace);
+    }
+
+    return async;
+}
+
+bool dsnote_app::handle_stt_echo(const QString &text_to_echo) {
+    // TODO: move echo to service
+    if (text_to_echo.isEmpty() || !m_current_stt_request ||
+        m_current_stt_request->type == stt_request_type_t::transcribe_file) {
+        // do nothing
+        return false;
+    }
+
+    bool stt_echo = m_current_stt_request->options.value("stt_echo").toBool();
+    bool mnt_echo = m_current_stt_request->options.value("mnt_echo").toBool();
+
+    if (!stt_echo && !mnt_echo) {
+        // echo disabled
+        return false;
+    }
+
+    bool async = false;
+
+    if (mnt_echo && (m_stt_destination == stt_destination_t::note_add ||
+                     m_stt_destination == stt_destination_t::note_replace)) {
+        // before playing text it needs to be translated
+        async = translate_internal(text_to_echo, mnt_destination_t::tts);
+    } else if (stt_echo) {
+        async = play_speech_from_text_format(
+            text_to_echo, active_tts_model(),
+            settings::instance()->stt_tts_text_format());
+    }
+
+    if (async && service_state() == service_state_t::StateListeningAuto &&
+        m_current_stt_request->resume) {
         // a new task will automatically cancel ongoing task on service side, so
         // in always-on listening, set pending request to resume listening just
         // after playing speech
         m_pending_stt_request = m_current_stt_request;
-    }
-
-    if (settings::instance()->translator_mode() &&
-        settings::instance()->mnt_echo() &&
-        (m_stt_destination == stt_destination_t::note_add ||
-         m_stt_destination == stt_destination_t::note_replace)) {
-        // before playing text it needs to be translated
-        async = translate_internal(text_to_echo, mnt_destination_t::tts);
-    } else {
-        async = play_speech_from_text_format(
-            text_to_echo, active_tts_model(),
-            settings::instance()->stt_tts_text_format());
     }
 
     return async;
@@ -2159,7 +2179,7 @@ void dsnote_app::handle_mnt_translate_finished(
     switch (m_mnt_destination) {
         case mnt_destination_t::translation_replace:
             set_translated_text(out_text);
-            if (!handle_echo_mode(m_pending_stt_text)) {
+            if (!handle_stt_echo(m_pending_stt_text)) {
                 handle_pending_stt_request();
             }
             m_pending_stt_text.clear();
@@ -3211,6 +3231,10 @@ void dsnote_app::cancel() {
             return;
     }
 
+    if (m_current_stt_request) {
+        m_current_stt_request->resume = false;
+    }
+
     if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
         if (m_primary_task) {
             if (m_primary_task.current != INVALID_TASK) {
@@ -3295,6 +3319,7 @@ void dsnote_app::transcribe_file_internal(
         .type = stt_request_type_t::transcribe_file,
         .model_id = model_id,
         .speech_mode = settings::speech_mode_t::SpeechAutomatic,
+        .resume = false,
         .options = options,
     };
 
@@ -3386,6 +3411,7 @@ void dsnote_app::transcribe_ref_file(const QString &file_path) {
         .type = stt_request_type_t::transcribe_file,
         .model_id = {},
         .speech_mode = settings::speech_mode_t::SpeechAutomatic,
+        .resume = false,
         .options = options,
     };
 
@@ -3418,6 +3444,10 @@ void dsnote_app::listen_mnt() {
          settings::instance()->stt_echo())) {
         options.insert("stt_clear_mic_audio_when_decoding", true);
     }
+    options.insert("partial_translation",
+                   settings::instance()->translate_when_typing());
+    options.insert("mnt_echo", settings::instance()->mnt_echo());
+    options.insert("stt_echo", settings::instance()->stt_echo());
 
     listen_internal(active_stt_model_for_in_mnt(), stt_translate_req_t::off,
                     settings::instance()->speech_mode(),
@@ -3496,6 +3526,7 @@ void dsnote_app::listen_internal(const QString &model_id,
         .type = stt_request_type,
         .model_id = model_id,
         .speech_mode = speech_mode,
+        .resume = speech_mode == settings::speech_mode_t::SpeechAutomatic,
         .options = options,
     };
 
@@ -3517,6 +3548,9 @@ void dsnote_app::listen_internal(const QString &model_id,
 
 void dsnote_app::stop_listen() {
     if (m_primary_task) {
+        if (m_current_stt_request) {
+            m_current_stt_request->resume = false;
+        }
         if (settings::launch_mode == settings::launch_mode_t::app_stanalone) {
             speech_service::instance()->stt_stop_listen(m_primary_task.current);
         } else {
