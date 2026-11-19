@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,6 +9,7 @@
 #define TRAYICON_H
 
 #include <QAction>
+#include <QMap>
 #include <QMenu>
 #include <QObject>
 #include <QSystemTrayIcon>
@@ -35,21 +36,23 @@ class tray_icon : public QSystemTrayIcon {
         quit,
         toggle_app_window,
         change_stt_model,
-        change_tts_model
+        change_tts_model,
     };
     enum class state_t { idle, busy, stt, stt_file, tts, tts_file, mnt };
     enum class task_state_t {
-        idle = 0,
-        processing = 1,
-        initializing = 2,
-        playing = 3,
-        paused = 4,
-        cancelling = 5
+        idle,
+        speech_detected,
+        processing,
+        initializing,
+        playing,
+        paused,
+        cancelling,
     };
 
     explicit tray_icon(QObject *parent = nullptr);
     void set_state(state_t state);
     void set_task_state(task_state_t task_state);
+    void set_listening_state(bool listening_state);
     void set_stt_models(QVariantList&& stt_models);
     void set_active_stt_model(QString&& stt_model, bool translate_supported);
     void set_tts_models(QVariantList&& tts_models);
@@ -60,11 +63,14 @@ class tray_icon : public QSystemTrayIcon {
     void action_triggered(action_t action, int value);
 
    private:
+    enum class icon_action_t : uint8_t { none, app, busy, pause, speech };
+
     inline static const auto app_icon = QStringLiteral(":/app_icon.png");
     QMenu m_menu;
     QMenu m_menu_translate;
     state_t m_state = state_t::busy;
     task_state_t m_task_state = task_state_t::idle;
+    bool m_listening_state = false;
     std::vector<std::pair<action_t, QObject*>> m_actions;
     QVariantList m_stt_models;
     QString m_active_stt_model;
@@ -74,11 +80,14 @@ class tray_icon : public QSystemTrayIcon {
     uint8_t m_icon_idx = 0;
     bool m_stt_translate_supported = false;
     bool m_fake_keyboard_supported = false;
+    QMap<QString, QIcon> m_icon_cache;
 
+    void make_icon_cache();
     void make_menu();
     void update_menu();
     void update_icon();
     void update_animated_icon();
+    void update_tooltip();
 };
 
 #endif  // TRAYICON_H

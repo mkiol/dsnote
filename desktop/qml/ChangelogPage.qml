@@ -20,6 +20,8 @@ DialogPage {
     RichLabel {
         text: "<p>" + qsTr("General") + "</p>
         <ul>
+        <li>Import a note from a URL. Use the <i>Import a note from a URL</i> option in the main app toolbar to import text content from a link.
+            The URL must use HTTP or HTTPS. For HTML pages, you can choose to extract only the readable text or import the entire page.</li>
         <li>Import and Export <i>Rules</i> to a JSON file.
             <i>Rules</i> let you apply text transformation after Speech to Text or before Text to Speech.
             With <i>Rules</i>, you can easily and flexibly correct errors in decoded text or correct mispronounced words.
@@ -119,8 +121,8 @@ DialogPage {
         <p>" + qsTr("User Interface") + "</p>
         <ul>
         <li>Qt UI toolkit update to version 6</li>
-        <li>Import a note from a URL. Use the <i>Import a note from a URL</i> option in the main app toolbar to import text content from a link.
-            The URL must use HTTP or HTTPS. For HTML pages, you can choose to extract only the readable text or import the entire page.</li>
+        <li>The Listen/Read icon is now highlighted when the microphone or speaker is in use.</li>
+        <li>The system tray icon is highlighted with a red outline while the microphone is in use.</li>
         <li>Setting option to force the English language in the user interface</li>
         <li>Setting option to force dark or light user interface color appearance (<i>Settings</i> &rarr; <i>User Interface</i> &rarr; <i>User interface color appearance</i>).
             Change if you observe problems with incorrect colors under a dark theme.</li>

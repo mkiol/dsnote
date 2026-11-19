@@ -4308,6 +4308,8 @@ void dsnote_app::set_listening_state(bool new_listening_state) {
                  << new_listening_state;
         m_listening_state = new_listening_state;
         emit listening_state_changed();
+
+        update_tray_listening_state();
     }
 }
 
@@ -6847,6 +6849,8 @@ void dsnote_app::update_tray_task_state() {
             m_tray.set_task_state(tray_icon::task_state_t::idle);
             break;
         case service_task_state_t::TaskStateSpeechDetected:
+            m_tray.set_task_state(tray_icon::task_state_t::speech_detected);
+            break;
         case service_task_state_t::TaskStateProcessing:
             m_tray.set_task_state(tray_icon::task_state_t::processing);
             break;
@@ -6863,6 +6867,12 @@ void dsnote_app::update_tray_task_state() {
             m_tray.set_task_state(tray_icon::task_state_t::cancelling);
             break;
     }
+#endif
+}
+
+void dsnote_app::update_tray_listening_state() {
+#ifdef USE_DESKTOP
+    m_tray.set_listening_state(m_listening_state);
 #endif
 }
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2023-2025 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,6 +8,8 @@
 #include "tray_icon.hpp"
 
 #include <QDebug>
+#include <QPainter>
+#include <QPixmap>
 #include <algorithm>
 
 #include "config.h"
@@ -15,19 +17,13 @@
 
 tray_icon::tray_icon(QObject* parent)
     : QSystemTrayIcon{QIcon{app_icon}, parent} {
-    setToolTip(APP_NAME);
-
+    update_tooltip();
     make_menu();
 
-    auto* s = settings::instance();
-
     connect(
-        s, &settings::use_tray_changed, this,
+        settings::instance(), &settings::use_tray_changed, this,
         [this]() {
-            if (settings::instance()->use_tray())
-                show();
-            else
-                hide();
+            setVisible(settings::instance()->use_tray());
             update_icon();
         },
         Qt::QueuedConnection);
@@ -38,7 +34,7 @@ tray_icon::tray_icon(QObject* parent)
     connect(&m_animated_icon_timer, &QTimer::timeout, this,
             &tray_icon::update_animated_icon, Qt::QueuedConnection);
 
-    if (s->use_tray()) show();
+    setVisible(settings::instance()->use_tray());
 }
 
 void tray_icon::set_state(state_t state) {
@@ -46,6 +42,7 @@ void tray_icon::set_state(state_t state) {
         m_state = state;
         update_menu();
         update_icon();
+        update_tooltip();
     }
 }
 
@@ -53,6 +50,17 @@ void tray_icon::set_task_state(task_state_t task_state) {
     if (m_task_state != task_state) {
         m_task_state = task_state;
         update_menu();
+        update_icon();
+        update_tooltip();
+    }
+}
+
+void tray_icon::set_listening_state(bool listening_state) {
+    if (m_listening_state != listening_state) {
+        m_listening_state = listening_state;
+        update_menu();
+        update_icon();
+        update_tooltip();
     }
 }
 
@@ -78,70 +86,186 @@ void tray_icon::update_icon() {
     update_animated_icon();
 }
 
+void tray_icon::update_tooltip() {
+    QString text{APP_NAME};
+
+    QString info;
+    switch (m_task_state) {
+        case task_state_t::idle:
+        case task_state_t::speech_detected:
+        case task_state_t::playing:
+            break;
+        case task_state_t::paused:
+            info = tr("Reading is paused.");
+            break;
+        case task_state_t::processing:
+            switch (m_state) {
+                case state_t::idle:
+                case state_t::busy:
+                case state_t::stt_file:
+                    break;
+                case state_t::stt:
+                    if (m_listening_state) {
+                        info =
+                            tr("Keep talking... (processing your last sentence "
+                               "while you talk)");
+                        break;
+                    }
+                    [[fallthrough]];
+                case state_t::tts:
+                case state_t::tts_file:
+                case state_t::mnt:
+                    info = tr("Processing, please wait...");
+                    break;
+            }
+            break;
+        case task_state_t::initializing:
+            info = tr("Getting ready, please wait...");
+            break;
+        case task_state_t::cancelling:
+            info = tr("Cancelling, please wait...");
+            break;
+    }
+
+    if (info.isEmpty()) {
+        switch (m_state) {
+            case state_t::idle:
+                break;
+            case state_t::busy:
+                info = tr("Busy...");
+                break;
+            case state_t::stt:
+                info = tr("Say something...");
+                break;
+            case state_t::stt_file:
+                info = tr("Transcribing audio file...");
+                break;
+            case state_t::tts:
+            case state_t::tts_file:
+                info = tr("Reading a note...");
+                break;
+            case state_t::mnt:
+                info = tr("Translating...");
+                break;
+        }
+    }
+
+    if (!info.isEmpty()) {
+        text += " — " + info;
+    }
+
+    setToolTip(text);
+}
+
+void tray_icon::make_icon_cache() {
+    if (!m_icon_cache.empty()) {
+        return;
+    }
+
+    auto add_border = [](QIcon& icon) {
+        auto px = icon.pixmap(icon.actualSize({84, 91}));
+        const int border_size = px.width() * 0.2;
+        QPainter painter{&px};
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        painter.setPen(QPen{Qt::red, static_cast<qreal>(border_size)});
+        painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+        painter.drawRect(0, 0, px.width(), px.height());
+        icon = QIcon{px};
+    };
+
+    auto make_icon_set = [&](const QString& key, int idx) {
+        QIcon icon{idx < 0 ? QStringLiteral(":/%1.png").arg(key)
+                           : QStringLiteral(":/%1_%2.png").arg(key).arg(idx)};
+
+        m_icon_cache.insert(
+            QStringLiteral("%1_%2_0").arg(key).arg(idx < 0 ? 0 : idx), icon);
+
+        // add red border to indicate active listening state
+        add_border(icon);
+        m_icon_cache.insert(
+            QStringLiteral("%1_%2_1").arg(key).arg(idx < 0 ? 0 : idx), icon);
+    };
+
+    make_icon_set("app_icon", -1);
+    for (auto idx : {0, 1}) {
+        make_icon_set("busy_icon", idx);
+        make_icon_set("pause_icon", idx);
+        make_icon_set("speech_icon", idx);
+    }
+}
+
 void tray_icon::update_animated_icon() {
     m_icon_idx = (m_icon_idx + 1) % 2;
 
-    enum class action_t : uint8_t { none, app, busy, pause, speech };
-    action_t action = action_t::none;
+    icon_action_t action = icon_action_t::none;
 
     if (isVisible()) {
         switch (m_state) {
             case state_t::idle:
-                action = action_t::app;
+                action = icon_action_t::app;
                 break;
             case state_t::busy:
             case state_t::tts_file:
             case state_t::stt_file:
             case state_t::mnt:
-                action = action_t::busy;
+                action = icon_action_t::busy;
                 break;
             case state_t::tts:
             case state_t::stt:
                 switch (m_task_state) {
                     case task_state_t::idle:
-                        action = action_t::app;
+                        action = icon_action_t::app;
                         break;
                     case task_state_t::initializing:
                     case task_state_t::cancelling:
-                        action = action_t::busy;
+                        action = icon_action_t::busy;
                         break;
                     case task_state_t::paused:
-                        action = action_t::pause;
+                        action = icon_action_t::pause;
                         break;
                     case task_state_t::processing:
-                        if (m_state == state_t::tts) {
-                            action = action_t::busy;
-                            break;
-                        }
-                        [[fallthrough]];
+                        action = icon_action_t::busy;
+                        break;
                     case task_state_t::playing:
-                        action = action_t::speech;
+                    case task_state_t::speech_detected:
+                        action = icon_action_t::speech;
                         break;
                 }
                 break;
         }
     } else {
-        action = action_t::app;
+        action = icon_action_t::app;
     }
 
+    make_icon_cache();
+
+    QString icon_key;
     switch (action) {
-        case action_t::none:
+        case icon_action_t::none:
             break;
-        case action_t::app:
-            setIcon(QIcon{app_icon});
+        case icon_action_t::app:
+            icon_key =
+                QStringLiteral("app_icon_0_%1").arg(m_listening_state ? 1 : 0);
             break;
-        case action_t::busy:
-            setIcon(
-                QIcon{QStringLiteral(":/busy_icon_%1.png").arg(m_icon_idx)});
+        case icon_action_t::busy:
+            icon_key = QStringLiteral("busy_icon_%1_%2")
+                           .arg(m_icon_idx)
+                           .arg(m_listening_state ? 1 : 0);
             break;
-        case action_t::pause:
-            setIcon(
-                QIcon{QStringLiteral(":/pause_icon_%1.png").arg(m_icon_idx)});
+        case icon_action_t::pause:
+            icon_key = QStringLiteral("pause_icon_%1_%2")
+                           .arg(m_icon_idx)
+                           .arg(m_listening_state ? 1 : 0);
             break;
-        case action_t::speech:
-            setIcon(
-                QIcon{QStringLiteral(":/speech_icon_%1.png").arg(m_icon_idx)});
+        case icon_action_t::speech:
+            icon_key = QStringLiteral("speech_icon_%1_%2")
+                           .arg(m_icon_idx)
+                           .arg(m_listening_state ? 1 : 0);
             break;
+    }
+
+    if (!icon_key.isEmpty()) {
+        setIcon(m_icon_cache.value(icon_key));
     }
 
     if (!isVisible()) {
@@ -188,9 +312,10 @@ void tray_icon::update_menu() {
                     "enabled", tts_configured && m_state == state_t::idle);
                 break;
             case action_t::pause_resume_reading:
-                p.second->setProperty("enabled", tts_configured &&
-                                                     m_state != state_t::idle &&
-                                                     m_state != state_t::busy);
+                p.second->setProperty(
+                    "enabled",
+                    tts_configured && (m_state == state_t::tts ||
+                                       m_state == state_t::tts_file));
                 qobject_cast<QAction*>(p.second)->setIcon(QIcon::fromTheme(
                     m_task_state == task_state_t::paused
                         ? QStringLiteral("media-playback-start-symbolic")

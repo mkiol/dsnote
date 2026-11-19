@@ -99,10 +99,12 @@
       <mediatype>application/x-subrip</mediatype>
   </provides>
   <releases>
-    <release version="4.9.1" date="2026-11-14">
+    <release version="4.9.1" date="2026-11-19">
       <description>
       <p>General</p>
       <ul>
+      <li>Import a note from a URL. Use the 'Import a note from a URL' option in the main app toolbar to import text content from a link.
+        The URL must use HTTP or HTTPS. For HTML pages, you can choose to extract only the readable text or import the entire page.</li>
       <li>Import and Export 'Rules' to a JSON file.
         With 'Rules' you can apply text transformation after Speech to Text or before Text to Speech.
         You can now export and import all or selected rules to a file. Additionally, you can view and edit each rule in JSON format.</li>
@@ -178,8 +180,8 @@
       <p>User Interface:</p>
       <ul>
       <li>Qt UI toolkit update to version 6</li>
-      <li>Import a note from a URL. Use the 'Import a note from a URL' option in the main app toolbar to import text content from a link.
-          The URL must use HTTP or HTTPS. For HTML pages, you can choose to extract only the readable text or import the entire page.</li>
+      <li>The Listen/Read icon is now highlighted when the microphone or speaker is in use.</li>
+      <li>The system tray icon is highlighted with a red outline while the microphone is in use.</li>
       <li>Setting option to force the English language in the user interface</li>
       <li>Setting option to force dark or light user interface color appearance.
           Change if you observe problems with incorrect colors under a dark theme.</li>

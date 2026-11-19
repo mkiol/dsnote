@@ -1097,6 +1097,7 @@ class dsnote_app : public QObject {
     QString tts_ref_voice_unique_name(QString name, bool add_numner) const;
     void update_tray_state();
     void update_tray_task_state();
+    void update_tray_listening_state();
     void update_auto_text_format_delayed();
     void update_auto_text_format();
     bool translate_internal(const QString &text, mnt_destination_t destination);
