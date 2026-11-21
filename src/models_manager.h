@@ -183,6 +183,7 @@ class models_manager : public QObject, public singleton<models_manager> {
         bool ENGINE_TYPE_LANG(kokoro, tts, ja) = false;
         bool ENGINE_TYPE_LANG(kokoro, tts, zh) = false;
 
+        bool tts_espeak_mbrola = false;
         bool option_r = false;
     };
     friend QDebug operator<<(QDebug d,

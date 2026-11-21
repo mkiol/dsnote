@@ -2,8 +2,12 @@ Name:       harbour-dsnote
 
 # >> macros
 %define __provides_exclude_from ^%{_datadir}/.*$
-%define __requires_exclude ^libstt.*|libkenlm.*|libtensorflowlite.*|libtflitedelegates.*|libopenblas.*|libwhisper*|libggml*|libparakeet*|libbergamota*|libvosk.*|libonnxruntime.*|libRHVoice*|libaprilasr.*$
+%define __requires_exclude ^libstt.*|libkenlm.*|libtensorflowlite.*|libtflitedelegates.*|libopenblas.*|libwhisper*|libggml*|libparakeet*|libbergamota*|libvosk.*|libonnxruntime.*|libRHVoice*|libaprilasr.*|libgomp.*$
 %define _unpackaged_files_terminate_build 0
+
+%if %{getenv:SFOS_HARBOUR} > 0
+%define sfos_harbour 1
+%endif
 # << macros
 
 %global debug_package %{nil}
@@ -54,6 +58,7 @@ No data is sent to the Internet.
 
 %build
 # >> build pre
+%{?sfos_harbour:echo Building for Harbour}
 # << build pre
 %cmake .
 make %{?_smp_mflags}
@@ -67,27 +72,25 @@ rm -rf %{buildroot}
 # << install pre
 %make_install
 
-desktop-file-install --delete-original       \
-  --dir %{buildroot}%{_datadir}/applications             \
+desktop-file-install --delete-original \
+  --dir %{buildroot}%{_datadir}/applications \
    %{buildroot}%{_datadir}/applications/*.desktop
 
-%post
-systemctl-user stop %{name}.service >/dev/null 2>&1 || :
-systemctl-user daemon-reload >/dev/null 2>&1 || :
+%{!?sfos_harbour:%post}
+%{!?sfos_harbour:systemctl-user stop %{name}.service >/dev/null 2>&1 || :}
+%{!?sfos_harbour:systemctl-user daemon-reload >/dev/null 2>&1 || :}
 
-%preun
-systemctl-user stop %{name}.service >/dev/null 2>&1 || :
-systemctl-user daemon-reload >/dev/null 2>&1 || :
+%{!?sfos_harbour:%preun}
+%{!?sfos_harbour:systemctl-user stop %{name}.service >/dev/null 2>&1 || :}
+%{!?sfos_harbour:systemctl-user daemon-reload >/dev/null 2>&1 || :}
 
 %files
 %defattr(-,root,root,-)
 %{_bindir}
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
-%{_datadir}/applications/%{name}-open-url.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
-%{_datadir}/dbus-1/services/org.mkiol.Speech.service
-%{_datadir}/dbus-1/services/org.mkiol.dsnote.service
-%{_userunitdir}/%{name}.service
+%{!?sfos_harbour:%{_datadir}/dbus-1/services/org.mkiol.Speech.service}
+%{!?sfos_harbour:%{_userunitdir}/%{name}.service}
 # >> files
 # << files

@@ -363,6 +363,11 @@ void app_server::OpenUrl(const QStringList &uris) {
     open_urls(uris);
 }
 
+void app_server::openUrl(const QStringList &uris) {
+  qDebug() << "[dbus app] openUrl called:" << uris;
+  open_urls(uris);
+}
+
 void app_server::open_urls(const QStringList &uris) {
     QList<QUrl> urls;
     std::transform(uris.cbegin(), uris.cend(), std::back_inserter(urls),

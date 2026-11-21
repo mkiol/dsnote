@@ -45,6 +45,7 @@ class app_server : public QObject {
                           const QVariantMap &platform_data);
     // dbus dsnote api
     Q_INVOKABLE void OpenUrl(const QStringList &uris);
+    Q_INVOKABLE void openUrl(const QStringList &uris);
     Q_INVOKABLE QVariantMap InvokeAction(const QString &action_name,
                                          const QVariantMap &arguments);
     Q_INVOKABLE QVariantList GetSttModels();

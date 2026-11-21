@@ -1,0 +1,26 @@
+[Desktop Entry]
+Type=Application
+Categories=Utility;Office;Audio;AudioVideo;TextEditor;Translation;KDE;Qt;
+Icon=@info_app_icon_id@
+Exec=@info_binary_id@ @info_app_run_mode@ %F
+Name=@info_name@
+MimeType=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/vorbis;audio/x-vorbis;audio/opus;audio/x-speex;audio/speex;audio/wav;audio/x-wav;audio/vnd.wave;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;audio/mp4;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;application/x-subrip;text/vtt;text/plain;text/html;text/markdown;x-scheme-handler/https;
+Keywords=@info_name@;@id@;
+Comment=Take, read and translate notes in multiple languages, using Speech to Text, Text to Speech and Machine Translation.
+X-Nemo-Application-Type=silica-qt5
+X-Share-Methods=files;
+X-DBusActivatable=true
+X-Maemo-Service=@info_dbus_app_service@
+X-Maemo-Object-Path=@info_dbus_app_path@
+X-Maemo-Method=@info_dbus_app_interface@.OpenUrl
+
+[X-Share Method files]
+Capabilities=audio/aac;audio/mpeg;audio/x-mp3;audio/ogg;audio/vorbis;audio/x-vorbis;audio/opus;audio/x-speex;audio/speex;audio/wav;audio/x-wav;audio/vnd.wave;audio/flac;audio/x-flac;audio/x-matroska;audio/webm;audio/mp4;video/mpeg;video/mp4;video/ogg;video/x-matroska;video/webm;application/x-subrip;text/vtt;text/plain;text/html;text/markdown;x-scheme-handler/https;
+SupportsMultipleFiles=yes
+
+[X-Sailjail]
+OrganizationName=@info_org@
+ApplicationName=@id@
+Permissions=Internet;Audio;Microphone;RemovableMedia;UserDirs;
+ExecDBus=@info_binary_id@ @info_app_run_mode@
+@info_sfos_sailjail_key@

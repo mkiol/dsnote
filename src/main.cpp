@@ -751,7 +751,7 @@ static void start_app(const cmd::options& options,
 
     context->setContextProperty(QStringLiteral("APP_NAME"), APP_NAME);
     context->setContextProperty(QStringLiteral("APP_ID"), APP_ID);
-    context->setContextProperty(QStringLiteral("APP_VERSION"), APP_VERSION);
+    context->setContextProperty(QStringLiteral("APP_VERSION"), APP_VERSION_FULL);
     context->setContextProperty(QStringLiteral("APP_COPYRIGHT_YEAR"),
                                 APP_COPYRIGHT_YEAR);
     context->setContextProperty(QStringLiteral("APP_AUTHOR"), APP_AUTHOR);
@@ -839,7 +839,7 @@ int main(int argc, char* argv[]) {
     initQtLogger();
     initAvLogger();
 
-    LOGD("app version: " << APP_VERSION);
+    LOGD("app version: " << APP_VERSION_FULL);
 #ifdef USE_FLATPAK
     LOGD("required addon version: " << APP_ADDON_VERSION);
 #endif

@@ -3964,8 +3964,6 @@ bool dsnote_app::translate_internal(const QString &text,
     }
 
     if (text.isEmpty()) {
-        qWarning() << "empty text to translate";
-
         switch (destination) {
             case mnt_destination_t::translation_replace:
                 set_translated_text({});
@@ -6007,6 +6005,8 @@ QVariantList dsnote_app::features_availability() {
             ma.option_r =
                 feature_available(ENGINE_FEAV_LANG_STR(coqui, tts, ko), false);
             ma.ENGINE_TYPE(bergamot, mnt) = translator_enabled;
+            ma.tts_espeak_mbrola =
+                feature_available("espeak-mbrola-tts", false);
 #ifdef USE_PY
             ma.ENGINE_TYPE(hftc, ttt) = feature_available("punctuator", false);
 #endif

@@ -137,6 +137,7 @@ ApplicationWindow {
                     "audio/speex",
                     "audio/wav",
                     "audio/x-wav",
+                    "audio/vnd.wave",
                     "audio/flac",
                     "audio/x-flac",
                     "audio/x-matroska",
@@ -329,7 +330,7 @@ ApplicationWindow {
                 id: modelDownloadHint
 
                 modal: false
-                enabled: (!app.tts_configured && !app.stt_configured && !app.mnt_configured) &&
+                enabled: !app.busy && !service.busy && app.connected && (!app.tts_configured && !app.stt_configured && !app.mnt_configured) &&
                          (_settings.hint_done_flags & Settings.HintDoneModelDownload) == 0
                 text: qsTr("Go to the %1 to download models for the languages you intend to use.")
                       .arg("<i>" + qsTr("Languages and Models") + "</i>")

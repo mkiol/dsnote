@@ -212,6 +212,7 @@ QDebug operator<<(QDebug d,
         d << "tts_kokoro_zh,";
 
     if (models_availability.option_r) d << "option_r,";
+    if (models_availability.tts_espeak_mbrola) d << "tts-espeak-mbrola,";
 
     return d;
 }
@@ -2141,6 +2142,13 @@ auto models_manager::extract_models(
                 qDebug() << "ignoring model with option r:" << model_id;
                 continue;
             }
+
+            if (!models_availability->tts_espeak_mbrola &&
+                engine == model_engine_t::tts_espeak &&
+                speaker.startsWith("mb-")) {
+                qDebug() << "ignoring mbrola model:" << model_id;
+                continue;
+            }
         }
 
         bool is_default_model_for_lang = [&] {
@@ -2721,6 +2729,12 @@ void models_manager::update_models_using_availability_internal() {
 #endif
         if (!m_models_availability->option_r &&
             pair.second.options.contains('r')) {
+            pair.second.disabled = true;
+            return;
+        }
+        if (!m_models_availability->tts_espeak_mbrola &&
+            pair.second.engine == model_engine_t::tts_espeak &&
+            pair.second.speaker.startsWith("mb-")) {
             pair.second.disabled = true;
             return;
         }

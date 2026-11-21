@@ -10,6 +10,9 @@
   <method name="OpenUrl">
     <arg name="arguments" type="as" direction="in"/>
   </method>
+  <method name="openUrl">
+    <arg name="arguments" type="as" direction="in"/>
+  </method>
 
   <!--
       Currently active STT model

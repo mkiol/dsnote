@@ -1,17 +1,20 @@
 install(TARGETS ${info_binary_id} RUNTIME DESTINATION bin)
 
-install(FILES "${sfos_dir}/${info_binary_id}.desktop" DESTINATION share/applications)
-install(FILES "${sfos_dir}/${info_binary_id}-open-url.desktop" DESTINATION share/applications)
+configure_file("${sfos_dir}/${info_id}.desktop.in" "${PROJECT_BINARY_DIR}/${info_app_icon_id}.desktop")
+install(FILES "${PROJECT_BINARY_DIR}/${info_app_icon_id}.desktop" DESTINATION share/applications)
+
 install(FILES "${sfos_dir}/icons/86x86/${info_binary_id}.png" DESTINATION share/icons/hicolor/86x86/apps)
 install(FILES "${sfos_dir}/icons/108x108/${info_binary_id}.png" DESTINATION share/icons/hicolor/108x108/apps)
 install(FILES "${sfos_dir}/icons/128x128/${info_binary_id}.png" DESTINATION share/icons/hicolor/128x128/apps)
 install(FILES "${sfos_dir}/icons/172x172/${info_binary_id}.png" DESTINATION share/icons/hicolor/172x172/apps)
 install(DIRECTORY "${sfos_dir}/images" DESTINATION ${install_dir})
-install(FILES ${qm_files} DESTINATION ${install_dir}/translations)
 install(DIRECTORY "${sfos_dir}/qml" DESTINATION ${install_dir})
+install(FILES ${qm_files} DESTINATION ${install_dir}/translations)
 
-configure_file("${sfos_dir}/dbus_app.service.in" "${PROJECT_BINARY_DIR}/dbus_app.service")
-install(FILES "${PROJECT_BINARY_DIR}/dbus_app.service" DESTINATION share/dbus-1/services RENAME ${info_dbus_app_service}.service)
+if(NOT WITH_SFOS_HARBOUR)
+    configure_file("${sfos_dir}/dbus_app.service.in" "${PROJECT_BINARY_DIR}/dbus_app.service")
+    install(FILES "${PROJECT_BINARY_DIR}/dbus_app.service" DESTINATION share/dbus-1/services RENAME ${info_dbus_app_service}.service)
+endif()
 
 # beep tones
 install(FILES "${resources_dir}/beep-start-listen.wav" DESTINATION ${resources_install_dir})
@@ -51,6 +54,10 @@ function(install_rhvoice_library lib_name)
             \"${external_lib_dir}/${lib_name}.so\")
     ")
 endfunction()
+
+# sfos harbour validator doesn't allow linking to system libgomp.so, so coping it to the package
+install(PROGRAMS "/usr/lib64/libgomp.so.1" DESTINATION ${lib_install_dir})
+install(PROGRAMS "/usr/lib64/libgomp.so.1.0.0" DESTINATION ${lib_install_dir})
 
 if(BUILD_WHISPERCPP)
     set(ggml_ver "0.15.1")
@@ -100,7 +107,7 @@ if(BUILD_OPENBLAS)
     install(PROGRAMS "${external_lib_dir}/libopenblas.so" DESTINATION ${lib_install_dir})
 endif()
 
-if(BUILD_ESPEAK)
+if(BUILD_ESPEAK AND WITH_MBROLA)
     strip_all("${external_bin_dir}/mbrola")
     install(PROGRAMS "${external_bin_dir}/mbrola" DESTINATION ${bin_install_dir})
 endif()
@@ -112,6 +119,7 @@ if(BUILD_RHVOICE)
     install_rhvoice_library("libRHVoice_core")
     install_rhvoice_library("libRHVoice")
 endif()
+
 if(BUILD_RHVOICE_MODULE)
     install(FILES "${PROJECT_BINARY_DIR}/rhvoicedata.tar.xz" DESTINATION ${module_install_dir})
     install(FILES "${PROJECT_BINARY_DIR}/rhvoiceconfig.tar.xz" DESTINATION ${module_install_dir})

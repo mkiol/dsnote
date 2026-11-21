@@ -3730,6 +3730,12 @@ QVariantMap speech_service::features_availability() {
     m_features_availability.insert("vosk-stt",
                                    QVariantList{ma.stt_vosk, "Vosk STT"});
 
+#ifdef USE_MBROLA
+    ma.tts_espeak_mbrola = true;
+#endif
+    m_features_availability.insert("espeak-mbrola-tts",
+                                   QVariantList{ma.tts_espeak_mbrola, "MBROLA TTS"});
+
     /* model types always enabled */
     ma.stt_april = true;
     ma.tts_espeak = true;
@@ -3769,7 +3775,7 @@ QVariantMap speech_service::features_availability() {
     m_features_availability.insert(
         "config-version", QVariantList{} << QStringLiteral(APP_CONF_VERSION));
     m_features_availability.insert(
-        "service-version", QVariantList{} << QStringLiteral(APP_VERSION));
+        "service-version", QVariantList{} << QStringLiteral(APP_VERSION_FULL));
     refresh_status();
 
     emit features_availability_updated();

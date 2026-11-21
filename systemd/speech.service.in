@@ -1,9 +1,9 @@
 [Unit]
-Description=Speech daemon
+Description=@info_name@ daemon
 After=pulseaudio.service
 Requires=pulseaudio.service
 
 [Service]
 Type=dbus
-BusName=org.mkiol.Speech
+BusName=@info_dbus_speech_service@
 ExecStart=@binary_path@ --service

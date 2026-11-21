@@ -15,19 +15,6 @@ if(${libtool_bin} MATCHES "-NOTFOUND$")
    message(FATAL_ERROR "libtool not found but it is required to build espeak")
 endif()
 
-ExternalProject_Add(mbrola
-    SOURCE_DIR ${external_dir}/mbrola
-    BINARY_DIR ${PROJECT_BINARY_DIR}/external/mbrola
-    INSTALL_DIR ${PROJECT_BINARY_DIR}/external
-    URL ${mbrola_source_url}
-    URL_HASH SHA256=${mbrola_checksum}
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-    CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR>
-    BUILD_COMMAND ${MAKE}
-    BUILD_ALWAYS False
-    INSTALL_COMMAND mkdir -p ${external_bin_dir} && cp <BINARY_DIR>/Bin/mbrola ${external_bin_dir}
-)
-
 ExternalProject_Add(espeak
     SOURCE_DIR ${external_dir}/espeak
     BINARY_DIR ${PROJECT_BINARY_DIR}/external/espeak
@@ -46,7 +33,7 @@ ExternalProject_Add(espeak
         -DENABLE_TESTS=OFF
         -DBUILD_SHARED_LIBS=ON
         -DBUILD_STATIC_LIBS=ON
-        -DUSE_MBROLA=ON
+        -DUSE_MBROLA=${WITH_MBROLA}
         -DUSE_LIBSONIC=OFF
         -DUSE_LIBPCAUDIO=OFF
         -DUSE_SPEECHPLAYER=OFF
@@ -54,9 +41,28 @@ ExternalProject_Add(espeak
     BUILD_ALWAYS False
 )
 
-ExternalProject_Add_StepDependencies(espeak configure mbrola)
+if(WITH_MBROLA)
+    ExternalProject_Add(mbrola
+        SOURCE_DIR ${external_dir}/mbrola
+        BINARY_DIR ${PROJECT_BINARY_DIR}/external/mbrola
+        INSTALL_DIR ${PROJECT_BINARY_DIR}/external
+        URL ${mbrola_source_url}
+        URL_HASH SHA256=${mbrola_checksum}
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+        CONFIGURE_COMMAND cp -r --no-target-directory <SOURCE_DIR> <BINARY_DIR>
+        BUILD_COMMAND ${MAKE}
+        BUILD_ALWAYS False
+        INSTALL_COMMAND mkdir -p ${external_bin_dir} && cp <BINARY_DIR>/Bin/mbrola ${external_bin_dir}
+    )
+
+    ExternalProject_Add_StepDependencies(espeak configure mbrola)
+endif()
 
 list(APPEND deps_libs
         "${external_lib_dir}/libespeak-ng.a"
         "${external_lib_dir}/libucd.a")
-list(APPEND deps espeak mbrola)
+list(APPEND deps espeak)
+
+if(WITH_MBROLA)
+    list(APPEND deps mbrola)
+endif()
