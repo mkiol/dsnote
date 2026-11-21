@@ -9,6 +9,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 import Sailfish.Share 1.0
+import Nemo.DBus 2.0
 import Opal.Tabs 1.0 as Opal
 
 import harbour.dsnote.Settings 1.0
@@ -24,7 +25,14 @@ ApplicationWindow {
     initialPage: mainPage
     cover: Qt.resolvedUrl("CoverPage.qml")
 
+    function popToMain() {
+        var main_page = pageStack.find(function(page) { return page.objectName === "main" })
+        pageStack.pop(main_page)
+    }
+
     function importUrls(urls) {
+        popToMain()
+
         if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
             if (addTextDialog) {
                 var urls_to_import = urls.slice(0) // deep copy
@@ -73,6 +81,7 @@ ApplicationWindow {
 
         Page {
             id: root
+            objectName: "main"
 
             readonly property bool verticalMode: isPortrait
             readonly property bool canCancelStt: !app.another_app_connected &&
@@ -119,11 +128,16 @@ ApplicationWindow {
                 } else if (resource.type === ShareResource.StringDataType) {
                     appWin.importText(resource.data)
                 } else {
-                    console.warn("unknown resource type:", resource.type)
+                    console.debug("unknown share resource type:", resource.type)
+                    
+                    // assuming data is text
+                    appWin.importText(resource.data)
                 }
             }
 
             ShareProvider {
+                id: filesShareProvider
+
                 method: "files"
                 capabilities: [
                     "audio/aac",
@@ -152,13 +166,36 @@ ApplicationWindow {
                     "text/vtt",
                     "text/plain",
                     "text/html",
-                    "text/markdown"
+                    "text/markdown",
+                    "text/x-url",
+                    "x-scheme-handler/http",
+                    "x-scheme-handler/https"
                 ]
 
                 onTriggered: {
                     for(var i = 0; i < resources.length; i++) {
                         handleResource(resources[i])
                     }
+                }
+            }
+
+            // workaround to support url sharing:
+            // https://forum.sailfishos.org/t/shareprovider-receiver-for-url-sharing-from-browser-is-failing/27281/4
+            ShareAction { id: shareAction }
+            DBusAdaptor {
+                service: "org.mkiol.dsnote"
+                path: "/share/files"
+                iface: "org.sailfishos.share"
+
+                function share(shareConfiguration) {
+                    shareAction.loadConfiguration(shareConfiguration)
+                    var resources = shareAction.resources
+                    for(var i = 0; i < resources.length; i++) {
+                        if (resources[i].type === "text/x-url") {
+                            resources[i] = {type: ShareResource.FilePathType, filePath: resources[i].status}
+                        }
+                    }
+                    filesShareProvider.triggered(resources)
                 }
             }
 

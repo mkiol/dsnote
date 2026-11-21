@@ -1421,7 +1421,12 @@ QString settings::file_path_from_url(const QUrl& file_url) const {
 }
 
 QUrl settings::url_from_file_path(const QString& file_path) const {
-    return QUrl::fromLocalFile(file_path);
+    QUrl url{file_path};
+    if (url.scheme().isEmpty()) {
+        return QUrl::fromLocalFile(file_path);
+    }
+    // file_path is already a url
+    return url;
 }
 
 QString settings::dir_of_file(const QString& file_path) const {

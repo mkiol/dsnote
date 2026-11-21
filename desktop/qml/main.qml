@@ -187,6 +187,9 @@ ApplicationWindow {
     }
 
     function importUrls(urls) {
+        closeDialog()
+        closeHelloDialog()
+
         if (app.note.length > 0 && _settings.file_import_action === Settings.FileImportActionAsk) {
             var urls_to_import = urls.slice(0) // deep copy
             addTextDialog.addHandler = function(){
@@ -529,7 +532,7 @@ ApplicationWindow {
 
         onDropped: (drop) => {
             if (!drop.hasUrls) return
-            root.importUrls(drop.urls)
+            appWin.importUrls(drop.urls)
         }
     }
 
@@ -553,7 +556,7 @@ ApplicationWindow {
             appWin.raise()
         }
         function onUrls_to_open_requested(urls) {
-            root.importUrls(urls)
+            appWin.importUrls(urls)
         }
     }
 
@@ -600,7 +603,7 @@ ApplicationWindow {
                 app.show_desktop_notification(qsTr("Text copied to clipboard!"), "", false)
             }
         }
-        onImport_file_multiple_streams: {
+        onImport_file_multiple_streams: (file_path, streams, replace) => {
             streamSelectionDialog.filePath = file_path
             streamSelectionDialog.streams = streams
             streamSelectionDialog.replace = replace

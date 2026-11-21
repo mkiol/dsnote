@@ -114,15 +114,6 @@ Page {
                         }
 
                         TextSwitch {
-                            checked: _settings.import_extract_readable
-                            automaticCheck: false
-                            text: qsTr("When importing an HTML, extract only the readable text")
-                            onClicked: {
-                                _settings.keep_last_note = !_settings.keep_last_note
-                            }
-                        }
-
-                        TextSwitch {
                             checked: _settings.subtitles_support
                             automaticCheck: false
                             text: qsTr("Subtitles and inline timestamps support")
@@ -683,16 +674,6 @@ Page {
                                         qsTranslate("SettingsPage", "When both options are on, %1 takes precedence.").arg("<i>" + qsTranslate("SettingsPage", "Echo translation") + "</i>")
                         }
 
-                        TextSwitch {
-                            checked: _settings.mnt_pinyin
-                            automaticCheck: false
-                            text: qsTr("Translate to Pinyin")
-                            onClicked: {
-                                _settings.mnt_pinyin = !_settings.mnt_pinyin
-                            }
-                            description: qsTr("When translating into Chinese, use Pinyin instead of Chinese characters.")
-                        }
-
                         ComboBox {
                             label: qsTr("Voice options in translator mode")
                             currentIndex: {
@@ -721,6 +702,16 @@ Page {
                             }
                             description: qsTr("Choose which voice options appear in translator mode.")
                         }
+
+                        TextSwitch {
+                            checked: _settings.mnt_pinyin
+                            automaticCheck: false
+                            text: qsTr("Translate to Pinyin")
+                            onClicked: {
+                                _settings.mnt_pinyin = !_settings.mnt_pinyin
+                            }
+                            description: qsTr("When translating into Chinese, use Pinyin instead of Chinese characters.")
+                        }
                     }
                 }
 
@@ -728,6 +719,15 @@ Page {
                     title: qsTr("Other")
 
                     content.sourceComponent: Column {
+                        TextSwitch {
+                            checked: _settings.import_extract_readable
+                            automaticCheck: false
+                            text: qsTr("When importing an HTML, extract only the readable text")
+                            onClicked: {
+                                _settings.keep_last_note = !_settings.keep_last_note
+                            }
+                        }
+
                         TextSwitch {
                             checked: _settings.cache_policy === Settings.CacheRemove
                             automaticCheck: false
