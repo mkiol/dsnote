@@ -1,4 +1,4 @@
 [D-BUS Service]
 Name=@info_dbus_app_service@
 Interface=org.freedesktop.Application
-Exec=@binary_path@ --app
+Exec=@binary_path@ @info_app_run_mode@

@@ -91,6 +91,7 @@ desktop-file-install --delete-original \
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{!?sfos_harbour:%{_datadir}/dbus-1/services/org.mkiol.Speech.service}
+%{!?sfos_harbour:%{_datadir}/dbus-1/services/org.mkiol.dsnote.service}
 %{!?sfos_harbour:%{_userunitdir}/%{name}.service}
 # >> files
 # << files
