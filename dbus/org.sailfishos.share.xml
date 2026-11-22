@@ -1,0 +1,6 @@
+<interface name="org.sailfishos.share">
+  <method name="share">
+    <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QVariantMap"/>
+    <arg name="arguments" type="a{sv}" direction="in"/>
+  </method>
+</interface>

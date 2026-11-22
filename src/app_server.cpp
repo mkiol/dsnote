@@ -9,6 +9,7 @@
 
 #include <fmt/format.h>
 
+#include <QDBusArgument>
 #include <QDBusConnection>
 #include <QDebug>
 #include <QDir>
@@ -21,12 +22,22 @@
 app_server::app_server(const cmd::options &options, QObject *parent)
     : QObject{parent},
       m_dbus_application_adaptor{this},
-      m_dbus_dsnote_adaptor{this} {
+      m_dbus_dsnote_adaptor{this}
+#ifdef USE_SFOS
+      ,
+      m_dbus_share_adaptor{this}
+#endif
+{
     auto con = QDBusConnection::sessionBus();
 
     if (con.registerService(DBUS_SERVICE_NAME) &&
         con.registerObject(DBUS_SERVICE_PATH, this) &&
-        con.registerObject("/", this)) {
+        con.registerObject("/", this)
+#ifdef USE_SFOS
+        /* share sfos api */
+        && con.registerObject("/share/files", this)
+#endif
+    ) {
         qDebug() << "dbus app service registration successul";
 
         m_pending_request_timer.setSingleShot(true);
@@ -259,6 +270,14 @@ void app_server::urls_to_open(const QList<QUrl> &urls) {
     }
 }
 
+void app_server::text_to_open(const QString &text) {
+    if (text.isEmpty()) {
+        emit activate_requested();
+    } else {
+        emit text_to_open_requested(text);
+    }
+}
+
 void app_server::handle_active_stt_model_change() {
     emit ActiveSttModelPropertyChanged(active_stt_model());
 }
@@ -376,6 +395,11 @@ void app_server::open_urls(const QStringList &uris) {
                            // http URL converted to file URL
                            return QUrl{uri.mid(5)};
                        }
+                       QUrl url{uri};
+                       if (url.scheme().isEmpty()) {
+                           // file path instead of url
+                           return QUrl::fromLocalFile(uri);
+                       }
                        return QUrl{uri};
                    });
 
@@ -421,3 +445,86 @@ int app_server::task_state() const {
     qDebug() << "[dbus app] TaskState called";
     return m_dsnote_app ? m_dsnote_app->property("task_state").toInt() : 0;
 }
+
+#ifdef USE_SFOS
+void app_server::share(const QVariantMap &arguments) {
+    qDebug() << "[dbus app] share called:" << arguments;
+
+    QStringList uris;
+    QString data;
+
+    auto mime = arguments.value(QStringLiteral("mimeType")).toString();
+    if (mime.isEmpty()) {
+        qWarning() << "empty share mime-type";
+        return;
+    }
+
+    auto media = mime.split('/').front();
+    if (media.compare(QStringLiteral("audio"),
+                      Qt::CaseSensitivity::CaseInsensitive) != 0 &&
+        media.compare(QStringLiteral("video"),
+                      Qt::CaseSensitivity::CaseInsensitive) != 0 &&
+        media.compare(QStringLiteral("text"),
+                      Qt::CaseSensitivity::CaseInsensitive) != 0 &&
+        media.compare(QStringLiteral("application"),
+                      Qt::CaseSensitivity::CaseInsensitive) != 0) {
+        qWarning() << "invalid share mime-type:" << mime;
+        return;
+    }
+
+    auto resources_arg =
+        arguments.value(QStringLiteral("resources")).value<QDBusArgument>();
+    if (resources_arg.currentSignature() != "av") {
+        qWarning() << "invalid share resources signature:"
+                   << resources_arg.currentSignature();
+    }
+
+    resources_arg.beginArray();
+    while (!resources_arg.atEnd()) {
+        QVariant v;
+        resources_arg >> v;
+        qDebug() << v;
+        if (v.type() == QVariant::String) {
+            auto uri = v.toString();
+            if (!uri.isEmpty()) {
+                uris.push_back(std::move(uri));
+            }
+            continue;
+        }
+        auto arg = v.value<QDBusArgument>();
+        if (arg.currentSignature() != "a{sv}") {
+            qWarning() << "invalid share resource signature:"
+                       << arg.currentSignature();
+            continue;
+        }
+        QVariantMap map;
+        arg >> map;
+        auto type = map.value(QStringLiteral("type")).toString();
+        if (type.isEmpty()) {
+            qWarning() << "share resource type is empty";
+            continue;
+        }
+        data = map.value(QStringLiteral("data")).toString();
+
+        if (type.compare(QLatin1String{"text/x-url"}) == 0) {
+            if (!data.isEmpty()) {
+                uris.push_back(std::move(data));
+                continue;
+            }
+            auto status = map.value(QStringLiteral("status")).toString();
+            if (!status.isEmpty()) {
+                uris.push_back(std::move(status));
+            }
+            continue;
+        }
+    }
+    resources_arg.endArray();
+
+    if (!uris.empty()) {
+        open_urls(uris);
+    }
+    if (!data.isEmpty()) {
+        text_to_open(data);
+    }
+}
+#endif

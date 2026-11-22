@@ -507,7 +507,9 @@ endif()
 if(WITH_SFOS)
     list(APPEND dsnote_lib_sources
         ${sources_dir}/icon_provider.hpp
-        ${sources_dir}/icon_provider.cpp)
+        ${sources_dir}/icon_provider.cpp
+        ${sources_dir}/dbus_share_adaptor.cpp
+        ${sources_dir}/dbus_share_adaptor.h)
 endif()
 
 configure_file(config.h.in config.h)

@@ -22,6 +22,9 @@
 #include "config.h"
 #include "dbus_application_adaptor.h"
 #include "dbus_dsnote_adaptor.h"
+#ifdef USE_SFOS
+#include "dbus_share_adaptor.h"
+#endif
 
 class app_server : public QObject {
     Q_OBJECT
@@ -43,6 +46,12 @@ class app_server : public QObject {
                                     const QVariantMap &platform_data);
     Q_INVOKABLE void Open(const QStringList &uris,
                           const QVariantMap &platform_data);
+
+#ifdef USE_SFOS
+    // dbus sfos share api
+    Q_INVOKABLE void share(const QVariantMap &arguments);
+#endif
+
     // dbus dsnote api
     Q_INVOKABLE void OpenUrl(const QStringList &uris);
     Q_INVOKABLE void openUrl(const QStringList &uris);
@@ -54,6 +63,7 @@ class app_server : public QObject {
    signals:
     void activate_requested();
     void urls_to_open_requested(const QList<QUrl> &urls);
+    void text_to_open_requested(const QString &text);
     // dbus dsnote api
     void ActiveSttModelPropertyChanged(const QVariantMap &id);
     void ActiveTtsModelPropertyChanged(const QVariantMap &id);
@@ -75,11 +85,15 @@ class app_server : public QObject {
 
     ApplicationAdaptor m_dbus_application_adaptor;
     DsnoteAdaptor m_dbus_dsnote_adaptor;
+#ifdef USE_SFOS
+    ShareAdaptor m_dbus_share_adaptor;
+#endif
     QObject *m_dsnote_app = nullptr;
     QTimer m_pending_request_timer;
 
     void open_urls(const QStringList &uris);
     void urls_to_open(const QList<QUrl> &urls);
+    void text_to_open(const QString& text);
     int request_another_instance(const cmd::options &options);
     QVariantMap active_stt_model() const;
     QVariantMap active_tts_model() const;
