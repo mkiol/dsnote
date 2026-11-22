@@ -75,6 +75,7 @@
 
 class dsnote_app : public QObject {
     Q_OBJECT
+    Q_PROPERTY(bool app_stanalone_mode READ app_stanalone_mode CONSTANT)
     Q_PROPERTY(QString intermediate_text READ intermediate_text NOTIFY
                    intermediate_text_changed)
     Q_PROPERTY(QString note READ note WRITE set_note NOTIFY note_changed)
@@ -1167,6 +1168,7 @@ class dsnote_app : public QObject {
     void set_current_tts_request(tts_request_t request);
     bool current_tts_mnt_in() const;
     bool current_tts_mnt_out() const;
+    static bool app_stanalone_mode();
 };
 
 #endif  // DSNOTE_APP_H

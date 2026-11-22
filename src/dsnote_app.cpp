@@ -7197,3 +7197,7 @@ bool dsnote_app::current_tts_mnt_out() const {
     return m_current_tts_request &&
            m_current_tts_request->options.value("mnt_out").toBool();
 }
+
+bool dsnote_app::app_stanalone_mode() {
+    return settings::launch_mode == settings::launch_mode_t::app_stanalone;
+}

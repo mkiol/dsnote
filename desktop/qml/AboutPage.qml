@@ -41,7 +41,7 @@ DialogPage {
 
             Label {
                 Layout.fillWidth: true
-                text: APP_NAME + " " + APP_VERSION
+                text: APP_NAME + " " + APP_VERSION + (app.app_stanalone_mode ? "" : " — splitted");
                 font.pixelSize: Qt.application.font.pixelSize * 1.2
             }
 

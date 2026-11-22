@@ -43,7 +43,8 @@ Page {
                 horizontalAlignment: Text.AlignHCenter
                 font.pixelSize: Theme.fontSizeMedium
                 color: Theme.highlightColor
-                text: qsTr("Version %1").arg(APP_VERSION);
+                text: qsTr("Version %1").arg(APP_VERSION) +
+                      (app.app_stanalone_mode ? " — standalone" : "");
             }
 
             Flow {
