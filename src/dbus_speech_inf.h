@@ -143,6 +143,13 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("Cancel"), argumentList);
     }
 
+    inline QDBusPendingReply<int> ExecuteCommand(const QString &command, const QVariantMap &arguments)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(command) << QVariant::fromValue(arguments);
+        return asyncCallWithArgumentList(QStringLiteral("ExecuteCommand"), argumentList);
+    }
+
     inline QDBusPendingReply<QVariantMap> FeaturesAvailability()
     {
         QList<QVariant> argumentList;
@@ -278,12 +285,6 @@ public Q_SLOTS: // METHODS
         QList<QVariant> argumentList;
         argumentList << QVariant::fromValue(text) << QVariant::fromValue(options);
         return asyncCallWithArgumentList(QStringLiteral("TttRepairText"), argumentList);
-    }
-
-    inline QDBusPendingReply<int> UnloadModels()
-    {
-        QList<QVariant> argumentList;
-        return asyncCallWithArgumentList(QStringLiteral("UnloadModels"), argumentList);
     }
 
     inline QDBusPendingReply<int> UpdateSettings(const QVariantMap &settings)

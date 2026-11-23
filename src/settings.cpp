@@ -62,7 +62,7 @@ QDebug operator<<(QDebug d, settings::launch_mode_t launch_mode) {
         case settings::launch_mode_t::service:
             d << "service";
             break;
-        case settings::launch_mode_t::app_stanalone:
+        case settings::launch_mode_t::app_standalone:
             d << "app-standalone";
             break;
         case settings::launch_mode_t::app:
@@ -352,7 +352,7 @@ std::ostream& operator<<(
     return os;
 }
 
-settings::launch_mode_t settings::launch_mode = launch_mode_t::app_stanalone;
+settings::launch_mode_t settings::launch_mode = launch_mode_t::app_standalone;
 
 settings::settings() : QSettings{settings_filepath(), QSettings::NativeFormat} {
     LOGD("app: " << APP_ORG << " " << APP_ID);

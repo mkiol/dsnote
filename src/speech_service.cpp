@@ -4711,6 +4711,9 @@ void speech_service::set_state(state_t new_state) {
         qDebug() << "service state changed:" << m_state << "=>" << new_state;
         report_activity();
         m_state = new_state;
+        if (new_state == state_t::idle) {
+            handle_state_change_to_idle();
+        }
         emit state_changed();
     }
 }
@@ -5006,21 +5009,35 @@ void speech_service::stop_keepalive_current_task() {
 }
 
 void speech_service::remove_cached_files() {
+    QDir dir{settings::instance()->cache_dir()};
+
+    // media files
+
+    dir.setNameFilters(QStringList{} << "*.wav"
+                                     << "*.mp3"
+                                     << "*.ogg"
+                                     << "*.opus"
+                                     << "*.flac");
+    dir.setFilter(QDir::Files);
+
+    for (const auto &file : std::as_const(dir).entryList()) dir.remove(file);
+}
+
+void speech_service::remove_cached_files_if_needed() {
     if (settings::instance()->cache_policy() ==
         settings::cache_policy_t::CacheRemove) {
-        QDir dir{settings::instance()->cache_dir()};
+        remove_cached_files();
+    }
+}
 
-        // media files
-
-        dir.setNameFilters(QStringList{} << "*.wav"
-                                         << "*.mp3"
-                                         << "*.ogg"
-                                         << "*.opus"
-                                         << "*.flac");
-        dir.setFilter(QDir::Files);
-
-        for (const auto &file : std::as_const(dir).entryList())
-            dir.remove(file);
+void speech_service::remove_cached_files_in_idle_state() {
+    if (m_state == state_t::idle) {
+        qDebug() << "remove cached files";
+        m_has_pending_remove_chached_files = false;
+        remove_cached_files();
+    } else {
+        qDebug() << "set pending remove cached files request";
+        m_has_pending_remove_chached_files = true;
     }
 }
 
@@ -5291,6 +5308,25 @@ speech_service::activity_tracker_t::active_items(
     return inactive_items;
 }
 
+speech_service::speech_mode_t speech_service::to_service_speech_mode(
+    settings::speech_mode_t speech_mode) {
+    switch (speech_mode) {
+        case settings::speech_mode_t::SpeechAutomatic:
+            return speech_service::speech_mode_t::automatic;
+        case settings::speech_mode_t::SpeechManual:
+            return speech_service::speech_mode_t::manual;
+        case settings::speech_mode_t::SpeechSingleSentence:
+            return speech_service::speech_mode_t::single_sentence;
+    }
+    throw std::runtime_error{"speech_mode value"};
+}
+
+void speech_service::handle_state_change_to_idle() {
+    if (m_has_pending_remove_chached_files) {
+        remove_cached_files_in_idle_state();
+    }
+}
+
 // DBus
 
 int speech_service::SttStartListen(int mode, const QString &lang,
@@ -5487,12 +5523,22 @@ int speech_service::Reload() {
     return SUCCESS;
 }
 
-int speech_service::UnloadModels() {
-    qDebug() << "[dbus => service] called UnloadModels";
+int speech_service::ExecuteCommand(
+    const QString &command, [[maybe_unused]] const QVariantMap &arguments) {
+    qDebug() << "[dbus => service] called ExecuteCommand:" << command;
 
-    unload_models();
+    if (command == "unload_models") {
+        unload_models();
+        return SUCCESS;
+    }
+    if (command == "remove_cached_files") {
+        remove_cached_files_in_idle_state();
+        return SUCCESS;
+    }
 
-    return SUCCESS;
+    qWarning() << "unknown command:" << command;
+
+    return FAILURE;
 }
 
 int speech_service::UpdateSettings(const QVariantMap &settings_map) const {
@@ -5503,17 +5549,4 @@ int speech_service::UpdateSettings(const QVariantMap &settings_map) const {
     }
 
     return SUCCESS;
-}
-
-speech_service::speech_mode_t speech_service::to_service_speech_mode(
-    settings::speech_mode_t speech_mode) {
-    switch (speech_mode) {
-        case settings::speech_mode_t::SpeechAutomatic:
-            return speech_service::speech_mode_t::automatic;
-        case settings::speech_mode_t::SpeechManual:
-            return speech_service::speech_mode_t::manual;
-        case settings::speech_mode_t::SpeechSingleSentence:
-            return speech_service::speech_mode_t::single_sentence;
-    }
-    throw std::runtime_error{"speech_mode value"};
 }

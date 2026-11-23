@@ -209,6 +209,14 @@ int SpeechAdaptor::Cancel(int task)
     return result;
 }
 
+int SpeechAdaptor::ExecuteCommand(const QString &command, const QVariantMap &arguments)
+{
+    // handle method call org.mkiol.Speech.ExecuteCommand
+    int result;
+    QMetaObject::invokeMethod(parent(), "ExecuteCommand", Q_RETURN_ARG(int, result), Q_ARG(QString, command), Q_ARG(QVariantMap, arguments));
+    return result;
+}
+
 QVariantMap SpeechAdaptor::FeaturesAvailability()
 {
     // handle method call org.mkiol.Speech.FeaturesAvailability
@@ -367,14 +375,6 @@ int SpeechAdaptor::TttRepairText(const QString &text, const QVariantMap &options
     int task;
     QMetaObject::invokeMethod(parent(), "TttRepairText", Q_RETURN_ARG(int, task), Q_ARG(QString, text), Q_ARG(QVariantMap, options));
     return task;
-}
-
-int SpeechAdaptor::UnloadModels()
-{
-    // handle method call org.mkiol.Speech.UnloadModels
-    int result;
-    QMetaObject::invokeMethod(parent(), "UnloadModels", Q_RETURN_ARG(int, result));
-    return result;
 }
 
 int SpeechAdaptor::UpdateSettings(const QVariantMap &settings)

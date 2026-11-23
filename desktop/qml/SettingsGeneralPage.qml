@@ -166,6 +166,16 @@ ColumnLayout {
         hoverEnabled: true
     }
 
+    Button {
+        text: qsTranslate("SettingsPage", "Clear cache")
+        onClicked: app.clear_cache()
+
+        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+        ToolTip.visible: hovered
+        ToolTip.text: qsTranslate("SettingsPage", "Delete all cached audio files.")
+        hoverEnabled: true
+    }
+
     TextFieldForm {
         label.text: qsTranslate("SettingsPage", "Location of language files")
         toolTip: qsTranslate("SettingsPage", "Directory where language files are downloaded to and stored.") +

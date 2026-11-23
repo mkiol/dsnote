@@ -61,7 +61,7 @@
 static void exit_program() {
     LOGD("exiting");
 
-    speech_service::remove_cached_files();
+    speech_service::remove_cached_files_if_needed();
 
     // workaround for python thread locking
     std::quick_exit(0);
@@ -274,7 +274,7 @@ static cmd::options check_options(const QCoreApplication& app) {
 
     if (parser.isSet(appstandalone_opt)) {
         if (!parser.isSet(app_opt) && !parser.isSet(sttservice_opt)) {
-            options.launch_mode = settings::launch_mode_t::app_stanalone;
+            options.launch_mode = settings::launch_mode_t::app_standalone;
         } else {
             options.valid = false;
         }
@@ -291,7 +291,7 @@ static cmd::options check_options(const QCoreApplication& app) {
             options.valid = false;
         }
     } else {
-        options.launch_mode = settings::launch_mode_t::app_stanalone;
+        options.launch_mode = settings::launch_mode_t::app_standalone;
     }
 
     if (!options.valid) {
@@ -727,7 +727,7 @@ static void start_app(const cmd::options& options,
         s->disable_py_scan();
     }
 
-    if (settings::launch_mode == settings::launch_mode_t::app_stanalone &&
+    if (settings::launch_mode == settings::launch_mode_t::app_standalone &&
         options.gen_cheksums) {
         models_manager::instance()->generate_checksums();
     }
@@ -861,7 +861,7 @@ int main(int argc, char* argv[]) {
             start_service(cmd_opts);
             exit_program();
             break;
-        case settings::launch_mode_t::app_stanalone:
+        case settings::launch_mode_t::app_standalone:
             LOGD("starting standalone app");
             break;
         case settings::launch_mode_t::app:

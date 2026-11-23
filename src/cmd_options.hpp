@@ -33,7 +33,7 @@ bool validate_text_format_str(const QString& text_format_str);
 struct options {
     bool valid = true;
     settings::launch_mode_t launch_mode =
-        settings::launch_mode_t::app_stanalone;
+        settings::launch_mode_t::app_standalone;
     bool verbose = false;
     bool gen_cheksums = false;
     bool hw_scan_off = false;

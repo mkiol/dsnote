@@ -740,6 +740,12 @@ Page {
                             }
                         }
 
+                        Button {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            text: qsTr("Clear cache")
+                            onClicked: app.clear_cache()
+                        }
+
                         TextSwitch {
                             checked: _settings.inactivity_reset
                             automaticCheck: false
@@ -749,6 +755,12 @@ Page {
                             onClicked: {
                                 _settings.inactivity_reset = !_settings.inactivity_reset
                             }
+                        }
+
+                        Button {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            text: qsTr("Unload all models")
+                            onClicked: app.unload_models()
                         }
 
                         ItemBox {

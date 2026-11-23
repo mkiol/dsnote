@@ -212,10 +212,11 @@ class speech_service : public QObject, public singleton<speech_service> {
     double mnt_translate_progress(int task) const;
     QVariantMap mnt_out_langs(QString in_lang) const;
     QVariantMap features_availability();
-    static void remove_cached_files();
+    static void remove_cached_files_if_needed();
     static speech_mode_t to_service_speech_mode(
         settings::speech_mode_t speech_mode);
     void unload_models();
+    void remove_cached_files_in_idle_state();
 
    signals:
     void models_changed();
@@ -481,6 +482,7 @@ class speech_service : public QObject, public singleton<speech_service> {
     bool m_models_changed_handled = false;
     QString m_stt_pending_text;
     QString m_stt_pending_lang;
+    bool m_has_pending_remove_chached_files = false;
 
     bool feature_discovery_done() const {
         return !m_features_availability.isEmpty();
@@ -632,13 +634,16 @@ class speech_service : public QObject, public singleton<speech_service> {
     void handle_inactivity_reset_settings_changed();
     static stt_engine::speech_mode_t to_stt_speech_mode(
         speech_mode_t speech_mode);
+    static void remove_cached_files();
+    void handle_state_change_to_idle();
 
     // DBus
     Q_INVOKABLE int Cancel(int task);
     Q_INVOKABLE int KeepAliveService();
     Q_INVOKABLE int KeepAliveTask(int task);
     Q_INVOKABLE int Reload();
-    Q_INVOKABLE int UnloadModels();
+    Q_INVOKABLE int ExecuteCommand(const QString &command,
+                                   const QVariantMap &arguments);
     Q_INVOKABLE int UpdateSettings(const QVariantMap &settings_map) const;
     Q_INVOKABLE int SttStartListen(int mode, const QString &lang,
                                    const QString &out_lang);

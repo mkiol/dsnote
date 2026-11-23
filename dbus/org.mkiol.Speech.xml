@@ -802,16 +802,6 @@
         </method>
 
         <!--
-            UnloadModels:
-            @result: 0 - success, any other value - error
-
-            Unload all active models in the service to free up memory.
-        -->
-        <method name="UnloadModels">
-            <arg name="result" type="i" direction="out" />
-        </method>
-
-        <!--
             KeepAliveTask:
             @task: id of task returned in SttStartListen, SttTranscribeFile,
                    or TtsPlaySpeech call
@@ -871,7 +861,20 @@
             <arg name="result" type="i" direction="out" />
         </method>
 
-        <!-- ttt experimental api -->
+        <!--
+            ExecuteCommand:
+            @command: a name of command
+            @arguments: a dict of arguments (argument-name => argument-value)
+            @result: 0 - success, any other value - error
+
+            Runs the command.
+        -->
+        <method name="ExecuteCommand">
+            <annotation name="org.qtproject.QtDBus.QtTypeName.In1" value="QVariantMap"/>
+            <arg name="command" type="s" direction="in" />
+            <arg name="arguments" type="a{sv}" direction="in" />
+            <arg name="result" type="i" direction="out" />
+        </method>
 
         <!--
             TttRepairText:

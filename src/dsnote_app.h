@@ -528,6 +528,7 @@ class dsnote_app : public QObject {
     Q_INVOKABLE bool is_valid_url(const QString &text) const;
     Q_INVOKABLE QString feature_fake_keyboard_ydo_error_message() const;
     Q_INVOKABLE void unload_models();
+    Q_INVOKABLE void clear_cache();
 
    signals:
     void active_stt_model_changed();

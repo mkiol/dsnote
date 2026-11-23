@@ -556,7 +556,7 @@ class settings : public QSettings, public singleton<settings> {
     Q_ENUM(mode_t)
     friend QDebug operator<<(QDebug d, mode_t mode);
 
-    enum class launch_mode_t { app_stanalone, app, service };
+    enum class launch_mode_t { app_standalone, app, service };
     friend QDebug operator<<(QDebug d, launch_mode_t launch_mode);
 
     enum class speech_mode_t {

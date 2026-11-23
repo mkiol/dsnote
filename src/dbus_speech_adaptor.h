@@ -278,9 +278,6 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"Reload\">\n"
 "      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
 "    </method>\n"
-"    <method name=\"UnloadModels\">\n"
-"      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
-"    </method>\n"
 "    <method name=\"KeepAliveTask\">\n"
 "      <arg direction=\"in\" type=\"i\" name=\"task\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"timer\"/>\n"
@@ -308,6 +305,12 @@ class SpeechAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"UpdateSettings\">\n"
 "      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.In0\"/>\n"
 "      <arg direction=\"in\" type=\"a{sv}\" name=\"settings\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
+"    </method>\n"
+"    <method name=\"ExecuteCommand\">\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.In1\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"command\"/>\n"
+"      <arg direction=\"in\" type=\"a{sv}\" name=\"arguments\"/>\n"
 "      <arg direction=\"out\" type=\"i\" name=\"result\"/>\n"
 "    </method>\n"
 "    <method name=\"TttRepairText\">\n"
@@ -401,6 +404,7 @@ public: // PROPERTIES
 
 public Q_SLOTS: // METHODS
     int Cancel(int task);
+    int ExecuteCommand(const QString &command, const QVariantMap &arguments);
     QVariantMap FeaturesAvailability();
     int KeepAliveService();
     int KeepAliveTask(int task);
@@ -421,7 +425,6 @@ public Q_SLOTS: // METHODS
     int TtsSpeechToFile(const QString &text, const QString &lang, const QVariantMap &options);
     int TtsStopSpeech(int task);
     int TttRepairText(const QString &text, const QVariantMap &options);
-    int UnloadModels();
     int UpdateSettings(const QVariantMap &settings);
 Q_SIGNALS: // SIGNALS
     void CurrentTaskPropertyChanged(int task);
