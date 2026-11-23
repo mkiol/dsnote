@@ -1,4 +1,4 @@
-/* Copyright (C) 2024 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2024-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,28 +8,20 @@
 #include "denoiser.hpp"
 
 extern "C" {
-#include <rnnoise-nu.h>
+#include <rnnoise.h>
 }
 
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
 
-#include "logger.hpp"
-
 denoiser::denoiser(int sample_rate, unsigned int tasks, uint64_t full_size)
-    : m_task_flags{tasks}, m_full_size{full_size} {
+    : m_sample_rate{sample_rate}, m_task_flags{tasks}, m_full_size{full_size} {
     if ((m_task_flags & task_denoise) || (m_task_flags & task_denoise_hard) ||
         (m_task_flags & task_probs)) {
-        auto* model = rnnoise_get_model("orig");
-        if (model == nullptr) LOGE("rnnoise model not found");
-
-        m_state = rnnoise_create(model);
+        m_state = rnnoise_create(nullptr);
         if (m_state == nullptr)
             throw std::runtime_error("failed to create rnnoise");
-
-        rnnoise_set_param(m_state, RNNOISE_PARAM_MAX_ATTENUATION, 10.0);
-        rnnoise_set_param(m_state, RNNOISE_PARAM_SAMPLE_RATE, sample_rate);
     }
 
     m_prob_seg_size =
@@ -54,37 +46,44 @@ std::vector<float> denoiser::speech_probs() {
 }
 
 // TO-DO: refactor with simd
-void denoiser::normalize_audio(sample_t* audio, size_t size, bool second_pass) {
-    int max = std::numeric_limits<sample_t>::max();
-    int min = std::numeric_limits<sample_t>::min();
-    int target_gain = max * 0.75;
+void denoiser::normalize_audio(sample_t* __restrict__ audio, size_t size,
+                               bool second_pass) {
+    constexpr int max = std::numeric_limits<sample_t>::max();
+    constexpr int min = std::numeric_limits<sample_t>::min();
+    constexpr int target_gain = max * 3 / 4;
 
-    if (!second_pass && (m_task_flags & task_normalize ||
-                         m_task_flags & task_normalize_two_pass)) {
+    const bool peek_pass =
+        !second_pass &&
+        (m_task_flags & (task_normalize | task_normalize_two_pass)) != 0;
+    const bool gain_pass = (m_task_flags & task_normalize) != 0 || second_pass;
+
+    int peek = m_normalize_peek;
+
+    if (peek_pass) {
+        int local_peek = 0;
         for (size_t i = 0; i < size; ++i) {
-            int val = std::abs(audio[i]);
-            if (val > m_normalize_peek) m_normalize_peek = val;
+            int v = std::abs(static_cast<int>(audio[i]));
+            local_peek = v > local_peek ? v : local_peek;
         }
+        peek = std::max(peek, local_peek);
+        m_normalize_peek = peek;
     }
 
-    if (m_task_flags & task_normalize || second_pass) {
-        auto new_gain = [&]() {
-            int max_ampl = 32;
+    if (gain_pass && peek > 0) {
+        int gain = (1 << 10) * target_gain / peek;
+        gain = std::clamp(gain, 1 << 10, 32 << 10);
+        if ((peek * gain >> 10) > max) gain = (max << 10) / peek;
 
-            int new_gain = (1 << 10) * target_gain / m_normalize_peek;
-            if (new_gain > (max_ampl << 10)) new_gain = max_ampl << 10;
-            if (new_gain < (1 << 10)) new_gain = 1 << 10;
-            if ((m_normalize_peek * new_gain >> 10) > max)
-                new_gain = (max << 10) / m_normalize_peek;
+        for (size_t i = 0; i < size; ++i) {
+            int v = (audio[i] * gain) >> 10;
+            audio[i] =
+                static_cast<sample_t>(v < min ? min : (v > max ? max : v));
+        }
 
-            return new_gain;
-        }();
-
-        for (size_t i = 0; i < size; ++i)
-            audio[i] = static_cast<sample_t>(
-                std::clamp(audio[i] * new_gain >> 10, min, max));
-
-        if (m_task_flags & task_normalize) m_normalize_peek = 1;
+        if (m_task_flags & task_normalize) {
+            m_normalize_peek = 1;
+            peek = 1;
+        }
     }
 }
 
@@ -102,13 +101,41 @@ void denoiser::process_char(char* buf, size_t size) {
                       size / sizeof(sample_t));
 }
 
+size_t denoiser::size_after_resample(size_t src_len, int src_rate,
+                                     int dst_rate) {
+    return static_cast<size_t>(
+        std::llround(static_cast<double>(src_len) * dst_rate / src_rate));
+}
+
+size_t denoiser::resample(const sample_t* src, size_t src_len, int src_rate,
+                          int dst_rate, sample_t* dst) {
+    auto dst_size = size_after_resample(src_len, src_rate, dst_rate);
+    double src_step = static_cast<double>(src_rate) / dst_rate;
+
+    for (size_t i = 0; i < dst_size; ++i) {
+        auto pos = i * src_step;
+        auto k = static_cast<size_t>(pos);
+        double frac = pos - static_cast<double>(k);
+        int32_t s0 = src[k];
+        int32_t s1 = (k + 1 < src_len) ? src[k + 1] : src[k];
+        dst[i] = static_cast<int16_t>(std::lrint(s0 + ((s1 - s0) * frac)));
+    }
+
+    return dst_size;
+}
+
 void denoiser::process(sample_t* buf, size_t size) {
     if ((m_task_flags & task_denoise) || (m_task_flags & task_denoise_hard) ||
         (m_task_flags & task_probs)) {
+        // resample to 48000
+        auto size48 = size_after_resample(size, m_sample_rate, rnn_sample_rate);
+        std::vector<int16_t> buf48(size48);
+        resample(buf, size, m_sample_rate, rnn_sample_rate, buf48.data());
+
         frame_t frame;
 
-        auto* cur = buf;
-        const auto* end = buf + size;
+        auto* cur = buf48.data();
+        const auto* end = buf48.data() + size48;
 
         while (cur < end) {
             size_t samples = end - cur;
@@ -147,8 +174,12 @@ void denoiser::process(sample_t* buf, size_t size) {
 
             cur += samples;
         }
+
+        resample(buf48.data(), size48, rnn_sample_rate, m_sample_rate, buf);
     }
 
-    if (m_task_flags & task_normalize || m_task_flags & task_normalize_two_pass)
+    if (m_task_flags & task_normalize ||
+        m_task_flags & task_normalize_two_pass) {
         normalize_audio(buf, size, false);
+    }
 }

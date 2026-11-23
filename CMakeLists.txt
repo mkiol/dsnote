@@ -38,7 +38,7 @@ option(BUILD_WHISPERCPP_VULKAN_SHADERC "build vulkan glslc" OFF)
 option(BUILD_WEBRTCVAD "download sources of webrtc vad, build and link statically" ON)
 option(BUILD_OPENBLAS "download sources of openblas, build and install shared lib" ON)
 option(BUILD_XZ "download sources of xz lib, build and link statically" ON)
-option(BUILD_RNNOISE "download sources of rnnoise-nu lib, build and link statically" ON)
+option(BUILD_RNNOISE "download sources of rnnoise lib, build and link statically" ON)
 option(BUILD_PYBIND11 "download sources of pybind11, build and link statically" ON)
 option(BUILD_PYTHON_MODULE "make python module archive" OFF)
 option(BUILD_ESPEAK "download sources of espeak-ng lib, build and link statically" ON)
@@ -221,7 +221,7 @@ set(info_translators_str "Heimen Stoffels · Bérenger Arnaud · Karry · dashin
 Åke Engelbrektson · L'Africain · Albano Battistella · Locness3 · DevSJR · Vovkiv · Niklas Halvorsen · \
 Matjaž Jeran · Victor Alonso Barberan · Bruno Veilleux · Abdullah Albaroty · 李 阳 · Erdem Uygun · Armin Maier · \
 Alexandre Cerqueira Leite · Erhan Yükselci · Boštjan Štrumbelj")
-set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise-nu · \
+set(info_libs_str "Qt · Coqui STT · Vosk · whisper.cpp · WebRTC-VAD · libarchive · RNNoise · \
 {fmt} · Piper · RHVoice · ssplit-cpp · nlohmann JSON · eSpeak NG · Bergamot Translator · \
 Rubber Band Library · simdjson · astrunc · FFmpeg · LAME · Vorbis · Opus · TagLib · \
 libnumbertext · april-asr · html2md · maddy · SAM · rdrview · CLD2 · libpinyin · cpp-pinyin")
@@ -716,7 +716,7 @@ endif()
 if(BUILD_RNNOISE)
     include(${cmake_path}/rnnoise.cmake)
 else()
-    find_library(rnnoise_path rnnoise-nu REQUIRED)
+    find_library(rnnoise_path rnnoise REQUIRED)
     list(APPEND deps_libs ${rnnoise_path})
 endif()
 

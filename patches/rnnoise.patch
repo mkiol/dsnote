@@ -1,0 +1,12 @@
+diff -ruN -x '.*' rnnoise-org/download_model.sh rnnoise-patched/download_model.sh
+--- rnnoise-org/download_model.sh	2025-02-23 00:58:18.000000000 +0100
++++ rnnoise-patched/download_model.sh	2026-11-23 16:49:36.254671093 +0100
+@@ -6,7 +6,7 @@
+ 
+ if [ ! -f $model ]; then
+         echo "Downloading latest model"
+-        wget https://media.xiph.org/rnnoise/models/$model
++        curl -o $model https://media.xiph.org/rnnoise/models/$model
+ fi
+ 
+ if command -v sha256sum

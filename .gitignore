@@ -17,3 +17,12 @@ flatpak/
 deb/noble/
 deb/plucky/
 arch/local/
+arch/*/dsnote
+arch/*/pkg
+arch/*/src
+arch/*/*.zst
+.*
+*-old
+*-bak
+render_*.sh
+gen_*.py

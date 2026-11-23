@@ -304,10 +304,18 @@ modules:
         -D_celt_autocorr=rnnoise__celt_autocorr
         -Dcompute_gru=rnnoise_compute_gru
         -Dcompute_dense=rnnoise_compute_dense
+    build-options:
+      arch:
+        x86_64:
+          config-opts:
+            - --enable-x86-rtcd
     sources:
       - type: archive
-        url: https://github.com/GregorR/rnnoise-nu/archive/26269304e120499485438cd93acf5127c6908c68.zip
-        sha256: 93a994a3d59cb89c005f0f861fd522fe268780dc0e2e2acea56945305ed0cbf1
+        url: https://github.com/xiph/rnnoise/archive/70f1d256acd4b34a572f999a05c87bf00b67730d.zip
+        sha256: a8aeeb024e08d5884b9b0b2cddb9b0c357c872a3c7149ca7a23375ccdd7e1190
+      - type: file
+        url: https://media.xiph.org/rnnoise/models/rnnoise_data-0a8755f8e2d834eff6a54714ecc7d75f9932e845df35f8b59bc52a7cfe6e8b37.tar.gz
+        sha256: 0a8755f8e2d834eff6a54714ecc7d75f9932e845df35f8b59bc52a7cfe6e8b37
 
   - name: boost
     buildsystem: simple

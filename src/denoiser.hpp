@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2023-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23,10 +23,10 @@ class denoiser {
         task_denoise_hard = 1U << 1U,
         task_normalize = 1U << 2U,
         task_normalize_two_pass = 1U << 3U,
-        task_probs = 1U << 4U
+        task_probs = 1U << 4U,
     };
-
     inline static const size_t frame_size = 480;
+
     using sample_t = int16_t;
 
     explicit denoiser(int sample_rate, unsigned int tasks,
@@ -39,15 +39,15 @@ class denoiser {
     std::vector<float> speech_probs();
 
    private:
+    static const int rnn_sample_rate = 48000;
     using frame_t = std::array<float, frame_size>;
 
     inline static const float m_prob_seg_threshold = 0.1;
     inline static const float m_prob_seg_count = 100;
     float m_prob_acum = 0.0;
-
     unsigned int m_prob_seg_num = 0;
     unsigned int m_prob_seg_size = 0;
-
+    int m_sample_rate;
     DenoiseState* m_state = nullptr;
     std::vector<float> m_speech_probs;
     unsigned int m_task_flags = task_flags::task_none;
@@ -55,6 +55,10 @@ class denoiser {
     int m_normalize_peek = 1;
 
     void normalize_audio(sample_t* audio, size_t size, bool second_pass);
+    static size_t size_after_resample(size_t src_len, int src_rate,
+                                      int dst_rate);
+    static size_t resample(const sample_t* src, size_t src_len, int src_rate,
+                           int dst_rate, sample_t* dst);
 };
 
 #endif // DENOISER_HPP
