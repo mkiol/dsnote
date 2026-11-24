@@ -168,6 +168,9 @@ ColumnLayout {
                     onClearClicked: {
                         app.make_undo()
                         root.noteTextArea.textArea.text = ""
+                        if (app.state === DsnoteApp.StateTranslating) {
+                            app.cancel()
+                        }
                     }
                     onUndoFallbackClicked: app.undo_or_redu_note()
                     onReadSelectedClicked: {

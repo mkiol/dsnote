@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2021 Michal Kosciesza <michal@mkiol.net>
+/* Copyright (C) 2017-2026 Michal Kosciesza <michal@mkiol.net>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,9 +13,10 @@ BusyIndicator {
     size: BusyIndicatorSize.Medium
 
     property double progress: -1.0
+    property alias text: label.text
 
     Label {
-        visible: progress >= 0.0
+        visible: progress >= 0.0 && root.running
         color: parent.color
         anchors.centerIn: parent
         font.pixelSize: {
@@ -30,6 +31,15 @@ BusyIndicator {
             }
         }
         text:  Math.round(progress * 100) + "%"
+    }
+
+    Label {
+        id: label
+
+        anchors.top: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: parent.color
+        visible: root.running
     }
 }
 

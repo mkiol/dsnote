@@ -119,6 +119,9 @@ Item {
                     onClearClicked: {
                         app.make_undo()
                         root.noteTextArea.textArea.text = ""
+                        if (root.canCancelMnt) {
+                            app.cancel()
+                        }
                     }
                     onCopyClicked: app.copy_to_clipboard()
                     onUndoClicked: app.undo_or_redu_note()
@@ -285,10 +288,13 @@ Item {
                     }
 
                     BusyIndicatorWithProgress {
+                        id: busyIndicator
+
                         anchors.centerIn: parent
                         size: BusyIndicatorSize.Large
                         running: app.state === DsnoteApp.StateTranslating
-                        progress: app.translate_progress > 0.0 ? app.translate_progress : -1.0
+                        progress: app.translate_progress > 0.0 && app.task_state !== DsnoteApp.TaskStateCancelling ? app.translate_progress : -1.0
+                        text: app.task_state === DsnoteApp.TaskStateCancelling ? qsTr("Cancelling...") : ""
                     }
                 }
 
@@ -352,7 +358,7 @@ Item {
 
             width: parent.width
             height: visible ? _translatorButton.height + 2 * Theme.paddingMedium : 0
-            visible: !_settings.translate_when_typing || (app.state === DsnoteApp.StateTranslating && app.task_state === DsnoteApp.TaskStateCancelling)
+            visible: !_settings.translate_when_typing
 
             Row {
                 anchors.centerIn: parent

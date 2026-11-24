@@ -266,7 +266,7 @@ ApplicationWindow {
                              app.connected && !app.busy &&
                                  app.task_state !== DsnoteApp.TaskStateProcessing &&
                                  app.task_state !== DsnoteApp.TaskStateInitializing &&
-                                 app.state === DsnoteApp.StateListeningSingleSentence
+                                 (app.state === DsnoteApp.StateListeningSingleSentence || app.state === DsnoteApp.StateListeningAuto)
                     onCancelClicked: app.cancel()
                     onPauseClicked: app.pause_speech()
                     onResumeClicked: app.resume_speech()
