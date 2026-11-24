@@ -277,19 +277,6 @@ std::wstring UTF8_to_wchar(const char* in) {
     return out;
 }
 
-void ltrim(std::string& s) {
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
-                return !std::isspace(ch);
-            }));
-}
-
-void rtrim(std::string& s) {
-    s.erase(std::find_if(s.rbegin(), s.rend(),
-                         [](unsigned char ch) { return !std::isspace(ch); })
-                .base(),
-            s.end());
-}
-
 void replace_characters(std::string& text, const std::string& from,
                         const std::string& to) {
     auto w_text = UTF8_to_wchar(text.c_str());
@@ -329,8 +316,7 @@ void convert_subrip_to_html(std::string& text) {
     unsigned int n = 0;
     std::string text_line;
     for (std::string line; std::getline(in_ss, line);) {
-        ltrim(line);
-        rtrim(line);
+        text_tools::trim(line);
 
         if (line.empty()) {
             if (!text_line.empty()) {
@@ -537,7 +523,20 @@ void clean_white_characters(std::string& text) {
     text = std::regex_replace(text, std::regex{" \n|\n "}, "\n");
 }
 
-void trim_line(std::string& text) {
+void ltrim(std::string& s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+                return !std::isspace(ch);
+            }));
+}
+
+void rtrim(std::string& s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(),
+                         [](unsigned char ch) { return !std::isspace(ch); })
+                .base(),
+            s.end());
+}
+
+void trim(std::string& text) {
     ltrim(text);
     rtrim(text);
 }
@@ -549,9 +548,7 @@ void trim_lines(std::string& text) {
     bool first_line = true;
     bool prev_line_empty = false;
     for (std::string line; std::getline(ss_in, line);) {
-        ltrim(line);
-        rtrim(line);
-
+        trim(line);
         if (line.empty()) {
             prev_line_empty = !first_line;
         } else {
@@ -1019,7 +1016,7 @@ std::string strip_inline_timestamps(const std::string& text,
     std::string result = std::regex_replace(text, pattern, " ");
     static const std::regex multi_space{R"(\s{2,})"};
     result = std::regex_replace(result, multi_space, " ");
-    trim_line(result);
+    trim(result);
     return result;
 }
 
@@ -1080,9 +1077,7 @@ std::vector<segment_t> subrip_text_to_segments(const std::string& text,
     std::string text_line;
     std::pair<size_t, size_t> t;
     for (std::string line; std::getline(in_ss, line);) {
-        ltrim(line);
-        rtrim(line);
-
+        trim(line);
         if (line.empty()) {
             if (!text_line.empty()) {
                 segments.push_back({

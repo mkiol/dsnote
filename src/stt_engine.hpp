@@ -258,18 +258,21 @@ class stt_engine {
     std::unique_ptr<std::ofstream> m_file_audio_input;
     std::unique_ptr<std::ofstream> m_file_audio_after_denoise;
     std::unique_ptr<std::ofstream> m_file_audio_after_vad;
+    std::unique_ptr<std::ofstream> m_file_audio_before_decoding;
 #endif
 
-    static void ltrim(std::string& s);
-    static void rtrim(std::string& s);
-    static std::string merge_texts(const std::string& old_text,
-                                   std::string&& new_text);
+    /* --- engine class should implement the following functions: */
     virtual samples_process_result_t process_buff();
     virtual void reset_impl() = 0;
     virtual void stop_processing_impl();
     virtual void start_processing_impl();
     virtual std::string report_stats(size_t nb_samples, size_t sample_rate,
                                      size_t processing_duration_ms);
+    /* --- end */
+
+    static void trim(std::string& s);
+    static std::string merge_texts(const std::string& old_text,
+                                   std::string&& new_text);
     void flush(flush_t type);
     bool lock_buf(lock_type_t desired_lock);
     bool lock_buff_for_processing();
@@ -285,6 +288,7 @@ class stt_engine {
     void restart_sentence_timer();
     void create_punctuator();
     void reset_segment_counters();
+    samples_process_result_t process_buff_full();
     static bool file_exists(const std::string& file_path);
     static void set_env(const char* name, const char* value, bool force);
     static void push_buf_to_f32_buf(
@@ -293,7 +297,6 @@ class stt_engine {
     static void push_buf_to_f32_buf(const in_buf_t::buf_t::value_type* data,
                                     in_buf_t::buf_t::size_type size,
                                     f32_buf_t& f32_buf);
-    samples_process_result_t process_buff_full();
 };
 
 #endif  // STT_ENGINE_H

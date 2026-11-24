@@ -127,13 +127,9 @@ std::string qwen3asr_engine::qwen_name_to_lang(
     // qwen3-asr returns comma separated language names (e.g.
     // "Chinese,English") or empty string when language is unknown
     auto name = qwen_langs_str.substr(0, qwen_langs_str.find(','));
-    rtrim(name);
-    ltrim(name);
-
+    trim(name);
     if (name.empty()) return {};
-
     if (name == qwen_cantonese) return "zh";
-
     auto it = std::find_if(qwen_langs.cbegin(), qwen_langs.cend(),
                            [&](const auto& p) { return p.second == name; });
     return it == qwen_langs.cend() ? std::string{} : std::string{it->first};
@@ -188,8 +184,7 @@ std::vector<text_tools::segment_t> qwen3asr_engine::make_segments(
     size_t total_length = 0;
 
     for (auto& sentence : text_tools::split(text, split_engine, lang).first) {
-        rtrim(sentence);
-        ltrim(sentence);
+        trim(sentence);
         if (sentence.empty()) continue;
         auto length = utf8_length(sentence);
         total_length += length;
@@ -445,7 +440,7 @@ void qwen3asr_engine::decode_speech(const f32_buf_t& buf) {
             // transcribe() reads max_new_tokens from the model on every call
             m_model->attr("max_new_tokens") =
                 py::int_(m_max_new_tokens_base +
-                         m_max_new_tokens_per_sec * (size / m_sample_rate));
+                         (m_max_new_tokens_per_sec * (size / m_sample_rate)));
 
             auto results = m_model->attr("transcribe")(
                 "audio"_a = py::make_tuple(array, m_sample_rate),
@@ -464,8 +459,7 @@ void qwen3asr_engine::decode_speech(const f32_buf_t& buf) {
             py::object result = results_list[0];
 
             auto text = result.attr("text").cast<std::string>();
-            rtrim(text);
-            ltrim(text);
+            trim(text);
 
             std::string auto_lang = [&] {
                 if (!m_auto_lang) return m_config.lang;

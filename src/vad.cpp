@@ -84,7 +84,9 @@ std::vector<bool> vad::vad_process(const buf_t& samples) const {
                                         samples.data() + (chunk * m_chunk_size),
                                         m_chunk_size);
 
-        if (result < 0) throw std::runtime_error("process error");
+        if (result < 0) {
+            LOGF("vad process error");
+        }
 
         results.push_back(result == 1);
     }
@@ -130,7 +132,9 @@ const vad::buf_t& vad::remove_silence(const buf_t::value_type* frame,
         auto vad_active = 2 * acc > m_chunks_in_frame;
 
         if (vad_active && !cut_start) {
-            auto pos = std::min(chunk * m_chunk_size, m_input_samples.size());
+            size_t chunk_prev = chunk > 0 ? chunk - 1 : chunk;
+            auto pos =
+                std::min(chunk_prev * m_chunk_size, m_input_samples.size());
             LOGT("cut start: pos=" << pos << ", m_dup_size=" << m_dup_size);
 
             if (pos == 0) {

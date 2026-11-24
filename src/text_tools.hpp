@@ -93,7 +93,9 @@ void remove_stats_tag(std::string& text);
 void restore_caps(std::string& text);
 void to_lower_case(std::string& text);
 void trim_lines(std::string& text);
-void trim_line(std::string& text);
+void trim(std::string& text);
+void ltrim(std::string& s);
+void rtrim(std::string& s);
 void remove_hyphen_word_break(std::string& text);
 void clean_white_characters(std::string& text);
 void numbers_to_words(std::string& text, const std::string& lang,

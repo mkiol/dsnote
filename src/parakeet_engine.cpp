@@ -530,20 +530,16 @@ void parakeet_engine::decode_speech(const f32_buf_t& buf) {
     bool subrip = m_config.text_format == text_format_t::subrip;
     bool inline_ts = m_config.text_format == text_format_t::inline_timestamp;
 
-    // if (m_config.whisper_config.has_value()) {
-    //     if (m_config.whisper_config->audio_ctx_conf ==
-    //             audio_ctx_conf_t::dynamic &&
-    //         !use_gpu()) {
-    //         // short audio clips optimization
-    //         // https://github.com/ggml-org/whisper.cpp/issues/1855
-    //         m_wparams.audio_ctx = std::min<int>(
-    //             static_cast<int>(std::clamp<size_t>(
-    //                 ((1500 * buf.size()) / (m_sample_rate * 30)) + 128, 0,
-    //                 std::numeric_limits<int>::max())),
-    //             1500);
-    //     }
-    // }
     LOGD("audio_ctx: " << m_wparams.audio_ctx);
+
+#ifdef DUMP_AUDIO_TO_FILE
+    // if (!m_file_audio_before_decoding)
+    m_file_audio_before_decoding =
+        std::make_unique<std::ofstream>("audio_before_decoding.pcm");
+    m_file_audio_before_decoding->write(
+        reinterpret_cast<const char*>(buf.data()),
+        buf.size() * sizeof(f32_buf_t::value_type));
+#endif
 
     std::ostringstream os;
 
@@ -562,12 +558,9 @@ void parakeet_engine::decode_speech(const f32_buf_t& buf) {
                 m_parakeet_api.parakeet_full_get_segment_text(m_parakeet_ctx, i);
             if (text.empty()) continue;
             if (text.at(0) == '!') text.erase(0, 1);
-            rtrim(text);
-            ltrim(text);
+            trim(text);
             if (text.empty()) continue;
-#ifdef DEBUG
-            LOGD("segment " << i << ": " << text);
-#endif
+            LOGT("segment " << i << ": " << text);
             if (subrip || inline_ts) {
                 size_t t0 = std::max<int64_t>(
                                 0, m_parakeet_api.parakeet_full_get_segment_t0(

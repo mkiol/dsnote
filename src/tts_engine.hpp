@@ -228,24 +228,15 @@ class tts_engine {
     bool m_restart_requested = false;
     unsigned int m_last_speech_sample_rate = 48000;
 
-    static std::string first_file_with_ext(std::string dir_path,
-                                           const std::string& ext);
-    static std::string find_file_with_name_prefix(std::string dir_path,
-                                                  const std::string& prefix);
-    static void write_wav_header(int sample_rate, int sample_width,
-                                 int channels, uint32_t num_samples,
-                                 std::ofstream& wav_file);
-    static wav_header read_wav_header(std::ifstream& wav_file);
-    static float vits_length_scale(unsigned int speech_speed,
-                                   float initial_length_scale);
-    static float overflow_duration_threshold(unsigned int speech_speed,
-                                             float initial_duration_threshold);
+    /* --- engine class should implement the following functions: */
     virtual bool model_created() const = 0;
     virtual bool model_supports_speed() const = 0;
     virtual void create_model() = 0;
     virtual void reset_ref_voice();
     virtual bool encode_speech_impl(const std::string& text, unsigned int speed,
                                     const std::string& out_file) = 0;
+    /* --- end */
+
     void set_state(state_t new_state);
     std::string path_to_output_file(const std::string& text,
                                     unsigned int speech_speed,
@@ -286,6 +277,19 @@ class tts_engine {
     static void make_pkuseg_link(const std::string& pkuseg_dir,
                                  const std::string& cache_dir);
     static int nb_threads_limit();
+    static void trim(std::string& s);
+    static std::string first_file_with_ext(std::string dir_path,
+                                           const std::string& ext);
+    static std::string find_file_with_name_prefix(std::string dir_path,
+                                                  const std::string& prefix);
+    static void write_wav_header(int sample_rate, int sample_width,
+                                 int channels, uint32_t num_samples,
+                                 std::ofstream& wav_file);
+    static wav_header read_wav_header(std::ifstream& wav_file);
+    static float vits_length_scale(unsigned int speech_speed,
+                                   float initial_length_scale);
+    static float overflow_duration_threshold(unsigned int speech_speed,
+                                             float initial_duration_threshold);
 };
 
 #endif // TTS_ENGINE_HPP

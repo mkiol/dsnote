@@ -359,10 +359,7 @@ void fasterwhisper_engine::decode_speech(const f32_buf_t& buf) {
             auto i = 0;
             for (auto& segment : segments) {
                 auto text = segment.attr("text").cast<std::string>();
-
-                rtrim(text);
-                ltrim(text);
-
+                trim(text);
                 if (text.empty()) continue;
 #ifdef DEBUG
                 LOGD("segment: " << text);

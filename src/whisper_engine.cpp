@@ -627,8 +627,7 @@ void whisper_engine::decode_speech(const f32_buf_t& buf) {
                 m_whisper_api.whisper_full_get_segment_text(m_whisper_ctx, i);
             if (text.empty()) continue;
             if (text.at(0) == '!') text.erase(0, 1);
-            rtrim(text);
-            ltrim(text);
+            trim(text);
             if (text.empty()) continue;
 #ifdef DEBUG
             LOGD("segment " << i << ": " << text);

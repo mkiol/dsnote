@@ -17,6 +17,7 @@
 #include <iterator>
 
 #include "logger.hpp"
+#include "text_tools.hpp"
 
 using namespace std::chrono_literals;
 
@@ -518,7 +519,7 @@ std::string stt_engine::merge_texts(const std::string& old_text,
 
     if (idx > 0) {
         new_text = new_text.substr(idx);
-        ltrim(new_text);
+        text_tools::ltrim(new_text);
     }
 
     if (new_text.empty()) return old_text;
@@ -641,18 +642,7 @@ void stt_engine::set_speech_detection_status(speech_detection_status_t status) {
         m_call_backs.speech_detection_status_changed(new_speech_status);
 }
 
-void stt_engine::ltrim(std::string& s) {
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
-                return !std::isspace(ch);
-            }));
-}
-
-void stt_engine::rtrim(std::string& s) {
-    s.erase(std::find_if(s.rbegin(), s.rend(),
-                         [](unsigned char ch) { return !std::isspace(ch); })
-                .base(),
-            s.end());
-}
+void stt_engine::trim(std::string& s) { text_tools::trim(s); }
 
 bool stt_engine::sentence_timer_timed_out() {
     if (m_start_time) {

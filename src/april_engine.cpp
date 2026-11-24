@@ -250,26 +250,26 @@ void april_engine::decode_speech(april_buf_t& buf, bool eof) {
 
         m_result_size_consumed = m_result_prev_segment.size();
 
-        ltrim(result);
-        rtrim(result);
+        trim(result);
 
         if (m_prev_segment_start_time) {
             if (!m_prev_segment_end_time ||
                 *m_prev_segment_end_time <= *m_prev_segment_start_time) {
                 m_prev_segment_end_time =
                     *m_prev_segment_start_time +
-                    result.size() * m_prev_segment_dur_per_token;
+                    (result.size() * m_prev_segment_dur_per_token);
             } else {
                 m_prev_segment_dur_per_token =
                     (*m_prev_segment_end_time - *m_prev_segment_start_time) /
                     result.size();
             }
 
-            m_segments.push_back(
-                {++m_segment_offset,
-                 *m_prev_segment_start_time + m_segment_time_offset,
-                 *m_prev_segment_end_time + m_segment_time_offset,
-                 std::move(result)});
+            m_segments.push_back({
+                .n = ++m_segment_offset,
+                .t0 = *m_prev_segment_start_time + m_segment_time_offset,
+                .t1 = *m_prev_segment_end_time + m_segment_time_offset,
+                .text = std::move(result),
+            });
         }
 
         m_prev_segment_start_time.reset();
@@ -278,8 +278,7 @@ void april_engine::decode_speech(april_buf_t& buf, bool eof) {
 
     if (eof && (m_config.text_format == text_format_t::subrip ||
                 m_config.text_format == text_format_t::inline_timestamp)) {
-        ltrim(m_result_prev_segment);
-        rtrim(m_result_prev_segment);
+        trim(m_result_prev_segment);
 
 #ifdef USE_PY
         if (m_punctuator) {
@@ -316,9 +315,8 @@ void april_engine::decode_speech(april_buf_t& buf, bool eof) {
         m_segments.clear();
     } else {
         auto result = m_result_prev_segment + m_result;
+        trim(result);
 
-        ltrim(result);
-        rtrim(result);
 #ifdef USE_PY
         if (m_punctuator) {
             result = m_punctuator->process(result);
