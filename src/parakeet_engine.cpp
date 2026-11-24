@@ -503,7 +503,9 @@ parakeet_full_params parakeet_engine::make_wparams() {
     wparams.abort_callback = abort_callback;
     wparams.abort_callback_user_data = &m_thread_exit_requested;
     wparams.audio_ctx = 0;
-    wparams.no_context = false;
+
+    /* disable context passing */
+    wparams.no_context = true;
 
     if (m_config.whisper_config.has_value()) {
         wparams.n_threads = static_cast<int>(
@@ -530,7 +532,10 @@ void parakeet_engine::decode_speech(const f32_buf_t& buf) {
     bool subrip = m_config.text_format == text_format_t::subrip;
     bool inline_ts = m_config.text_format == text_format_t::inline_timestamp;
 
-    LOGD("audio_ctx: " << m_wparams.audio_ctx);
+    LOGD("wparams: audio_ctx=" << m_wparams.audio_ctx
+                               << ", offset_ms=" << m_wparams.offset_ms
+                               << ", duration_ms=" << m_wparams.duration_ms
+                               << ", no_context=" << m_wparams.no_context);
 
 #ifdef DUMP_AUDIO_TO_FILE
     // if (!m_file_audio_before_decoding)
